@@ -1,0 +1,5 @@
+numpy
+matplotlib
+torch          # 6-DOF MARL (run in lab venv)
+gymnasium
+# 6-DOF sim backend TBD (WarSim SE3 / Isaac Lab / PX4-ROS2-Gazebo) — see shepherd/sim/README.md

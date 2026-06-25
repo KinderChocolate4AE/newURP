@@ -1,0 +1,165 @@
+================================================================
+GPT VERIFICATION PACK — ANDES last-mile counter-UAS research
+2026-06-24 · self-contained for EXTERNAL ADVERSARIAL REVIEW
+================================================================
+
+#### YOUR ROLE ####
+You are a hostile, well-read reviewer. Two jobs: (1) try to KILL the novelty claim in Part B
+— find prior work (esp. 2023-2026, or fields we did not search) that already does it; (2) critique
+the formalization in Part C — especially whether the core "shaping-as-economic-lever" is actually
+derivable or hand-waving. Specific questions in Part D. Be brutal; do not reassure.
+
+================================================================
+PART A — CONTEXT & DIRECTION PIVOT
+================================================================
+Problem: last-mile counter-UAS. A heterogeneous defender team — several CHEAP KINETIC "path-limiter"
+drones + ONE NON-DESTRUCTIVE "net-capturer" drone (finisher) — defends a point against a hostile drone.
+Style: cooperative "shepherding" (path-limiters shape the adversary; the net-capturer finishes).
+
+OLD framing (abandoned): "manufacturing capturability via cooperative shaping" — path-limiters herd the
+adversary into the net-capturer's dynamic capture-viability set. WHY ABANDONED: concept-precedented
+(see Part B threats Von Moll turret+defender; Chen luring). "First flag on a place others reach in ~2yr"
+is not a moat.
+
+NEW load-bearing claim: **cooperative SHAPING used as a LEVER on the EXCHANGE-ECONOMICS of a
+FINITE, IRREVERSIBLE, MISS-IS-FREE non-destructive (net) finisher — solved by MARL.**
+
+Root structural hook (MISS-IS-FREE ASYMMETRY): a missed net is COSTLESS to the attacker but spends one
+of the defender's SCARCE, irreversible shots (deploy delay τ, finite magazine). Kinetic defense lacks
+this (a near-miss still deters/damages). So a smart attacker BAITS/EXHAUSTS the nets, then penetrates —
+geometry/"capturability" alone is meaningless if you can dodge the net. The research question is NOT
+"can we catch this drone" (a tactic, loses the spear-vs-shield loop) but "what is the COST/EXCHANGE
+structure, and in which resource regimes (net capacity × speed/agility ratio × team size × net spec)
+does a shaping defense have positive value AT ALL, robust to the attacker's best response (incl.
+exhaustion/baiting)" — a statement about the game's payoff structure, not a tactic.
+
+Ethos: usability > fidelity (3DOF KINEMATIC sim; we do NOT compete on 6-DoF realism; we make PARAMETERS
+realistic: net capacity, deploy time/spread/range, commercial/FPV speeds). Novelty defended only as an
+INTERSECTION. Moat = publish the frame, hold the recipe (tuned policy, full quantitative envelope,
+stack). arXiv priority is the keystone (space is closing fast).
+
+Carry-forward asset: a surrogate E_req = w1·||v_perp||^2 + w2·||lambda_dot||^2 + w3·max(0, a_req -
+a_net,max)^2 + w4·||delta_p_net(tau_deploy)||^2  (v_perp = closing-normal vel; lambda_dot = LOS rate;
+a_req margin vs net max accel; miss-during-deploy). Reframed from "capture difficulty" to PER-SHOT VALUE.
+
+================================================================
+PART B — NOVELTY AUDIT (claim on trial + evidence)
+================================================================
+CLAIM decomposed into 3 sub-claims (test each):
+ (i)   capture modeled with realistic FINITE/IRREVERSIBLE net deployment (miss = wasted scarce shot,
+       costless to attacker) — not geometric proximity/dwell.
+ (ii)  teammates SHAPE the adversary to satisfy a SPECIFIC finisher's condition (not general
+       containment/encirclement).
+ (iii) a LEARNED/MARL surrogate of that finisher's capture-VIABILITY as the cooperative shaping objective.
+
+PER-SUB-CLAIM VERDICT (from our audit):
+ (i)   standalone DEAD — net deployment physics already modeled (Drones 9:190 FEM; Pliska FRPN RA-L 2024;
+       Liu arXiv:2506.03297 multi-UAV tethered net + MAPPO). Defensible only as a COMPONENT.
+ (ii)  CONCEPT precedented — "shape adversary so a specific teammate finishes" exists analytically
+       (Von Moll turret+defender; Chen luring). Not novel alone.
+ (iii) strongest survivor, but dented (Choi 2026 = learned capturability surrogate but for SELECTION;
+       role-structured MARL pursuit exists).
+
+THE TWO BIG FRAMINGS ARE BOTH ~60-YEAR-OCCUPIED (do NOT claim either alone):
+ - Differential-game VALUE/BARRIER "viable-defense region" (Isaacs; Von Moll/Shishika/Pachter; Bakolas;
+   Bansal-Tomlin HJ; Yang et al. winning-regions). Capture model UNIFORMLY: radius/point, re-attemptable,
+   kinetic, destructive. FINITE-ammo / irreversible / miss-free = ABSENT (sequential capture is their own
+   named open problem).
+ - Defense-OR FINITE-RESOURCE + EXCHANGE-RATIO economics (Manne 1958 WTA; Hughes 1995 salvo; Armstrong
+   2014 Iron Dome; Davis-Robbins-Lunday 2017 dynamic finite-inventory ADP; Han-Lunday-Robbins 2016
+   deplete-then-penetrate DAD; cost-exchange/Nitze). Shooters = FIXED-capability; cooperative SHAPING of
+   the target to move the exchange ratio = ABSENT; non-destructive = ABSENT; MARL only on classical WTA.
+
+VERIFIED OPEN SEAM (the only surviving claim): cooperative SHAPING as a LEVER on the exchange-economics
+of a FINITE/IRREVERSIBLE/MISS-IS-FREE non-destructive finisher, MARL-solved. Each ingredient exists
+ALONE (shoot-look-shoot finite-shot economy; StringNet non-destructive cooperative herding; sequential-
+intruders engagement-shaping; Choi learned-capturability-for-selection); NONE fuses them. This is the
+BRIDGE between control/MARL and defense-OR economics that neither community crosses.
+
+SEARCH COVERAGE: English 5 angles (shepherding/herding; pursuit-evasion & capturability; counter-UAS net;
+role-defense/caging/enabler-finisher; CBF-herding & shaping-vs-selection) + 3 angles (diff-game value;
+defense-OR saturation/salvo/WTA; the crossover seam) + Chinese (CNKI) 3 angles (反无人机网捕; 协同围捕 MARL;
+追逃微分对策·拦截资源经济) + FULL-TEXT body-pass of 4 closest Chinese/diff-game papers. All returned OPEN/CLEAR.
+Confidence ~94%. Residual = CNKI/万方 paywalled master's/PhD theses (could not read full text).
+
+MUST-CITE-AND-DIVERGE (closest threats; "our divergence" = the axis we survive on):
+ - Von Moll, Maity, Pachter, Shishika, Dorothy 2025, "Target Defense w/ Turret + Mobile Defender Team,"
+   arXiv:2509.09777 (AFRL). [closest structural] hetero team; defender forces adversary into a limited-
+   actuation FINISHER's reachable set. DIVERGE: finisher = net deployment viability (not turret angle);
+   LEARNED (not HJI); FINITE/miss-free (not unlimited). NB: same group is scaling to many-vs-many.
+ - Chen, Hu, Gao, Jing 2024, "Luring cooperative capture guidance," Astrodynamics 8(4):675,
+   DOI 10.1007/s42064-024-0224-6. [closest to (ii)] inducer lures adversary so a DISTINCT teammate
+   finishes. DIVERGE: kinetic intercept (not net/finite/miss-free); analytic backstepping (not MARL);
+   objective = exchange ratio.
+ - Von Moll et al. 2022, Turret-Runner-Penetrator role selection, IEEE TAES 58(6):5687,
+   DOI 10.1109/TAES.2022.3176599. [enabler/finisher precedent] DIVERGE: analytic; destructive; no economy.
+ - Chipade & Panagou 2021, StringNet Herding, Front. Robot. AI 8:640446. [non-destructive coop herding]
+   DIVERGE: "net" = defender-formation barrier (not a fired finite resource); goal = containment, no economy.
+ - Liu, Ren, Fan 2025, multi-UAV tethered net + MAPPO, arXiv:2506.03297. DIVERGE: homogeneous; pursue not
+   shape; net always present (no finite/miss-free); no viability surrogate / economics.
+ - Choi, Heu, Kim 2026, predicted-capturability task assignment, Aerospace 13(4):347. [learned-capturability
+   but SELECTION] DIVERGE: predict-then-SELECT (target unchanged) vs predict-then-SHAPE.
+ - Defense-OR economics: Manne 1958 (WTA); Hughes 1995 (salvo, NRL 42:267); Armstrong 2014 (Iron Dome,
+   Oper.Res. 62:1028); Davis-Robbins-Lunday 2017 (EJOR 259:873); Han-Lunday-Robbins 2016 (INFORMS JOC 28:405);
+   shoot-look-shoot (Washburn). DIVERGE: fixed shooters (we maneuver-shape); destructive (we non-destructive);
+   measure exchange ratio (we MOVE it via shaping).
+ - sequential-intruders, arXiv:2212.06628. DIVERGE: reusable point-capture (we finite/irreversible/non-destruct).
+ - CHINESE full-text-read (all CLEAR): 狼群 role-matching labor division (Wu & Xiao, 智能系统学报 2021,
+   16(1):125-133, 10.11992/tis.202007043) — bio-rule (not MARL), kinetic 绞杀, generic resource burn-down
+   (not exchange ratio); 多机器人协同围捕综述 (Zhou et al., 自动化学报 2024, 50(12):2325, 10.16383/j.aas.c240114)
+   — symmetric geometric encirclement, RL reward = distance/angle/success; 多弹协同拦截综述 (Wei et al.,
+   航空学报 2020, 41(S1):723804) — kinetic destructive, miss-distance is a COSTLY indicator; Yang/Li/Luo/Guo
+   2026, "Approximate Analytical Winning Regions ... PE-Defense Game," J. Spacecraft & Rockets 63(3),
+   10.2514/1.A36494 — the conceded diff-game value/barrier neighbor (point-capture, energy=time-deadline).
+
+================================================================
+PART C — M1 FORMALIZATION SCAFFOLD (we will fill; review the DESIGN)
+================================================================
+Discipline: every choice must DIFFER from the threats above on the listed axis; usability params
+(capacity, speed/agility ratio, net spec); novelty = intersection. strawmen below are REDLINE-targets,
+not adopted.
+
+SLOTS (S = question / options / strawman):
+ S1 Players & expendability: N path-limiters (expendable?) + 1 finisher + adversary 1 or M (saturation)?
+    strawman: N=3 expendable + 1 finisher + 1 adversary.
+ S2 State (NOVEL = finisher resource): ammo k in {0..K} + deploy timer; +adversary hidden "mode"
+    (feint/penetrate)? +adversary's own resource (fuel/time)?  strawman: physical(3DOF)+k+deploy-countdown.
+ S3 Actions (NOVEL = fire-commit): finisher fire = one-shot irreversible, locked for tau after; adversary
+    action incl. feint-vs-commit-penetrate; limiters = setpoints.
+ S4 INFORMATION STRUCTURE (deepest): is the finisher's commit OBSERVABLE to the adversary? (observable =>
+    adversary baits/dodges => commitment/Stackelberg game = the loop-escape locus). options: full-obs /
+    partial(adversary unsure of ammo) / simultaneous. THIS choice sets the game TYPE.
+ S5 Per-shot value (reuse E_req): v_shot in [0,1] as fn of relative state at commit. strawman:
+    v_shot = P(adversary in deployed-net volume | rel-state, tau_deploy) ~= sigmoid(w·phi), phi = E_req terms.
+ S6 OBJECTIVE (NOVEL = miss-is-free, NOT P_capture): exchange ratio R = (attacker cost-to-penetrate) /
+    (defender resource expended); viable-defense region = {params : R>1 under adversary best-response}.
+    Define numerator (feints, exposure, time, losses) & denominator (shots fired, limiters lost) concretely.
+ S7 Solution concept: learned shaping policy + EMPIRICAL viable-envelope over (capacity × speed/agility)
+    [usability+MARL], vs approximate game value. Diff-game value cited as CONTRAST only.
+ S8 SHAPING-AS-LEVER COUPLING (THE CORE — must be DERIVED, not asserted): by what mechanism does a
+    limiter's action at t change the finisher's per-shot value (S5) / exchange ratio (S6) at t+tau?
+    candidate channels: (a) shrink adversary escape volume during deploy delay; (b) force adversary into
+    net high-coverage cone; (c) deplete adversary maneuver margin => a_req down => v_shot up; (d) force
+    geometry that conserves ammo. REQUIREMENT: connect a channel to v_shot or R as a term, with limiter
+    reward following that term's gradient (a counterfactual-credit mechanism for agents with no direct reward).
+
+================================================================
+PART D — VERIFICATION QUESTIONS FOR YOU (GPT)
+================================================================
+1. PRIOR-ART KILL: name any work (esp. 2023-2026, or a field we did NOT search) that fuses cooperative
+   shaping + finite/irreversible/miss-is-free non-destructive finisher + exchange-economics (or MARL of it).
+   Where would such a paper most likely hide? Which of our 3 sub-claims is most likely already taken?
+2. "REALIZATION" TEST: does the finite/irreversible/miss-is-free structure genuinely change the game's
+   mathematical TYPE (vs a differential game with a fancier capture set / vs a WTA with maneuver)? Or is it
+   cosmetic — i.e., are we just "realizing" a known game? Be specific about what is or isn't new structurally.
+3. SHAPING-AS-LEVER (S8) SOUNDNESS: is there a real mechanism by which limiter maneuver MOVES the exchange
+   ratio, or is it hand-waving? Which candidate channel (a-d) is most/least defensible? Is the counterfactual
+   credit-assignment well-posed?
+4. MISS-IS-FREE ASYMMETRY: is it real and load-bearing, or is there a counter (near-miss deters; nets are
+   cheap so capacity is not binding; reload trivial)? Does the whole framing collapse under any such counter?
+5. HOSTILE-REVIEWER SIM: the top 3 attacks a reviewer makes on this paper, and whether our differentiators
+   survive each. Include the strongest single attack.
+6. VENUE/STRENGTH: is the surviving intersection a strong contribution, or still flag-planting? What ONE
+   addition would most strengthen it? Is the scaffold's design (S1-S8) missing a slot or making a wrong default?
+
+(Answer 1-6 directly. If you assert a prior exists, give a real citation we can verify.)
