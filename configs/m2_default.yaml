@@ -1,0 +1,49 @@
+# M2 / L1 default scenario + reward config  (build/m2-l1-reduced-attitude-env)
+#
+# SINGLE SOURCE OF TRUTH for physical params, fire gate, and reward weights.
+# Code reads these (roles.ScenarioSpec.from_dict); values are NEVER hardcoded.
+#
+# Defaults mirror prototypes/reachset.py __main__ so the commit-2 port-fidelity
+# regression (viability judge=point_mass, turn_limited=False, seed=0) reproduces
+# the proto output bit-for-bit. Param ratification (c_fire/theta_fire/theta_net)
+# happens against the first GIF (docs/08 §5) by tuning HERE, never in code.
+
+scenario:
+  n_limiters: 4                 # S1: N cost-bearing shaping limiters (+/-y, +/-z ring)
+  n_adversaries: 1              # M2: single scripted attacker
+  finisher:
+    K: 1                        # S1: finite magazine; the single binding scarce resource (M2)
+
+physics:
+  dt: 0.05                      # integration step [s]
+  tau_deploy: 0.4               # net deploy delay [s]   (reachset __main__)
+  tau_lock: 0.1                 # post-fire lock [s]      (S3 irreversible commit)
+  a_att_max: 30.0               # attacker bounded accel [m/s^2]  (reachset __main__)
+  att_speed: 20.0               # attacker nominal speed [m/s]    (reachset __main__)
+  kill_radius: 2.0              # limiter kamikaze kill-radius [m] (reachset __main__)
+  net_radius: 1.5               # finisher net capture radius [m]  (reachset __main__)
+  a_lim_max: 30.0               # limiter setpoint/accel limit [m/s^2]
+
+attitude:                       # R3: reduced-attitude pointing (NOT full 6-DOF aero)
+  omega_max: 3.14159            # net-axis slew-rate limit [rad/s]; a PARAMETER, not a state dim
+  e_net_init: [1.0, 0.0, 0.0]   # initial finisher net-pointing axis e_net (R_F . e_net)
+
+viability:                      # v_shot reachable-set surrogate (commit 2)
+  judge: point_mass             # {point_mass, se3}; point_mass = proto port baseline
+  turn_limited: false           # false = single-segment constant-accel reachable set (proto)
+  n_samples: 2000               # accel samples (reachset __main__ n=2000)
+  seed: 0                       # port-fidelity regression seed
+
+fire_gate:                      # R2: single fire gate source of truth
+  theta_fire: 0.8               # fire iff v_shot_soft >= theta_fire
+  B_capture: 1.0                # capture benefit
+  c_fire: 0.8                   # == theta_fire * B_capture (asserted in roles.FireGate)
+
+reward:                         # S6: J_M2 = dv_shot + l1*1[v>=theta] - l2*wasted_fire - l3*limiter_loss
+  lambda1: 1.0                  # threshold-crossing bonus
+  lambda2: 1.0                  # wasted-fire penalty
+  lambda3: 0.5                  # limiter loss-cost penalty
+
+baselines:                      # S8 / COMA credit assignment (commit 4)
+  headline_u0: hold_position    # headline delta: full shaping vs hold-position rollout
+  coma_u0: hold_position        # COMA counterfactual baseline u_i^0 (FIXED; do not vary per-step)

@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shepherd"
+version = "0.1.0"
+description = "Cooperative shaping of the net-shot exchange frontier for non-destructive C-UAS (newURP M2/L1)"
+requires-python = ">=3.10"
+dependencies = ["numpy", "pyyaml"]
+
+[project.optional-dependencies]
+env = ["pettingzoo", "gymnasium"]
+viz = ["matplotlib"]
+marl = ["torch"]            # 6-DOF MARL, lab venv
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["shepherd*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
