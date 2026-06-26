@@ -38,7 +38,7 @@ Branch `build/m2-l1-reduced-attitude-env` (7 commits) · 31 tests green · the f
 
 ## Next
 - **S14 (recommended first).** Make the reachable-set surrogate conservative (multi-segment / proper bound) so `v_shot` is trustworthy — otherwise L2 trains on, and a learned policy is fooled by, an optimistic signal. Torch-free.
-- **N1 (Hyunjun human-lane, WP-A4/CP-4).** Ground the cone (`half_angle`, `range`) to Paper 2 net physics; replace the tuned values with a finite physical range.
+- **N1 (Hyunjun human-lane, WP-A4/CP-4).** Ground the cone (`half_angle`, `range`) to Paper 2 net physics; replace the tuned values with a finite physical range. *(Tuned constants live in `configs/m2_default.yaml` + `configs/m2_clean_viability_demo.yaml` cone blocks, `shepherd/env.py` `cone_half_angle`/`cone_range_max` defaults, and `tests/test_coma.py`.)*
 - **L2 (MAPPO/COMA, torch / lab venv).** Replace scripted policies with a learned shaping policy → measured frontier. The learning-goal core; meaningful once S14 makes `v_shot` trustworthy.
 - **M3.** Sweep the capture↔containment regime boundary (this build's seed) → paper headline result.
 
