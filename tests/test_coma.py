@@ -226,3 +226,33 @@ def test_capture_model_is_frozen_worst_case_not_trajectory():
     assert fired is True
     assert fire_worst == 0.0                  # worst-case judge says the attacker can escape
     assert env.fsm.last_capture is False      # -> env's capture decision is the worst-case one
+
+
+def test_clean_demo_config_meets_m2_dod_without_enlarging_net():
+    """The configs/m2_clean_demo.yaml scenario shows the FULL M2 DoD via the
+    shaping lever (many agile limiters vs a slow threat) at the GROUNDED net
+    size (net_radius == 1.5): delta>0, clean (non-boxed) crossing at fire,
+    viability_capture True, and strictly fewer wasted_fire than hold.
+    boxed_in is NOT counted as the clean crossing (fire step is not boxed)."""
+    import pathlib
+    import yaml
+    import shepherd.scripts.rollout_gif as RG          # build_env/rollout import w/o matplotlib
+    cfg = yaml.safe_load(open(pathlib.Path(__file__).resolve().parents[1]
+                              / "configs" / "m2_clean_demo.yaml"))
+
+    def run(mode):
+        env, scn, lay = RG.build_env(cfg, mode=mode)
+        frames, summ = RG.rollout(env, scn, lay, mode, seed=0)
+        fire_boxed = next((f["boxed"] for f in frames if f["fire"]), None)
+        return summ, fire_boxed, scn.finisher.net_radius
+
+    base, _, _ = run("hold")
+    shape, shape_fire_boxed, net_r = run("shaping")
+
+    assert net_r == 1.5                          # grounded net size, NOT enlarged to force a pass
+    assert shape["max_delta"] > 0.0              # shaping lever moved v_shot
+    assert shape["clean"] is True
+    assert shape_fire_boxed is False             # clean crossing at fire (NOT boxed containment)
+    assert shape["viability_capture"] is True    # clean capture (worst-case frozen at fire)
+    assert base["wasted"] >= 1
+    assert shape["wasted"] < base["wasted"]      # strictly fewer wasted_fire than hold

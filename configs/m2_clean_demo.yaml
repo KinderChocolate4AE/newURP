@@ -1,0 +1,71 @@
+# M2 CLEAN / FAVORABLE-REGIME demonstration scenario  (NOT the default)
+#
+# Purpose: a representative artifact that shows the real M2 DoD end-to-end --
+#   delta_v_shot_headline > 0, clean_net_threshold_crossed = True, boxed_in =
+#   False at fire, wasted_fire(shaping) < wasted_fire(hold), viability_capture = True.
+#
+# Regime: MANY AGILE CHEAP LIMITERS vs a SLOW threat. This is the favorable
+# corner where cooperative shaping cleanly closes the SE(3) net cone -- it is
+# NOT the typical/default scenario (see configs/m2_default.yaml, which stays
+# conservative/prototype-derived and may show boxing/containment).
+#
+# The clean capture is achieved through the SHAPING LEVER (limiter count +
+# agility), NOT by enlarging the net: net_radius is kept at the grounded 1.5.
+# (With judge=se3_cone, capture is decided by the net CONE, so net_radius does
+# not inflate the viability capture -- it only sets the point_mass ablation
+# sphere, the informational trajectory_capture test, and the display blob.)
+
+scenario:
+  n_limiters: 8                 # shaping lever: enough agile limiters to close the cone
+  n_adversaries: 1
+  finisher:
+    K: 1
+
+physics:
+  dt: 0.05
+  tau_deploy: 0.4
+  tau_lock: 0.1
+  a_att_max: 30.0               # attacker maneuver authority (same as default/gate)
+  att_speed: 8.0                # SLOW threat -> limiters have time to settle on the shell
+  kill_radius: 2.0
+  net_radius: 1.5               # GROUNDED net size (same as default); NOT enlarged to force a pass
+  a_lim_max: 200.0              # agile limiters (shaping lever)
+
+attitude:
+  omega_max: 3.14159
+  e_net_init: [1.0, 0.0, 0.0]
+
+viability:
+  judge: se3_cone               # SE(3) net cone (capture is cone-based; net_radius does NOT enter it)
+  turn_limited: false
+  n_samples: 2000
+  seed: 0
+  cone:
+    half_angle: 0.43            # same cone as the M2 gate
+    range_min: 0.0
+    range_max: 40.0
+
+fire_gate:                      # same fire gate as the M2 gate (R2)
+  theta_fire: 0.8
+  B_capture: 1.0
+  c_fire: 0.8
+
+reward:
+  lambda1: 1.0
+  lambda2: 1.0
+  lambda3: 0.5
+
+baselines:
+  headline_u0: hold_position
+  coma_u0: hold_position
+
+demo:                           # corridor geometry + backend kinematics for the GIF
+                                # (the M2 gate's PROVEN capturing fixture). m2_default has
+                                # NO demo block -> build_env defaults reproduce its rendering.
+  limiter_v_max: 150.0          # agile cheap limiters (shaping lever) -- snap onto the cone shell
+  limiter_omega: 16.0
+  adversary_v_max: 20.0
+  adversary_start_x: 18.0
+  episode_len: 45
+  r_ring: 2.1
+  x_fire: 11.0

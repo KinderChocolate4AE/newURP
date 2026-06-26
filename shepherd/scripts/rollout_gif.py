@@ -24,11 +24,8 @@ import pathlib
 
 import numpy as np
 import yaml
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation, PillowWriter
-from matplotlib.patches import Circle, Polygon
+# matplotlib is imported lazily inside render() so build_env()/rollout() (the
+# scenario logic the tests pin) import without the viz dependency.
 
 from shepherd.game.roles import ScenarioSpec
 from shepherd.env import ShapingParallelEnv, Layout
@@ -46,20 +43,33 @@ def _ring(n, c, r):
 
 
 def build_env(cfg, mode="shaping"):
-    """Compose ScenarioSpec + corridor Layout + AnalyticBackend + env (cone kwargs)."""
+    """Compose ScenarioSpec + corridor Layout + AnalyticBackend + env (cone kwargs).
+
+    An optional cfg["demo"] block overrides the corridor geometry + backend
+    kinematic limits. Its DEFAULTS reproduce the conservative m2_default
+    rendering exactly, so a config with no demo block is unaffected.
+    """
     scn = ScenarioSpec.from_dict(cfg)
     cone = cfg.get("viability", {}).get("cone", {})
+    d = cfg.get("demo", {})
     n = scn.n_limiters
+    lim_vmax = float(d.get("limiter_v_max", 80.0))
+    lim_omega = float(d.get("limiter_omega", 12.0))
+    adv_vmax = float(d.get("adversary_v_max", 30.0))
+    adv_x = float(d.get("adversary_start_x", 24.0))
+    ep = int(d.get("episode_len", 70))
+    r_ring = float(d.get("r_ring", 2.1))
+    x_fire = float(d.get("x_fire", 11.0))
     lay = Layout(target=[0.0, 0, 0], limiter_p0=_ring(n, [8.0, 0, 0], 5.0),
-                 finisher_p0=[2.0, 0, 0], adversary_p0=[24.0, 0, 0],
+                 finisher_p0=[2.0, 0, 0], adversary_p0=[adv_x, 0, 0],
                  adversary_v0=[-scn.adversary.speed, 0, 0], target_radius=1.0,
-                 r_ring=2.1, episode_len=70)
-    lay.x_fire = 11.0
-    agents = [AgentKin(f"limiter_{i}", "limiter", KinematicLimits(scn.limiter.a_max, 80.0, 12.0),
+                 r_ring=r_ring, episode_len=ep)
+    lay.x_fire = x_fire
+    agents = [AgentKin(f"limiter_{i}", "limiter", KinematicLimits(scn.limiter.a_max, lim_vmax, lim_omega),
                        list(p), [0, 0, 0], [1, 0, 0]) for i, p in enumerate(lay.limiter_p0)]
     agents.append(AgentKin("finisher_0", "finisher", KinematicLimits(1.0, 1.0, scn.finisher.omega_max),
                            list(lay.finisher_p0), [0, 0, 0], [1, 0, 0]))
-    agents.append(AgentKin("adversary_0", "adversary", KinematicLimits(scn.adversary.a_att_max, 30.0, 10.0),
+    agents.append(AgentKin("adversary_0", "adversary", KinematicLimits(scn.adversary.a_att_max, adv_vmax, 10.0),
                            list(lay.adversary_p0), list(lay.adversary_v0), [-1, 0, 0]))
     backend = AnalyticBackend(agents, dt=scn.dt)
     env = ShapingParallelEnv(backend, scn, lay, baseline_mode=mode,
@@ -148,7 +158,13 @@ def _cone_polygon(apex, axis2d, half, length):
     return np.array([apex, apex + e1, apex + e2])
 
 
-def render(frames, summary, out_path, mode):
+def render(frames, summary, out_path, mode, scenario="m2"):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.animation import FuncAnimation, PillowWriter
+    from matplotlib.patches import Circle, Polygon
+
     fig, (axA, axP) = plt.subplots(1, 2, figsize=(12, 5.4),
                                    gridspec_kw={"width_ratios": [1.45, 1.0]})
     ts = [f["t"] for f in frames]
@@ -159,7 +175,7 @@ def render(frames, summary, out_path, mode):
     def update(i):
         f = frames[i]
         axA.clear()
-        axA.set_title(f"M2 / L1 scripted rollout  ({mode}, se3_cone)   t={f['t']}")
+        axA.set_title(f"M2 / L1 rollout  [{scenario}]  ({mode}, se3_cone)   t={f['t']}")
         axA.set_xlim(-3, 26); axA.set_ylim(-9, 9); axA.set_aspect("equal")
         axA.grid(alpha=0.15)
         # target
@@ -234,16 +250,18 @@ def render(frames, summary, out_path, mode):
 def main():
     ap = argparse.ArgumentParser(description="Scripted M2 rollout GIF (L1).")
     ap.add_argument("--config", default="configs/m2_default.yaml")
-    ap.add_argument("--out", default="results/m2_rollout.gif")
+    ap.add_argument("--output", "--out", dest="output", default="results/m2_rollout.gif")
     ap.add_argument("--mode", default="shaping", choices=["shaping", "hold"])
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
 
+    scenario = pathlib.Path(args.config).stem
     cfg = yaml.safe_load(open(args.config))
     env, scn, lay = build_env(cfg, mode=args.mode)
     frames, summary = rollout(env, scn, lay, args.mode, seed=args.seed)
-    out = render(frames, summary, args.out, args.mode)
-    print(f"judge={scn.viability.judge}  mode={args.mode}  frames={len(frames)}")
+    out = render(frames, summary, args.output, args.mode, scenario=scenario)
+    print(f"scenario={scenario}  judge={scn.viability.judge}  net_radius={scn.finisher.net_radius}  "
+          f"mode={args.mode}  frames={len(frames)}")
     print(f"max_vshot={summary['max_vshot']:.3f}  max_delta={summary['max_delta']:.3f}  "
           f"clean={summary['clean']}  boxed_steps={summary['boxed_steps']}  "
           f"wasted_fire={summary['wasted']}")
