@@ -29,10 +29,17 @@ attitude:                       # R3: reduced-attitude pointing (NOT full 6-DOF 
   e_net_init: [1.0, 0.0, 0.0]   # initial finisher net-pointing axis e_net (R_F . e_net)
 
 viability:                      # v_shot reachable-set surrogate (commit 2)
-  judge: point_mass             # {point_mass, se3}; point_mass = proto port baseline
-  turn_limited: false           # false = single-segment constant-accel reachable set (proto)
-  n_samples: 2000               # accel samples (reachset __main__ n=2000)
-  seed: 0                       # port-fidelity regression seed
+  judge: se3_cone               # M2/L1 DEFAULT: SE(3) net cone (S5/S8 channel 2 net-volume
+                                # alignment). Canonical values: {se3_cone, point_mass}.
+                                # point_mass = logged ablation / kill-switch baseline ONLY
+                                # (and the commit-2 port-fidelity regression judge).
+  turn_limited: false           # false = single-segment constant-accel reachable set
+  n_samples: 2000               # accel samples
+  seed: 0                       # rng seed
+  cone:                         # se3_cone geometry. Consumed by the composition root
+    half_angle: 0.43            # (rollout/env cone_* kwargs); ScenarioSpec.from_dict ignores it.
+    range_min: 0.0
+    range_max: 40.0
 
 fire_gate:                      # R2: single fire gate source of truth
   theta_fire: 0.8               # fire iff v_shot_soft >= theta_fire

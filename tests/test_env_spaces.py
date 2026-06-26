@@ -291,3 +291,14 @@ def test_env_fire_gate_threshold():
         if not env.agents:
             break
     assert env.fsm.fired_count == 0                                   # gate blocked every fire
+
+
+def test_config_default_judge_is_se3_cone():
+    """Note A: the M2/L1 default config selects the SE(3) cone judge, end-to-end
+    (canonical value 'se3_cone' flows config -> ScenarioSpec -> viability)."""
+    import pathlib
+    import yaml
+    cfg = yaml.safe_load(open(pathlib.Path(__file__).resolve().parents[1]
+                              / "configs" / "m2_default.yaml"))
+    assert cfg["viability"]["judge"] == "se3_cone"
+    assert ScenarioSpec.from_dict(cfg).viability.judge == "se3_cone"

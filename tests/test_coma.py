@@ -196,3 +196,33 @@ def test_dod_smoke_shaping_beats_hold():
     assert base["captured"] is False
     assert base["wasted"] >= 1
     assert shape["wasted"] < base["wasted"]           # STRICTLY fewer wasted_fire
+
+
+def test_capture_model_is_frozen_worst_case_not_trajectory():
+    """Note B: capture (terminated/DoD) = the WORST-CASE viability judge FROZEN at
+    fire, NOT the scripted attacker's actual endpoint. In the hold baseline the
+    fire step has v_shot_worst == 0 (a feasible escape avoids the net), so the env
+    reports NO capture -- regardless of where the attacker's actual trajectory
+    lands. capture_model == 'frozen_commit_worst_case'."""
+    env = _env("hold")
+    env.reset(seed=0)
+    fired = False
+    fire_worst = None
+    for _ in range(env.layout.episode_len):
+        lims, fin, att = env._states()
+        p_att, v_att, p_fin = env._p(att), env._v(att), env._p(fin)
+        trig = p_att[0] <= env.layout.x_fire
+        acts = {lid: hold_position_limiter() for lid in env.limiter_ids}
+        acts["finisher_0"] = scripted_finisher(p_fin, p_att, v_att, tau=env.tau_deploy,
+                                               clean_threshold_crossed=trig)
+        acts["adversary_0"] = np.zeros(3, np.float32)
+        _, _, _, _, info = env.step(acts)
+        fi = info["finisher_0"]
+        if fi["fire_event"]:
+            fired = True
+            fire_worst = fi["v_shot_worst"]
+        if not env.agents:
+            break
+    assert fired is True
+    assert fire_worst == 0.0                  # worst-case judge says the attacker can escape
+    assert env.fsm.last_capture is False      # -> env's capture decision is the worst-case one
