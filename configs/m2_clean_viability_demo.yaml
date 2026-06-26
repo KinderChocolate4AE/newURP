@@ -1,0 +1,85 @@
+# M2 CLEAN VIABILITY-THRESHOLD demonstration scenario  (NOT the default)
+#
+# Name = "clean VIABILITY-threshold demo under an UNGROUNDED cone", NOT "clean
+# physical capture". The load-bearing judge here is the SE(3) net CONE, which is
+# a TUNED / UNGROUNDED model choice (half_angle/range below are demo values, not
+# a physical net). Physical grounding of the net model = the N1 question /
+# Paper-2 track (Xu, Drones 9:190) -- deliberately NOT done in this commit.
+#
+# Shows the M2 DoD end-to-end UNDER THE CONE judge: delta_v_shot_headline > 0,
+# clean_net_threshold_crossed = True, boxed_in = False at fire,
+# wasted_fire(shaping) < wasted_fire(hold), viability_capture = True.
+#
+# HONEST CAVEATS (do NOT read viability_capture as physical capture):
+#  - trajectory_capture (actual endpoint in the SAME cone) is FALSE here. The
+#    actual discrete CLOSED-LOOP attacker overshoots the single-segment
+#    CONTINUOUS reachable set the viability judge uses and EXITS the cone. This
+#    is an S14 surrogate-fidelity finding -- v_shot is OPTIMISTIC. We report it
+#    (summary/panel: surrogate_fidelity = "actual exits cone (S14)"); we do NOT
+#    shrink the dodge to force agreement.
+#  - tight_net_probe_1p5m (actual endpoint in a tight 1.5 m PHYSICAL point-net)
+#    is also FALSE -- the N1 physical-net caveat ("a tight net would miss").
+#
+# The clean viability capture is achieved through the SHAPING LEVER (limiter
+# count + agility), NOT by enlarging the net: net_radius stays at the grounded
+# 1.5. (With judge=se3_cone, viability capture is decided by the CONE, so
+# net_radius does not inflate it -- it only sets the point_mass ablation sphere,
+# the tight-net probe reference, and the display blob.)
+
+scenario:
+  n_limiters: 8                 # shaping lever: enough agile limiters to close the cone
+  n_adversaries: 1
+  finisher:
+    K: 1
+
+physics:
+  dt: 0.05
+  tau_deploy: 0.4
+  tau_lock: 0.1
+  a_att_max: 30.0               # attacker maneuver authority (same as default/gate)
+  att_speed: 8.0                # SLOW threat -> limiters have time to settle on the shell
+  kill_radius: 2.0
+  net_radius: 1.5               # GROUNDED net size (same as default); NOT enlarged to force a pass
+  a_lim_max: 200.0              # agile limiters (shaping lever)
+
+attitude:
+  omega_max: 3.14159
+  e_net_init: [1.0, 0.0, 0.0]
+
+viability:
+  judge: se3_cone               # SE(3) net cone (capture is cone-based; net_radius does NOT enter it)
+  turn_limited: false
+  n_samples: 2000
+  seed: 0
+  cone:                         # TUNED / UNGROUNDED cone geometry (demo choice, not a physical net)
+    half_angle: 0.43            # same cone as the M2 gate
+    range_min: 0.0
+    range_max: 40.0             # FINITE (not inf). NOTE: the DoD gate (tests/test_coma _env) also
+                                # uses a finite tuned range_max=40 (the env default), NOT inf -- both
+                                # the demo and the gate use this ungrounded value, to be grounded
+                                # under N1 / Paper-2. (Gate behavior unchanged in this commit.)
+
+fire_gate:                      # same fire gate as the M2 gate (R2)
+  theta_fire: 0.8
+  B_capture: 1.0
+  c_fire: 0.8
+
+reward:
+  lambda1: 1.0
+  lambda2: 1.0
+  lambda3: 0.5
+
+baselines:
+  headline_u0: hold_position
+  coma_u0: hold_position
+
+demo:                           # corridor geometry + backend kinematics for the GIF
+                                # (the M2 gate's PROVEN capturing fixture). m2_default has
+                                # NO demo block -> build_env defaults reproduce its rendering.
+  limiter_v_max: 150.0          # agile cheap limiters (shaping lever) -- snap onto the cone shell
+  limiter_omega: 16.0
+  adversary_v_max: 20.0
+  adversary_start_x: 18.0
+  episode_len: 45
+  r_ring: 2.1
+  x_fire: 11.0

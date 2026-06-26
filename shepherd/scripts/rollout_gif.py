@@ -31,10 +31,30 @@ from shepherd.game.roles import ScenarioSpec
 from shepherd.env import ShapingParallelEnv, Layout
 from shepherd.sim.analytic import AnalyticBackend, AgentKin, KinematicLimits   # composition root
 from shepherd.game.finisher_fsm import FinisherState
+from shepherd.game import viability as V
 from shepherd.agents.baselines import (hold_position_limiter, scripted_shaping_limiter,
                                        scripted_finisher)
 
 CAPTURE_MODEL = "frozen_commit_worst_case"
+TIGHT_NET_RADIUS = 1.5          # N1 probe: a tight PHYSICAL point-net sphere
+
+
+def _net_model_str(env):
+    """Human label for the net model the viability judge uses this episode."""
+    if env.judge == "se3_cone":
+        return (f"SE(3) cone (half_angle={env.cone_half_angle}, range_max={env.cone_range_max}) "
+                f"-- UNGROUNDED/tuned, pending Paper-2 (Xu Drones 9:190) grounding")
+    return f"point-mass sphere (net_radius={env.net_radius}) -- surrogate"
+
+
+def _actual_endpoint_in_net(endpoint, env, apex, axis, net_center):
+    """Is the ACTUAL attacker endpoint inside the SAME net model the viability
+    judge uses (SE(3) cone for se3_cone; point sphere for point_mass)?"""
+    p = np.asarray(endpoint, float)[None, :]
+    if env.judge == "se3_cone":
+        return bool(V._caught_se3_cone(p, apex, axis, env.cone_half_angle,
+                                       env.cone_range_min, env.cone_range_max)[0])
+    return bool(np.linalg.norm(p[0] - np.asarray(net_center, float)) <= env.net_radius)
 
 
 def _ring(n, c, r):
@@ -85,7 +105,10 @@ def rollout(env, scn, lay, mode, seed=0):
     R_lat = 0.5 * scn.adversary.a_att_max * scn.finisher.tau_deploy ** 2
     frames = []
     frozen_nc = None
-    traj_cap = None
+    frozen_apex = None
+    frozen_axis = None
+    traj_cap = None                 # actual endpoint in the SAME net model (cone) as viability
+    tight_probe = None              # actual endpoint in a tight 1.5 m PHYSICAL sphere (N1 probe)
     viability_cap = False
     prev_state = env.fsm.state
     for t in range(lay.episode_len):
@@ -106,13 +129,29 @@ def rollout(env, scn, lay, mode, seed=0):
         fi = info["finisher_0"]
 
         if fi["fire_event"] and env.fsm.commit is not None:
-            frozen_nc = np.asarray(env.fsm.commit.net_center, float)
-        # trajectory_capture (informational): actual attacker vs frozen net sphere
-        # resolved when the shot leaves LOCKED.
-        if (prev_state is FinisherState.LOCKED
-                and env.fsm.state in (FinisherState.SPENT, FinisherState.LOADED)
+            cm = env.fsm.commit
+            frozen_nc = np.asarray(cm.net_center, float)
+            frozen_apex = np.asarray(cm.p_F, float)      # finisher pose frozen at fire (cone apex/axis)
+            frozen_axis = np.asarray(cm.e_net, float)
+        # Resolve at the DEPLOY resolution (DEPLOYING->LOCKED, = fire + tau_deploy)
+        # so the actual endpoint is measured at the SAME horizon the viability
+        # judge froze at fire (NOT fire + tau_deploy + tau_lock -- that would give
+        # the attacker extra dodge time and is an inconsistent comparison).
+        #  trajectory_capture : actual endpoint in the SAME net model (cone). It
+        #                       can be FALSE even when viability_capture is True:
+        #                       the actual discrete CLOSED-LOOP attacker overshoots
+        #                       the single-segment CONTINUOUS reachable set the
+        #                       judge uses and EXITS the cone -> an S14 surrogate-
+        #                       fidelity finding (v_shot is optimistic). We report
+        #                       this honestly; we do NOT shrink the dodge.
+        #  tight_net_probe_1p5m: actual endpoint in a tight 1.5 m PHYSICAL point-net
+        #                       sphere -> the N1 physical-net caveat (a tight net misses).
+        if (prev_state is FinisherState.DEPLOYING
+                and env.fsm.state is FinisherState.LOCKED
                 and frozen_nc is not None):
-            traj_cap = bool(np.linalg.norm(env._p(env._states()[2]) - frozen_nc) <= env.net_radius)
+            actual_end = env._p(env._states()[2])
+            traj_cap = _actual_endpoint_in_net(actual_end, env, frozen_apex, frozen_axis, frozen_nc)
+            tight_probe = bool(np.linalg.norm(actual_end - frozen_nc) <= TIGHT_NET_RADIUS)
         viability_cap = viability_cap or bool(fi["captured"])
         prev_state = env.fsm.state
 
@@ -133,11 +172,23 @@ def rollout(env, scn, lay, mode, seed=0):
             clean=fi["clean_net_threshold_crossed"], boxed=fi["boxed_in"],
             fire=fi["fire_event"], committed=fi["fsm_state"] in ("DEPLOYING", "LOCKED"),
             viability_capture=viability_cap, trajectory_capture=traj_cap,
+            tight_net_probe_1p5m=tight_probe,
         ))
         if not env.agents:
             break
+    # S14 surrogate-fidelity verdict: viability uses a single-segment CONTINUOUS
+    # reachable set; the actual discrete closed-loop attacker can over-bound it.
+    if traj_cap is None:
+        surrogate_fidelity = "n/a (no resolved shot)"
+    elif viability_cap and not traj_cap:
+        surrogate_fidelity = ("actual exits cone (S14): single-segment continuous "
+                              "reachable set under-bounds the discrete closed-loop "
+                              "attacker -> v_shot is optimistic")
+    else:
+        surrogate_fidelity = "consistent (actual endpoint matches viability under the cone)"
     summary = dict(viability_capture=viability_cap, trajectory_capture=traj_cap,
-                   capture_model=CAPTURE_MODEL,
+                   tight_net_probe_1p5m=tight_probe, capture_model=CAPTURE_MODEL,
+                   net_model=_net_model_str(env), surrogate_fidelity=surrogate_fidelity,
                    max_vshot=max(f["vsoft"] for f in frames),
                    max_delta=max(f["delta"] for f in frames),
                    clean=any(f["clean"] for f in frames),
@@ -226,15 +277,22 @@ def render(frames, summary, out_path, mode, scenario="m2"):
         axP.set_xlabel("step"); axP.set_title("viability metrics")
         axP.legend(loc="upper left", fontsize=7, ncol=1)
         tc = f["trajectory_capture"]
+        tp = f["tight_net_probe_1p5m"]
+        # wrap the (long, ungrounded) net-model label for the panel
+        nm = summary["net_model"]
+        nm_wrapped = nm if len(nm) <= 52 else nm[:52] + "\n               " + nm[52:]
         txt = (f"FSM: {f['fsm']}    k={f['k']}\n"
                f"v_shot_soft = {f['vsoft']:.3f}   v_shot_worst = {f['vworst']:.0f}\n"
                f"delta_headline = {f['delta']:.3f}\n"
                f"clean_net_threshold = {f['clean']}\n"
                f"boxed_in = {f['boxed']}\n"
+               f"net_model = {nm_wrapped}\n"
                f"---- capture (model = {summary['capture_model']}) ----\n"
                f"viability_capture  = {f['viability_capture']}   <- DoD / terminated\n"
-               f"trajectory_capture = {tc}   (informational)")
-        axP.text(0.02, -0.02, txt, transform=axP.transAxes, va="top", fontsize=8,
+               f"trajectory_capture = {tc}   (actual endpoint in SAME cone)\n"
+               f"tight_net_probe_1p5m = {tp}   (PROBE: tight physical net; N1 caveat)\n"
+               f"surrogate_fidelity: {'actual exits cone (S14)' if (f['viability_capture'] and tc is False) else 'consistent' if tc is not None else 'n/a'}")
+        axP.text(0.02, -0.02, txt, transform=axP.transAxes, va="top", fontsize=7.2,
                  family="monospace",
                  bbox=dict(boxstyle="round", fc="#f4f4f4", ec="0.7"))
         return []
@@ -265,9 +323,12 @@ def main():
     print(f"max_vshot={summary['max_vshot']:.3f}  max_delta={summary['max_delta']:.3f}  "
           f"clean={summary['clean']}  boxed_steps={summary['boxed_steps']}  "
           f"wasted_fire={summary['wasted']}")
+    print(f"net_model = {summary['net_model']}")
     print(f"capture_model={summary['capture_model']}  "
           f"viability_capture={summary['viability_capture']}  "
-          f"trajectory_capture={summary['trajectory_capture']}")
+          f"trajectory_capture(same cone)={summary['trajectory_capture']}  "
+          f"tight_net_probe_1p5m={summary['tight_net_probe_1p5m']}")
+    print(f"surrogate_fidelity: {summary['surrogate_fidelity']}")
     print(f"wrote {out}  ({out.stat().st_size} bytes)")
 
 

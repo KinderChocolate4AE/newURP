@@ -228,17 +228,25 @@ def test_capture_model_is_frozen_worst_case_not_trajectory():
     assert env.fsm.last_capture is False      # -> env's capture decision is the worst-case one
 
 
-def test_clean_demo_config_meets_m2_dod_without_enlarging_net():
-    """The configs/m2_clean_demo.yaml scenario shows the FULL M2 DoD via the
-    shaping lever (many agile limiters vs a slow threat) at the GROUNDED net
-    size (net_radius == 1.5): delta>0, clean (non-boxed) crossing at fire,
-    viability_capture True, and strictly fewer wasted_fire than hold.
-    boxed_in is NOT counted as the clean crossing (fire step is not boxed)."""
+def test_clean_viability_demo_reporting_is_consistent_and_honest():
+    """configs/m2_clean_viability_demo.yaml shows the M2 DoD UNDER THE CONE judge
+    via the shaping lever, at the GROUNDED net size (net_radius == 1.5), with
+    HONEST capture reporting (no cherry-picking, no net enlargement):
+      - viability_capture (worst-case CONTINUOUS reachable set in the cone) == True
+      - trajectory_capture (actual discrete endpoint in the SAME cone)      == False
+        -> S14 surrogate-fidelity: the closed-loop attacker overshoots the
+           single-segment reachable surrogate and EXITS the cone (v_shot optimistic).
+      - tight_net_probe_1p5m (actual endpoint in a tight 1.5 m sphere)       == False
+        -> N1 physical-net caveat.
+      - clean (non-boxed-at-fire) crossing, delta>0, wasted(shaping) < wasted(hold).
+    We do NOT assert trajectory_capture or the tight sphere is True -- forcing
+    that would require shrinking the dodge (cherry-pick); the disagreement IS the
+    S14 / N1 finding, reported via summary['surrogate_fidelity']."""
     import pathlib
     import yaml
     import shepherd.scripts.rollout_gif as RG          # build_env/rollout import w/o matplotlib
     cfg = yaml.safe_load(open(pathlib.Path(__file__).resolve().parents[1]
-                              / "configs" / "m2_clean_demo.yaml"))
+                              / "configs" / "m2_clean_viability_demo.yaml"))
 
     def run(mode):
         env, scn, lay = RG.build_env(cfg, mode=mode)
@@ -249,10 +257,18 @@ def test_clean_demo_config_meets_m2_dod_without_enlarging_net():
     base, _, _ = run("hold")
     shape, shape_fire_boxed, net_r = run("shaping")
 
-    assert net_r == 1.5                          # grounded net size, NOT enlarged to force a pass
-    assert shape["max_delta"] > 0.0              # shaping lever moved v_shot
+    assert net_r == 1.5                              # grounded net size, NOT enlarged
+    assert shape["max_delta"] > 0.0                  # shaping lever moved v_shot
     assert shape["clean"] is True
-    assert shape_fire_boxed is False             # clean crossing at fire (NOT boxed containment)
-    assert shape["viability_capture"] is True    # clean capture (worst-case frozen at fire)
+    assert shape_fire_boxed is False                 # clean crossing at fire (NOT boxed containment)
+    assert shape["viability_capture"] is True        # worst-case CONTINUOUS reachable set in the cone
+    # honest S14 finding: the actual discrete attacker exits the same cone
+    assert shape["trajectory_capture"] is False
+    assert "tight_net_probe_1p5m" in shape           # N1 probe reported...
+    assert shape["tight_net_probe_1p5m"] is False    # ...tight physical net would MISS
+    assert "SE(3) cone" in shape["net_model"]
+    assert "UNGROUNDED" in shape["net_model"]         # net model labelled ungrounded
+    assert "S14" in shape["surrogate_fidelity"]       # surrogate-fidelity verdict surfaced
+    assert "exits cone" in shape["surrogate_fidelity"]
     assert base["wasted"] >= 1
-    assert shape["wasted"] < base["wasted"]      # strictly fewer wasted_fire than hold
+    assert shape["wasted"] < base["wasted"]          # strictly fewer wasted_fire than hold
