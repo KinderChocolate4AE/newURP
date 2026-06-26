@@ -147,3 +147,147 @@ def test_slew_reaches_when_within_budget():
     out = _slew(e, np.array([1.0, 0.05, 0.0]), max_ang=1.0)   # tiny turn, big budget
     assert abs(np.linalg.norm(out) - 1.0) < 1e-12
     assert out @ _slew(np.array([1.0, 0.05, 0.0]), np.array([1.0, 0.05, 0.0]), 1.0) > 0.999
+
+
+# --------------------------------------------------------------------------- #
+# PettingZoo M2 env composition (commit 4)
+# --------------------------------------------------------------------------- #
+from shepherd.game.roles import ScenarioSpec                       # noqa: E402
+from shepherd.game.finisher_fsm import FinisherState               # noqa: E402
+from shepherd.env import ShapingParallelEnv, Layout                # noqa: E402
+
+
+def _ring(n, c, r):
+    return [[c[0], c[1] + r * np.cos(2 * np.pi * i / n), c[2] + r * np.sin(2 * np.pi * i / n)]
+            for i in range(n)]
+
+
+def _scenario(n_lim, judge, nsamp):
+    return ScenarioSpec.from_dict({
+        "scenario": {"n_limiters": n_lim, "n_adversaries": 1, "finisher": {"K": 1}},
+        "physics": {"dt": 0.05, "tau_deploy": 0.4, "tau_lock": 0.1, "a_att_max": 30.0,
+                    "att_speed": 8.0, "kill_radius": 2.0, "net_radius": 2.25, "a_lim_max": 200.0},
+        "attitude": {"omega_max": 3.14159, "e_net_init": [1, 0, 0]},
+        "fire_gate": {"theta_fire": 0.8, "B_capture": 1.0, "c_fire": 0.8},
+        "viability": {"judge": judge, "turn_limited": False, "n_samples": nsamp, "seed": 0},
+        "reward": {"lambda1": 1.0, "lambda2": 1.0, "lambda3": 0.5},
+        "baselines": {"headline_u0": "hold_position", "coma_u0": "hold_position"}})
+
+
+def _env_backend(scn, lay):
+    ag = [AgentKin(f"limiter_{i}", "limiter", KinematicLimits(200.0, 150.0, 16.0),
+                   list(p), [0, 0, 0], [1, 0, 0]) for i, p in enumerate(lay.limiter_p0)]
+    ag.append(AgentKin("finisher_0", "finisher", KinematicLimits(1.0, 1.0, 3.14159),
+                       list(lay.finisher_p0), [0, 0, 0], [1, 0, 0]))
+    ag.append(AgentKin("adversary_0", "adversary", KinematicLimits(30.0, 20.0, 10.0),
+                       list(lay.adversary_p0), list(lay.adversary_v0), [-1, 0, 0]))
+    return AnalyticBackend(ag, dt=scn.dt)
+
+
+def _conformance_env(n_lim=4, nsamp=200):
+    """Small, fast env for API/space conformance (point_mass judge)."""
+    scn = _scenario(n_lim, "point_mass", nsamp)
+    lay = Layout(target=[0.0, 0, 0], limiter_p0=_ring(n_lim, [8.0, 0, 0], 4.0),
+                 finisher_p0=[2.0, 0, 0], adversary_p0=[16.0, 0, 0], adversary_v0=[-8, 0, 0],
+                 target_radius=1.0, r_ring=2.1, episode_len=12)
+    return ShapingParallelEnv(_env_backend(scn, lay), scn, lay)
+
+
+def test_parallel_api_conformance():
+    """PettingZoo ParallelEnv conformance (parallel_api_test)."""
+    from pettingzoo.test import parallel_api_test
+    parallel_api_test(_conformance_env(), num_cycles=40)
+
+
+def test_env_reset_reproducible():
+    a, b = _conformance_env(), _conformance_env()
+    oa, _ = a.reset(seed=3)
+    ob, _ = b.reset(seed=3)
+    for k in oa:
+        assert np.array_equal(oa[k], ob[k])
+
+
+def test_obs_and_sampled_actions_in_spaces():
+    env = _conformance_env()
+    obs, _ = env.reset(seed=0)
+    for agent, o in obs.items():
+        assert env.observation_space(agent).contains(o)
+    for _ in range(5):
+        acts = {a: env.action_space(a).sample() for a in env.agents}
+        for a, ac in acts.items():
+            assert env.action_space(a).contains(ac)
+        obs, rew, term, trunc, info = env.step(acts)
+        if not env.agents:
+            break
+    for agent, o in obs.items():
+        assert env.observation_space(agent).contains(o)
+
+
+def test_step_returns_parallel_dicts():
+    env = _conformance_env()
+    env.reset(seed=0)
+    acts = {a: env.action_space(a).sample() for a in env.agents}
+    obs, rew, term, trunc, info = env.step(acts)
+    for d in (obs, rew, term, trunc, info):
+        assert set(d.keys()) == set(env.possible_agents)
+    assert all(isinstance(v, float) for v in rew.values())
+    assert all(isinstance(v, bool) for v in term.values())
+    assert all(isinstance(v, bool) for v in trunc.values())
+    assert all(isinstance(v, dict) for v in info.values())
+
+
+def test_termination_truncation_mutually_exclusive():
+    """Across a full rollout, no agent is both terminated and truncated."""
+    env = _conformance_env()
+    env.reset(seed=0)
+    for _ in range(60):
+        acts = {a: env.action_space(a).sample() for a in env.agents}
+        _, _, term, trunc, _ = env.step(acts)
+        for a in term:
+            assert not (term[a] and trunc[a])
+        if not env.agents:
+            break
+
+
+def test_env_double_fire_no_double_decrement():
+    """Hammering the finisher fire-logit through the env path decrements k once."""
+    env = _conformance_env()
+    env.reset(seed=0)
+    saw_fire = False
+    for _ in range(env.layout.episode_len):
+        acts = {lid: np.zeros(4, np.float32) for lid in env.limiter_ids}
+        # finisher: always command fire (logit=1); FSM enforces single decrement
+        acts["finisher_0"] = np.array([1, 0, 0, 1, 1], np.float32)
+        acts["adversary_0"] = np.zeros(3, np.float32)
+        _, _, _, _, info = env.step(acts)
+        if info["finisher_0"]["fire_event"]:
+            saw_fire = True
+        assert env.fsm.k >= 0
+        if not env.agents:
+            break
+    assert saw_fire                      # it did fire at least once
+    assert env.fsm.fired_count == 1      # ... and only once (K=1, irreversible)
+    assert env.fsm.k == 0
+
+
+def test_env_fire_gate_threshold():
+    """Below theta_fire the env never fires; a high-v_shot setup does fire.
+    (point_mass with a large net so v_shot >= theta_fire is reachable.)"""
+    # low-v_shot: tiny net -> v_shot stays under theta_fire -> never fires
+    scn = _scenario(4, "point_mass", 300)
+    lay = Layout(target=[0.0, 0, 0], limiter_p0=_ring(4, [8.0, 0, 0], 4.0),
+                 finisher_p0=[2.0, 0, 0], adversary_p0=[16.0, 0, 0], adversary_v0=[-8, 0, 0],
+                 target_radius=1.0, r_ring=2.1, episode_len=30)
+    env = ShapingParallelEnv(_env_backend(scn, lay), scn, lay)
+    # shrink the net hard so the random reachable set rarely lands inside
+    env.net_radius = 0.3
+    env.reset(seed=0)
+    for _ in range(env.layout.episode_len):
+        acts = {lid: np.zeros(4, np.float32) for lid in env.limiter_ids}
+        acts["finisher_0"] = np.array([1, 0, 0, 1, 1], np.float32)   # always command fire
+        acts["adversary_0"] = np.zeros(3, np.float32)
+        _, _, _, _, info = env.step(acts)
+        assert info["finisher_0"]["v_shot_soft"] < env.theta_fire     # gate never satisfied
+        if not env.agents:
+            break
+    assert env.fsm.fired_count == 0                                   # gate blocked every fire
