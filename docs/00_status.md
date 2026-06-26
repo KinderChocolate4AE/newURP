@@ -12,7 +12,7 @@
 - **old → new 헤드라인**:
   - old: CBBA+RL(수단 중심) → "manufacturing capturability"(개념 선점됨: Von Moll turret+defender, Chen luring).
   - **new(정본 claim): 협력 shaping이 *유한·비가역·miss-free 비파괴 finisher(net)의 교환-경제학(exchange frontier)*을 움직인다 — MARL.** 싼 kamikaze가 적을 몰아 희소 net의 발당 가치를 올린다.
-- **기조**: usability > fidelity(3DOF 유지) · novelty = *thin-but-honest intersection 수용* · 목적 = **robotics+RL 진로 milestone + 저널 게재 경험 + RL/physical-AI 학습**(URP-scoped) · moat 완화 → **코드 공개 OK**(portfolio·인용) · arXiv-우선권 압박 완화 → 현실 venue.
+- **기조**: usability > fidelity(6-DOF/SE3) · novelty = *thin-but-honest intersection 수용* · 목적 = **robotics+RL 진로 milestone + 저널 게재 경험 + RL/physical-AI 학습**(URP-scoped) · moat 완화 → **코드 공개 OK**(portfolio·인용) · arXiv-우선권 압박 완화 → 현실 venue.
 - **운영 교훈**: 초반 검증/probe에 과투자(build 0) → 지금은 **build-first, 검증 time-box**.
 - **잠금 결정**: S4 적이 commit 관측·τ 동안 반응(worst-case v_shot) · S8 hard no-go + reachable-set v_shot · limiter = 싼 자폭 kamikaze(위협=herd, net=비파괴 takedown) · 방어자 2통화(싼 shaper + 희소 net)=cost-asymmetry 엔진 · default reactive 적(goal-constrained + 측면 dodge + kamikaze 회피 + commit 반응); back-diagonal·bait·reload는 S13로 보류.
 

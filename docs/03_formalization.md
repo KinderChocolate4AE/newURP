@@ -18,7 +18,7 @@
 ## B. 핵심 슬롯 (S1-S8) — 질문 / 옵션 / strawman / [결정]
 
 **S1 플레이어&소모성**: N limiter(소모성?) + 1 finisher + 적 1 or M? · 옵션 (a)N=3 소모 (b)N 가변 (c)적 M=포화 · strawman: N=3 소모+1+적1 · [결정:__]
-**S2 상태(신규=자원)**: 잔탄 k∈{0..K}+전개타이머; +적 모드(feint/penetrate)?; +적 자원? · strawman: 3DOF+k+전개카운트 · [결정:__]
+**S2 상태(신규=자원)**: 잔탄 k∈{0..K}+전개타이머; +적 모드(feint/penetrate)?; +적 자원? · strawman: SE3(6-DOF)+k+전개카운트 · [결정:__]
 **S3 액션(신규=발사 commit)**: fire=일회성 비가역, 발사후 τ 잠금; 적 {feint vs commit-penetrate}; limiter=setpoint · [결정:__]
 **S4 정보구조(가장 미묘)**: finisher commit이 적에게 관측? (관측=baiting/commitment 게임=루프탈출 지점) · 옵션 full / partial(잔탄 은닉) / 동시수 · strawman: 전개개시 관측·잔탄 partial · **[결정:__] ← 게임 종류 결정**
 **S5 per-shot value(E_req 재사용)**: v_shot∈[0,1]=commit 시 상대상태 함수 · strawman: v_shot=P(적∈전개net부피|상대상태,τ)≈σ(w·φ), φ=E_req항 · [결정:__]

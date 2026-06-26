@@ -61,7 +61,7 @@
 
 ## 5. 자산 회계 (유지 / 추가 / 폐기·강등)
 
-**유지:** WarSim 3DOF substrate; E_req 4항(→per-shot value로 재해석); shaping/herding 메커니즘; reduced-attitude pointing + strategy-agnostic action space 결정(2026-06-12); harness(통계 경량 유지).
+**유지:** WarSim SE3(6-DOF) substrate; E_req 4항(→per-shot value로 재해석); shaping/herding 메커니즘; reduced-attitude pointing + strategy-agnostic action space 결정(2026-06-12); harness(통계 경량 유지).
 **추가(신규 lift):** 유한-탄 상태 + 소진 동역학; 교환비/비용 목적함수; **자원을 소진시키는 적응형 적**(self-play); game-value(또는 그 학습 근사) 층.
 **폐기·강등:** "manufacturing capturability" 헤드라인(개념 선점); T0 외부 anchor-as-gate(→현실 파라미터 출처로만 경량화); N1 citable-PASS 중장비(→"현실 regime에 gap 존재" 수준); §11 Q1-레버/Phase F venue 최적화 과중; J.6 전체 code 공개(→레퍼런스 최소만, 해자).
 
