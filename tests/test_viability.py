@@ -13,7 +13,10 @@ import pathlib
 import numpy as np
 import pytest
 
-from shepherd.game.viability import VShotResult, reachable_accels, v_shot
+from shepherd.game.viability import (
+    VShotResult, reachable_accels, v_shot,
+    _union_sets, _turn_curve_segments, _segments_endpoints_feasible,
+)
 
 # --- shared corridor fixture (attacker funnels +x; net at straight-line predicted pos) ---
 TAU, A_MAX = 0.4, 30.0
@@ -161,3 +164,101 @@ def test_turn_limit_monotonicity():
     counts = [nf(om) for om in (10.0, 4.0, 2.0, 1.0)]
     assert counts == sorted(counts, reverse=True)
     assert counts[-1] < counts[0]      # strictly tighter at the small end
+
+
+# --------------------------------------------------------------------------- #
+# S14 — conservative EXTREME-POINT reachable set (n_segments>1). The default
+# path (n_segments=1) is the frozen legacy surrogate, exercised bit-exactly by
+# test_port_fidelity_* above (those must stay untouched -> port fidelity intact).
+# --------------------------------------------------------------------------- #
+def test_s14_superset_no_shrink():
+    """The conservative union concatenates the single-segment uniform-in-ball block
+    VERBATIM (first n entries), so its feasible reachable set is a guaranteed
+    SUPERSET of the legacy set -- reachability never shrinks."""
+    n = 200
+    endpoints, feasible, _ = _union_sets(
+        X, V, tau=TAU, a_att_max=A_MAX, judge="point_mass",
+        net_center=NC, net_radius=NR, net_apex=None, n_F=None, theta_net=None,
+        range_min=0.0, range_max=None, limiters=None, kill_radius=0.0,
+        attacker_turn_limited=False, omega_att_max=None, e_att=None,
+        n=n, n_segments=2, seed=0)
+    a1 = reachable_accels(A_MAX, n, 0)
+    end1 = X + V * TAU + 0.5 * a1 * TAU ** 2
+    feas1 = np.ones(n, bool)                          # no limiter / no turn limit here
+    assert len(endpoints) > n                         # extreme points were added
+    assert np.array_equal(endpoints[:n], end1)        # single-seg block verbatim
+    assert np.array_equal(feasible[:n], feas1)
+
+
+def test_s14_worst_monotone():
+    """v_shot_worst(n_segments>1) <= v_shot_worst(1): adding extreme (boundary /
+    dogleg) points can only EXPOSE escapes, never remove them. The equal-case
+    fixture (a wide capture volume that catches even boundary points) keeps both at
+    1.0 -- proving the monotonicity is not vacuously always 0."""
+    pm = dict(judge="point_mass", net_center=NC)
+
+    def worst(nr, nseg):
+        return v_shot(X, V, tau=TAU, a_att_max=A_MAX, net_radius=nr,
+                      n=200, seed=0, n_segments=nseg, **pm).v_shot_worst
+
+    # tight net: boundary overshoot escapes -> conservative <= single
+    assert worst(1.5, 2) <= worst(1.5, 1)
+    # wide net: catches the whole reachable ball incl. boundary -> both stay 1.0
+    assert worst(5.0, 1) == 1.0 and worst(5.0, 2) == 1.0
+
+
+def test_s14_cone_overshoot_synthetic_local():
+    """S14 fix in action (SYNTHETIC LOCAL cone -- decoupling rule 1; NO global
+    config constants). Demo geometry tau=0.4, a_att_max=30 => the pure-forward
+    a_max boundary endpoint overshoots by R = 1/2 a_max tau^2 = 2.4 to axial 10.4.
+    Point a forward cone whose range_max (10.2) sits JUST BELOW that extreme but
+    ABOVE the uniform-in-ball seed=0 reach (9.95 @ n=100): the legacy single-segment
+    surrogate reads worst=1.0 (it never lands the exact forward extreme) while the
+    conservative boundary set ALWAYS includes it -> worst=0.0, now agreeing with
+    the demo's trajectory_capture=False."""
+    R = 0.5 * A_MAX * TAU ** 2                         # 2.4 overshoot radius
+    center_x = V[0] * TAU                              # 8.0 straight-line axial
+    forward_extreme = center_x + R                     # 10.4 boundary endpoint
+    # --- cone params defined LOCALLY (not read from any config) ---
+    net_apex = np.array([0.0, 0.0, 0.0])
+    n_F = np.array([1.0, 0.0, 0.0])                    # forward finisher axis
+    theta_net = 0.5                                    # > 0.31 max sample half-angle
+    range_min = 0.0
+    range_max = 10.2                                   # 9.95 < 10.2 < 10.4 (margins ~0.2)
+    assert range_max < forward_extreme                 # the extreme overshoots the band
+
+    cone = dict(judge="se3_cone", net_apex=net_apex, n_F=n_F, theta_net=theta_net,
+                range_min=range_min, range_max=range_max)
+    legacy = v_shot(X, V, tau=TAU, a_att_max=A_MAX, n=100, seed=0,
+                    n_segments=1, **cone)
+    conservative = v_shot(X, V, tau=TAU, a_att_max=A_MAX, n=100, seed=0,
+                          n_segments=2, **cone)
+    assert legacy.v_shot_worst == 1.0                  # optimistic: claims containment
+    assert conservative.v_shot_worst == 0.0            # honest: the overshoot escapes
+
+
+def test_s14_turn_curve_sound():
+    """Turn-curve block soundness (honest form of the optional turn-curve test).
+    Every max-rate turn-curve segment respects the per-segment turn limit, so the
+    integrated controls are ALL feasible -- the block never fabricates an
+    infeasible 'escape'. (Under the current accel-cone _feasible_turn proxy these
+    endpoints stay inside the single-segment turn-limited set; the block becomes
+    capture-relevant only under a true turn-RATE-limited dynamics -- see the
+    _turn_curve_segments docstring caveat.)"""
+    om = 2.0
+    curves = _turn_curve_segments(V, om, TAU, A_MAX, 4, e_att=None, n_azimuth=12)
+    _, feasible = _segments_endpoints_feasible(
+        X, V, curves, tau=TAU, limiters=None, kill_radius=0.0,
+        attacker_turn_limited=True, omega_att_max=om, e_att=None)
+    assert len(curves) == 12
+    assert feasible.all()                              # all curves are valid controls
+
+    # and the turn-limited conservative path stays monotone (never claims more
+    # capture than the legacy single-segment turn-limited surrogate).
+    tl = dict(judge="point_mass", net_center=NC, net_radius=2.0,
+              attacker_turn_limited=True, omega_att_max=om)
+    w1 = v_shot(X, V, tau=TAU, a_att_max=A_MAX, n=200, seed=0, n_segments=1,
+                **tl).v_shot_worst
+    wc = v_shot(X, V, tau=TAU, a_att_max=A_MAX, n=200, seed=0, n_segments=3,
+                **tl).v_shot_worst
+    assert wc <= w1

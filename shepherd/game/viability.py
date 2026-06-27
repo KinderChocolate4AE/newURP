@@ -204,25 +204,366 @@ def _v_shot_with_accels(accels, x_att, v_att, *, tau, judge="point_mass",
     )
 
 
+# ---------------------------------------------------------------------------- #
+# S14 — conservative EXTREME-POINT reachable set.
+#
+# The single-segment sampler above holds ONE constant accel over the whole tau,
+# drawn uniform-IN-BALL. Two problems make it read OPTIMISTICALLY:
+#   (a) Free double integrator: the single-segment ball IS the exact reachable
+#       endpoint set (max displacement-from-coast over ||a||<=a_max is a_max*tau^2/2
+#       in any direction). But uniform-in-ball UNDER-SAMPLES the boundary sphere
+#       ||a||=a_max -- exactly where the escapes live (the pure-forward a_max
+#       overshoot that exits the cone in m2_clean_viability_demo). Fix: SAMPLE THE
+#       BOUNDARY directly.
+#   (b) A discrete closed-loop attacker re-plans piecewise: it DODGES limiters
+#       with a dogleg the single parabola can't trace, and (turn-limited) CURVES
+#       past the single fixed omega*tau heading cone by re-pointing each step. Fix:
+#       BANG-BANG doglegs + max-rate TURN-CURVE sequences that sweep the full
+#       +-omega*tau envelope.
+#
+# Soundness: over-approximating the attacker's reachable set can only find MORE
+# escapes, never falsely claim containment. Boundary points lie ON the true free
+# ball (exact); each per-segment turn step respects the true per-step limit
+# omega*(tau/K) (sound). The conservative set is the UNION of the verbatim
+# single-segment block (so it is a guaranteed SUPERSET -> reachability never
+# shrinks, v_shot_worst is monotone non-increasing) with these extreme-point
+# blocks. n_segments=1 stays the bit-exact single-segment legacy path (default),
+# so the frozen port fidelity is preserved.
+# ---------------------------------------------------------------------------- #
+def _extreme_dirs(n_dir=32, seed=0, e_att=None):
+    """Unit directions covering the sphere for boundary / extreme-point sampling.
+
+    Deterministic core: the six axis-aligned +-x,+-y,+-z plus (if given) the
+    +-heading e_att -- so the pure-forward a_max boundary endpoint is ALWAYS
+    present (the deterministic overshoot demonstration). Then a Fibonacci-sphere
+    quasi-uniform grid and a few rng directions for off-axis coverage."""
+    base = [[1., 0., 0.], [-1., 0., 0.], [0., 1., 0.],
+            [0., -1., 0.], [0., 0., 1.], [0., 0., -1.]]
+    dirs = [np.asarray(b, float) for b in base]
+    if e_att is not None:
+        e = np.asarray(e_att, float)
+        ne = np.linalg.norm(e)
+        if ne > _EPS:
+            e = e / ne
+            dirs.append(e)
+            dirs.append(-e)
+    m = max(int(n_dir), 0)
+    if m > 0:
+        i = np.arange(m) + 0.5
+        phi = np.arccos(1.0 - 2.0 * i / m)                  # Fibonacci sphere
+        gold = np.pi * (1.0 + 5.0 ** 0.5)
+        th = gold * i
+        fib = np.stack([np.sin(phi) * np.cos(th),
+                        np.sin(phi) * np.sin(th), np.cos(phi)], axis=1)
+        dirs.extend(fib)
+        rng = np.random.default_rng((int(seed), 0xB0DE))    # distinct stream
+        rd = rng.normal(size=(m, 3))
+        rd /= np.linalg.norm(rd, axis=1, keepdims=True) + _EPS
+        dirs.extend(rd)
+    D = np.asarray(dirs, float)
+    D /= np.linalg.norm(D, axis=1, keepdims=True) + _EPS
+    return D
+
+
+def _boundary_accels(a_att_max, dirs):
+    """Single-segment controls at the EXACT boundary ||a||=a_max of the free
+    reachable ball (constant max-accel in each extreme direction), shaped (m,1,3)
+    so they flow through the piecewise integrator as degenerate K=1 segments. For
+    the free / point_mass / cone case (no turn limit) this is the workhorse: the
+    pure-forward boundary endpoint IS the overshoot uniform-in-ball misses."""
+    D = np.asarray(dirs, float)
+    return (float(a_att_max) * D)[:, None, :]
+
+
+def _bangbang_segments(a_att_max, dirs, n_segments, second_dirs=None):
+    """K-segment max-magnitude (||a||=a_max) DOGLEG controls: the first ceil(K/2)
+    segments along d1, the remainder along d2. A dogleg dodges a limiter the
+    single parabola can't (lateral then forward) and curves when d1!=d2 -> it
+    expands the feasible reachable set (sound: strictly more reachable points)."""
+    D = np.asarray(dirs, float)
+    if second_dirs is None:
+        second_dirs = np.array([[1., 0., 0.], [-1., 0., 0.], [0., 1., 0.],
+                                [0., -1., 0.], [0., 0., 1.], [0., 0., -1.]], float)
+    S = np.asarray(second_dirs, float)
+    K = max(int(n_segments), 2)
+    k1 = (K + 1) // 2
+    if len(D) == 0 or len(S) == 0:
+        return np.zeros((0, K, 3))
+    controls = np.empty((len(D) * len(S), K, 3), float)
+    idx = 0
+    for d1 in D:
+        for d2 in S:
+            controls[idx, :k1] = a_att_max * d1
+            controls[idx, k1:] = a_att_max * d2
+            idx += 1
+    return controls
+
+
+def _turn_curve_segments(v0, omega, tau, a_att_max, n_segments, e_att=None,
+                         n_azimuth=8, safety=0.999):
+    """Max-rate turning sequences (turn-limited attacker only). Each segment's
+    accel sits at the omega*h cone EDGE of the CURRENT heading -- it carries a
+    component PERPENDICULAR to v that actually rotates the heading (accel purely
+    along v only grows speed, never curves). Every segment stays within
+    omega*h (= omega*tau/K) of its current heading, so it passes the per-segment
+    turn check, yet the heading SWEEPS the full +-omega*tau envelope -- reaching
+    endpoints the single fixed omega*tau cone rejects. Sound: each step respects
+    the true per-step turn limit. Returns (n_azimuth, K, 3).
+
+    HONEST CAVEAT (current model): _feasible_turn is an ACCEL-cone proxy (accel
+    within omega*tau of the frozen heading), which already OVER-covers physical
+    turning whenever a_max/speed < omega (accel-limited, not rate-limited). Under
+    that proxy every curve endpoint lands INSIDE the single-segment turn-limited
+    set, so this block is a sound no-op for capture today. It becomes load-bearing
+    once _feasible_turn is replaced by a true turn-RATE-limited dynamics (the
+    curve's velocity-rotation lateral term then escapes the accel cone)."""
+    v0 = np.asarray(v0, float)
+    K = int(n_segments)
+    if K < 1:
+        return np.zeros((0, 1, 3))
+    h0 = np.asarray(e_att, float) if e_att is not None else v0
+    nh = np.linalg.norm(h0)
+    speed0 = np.linalg.norm(v0)
+    if nh < _EPS or speed0 < _EPS:
+        return np.zeros((0, K, 3))           # heading / speed undefined -> no curve
+    h0 = h0 / nh
+    h = float(tau) / K
+    edge = float(omega) * h * float(safety)  # just inside the per-segment cone edge
+    ca, sa = np.cos(edge), np.sin(edge)
+    ref = np.array([1., 0., 0.]) if abs(h0[0]) < 0.9 else np.array([0., 1., 0.])
+    u = ref - (ref @ h0) * h0
+    u /= np.linalg.norm(u) + _EPS
+    w = np.cross(h0, u)
+    controls = np.empty((int(n_azimuth), K, 3), float)
+    for k in range(int(n_azimuth)):
+        phi = 2.0 * np.pi * k / int(n_azimuth)
+        p0 = np.cos(phi) * u + np.sin(phi) * w               # fixed turn-plane perp
+        v = v0.copy()
+        for j in range(K):
+            head = v / (np.linalg.norm(v) + _EPS)
+            p = p0 - (p0 @ head) * head                      # perp within plane(head)
+            pn = np.linalg.norm(p)
+            if pn < _EPS:
+                a = a_att_max * head                         # degenerate -> straight
+            else:
+                a = a_att_max * (ca * head + sa * (p / pn))  # at the cone edge
+            controls[k, j] = a
+            v = v + a * h
+    return controls
+
+
+def _caught_mask(endpoints, judge, *, net_center, net_radius,
+                 net_apex, n_F, theta_net, range_min, range_max):
+    """Dispatch the capture judge over a batch of endpoints (same semantics as
+    _v_shot_with_accels, factored so the union path can reuse it)."""
+    if judge == "point_mass":
+        if net_center is None or net_radius is None:
+            raise ValueError("judge='point_mass' requires net_center and net_radius.")
+        return _caught_point_mass(endpoints, net_center, net_radius)
+    if judge == "se3_cone":
+        if net_apex is None or n_F is None or theta_net is None:
+            raise ValueError("judge='se3_cone' requires net_apex, n_F, theta_net.")
+        return _caught_se3_cone(endpoints, net_apex, n_F, theta_net, range_min, range_max)
+    raise ValueError(f"unknown judge {judge!r} (use 'point_mass' or 'se3_cone').")
+
+
+def _segments_endpoints_feasible(x0, v0, seg_accels, *, tau, limiters, kill_radius,
+                                 attacker_turn_limited, omega_att_max, e_att, n_t=24):
+    """Integrate piecewise-constant controls and return (endpoints, feasible).
+
+    - Trajectory: K segments of length h=tau/K; within each, exact constant-accel
+      kinematics, n_t substeps for the limiter no-go test on the ACTUAL dogleg
+      path (not a single parabola) -> a dodge that the single segment can't make.
+    - Turn limit: each segment's accel must lie within omega_att_max*h of the
+      CURRENT heading (the evolving velocity; for segment 0, e_att if given). The
+      heading rotates segment-to-segment, so the attacker can CURVE beyond the
+      single fixed cone of half-angle omega_att_max*tau. Zero accel is always
+      allowed (straight coast)."""
+    seg_accels = np.asarray(seg_accels, float)
+    n, K, _ = seg_accels.shape
+    h = tau / K
+    x = np.repeat(np.asarray(x0, float)[None, :], n, axis=0)
+    v = np.repeat(np.asarray(v0, float)[None, :], n, axis=0)
+    s = np.linspace(0.0, h, n_t)                                # within-segment substeps
+    half = (float(omega_att_max) * h) if attacker_turn_limited else None
+    feasible_turn = np.ones(n, bool)
+    seg_pts = []
+    for j in range(K):
+        a = seg_accels[:, j, :]                                 # (n,3)
+        if attacker_turn_limited:
+            if omega_att_max is None:
+                raise ValueError("attacker_turn_limited=True requires omega_att_max.")
+            if j == 0 and e_att is not None:
+                head = np.repeat(np.asarray(e_att, float)[None, :], n, axis=0)
+            else:
+                head = v
+            an = np.linalg.norm(a, axis=1)
+            hn = np.linalg.norm(head, axis=1)
+            denom = an * hn
+            cos_a = np.where(denom < _EPS, 1.0,
+                             np.einsum("ij,ij->i", a, head) / (denom + _EPS))
+            cos_a = np.clip(cos_a, -1.0, 1.0)
+            ok = (np.arccos(cos_a) <= half) | (an < _EPS)       # zero-accel always feasible
+            feasible_turn &= ok
+        seg_pts.append(x[:, None, :] + v[:, None, :] * s[None, :, None]
+                       + 0.5 * a[:, None, :] * (s ** 2)[None, :, None])
+        x = x + v * h + 0.5 * a * h * h                         # advance to segment end
+        v = v + a * h
+    endpoints = x
+
+    if limiters is None or kill_radius <= 0:
+        feasible_lim = np.ones(n, bool)
+    else:
+        L = np.asarray(limiters, float).reshape(-1, 3)
+        if len(L) == 0:
+            feasible_lim = np.ones(n, bool)
+        else:
+            pts = np.concatenate(seg_pts, axis=1)               # (n, K*n_t, 3)
+            d = np.linalg.norm(pts[:, :, None, :] - L[None, None, :, :], axis=3)
+            feasible_lim = ~(d <= kill_radius).any(axis=(1, 2))
+    return endpoints, feasible_lim & feasible_turn
+
+
+def _assemble(feasible, caught, n_total, judge, seed):
+    """Build a VShotResult from a feasible mask + caught mask (R4 boxed split)."""
+    nf = int(feasible.sum())
+    p_feasible = nf / n_total if n_total else 0.0
+    if nf == 0:
+        return VShotResult(v_shot_soft=1.0, v_shot_worst=1.0, n_feasible=0,
+                           n_total=n_total, boxed_in=True, p_feasible=0.0,
+                           p_limiter_blocked=1.0, judge=judge, seed=seed)
+    fc = caught[feasible]
+    return VShotResult(
+        v_shot_soft=float(fc.mean()),
+        v_shot_worst=(1.0 if fc.all() else 0.0),
+        n_feasible=nf,
+        n_total=n_total,
+        boxed_in=False,
+        p_feasible=float(p_feasible),
+        p_limiter_blocked=float(1.0 - p_feasible),
+        judge=judge,
+        seed=seed,
+    )
+
+
+def _union_sets(x_att, v_att, *, tau, a_att_max, judge,
+                net_center, net_radius, net_apex, n_F, theta_net,
+                range_min, range_max, limiters, kill_radius,
+                attacker_turn_limited, omega_att_max, e_att,
+                n, n_segments, seed, n_dir=32):
+    """Build the conservative UNION reachable set as (endpoints, feasible, caught).
+
+    Block 1 is the VERBATIM single-segment uniform-in-ball reachable set (same math
+    as _v_shot_with_accels) -- concatenated first, so the union is a guaranteed
+    SUPERSET of the legacy set and v_shot_worst is monotone non-increasing.
+
+    The extreme-point blocks then EXPOSE the escapes uniform-in-ball misses:
+      - boundary spheres (||a||=a_max): the pure-forward overshoot workhorse,
+      - bang-bang doglegs: dodge a limiter / curve when the two legs differ,
+      - max-rate turn curves (turn-limited only): sweep the +-omega*tau envelope.
+    Each extreme block is integrated through _segments_endpoints_feasible and the
+    whole stack is judged with _caught_mask. Factored out of
+    _v_shot_multiseg_union so tests can assert the subset relationship directly."""
+    x_att = np.asarray(x_att, float)
+    v_att = np.asarray(v_att, float)
+    heading = v_att if e_att is None else np.asarray(e_att, float)
+
+    # --- Block 1: verbatim single-segment uniform-in-ball (superset guarantee) ---
+    accels1 = reachable_accels(a_att_max, n, seed)
+    end1 = x_att[None, :] + v_att[None, :] * tau + 0.5 * accels1 * tau ** 2
+    feas1 = _feasible_limiter(x_att, v_att, accels1, tau, limiters, kill_radius)
+    if attacker_turn_limited:
+        if omega_att_max is None:
+            raise ValueError("attacker_turn_limited=True requires omega_att_max.")
+        feas1 = feas1 & _feasible_turn(accels1, heading, omega_att_max, tau)
+    end_blocks = [end1]
+    feas_blocks = [feas1]
+
+    dirs = _extreme_dirs(n_dir=n_dir, seed=seed, e_att=heading)
+
+    def _add(seg_accels):
+        if len(seg_accels) == 0:
+            return
+        ep, fe = _segments_endpoints_feasible(
+            x_att, v_att, seg_accels, tau=tau, limiters=limiters, kill_radius=kill_radius,
+            attacker_turn_limited=attacker_turn_limited, omega_att_max=omega_att_max,
+            e_att=e_att)
+        end_blocks.append(ep)
+        feas_blocks.append(fe)
+
+    _add(_boundary_accels(a_att_max, dirs))                  # boundary spheres (K=1)
+    _add(_bangbang_segments(a_att_max, dirs, n_segments))    # doglegs
+    if attacker_turn_limited:                                # max-rate turn curves
+        _add(_turn_curve_segments(v_att, omega_att_max, tau, a_att_max, n_segments,
+                                  e_att=e_att))
+
+    endpoints = np.concatenate(end_blocks, axis=0)
+    feasible = np.concatenate(feas_blocks, axis=0)
+    caught = _caught_mask(endpoints, judge, net_center=net_center, net_radius=net_radius,
+                          net_apex=net_apex, n_F=n_F, theta_net=theta_net,
+                          range_min=range_min, range_max=range_max)
+    return endpoints, feasible, caught
+
+
+def _v_shot_multiseg_union(x_att, v_att, *, tau, a_att_max, judge,
+                           net_center, net_radius, net_apex, n_F, theta_net,
+                           range_min, range_max, limiters, kill_radius,
+                           attacker_turn_limited, omega_att_max, e_att,
+                           n, n_segments, seed):
+    """v_shot over the conservative extreme-point union (see _union_sets). The
+    union contains the single-segment feasible endpoints verbatim, so the feasible
+    reachable set is a guaranteed superset: reachability does not shrink and
+    v_shot_worst is conservatively non-increasing vs n_segments=1."""
+    endpoints, feasible, caught = _union_sets(
+        x_att, v_att, tau=tau, a_att_max=a_att_max, judge=judge,
+        net_center=net_center, net_radius=net_radius, net_apex=net_apex, n_F=n_F,
+        theta_net=theta_net, range_min=range_min, range_max=range_max,
+        limiters=limiters, kill_radius=kill_radius,
+        attacker_turn_limited=attacker_turn_limited, omega_att_max=omega_att_max,
+        e_att=e_att, n=n, n_segments=n_segments, seed=seed)
+    return _assemble(feasible, caught, len(endpoints), judge, seed)
+
+
 def v_shot(x_att, v_att, *, tau, a_att_max, judge="point_mass",
            net_center=None, net_radius=None,
            net_apex=None, n_F=None, theta_net=None, range_min=0.0, range_max=None,
            limiters=None, kill_radius=0.0,
            attacker_turn_limited=False, omega_att_max=None, e_att=None,
-           n=2000, seed=0):
+           n=2000, seed=0, n_segments=1):
     """Per-shot capture value in [0,1] -> VShotResult.
 
     Draws the attacker reachable accel sample then delegates to
     _v_shot_with_accels. point_mass + attacker_turn_limited=False at a given seed
     reproduces prototypes/reachset.py exactly.
+
+    n_segments (S14): 1 (default) = single constant-accel uniform-in-ball reachable
+    set, BIT-EXACT with the frozen prototype (the legacy surrogate). n_segments>1 =
+    conservative EXTREME-POINT reachable set -- the verbatim single-segment block
+    UNIONED with boundary spheres (||a||=a_max overshoot), bang-bang doglegs, and
+    (turn-limited) max-rate turn curves that sweep the +-omega*tau envelope. This
+    is an over-approximation of the discrete closed-loop attacker (NOT just more MC
+    samples): the feasible reachable set is a guaranteed superset, so v_shot stops
+    under-bounding (v_shot_worst is conservatively non-increasing) and is the
+    trustworthy capture signal. Keep 1 only to reproduce the legacy surrogate.
     """
-    accels = reachable_accels(a_att_max, n, seed)
-    return _v_shot_with_accels(
-        accels, x_att, v_att, tau=tau, judge=judge,
+    if n_segments is None or int(n_segments) <= 1:
+        accels = reachable_accels(a_att_max, n, seed)
+        return _v_shot_with_accels(
+            accels, x_att, v_att, tau=tau, judge=judge,
+            net_center=net_center, net_radius=net_radius,
+            net_apex=net_apex, n_F=n_F, theta_net=theta_net,
+            range_min=range_min, range_max=range_max,
+            limiters=limiters, kill_radius=kill_radius,
+            attacker_turn_limited=attacker_turn_limited,
+            omega_att_max=omega_att_max, e_att=e_att, seed=seed,
+        )
+    return _v_shot_multiseg_union(
+        x_att, v_att, tau=tau, a_att_max=a_att_max, judge=judge,
         net_center=net_center, net_radius=net_radius,
         net_apex=net_apex, n_F=n_F, theta_net=theta_net,
         range_min=range_min, range_max=range_max,
         limiters=limiters, kill_radius=kill_radius,
         attacker_turn_limited=attacker_turn_limited,
-        omega_att_max=omega_att_max, e_att=e_att, seed=seed,
+        omega_att_max=omega_att_max, e_att=e_att,
+        n=n, n_segments=int(n_segments), seed=seed,
     )
