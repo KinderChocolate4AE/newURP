@@ -66,9 +66,13 @@ class ShapingParallelEnv(ParallelEnv):
 
     def __init__(self, backend: EnvBackend, scenario: ScenarioSpec, layout: Layout,
                  *, n_limiters_max: Optional[int] = None, baseline_mode: str = "shaping",
-                 capture_thresh: float = 0.95, cone_half_angle: float = 0.30,
-                 cone_range_min: float = 0.0, cone_range_max: float = 40.0,
+                 capture_thresh: float = 0.95, cone_half_angle: float = 0.067,
+                 cone_range_min: float = 0.0, cone_range_max: float = 29.847,
                  adv_a_max: Optional[float] = None):
+        # cone defaults are N1-GROUNDED (Xu et al. Drones 9:190; see
+        # docs/n1_net_grounding.md): half_angle=arctan(net_radius/range_max)=0.067 rad,
+        # range_max=29.847 m. The legacy tuned 0.43 rad / 40 m cone was ~6.5x over-sized
+        # (effective net radius ~13.7 m) -- it is now an explicit non-gating SHOWCASE only.
         self.backend = backend                      # EnvBackend ABC (injected; NOT analytic here)
         self.sc = scenario
         self.layout = layout

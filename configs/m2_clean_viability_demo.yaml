@@ -3,8 +3,14 @@
 # Name = "clean VIABILITY-threshold demo under an UNGROUNDED cone", NOT "clean
 # physical capture". The load-bearing judge here is the SE(3) net CONE, which is
 # a TUNED / UNGROUNDED model choice (half_angle/range below are demo values, not
-# a physical net). Physical grounding of the net model = the N1 question /
-# Paper-2 track (Xu, Drones 9:190) -- deliberately NOT done in this commit.
+# a physical net).
+#
+# *** N1 UPDATE: this config is now an EXPLICIT NON-GATING OPTIMISTIC SHOWCASE. ***
+# N1 grounded the physical cone (half_angle 0.43->0.067, range 40->29.8, net 1.5->2.0;
+# docs/n1_net_grounding.md). Under the PHYSICAL cone capture FAILS (net_radius 2.0 <
+# attacker reachable radius R_reach=2.4 m) -- see tests/test_coma.py
+# test_dod_physical_cone_*. This demo deliberately KEEPS the over-sized tuned cone to
+# ILLUSTRATE the lever->fire->capture machinery; it is NOT an asserted physical result.
 #
 # Shows the M2 DoD end-to-end UNDER THE CONE judge: delta_v_shot_headline > 0,
 # clean_net_threshold_crossed = True, boxed_in = False at fire,

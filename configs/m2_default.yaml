@@ -21,7 +21,8 @@ physics:
   a_att_max: 30.0               # attacker bounded accel [m/s^2]  (reachset __main__)
   att_speed: 20.0               # attacker nominal speed [m/s]    (reachset __main__)
   kill_radius: 2.0              # limiter kamikaze kill-radius [m] (reachset __main__)
-  net_radius: 1.5               # finisher net capture radius [m]  (reachset __main__)
+  net_radius: 2.0               # finisher net capture radius [m] -- N1-GROUNDED (was 1.5);
+                                # = sqrt(S_NP/pi), paper baseline S_NP=12.54 (docs/n1_net_grounding.md)
   a_lim_max: 30.0               # limiter setpoint/accel limit [m/s^2]
 
 attitude:                       # R3: reduced-attitude pointing (NOT full 6-DOF aero)
@@ -37,9 +38,12 @@ viability:                      # v_shot reachable-set surrogate (commit 2)
   n_samples: 2000               # accel samples
   seed: 0                       # rng seed
   cone:                         # se3_cone geometry. Consumed by the composition root
-    half_angle: 0.43            # (rollout/env cone_* kwargs); ScenarioSpec.from_dict ignores it.
+                                # (rollout/env cone_* kwargs); ScenarioSpec.from_dict ignores it.
+                                # N1-GROUNDED (Xu Drones 9:190; docs/n1_net_grounding.md). The legacy
+                                # tuned 0.43 rad / 40 m cone was ~6.5x over-sized (now showcase-only).
+    half_angle: 0.067           # = arctan(net_radius/range_max) (3.8 deg)
     range_min: 0.0
-    range_max: 40.0
+    range_max: 29.847           # conservative coverage-window travel (WEAK; flagged in N1 doc)
 
 fire_gate:                      # R2: single fire gate source of truth
   theta_fire: 0.8               # fire iff v_shot_soft >= theta_fire
