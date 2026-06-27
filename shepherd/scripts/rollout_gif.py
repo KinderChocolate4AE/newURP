@@ -42,8 +42,11 @@ TIGHT_NET_RADIUS = 1.5          # N1 probe: a tight PHYSICAL point-net sphere
 def _net_model_str(env):
     """Human label for the net model the viability judge uses this episode."""
     if env.judge == "se3_cone":
+        grounded = abs(env.cone_half_angle - 0.067) < 0.02     # N1-grounded vs tuned showcase
+        tag = ("N1-GROUNDED (Xu Drones 9:190; docs/n1_net_grounding.md)" if grounded
+               else "UNGROUNDED/tuned -- optimistic SHOWCASE only (non-physical)")
         return (f"SE(3) cone (half_angle={env.cone_half_angle}, range_max={env.cone_range_max}) "
-                f"-- UNGROUNDED/tuned, pending Paper-2 (Xu Drones 9:190) grounding")
+                f"-- {tag}")
     return f"point-mass sphere (net_radius={env.net_radius}) -- surrogate"
 
 
@@ -93,9 +96,9 @@ def build_env(cfg, mode="shaping"):
                            list(lay.adversary_p0), list(lay.adversary_v0), [-1, 0, 0]))
     backend = AnalyticBackend(agents, dt=scn.dt)
     env = ShapingParallelEnv(backend, scn, lay, baseline_mode=mode,
-                             cone_half_angle=float(cone.get("half_angle", 0.43)),
+                             cone_half_angle=float(cone.get("half_angle", 0.067)),
                              cone_range_min=float(cone.get("range_min", 0.0)),
-                             cone_range_max=float(cone.get("range_max", 40.0)))
+                             cone_range_max=float(cone.get("range_max", 29.847)))
     return env, scn, lay
 
 

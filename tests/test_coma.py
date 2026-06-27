@@ -1,13 +1,15 @@
-"""Commit-4 GATE: COMA credit split + the M2 DoD smoke.
+"""Commit-4 GATE: COMA credit split + the M2 DoD (N1 RE-BASELINED).
 
-DoD (the ONE thing M2 must show):
-  u_L != u_L^0  =>  delta_v_shot_headline > 0  AND a CLEAN net-shot threshold
-  crossing with STRICTLY FEWER wasted_fire than the hold_position baseline.
+DoD (the ONE thing M2 shows, under the N1-GROUNDED physical cone):
+  u_L != u_L^0  =>  delta_v_shot_headline > 0  (the LEVER is robust);
+  absolute CAPTURE honestly FAILS, because the physical net (net_radius 2.0 m)
+  cannot contain THIS attacker's reachable ball (R_reach = 1/2 a_att_max tau^2
+  = 2.4 m on the fixture). Capture is now a quantified L2 target, not a claim.
 
-The smoke compares a hold_position rollout vs a scripted-shaping rollout in a
-corridor fixture (se3_cone judge; limiters ring the predicted-endpoint escape
-shell). Capture is the worst-case (robust) judge frozen at fire; boxed_in is
-NEVER counted as a clean net-shot.
+The old 'shaping captures' result was an artifact of a ~6.5x over-sized tuned
+cone; it survives ONLY as a labelled non-gating SHOWCASE
+(test_tuned_cone_showcase_*). Capture is the worst-case (robust) judge frozen at
+fire; boxed_in is NEVER counted as a clean net-shot.
 
 Run: python -m pytest tests/test_coma.py
 """
@@ -19,11 +21,22 @@ from shepherd.env import ShapingParallelEnv, Layout
 from shepherd.agents.baselines import (hold_position_limiter, scripted_shaping_limiter,
                                        scripted_finisher)
 
-# --- LOCKED DoD corridor fixture (tuned in commit 4; geometry-only, not S1-S8) ---
+# --- DoD corridor fixture (geometry-only, not S1-S8) ---
+# Two cones (N1 re-baseline): the GROUNDED PHYSICAL cone is the DoD gate; the legacy
+# TUNED cone is now an explicit non-gating optimistic SHOWCASE that exercises the
+# fire/capture machinery. grounded half_angle = arctan(net_radius/range_max); the
+# tuned 0.43 rad was ~6.5x over-sized (effective net radius ~13.7 m).
 N_LIM = 8
-THETA = 0.43            # se3_cone half-angle: baseline soft>=0.8 (fires) with worst=0 (miss)
-R_RING = 2.1           # shaping escape-ring radius on the predicted-endpoint shell
-X_FIRE = 11.0          # finisher commits when the attacker crosses this x-plane
+THETA_SHOWCASE = 0.43       # tuned se3_cone half-angle (SHOWCASE only: soft>=0.8 fires, worst=0)
+RANGE_SHOWCASE = 40.0
+THETA_G = 0.067             # N1-GROUNDED half-angle (3.8 deg) -- the physical DoD cone
+RANGE_G = 29.847            # N1-GROUNDED conservative range_max
+NETR_G = 2.0               # N1-GROUNDED net_radius (= sqrt(S_NP/pi), paper baseline 12.54)
+A_ATT, TAU = 30.0, 0.4
+R_REACH = 0.5 * A_ATT * TAU ** 2   # = 2.4 m attacker tau-reachable radius (capture needs net >= this)
+THETA = THETA_SHOWCASE      # back-compat alias for the showcase-cone mechanics tests
+R_RING = 2.1               # shaping escape-ring radius on the predicted-endpoint shell
+X_FIRE = 11.0              # finisher commits when the attacker crosses this x-plane
 N_SAMP = 800
 EP = 45
 
@@ -63,10 +76,13 @@ def _backend(scn, lay):
     return AnalyticBackend(ag, dt=scn.dt)
 
 
-def _env(mode):
+def _env(mode, physical=False):
     scn, lay = _scenario(), _layout()
-    return ShapingParallelEnv(_backend(scn, lay), scn, lay,
-                              baseline_mode=mode, cone_half_angle=THETA)
+    if physical:        # N1-grounded physical cone (the DoD gate)
+        return ShapingParallelEnv(_backend(scn, lay), scn, lay, baseline_mode=mode,
+                                  cone_half_angle=THETA_G, cone_range_max=RANGE_G)
+    return ShapingParallelEnv(_backend(scn, lay), scn, lay, baseline_mode=mode,   # tuned showcase
+                              cone_half_angle=THETA_SHOWCASE, cone_range_max=RANGE_SHOWCASE)
 
 
 def _limiter_action(env, mode, i, lims, p_att, v_att):
@@ -77,9 +93,9 @@ def _limiter_action(env, mode, i, lims, p_att, v_att):
                                     r_ring=env.layout.r_ring, dt=env.dt)
 
 
-def _rollout(mode, seed=0):
-    """Drive the locked fixture; return the DoD metrics."""
-    env = _env(mode)
+def _rollout(mode, seed=0, physical=False):
+    """Drive the fixture; return the DoD metrics. physical=True -> N1-grounded cone."""
+    env = _env(mode, physical=physical)
     env.reset(seed=seed)
     out = dict(fired=False, fire_boxed=None, max_delta=0.0, clean=False,
                captured=False, wasted=0)
@@ -177,25 +193,57 @@ def test_coma_shared_sample_deterministic():
 # --------------------------------------------------------------------------- #
 # M2 DoD smoke (the load-bearing gate)
 # --------------------------------------------------------------------------- #
-def test_dod_smoke_shaping_beats_hold():
-    """u_L != u_L^0  =>  delta_v_shot_headline > 0  AND a clean (non-boxed) net-shot
-    threshold crossing with STRICTLY FEWER wasted_fire than the hold baseline."""
-    base = _rollout("hold")
-    shape = _rollout("shaping")
+def test_dod_physical_cone_lever_survives_capture_honestly_fails():
+    """RE-BASELINED M2 DoD (N1 physical cone) -- THE GATE.
 
-    # both finishers actually commit their single shot
+    Under the GROUNDED physical cone (half_angle=0.067, range_max=29.8; with
+    net_radius 2.0 < R_reach=2.4):
+      - the shaping LEVER survives: delta_v_shot_headline > 0 (shaping still moves
+        v_shot, even more than under the tuned cone);
+      - absolute CAPTURE honestly FAILS: no clean worst-case capture, because the
+        physical 2.0 m net cannot contain THIS attacker's 2.4 m reachable ball.
+    The old 'shaping captures' DoD was an artifact of the ~6.5x over-sized tuned cone
+    (kept only as the labelled non-gating showcase below). Capture is now a quantified
+    L2 target: shrink the shaped reachable radius 2.4 -> <2.0 m (~17%)."""
+    base = _rollout("hold", physical=True)
+    shape = _rollout("shaping", physical=True)
+    assert shape["max_delta"] > 0.0          # LEVER survives the honest physical cone
+    assert shape["captured"] is False        # capture honestly FAILS (net 2.0 < reach 2.4)
+    assert base["captured"] is False
+
+
+def test_capture_requires_net_radius_geq_R_reach():
+    """LINCHPIN (PI-confirmed vs actual v_shot): worst-case capture needs
+    net_radius >= R_reach = 1/2 a_att_max tau^2. On the fixture (a=30, tau=0.4 ->
+    R_reach=2.4 m): a 2.0 m net -> worst=0 (a feasible escape exists); a net >= R_reach
+    -> worst=1 (contains). This is WHY the grounded 2.0 m net flips capture -- robust
+    PHYSICS (point_mass judge), NOT a cone-conservatism artifact (the sphere fails too)."""
+    from shepherd.game.viability import v_shot
+    x = np.array([0.0, 0.0, 0.0]); v = np.array([8.0, 0.0, 0.0])
+    nc = x + v * TAU                          # straight-line predicted endpoint (ball center)
+    worst = lambda nr: v_shot(x, v, tau=TAU, a_att_max=A_ATT, judge="point_mass",
+                              net_center=nc, net_radius=nr, n=2000, seed=0).v_shot_worst
+    assert worst(NETR_G) == 0.0              # grounded 2.0 m net: escape exists
+    assert worst(R_REACH + 0.1) == 1.0       # net >= reachable radius: contains
+
+
+def test_tuned_cone_showcase_shaping_captures_NONPHYSICAL():
+    """NON-GATING SHOWCASE (NOT a physical result). Under the legacy TUNED/over-sized
+    cone (half_angle=0.43, range_max=40), the lever->fire->capture machinery works
+    end-to-end: delta>0, clean non-boxed crossing, shaping captures with no wasted
+    shot while hold wastes its shot. This ONLY illustrates the mechanics; the physical
+    DoD is test_dod_physical_cone_* above (where this 'capture' honestly disappears)."""
+    base = _rollout("hold")                  # showcase cone (default)
+    shape = _rollout("shaping")
     assert base["fired"] and shape["fired"]
-    # the shaping lever moved v_shot
     assert shape["max_delta"] > 0.0
-    # CLEAN crossing: the fire step is a real net-shot, not limiter containment
     assert shape["clean"] is True
     assert shape["fire_boxed"] is False
-    # the payoff: shaping captures with no wasted shot; hold wastes its shot
-    assert shape["captured"] is True
+    assert shape["captured"] is True         # SHOWCASE-only capture (over-sized cone)
     assert shape["wasted"] == 0
     assert base["captured"] is False
     assert base["wasted"] >= 1
-    assert shape["wasted"] < base["wasted"]           # STRICTLY fewer wasted_fire
+    assert shape["wasted"] < base["wasted"]
 
 
 def test_capture_model_is_frozen_worst_case_not_trajectory():
@@ -257,7 +305,9 @@ def test_clean_viability_demo_reporting_is_consistent_and_honest():
     base, _, _ = run("hold")
     shape, shape_fire_boxed, net_r = run("shaping")
 
-    assert net_r == 1.5                              # grounded net size, NOT enlarged
+    assert net_r == 1.5                              # SHOWCASE net size, NOT enlarged to force a pass
+                                                     # (N1-grounded physical net_radius is 2.0; this
+                                                     #  tuned demo is an explicit non-gating showcase)
     assert shape["max_delta"] > 0.0                  # shaping lever moved v_shot
     assert shape["clean"] is True
     assert shape_fire_boxed is False                 # clean crossing at fire (NOT boxed containment)
