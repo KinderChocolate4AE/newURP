@@ -29,6 +29,53 @@ is a generous description; not a fudge but flagged). Baseline sim: `S_NP@20m = 1
 
 ---
 
+## ⚠ Post-review corrections (2026-06-28 — GPT adversarial implementation review)
+
+An external adversarial review (`GPT_verification_S14_N1_wiring_2026-06-28.txt`) landed
+three corrections, accepted here. They do **not** overturn the core result (the lever
+survives; baseline-net absolute capture fails) — they sharpen it.
+
+**1. `net_radius` is an EQUIVALENT-AREA scalar, NOT a worst-case capture inradius
+(downgrade STRONG → directional).** `r_eq = sqrt(S_NP/π)` preserves AREA, not
+containment. A `12.54 m²` silhouette could be a `2.0×6.27 m` rectangle whose horizontal
+inradius is only `1.0 m`; the point-mass sphere judge (radius 2.0) would then be
+OPTIMISTIC laterally. Worst-case containment needs the **minimum radial support
+(inradius) of the deployed silhouette about the aim point**, `r_in = min_θ support(θ)`,
+with `r_in ≤ r_eq` (equality only for a disk). → Honest relabel: **`net_radius = 2.0 m`
+is the baseline equivalent-area disk number, not a certified capture radius**; the
+deployed silhouette's radial support over range should be measured (the single check
+that most strengthens or kills it). *Benign for the headline:* since `r_in ≤ 2.0`, the
+real net is SMALLER in the worst direction, so baseline-net capture fails **harder** —
+the flip is robust. What it threatens is the L2 *target* (goal is `R_reach < r_in`, not
+`< 2.0`).
+
+**2. The flip is BASELINE-net-specific — the paper's own Pareto-optimal nets cross the
+threshold.** Un-flipping needs `net_radius ≥ R_reach = 2.40 m`, i.e. silhouette area
+`π·2.4² = 18.10 m²` — only **+44% (×1.44)** over baseline `12.54`, NOT the ×1.8 a draft
+mis-stated. Back-solving the paper's own frontier coverage (`S_NP = S_UAV/(1−ln C)`,
+`r_eq = sqrt(S_NP/π)`) shows several optimized designs already exceed 2.4 m:
+
+| Net (θ°/v/m g) | C | S_NP m² | r_eq m | ≥ R_reach 2.40? |
+|---|---|---|---|---|
+| Baseline 45/60/35 | 2.3174 | 12.5 | 2.00 | no |
+| Frontier A 65/90/25 | 2.4802 | 21.8 | 2.64 | **YES** |
+| Frontier B 55/70/25 | 2.4399 | 18.5 | 2.43 | **YES** |
+| Frontier C 65/60/35 | 2.4359 | 18.2 | 2.41 | **YES** |
+| Frontier D 45/50/25 | 2.4257 | 17.6 | 2.36 | ~ |
+| Frontier E 35/50/25 | 2.3904 | 15.6 | 2.23 | no |
+
+→ Corrected headline: **the BASELINE (45/60/35) net cannot contain THIS attacker
+(a=30, τ=0.4); the paper's own optimized nets A/B/C (r_eq 2.4–2.6 m) can.** Capture is
+reachable via a better net choice OR via shaping — **two levers, not a wall** (caveat 1
+still applies: these `r_eq` overstate the inradius, so true containment needs verifying).
+
+**3. Conditioning made explicit.** The flip is conditioned on the fixture attacker
+agility `a=30 m/s²` (≈3 g) and `τ=0.4 s`: capture returns at `a ≤ 25` (r=2.0, τ=0.4) or
+`τ ≤ 0.365 s` (a=30). Whether 3 g / 0.4 s is the operational FPV/commercial regime is an
+assumptions-register question, not settled here.
+
+---
+
 ## Forward model (resolved flags)
 
 Lumped-mass (11×11 = 121 nodes), tension-only spring-damper (eq 1–3, `Tmag≥0` clamp), Williams aero

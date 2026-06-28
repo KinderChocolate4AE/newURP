@@ -229,6 +229,15 @@ def _v_shot_with_accels(accels, x_att, v_att, *, tau, judge="point_mass",
 # shrinks, v_shot_worst is monotone non-increasing) with these extreme-point
 # blocks. n_segments=1 stays the bit-exact single-segment legacy path (default),
 # so the frozen port fidelity is preserved.
+#
+# POST-REVIEW CAVEAT (2026-06-28). "Never falsely claim containment" holds for the
+# continuous reachable SET. The IMPLEMENTATION evaluates a FINITE witness sample of
+# it (B1 + boundary/dogleg extremes), so v_shot_worst==1 means "no SAMPLED witness
+# escaped", NOT a certified containment bound -- an escape can hide between sampled
+# boundary directions. Treat the union as an ADVERSARIAL extreme-point witness set
+# that REDUCES (not eliminates) the single-sample optimism. For the point-mass
+# sphere with no limiters, sphere_containment_certificate() gives the EXACT
+# worst-case answer in closed form; prefer it for the worst-case gate.
 # ---------------------------------------------------------------------------- #
 def _extreme_dirs(n_dir=32, seed=0, e_att=None):
     """Unit directions covering the sphere for boundary / extreme-point sampling.
@@ -544,7 +553,9 @@ def v_shot(x_att, v_att, *, tau, a_att_max, judge="point_mass",
     is an over-approximation of the discrete closed-loop attacker (NOT just more MC
     samples): the feasible reachable set is a guaranteed superset, so v_shot stops
     under-bounding (v_shot_worst is conservatively non-increasing) and is the
-    trustworthy capture signal. Keep 1 only to reproduce the legacy surrogate.
+    trustworthy capture signal. Keep 1 only to reproduce the legacy surrogate. NOTE (post-review): the
+    union is a FINITE witness set, so worst==1 is not a formal containment
+    certificate (see sphere_containment_certificate for the exact sphere bound).
     """
     if n_segments is None or int(n_segments) <= 1:
         accels = reachable_accels(a_att_max, n, seed)
@@ -567,3 +578,163 @@ def v_shot(x_att, v_att, *, tau, a_att_max, judge="point_mass",
         omega_att_max=omega_att_max, e_att=e_att,
         n=n, n_segments=int(n_segments), seed=seed,
     )
+
+
+# ---------------------------------------------------------------------------- #
+# S14 / L2 -- PRECOMPUTED reachable UNION (build once, evaluate many layouts).
+#
+# The union's endpoints, per-witness trajectory, judge result (caught) and turn
+# feasibility are ALL independent of the limiter layout (they depend only on the
+# attacker state, the net/finisher pose and the seed). ONLY the limiter no-go
+# feasibility depends on the layout. build_reachable_union() does the layout-
+# independent work ONCE; eval_union_with_limiters() applies one layout's limiter
+# mask. The env uses this for the headline + per-limiter COMA counterfactuals so all
+# N+2 evaluations share ONE union -> common-random-numbers is MANIFEST (identical
+# endpoints + caught; only the feasibility mask differs) and ~(N+2)x cheaper.
+#
+# eval_union_with_limiters(build_reachable_union(...), limiters, kr) is numerically
+# IDENTICAL to v_shot(..., n_segments=K) (locked by tests/test_union_equiv).
+# ---------------------------------------------------------------------------- #
+@dataclass(frozen=True)
+class ReachableUnion:
+    endpoints: object          # (M,3) all witness endpoints (B1 + extreme blocks)
+    caught: object             # (M,) judge result (layout-independent)
+    turn_feasible: object      # (M,) turn-limit mask (layout-independent)
+    path_blocks: tuple         # per-block (n_b, T_b, 3) trajectory substeps
+    block_sizes: tuple         # per-block witness counts (concat order == endpoints)
+    n_total: int
+    judge: str
+    seed: int
+
+
+def _single_seg_paths(x0, v0, accels, tau, n_t=24):
+    """Parabola substeps for the single-segment block (matches _feasible_limiter)."""
+    s = np.linspace(0.0, tau, n_t)
+    return (x0[None, None, :] + v0[None, None, :] * s[None, :, None]
+            + 0.5 * accels[:, None, :] * (s ** 2)[None, :, None])      # (n, n_t, 3)
+
+
+def _seg_paths_turn(x0, v0, seg_accels, *, tau, attacker_turn_limited,
+                    omega_att_max, e_att, n_t=24):
+    """Layout-INDEPENDENT half of _segments_endpoints_feasible: endpoints, turn
+    feasibility, and the trajectory substep points (for a later limiter test). No
+    limiter logic here (so the result can be reused across layouts)."""
+    seg_accels = np.asarray(seg_accels, float)
+    n, K, _ = seg_accels.shape
+    h = tau / K
+    x = np.repeat(np.asarray(x0, float)[None, :], n, axis=0)
+    v = np.repeat(np.asarray(v0, float)[None, :], n, axis=0)
+    s = np.linspace(0.0, h, n_t)
+    half = (float(omega_att_max) * h) if attacker_turn_limited else None
+    feasible_turn = np.ones(n, bool)
+    seg_pts = []
+    for j in range(K):
+        a = seg_accels[:, j, :]
+        if attacker_turn_limited:
+            if omega_att_max is None:
+                raise ValueError("attacker_turn_limited=True requires omega_att_max.")
+            head = (np.repeat(np.asarray(e_att, float)[None, :], n, axis=0)
+                    if (j == 0 and e_att is not None) else v)
+            an = np.linalg.norm(a, axis=1)
+            hn = np.linalg.norm(head, axis=1)
+            denom = an * hn
+            cos_a = np.where(denom < _EPS, 1.0,
+                             np.einsum("ij,ij->i", a, head) / (denom + _EPS))
+            cos_a = np.clip(cos_a, -1.0, 1.0)
+            feasible_turn &= (np.arccos(cos_a) <= half) | (an < _EPS)
+        seg_pts.append(x[:, None, :] + v[:, None, :] * s[None, :, None]
+                       + 0.5 * a[:, None, :] * (s ** 2)[None, :, None])
+        x = x + v * h + 0.5 * a * h * h
+        v = v + a * h
+    paths = np.concatenate(seg_pts, axis=1)                # (n, K*n_t, 3)
+    return x, feasible_turn, paths
+
+
+def _limiter_mask_from_paths(paths, limiters, kill_radius):
+    """True iff the trajectory NEVER enters any limiter kill-radius (identical no-go
+    semantics to _feasible_limiter / _segments_endpoints_feasible)."""
+    n = paths.shape[0]
+    if limiters is None or kill_radius <= 0:
+        return np.ones(n, bool)
+    L = np.asarray(limiters, float).reshape(-1, 3)
+    if len(L) == 0:
+        return np.ones(n, bool)
+    d = np.linalg.norm(paths[:, :, None, :] - L[None, None, :, :], axis=3)
+    return ~(d <= kill_radius).any(axis=(1, 2))
+
+
+def build_reachable_union(x_att, v_att, *, tau, a_att_max, judge,
+                          net_center=None, net_radius=None, net_apex=None, n_F=None,
+                          theta_net=None, range_min=0.0, range_max=None,
+                          attacker_turn_limited=False, omega_att_max=None, e_att=None,
+                          n=2000, n_segments=4, seed=0, n_dir=32, n_t=24):
+    """Build the layout-INDEPENDENT conservative union ONCE. Mirrors _union_sets'
+    block order EXACTLY (B1, boundary, bang-bang, [turn-curve]) so that
+    eval_union_with_limiters(build_reachable_union(...), limiters, kr) ==
+    v_shot(..., n_segments=n_segments)."""
+    x_att = np.asarray(x_att, float)
+    v_att = np.asarray(v_att, float)
+    heading = v_att if e_att is None else np.asarray(e_att, float)
+    blocks_end, blocks_turn, blocks_paths = [], [], []
+
+    accels1 = reachable_accels(a_att_max, n, seed)            # Block 1 (verbatim)
+    end1 = x_att[None, :] + v_att[None, :] * tau + 0.5 * accels1 * tau ** 2
+    turn1 = (_feasible_turn(accels1, heading, omega_att_max, tau)
+             if attacker_turn_limited else np.ones(len(accels1), bool))
+    blocks_end.append(end1)
+    blocks_turn.append(turn1)
+    blocks_paths.append(_single_seg_paths(x_att, v_att, accels1, tau, n_t=n_t))
+
+    dirs = _extreme_dirs(n_dir=n_dir, seed=seed, e_att=heading)
+
+    def _add(seg_accels):
+        if len(seg_accels) == 0:
+            return
+        ep, tf, pp = _seg_paths_turn(x_att, v_att, seg_accels, tau=tau,
+                                     attacker_turn_limited=attacker_turn_limited,
+                                     omega_att_max=omega_att_max, e_att=e_att, n_t=n_t)
+        blocks_end.append(ep)
+        blocks_turn.append(tf)
+        blocks_paths.append(pp)
+
+    _add(_boundary_accels(a_att_max, dirs))
+    _add(_bangbang_segments(a_att_max, dirs, n_segments))
+    if attacker_turn_limited:
+        _add(_turn_curve_segments(v_att, omega_att_max, tau, a_att_max, n_segments,
+                                  e_att=e_att))
+
+    endpoints = np.concatenate(blocks_end, axis=0)
+    turn_feasible = np.concatenate(blocks_turn, axis=0)
+    caught = _caught_mask(endpoints, judge, net_center=net_center, net_radius=net_radius,
+                          net_apex=net_apex, n_F=n_F, theta_net=theta_net,
+                          range_min=range_min, range_max=range_max)
+    return ReachableUnion(endpoints=endpoints, caught=caught, turn_feasible=turn_feasible,
+                          path_blocks=tuple(blocks_paths),
+                          block_sizes=tuple(len(b) for b in blocks_end),
+                          n_total=int(len(endpoints)), judge=judge, seed=seed)
+
+
+def eval_union_with_limiters(union, limiters, kill_radius):
+    """Apply a limiter layout to a prebuilt ReachableUnion -> VShotResult. Only the
+    limiter no-go depends on the layout; endpoints/caught/turn are reused. Numerically
+    identical to v_shot(..., n_segments=K) for the same inputs."""
+    masks = [_limiter_mask_from_paths(pb, limiters, kill_radius)
+             for pb in union.path_blocks]
+    limiter_feasible = (np.concatenate(masks, axis=0) if masks
+                        else np.ones(union.n_total, bool))
+    feasible = limiter_feasible & union.turn_feasible
+    return _assemble(feasible, union.caught, union.n_total, union.judge, union.seed)
+
+
+def sphere_containment_certificate(x_att, v_att, *, tau, a_att_max, net_center,
+                                   net_radius):
+    """EXACT worst-case containment for the point-mass sphere, NO limiters / no turn
+    limit (post-review fix: replace finite-witness worst-counting with a closed-form
+    certificate where the reachable set is the full ball). The free tau-reachable set
+    is B(c, R), c = x + v*tau, R = 1/2 a_att_max tau^2; it is wholly inside the net
+    sphere iff ||c - net_center|| + R <= net_radius. Returns True => certified
+    contained (v_shot_worst must be 1); False => a reachable point provably escapes."""
+    c = np.asarray(x_att, float) + np.asarray(v_att, float) * tau
+    R = 0.5 * float(a_att_max) * tau ** 2
+    off = float(np.linalg.norm(c - np.asarray(net_center, float)))
+    return bool(off + R <= net_radius + _EPS)

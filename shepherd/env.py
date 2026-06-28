@@ -238,9 +238,26 @@ class ShapingParallelEnv(ParallelEnv):
 
         # --- viability metrics on the CURRENT (pre-move) state -----------------
         accels = V.reachable_accels(self.a_att_max, self.n_samples, step_seed)
-        vfull = self._vshot(p_att, v_att, lim_pos, fin, accels=accels, seed=step_seed)
-        vbase = self._vshot(p_att, v_att, self.layout.limiter_p0, fin,
-                            accels=accels, seed=step_seed)        # hold_position baseline
+        # S14/L2: on the conservative signal (n_segments>1) build the layout-
+        # INDEPENDENT reachable union ONCE and evaluate the headline + every COMA
+        # counterfactual against it (different limiter masks). Makes the shared-seed
+        # CRN manifest (identical endpoints/caught; only feasibility differs) and is
+        # ~(N+2)x cheaper. Numerically identical to per-layout v_shot(n_segments=K)
+        # (tests/test_union_equiv). n_segments==1 keeps the exact legacy accels path.
+        union = None
+        if self.n_segments > 1:
+            union = V.build_reachable_union(
+                p_att, v_att, tau=self.tau_deploy, a_att_max=self.a_att_max,
+                n=self.n_samples, n_segments=self.n_segments, seed=step_seed,
+                **self._vshot_kwargs(p_att, v_att, fin))
+
+        def _vs(limiter_pos):
+            if union is not None:
+                return V.eval_union_with_limiters(union, limiter_pos, self.kill_radius)
+            return self._vshot(p_att, v_att, limiter_pos, fin, accels=accels, seed=step_seed)
+
+        vfull = _vs(lim_pos)
+        vbase = _vs(self.layout.limiter_p0)                      # hold_position baseline
         delta_headline = vfull.v_shot_soft - vbase.v_shot_soft
 
         threshold_crossed = bool(vfull.v_shot_soft >= self.theta_fire)
@@ -251,7 +268,7 @@ class ShapingParallelEnv(ParallelEnv):
         for i, lid in enumerate(self.limiter_ids):
             cf = list(lim_pos)
             cf[i] = np.asarray(self.layout.limiter_p0[i], float)
-            vcf = self._vshot(p_att, v_att, cf, fin, accels=accels, seed=step_seed)
+            vcf = _vs(cf)
             coma_D[lid] = float(vfull.v_shot_soft - vcf.v_shot_soft)
 
         # --- finisher FSM (fire gate R2 enforced INSIDE the FSM) ---------------

@@ -49,9 +49,15 @@ viability:                      # v_shot reachable-set surrogate (commit 2)
     range_max: 29.847           # conservative coverage-window travel (WEAK; flagged in N1 doc)
 
 fire_gate:                      # R2: single fire gate source of truth
-  theta_fire: 0.8               # fire iff v_shot_soft >= theta_fire
-  B_capture: 1.0                # capture benefit
-  c_fire: 0.8                   # == theta_fire * B_capture (asserted in roles.FireGate)
+  # theta_fire RAISED 0.8 -> 0.9 for the CONSERVATIVE v_shot signal (S14 union).
+  # Calibrated zero-wasted-shot band = [0.85, 1.0] (fire ONLY when robustly contained,
+  # v_shot_worst==1); the legacy 0.8 sits BELOW the band -> it would fire at intermediate
+  # containment where worst==0, wasting a miss-is-free shot. The danger under the
+  # conservative signal is over-eager firing, NOT a dead gate. Source:
+  # shepherd/eval/fire_gate_calibration.py + results/fire_gate_calibration.md.
+  theta_fire: 0.9              # fire iff v_shot_soft >= theta_fire (conservative-calibrated)
+  B_capture: 1.0               # capture benefit
+  c_fire: 0.9                  # == theta_fire * B_capture (asserted in roles.FireGate)
 
 reward:                         # S6: J_M2 = dv_shot + l1*1[v>=theta] - l2*wasted_fire - l3*limiter_loss
   lambda1: 1.0                  # threshold-crossing bonus
