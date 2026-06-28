@@ -73,6 +73,10 @@ class ViabilitySpec:
     turn_limited: bool = False  # False = single-segment constant-accel reachable set
     n_samples: int = 2000
     seed: int = 0
+    n_segments: int = 1         # S14: 1 = legacy single-segment reachable set (bit-exact
+                                # with the frozen prototype); >1 = conservative EXTREME-POINT
+                                # union (boundary spheres + bang-bang doglegs) -- the
+                                # trustworthy L2 training signal (over-approx, never optimistic).
 
 
 @dataclass(frozen=True)
@@ -139,6 +143,7 @@ class ScenarioSpec:
                 turn_limited=bool(vi["turn_limited"]),
                 n_samples=int(vi["n_samples"]),
                 seed=int(vi["seed"]),
+                n_segments=int(vi.get("n_segments", 1)),   # S14: optional; default 1 (legacy)
             ),
             reward=RewardSpec(
                 lambda1=float(rw["lambda1"]),

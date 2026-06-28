@@ -1,0 +1,63 @@
+# M2 / L2 TRAINING scenario  (feat/l2-prep-wiring)
+#
+# Identical to m2_default.yaml EXCEPT viability.n_segments > 1: L2 (MAPPO/COMA)
+# must train on the S14 conservative EXTREME-POINT reachable set -- the trustworthy
+# capture signal -- NOT the legacy single-segment surrogate (which reads
+# optimistically; m2_l1_status.md "S14"). The cone stays N1-GROUNDED (the physical
+# DoD): net_radius 2.0 m < R_reach 2.4 m, so absolute capture honestly FAILS until
+# the learned shaping shrinks the shaped reachable radius below 2.0 m (the L2 target).
+#
+# Use:
+#   python -m shepherd.scripts.rollout_gif --config configs/m2_l2_train.yaml   # sanity
+#   (lab venv) point the MAPPO trainer's env factory at this config.
+
+scenario:
+  n_limiters: 4                 # S1: N cost-bearing shaping limiters (+/-y, +/-z ring)
+  n_adversaries: 1              # M2: single scripted attacker
+  finisher:
+    K: 1                        # S1: finite magazine; the single binding scarce resource (M2)
+
+physics:
+  dt: 0.05                      # integration step [s]
+  tau_deploy: 0.4               # net deploy delay [s]
+  tau_lock: 0.1                 # post-fire lock [s]      (S3 irreversible commit)
+  a_att_max: 30.0               # attacker bounded accel [m/s^2]
+  att_speed: 20.0               # attacker nominal speed [m/s]
+  kill_radius: 2.0              # limiter kamikaze kill-radius [m]
+  net_radius: 2.0               # finisher net capture radius [m] -- N1-GROUNDED
+                                # = sqrt(S_NP/pi), paper baseline S_NP=12.54 (docs/n1_net_grounding.md)
+  a_lim_max: 30.0               # limiter setpoint/accel limit [m/s^2]
+
+attitude:                       # R3: reduced-attitude pointing (NOT full 6-DOF aero)
+  omega_max: 3.14159            # net-axis slew-rate limit [rad/s]; a PARAMETER, not a state dim
+  e_net_init: [1.0, 0.0, 0.0]   # initial finisher net-pointing axis e_net (R_F . e_net)
+
+viability:                      # v_shot reachable-set surrogate (commit 2)
+  judge: se3_cone               # M2/L1 DEFAULT: SE(3) net cone (S5/S8 channel 2 net-volume alignment)
+  turn_limited: false           # false = single fixed heading cone in the legacy path
+  n_samples: 2000               # accel samples (Block-1 single-segment of the union)
+  seed: 0                       # rng seed
+  n_segments: 4                 # S14: >1 -> conservative EXTREME-POINT union (Block-1 single-segment
+                                # UNIONED with boundary spheres + K-segment bang-bang doglegs). This is
+                                # the trustworthy training signal: a sound over-approximation of the
+                                # discrete closed-loop attacker, so v_shot_worst is monotone
+                                # non-increasing vs n_segments=1 and never reads optimistically.
+  cone:                         # se3_cone geometry (consumed by the composition root cone_* kwargs)
+                                # N1-GROUNDED (Xu Drones 9:190; docs/n1_net_grounding.md).
+    half_angle: 0.067           # = arctan(net_radius/range_max) (3.8 deg)
+    range_min: 0.0
+    range_max: 29.847           # conservative coverage-window travel (WEAK; flagged in N1 doc)
+
+fire_gate:                      # R2: single fire gate source of truth
+  theta_fire: 0.8               # fire iff v_shot_soft >= theta_fire
+  B_capture: 1.0                # capture benefit
+  c_fire: 0.8                   # == theta_fire * B_capture (asserted in roles.FireGate)
+
+reward:                         # S6: J_M2 = dv_shot + l1*1[v>=theta] - l2*wasted_fire - l3*limiter_loss
+  lambda1: 1.0                  # threshold-crossing bonus
+  lambda2: 1.0                  # wasted-fire penalty
+  lambda3: 0.5                  # limiter loss-cost penalty
+
+baselines:                      # S8 / COMA credit assignment (commit 4)
+  headline_u0: hold_position    # headline delta: full shaping vs hold-position rollout
+  coma_u0: hold_position        # COMA counterfactual baseline u_i^0 (FIXED; do not vary per-step)
