@@ -103,6 +103,10 @@ class ShapingParallelEnv(ParallelEnv):
         self.theta_fire = scenario.fire_gate.theta_fire
         self.judge = scenario.viability.judge
         self.n_samples = scenario.viability.n_samples
+        # S14: n_segments>1 makes v_shot the conservative extreme-point (over-approx)
+        # signal L2 should train on. Default 1 keeps env/DoD bit-exact with the legacy
+        # single-segment surrogate (all 31 L1 tests run this path).
+        self.n_segments = int(scenario.viability.n_segments)
         self.l1 = scenario.reward.lambda1
         self.l2 = scenario.reward.lambda2
         self.l3 = scenario.reward.lambda3
@@ -179,6 +183,15 @@ class ShapingParallelEnv(ParallelEnv):
     def _vshot(self, p_att, v_att, limiter_pos, fin_s9, *, accels=None, seed=0,
                net_center=None):
         kw = self._vshot_kwargs(p_att, v_att, fin_s9, net_center=net_center)
+        if self.n_segments > 1:
+            # S14 trustworthy signal: the conservative EXTREME-POINT reachable set.
+            # Headline/COMA differences keep common-random-number cancellation via the
+            # SHARED `seed` (the union's single-segment block is reachable_accels(seed);
+            # the boundary/dogleg blocks are deterministic), so the pre-drawn `accels`
+            # sample is intentionally unused on this path.
+            return V.v_shot(p_att, v_att, tau=self.tau_deploy, a_att_max=self.a_att_max,
+                            limiters=limiter_pos, kill_radius=self.kill_radius,
+                            n=self.n_samples, seed=seed, n_segments=self.n_segments, **kw)
         if accels is None:
             return V.v_shot(p_att, v_att, tau=self.tau_deploy, a_att_max=self.a_att_max,
                             limiters=limiter_pos, kill_radius=self.kill_radius,
@@ -225,9 +238,26 @@ class ShapingParallelEnv(ParallelEnv):
 
         # --- viability metrics on the CURRENT (pre-move) state -----------------
         accels = V.reachable_accels(self.a_att_max, self.n_samples, step_seed)
-        vfull = self._vshot(p_att, v_att, lim_pos, fin, accels=accels, seed=step_seed)
-        vbase = self._vshot(p_att, v_att, self.layout.limiter_p0, fin,
-                            accels=accels, seed=step_seed)        # hold_position baseline
+        # S14/L2: on the conservative signal (n_segments>1) build the layout-
+        # INDEPENDENT reachable union ONCE and evaluate the headline + every COMA
+        # counterfactual against it (different limiter masks). Makes the shared-seed
+        # CRN manifest (identical endpoints/caught; only feasibility differs) and is
+        # ~(N+2)x cheaper. Numerically identical to per-layout v_shot(n_segments=K)
+        # (tests/test_union_equiv). n_segments==1 keeps the exact legacy accels path.
+        union = None
+        if self.n_segments > 1:
+            union = V.build_reachable_union(
+                p_att, v_att, tau=self.tau_deploy, a_att_max=self.a_att_max,
+                n=self.n_samples, n_segments=self.n_segments, seed=step_seed,
+                **self._vshot_kwargs(p_att, v_att, fin))
+
+        def _vs(limiter_pos):
+            if union is not None:
+                return V.eval_union_with_limiters(union, limiter_pos, self.kill_radius)
+            return self._vshot(p_att, v_att, limiter_pos, fin, accels=accels, seed=step_seed)
+
+        vfull = _vs(lim_pos)
+        vbase = _vs(self.layout.limiter_p0)                      # hold_position baseline
         delta_headline = vfull.v_shot_soft - vbase.v_shot_soft
 
         threshold_crossed = bool(vfull.v_shot_soft >= self.theta_fire)
@@ -238,7 +268,7 @@ class ShapingParallelEnv(ParallelEnv):
         for i, lid in enumerate(self.limiter_ids):
             cf = list(lim_pos)
             cf[i] = np.asarray(self.layout.limiter_p0[i], float)
-            vcf = self._vshot(p_att, v_att, cf, fin, accels=accels, seed=step_seed)
+            vcf = _vs(cf)
             coma_D[lid] = float(vfull.v_shot_soft - vcf.v_shot_soft)
 
         # --- finisher FSM (fire gate R2 enforced INSIDE the FSM) ---------------

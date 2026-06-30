@@ -12,7 +12,7 @@ dependencies = ["numpy", "pyyaml"]
 [project.optional-dependencies]
 env = ["pettingzoo", "gymnasium"]
 viz = ["matplotlib"]
-marl = ["torch"]            # 6-DOF MARL, lab venv
+marl = ["torch", "supersuit", "wandb"]   # L2 MARL: training + vec-env + logging (lab/local venv)
 dev = ["pytest"]
 
 [tool.setuptools.packages.find]
