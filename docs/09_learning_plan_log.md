@@ -12,7 +12,7 @@
 - **목표:** scripted 정책 → **학습된 shaping 정책**. MAPPO **직접 구현**(black-box 금지) + **COMA** limiter credit. CTDE.
 - **동결(건드리지 않음):** S1–S8 계약(`03_formalization.md`), env 계약(`shepherd/env.py`), `configs/m2_l2_train.yaml`, frozen blob 2개(`03_formalization.md`, `shepherd/game/exchange.py`).
 - **L2 산출:** seed≥3 수렴 학습곡선 > baseline + wandb 곡선 + checkpoint + demo GIF.
-- **현 위치:** **Phase 1 완료(2026-07-01).** from-scratch PPO 코어(`shepherd/train/ppo.py` + torch-free `gae.py`) + 토이 수렴 검증 커밋(`52a7d58`). 다음 = Phase 2 MAPPO(shepherd env, CTDE).
+- **현 위치:** **Phase 1 완료(2026-07-01).** from-scratch PPO 코어(`shepherd/train/ppo.py` + torch-free `gae.py`) + 토이 수렴 검증 커밋(`52a7d58`). **다음 착수점 = Phase 2A**(shepherd ParallelEnv 어댑터 smoke) — Phase 2는 2A→2B(IPPO)→2C(MAPPO)→2D(COMA) 사다리(§5).
 
 ---
 
@@ -183,26 +183,49 @@ jobs:
 - **확정된 설계 결정(사용자 승인):** state-independent log-std / value-clip 생략 / action **clip**(log-prob는 raw Gaussian 기준, exact ratio) / adv-norm **rollout-level 1회** / raw·env action 분리 / `compute_gae` **per-step next_values 시그니처** / update 테스트는 "loss 감소" 대신 구조 불변식(finite·ratio≈1·param-move·KL≥0·grad-clip).
 - **리스크(해소):** advantage 정규화·보상 스케일 → 토이에서 확인 완료. gymnasium 1.3.0 autoreset("next-step" mode) → plain env+manual reset로 회피(프로브로 확인).
 
-### Phase 2 — MAPPO (shepherd env, CTDE)
+### Phase 2 — single-agent PPO → MAPPO 사다리 (shepherd env, CTDE) `[재구성 2026-07-01]`
 
-- **할 일:** `shepherd/train/mappo.py` — **역할별 actor**(limiter 공유 파라미터 / finisher 별도), **중앙 critic 1개**(`env.state()` 입력). PettingZoo ParallelEnv 어댑터.
-- **혼합 action head 결정:** finisher `fire`(binary) — Gaussian+threshold vs **Bernoulli head**(권장: fire만 분리 Bernoulli, 나머지 연속 Gaussian) → Phase 2에서 확정·기록.
-- **DoD:** shepherd env에서 학습 루프 NaN 없이 돌고 return 상승 추세. 31 테스트 green.
-- **커밋:** `feat(train): MAPPO (shared-critic CTDE) on shepherd env`.
+> **Phase 1 PPO 코어를 최대 재활용하며 리스크를 한 계단씩 격리.** 부산물로 **IPPO(2B) / MAPPO(2C) / MAPPO+COMA(2D)** ablation 사다리가 나옴 → §5 Phase 6 baseline 비교표로 그대로 재사용(중복 작업 0). 각 rung = 동작 산출물 + DoD + 커밋. torch-free 스위트 매 커밋 green(현 72), frozen blob diff 0.
+>
+> **이종(heterogeneous) 못박기:** env는 4 limiter(`Box(4)` accel+pressure) + 1 finisher(`Box(5)` axis+slew+**fire**) + scripted adversary. "N-agent 완전 공유 정책"은 **틀림** — limiter만 파라미터 공유, finisher는 별도 정책, adversary는 학습 X.
 
-### Phase 3 — COMA limiter credit (D1-A 1단계)
+#### Phase 2A — shepherd env 어댑터 smoke (알고리즘 X, 배선만)
 
-- **할 일:** env의 `info[limiter_i]["coma_D"]`(해석적 v_shot 차분)를 **limiter advantage**로 배선. baseline = hold_position(고정, S8).
-- **DoD:** limiter shaping 학습 → `Δv_shot>0` 유지, `D_i` 평균 > 0(역할 검증, kill-switch 연동). terminal-only 보상 금지.
+- **할 일:** PettingZoo ParallelEnv ↔ trainer 어댑터. dict obs flatten, agent별 action 라우팅(limiter/finisher/adversary), reward·info(`coma_D`/`delta_v_shot_headline`) 추출, `env.state()` 배선. adversary는 scripted 주입.
+- **DoD:** **random 정책**이 full episode(`episode_len=80`) NaN 없이 완주 + obs/action/reward/info 배선 검증(shape·키). torch-free 스위트 green.
+- **커밋:** `feat(train): shepherd ParallelEnv adapter smoke (random policy)`.
+
+#### Phase 2B — IPPO (independent PPO, 중앙 critic 없음)
+
+- **할 일:** Phase 1 PPO 코어를 agent별로 굴림 — **limiter = 파라미터 공유 1개 정책**(homogeneous 역할) + **finisher = 별도 정책**, 각자 **decentralized critic**. = 진짜 IPPO(MARL 표준 baseline·selection-only ablation).
+- **혼합 action head 확정(여기서 close):** finisher `fire`(binary·비가역) — **Bernoulli head 권장**(fire만 분리 Bernoulli, 나머지 연속 Gaussian) vs Gaussian+threshold → 2B에서 결정·기록. §7.1 오픈항목 해소.
+- **로깅:** wandb 여기서부터 켬(return / loss / entropy / KL + `Δv_shot`/`wasted_fire`/`limiter_loss`). checkpoint = Phase 1 `PPOTrainer.save/load` 재사용.
+- **DoD:** IPPO return이 hold_position·scripted baseline **유의 초과**(≈ selection-only baseline, 사실상 L2 게이트 근접). NaN 0.
+- **커밋:** `feat(train): IPPO (shared-limiter + separate finisher, decentralized critics)`.
+
+#### Phase 2C — MAPPO (중앙 critic, CTDE)
+
+- **할 일:** 2B 위에 **중앙 critic 1개**(`env.state()` 입력)만 추가 → CTDE. actor는 2B 그대로(decentralized 실행).
+- **throughput(주의):** `v_shot`(n_segments=4, n_samples=2000, per-step union)이 최대 병목(§7) → **여기서 물림**. supersuit 벡터화를 2C 직전/병행으로 당기거나, 최소 2C DoD에 throughput 측정 + n_samples 축소/union 캐싱/CRN 재사용 튜닝(정확도-속도 trade) 포함.
+- **DoD:** MAPPO return **≥ 2B(IPPO)** + 학습 안정(NaN 0, KL 정상). torch-free green.
+- **커밋:** `feat(train): MAPPO (shared central critic, CTDE) on shepherd env`.
+
+#### Phase 2D — COMA limiter credit ablation (D1-A 1단계)
+
+- **할 일:** env의 `info[limiter_i]["coma_D"]`(**해석적** v_shot 차분)를 **limiter advantage**로 배선. baseline = hold_position(고정, S8). = 기존 Phase 3, "ablation"으로 프레이밍.
+- **DoD:** `D_i` 평균 > 0(역할 검증·kill-switch 연동) ∧ **MAPPO+COMA ≥ MAPPO** ∧ `Δv_shot>0` 유지. terminal-only 보상 금지.
 - **커밋:** `feat(train): COMA difference-reward credit for limiters (analytic D_i)`.
-- **D1-A 2단계(Phase 6 이후 stretch):** 학습된 counterfactual critic으로 D_i 대체 → "COMA 직접 구현" 신호.
+- **D1-A 2단계(Phase 6 이후 stretch):** 학습된 counterfactual critic으로 D_i 대체 → "COMA 직접 구현" 이력서 신호.
 
-### Phase 4 — 벡터화 + 로깅 + 재현성
+**ablation 사다리 = baseline 재사용:** 2B(IPPO) / 2C(MAPPO) / 2D(+COMA) 곡선이 그대로 Phase 6 비교표(no-shaping / selection-only / MAPPO / +COMA)로 들어감.
 
-- **할 일:** supersuit로 ParallelEnv 벡터화. wandb 로깅(return / policy·value loss / entropy / KL **+ Δv_shot / capture_rate / wasted_fire / limiter_loss**). checkpoint 저장·재개. seed≥3.
-- **DoD:** wandb 곡선 + checkpoint resume 동일 궤적 + 3 seed 배치 실행.
-- **커밋:** `feat(train): vec-env + wandb + checkpoint/seed`.
-- **리스크(주의):** `v_shot`(n_segments=4, n_samples=2000, per-step union) **throughput 병목** 가능 → n_samples 축소/union 캐싱/CRN 재사용 튜닝(정확도-속도 trade, 기록).
+### Phase 4 — 재현성 마감 (벡터화·로깅은 2B/2C로 선반영)
+
+> **2026-07-01 재구성:** wandb 로깅·checkpoint = **2B로**, supersuit 벡터화·`v_shot` throughput 튜닝 = **2C로** 당김. Phase 4는 잔여 마감만.
+
+- **할 일:** seed≥3 배치 실행 표준화 + checkpoint resume **동일 궤적** 검증(2B save/load 위) + wandb 곡선 정리(2B에서 켠 로깅). (미당겼으면 여기서 supersuit 벡터화 마감.)
+- **DoD:** 3 seed 배치 + checkpoint resume 동일 궤적 + wandb 곡선 완비.
+- **커밋:** `feat(train): reproducibility pass (seed>=3, checkpoint resume, wandb)`.
 
 ### Phase 5 — 조기 sanity (`03 §D`, build 안 1회)
 
@@ -236,7 +259,7 @@ jobs:
 ## 7. 리스크 / 오픈 항목
 
 - **v_shot throughput** — 학습 루프 최대 병목 후보(§5 Phase 4 대응).
-- **혼합 action head** — finisher fire(binary) 분포 처리(Phase 2 확정).
+- **혼합 action head** — finisher fire(binary) 분포 처리(**Phase 2B 확정** — Bernoulli head 권장).
 - **비수렴·보상 스케일·NaN** — Phase 1 토이에서 선제 차단 + 디버깅 경험 1건은 학습목표(`06`).
 - **torch 샌드박스 불가** — 학습은 로컬/랩 전용, 샌드박스는 torch-free 테스트만.
 - **mount truncation** — 마운트 쓰기 간헐 truncation(이번 세션 실재) → heredoc 재기록 + 재읽기 검증 규율.
@@ -259,7 +282,13 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
-### 2026-07-01
+### 2026-07-01 (b) — Phase 2 사다리 재구성
+- **§5 Phase 2를 4-rung 사다리로 재작성**(2A adapter smoke → 2B IPPO → 2C MAPPO → 2D COMA ablation). 기존 통짜 "Phase 2 MAPPO + Phase 3 COMA" 흡수. GPT 제안 채택 + 4개 보정: (1) 이종 env라 "N-agent 완전 공유"는 틀림 → limiter만 공유·finisher 별도·adversary scripted 명시, (2) 혼합 action head(finisher fire Bernoulli)는 finisher 정책 첫 등장하는 **2B에서 확정**, (3) 2D COMA = **해석적 `coma_D` 먼저**(D1-A 1단계, 학습 critic은 Phase 6+), (4) `v_shot` throughput 병목은 **2C에서 물림** → supersuit 벡터화/n_samples 튜닝 2C로 당김.
+- **부산물:** 2B/2C/2D = IPPO/MAPPO/+COMA **ablation 사다리** → Phase 6 baseline 비교표로 그대로 재사용(중복 0).
+- **Phase 4 축소:** wandb·checkpoint→2B, 벡터화·throughput→2C 로 선반영, Phase 4는 재현성 마감만. §7 혼합 action head 포인터 2B로 갱신.
+- **다음 세션 착수점 = Phase 2A**(shepherd ParallelEnv 어댑터 smoke, random 정책).
+
+### 2026-07-01 (a)
 - **Phase 1 완료 — from-scratch 단일 에이전트 PPO 코어 + 토이 수렴.** 커밋 `52a7d58` (브랜치 `feat/l2-mappo-train`).
 - **산출:** `shepherd/train/gae.py`(torch-free GAE, per-step next_values로 truncation/termination 부트스트랩 분리) · `shepherd/train/ppo.py`(ActorCritic·RolloutBuffer·PPOConfig·PPOTrainer + checkpoint save/load) · `shepherd/scripts/train_ppo_toy.py` + `configs/ppo_toy.yaml` · 테스트 2종(gae torch-free 6 + update/checkpoint torch 7) · `pyproject.toml` `torch` 마커.
 - **plan-mode 리뷰 반영(사용자 must-fix 5 + nice-to-have 5):** ① gymnasium 1.3.0 autoreset 프로브 → **plain env + manual reset**로 회피, `compute_gae` **per-step next_values** 시그니처로 보강(mid-rollout truncation 테스트 추가) ② RolloutBuffer **raw+env action 분리 저장** + `clip_fraction_action` 로깅 ③ update 테스트 "loss 감소" 제거 → finite/ratio≈1/param-move/KL≥0/grad-clip ④ adv-norm **rollout-level 1회**(이중 정규화 금지) ⑤ GAE 테스트명 termination/truncation 정확화 / eval deterministic 곡선 분리 · DoD 완화(eval·seed≥3·1seed≥−300) · 재현성 CPU-only · `init_log_std` config화 · PPOConfig dataclass.
