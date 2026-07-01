@@ -20,3 +20,6 @@ include = ["shepherd*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "torch: requires torch (deselect with -m 'not torch')",
+]

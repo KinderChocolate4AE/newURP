@@ -1,0 +1,27 @@
+# L2 Phase 1 -- from-scratch PPO toy-convergence config.
+# NOT a shepherd scenario config (frozen m2_l2_train.yaml is untouched). This
+# only parameterizes shepherd/scripts/train_ppo_toy.py on a Gymnasium toy env.
+
+env_id: Pendulum-v1          # primary sanity env (continuous, Gaussian-friendly)
+# env_id: LunarLanderContinuous-v3   # optional secondary (needs box2d; auto-skips)
+
+ppo:
+  total_timesteps: 300000
+  rollout_steps: 2048        # steps per update (single env)
+  epochs: 10
+  minibatch_size: 64
+  lr: 0.0003
+  max_grad_norm: 0.5
+  clip_eps: 0.2
+  gamma: 0.9                 # Pendulum-tuned (0.99 is the general default)
+  lam: 0.95
+  ent_coef: 0.0
+  vf_coef: 0.5
+  hidden_sizes: [64, 64]
+  init_log_std: 0.0          # config-driven: shepherd's action space is narrower
+  seed: 0
+  device: cpu
+
+eval:
+  interval_updates: 5        # deterministic eval every N updates
+  episodes: 10
