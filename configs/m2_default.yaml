@@ -34,7 +34,9 @@ viability:                      # v_shot reachable-set surrogate (commit 2)
                                 # alignment). Canonical values: {se3_cone, point_mass}.
                                 # point_mass = logged ablation / kill-switch baseline ONLY
                                 # (and the commit-2 port-fidelity regression judge).
-  turn_limited: false           # false = single-segment constant-accel reachable set
+  turn_limited: false           # RESERVED (2026-07-03): parsed into ScenarioSpec but NOT wired into
+                                # the env's v_shot path (proto-parity key; viability.py supports
+                                # attacker_turn_limited -- wire-through deferred to S13/S14).
   n_samples: 2000               # accel samples
   seed: 0                       # rng seed
   cone:                         # se3_cone geometry. Consumed by the composition root

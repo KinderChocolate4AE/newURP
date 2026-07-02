@@ -1,6 +1,8 @@
 # newURP — 06 Learning Checklists
 
 > `05_learning_goals.md`의 L1–L6를 잘게 쪼갠 체크리스트. **개념·용어**는 "한 문장으로 설명 가능"하면 체크 / **실습**은 "실제로 돌아가면" 체크. 각 L의 **✅ 완료 기준**을 채우면 그 milestone 졸업.
+>
+> 2026-07-03: **실습 박스만** 실측 근거(커밋·테스트·산출물)로 체크함 — **개념 박스는 Hyunjun 자기평가용**이라 AI가 체크하지 않음.
 
 ## L0 — 공통 엔지니어링 위생 (전 구간에 깔림)
 **개념·용어**
@@ -12,10 +14,10 @@
 - [ ] 단위테스트(pytest) · CI(GitHub Actions) 개념
 
 **실습·경험**
-- [ ] newURP venv 셋업 → `import shepherd` 통과
-- [ ] pytest 1개 작성·통과 (예: env reset 결정론)
+- [x] newURP venv 셋업 → `import shepherd` 통과 (로컬 venv; Phase 1 학습 실행 실적, 09 §8)
+- [x] pytest 1개 작성·통과 (현 80 수집 = torch-free 73 + torch 7, 2026-07-03)
 - [ ] wandb 프로젝트 만들어 더미 곡선 1개 로깅
-- [ ] (선택) GitHub Actions로 pytest 자동 실행 + 뱃지
+- [ ] (선택) GitHub Actions로 pytest 자동 실행 + 뱃지 (ci.yml 생성·동작 2026-06-30 — 뱃지만 미부착)
 
 ## L1 — Multi-agent ENV 바닥부터
 **개념·용어**
@@ -29,12 +31,12 @@
 
 **실습·경험**
 - [ ] 최소 단일-에이전트 env `reset`/`step` 구현 + render
-- [ ] 다중 에이전트로 확장: limiter×N + finisher×1 + adversary×1
-- [ ] 역할별 obs/action/reward 정의
-- [ ] numpy `v_shot`(prototypes/reachset) → env reward/info 연결
-- [ ] scripted 정책 rollout → **render GIF 1개**
-- [ ] env 단위테스트(space 일치 · 결정론)
-- [ ] **✅ L1 완료**: scripted 정책으로 에피소드가 끝까지 돌고 GIF가 나온다
+- [x] 다중 에이전트로 확장: limiter×N + finisher×1 + adversary×1 (`shepherd/env.py`)
+- [x] 역할별 obs/action/reward 정의 (09 §2 env 계약; pressure/slew = RESERVED)
+- [x] numpy `v_shot`(prototypes/reachset) → env reward/info 연결 (`shepherd/game/viability.py`)
+- [x] scripted 정책 rollout → **render GIF 1개** (`rollout_gif.py`, L1 DONE 산출물)
+- [x] env 단위테스트(space 일치 · 결정론) (`tests/test_env_spaces.py` 외)
+- [x] **✅ L1 완료**: scripted 정책으로 에피소드가 끝까지 돌고 GIF가 나온다 (09 §0 전제 = L1 완료)
 
 ## L2 — MARL 알고리즘 end-to-end
 **개념·용어**
@@ -46,7 +48,7 @@
 - [ ] on-policy vs off-policy · vectorized env
 
 **실습·경험**
-- [ ] PPO 코어 from-scratch 구현(단일) — 또는 한 줄씩 읽고 재현
+- [x] PPO 코어 from-scratch 구현(단일) — 또는 한 줄씩 읽고 재현 (Phase 1 DONE 2026-07-01, `52a7d58`; Pendulum −131/−186/−156)
 - [ ] **MAPPO 코어 루프 직접 구현** (black-box 호출 금지)
 - [ ] vectorized env로 병렬 rollout
 - [ ] wandb: return / loss / entropy / KL 곡선 로깅

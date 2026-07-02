@@ -80,6 +80,9 @@ def build_env(cfg, mode="shaping"):
     lim_omega = float(d.get("limiter_omega", 12.0))
     adv_vmax = float(d.get("adversary_v_max", 30.0))
     adv_x = float(d.get("adversary_start_x", 24.0))
+    # DEMO default 70 != env-contract truncation 80 (docs/09 SS2) -- rendering-only
+    # legacy. TRAINING must NOT reuse this root: use shepherd.train.make_env
+    # .make_train_env(cfg), which requires episode_len pinned in config (train:).
     ep = int(d.get("episode_len", 70))
     r_ring = float(d.get("r_ring", 2.1))
     x_fire = float(d.get("x_fire", 11.0))

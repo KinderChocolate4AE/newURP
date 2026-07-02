@@ -34,7 +34,10 @@ attitude:                       # R3: reduced-attitude pointing (NOT full 6-DOF 
 
 viability:                      # v_shot reachable-set surrogate (commit 2)
   judge: se3_cone               # M2/L1 DEFAULT: SE(3) net cone (S5/S8 channel 2 net-volume alignment)
-  turn_limited: false           # false = single fixed heading cone in the legacy path
+  turn_limited: false           # RESERVED (2026-07-03): parsed into ScenarioSpec but NOT wired into
+                                # the env's v_shot path (effectively always False there). viability.py
+                                # already supports attacker_turn_limited -- wire-through deferred to
+                                # S13/S14 activation. Do NOT set true expecting an effect.
   n_samples: 2000               # accel samples (Block-1 single-segment of the union)
   seed: 0                       # rng seed
   n_segments: 4                 # S14: >1 -> conservative EXTREME-POINT union (Block-1 single-segment
@@ -67,3 +70,24 @@ reward:                         # S6: J_M2 = dv_shot + l1*1[v>=theta] - l2*waste
 baselines:                      # S8 / COMA credit assignment (commit 4)
   headline_u0: hold_position    # headline delta: full shaping vs hold-position rollout
   coma_u0: hold_position        # COMA counterfactual baseline u_i^0 (FIXED; do not vary per-step)
+
+train:                          # composition-root pins (ADDED 2026-07-03; ratified values above
+                                # unchanged). shepherd/train/make_env.py REQUIRES this block --
+                                # no silent defaults at the assembly site. Motivation: the demo
+                                # root (rollout_gif.build_env) defaults episode_len=70 while the
+                                # env contract truncates at 80 (docs/09 SS2) -- the 80 lived only
+                                # in Layout's dataclass default, in NO config, until now.
+  episode_len: 80               # == env-contract truncation horizon (docs/09 SS2)
+  layout:                       # corridor geometry (same values the L1 demo GIFs used)
+    target: [0.0, 0.0, 0.0]
+    target_radius: 1.0
+    ring_center: [8.0, 0.0, 0.0]
+    ring_radius: 5.0
+    r_ring: 2.1                 # scripted-shaping escape ring (baselines only; learned policies ignore)
+    finisher_p0: [2.0, 0.0, 0.0]
+    adversary_start_x: 24.0
+    x_fire: 11.0                # scripted-finisher trigger (baseline rollouts only)
+  limits:                       # backend kinematic limits (demo-proven values)
+    limiter_v_max: 80.0
+    limiter_omega: 12.0
+    adversary_v_max: 30.0

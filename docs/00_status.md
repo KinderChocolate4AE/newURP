@@ -46,6 +46,8 @@
 
 ## 4. 앞으로 (build-first)
 
+> **(2026-07-03) 이 절은 06-24 스냅샷** — 아래 파일명들(threats.py·role_env.py·effectors.py·rewards.py)은 구 WarSim 트리 기준. **현행 계획·현황·착수점 = `docs/09_learning_plan_log.md`** (Phase 1 PPO 코어 완료, 다음 = Phase 2A + 2A′ throughput; env는 `shepherd/env.py`로 이미 구현됨).
+
 **다음(주력) = (A) torch/lab 빌드**:
 - [ ] reactive 적: `threats.py`에 `state` 소비 subclass(goal-constrained + 측면 dodge + kamikaze 회피 + commit 반응) — default부터.
 - [ ] reachset/v_shot을 Gym env(`role_env.py`)에 wiring + 유한-탄 finisher(이미 `effectors.py`에 ammo/fire/전개지연 존재) + miss-free payoff.
