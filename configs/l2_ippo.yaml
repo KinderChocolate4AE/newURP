@@ -1,0 +1,68 @@
+# Phase 2B IPPO trainer config (docs/09 SS5 Phase 2B).
+#
+# TRAINER-side knobs ONLY. The game/env contract stays in the FROZEN
+# configs/m2_l2_train.yaml (pointed at below, read-only) -- this file can be
+# tuned freely without touching ratified values.
+#
+#   python -m shepherd.scripts.train_ippo --config configs/l2_ippo.yaml \
+#       --seed 0 --device cuda --output results/ippo
+
+env_config: configs/m2_l2_train.yaml   # FROZEN scenario (never edited by the trainer)
+
+loop:
+  total_env_steps: 200000       # ~390 updates; scale up after the first converging run
+  rollout_env_steps: 512        # env steps per update -> limiter buffer 512*N=2048, finisher 512
+  eval_interval_updates: 20     # deterministic eval on the nominal env
+  eval_episodes: 10
+  save_interval_updates: 20     # checkpoint cadence (ckpt_*_latest.pt, overwritten)
+
+ppo_limiter:                    # parameter-shared limiter policy (Phase-1 core)
+  gamma: 0.99                   # RESET for the 80-step corridor: 0.9 was Pendulum toy
+                                # tuning (~7-step half-life, too myopic for terminal
+                                # capture/waste credit; docs/09 SS7.1)
+  lam: 0.95
+  lr: 3.0e-4
+  epochs: 10
+  minibatch_size: 256           # buffer 2048 -> 8 minibatches x 10 epochs
+  clip_eps: 0.2
+  ent_coef: 0.0
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  hidden_sizes: [128, 128]      # 67-dim input (63 obs + 4 one-hot)
+  init_log_std: 0.0             # std 1 in NORMALIZED [-1,1] action space spans the box
+
+ppo_finisher:                   # separate finisher policy (Gaussian axis + Bernoulli fire)
+  gamma: 0.99
+  lam: 0.95
+  lr: 3.0e-4
+  epochs: 10
+  minibatch_size: 128           # buffer 512 -> 4 minibatches x 10 epochs
+  clip_eps: 0.2
+  ent_coef: 0.003               # small entropy bonus keeps the Bernoulli fire head from
+                                # premature collapse; the R2 gate already rejects
+                                # sub-theta fires so exploration of fire is cheap
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  hidden_sizes: [128, 128]
+  init_log_std: 0.0
+
+randomize:                      # scripted-attacker FAMILY domain randomization
+                                # (docs/09 SS7 item (c) step 1; stationary iid per
+                                # episode, TRAIN only -- eval is always nominal).
+                                # physics.a_att_max (v_shot surrogate authority) is
+                                # NEVER randomized: theta_fire=0.9 + the zero-waste
+                                # band are calibrated against it.
+  enabled: true
+  att_speed: [16.0, 24.0]       # nominal 20 (forward-drive v_nominal + spawn speed)
+  adversary_start_x: [20.0, 28.0]  # nominal 24 (spawn depth)
+  adversary_omega: [8.0, 12.0]  # nominal 10 (backend heading-slew agility)
+  adv_a_max: [21.0, 30.0]       # nominal 30; DOWNWARD-ONLY: the backend kinematic
+                                # limit shares physics.a_att_max=30 (values above it
+                                # would silently clamp) and actual<=surrogate keeps
+                                # the S14 conservative signal sound
+
+wandb:
+  enabled: true                 # runner degrades gracefully if wandb is absent;
+                                # on lab nodes: export WANDB_MODE=offline (runbook)
+  project: newurp-l2
+  group: phase2b-ippo
