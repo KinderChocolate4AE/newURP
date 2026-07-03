@@ -194,6 +194,7 @@ def rollout(env, scn, lay, mode, seed=0):
         surrogate_fidelity = "consistent (actual endpoint matches viability under the cone)"
     summary = dict(viability_capture=viability_cap, trajectory_capture=traj_cap,
                    tight_net_probe_1p5m=tight_probe, capture_model=CAPTURE_MODEL,
+                   theta_fire=env.theta_fire,
                    net_model=_net_model_str(env), surrogate_fidelity=surrogate_fidelity,
                    max_vshot=max(f["vsoft"] for f in frames),
                    max_delta=max(f["delta"] for f in frames),
@@ -275,8 +276,12 @@ def render(frames, summary, out_path, mode, scenario="m2"):
 
         axP.clear()
         axP.set_xlim(0, max(ts) + 1); axP.set_ylim(-0.05, 1.18)
-        axP.axhline(0.8, color="gray", ls="--", lw=1, alpha=0.7)
-        axP.text(0.3, 0.81, r"$\theta_{fire}=0.8$", fontsize=7, color="gray")
+        # gate line from the ACTUAL config (was hardcoded 0.8 -- stale for the
+        # calibrated 0.9 gate in m2_l2_train; 2026-07-03 review fix)
+        th_fire = summary["theta_fire"]
+        axP.axhline(th_fire, color="gray", ls="--", lw=1, alpha=0.7)
+        axP.text(0.3, th_fire + 0.01, rf"$\theta_{{fire}}={th_fire:g}$",
+                 fontsize=7, color="gray")
         axP.plot(ts[:i + 1], vs[:i + 1], "-", color="tab:purple", label=r"$v_{shot}^{soft}$")
         axP.plot(ts[:i + 1], vw[:i + 1], "-", color="tab:cyan", lw=1, label=r"$v_{shot}^{worst}$")
         axP.plot(ts[:i + 1], dl[:i + 1], "-", color="tab:olive", lw=1, label=r"$\Delta v_{shot}^{headline}$")

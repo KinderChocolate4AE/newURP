@@ -58,12 +58,20 @@ def compute_gae(
     next_values = np.asarray(next_values, dtype=np.float64)
     dones = np.asarray(dones, dtype=np.float64)
 
+    if rewards.ndim != 1:
+        raise ValueError(f"rewards must be 1-D (T,); got shape {rewards.shape}")
     T = rewards.shape[0]
     if not (values.shape == next_values.shape == dones.shape == (T,)):
         raise ValueError(
             "rewards, values, next_values, dones must all be 1-D length T; "
             f"got {rewards.shape}, {values.shape}, {next_values.shape}, {dones.shape}"
         )
+    if not (0.0 <= gamma <= 1.0):
+        raise ValueError(f"gamma must be in [0, 1], got {gamma}")
+    if not (0.0 <= lam <= 1.0):
+        raise ValueError(f"lam must be in [0, 1], got {lam}")
+    if not np.all((dones == 0.0) | (dones == 1.0)):
+        raise ValueError("dones must contain only 0/1 values")
 
     advantages = np.zeros(T, dtype=np.float64)
     gae = 0.0

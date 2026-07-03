@@ -69,7 +69,7 @@ class FireGate:
 @dataclass(frozen=True)
 class ViabilitySpec:
     """v_shot reachable-set surrogate config (commit 2)."""
-    judge: str = "point_mass"   # {point_mass, se3}
+    judge: str = "point_mass"   # {point_mass, se3_cone}
     turn_limited: bool = False  # False = single-segment constant-accel reachable set
     n_samples: int = 2000
     seed: int = 0

@@ -129,6 +129,43 @@ def test_checkpoint_save_load_roundtrip(tmp_path):
     assert torch.allclose(a1, a2, atol=1e-6)
 
 
+def test_update_rejects_partial_buffer():
+    # 2026-07-03 GPT-review fix: a partially-filled buffer would silently train
+    # on the zero-valued tail -- update() must refuse it.
+    cfg = _cfg()
+    trainer = PPOTrainer(obs_dim=4, act_dim=2, cfg=cfg)
+    buf = _fill_buffer(4, 2, cfg.rollout_steps)
+    buf.reset()                                   # empty again -> not full
+    with pytest.raises(ValueError, match="not full"):
+        trainer.update(buf)
+
+
+def test_minibatch_permutations_differ_across_updates():
+    # 2026-07-03 GPT-review fix: the shuffle RNG is trainer state, so successive
+    # updates must NOT replay the identical permutation sequence.
+    cfg = _cfg(epochs=1)
+    trainer = PPOTrainer(obs_dim=4, act_dim=2, cfg=cfg)
+    s1 = trainer._rng.bit_generator.state["state"]["state"]
+    trainer.update(_fill_buffer(4, 2, cfg.rollout_steps, seed=1))
+    s2 = trainer._rng.bit_generator.state["state"]["state"]
+    assert s1 != s2, "shuffle RNG did not advance across update()"
+
+
+def test_log_std_is_clamped_in_dist():
+    # 2026-07-03 GPT-review fix: a drifted log_std parameter outside
+    # [LOG_STD_MIN, LOG_STD_MAX] must not produce a degenerate/exploding std.
+    ac = ActorCritic(obs_dim=3, act_dim=2, hidden_sizes=(8,))
+    with torch.no_grad():
+        ac.log_std.fill_(100.0)
+    with torch.no_grad():
+        std_max = float(ac._dist(torch.zeros(1, 3)).stddev.max())
+    assert std_max <= float(np.exp(ActorCritic.LOG_STD_MAX)) + 1e-6
+    with torch.no_grad():
+        ac.log_std.fill_(-100.0)
+        std_min = float(ac._dist(torch.zeros(1, 3)).stddev.min())
+    assert std_min >= float(np.exp(ActorCritic.LOG_STD_MIN)) - 1e-9
+
+
 def test_ppoconfig_from_dict_rejects_unknown_and_tuples_hidden():
     cfg = PPOConfig.from_dict({"hidden_sizes": [128, 128], "gamma": 0.99})
     assert cfg.hidden_sizes == (128, 128)

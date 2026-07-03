@@ -20,6 +20,14 @@ Design choices (locked in the Phase-1 plan):
   * Advantage normalization happens once at rollout level (see gae module),
     not per-minibatch.
 
+Seeding ownership (2026-07-03 review): GLOBAL seeding (torch.manual_seed /
+np.random.seed / deterministic algorithms) is the RUNNER's job, done once
+before the trainer is constructed (see ``train_ppo_toy.seed_everything``).
+The trainer only owns its private minibatch-shuffle RNG (``self._rng``,
+seeded from cfg.seed at construction so successive update() calls see
+different permutations while staying reproducible). A future MAPPO runner
+must replicate the runner-side seeding.
+
 The trainer is env-agnostic: it consumes a rollout that the runner collects
 (``shepherd/scripts/train_ppo_toy.py``) and returns diagnostics. Nothing here
 imports the shepherd env -- Phase 1 validates on a Gymnasium toy env only.
@@ -27,7 +35,7 @@ imports the shepherd env -- Phase 1 validates on a Gymnasium toy env only.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 import numpy as np
@@ -111,9 +119,17 @@ class ActorCritic(nn.Module):
         self.critic = _mlp(obs_dim, hidden_sizes, 1)
         self.log_std = nn.Parameter(torch.full((act_dim,), float(init_log_std)))
 
+    # log_std bounds: std in [e^-5 ~ 0.007, e^2 ~ 7.4]. Clamped in the forward
+    # pass so a drifting parameter can neither kill exploration (std -> 0) nor
+    # blow the action scale up; the raw parameter may sit outside, but every
+    # density/sample uses the clamped value.
+    LOG_STD_MIN: float = -5.0
+    LOG_STD_MAX: float = 2.0
+
     def _dist(self, obs: torch.Tensor) -> Normal:
         mean = self.actor_mean(obs)
-        std = self.log_std.exp().expand_as(mean)
+        log_std = self.log_std.clamp(self.LOG_STD_MIN, self.LOG_STD_MAX)
+        std = log_std.exp().expand_as(mean)
         return Normal(mean, std)
 
     def value(self, obs: torch.Tensor) -> torch.Tensor:
@@ -185,10 +201,12 @@ class RolloutBuffer:
     def reset(self) -> None:
         self._i = 0
 
-    def clip_fraction_action(self) -> float:
+    def clip_fraction_action(self, atol: float = 1e-6) -> float:
         """Fraction of action components altered by Box clipping -- an early
-        signal that the policy is training outside the action bounds."""
-        return float(np.mean(self.raw_actions != self.env_actions))
+        signal that the policy is training outside the action bounds. Uses a
+        tolerance (not exact float equality) so dtype round-trips through the
+        env cannot register as phantom clipping."""
+        return float(np.mean(np.abs(self.raw_actions - self.env_actions) > atol))
 
 
 # -------------------------------------------------------------- trainer ---
@@ -205,6 +223,10 @@ class PPOTrainer:
             obs_dim, act_dim, cfg.hidden_sizes, cfg.init_log_std
         ).to(self.device)
         self.optimizer = torch.optim.Adam(self.ac.parameters(), lr=cfg.lr)
+        # Private minibatch-shuffle RNG (trainer state, NOT re-seeded per update:
+        # re-creating it inside update() would replay the identical permutation
+        # sequence every rollout -- 2026-07-03 review fix).
+        self._rng = np.random.default_rng(cfg.seed)
 
     # ----------------------------------------------------------- checkpoint ---
     def save(self, path) -> None:
@@ -247,6 +269,13 @@ class PPOTrainer:
         dict of scalar diagnostics.
         """
         cfg = self.cfg
+        if not buf.full:
+            # A partially-filled buffer would silently train on the zero-valued
+            # tail (fake transitions). Phase 1 policy: full rollouts only.
+            raise ValueError(
+                f"RolloutBuffer is not full: {buf._i}/{buf.size} -- collect a "
+                "complete rollout before update()"
+            )
         n = buf.size
 
         advantages_np, returns_np = compute_gae(
@@ -269,9 +298,8 @@ class PPOTrainer:
         clip_fracs = []
 
         idx = np.arange(n)
-        rng = np.random.default_rng(cfg.seed)
         for _ in range(cfg.epochs):
-            rng.shuffle(idx)
+            self._rng.shuffle(idx)
             for start in range(0, n, cfg.minibatch_size):
                 mb = idx[start:start + cfg.minibatch_size]
                 mb_t = torch.as_tensor(mb, device=self.device)

@@ -45,7 +45,10 @@ physics:
   a_att_max: 30.0               # attacker maneuver authority (same as default/gate)
   att_speed: 8.0                # SLOW threat -> limiters have time to settle on the shell
   kill_radius: 2.0
-  net_radius: 1.5               # GROUNDED net size (same as default); NOT enlarged to force a pass
+  net_radius: 1.5               # pre-N1 legacy value; NOT enlarged to force a pass. STALE-COMMENT FIX
+                                # (2026-07-03): N1 grounded net_radius is 2.0 (= m2_default) -- 1.5 is
+                                # kept here only as the historical showcase fixture (judge is the CONE,
+                                # so net_radius does not decide viability capture in this demo anyway)
   a_lim_max: 200.0              # agile limiters (shaping lever)
 
 attitude:

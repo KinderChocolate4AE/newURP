@@ -130,3 +130,19 @@ def test_compute_gae_shape_validation():
         compute_gae(
             np.zeros(3), np.zeros(4), np.zeros(3), np.zeros(3), 0.99, 0.95
         )
+
+
+def test_compute_gae_input_validation():
+    # 2026-07-03 GPT-review hardening: rewards 1-D, gamma/lam in [0,1], dones 0/1.
+    import pytest
+
+    ok = (np.zeros(3), np.zeros(3), np.zeros(3), np.zeros(3))
+    with pytest.raises(ValueError, match="rewards must be 1-D"):
+        compute_gae(np.zeros((3, 1)), *ok[1:], 0.99, 0.95)
+    with pytest.raises(ValueError, match="gamma"):
+        compute_gae(*ok, 1.5, 0.95)
+    with pytest.raises(ValueError, match="lam"):
+        compute_gae(*ok, 0.99, -0.1)
+    with pytest.raises(ValueError, match="dones"):
+        compute_gae(np.zeros(3), np.zeros(3), np.zeros(3),
+                    np.array([0.0, 2.0, 0.0]), 0.99, 0.95)

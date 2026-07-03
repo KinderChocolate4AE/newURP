@@ -58,6 +58,29 @@ def test_missing_cone_raises():
         make_train_env(cfg)
 
 
+def test_missing_backend_limit_raises():
+    # 2026-07-03 GPT-review fix: finisher/adversary backend limits are REQUIRED
+    # train.limits keys now (were silently hardcoded 1.0/1.0/10.0).
+    cfg = _cfg()
+    cfg["train"]["limits"].pop("finisher_a_max")
+    with pytest.raises(KeyError, match="finisher_a_max"):
+        make_train_env(cfg)
+
+
+def test_non_mapping_section_raises():
+    cfg = _cfg()
+    cfg["train"] = None
+    with pytest.raises(TypeError, match="mapping"):
+        make_train_env(cfg)
+
+
+def test_bad_layout_vector_length_raises():
+    cfg = _cfg()
+    cfg["train"]["layout"]["target"] = [0.0, 0.0]            # length 2, not 3
+    with pytest.raises(ValueError, match="length 3"):
+        make_train_env(cfg)
+
+
 # ----------------------------------------------------------- reserved dims
 def test_pad_limiter_pressure_reserved():
     a = pad_env_action("limiter_0", [1.0, 2.0, 3.0])
@@ -82,6 +105,16 @@ def test_live_dims_and_bad_inputs():
         pad_env_action("limiter_0", [1.0, 2.0, 3.0, 4.0])    # live dim mismatch
     with pytest.raises(KeyError):
         pad_env_action("mystery_7", [0.0])
+
+
+def test_pad_env_actions_missing_agent_guard():
+    # 2026-07-03 GPT-review fix: with expected_agents, a partial action dict
+    # raises instead of silently stepping the env with missing agents.
+    live = {"limiter_0": np.zeros(3, np.float32)}
+    with pytest.raises(KeyError, match="finisher_0"):
+        pad_env_actions(live, expected_agents=["limiter_0", "finisher_0"])
+    out = pad_env_actions(live, expected_agents=["limiter_0"])   # complete -> ok
+    assert out["limiter_0"].shape == (4,)
 
 
 # ------------------------------------------------------------- integration

@@ -91,3 +91,10 @@ train:                          # composition-root pins (ADDED 2026-07-03; ratif
     limiter_v_max: 80.0
     limiter_omega: 12.0
     adversary_v_max: 30.0
+    # ADDED 2026-07-03 (GPT-review strictness fix): these three were hardcoded in
+    # shepherd/train/make_env.py despite the strict composition-root philosophy.
+    # Values are IDENTICAL to the previous hardcoded ones -- behavior unchanged.
+    finisher_a_max: 1.0         # finisher is effectively stationary in M2 (env commands a=0)
+    finisher_v_max: 1.0
+    adversary_omega: 10.0       # the ACTUAL adversary heading-slew limit (the 8.0 the
+                                # frozen env passes to the scripted policy is unused there)
