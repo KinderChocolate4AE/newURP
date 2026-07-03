@@ -1,0 +1,17 @@
+{
+ "n_steps": 23,
+ "step_ms": {
+  "mean": 117.34655491316357,
+  "median": 115.99666700021771,
+  "p90": 127.60390040002676
+ },
+ "comp_ms": {
+  "build": 3.579100416724638,
+  "eval": 14.143073166754524,
+  "vres2": 18.84389883305933,
+  "draw": 0.2490585000032297
+ },
+ "n_bank": 23,
+ "n_sub": 12,
+ "note": "per step: draw + build B + 6x eval E (vfull,vbase,4x coma) + vres2 (B+inline E)"
+}

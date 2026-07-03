@@ -1,0 +1,7 @@
+{
+ "nproc": 2,
+ "n_steps_each": 20,
+ "serial_s": 5.385151119999136,
+ "parallel_wall_s": 3.2604182789991683,
+ "efficiency_2way": 0.825837463046641
+}
