@@ -256,20 +256,39 @@ class ShapingParallelEnv(ParallelEnv):
                 return V.eval_union_with_limiters(union, limiter_pos, self.kill_radius)
             return self._vshot(p_att, v_att, limiter_pos, fin, accels=accels, seed=step_seed)
 
-        vfull = _vs(lim_pos)
-        vbase = _vs(self.layout.limiter_p0)                      # hold_position baseline
+        if union is not None:
+            # 2A batched shared-distance eval -- the SOLE ratified freeze
+            # exception on this file (docs/09 SS0/SS5/SS8 2026-07-03 (d)).
+            # Numerically IDENTICAL to the previous six per-layout
+            # eval_union_with_limiters calls (bit-locked by
+            # tests/test_batched_eval.py), ~2.4x cheaper: the six layouts
+            # (full, hold_position baseline, N counterfactuals) share <= 2N
+            # unique limiter positions, so each unique sphere's hit mask is
+            # computed once and every layout composes as a boolean any().
+            cfs = []
+            for i in range(len(self.limiter_ids)):
+                cf = list(lim_pos)
+                cf[i] = np.asarray(self.layout.limiter_p0[i], float)
+                cfs.append(cf)
+            res = V.eval_union_with_limiter_sets(
+                union, [lim_pos, self.layout.limiter_p0] + cfs, self.kill_radius)
+            vfull, vbase = res[0], res[1]
+            coma_D = {lid: float(vfull.v_shot_soft - res[2 + i].v_shot_soft)
+                      for i, lid in enumerate(self.limiter_ids)}
+        else:
+            vfull = _vs(lim_pos)
+            vbase = _vs(self.layout.limiter_p0)                  # hold_position baseline
+            # COMA D_i: swap limiter i to hold_position, same accel sample (CRN)
+            coma_D = {}
+            for i, lid in enumerate(self.limiter_ids):
+                cf = list(lim_pos)
+                cf[i] = np.asarray(self.layout.limiter_p0[i], float)
+                vcf = _vs(cf)
+                coma_D[lid] = float(vfull.v_shot_soft - vcf.v_shot_soft)
         delta_headline = vfull.v_shot_soft - vbase.v_shot_soft
 
         threshold_crossed = bool(vfull.v_shot_soft >= self.theta_fire)
         clean_crossed = bool(threshold_crossed and not vfull.boxed_in)
-
-        # COMA D_i: swap limiter i to its hold_position, same accel sample (CRN)
-        coma_D = {}
-        for i, lid in enumerate(self.limiter_ids):
-            cf = list(lim_pos)
-            cf[i] = np.asarray(self.layout.limiter_p0[i], float)
-            vcf = _vs(cf)
-            coma_D[lid] = float(vfull.v_shot_soft - vcf.v_shot_soft)
 
         # --- finisher FSM (fire gate R2 enforced INSIDE the FSM) ---------------
         fin_act = np.asarray(actions.get(self.finisher_id, np.zeros(5)), float)

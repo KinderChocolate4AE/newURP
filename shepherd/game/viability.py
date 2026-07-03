@@ -725,6 +725,58 @@ def eval_union_with_limiters(union, limiters, kill_radius):
     feasible = limiter_feasible & union.turn_feasible
     return _assemble(feasible, union.caught, union.n_total, union.judge, union.seed)
 
+def eval_union_with_limiter_sets(union, limiter_sets, kill_radius):
+    """Batched eval_union_with_limiters over MULTIPLE limiter layouts at once.
+
+    2A batched shared-distance eval (docs/09 SS5 Phase 2A / SS8 2026-07-03 (d),
+    ratified): the env's per-step layouts (full, hold_position baseline, N COMA
+    counterfactuals) draw from a small pool of UNIQUE limiter positions (<= 2N).
+    Compute each unique sphere's per-witness hit mask ONCE per path block, then
+    compose every layout as a boolean any() over its column subset.
+
+    NUMERICALLY IDENTICAL to calling eval_union_with_limiters(union, L, kr) per
+    layout (same subtraction/norm per (witness, substep, position); locked by
+    tests/test_batched_eval.py; 2A' spike pre-verified 0/12 state mismatches),
+    ~2.4x cheaper for the M2 six-layout step. Returns [VShotResult] in order.
+    """
+    sets_arr = []
+    for L in limiter_sets:
+        if L is None:
+            sets_arr.append(np.zeros((0, 3)))
+        else:
+            sets_arr.append(np.asarray(L, float).reshape(-1, 3))
+
+    ones = np.ones(union.n_total, bool)
+    if kill_radius <= 0 or all(len(L) == 0 for L in sets_arr):
+        return [_assemble(ones & union.turn_feasible, union.caught,
+                          union.n_total, union.judge, union.seed)
+                for _ in sets_arr]
+
+    uniq_rows, uniq_index, cols = [], {}, []
+    for L in sets_arr:
+        c = []
+        for row in L:
+            key = row.tobytes()
+            if key not in uniq_index:
+                uniq_index[key] = len(uniq_rows)
+                uniq_rows.append(row)
+            c.append(uniq_index[key])
+        cols.append(sorted(set(c)))
+    uniq = np.asarray(uniq_rows, float)                          # (U, 3)
+
+    hit_blocks = []
+    for pb in union.path_blocks:
+        d = np.linalg.norm(pb[:, :, None, :] - uniq[None, None, :, :], axis=3)
+        hit_blocks.append((d <= kill_radius).any(axis=1))        # (n_b, U)
+    hit = np.concatenate(hit_blocks, axis=0)                     # (M, U)
+
+    out = []
+    for c in cols:
+        feasible_lim = ones if not c else ~hit[:, c].any(axis=1)
+        out.append(_assemble(feasible_lim & union.turn_feasible, union.caught,
+                             union.n_total, union.judge, union.seed))
+    return out
+
 
 def sphere_containment_certificate(x_att, v_att, *, tau, a_att_max, net_center,
                                    net_radius):
