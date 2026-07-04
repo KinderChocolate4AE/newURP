@@ -131,6 +131,11 @@ class MAPPORunner:
         if self._adapter is None:
             self._begin_episode()
         device = self.tr.device
+        # Phase 2D causality: env.step computes coma_D on the PRE-move state,
+        # so step t's returned D belongs to action t-1. prev_row tracks the
+        # buffer row to write back into; None at episode/rollout starts (the
+        # last action of an episode/rollout keeps D=0).
+        prev_row = None
         for _ in range(self.rollout_env_steps):
             ad = self._adapter
             obs = self._obs
@@ -162,6 +167,10 @@ class MAPPORunner:
             else:
                 next_value = self.tr.value_np(self.norm.normalize(next_obs))
 
+            if prev_row is not None:               # shift-back D(s_t) -> a_{t-1}
+                self.buf.coma_D[prev_row] = np.array(
+                    [r.coma_D[lid] for lid in ad.limiter_ids], np.float32)
+            prev_row = self.buf._i
             self.buf.add(obs=nobs, lim_raw=raw_l, lim_clip=clip_l,
                          lim_logp=logp_l.cpu().numpy(),
                          fin_raw=raw_f, fin_clip=clip_f,
@@ -183,6 +192,7 @@ class MAPPORunner:
             if r.done:
                 self._finish_episode(r)
                 self._begin_episode()
+                prev_row = None                    # no D credit across episodes
             else:
                 self._obs = next_obs
 
@@ -253,12 +263,17 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
     save_every = int(loop.get("save_interval_updates", eval_every))
     eval_eps = int(loop["eval_episodes"])
     anneal = str(loop.get("lr_anneal", "none")).lower()
+    # recipe-v2: anneal FLOOR (e.g. 0.1 -> LR decays to 10% and holds) keeps
+    # late-training refinement alive instead of freezing into the first basin
+    # (2C run-1 seeds 2/5 plateaued low under floor=0).
+    anneal_floor = float(loop.get("lr_anneal_floor", 0.0))
     out_dir = out_root / f"seed{seed}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     runner = MAPPORunner(env_cfg, run_cfg, seed, device)
     n_updates = max(1, total // runner.rollout_env_steps)
     ippo_ref = load_ippo_ref(run_cfg.get("ippo_ref"))
+    mappo_ref = load_ippo_ref(run_cfg.get("mappo_ref"))   # same summary schema
 
     wb = None
     if use_wandb:
@@ -289,13 +304,18 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
     if ippo_ref:
         print(f"[ippo ref] mean_last3_return={ippo_ref['mean']:.3f} "
               f"per_seed={ippo_ref['per_seed']}")
+    if mappo_ref:
+        print(f"[mappo ref] mean_last3_return={mappo_ref['mean']:.3f} "
+              f"per_seed={mappo_ref['per_seed']}")
 
     eval_curve, train_curve = [], []
+    best3 = float("-inf")
     t0 = time.monotonic()
     for upd in range(1, n_updates + 1):
         lr_frac = 1.0
         if anneal == "linear":
-            lr_frac = 1.0 - (upd - 1) / n_updates
+            lr_frac = (anneal_floor + (1.0 - anneal_floor)
+                       * (1.0 - (upd - 1) / n_updates))
             runner.tr.set_lr(runner.tr.cfg.lr * lr_frac)
         runner.collect_rollout()
         stats = runner.update()
@@ -321,7 +341,19 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
             point = {"step": runner.env_steps, **ev, "dod_margin": margin}
             if ippo_ref:
                 point["vs_ippo"] = ev["return_mean"] - ippo_ref["mean"]
+            if mappo_ref:
+                point["vs_mappo"] = ev["return_mean"] - mappo_ref["mean"]
             eval_curve.append(point)
+            # best-sustained checkpoint: rolling last-3 margin (judgment
+            # metric) -- keeps the best policy artifact for GIFs / warm
+            # starts even if the final snapshot dips (2C run-1 seed 2).
+            roll3 = float(np.mean([p["dod_margin"] for p in eval_curve[-3:]]))
+            if roll3 > best3:
+                best3 = roll3
+                runner.save(out_dir, tag="best")
+                (out_dir / "best.json").write_text(json.dumps(
+                    {"step": runner.env_steps, "last3_margin": roll3,
+                     "return_mean": ev["return_mean"]}))
             print(f"  [eval] return={ev['return_mean']:.3f}+-{ev['return_std']:.3f} "
                   f"captured={ev['captured_rate']:.2f} wasted={ev['wasted_mean']:.2f} "
                   f"clean={ev['clean_cross_rate']:.2f} DoD_margin={margin:+.3f}"
@@ -348,6 +380,9 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
     if ippo_ref:
         summary["ippo_ref_mean_last3"] = ippo_ref["mean"]
         summary["vs_ippo_last3"] = return_last3 - ippo_ref["mean"]
+    if mappo_ref:
+        summary["mappo_ref_mean_last3"] = mappo_ref["mean"]
+        summary["vs_mappo_last3"] = return_last3 - mappo_ref["mean"]
     (out_dir / "summary.json").write_text(json.dumps(summary, indent=2))
     maybe_plot(eval_curve, baselines, ippo_ref, out_dir)
     if wb:
@@ -416,12 +451,14 @@ def main() -> None:
     results = [run_one(run_cfg, env_cfg, s, args.device, out_root, use_wandb)
                for s in seeds]
 
-    print("\n=== Phase 2C summary (DoD: MAPPO >= IPPO, last-3-eval mean) ===")
+    print("\n=== summary (last-3-eval mean; 2C DoD: >=IPPO / 2D DoD: >=MAPPO) ===")
     for res in results:
-        vs = res.get("vs_ippo_last3")
+        vs_i = res.get("vs_ippo_last3")
+        vs_m = res.get("vs_mappo_last3")
         print(f"  seed {res['seed']}: last3_return={res['return_mean_last3']:.3f} "
               f"last3_margin={res['dod_margin_last3']:+.3f}"
-              + (f" vs_ippo={vs:+.3f}" if vs is not None else ""))
+              + (f" vs_ippo={vs_i:+.3f}" if vs_i is not None else "")
+              + (f" vs_mappo={vs_m:+.3f}" if vs_m is not None else ""))
 
 
 if __name__ == "__main__":

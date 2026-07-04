@@ -1,0 +1,63 @@
+# Phase 2D MAPPO+COMA trainer config (docs/09 SS5 Phase 2D; D1-A stage 1).
+#
+# = l2_mappo.yaml recipe-v2 + the analytic-COMA limiter credit:
+#   limiter advantage <- coma_mix-blend of shared GAE and the normalized
+#   (coma_gamma*coma_lam)-discounted forward sum of the ONE-STEP-SHIFTED
+#   analytic coma_D (baseline u_i^0 = hold_position, FIXED inside the frozen
+#   env -- S8). mix=1.0 = the ratified literal "use D_i as the limiter
+#   advantage". KNOWN CAVEAT (docs/09 SS8): at mix=1 the limiter gradient
+#   drops the shared J's -lambda3 loss-cost term; if limiter_loss regresses,
+#   the documented fallback arm is coma_mix: 0.5.
+#
+#   TRAIN_MODULE=shepherd.scripts.train_mappo CONFIG=configs/l2_coma.yaml \
+#       OUT=results/coma_run1 bash scripts/run_ippo_seeds_parallel.sh
+#
+# 2D DoD: D_i > 0 (limiter/coma_D_raw_mean) AND MAPPO+COMA >= MAPPO
+# (vs_mappo_last3 vs the SAME-recipe mappo_run2 arm) AND dv_shot > 0 kept.
+
+env_config: configs/m2_l2_train.yaml   # FROZEN scenario (never edited)
+ippo_ref: results/ippo_run2            # 2B reference (continuity)
+mappo_ref: results/mappo_run2          # SAME-recipe 2C arm (2D DoD comparator;
+                                       # absent at parallel-run time -> compared
+                                       # offline after both arms finish)
+
+loop:                           # identical to l2_mappo.yaml recipe-v2
+  total_env_steps: 500000
+  rollout_env_steps: 1024
+  eval_interval_updates: 20
+  eval_episodes: 20
+  save_interval_updates: 20
+  lr_anneal: linear
+  lr_anneal_floor: 0.1
+
+mappo:
+  gamma: 0.99
+  lam: 0.95
+  lr: 3.0e-4
+  epochs: 10
+  minibatch_size: 256
+  clip_eps: 0.2
+  ent_coef_limiter: 0.0
+  ent_coef_finisher: 0.003
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  target_kl: 0.02
+  hidden_sizes: [128, 128]
+  init_log_std: 0.0
+  ortho_init: true
+  value_norm: true
+  coma_mix: 1.0                 # D1-A literal form (fallback arm: 0.5)
+  coma_gamma: 0.99              # difference-RETURNS over the shifted D stream
+  coma_lam: 0.95                # (gamma=0 would be the purely myopic D_i)
+
+randomize:
+  enabled: true
+  att_speed: [16.0, 24.0]
+  adversary_start_x: [20.0, 28.0]
+  adversary_omega: [8.0, 12.0]
+  adv_a_max: [21.0, 30.0]
+
+wandb:
+  enabled: true
+  project: newurp-l2
+  group: phase2d-coma

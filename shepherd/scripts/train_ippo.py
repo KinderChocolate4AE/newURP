@@ -400,6 +400,7 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
     # the run -- late-training policy drift shrinks so the policy freezes into
     # one behavior basin instead of oscillating between them.
     anneal = str(loop.get("lr_anneal", "none")).lower()
+    anneal_floor = float(loop.get("lr_anneal_floor", 0.0))
     out_dir = out_root / f"seed{seed}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -443,7 +444,8 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
     for upd in range(1, n_updates + 1):
         lr_frac = 1.0
         if anneal == "linear":
-            lr_frac = 1.0 - (upd - 1) / n_updates
+            lr_frac = (anneal_floor + (1.0 - anneal_floor)
+                       * (1.0 - (upd - 1) / n_updates))
             runner.lim_tr.set_lr(runner.lim_tr.cfg.lr * lr_frac)
             runner.fin_tr.set_lr(runner.fin_tr.cfg.lr * lr_frac)
         runner.collect_rollout()

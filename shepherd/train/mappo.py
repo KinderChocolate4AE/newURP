@@ -39,7 +39,20 @@ from shepherd.train.ppo import _mlp
 from shepherd.train.value_norm import ValueNorm
 
 __all__ = ["MAPPOConfig", "GaussianActor", "MixedActor", "CentralCritic",
-           "MAPPORollout", "MAPPOTrainer", "ortho_init_"]
+           "MAPPORollout", "MAPPOTrainer", "ortho_init_", "coma_advantages"]
+
+
+def coma_advantages(coma_D, dones, gamma: float, lam: float):
+    """(T, N) one-step-shifted analytic D -> (T, N) difference-return
+    advantages: the (gamma*lam)-discounted forward sum of each limiter's D
+    stream (compute_gae with V == 0), stopping at episode boundaries.
+    gamma=0 recovers the purely myopic per-step D_i."""
+    coma_D = np.asarray(coma_D, dtype=np.float64)
+    T, N = coma_D.shape
+    zeros = np.zeros(T)
+    return np.stack([compute_gae(coma_D[:, i], zeros, zeros,
+                                 np.asarray(dones, np.float64), gamma, lam)[0]
+                     for i in range(N)], axis=1)
 
 LOG_STD_MIN, LOG_STD_MAX = -5.0, 2.0
 
@@ -77,6 +90,20 @@ class MAPPOConfig:
     init_log_std: float = 0.0
     ortho_init: bool = True            # ratified ON (2026-07-04)
     value_norm: bool = True            # ratified ON (2026-07-04)
+
+    # Phase 2D -- COMA difference-reward credit for limiters (D1-A stage 1,
+    # docs/09 SS1/SS5). coma_mix blends the limiter advantage:
+    #   adv_lim = (1-mix)*A_shared + mix*A_D
+    # where A_D = normalized (coma_gamma*coma_lam)-discounted forward sum of
+    # the ONE-STEP-SHIFTED analytic coma_D (the runner assigns step t+1's
+    # pre-move D to action t -- causality; see train_mappo.py). mix=0 -> exact
+    # 2C behavior (coma arrays ignored). mix=1 -> the ratified "use D_i as the
+    # limiter advantage" literal form. CAVEAT (flagged in docs/09 SS8): at
+    # mix=1 the limiter gradient no longer sees the shared J's -lambda3 loss
+    # cost; if limiter_loss regresses, mix=0.5 is the documented fallback arm.
+    coma_mix: float = 0.0
+    coma_gamma: float = 0.99
+    coma_lam: float = 0.95
 
     seed: int = 0
     device: str = "cpu"
@@ -192,6 +219,11 @@ class MAPPORollout:
         self.values = np.zeros(size, np.float32)        # DENORMALIZED V(s_t)
         self.next_values = np.zeros(size, np.float32)   # denorm bootstrap
         self.dones = np.zeros(size, np.float32)
+        # Phase 2D: ONE-STEP-SHIFTED analytic coma_D per limiter -- row t holds
+        # the D computed on the state action t PRODUCED (the runner writes it
+        # back when step t+1 returns; stays 0 for the last action of an
+        # episode/rollout). Ignored unless cfg.coma_mix > 0.
+        self.coma_D = np.zeros((size, n_limiters), np.float32)
         self._i = 0
 
     def add(self, **kw) -> None:
@@ -208,6 +240,10 @@ class MAPPORollout:
 
     def reset(self) -> None:
         self._i = 0
+        # coma_D rows are written BACK one step later (train_mappo.py), so a
+        # row that never gets its write-back (episode/rollout tail) must read
+        # 0, not a stale value from the previous rollout.
+        self.coma_D[:] = 0.0
 
     def clip_fraction_action(self, atol: float = 1e-6) -> float:
         lim = np.abs(self.lim_raw - self.lim_clip) > atol
@@ -288,7 +324,22 @@ class MAPPOTrainer:
         fin_raw = torch.as_tensor(buf.fin_raw, device=dev)
         fin_old = torch.as_tensor(buf.fin_logp, device=dev)
         adv = torch.as_tensor(adv_np.astype(np.float32), device=dev)
-        adv_lim = torch.as_tensor(np.repeat(adv_np, N).astype(np.float32), device=dev)
+        adv_lim_np = np.repeat(adv_np, N)
+        coma_stats = {}
+        if cfg.coma_mix > 0.0:
+            # Phase 2D: per-limiter difference-return advantage from the
+            # shifted analytic D, normalized jointly over limiter rows, then
+            # blended with the shared advantage.
+            advD = coma_advantages(buf.coma_D, buf.dones,
+                                   cfg.coma_gamma, cfg.coma_lam)   # (T, N)
+            advD_flat = normalize_advantages(advD.reshape(T * N))
+            adv_lim_np = ((1.0 - cfg.coma_mix) * adv_lim_np
+                          + cfg.coma_mix * advD_flat)
+            coma_stats = {
+                "limiter/coma_D_raw_mean": float(buf.coma_D.mean()),
+                "limiter/coma_D_raw_pos_frac": float((buf.coma_D > 0).mean()),
+            }
+        adv_lim = torch.as_tensor(adv_lim_np.astype(np.float32), device=dev)
         targets = torch.as_tensor(targets_np.astype(np.float32), device=dev)
 
         def _pg(ratio, a):
@@ -365,6 +416,7 @@ class MAPPOTrainer:
             "limiter/log_std": float(self.lim_actor.log_std.mean().item()),
             "finisher/log_std": float(self.fin_actor.log_std.mean().item()),
             "epochs_ran": float(epochs_ran),
+            **coma_stats,
         }
 
     # --------------------------------------------------------- checkpoint ---

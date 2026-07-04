@@ -10,20 +10,23 @@
 env_config: configs/m2_l2_train.yaml   # FROZEN scenario (never edited)
 ippo_ref: results/ippo_run2            # 2B reference (DoD: MAPPO >= IPPO); optional
 
-loop:
-  total_env_steps: 200000
-  rollout_env_steps: 512
+loop:                           # recipe-v2 (2026-07-05, post-2C-run-1 tuning):
+  total_env_steps: 500000       # 200k -> 500k (seed spread 7.2..10.6 = under-trained basins)
+  rollout_env_steps: 1024       # 512 -> 1024: ~12 episodes/update halves advantage
+                                # variance (mode mixing within a rollout)
   eval_interval_updates: 20
   eval_episodes: 20
   save_interval_updates: 20
-  lr_anneal: linear             # 2B-proven stabilizer (freeze into one basin)
+  lr_anneal: linear
+  lr_anneal_floor: 0.1          # decay to 10% and HOLD -- keep late refinement
+                                # alive instead of freezing into the first basin
 
 mappo:
   gamma: 0.99
   lam: 0.95
   lr: 3.0e-4
   epochs: 10
-  minibatch_size: 128           # TIME indices; limiter rows = x4 per minibatch
+  minibatch_size: 256           # buffer 1024 -> 4 minibatches x epochs
   clip_eps: 0.2
   ent_coef_limiter: 0.0
   ent_coef_finisher: 0.003      # same fire-head anti-collapse bonus as 2B

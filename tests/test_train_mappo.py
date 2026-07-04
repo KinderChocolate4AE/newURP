@@ -158,3 +158,67 @@ def test_runner_collect_update_smoke():
     assert all(np.isfinite(v) for v in stats.values())
     assert not runner.buf.full
     assert runner.norm.count == pytest.approx(8, abs=1e-2)
+
+
+# ----------------------------------------------------------- Phase 2D: COMA ---
+def test_coma_advantages_math():
+    from shepherd.train.mappo import coma_advantages
+    # gamma=0 -> purely myopic: advantages == the D stream itself
+    D = np.array([[1.0], [2.0], [3.0]])
+    dones = np.array([0.0, 0.0, 1.0])
+    adv0 = coma_advantages(D, dones, gamma=0.0, lam=0.95)
+    assert np.allclose(adv0, D)
+    # gamma=1, lam=1 -> forward sums within the episode, reset at done
+    D2 = np.array([[1.0], [1.0], [1.0], [5.0]])
+    dones2 = np.array([0.0, 0.0, 1.0, 1.0])
+    adv1 = coma_advantages(D2, dones2, gamma=1.0, lam=1.0)
+    assert np.allclose(adv1[:, 0], [3.0, 2.0, 1.0, 5.0])
+
+
+def test_coma_mix_zero_is_exact_2c():
+    # with coma_mix=0 the coma_D contents must be COMPLETELY ignored
+    torch.manual_seed(7)
+    tr_a = MAPPOTrainer(OBS, N, _cfg(coma_mix=0.0))
+    torch.manual_seed(7)
+    tr_b = MAPPOTrainer(OBS, N, _cfg(coma_mix=0.0))
+    buf_a = _fill(tr_a, 16)
+    buf_b = _fill(tr_b, 16)
+    assert np.allclose(buf_a.obs, buf_b.obs)           # identical rollouts
+    buf_b.coma_D[:] = 123.456                          # garbage coma values
+    sa, sb = tr_a.update(buf_a), tr_b.update(buf_b)
+    for k in sa:
+        assert sa[k] == pytest.approx(sb[k], abs=1e-7), k
+    assert "limiter/coma_D_raw_mean" not in sa
+
+
+def test_coma_mix_changes_limiter_gradient_only_path():
+    torch.manual_seed(8)
+    tr = MAPPOTrainer(OBS, N, _cfg(coma_mix=1.0))
+    buf = _fill(tr, 16)
+    buf.coma_D[:] = np.random.default_rng(0).normal(
+        size=buf.coma_D.shape).astype(np.float32)
+    stats = tr.update(buf)
+    assert "limiter/coma_D_raw_mean" in stats
+    assert all(np.isfinite(v) for v in stats.values())
+
+
+def test_rollout_reset_zeroes_coma():
+    buf = MAPPORollout(4, OBS, N)
+    buf.coma_D[:] = 9.9
+    buf.reset()
+    assert np.all(buf.coma_D == 0.0)
+
+
+def test_runner_coma_writeback_smoke():
+    torch.manual_seed(9)
+    with open("configs/m2_l2_train.yaml") as f:
+        env_cfg = yaml.safe_load(f)
+    cfg = _run_cfg(rollout=8)
+    cfg["mappo"]["coma_mix"] = 1.0
+    runner = MAPPORunner(env_cfg, cfg, seed=0, device="cpu")
+    runner.collect_rollout()
+    # write-back happened: at least one non-tail row carries a D vector
+    assert np.any(runner.buf.coma_D != 0.0)
+    stats = runner.update()
+    assert "limiter/coma_D_raw_mean" in stats
+    assert all(np.isfinite(v) for v in stats.values())
