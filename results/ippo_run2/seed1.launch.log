@@ -1,0 +1,453 @@
+wandb: Tracking run with wandb version 0.28.0
+wandb: W&B syncing is set to `offline` in this directory. Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+wandb: Run data is saved locally in /data/hjhong/l2/wandb/wandb/offline-run-20260704_205945-ni4bravs
+wandb: View this run in the terminal with `wandb leet`
+/data/hjhong/l2/newURP/.venv-l2/lib/python3.10/site-packages/torch/nn/modules/linear.py:125: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:217.)
+  return F.linear(input, self.weight, self.bias)
+/data/hjhong/l2/newURP/.venv-l2/lib/python3.10/site-packages/torch/autograd/graph.py:823: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:217.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+[baseline hold_position] return=0.000+-0.000 captured=0.00 wasted=0.00 clean=0.00
+[baseline scripted_shaping] return=3.056+-0.009 captured=0.00 wasted=0.00 clean=0.00
+[seed 1] upd 1/390 step=512 ep_ret=0.049 cap=0.00 kl_l=0.0090 kl_f=0.0132 sps=25.7
+[seed 1] upd 2/390 step=1024 ep_ret=0.175 cap=0.00 kl_l=0.0078 kl_f=0.0112 sps=25.8
+[seed 1] upd 3/390 step=1536 ep_ret=0.449 cap=0.00 kl_l=0.0056 kl_f=0.0102 sps=25.8
+[seed 1] upd 4/390 step=2048 ep_ret=0.301 cap=0.00 kl_l=0.0043 kl_f=0.0092 sps=25.7
+[seed 1] upd 5/390 step=2560 ep_ret=0.376 cap=0.00 kl_l=0.0055 kl_f=0.0105 sps=25.7
+[seed 1] upd 6/390 step=3072 ep_ret=0.577 cap=0.00 kl_l=0.0093 kl_f=0.0120 sps=25.7
+[seed 1] upd 7/390 step=3584 ep_ret=0.897 cap=0.00 kl_l=0.0065 kl_f=0.0099 sps=25.7
+[seed 1] upd 8/390 step=4096 ep_ret=0.674 cap=0.00 kl_l=0.0047 kl_f=0.0102 sps=25.8
+[seed 1] upd 9/390 step=4608 ep_ret=0.175 cap=0.00 kl_l=0.0091 kl_f=0.0104 sps=25.8
+[seed 1] upd 10/390 step=5120 ep_ret=0.324 cap=0.00 kl_l=0.0082 kl_f=0.0121 sps=25.7
+[seed 1] upd 11/390 step=5632 ep_ret=0.376 cap=0.00 kl_l=0.0073 kl_f=0.0106 sps=25.7
+[seed 1] upd 12/390 step=6144 ep_ret=0.225 cap=0.00 kl_l=0.0085 kl_f=0.0115 sps=25.7
+[seed 1] upd 13/390 step=6656 ep_ret=0.752 cap=0.00 kl_l=0.0102 kl_f=0.0097 sps=25.7
+[seed 1] upd 14/390 step=7168 ep_ret=1.371 cap=0.00 kl_l=0.0111 kl_f=0.0111 sps=25.7
+[seed 1] upd 15/390 step=7680 ep_ret=1.917 cap=0.00 kl_l=0.0076 kl_f=0.0121 sps=25.7
+[seed 1] upd 16/390 step=8192 ep_ret=2.219 cap=0.00 kl_l=0.0095 kl_f=0.0089 sps=25.7
+[seed 1] upd 17/390 step=8704 ep_ret=2.694 cap=0.00 kl_l=0.0088 kl_f=0.0107 sps=25.6
+[seed 1] upd 18/390 step=9216 ep_ret=1.748 cap=0.00 kl_l=0.0069 kl_f=0.0111 sps=25.5
+[seed 1] upd 19/390 step=9728 ep_ret=3.174 cap=0.00 kl_l=0.0063 kl_f=0.0102 sps=25.5
+[seed 1] upd 20/390 step=10240 ep_ret=2.780 cap=0.00 kl_l=0.0070 kl_f=0.0115 sps=25.5
+  [eval] return=4.995+-0.001 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=+1.939
+[seed 1] upd 21/390 step=10752 ep_ret=1.277 cap=0.00 kl_l=0.0048 kl_f=0.0119 sps=22.3
+[seed 1] upd 22/390 step=11264 ep_ret=2.324 cap=0.00 kl_l=0.0053 kl_f=0.0107 sps=22.5
+[seed 1] upd 23/390 step=11776 ep_ret=1.969 cap=0.00 kl_l=0.0076 kl_f=0.0110 sps=22.6
+[seed 1] upd 24/390 step=12288 ep_ret=1.851 cap=0.00 kl_l=0.0076 kl_f=0.0106 sps=22.7
+[seed 1] upd 25/390 step=12800 ep_ret=1.322 cap=0.00 kl_l=0.0038 kl_f=0.0100 sps=22.8
+[seed 1] upd 26/390 step=13312 ep_ret=2.600 cap=0.00 kl_l=0.0060 kl_f=0.0127 sps=22.9
+[seed 1] upd 27/390 step=13824 ep_ret=2.793 cap=0.00 kl_l=0.0069 kl_f=0.0086 sps=23.0
+[seed 1] upd 28/390 step=14336 ep_ret=1.902 cap=0.00 kl_l=0.0089 kl_f=0.0086 sps=23.1
+[seed 1] upd 29/390 step=14848 ep_ret=1.805 cap=0.00 kl_l=0.0089 kl_f=0.0114 sps=23.2
+[seed 1] upd 30/390 step=15360 ep_ret=1.428 cap=0.00 kl_l=0.0096 kl_f=0.0103 sps=23.2
+[seed 1] upd 31/390 step=15872 ep_ret=2.400 cap=0.00 kl_l=0.0086 kl_f=0.0081 sps=23.3
+[seed 1] upd 32/390 step=16384 ep_ret=2.428 cap=0.00 kl_l=0.0062 kl_f=0.0102 sps=23.4
+[seed 1] upd 33/390 step=16896 ep_ret=2.227 cap=0.00 kl_l=0.0058 kl_f=0.0123 sps=23.4
+[seed 1] upd 34/390 step=17408 ep_ret=1.553 cap=0.00 kl_l=0.0060 kl_f=0.0093 sps=23.5
+[seed 1] upd 35/390 step=17920 ep_ret=1.923 cap=0.00 kl_l=0.0057 kl_f=0.0087 sps=23.5
+[seed 1] upd 36/390 step=18432 ep_ret=1.723 cap=0.00 kl_l=0.0054 kl_f=0.0116 sps=23.6
+[seed 1] upd 37/390 step=18944 ep_ret=1.452 cap=0.00 kl_l=0.0050 kl_f=0.0122 sps=23.6
+[seed 1] upd 38/390 step=19456 ep_ret=1.574 cap=0.00 kl_l=0.0088 kl_f=0.0108 sps=23.7
+[seed 1] upd 39/390 step=19968 ep_ret=1.449 cap=0.00 kl_l=0.0103 kl_f=0.0103 sps=23.7
+[seed 1] upd 40/390 step=20480 ep_ret=1.499 cap=0.00 kl_l=0.0120 kl_f=0.0115 sps=23.8
+  [eval] return=1.990+-0.002 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=-1.067
+[seed 1] upd 41/390 step=20992 ep_ret=2.074 cap=0.00 kl_l=0.0120 kl_f=0.0097 sps=23.3
+[seed 1] upd 42/390 step=21504 ep_ret=2.418 cap=0.00 kl_l=0.0118 kl_f=0.0097 sps=23.4
+[seed 1] upd 43/390 step=22016 ep_ret=1.900 cap=0.00 kl_l=0.0062 kl_f=0.0098 sps=23.4
+[seed 1] upd 44/390 step=22528 ep_ret=2.227 cap=0.00 kl_l=0.0078 kl_f=0.0095 sps=23.5
+[seed 1] upd 45/390 step=23040 ep_ret=1.851 cap=0.00 kl_l=0.0115 kl_f=0.0101 sps=23.5
+[seed 1] upd 46/390 step=23552 ep_ret=1.475 cap=0.00 kl_l=0.0064 kl_f=0.0122 sps=23.6
+[seed 1] upd 47/390 step=24064 ep_ret=2.097 cap=0.00 kl_l=0.0080 kl_f=0.0086 sps=23.6
+[seed 1] upd 48/390 step=24576 ep_ret=1.627 cap=0.00 kl_l=0.0083 kl_f=0.0118 sps=23.6
+[seed 1] upd 49/390 step=25088 ep_ret=1.976 cap=0.00 kl_l=0.0086 kl_f=0.0110 sps=23.7
+[seed 1] upd 50/390 step=25600 ep_ret=1.752 cap=0.00 kl_l=0.0061 kl_f=0.0095 sps=23.7
+[seed 1] upd 51/390 step=26112 ep_ret=2.324 cap=0.00 kl_l=0.0048 kl_f=0.0094 sps=23.7
+[seed 1] upd 52/390 step=26624 ep_ret=1.779 cap=0.00 kl_l=0.0089 kl_f=0.0128 sps=23.7
+[seed 1] upd 53/390 step=27136 ep_ret=2.254 cap=0.00 kl_l=0.0056 kl_f=0.0097 sps=23.8
+[seed 1] upd 54/390 step=27648 ep_ret=2.029 cap=0.00 kl_l=0.0126 kl_f=0.0090 sps=23.8
+[seed 1] upd 55/390 step=28160 ep_ret=2.258 cap=0.00 kl_l=0.0064 kl_f=0.0093 sps=23.8
+[seed 1] upd 56/390 step=28672 ep_ret=1.876 cap=0.00 kl_l=0.0076 kl_f=0.0117 sps=23.9
+[seed 1] upd 57/390 step=29184 ep_ret=1.876 cap=0.00 kl_l=0.0064 kl_f=0.0120 sps=23.9
+[seed 1] upd 58/390 step=29696 ep_ret=2.423 cap=0.00 kl_l=0.0087 kl_f=0.0096 sps=23.9
+[seed 1] upd 59/390 step=30208 ep_ret=2.171 cap=0.00 kl_l=0.0089 kl_f=0.0127 sps=23.9
+[seed 1] upd 60/390 step=30720 ep_ret=1.701 cap=0.00 kl_l=0.0056 kl_f=0.0117 sps=24.0
+  [eval] return=0.016+-0.005 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=-3.041
+[seed 1] upd 61/390 step=31232 ep_ret=2.476 cap=0.00 kl_l=0.0076 kl_f=0.0091 sps=23.6
+[seed 1] upd 62/390 step=31744 ep_ret=1.800 cap=0.00 kl_l=0.0085 kl_f=0.0114 sps=23.7
+[seed 1] upd 63/390 step=32256 ep_ret=1.801 cap=0.00 kl_l=0.0080 kl_f=0.0102 sps=23.7
+[seed 1] upd 64/390 step=32768 ep_ret=2.010 cap=0.00 kl_l=0.0085 kl_f=0.0124 sps=23.7
+[seed 1] upd 65/390 step=33280 ep_ret=1.776 cap=0.00 kl_l=0.0059 kl_f=0.0123 sps=23.7
+[seed 1] upd 66/390 step=33792 ep_ret=2.450 cap=0.00 kl_l=0.0087 kl_f=0.0106 sps=23.7
+[seed 1] upd 67/390 step=34304 ep_ret=2.703 cap=0.00 kl_l=0.0083 kl_f=0.0106 sps=23.8
+[seed 1] upd 68/390 step=34816 ep_ret=1.602 cap=0.00 kl_l=0.0045 kl_f=0.0096 sps=23.8
+[seed 1] upd 69/390 step=35328 ep_ret=2.126 cap=0.00 kl_l=0.0090 kl_f=0.0103 sps=23.8
+[seed 1] upd 70/390 step=35840 ep_ret=3.179 cap=0.00 kl_l=0.0076 kl_f=0.0113 sps=23.8
+[seed 1] upd 71/390 step=36352 ep_ret=2.102 cap=0.00 kl_l=0.0058 kl_f=0.0106 sps=23.8
+[seed 1] upd 72/390 step=36864 ep_ret=1.818 cap=0.00 kl_l=0.0083 kl_f=0.0109 sps=23.9
+[seed 1] upd 73/390 step=37376 ep_ret=1.652 cap=0.00 kl_l=0.0094 kl_f=0.0114 sps=23.9
+[seed 1] upd 74/390 step=37888 ep_ret=2.028 cap=0.00 kl_l=0.0072 kl_f=0.0104 sps=23.9
+[seed 1] upd 75/390 step=38400 ep_ret=2.411 cap=0.00 kl_l=0.0088 kl_f=0.0101 sps=23.9
+[seed 1] upd 76/390 step=38912 ep_ret=2.330 cap=0.00 kl_l=0.0106 kl_f=0.0109 sps=23.9
+[seed 1] upd 77/390 step=39424 ep_ret=1.901 cap=0.00 kl_l=0.0086 kl_f=0.0131 sps=24.0
+[seed 1] upd 78/390 step=39936 ep_ret=2.229 cap=0.00 kl_l=0.0137 kl_f=0.0105 sps=24.0
+[seed 1] upd 79/390 step=40448 ep_ret=1.798 cap=0.00 kl_l=0.0098 kl_f=0.0100 sps=24.0
+[seed 1] upd 80/390 step=40960 ep_ret=2.501 cap=0.00 kl_l=0.0097 kl_f=0.0128 sps=24.0
+  [eval] return=1.995+-0.001 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=-1.062
+[seed 1] upd 81/390 step=41472 ep_ret=2.423 cap=0.00 kl_l=0.0137 kl_f=0.0106 sps=23.8
+[seed 1] upd 82/390 step=41984 ep_ret=2.325 cap=0.00 kl_l=0.0138 kl_f=0.0104 sps=23.8
+[seed 1] upd 83/390 step=42496 ep_ret=1.601 cap=0.00 kl_l=0.0112 kl_f=0.0131 sps=23.8
+[seed 1] upd 84/390 step=43008 ep_ret=2.322 cap=0.00 kl_l=0.0085 kl_f=0.0110 sps=23.8
+[seed 1] upd 85/390 step=43520 ep_ret=1.848 cap=0.00 kl_l=0.0106 kl_f=0.0103 sps=23.8
+[seed 1] upd 86/390 step=44032 ep_ret=1.426 cap=0.00 kl_l=0.0120 kl_f=0.0116 sps=23.8
+[seed 1] upd 87/390 step=44544 ep_ret=1.348 cap=0.00 kl_l=0.0118 kl_f=0.0099 sps=23.9
+[seed 1] upd 88/390 step=45056 ep_ret=1.776 cap=0.00 kl_l=0.0109 kl_f=0.0095 sps=23.9
+[seed 1] upd 89/390 step=45568 ep_ret=1.576 cap=0.00 kl_l=0.0106 kl_f=0.0112 sps=23.9
+[seed 1] upd 90/390 step=46080 ep_ret=2.502 cap=0.00 kl_l=0.0092 kl_f=0.0099 sps=23.9
+[seed 1] upd 91/390 step=46592 ep_ret=1.749 cap=0.00 kl_l=0.0126 kl_f=0.0122 sps=23.9
+[seed 1] upd 92/390 step=47104 ep_ret=1.851 cap=0.00 kl_l=0.0078 kl_f=0.0147 sps=23.9
+[seed 1] upd 93/390 step=47616 ep_ret=1.867 cap=0.00 kl_l=0.0085 kl_f=0.0128 sps=24.0
+[seed 1] upd 94/390 step=48128 ep_ret=2.367 cap=0.00 kl_l=0.0078 kl_f=0.0121 sps=24.0
+[seed 1] upd 95/390 step=48640 ep_ret=2.154 cap=0.00 kl_l=0.0095 kl_f=0.0119 sps=24.0
+[seed 1] upd 96/390 step=49152 ep_ret=2.800 cap=0.00 kl_l=0.0093 kl_f=0.0128 sps=24.0
+[seed 1] upd 97/390 step=49664 ep_ret=2.596 cap=0.00 kl_l=0.0087 kl_f=0.0086 sps=24.0
+[seed 1] upd 98/390 step=50176 ep_ret=1.552 cap=0.00 kl_l=0.0097 kl_f=0.0135 sps=24.0
+[seed 1] upd 99/390 step=50688 ep_ret=2.050 cap=0.00 kl_l=0.0105 kl_f=0.0110 sps=24.0
+[seed 1] upd 100/390 step=51200 ep_ret=1.954 cap=0.00 kl_l=0.0082 kl_f=0.0098 sps=24.0
+  [eval] return=0.997+-0.001 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=-2.060
+[seed 1] upd 101/390 step=51712 ep_ret=2.679 cap=0.00 kl_l=0.0077 kl_f=0.0119 sps=23.9
+[seed 1] upd 102/390 step=52224 ep_ret=2.357 cap=0.00 kl_l=0.0109 kl_f=0.0111 sps=23.9
+[seed 1] upd 103/390 step=52736 ep_ret=1.608 cap=0.00 kl_l=0.0132 kl_f=0.0103 sps=23.9
+[seed 1] upd 104/390 step=53248 ep_ret=2.571 cap=0.00 kl_l=0.0090 kl_f=0.0103 sps=23.9
+[seed 1] upd 105/390 step=53760 ep_ret=1.776 cap=0.00 kl_l=0.0080 kl_f=0.0084 sps=23.9
+[seed 1] upd 106/390 step=54272 ep_ret=2.572 cap=0.00 kl_l=0.0110 kl_f=0.0127 sps=23.9
+[seed 1] upd 107/390 step=54784 ep_ret=2.402 cap=0.00 kl_l=0.0095 kl_f=0.0109 sps=23.9
+[seed 1] upd 108/390 step=55296 ep_ret=2.277 cap=0.00 kl_l=0.0102 kl_f=0.0127 sps=23.9
+[seed 1] upd 109/390 step=55808 ep_ret=2.505 cap=0.00 kl_l=0.0097 kl_f=0.0121 sps=24.0
+[seed 1] upd 110/390 step=56320 ep_ret=2.235 cap=0.00 kl_l=0.0081 kl_f=0.0129 sps=24.0
+[seed 1] upd 111/390 step=56832 ep_ret=2.622 cap=0.00 kl_l=0.0099 kl_f=0.0122 sps=24.0
+[seed 1] upd 112/390 step=57344 ep_ret=2.454 cap=0.00 kl_l=0.0082 kl_f=0.0127 sps=24.0
+[seed 1] upd 113/390 step=57856 ep_ret=2.526 cap=0.00 kl_l=0.0070 kl_f=0.0110 sps=24.0
+[seed 1] upd 114/390 step=58368 ep_ret=2.801 cap=0.00 kl_l=0.0079 kl_f=0.0117 sps=24.0
+[seed 1] upd 115/390 step=58880 ep_ret=2.351 cap=0.00 kl_l=0.0104 kl_f=0.0129 sps=24.0
+[seed 1] upd 116/390 step=59392 ep_ret=2.399 cap=0.00 kl_l=0.0082 kl_f=0.0086 sps=24.0
+[seed 1] upd 117/390 step=59904 ep_ret=2.744 cap=0.00 kl_l=0.0089 kl_f=0.0099 sps=24.0
+[seed 1] upd 118/390 step=60416 ep_ret=2.899 cap=0.00 kl_l=0.0076 kl_f=0.0117 sps=24.0
+[seed 1] upd 119/390 step=60928 ep_ret=2.626 cap=0.00 kl_l=0.0078 kl_f=0.0137 sps=24.1
+[seed 1] upd 120/390 step=61440 ep_ret=2.671 cap=0.00 kl_l=0.0099 kl_f=0.0144 sps=24.1
+  [eval] return=3.097+-0.300 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=+0.040
+[seed 1] upd 121/390 step=61952 ep_ret=3.024 cap=0.00 kl_l=0.0110 kl_f=0.0138 sps=23.9
+[seed 1] upd 122/390 step=62464 ep_ret=2.248 cap=0.00 kl_l=0.0071 kl_f=0.0101 sps=23.9
+[seed 1] upd 123/390 step=62976 ep_ret=2.000 cap=0.00 kl_l=0.0118 kl_f=0.0130 sps=23.9
+[seed 1] upd 124/390 step=63488 ep_ret=2.332 cap=0.00 kl_l=0.0086 kl_f=0.0111 sps=23.9
+[seed 1] upd 125/390 step=64000 ep_ret=2.825 cap=0.00 kl_l=0.0092 kl_f=0.0133 sps=24.0
+[seed 1] upd 126/390 step=64512 ep_ret=2.972 cap=0.00 kl_l=0.0106 kl_f=0.0116 sps=24.0
+[seed 1] upd 127/390 step=65024 ep_ret=3.326 cap=0.00 kl_l=0.0075 kl_f=0.0124 sps=24.0
+[seed 1] upd 128/390 step=65536 ep_ret=2.846 cap=0.00 kl_l=0.0049 kl_f=0.0118 sps=24.0
+[seed 1] upd 129/390 step=66048 ep_ret=2.649 cap=0.00 kl_l=0.0078 kl_f=0.0112 sps=24.0
+[seed 1] upd 130/390 step=66560 ep_ret=3.052 cap=0.00 kl_l=0.0069 kl_f=0.0109 sps=24.0
+[seed 1] upd 131/390 step=67072 ep_ret=2.624 cap=0.00 kl_l=0.0074 kl_f=0.0099 sps=24.0
+[seed 1] upd 132/390 step=67584 ep_ret=2.400 cap=0.00 kl_l=0.0052 kl_f=0.0120 sps=24.0
+[seed 1] upd 133/390 step=68096 ep_ret=1.950 cap=0.00 kl_l=0.0078 kl_f=0.0110 sps=24.0
+[seed 1] upd 134/390 step=68608 ep_ret=1.922 cap=0.00 kl_l=0.0056 kl_f=0.0115 sps=24.0
+[seed 1] upd 135/390 step=69120 ep_ret=2.823 cap=0.00 kl_l=0.0085 kl_f=0.0101 sps=24.0
+[seed 1] upd 136/390 step=69632 ep_ret=3.026 cap=0.00 kl_l=0.0101 kl_f=0.0141 sps=24.1
+[seed 1] upd 137/390 step=70144 ep_ret=3.025 cap=0.00 kl_l=0.0063 kl_f=0.0093 sps=24.1
+[seed 1] upd 138/390 step=70656 ep_ret=2.572 cap=0.00 kl_l=0.0068 kl_f=0.0095 sps=24.1
+[seed 1] upd 139/390 step=71168 ep_ret=3.052 cap=0.00 kl_l=0.0061 kl_f=0.0102 sps=24.1
+[seed 1] upd 140/390 step=71680 ep_ret=2.633 cap=0.00 kl_l=0.0100 kl_f=0.0097 sps=24.1
+  [eval] return=1.998+-0.001 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=-1.059
+[seed 1] upd 141/390 step=72192 ep_ret=2.859 cap=0.00 kl_l=0.0115 kl_f=0.0123 sps=23.9
+[seed 1] upd 142/390 step=72704 ep_ret=3.098 cap=0.00 kl_l=0.0113 kl_f=0.0122 sps=24.0
+[seed 1] upd 143/390 step=73216 ep_ret=2.646 cap=0.00 kl_l=0.0088 kl_f=0.0141 sps=24.0
+[seed 1] upd 144/390 step=73728 ep_ret=3.175 cap=0.00 kl_l=0.0068 kl_f=0.0095 sps=24.0
+[seed 1] upd 145/390 step=74240 ep_ret=2.401 cap=0.00 kl_l=0.0044 kl_f=0.0107 sps=24.0
+[seed 1] upd 146/390 step=74752 ep_ret=2.050 cap=0.00 kl_l=0.0042 kl_f=0.0117 sps=24.0
+[seed 1] upd 147/390 step=75264 ep_ret=2.676 cap=0.00 kl_l=0.0067 kl_f=0.0098 sps=24.0
+[seed 1] upd 148/390 step=75776 ep_ret=3.329 cap=0.00 kl_l=0.0076 kl_f=0.0122 sps=24.0
+[seed 1] upd 149/390 step=76288 ep_ret=2.224 cap=0.00 kl_l=0.0048 kl_f=0.0121 sps=24.0
+[seed 1] upd 150/390 step=76800 ep_ret=3.078 cap=0.00 kl_l=0.0083 kl_f=0.0112 sps=24.0
+[seed 1] upd 151/390 step=77312 ep_ret=3.094 cap=0.00 kl_l=0.0079 kl_f=0.0105 sps=24.0
+[seed 1] upd 152/390 step=77824 ep_ret=2.284 cap=0.00 kl_l=0.0065 kl_f=0.0071 sps=24.0
+[seed 1] upd 153/390 step=78336 ep_ret=2.175 cap=0.00 kl_l=0.0114 kl_f=0.0089 sps=24.0
+[seed 1] upd 154/390 step=78848 ep_ret=2.929 cap=0.00 kl_l=0.0088 kl_f=0.0103 sps=24.0
+[seed 1] upd 155/390 step=79360 ep_ret=2.350 cap=0.00 kl_l=0.0074 kl_f=0.0100 sps=24.1
+[seed 1] upd 156/390 step=79872 ep_ret=2.878 cap=0.00 kl_l=0.0105 kl_f=0.0109 sps=24.1
+[seed 1] upd 157/390 step=80384 ep_ret=3.050 cap=0.00 kl_l=0.0078 kl_f=0.0090 sps=24.1
+[seed 1] upd 158/390 step=80896 ep_ret=3.729 cap=0.00 kl_l=0.0109 kl_f=0.0102 sps=24.1
+[seed 1] upd 159/390 step=81408 ep_ret=2.627 cap=0.00 kl_l=0.0083 kl_f=0.0096 sps=24.1
+[seed 1] upd 160/390 step=81920 ep_ret=2.547 cap=0.00 kl_l=0.0098 kl_f=0.0110 sps=24.1
+  [eval] return=2.997+-0.001 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=-0.060
+[seed 1] upd 161/390 step=82432 ep_ret=2.698 cap=0.00 kl_l=0.0084 kl_f=0.0093 sps=24.0
+[seed 1] upd 162/390 step=82944 ep_ret=3.697 cap=0.00 kl_l=0.0106 kl_f=0.0113 sps=24.0
+[seed 1] upd 163/390 step=83456 ep_ret=3.501 cap=0.00 kl_l=0.0085 kl_f=0.0124 sps=24.0
+[seed 1] upd 164/390 step=83968 ep_ret=3.349 cap=0.00 kl_l=0.0136 kl_f=0.0099 sps=24.0
+[seed 1] upd 165/390 step=84480 ep_ret=2.852 cap=0.00 kl_l=0.0077 kl_f=0.0075 sps=24.0
+[seed 1] upd 166/390 step=84992 ep_ret=3.251 cap=0.00 kl_l=0.0071 kl_f=0.0144 sps=24.0
+[seed 1] upd 167/390 step=85504 ep_ret=2.301 cap=0.00 kl_l=0.0074 kl_f=0.0091 sps=24.0
+[seed 1] upd 168/390 step=86016 ep_ret=3.427 cap=0.00 kl_l=0.0086 kl_f=0.0123 sps=24.0
+[seed 1] upd 169/390 step=86528 ep_ret=3.100 cap=0.00 kl_l=0.0048 kl_f=0.0103 sps=24.0
+[seed 1] upd 170/390 step=87040 ep_ret=3.631 cap=0.00 kl_l=0.0077 kl_f=0.0136 sps=24.0
+[seed 1] upd 171/390 step=87552 ep_ret=3.052 cap=0.00 kl_l=0.0072 kl_f=0.0111 sps=24.0
+[seed 1] upd 172/390 step=88064 ep_ret=3.227 cap=0.00 kl_l=0.0066 kl_f=0.0127 sps=24.0
+[seed 1] upd 173/390 step=88576 ep_ret=3.277 cap=0.00 kl_l=0.0060 kl_f=0.0105 sps=24.1
+[seed 1] upd 174/390 step=89088 ep_ret=3.834 cap=0.00 kl_l=0.0093 kl_f=0.0097 sps=24.1
+[seed 1] upd 175/390 step=89600 ep_ret=2.153 cap=0.00 kl_l=0.0060 kl_f=0.0053 sps=24.1
+[seed 1] upd 176/390 step=90112 ep_ret=2.955 cap=0.00 kl_l=0.0063 kl_f=0.0116 sps=24.1
+[seed 1] upd 177/390 step=90624 ep_ret=2.682 cap=0.00 kl_l=0.0059 kl_f=0.0098 sps=24.1
+[seed 1] upd 178/390 step=91136 ep_ret=2.328 cap=0.00 kl_l=0.0069 kl_f=0.0125 sps=24.1
+[seed 1] upd 179/390 step=91648 ep_ret=3.201 cap=0.00 kl_l=0.0065 kl_f=0.0109 sps=24.1
+[seed 1] upd 180/390 step=92160 ep_ret=3.055 cap=0.00 kl_l=0.0092 kl_f=0.0092 sps=24.1
+  [eval] return=0.172+-0.354 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=-2.884
+[seed 1] upd 181/390 step=92672 ep_ret=2.849 cap=0.00 kl_l=0.0103 kl_f=0.0110 sps=24.0
+[seed 1] upd 182/390 step=93184 ep_ret=2.777 cap=0.00 kl_l=0.0070 kl_f=0.0097 sps=24.0
+[seed 1] upd 183/390 step=93696 ep_ret=4.102 cap=0.00 kl_l=0.0076 kl_f=0.0101 sps=24.0
+[seed 1] upd 184/390 step=94208 ep_ret=2.929 cap=0.00 kl_l=0.0099 kl_f=0.0083 sps=24.0
+[seed 1] upd 185/390 step=94720 ep_ret=4.753 cap=0.00 kl_l=0.0079 kl_f=0.0116 sps=24.0
+[seed 1] upd 186/390 step=95232 ep_ret=2.151 cap=0.00 kl_l=0.0077 kl_f=0.0084 sps=24.0
+[seed 1] upd 187/390 step=95744 ep_ret=2.228 cap=0.00 kl_l=0.0085 kl_f=0.0102 sps=24.0
+[seed 1] upd 188/390 step=96256 ep_ret=3.704 cap=0.00 kl_l=0.0054 kl_f=0.0081 sps=24.0
+[seed 1] upd 189/390 step=96768 ep_ret=3.329 cap=0.00 kl_l=0.0044 kl_f=0.0085 sps=24.1
+[seed 1] upd 190/390 step=97280 ep_ret=4.803 cap=0.00 kl_l=0.0062 kl_f=0.0070 sps=24.1
+[seed 1] upd 191/390 step=97792 ep_ret=4.653 cap=0.00 kl_l=0.0073 kl_f=0.0105 sps=24.1
+[seed 1] upd 192/390 step=98304 ep_ret=2.529 cap=0.00 kl_l=0.0072 kl_f=0.0056 sps=24.1
+[seed 1] upd 193/390 step=98816 ep_ret=2.676 cap=0.00 kl_l=0.0087 kl_f=0.0111 sps=24.1
+[seed 1] upd 194/390 step=99328 ep_ret=3.153 cap=0.00 kl_l=0.0089 kl_f=0.0077 sps=24.1
+[seed 1] upd 195/390 step=99840 ep_ret=2.803 cap=0.00 kl_l=0.0054 kl_f=0.0089 sps=24.1
+[seed 1] upd 196/390 step=100352 ep_ret=3.278 cap=0.00 kl_l=0.0049 kl_f=0.0087 sps=24.1
+[seed 1] upd 197/390 step=100864 ep_ret=3.327 cap=0.00 kl_l=0.0080 kl_f=0.0099 sps=24.1
+[seed 1] upd 198/390 step=101376 ep_ret=3.175 cap=0.00 kl_l=0.0080 kl_f=0.0138 sps=24.1
+[seed 1] upd 199/390 step=101888 ep_ret=3.603 cap=0.00 kl_l=0.0077 kl_f=0.0095 sps=24.1
+[seed 1] upd 200/390 step=102400 ep_ret=2.478 cap=0.00 kl_l=0.0075 kl_f=0.0081 sps=24.1
+  [eval] return=0.010+-0.004 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=-3.046
+[seed 1] upd 201/390 step=102912 ep_ret=2.430 cap=0.00 kl_l=0.0097 kl_f=0.0099 sps=24.0
+[seed 1] upd 202/390 step=103424 ep_ret=2.855 cap=0.00 kl_l=0.0103 kl_f=0.0113 sps=24.0
+[seed 1] upd 203/390 step=103936 ep_ret=2.907 cap=0.00 kl_l=0.0078 kl_f=0.0101 sps=24.0
+[seed 1] upd 204/390 step=104448 ep_ret=3.627 cap=0.00 kl_l=0.0082 kl_f=0.0076 sps=24.0
+[seed 1] upd 205/390 step=104960 ep_ret=2.625 cap=0.00 kl_l=0.0084 kl_f=0.0077 sps=24.0
+[seed 1] upd 206/390 step=105472 ep_ret=2.630 cap=0.00 kl_l=0.0109 kl_f=0.0098 sps=24.0
+[seed 1] upd 207/390 step=105984 ep_ret=3.335 cap=0.00 kl_l=0.0094 kl_f=0.0114 sps=24.0
+[seed 1] upd 208/390 step=106496 ep_ret=3.779 cap=0.00 kl_l=0.0093 kl_f=0.0100 sps=24.0
+[seed 1] upd 209/390 step=107008 ep_ret=3.051 cap=0.00 kl_l=0.0088 kl_f=0.0111 sps=24.0
+[seed 1] upd 210/390 step=107520 ep_ret=3.351 cap=0.00 kl_l=0.0065 kl_f=0.0074 sps=24.0
+[seed 1] upd 211/390 step=108032 ep_ret=3.931 cap=0.00 kl_l=0.0072 kl_f=0.0129 sps=24.0
+[seed 1] upd 212/390 step=108544 ep_ret=3.604 cap=0.00 kl_l=0.0073 kl_f=0.0114 sps=24.0
+[seed 1] upd 213/390 step=109056 ep_ret=4.273 cap=0.00 kl_l=0.0052 kl_f=0.0090 sps=24.0
+[seed 1] upd 214/390 step=109568 ep_ret=3.751 cap=0.00 kl_l=0.0077 kl_f=0.0075 sps=24.0
+[seed 1] upd 215/390 step=110080 ep_ret=3.832 cap=0.00 kl_l=0.0081 kl_f=0.0110 sps=24.0
+[seed 1] upd 216/390 step=110592 ep_ret=3.447 cap=0.00 kl_l=0.0042 kl_f=0.0076 sps=24.0
+[seed 1] upd 217/390 step=111104 ep_ret=3.402 cap=0.00 kl_l=0.0082 kl_f=0.0103 sps=24.0
+[seed 1] upd 218/390 step=111616 ep_ret=3.498 cap=0.00 kl_l=0.0081 kl_f=0.0110 sps=24.0
+[seed 1] upd 219/390 step=112128 ep_ret=3.800 cap=0.00 kl_l=0.0059 kl_f=0.0102 sps=24.0
+[seed 1] upd 220/390 step=112640 ep_ret=3.427 cap=0.00 kl_l=0.0089 kl_f=0.0109 sps=24.0
+  [eval] return=4.058+-0.865 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=+1.001
+[seed 1] upd 221/390 step=113152 ep_ret=4.387 cap=0.00 kl_l=0.0109 kl_f=0.0089 sps=23.9
+[seed 1] upd 222/390 step=113664 ep_ret=4.182 cap=0.00 kl_l=0.0082 kl_f=0.0108 sps=23.9
+[seed 1] upd 223/390 step=114176 ep_ret=4.528 cap=0.00 kl_l=0.0085 kl_f=0.0109 sps=23.9
+[seed 1] upd 224/390 step=114688 ep_ret=4.730 cap=0.00 kl_l=0.0074 kl_f=0.0123 sps=23.9
+[seed 1] upd 225/390 step=115200 ep_ret=4.851 cap=0.00 kl_l=0.0095 kl_f=0.0088 sps=23.9
+[seed 1] upd 226/390 step=115712 ep_ret=3.678 cap=0.00 kl_l=0.0088 kl_f=0.0106 sps=23.9
+[seed 1] upd 227/390 step=116224 ep_ret=4.175 cap=0.00 kl_l=0.0102 kl_f=0.0083 sps=23.9
+[seed 1] upd 228/390 step=116736 ep_ret=3.781 cap=0.00 kl_l=0.0080 kl_f=0.0071 sps=23.9
+[seed 1] upd 229/390 step=117248 ep_ret=4.703 cap=0.00 kl_l=0.0069 kl_f=0.0089 sps=23.9
+[seed 1] upd 230/390 step=117760 ep_ret=3.627 cap=0.00 kl_l=0.0075 kl_f=0.0072 sps=23.9
+[seed 1] upd 231/390 step=118272 ep_ret=3.827 cap=0.00 kl_l=0.0066 kl_f=0.0091 sps=23.9
+[seed 1] upd 232/390 step=118784 ep_ret=4.323 cap=0.00 kl_l=0.0068 kl_f=0.0076 sps=23.9
+[seed 1] upd 233/390 step=119296 ep_ret=4.251 cap=0.00 kl_l=0.0093 kl_f=0.0075 sps=23.9
+[seed 1] upd 234/390 step=119808 ep_ret=4.379 cap=0.00 kl_l=0.0076 kl_f=0.0126 sps=23.9
+[seed 1] upd 235/390 step=120320 ep_ret=4.176 cap=0.00 kl_l=0.0107 kl_f=0.0100 sps=23.9
+[seed 1] upd 236/390 step=120832 ep_ret=4.601 cap=0.00 kl_l=0.0138 kl_f=0.0128 sps=23.9
+[seed 1] upd 237/390 step=121344 ep_ret=5.075 cap=0.00 kl_l=0.0090 kl_f=0.0110 sps=23.9
+[seed 1] upd 238/390 step=121856 ep_ret=4.629 cap=0.00 kl_l=0.0071 kl_f=0.0113 sps=23.9
+[seed 1] upd 239/390 step=122368 ep_ret=4.354 cap=0.00 kl_l=0.0066 kl_f=0.0092 sps=23.9
+[seed 1] upd 240/390 step=122880 ep_ret=3.951 cap=0.00 kl_l=0.0077 kl_f=0.0114 sps=23.9
+  [eval] return=5.736+-0.462 captured=0.00 wasted=0.05 clean=0.00 DoD_margin=+2.680
+[seed 1] upd 241/390 step=123392 ep_ret=3.802 cap=0.00 kl_l=0.0110 kl_f=0.0132 sps=23.8
+[seed 1] upd 242/390 step=123904 ep_ret=4.730 cap=0.00 kl_l=0.0067 kl_f=0.0100 sps=23.8
+[seed 1] upd 243/390 step=124416 ep_ret=4.600 cap=0.00 kl_l=0.0063 kl_f=0.0093 sps=23.8
+[seed 1] upd 244/390 step=124928 ep_ret=4.826 cap=0.00 kl_l=0.0075 kl_f=0.0097 sps=23.8
+[seed 1] upd 245/390 step=125440 ep_ret=5.510 cap=0.00 kl_l=0.0096 kl_f=0.0094 sps=23.8
+[seed 1] upd 246/390 step=125952 ep_ret=6.308 cap=0.00 kl_l=0.0057 kl_f=0.0096 sps=23.8
+[seed 1] upd 247/390 step=126464 ep_ret=4.605 cap=0.00 kl_l=0.0075 kl_f=0.0125 sps=23.8
+[seed 1] upd 248/390 step=126976 ep_ret=4.382 cap=0.00 kl_l=0.0080 kl_f=0.0074 sps=23.8
+[seed 1] upd 249/390 step=127488 ep_ret=5.527 cap=0.00 kl_l=0.0075 kl_f=0.0074 sps=23.8
+[seed 1] upd 250/390 step=128000 ep_ret=5.373 cap=0.00 kl_l=0.0069 kl_f=0.0071 sps=23.8
+[seed 1] upd 251/390 step=128512 ep_ret=5.659 cap=0.00 kl_l=0.0072 kl_f=0.0115 sps=23.9
+[seed 1] upd 252/390 step=129024 ep_ret=5.504 cap=0.00 kl_l=0.0089 kl_f=0.0095 sps=23.9
+[seed 1] upd 253/390 step=129536 ep_ret=5.456 cap=0.00 kl_l=0.0065 kl_f=0.0101 sps=23.9
+[seed 1] upd 254/390 step=130048 ep_ret=5.178 cap=0.00 kl_l=0.0065 kl_f=0.0109 sps=23.9
+[seed 1] upd 255/390 step=130560 ep_ret=4.908 cap=0.00 kl_l=0.0096 kl_f=0.0089 sps=23.9
+[seed 1] upd 256/390 step=131072 ep_ret=4.655 cap=0.00 kl_l=0.0075 kl_f=0.0083 sps=23.9
+[seed 1] upd 257/390 step=131584 ep_ret=5.100 cap=0.00 kl_l=0.0085 kl_f=0.0110 sps=23.9
+[seed 1] upd 258/390 step=132096 ep_ret=6.125 cap=0.00 kl_l=0.0093 kl_f=0.0088 sps=23.9
+[seed 1] upd 259/390 step=132608 ep_ret=5.404 cap=0.00 kl_l=0.0067 kl_f=0.0068 sps=23.9
+[seed 1] upd 260/390 step=133120 ep_ret=5.615 cap=0.00 kl_l=0.0049 kl_f=0.0116 sps=23.9
+  [eval] return=4.824+-0.399 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=+1.768
+[seed 1] upd 261/390 step=133632 ep_ret=5.011 cap=0.00 kl_l=0.0076 kl_f=0.0105 sps=23.8
+[seed 1] upd 262/390 step=134144 ep_ret=5.103 cap=0.00 kl_l=0.0060 kl_f=0.0088 sps=23.8
+[seed 1] upd 263/390 step=134656 ep_ret=5.503 cap=0.00 kl_l=0.0078 kl_f=0.0078 sps=23.8
+[seed 1] upd 264/390 step=135168 ep_ret=5.504 cap=0.00 kl_l=0.0073 kl_f=0.0075 sps=23.8
+[seed 1] upd 265/390 step=135680 ep_ret=4.186 cap=0.00 kl_l=0.0061 kl_f=0.0085 sps=23.8
+[seed 1] upd 266/390 step=136192 ep_ret=3.909 cap=0.00 kl_l=0.0078 kl_f=0.0103 sps=23.8
+[seed 1] upd 267/390 step=136704 ep_ret=5.779 cap=0.00 kl_l=0.0054 kl_f=0.0118 sps=23.8
+[seed 1] upd 268/390 step=137216 ep_ret=5.277 cap=0.00 kl_l=0.0062 kl_f=0.0086 sps=23.8
+[seed 1] upd 269/390 step=137728 ep_ret=4.987 cap=0.00 kl_l=0.0053 kl_f=0.0059 sps=23.8
+[seed 1] upd 270/390 step=138240 ep_ret=5.379 cap=0.00 kl_l=0.0051 kl_f=0.0098 sps=23.8
+[seed 1] upd 271/390 step=138752 ep_ret=6.982 cap=0.00 kl_l=0.0035 kl_f=0.0049 sps=23.8
+[seed 1] upd 272/390 step=139264 ep_ret=7.130 cap=0.00 kl_l=0.0067 kl_f=0.0140 sps=23.8
+[seed 1] upd 273/390 step=139776 ep_ret=6.235 cap=0.00 kl_l=0.0051 kl_f=0.0064 sps=23.8
+[seed 1] upd 274/390 step=140288 ep_ret=5.086 cap=0.00 kl_l=0.0062 kl_f=0.0059 sps=23.8
+[seed 1] upd 275/390 step=140800 ep_ret=6.763 cap=0.00 kl_l=0.0062 kl_f=0.0057 sps=23.8
+[seed 1] upd 276/390 step=141312 ep_ret=6.286 cap=0.00 kl_l=0.0079 kl_f=0.0069 sps=23.8
+[seed 1] upd 277/390 step=141824 ep_ret=5.836 cap=0.00 kl_l=0.0084 kl_f=0.0091 sps=23.8
+[seed 1] upd 278/390 step=142336 ep_ret=6.290 cap=0.00 kl_l=0.0061 kl_f=0.0048 sps=23.8
+[seed 1] upd 279/390 step=142848 ep_ret=4.887 cap=0.00 kl_l=0.0069 kl_f=0.0080 sps=23.8
+[seed 1] upd 280/390 step=143360 ep_ret=6.428 cap=0.00 kl_l=0.0041 kl_f=0.0063 sps=23.8
+  [eval] return=9.029+-0.014 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=+5.973
+[seed 1] upd 281/390 step=143872 ep_ret=7.162 cap=0.00 kl_l=0.0053 kl_f=0.0085 sps=23.7
+[seed 1] upd 282/390 step=144384 ep_ret=6.260 cap=0.00 kl_l=0.0054 kl_f=0.0084 sps=23.7
+[seed 1] upd 283/390 step=144896 ep_ret=6.909 cap=0.00 kl_l=0.0041 kl_f=0.0071 sps=23.7
+[seed 1] upd 284/390 step=145408 ep_ret=6.468 cap=0.00 kl_l=0.0030 kl_f=0.0077 sps=23.7
+[seed 1] upd 285/390 step=145920 ep_ret=5.463 cap=0.00 kl_l=0.0060 kl_f=0.0063 sps=23.7
+[seed 1] upd 286/390 step=146432 ep_ret=7.009 cap=0.00 kl_l=0.0054 kl_f=0.0060 sps=23.7
+[seed 1] upd 287/390 step=146944 ep_ret=6.134 cap=0.00 kl_l=0.0059 kl_f=0.0070 sps=23.8
+[seed 1] upd 288/390 step=147456 ep_ret=6.357 cap=0.00 kl_l=0.0072 kl_f=0.0062 sps=23.8
+[seed 1] upd 289/390 step=147968 ep_ret=5.807 cap=0.00 kl_l=0.0054 kl_f=0.0047 sps=23.8
+[seed 1] upd 290/390 step=148480 ep_ret=6.086 cap=0.00 kl_l=0.0070 kl_f=0.0059 sps=23.8
+[seed 1] upd 291/390 step=148992 ep_ret=6.796 cap=0.00 kl_l=0.0054 kl_f=0.0056 sps=23.8
+[seed 1] upd 292/390 step=149504 ep_ret=6.389 cap=0.00 kl_l=0.0042 kl_f=0.0080 sps=23.8
+[seed 1] upd 293/390 step=150016 ep_ret=5.891 cap=0.00 kl_l=0.0056 kl_f=0.0095 sps=23.8
+[seed 1] upd 294/390 step=150528 ep_ret=6.139 cap=0.00 kl_l=0.0046 kl_f=0.0051 sps=23.8
+[seed 1] upd 295/390 step=151040 ep_ret=6.045 cap=0.00 kl_l=0.0063 kl_f=0.0079 sps=23.8
+[seed 1] upd 296/390 step=151552 ep_ret=5.815 cap=0.00 kl_l=0.0072 kl_f=0.0103 sps=23.8
+[seed 1] upd 297/390 step=152064 ep_ret=5.761 cap=0.00 kl_l=0.0060 kl_f=0.0102 sps=23.8
+[seed 1] upd 298/390 step=152576 ep_ret=6.091 cap=0.00 kl_l=0.0051 kl_f=0.0076 sps=23.8
+[seed 1] upd 299/390 step=153088 ep_ret=5.683 cap=0.00 kl_l=0.0062 kl_f=0.0071 sps=23.8
+[seed 1] upd 300/390 step=153600 ep_ret=4.863 cap=0.00 kl_l=0.0082 kl_f=0.0085 sps=23.8
+  [eval] return=10.033+-0.010 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=+6.976
+[seed 1] upd 301/390 step=154112 ep_ret=5.936 cap=0.00 kl_l=0.0057 kl_f=0.0089 sps=23.7
+[seed 1] upd 302/390 step=154624 ep_ret=6.012 cap=0.00 kl_l=0.0071 kl_f=0.0091 sps=23.7
+[seed 1] upd 303/390 step=155136 ep_ret=6.716 cap=0.00 kl_l=0.0051 kl_f=0.0065 sps=23.7
+[seed 1] upd 304/390 step=155648 ep_ret=5.457 cap=0.00 kl_l=0.0057 kl_f=0.0082 sps=23.7
+[seed 1] upd 305/390 step=156160 ep_ret=6.155 cap=0.00 kl_l=0.0084 kl_f=0.0107 sps=23.7
+[seed 1] upd 306/390 step=156672 ep_ret=6.811 cap=0.00 kl_l=0.0080 kl_f=0.0068 sps=23.7
+[seed 1] upd 307/390 step=157184 ep_ret=7.384 cap=0.00 kl_l=0.0082 kl_f=0.0065 sps=23.7
+[seed 1] upd 308/390 step=157696 ep_ret=6.230 cap=0.00 kl_l=0.0058 kl_f=0.0079 sps=23.7
+[seed 1] upd 309/390 step=158208 ep_ret=5.373 cap=0.00 kl_l=0.0052 kl_f=0.0061 sps=23.7
+[seed 1] upd 310/390 step=158720 ep_ret=6.467 cap=0.00 kl_l=0.0039 kl_f=0.0038 sps=23.7
+[seed 1] upd 311/390 step=159232 ep_ret=6.785 cap=0.00 kl_l=0.0033 kl_f=0.0056 sps=23.7
+[seed 1] upd 312/390 step=159744 ep_ret=6.989 cap=0.00 kl_l=0.0047 kl_f=0.0068 sps=23.7
+[seed 1] upd 313/390 step=160256 ep_ret=7.035 cap=0.00 kl_l=0.0052 kl_f=0.0042 sps=23.7
+[seed 1] upd 314/390 step=160768 ep_ret=6.884 cap=0.00 kl_l=0.0049 kl_f=0.0068 sps=23.7
+[seed 1] upd 315/390 step=161280 ep_ret=6.192 cap=0.00 kl_l=0.0037 kl_f=0.0058 sps=23.7
+[seed 1] upd 316/390 step=161792 ep_ret=6.515 cap=0.00 kl_l=0.0029 kl_f=0.0048 sps=23.7
+[seed 1] upd 317/390 step=162304 ep_ret=5.337 cap=0.00 kl_l=0.0070 kl_f=0.0054 sps=23.7
+[seed 1] upd 318/390 step=162816 ep_ret=5.840 cap=0.00 kl_l=0.0049 kl_f=0.0053 sps=23.7
+[seed 1] upd 319/390 step=163328 ep_ret=6.792 cap=0.00 kl_l=0.0082 kl_f=0.0091 sps=23.7
+[seed 1] upd 320/390 step=163840 ep_ret=7.561 cap=0.00 kl_l=0.0070 kl_f=0.0030 sps=23.7
+  [eval] return=8.896+-0.465 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=+5.839
+[seed 1] upd 321/390 step=164352 ep_ret=6.793 cap=0.00 kl_l=0.0069 kl_f=0.0040 sps=23.6
+[seed 1] upd 322/390 step=164864 ep_ret=7.573 cap=0.00 kl_l=0.0054 kl_f=0.0056 sps=23.6
+[seed 1] upd 323/390 step=165376 ep_ret=7.187 cap=0.00 kl_l=0.0073 kl_f=0.0046 sps=23.6
+[seed 1] upd 324/390 step=165888 ep_ret=7.214 cap=0.00 kl_l=0.0038 kl_f=0.0040 sps=23.6
+[seed 1] upd 325/390 step=166400 ep_ret=5.998 cap=0.00 kl_l=0.0049 kl_f=0.0047 sps=23.7
+[seed 1] upd 326/390 step=166912 ep_ret=6.035 cap=0.00 kl_l=0.0040 kl_f=0.0053 sps=23.7
+[seed 1] upd 327/390 step=167424 ep_ret=7.462 cap=0.00 kl_l=0.0053 kl_f=0.0060 sps=23.7
+[seed 1] upd 328/390 step=167936 ep_ret=6.861 cap=0.00 kl_l=0.0064 kl_f=0.0062 sps=23.7
+[seed 1] upd 329/390 step=168448 ep_ret=6.934 cap=0.00 kl_l=0.0059 kl_f=0.0063 sps=23.7
+[seed 1] upd 330/390 step=168960 ep_ret=5.792 cap=0.00 kl_l=0.0053 kl_f=0.0061 sps=23.7
+[seed 1] upd 331/390 step=169472 ep_ret=6.677 cap=0.00 kl_l=0.0039 kl_f=0.0047 sps=23.7
+[seed 1] upd 332/390 step=169984 ep_ret=7.171 cap=0.00 kl_l=0.0051 kl_f=0.0061 sps=23.7
+[seed 1] upd 333/390 step=170496 ep_ret=6.510 cap=0.00 kl_l=0.0053 kl_f=0.0064 sps=23.7
+[seed 1] upd 334/390 step=171008 ep_ret=7.062 cap=0.00 kl_l=0.0048 kl_f=0.0062 sps=23.7
+[seed 1] upd 335/390 step=171520 ep_ret=7.386 cap=0.00 kl_l=0.0044 kl_f=0.0044 sps=23.7
+[seed 1] upd 336/390 step=172032 ep_ret=7.215 cap=0.00 kl_l=0.0039 kl_f=0.0057 sps=23.7
+[seed 1] upd 337/390 step=172544 ep_ret=7.212 cap=0.00 kl_l=0.0031 kl_f=0.0065 sps=23.7
+[seed 1] upd 338/390 step=173056 ep_ret=7.145 cap=0.00 kl_l=0.0043 kl_f=0.0039 sps=23.7
+[seed 1] upd 339/390 step=173568 ep_ret=7.942 cap=0.00 kl_l=0.0049 kl_f=0.0050 sps=23.7
+[seed 1] upd 340/390 step=174080 ep_ret=5.963 cap=0.00 kl_l=0.0024 kl_f=0.0023 sps=23.7
+  [eval] return=10.019+-0.006 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=+6.962
+[seed 1] upd 341/390 step=174592 ep_ret=6.584 cap=0.00 kl_l=0.0044 kl_f=0.0034 sps=23.6
+[seed 1] upd 342/390 step=175104 ep_ret=7.610 cap=0.00 kl_l=0.0022 kl_f=0.0035 sps=23.6
+[seed 1] upd 343/390 step=175616 ep_ret=6.993 cap=0.00 kl_l=0.0035 kl_f=0.0017 sps=23.6
+[seed 1] upd 344/390 step=176128 ep_ret=7.020 cap=0.00 kl_l=0.0053 kl_f=0.0032 sps=23.6
+[seed 1] upd 345/390 step=176640 ep_ret=7.985 cap=0.00 kl_l=0.0043 kl_f=0.0030 sps=23.6
+[seed 1] upd 346/390 step=177152 ep_ret=6.884 cap=0.00 kl_l=0.0036 kl_f=0.0024 sps=23.6
+[seed 1] upd 347/390 step=177664 ep_ret=7.409 cap=0.00 kl_l=0.0039 kl_f=0.0048 sps=23.6
+[seed 1] upd 348/390 step=178176 ep_ret=7.114 cap=0.00 kl_l=0.0036 kl_f=0.0048 sps=23.6
+[seed 1] upd 349/390 step=178688 ep_ret=5.911 cap=0.00 kl_l=0.0035 kl_f=0.0032 sps=23.6
+[seed 1] upd 350/390 step=179200 ep_ret=7.106 cap=0.00 kl_l=0.0030 kl_f=0.0039 sps=23.6
+[seed 1] upd 351/390 step=179712 ep_ret=7.223 cap=0.00 kl_l=0.0038 kl_f=0.0032 sps=23.6
+[seed 1] upd 352/390 step=180224 ep_ret=6.312 cap=0.00 kl_l=0.0042 kl_f=0.0042 sps=23.6
+[seed 1] upd 353/390 step=180736 ep_ret=7.942 cap=0.00 kl_l=0.0029 kl_f=0.0024 sps=23.6
+[seed 1] upd 354/390 step=181248 ep_ret=7.206 cap=0.00 kl_l=0.0040 kl_f=0.0023 sps=23.6
+[seed 1] upd 355/390 step=181760 ep_ret=6.203 cap=0.00 kl_l=0.0033 kl_f=0.0021 sps=23.6
+[seed 1] upd 356/390 step=182272 ep_ret=7.551 cap=0.00 kl_l=0.0029 kl_f=0.0018 sps=23.6
+wandb: 
+wandb: Run history:
+wandb:     eval/captured_rate ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:  eval/clean_cross_rate ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:        eval/dod_margin ▄▂▁▂▂▃▂▃▁▁▄▅▄▇█▇█▇▇▇
+wandb:          eval/episodes ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: eval/headline_sum_mean ▆▂▁▂▂▃▂▃▁▁▃▅▄▇▇█▇▆▇▇
+wandb:          eval/len_mean █▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   eval/penetrated_rate ▁████████████████▇██
+wandb:       eval/return_mean ▄▂▁▂▂▃▂▃▁▁▄▅▄▇█▇█▇▇▇
+wandb:        eval/return_std ▁▁▁▁▁▂▁▁▂▁▃▂▂▁▁▂▁█▁▁
+wandb:       eval/wasted_mean ▁▁▁▁▁▁▁▁▁▁▁▃▁▁▁▁▁█▁▁
+wandb:                    +30 ...
+wandb: 
+wandb: Run summary:
+wandb:     baseline_hold_return 0
+wandb: baseline_scripted_return 3.05647
+wandb:               dod_margin 5.97474
+wandb:       eval/captured_rate 0
+wandb:    eval/clean_cross_rate 0
+wandb:          eval/dod_margin 5.97474
+wandb:            eval/episodes 20
+wandb:   eval/headline_sum_mean 9.03121
+wandb:            eval/len_mean 23
+wandb:     eval/penetrated_rate 1
+wandb:                      +34 ...
+wandb: 
+wandb: You can sync this run to the cloud by running:
+wandb: wandb sync /data/hjhong/l2/wandb/wandb/offline-run-20260704_205945-ni4bravs
+wandb: Find logs at: /data/hjhong/l2/wandb/wandb/offline-run-20260704_205945-ni4bravs/logs
+[seed 1] upd 357/390 step=182784 ep_ret=7.414 cap=0.00 kl_l=0.0041 kl_f=0.0038 sps=23.6
+[seed 1] upd 358/390 step=183296 ep_ret=7.933 cap=0.00 kl_l=0.0052 kl_f=0.0021 sps=23.6
+[seed 1] upd 359/390 step=183808 ep_ret=7.113 cap=0.00 kl_l=0.0036 kl_f=0.0031 sps=23.6
+[seed 1] upd 360/390 step=184320 ep_ret=7.293 cap=0.00 kl_l=0.0050 kl_f=0.0033 sps=23.6
+  [eval] return=8.471+-2.749 captured=0.00 wasted=0.15 clean=0.00 DoD_margin=+5.415
+[seed 1] upd 361/390 step=184832 ep_ret=6.412 cap=0.00 kl_l=0.0026 kl_f=0.0028 sps=23.5
+[seed 1] upd 362/390 step=185344 ep_ret=7.210 cap=0.00 kl_l=0.0035 kl_f=0.0016 sps=23.5
+[seed 1] upd 363/390 step=185856 ep_ret=7.446 cap=0.00 kl_l=0.0057 kl_f=0.0013 sps=23.5
+[seed 1] upd 364/390 step=186368 ep_ret=6.144 cap=0.00 kl_l=0.0023 kl_f=0.0004 sps=23.5
+[seed 1] upd 365/390 step=186880 ep_ret=7.021 cap=0.00 kl_l=0.0037 kl_f=0.0008 sps=23.5
+[seed 1] upd 366/390 step=187392 ep_ret=6.670 cap=0.00 kl_l=0.0025 kl_f=0.0026 sps=23.5
+[seed 1] upd 367/390 step=187904 ep_ret=6.713 cap=0.00 kl_l=0.0032 kl_f=0.0017 sps=23.5
+[seed 1] upd 368/390 step=188416 ep_ret=7.076 cap=0.00 kl_l=0.0029 kl_f=0.0014 sps=23.5
+[seed 1] upd 369/390 step=188928 ep_ret=7.880 cap=0.00 kl_l=0.0013 kl_f=0.0012 sps=23.5
+[seed 1] upd 370/390 step=189440 ep_ret=8.016 cap=0.00 kl_l=0.0030 kl_f=0.0006 sps=23.5
+[seed 1] upd 371/390 step=189952 ep_ret=8.689 cap=0.00 kl_l=0.0040 kl_f=0.0012 sps=23.5
+[seed 1] upd 372/390 step=190464 ep_ret=7.862 cap=0.00 kl_l=0.0020 kl_f=0.0005 sps=23.5
+[seed 1] upd 373/390 step=190976 ep_ret=8.362 cap=0.00 kl_l=0.0031 kl_f=0.0013 sps=23.5
+[seed 1] upd 374/390 step=191488 ep_ret=7.708 cap=0.00 kl_l=0.0036 kl_f=0.0009 sps=23.5
+[seed 1] upd 375/390 step=192000 ep_ret=6.465 cap=0.00 kl_l=0.0009 kl_f=0.0006 sps=23.5
+[seed 1] upd 376/390 step=192512 ep_ret=7.369 cap=0.00 kl_l=0.0024 kl_f=0.0010 sps=23.5
+[seed 1] upd 377/390 step=193024 ep_ret=7.169 cap=0.00 kl_l=0.0020 kl_f=0.0009 sps=23.5
+[seed 1] upd 378/390 step=193536 ep_ret=7.009 cap=0.00 kl_l=0.0027 kl_f=0.0004 sps=23.5
+[seed 1] upd 379/390 step=194048 ep_ret=7.508 cap=0.00 kl_l=0.0013 kl_f=0.0012 sps=23.5
+[seed 1] upd 380/390 step=194560 ep_ret=8.761 cap=0.00 kl_l=0.0007 kl_f=0.0010 sps=23.5
+  [eval] return=9.045+-0.020 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=+5.989
+[seed 1] upd 381/390 step=195072 ep_ret=8.239 cap=0.00 kl_l=0.0034 kl_f=0.0015 sps=23.5
+[seed 1] upd 382/390 step=195584 ep_ret=7.508 cap=0.00 kl_l=0.0005 kl_f=0.0001 sps=23.5
+[seed 1] upd 383/390 step=196096 ep_ret=8.119 cap=0.00 kl_l=0.0012 kl_f=0.0003 sps=23.5
+[seed 1] upd 384/390 step=196608 ep_ret=7.175 cap=0.00 kl_l=0.0009 kl_f=0.0004 sps=23.5
+[seed 1] upd 385/390 step=197120 ep_ret=8.162 cap=0.00 kl_l=0.0011 kl_f=0.0001 sps=23.5
+[seed 1] upd 386/390 step=197632 ep_ret=7.991 cap=0.00 kl_l=0.0001 kl_f=0.0001 sps=23.5
+[seed 1] upd 387/390 step=198144 ep_ret=7.525 cap=0.00 kl_l=0.0002 kl_f=0.0000 sps=23.5
+[seed 1] upd 388/390 step=198656 ep_ret=5.485 cap=0.00 kl_l=0.0001 kl_f=0.0001 sps=23.5
+[seed 1] upd 389/390 step=199168 ep_ret=6.807 cap=0.00 kl_l=0.0001 kl_f=0.0000 sps=23.5
+[seed 1] upd 390/390 step=199680 ep_ret=6.962 cap=0.00 kl_l=0.0000 kl_f=0.0000 sps=23.5
+  [eval] return=9.031+-0.007 captured=0.00 wasted=0.00 clean=0.00 DoD_margin=+5.975
+
+=== Phase 2B summary (DoD metric: LAST-3-EVAL MEAN margin > 0) ===
+  seed 1: last3_return=8.849 last3_margin=+5.793 (final point +5.975) captured=0.00
