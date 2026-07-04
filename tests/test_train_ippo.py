@@ -112,6 +112,25 @@ def test_mixed_trainer_checkpoint_roundtrip(tmp_path):
     assert torch.allclose(r1, r2) and torch.allclose(v1, v2)
 
 
+def test_target_kl_early_stop():
+    torch.manual_seed(6)
+    # huge lr + tiny target_kl -> first epoch exceeds -> remaining skipped
+    tr = MixedPPOTrainer(OBS, CONT + 1, _cfg(lr=1e-2, target_kl=1e-6, epochs=5))
+    stats = tr.update(_fill_via_act(tr, 32))
+    assert 1.0 <= stats["epochs_ran"] <= 2.0
+    # default (None) keeps Phase-1 behavior: all epochs run
+    tr2 = MixedPPOTrainer(OBS, CONT + 1, _cfg(epochs=3))
+    s2 = tr2.update(_fill_via_act(tr2, 32))
+    assert s2["epochs_ran"] == 3.0
+
+
+def test_set_lr_hook():
+    tr = MixedPPOTrainer(OBS, CONT + 1, _cfg(lr=3e-4))
+    tr.set_lr(1.5e-4)
+    assert tr.optimizer.param_groups[0]["lr"] == pytest.approx(1.5e-4)
+    assert tr.cfg.lr == pytest.approx(3e-4)            # base rate untouched
+
+
 def test_limiter_inputs_onehot():
     x = limiter_inputs(np.arange(5, dtype=np.float32), 3)
     assert x.shape == (3, 8)

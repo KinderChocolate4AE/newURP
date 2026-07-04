@@ -13,8 +13,12 @@ loop:
   total_env_steps: 200000       # ~390 updates; scale up after the first converging run
   rollout_env_steps: 512        # env steps per update -> limiter buffer 512*N=2048, finisher 512
   eval_interval_updates: 20     # deterministic eval on the nominal env
-  eval_episodes: 10
+  eval_episodes: 20             # 10->20 (2B stabilization: MC-noise sensitivity of
+                                # the deterministic snapshot; judgment = last-3 mean)
   save_interval_updates: 20     # checkpoint cadence (ckpt_*_latest.pt, overwritten)
+  lr_anneal: linear             # 2B stabilization run 2: linear LR decay to 0 --
+                                # run 1 (constant lr) left seed 0 oscillating between
+                                # the escort-shaping and blocking behavior basins
 
 ppo_limiter:                    # parameter-shared limiter policy (Phase-1 core)
   gamma: 0.99                   # RESET for the 80-step corridor: 0.9 was Pendulum toy
@@ -28,6 +32,7 @@ ppo_limiter:                    # parameter-shared limiter policy (Phase-1 core)
   ent_coef: 0.0
   vf_coef: 0.5
   max_grad_norm: 0.5
+  target_kl: 0.02               # epoch early-stop guard (2B stabilization run 2)
   hidden_sizes: [128, 128]      # 67-dim input (63 obs + 4 one-hot)
   init_log_std: 0.0             # std 1 in NORMALIZED [-1,1] action space spans the box
 
@@ -43,6 +48,7 @@ ppo_finisher:                   # separate finisher policy (Gaussian axis + Bern
                                 # sub-theta fires so exploration of fire is cheap
   vf_coef: 0.5
   max_grad_norm: 0.5
+  target_kl: 0.02               # finisher ran the hotter KL (0.02-0.03) in run 1
   hidden_sizes: [128, 128]
   init_log_std: 0.0
 

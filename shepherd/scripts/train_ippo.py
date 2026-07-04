@@ -396,6 +396,10 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
     eval_every = int(loop["eval_interval_updates"])
     save_every = int(loop.get("save_interval_updates", eval_every))
     eval_eps = int(loop["eval_episodes"])
+    # 2B stabilization (docs/09 SS8): "linear" anneals both roles' LR to 0 over
+    # the run -- late-training policy drift shrinks so the policy freezes into
+    # one behavior basin instead of oscillating between them.
+    anneal = str(loop.get("lr_anneal", "none")).lower()
     out_dir = out_root / f"seed{seed}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -437,6 +441,11 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
     eval_curve, train_curve = [], []
     t0 = time.monotonic()
     for upd in range(1, n_updates + 1):
+        lr_frac = 1.0
+        if anneal == "linear":
+            lr_frac = 1.0 - (upd - 1) / n_updates
+            runner.lim_tr.set_lr(runner.lim_tr.cfg.lr * lr_frac)
+            runner.fin_tr.set_lr(runner.fin_tr.cfg.lr * lr_frac)
         runner.collect_rollout()
         stats = runner.update()
         roll = runner.rolling()
@@ -446,7 +455,8 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
                                ("train/ep_return", "train/captured_rate",
                                 "train/penetrated_rate", "train/wasted")}})
         if wb:
-            wb.log({**stats, **roll, "perf/env_steps_per_sec": sps},
+            wb.log({**stats, **roll, "perf/env_steps_per_sec": sps,
+                    "perf/lr_frac": lr_frac},
                    step=runner.env_steps)
         print(f"[seed {seed}] upd {upd}/{n_updates} step={runner.env_steps} "
               f"ep_ret={roll.get('train/ep_return', float('nan')):.3f} "
@@ -472,9 +482,19 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
             runner.save(out_dir, tag="latest")
 
     final = eval_curve[-1] if eval_curve else {}
+    # Judgment metric = mean of the LAST 3 evals, not the final snapshot: a
+    # single deterministic eval point is hostage to PPO policy oscillation
+    # (2B run 1, seed 0 -- docs/09 SS8). NaN-safe on short smoke runs.
+    lastk = eval_curve[-3:]
+    margin_last3 = (float(np.mean([p["dod_margin"] for p in lastk]))
+                    if lastk else float("nan"))
+    return_last3 = (float(np.mean([p["return_mean"] for p in lastk]))
+                    if lastk else float("nan"))
     summary = {"seed": seed, "env_steps": runner.env_steps,
                "final_eval": final, "baselines": baselines,
-               "dod_margin": final.get("dod_margin", float("nan"))}
+               "dod_margin": final.get("dod_margin", float("nan")),
+               "dod_margin_last3": margin_last3,
+               "return_mean_last3": return_last3}
     (out_dir / "summary.json").write_text(json.dumps(summary, indent=2))
     maybe_plot(eval_curve, baselines, out_dir)
     if wb:
@@ -540,12 +560,13 @@ def main() -> None:
     results = [run_one(run_cfg, env_cfg, s, args.device, out_root, use_wandb)
                for s in seeds]
 
-    print("\n=== Phase 2B summary (DoD: learned > best scripted baseline) ===")
+    print("\n=== Phase 2B summary (DoD metric: LAST-3-EVAL MEAN margin > 0) ===")
     for res in results:
         fe = res["final_eval"]
-        print(f"  seed {res['seed']}: eval_return="
-              f"{fe.get('return_mean', float('nan')):.3f} "
-              f"DoD_margin={res['dod_margin']:+.3f} "
+        print(f"  seed {res['seed']}: last3_return="
+              f"{res['return_mean_last3']:.3f} "
+              f"last3_margin={res['dod_margin_last3']:+.3f} "
+              f"(final point {res['dod_margin']:+.3f}) "
               f"captured={fe.get('captured_rate', float('nan')):.2f}")
 
 

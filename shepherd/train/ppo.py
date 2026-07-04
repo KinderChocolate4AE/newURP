@@ -68,6 +68,10 @@ class PPOConfig:
     lam: float = 0.95
     ent_coef: float = 0.0
     vf_coef: float = 0.5
+    # Optional epoch early-stop: after any epoch whose mean approx_kl exceeds
+    # this, remaining epochs are skipped (SB3-style update-drift guard; 2B
+    # stabilization, docs/09 SS8). None (default) = Phase-1 behavior.
+    target_kl: Optional[float] = None
 
     # policy / network
     hidden_sizes: tuple[int, ...] = (64, 64)
@@ -298,8 +302,10 @@ class PPOTrainer:
         clip_fracs = []
 
         idx = np.arange(n)
+        epochs_ran = 0
         for _ in range(cfg.epochs):
             self._rng.shuffle(idx)
+            epoch_kls: list[float] = []
             for start in range(0, n, cfg.minibatch_size):
                 mb = idx[start:start + cfg.minibatch_size]
                 mb_t = torch.as_tensor(mb, device=self.device)
@@ -337,8 +343,14 @@ class PPOTrainer:
                 vf_losses.append(value_loss.item())
                 ent_losses.append(entropy_loss.item())
                 approx_kls.append(approx_kl.item())
+                epoch_kls.append(approx_kl.item())
                 grad_norms.append(float(grad_norm))
                 clip_fracs.append(clip_frac.item())
+
+            epochs_ran += 1
+            if (cfg.target_kl is not None
+                    and float(np.mean(epoch_kls)) > cfg.target_kl):
+                break  # update-drift guard: skip remaining epochs
 
         return {
             "policy_loss": float(np.mean(pg_losses)),
@@ -349,4 +361,12 @@ class PPOTrainer:
             "clip_fraction": float(np.mean(clip_fracs)),
             "clip_fraction_action": buf.clip_fraction_action(),
             "log_std": float(self.ac.log_std.mean().item()),
+            "epochs_ran": float(epochs_ran),
         }
+
+    def set_lr(self, lr: float) -> None:
+        """Runner-driven LR schedule hook (e.g. linear anneal to 0 -- the
+        standard PPO stabilizer the 2B rerun adopts; docs/09 SS8). The config
+        ``lr`` stays the BASE rate; the runner owns the schedule."""
+        for group in self.optimizer.param_groups:
+            group["lr"] = float(lr)
