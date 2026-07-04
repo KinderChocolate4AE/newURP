@@ -1,0 +1,51 @@
+# Phase 2C MAPPO trainer config (docs/09 SS5 Phase 2C).
+#
+# 2B actors + ONE central critic on the shared 63-dim obs (ratified
+# 2026-07-04; superset of the literal env.state()). MAPPO tricks value-norm +
+# ortho-init ON (ratified). Frozen scenario untouched (read-only pointer).
+#
+#   python -m shepherd.scripts.train_mappo --config configs/l2_mappo.yaml \
+#       --device cuda --seed 0 --output results/mappo_run1
+
+env_config: configs/m2_l2_train.yaml   # FROZEN scenario (never edited)
+ippo_ref: results/ippo_run2            # 2B reference (DoD: MAPPO >= IPPO); optional
+
+loop:
+  total_env_steps: 200000
+  rollout_env_steps: 512
+  eval_interval_updates: 20
+  eval_episodes: 20
+  save_interval_updates: 20
+  lr_anneal: linear             # 2B-proven stabilizer (freeze into one basin)
+
+mappo:
+  gamma: 0.99
+  lam: 0.95
+  lr: 3.0e-4
+  epochs: 10
+  minibatch_size: 128           # TIME indices; limiter rows = x4 per minibatch
+  clip_eps: 0.2
+  ent_coef_limiter: 0.0
+  ent_coef_finisher: 0.003      # same fire-head anti-collapse bonus as 2B
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  target_kl: 0.02               # epoch early stop on max(limiter, finisher) KL
+  hidden_sizes: [128, 128]
+  init_log_std: 0.0
+  ortho_init: true              # MAPPO trick (ratified ON 2026-07-04)
+  value_norm: true              # MAPPO trick (ratified ON 2026-07-04) -- return
+                                # scale drifts between escort(~23-step) and
+                                # blocking(80-step) modes; normalized targets
+                                # keep the value-loss surface stationary
+
+randomize:                      # identical family to 2B (train only; eval nominal)
+  enabled: true
+  att_speed: [16.0, 24.0]
+  adversary_start_x: [20.0, 28.0]
+  adversary_omega: [8.0, 12.0]
+  adv_a_max: [21.0, 30.0]       # DOWNWARD-only (backend clamp + S14 soundness)
+
+wandb:
+  enabled: true
+  project: newurp-l2
+  group: phase2c-mappo

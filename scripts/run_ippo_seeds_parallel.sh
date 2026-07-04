@@ -17,9 +17,13 @@
 # Usage (inside tmux on the server):
 #   bash scripts/run_ippo_seeds_parallel.sh
 #   GPU=0 SEEDS="0 1 2 3 4" OUT=results/ippo_run3 bash scripts/run_ippo_seeds_parallel.sh
+#   TRAIN_MODULE=shepherd.scripts.train_mappo CONFIG=configs/l2_mappo.yaml \
+#       OUT=results/mappo_run1 bash scripts/run_ippo_seeds_parallel.sh   # Phase 2C
 set -euo pipefail
 
-REQUIRED_COMMIT="${REQUIRED_COMMIT:-cef170f}"   # 2B stabilization recipe
+REQUIRED_COMMIT="${REQUIRED_COMMIT:-cef170f}"   # min required code (2B stabilization)
+TRAIN_MODULE="${TRAIN_MODULE:-shepherd.scripts.train_ippo}"
+CONFIG="${CONFIG:-configs/l2_ippo.yaml}"
 GPU="${GPU:-1}"
 OUT="${OUT:-results/ippo_run2}"
 SEEDS_STR="${SEEDS:-0 1 2}"
@@ -54,8 +58,8 @@ PIDS=()
 for s in "${SEEDS_ARR[@]}"; do
   LOG="$OUT/seed${s}.launch.log"
   echo "[launch] seed $s (GPU $GPU, threads<=$THREADS, nice 10) -> $LOG"
-  nice -n 10 python -m shepherd.scripts.train_ippo \
-      --config configs/l2_ippo.yaml --device cuda \
+  nice -n 10 python -m "$TRAIN_MODULE" \
+      --config "$CONFIG" --device cuda \
       --seed "$s" --output "$OUT" > "$LOG" 2>&1 &
   PIDS+=("$!")
   sleep 5                                     # stagger first-write/init races
