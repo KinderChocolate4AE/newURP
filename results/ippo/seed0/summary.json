@@ -1,0 +1,42 @@
+{
+  "seed": 0,
+  "env_steps": 199680,
+  "final_eval": {
+    "step": 199680,
+    "episodes": 10,
+    "return_mean": 2.394369009584665,
+    "return_std": 0.3003893290461351,
+    "len_mean": 24.0,
+    "headline_sum_mean": 2.894369009584665,
+    "wasted_mean": 0.0,
+    "captured_rate": 0.0,
+    "penetrated_rate": 1.0,
+    "clean_cross_rate": 0.0,
+    "dod_margin": -0.6639447887107215
+  },
+  "baselines": {
+    "hold_position": {
+      "episodes": 10,
+      "return_mean": 0.0,
+      "return_std": 0.0,
+      "len_mean": 23.0,
+      "headline_sum_mean": 0.0,
+      "wasted_mean": 0.0,
+      "captured_rate": 0.0,
+      "penetrated_rate": 1.0,
+      "clean_cross_rate": 0.0
+    },
+    "scripted_shaping": {
+      "episodes": 10,
+      "return_mean": 3.0583137982953863,
+      "return_std": 0.00860158101123498,
+      "len_mean": 24.0,
+      "headline_sum_mean": 10.058313798295387,
+      "wasted_mean": 0.0,
+      "captured_rate": 0.0,
+      "penetrated_rate": 1.0,
+      "clean_cross_rate": 0.0
+    }
+  },
+  "dod_margin": -0.6639447887107215
+}
