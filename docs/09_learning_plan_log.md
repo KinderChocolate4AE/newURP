@@ -12,7 +12,7 @@
 - **목표:** scripted 정책 → **학습된 shaping 정책**. MAPPO **직접 구현**(black-box 금지) + **COMA** limiter credit. CTDE.
 - **동결(건드리지 않음):** S1–S8 계약(`03_formalization.md`), env 계약(`shepherd/env.py`), `configs/m2_l2_train.yaml`, frozen blob 2개(`03_formalization.md`, `shepherd/game/exchange.py`). **유일 비준 예외(2026-07-03, §8 (d)):** env.py step() 내 batched-eval call-site 1건 — **2A에서 구현·커밋 완료(`e99ff34`, §8 (e))**, equiv lock = `tests/test_batched_eval.py`.
 - **L2 산출:** seed≥3 수렴 학습곡선 > baseline + wandb 곡선 + checkpoint + demo GIF.
-- **현 위치:** **Phase 1 완료(2026-07-01)** + **Phase 2A′ 완료(2026-07-03, §8 (d)).** from-scratch PPO 코어(`52a7d58`) → 2A′ 스파이크: 병목 = MC 빌드가 아니라 **per-layout eval E×7회**; **DoD(벽시계) PASS**(베이스라인도 16w≈2.9h<4h, batched 채택 시 1.5h); 비준 = **batched-eval만 env.py 동결 예외 승인(구현은 2A)** + **n_samples 2000 유지**(near-gate err 근거). **Phase 2A 완료(2026-07-03, §8 (e); `e99ff34`+`b3ff97e`):** batched-eval 구현(실측 **117→54.4ms/step, 2.16×**) + torch-free 어댑터 smoke 6종 green. **Phase 2B 트레이너 구현 완료(2026-07-03 (g), `54dfdeb`)** — §7.1 이월(obs normalizer·γ/λ 0.99/0.95)·fire **Bernoulli head 확정**·wandb·공격자 가족 랜덤화 config 전부 반영. **run 1 완료(2026-07-04, §8 (h)):** 서버 bring-up V1–V4 green → 3-seed×200k — seed1/2 margin **+5.44/+6.74** 수렴(비용-인지 셰이핑), seed0 진동 끝 −0.66 → **DoD 2/3 미통과**. 안정화 레시피(`cef170f`) → **run 2(§8 (i)): 3/3 seed last3_margin +2.64/+5.79/+2.59 — ✅ Phase 2B DoD 통과·마감(2026-07-04).** **2C 트레이너 구현 완료(§8 (j), `7e0e98d`)** — 중앙 critic 입력 = 공유 obs 63(비준)·value-norm/ortho-init ON(비준); **다음 = 2C 서버 런**(DoD: MAPPO ≥ IPPO, vs_ippo 자동 로깅).
+- **현 위치:** **Phase 1 완료(2026-07-01)** + **Phase 2A′ 완료(2026-07-03, §8 (d)).** from-scratch PPO 코어(`52a7d58`) → 2A′ 스파이크: 병목 = MC 빌드가 아니라 **per-layout eval E×7회**; **DoD(벽시계) PASS**(베이스라인도 16w≈2.9h<4h, batched 채택 시 1.5h); 비준 = **batched-eval만 env.py 동결 예외 승인(구현은 2A)** + **n_samples 2000 유지**(near-gate err 근거). **Phase 2A 완료(2026-07-03, §8 (e); `e99ff34`+`b3ff97e`):** batched-eval 구현(실측 **117→54.4ms/step, 2.16×**) + torch-free 어댑터 smoke 6종 green. **Phase 2B 트레이너 구현 완료(2026-07-03 (g), `54dfdeb`)** — §7.1 이월(obs normalizer·γ/λ 0.99/0.95)·fire **Bernoulli head 확정**·wandb·공격자 가족 랜덤화 config 전부 반영. **run 1 완료(2026-07-04, §8 (h)):** 서버 bring-up V1–V4 green → 3-seed×200k — seed1/2 margin **+5.44/+6.74** 수렴(비용-인지 셰이핑), seed0 진동 끝 −0.66 → **DoD 2/3 미통과**. 안정화 레시피(`cef170f`) → **run 2(§8 (i)): 3/3 seed last3_margin +2.64/+5.79/+2.59 — ✅ Phase 2B DoD 통과·마감(2026-07-04).** **✅ Phase 2C 완료(§8 (k), `be816f9`): MAPPO 6-seed vs_ippo 평균 +2.32 (9.05 vs 6.73), 6/6 초과** — 차단+셰이핑 결합 모드 발견(headline 13.5 > scripted 10.06). clean crossing 여전히 0 → **다음 = Phase 2D(COMA credit)**.
 
 ---
 
@@ -220,7 +220,7 @@ jobs:
 - **DoD:** IPPO return이 hold_position·scripted baseline **유의 초과**(≈ selection-only baseline, 사실상 L2 게이트 근접). NaN 0.
 - **커밋:** `feat(train): IPPO (shared-limiter + separate finisher, decentralized critics)`.
 
-#### Phase 2C — MAPPO (중앙 critic, CTDE) — 🔧 **트레이너 구현 완료(2026-07-04 (j), `7e0e98d`); 학습 실행·DoD = 랩 서버**
+#### Phase 2C — MAPPO (중앙 critic, CTDE) ✅ **DONE (2026-07-05, §8 (k) — 6-seed vs_ippo 全 양수, 평균 +2.32)**
 
 - **할 일:** 2B 위에 **중앙 critic 1개**(`env.state()` 입력)만 추가 → CTDE. actor는 2B 그대로(decentralized 실행).
 - **throughput:** ~~여기서 물림~~ → **2A′로 승격(2026-07-03, 실측 133 ms/step 근거)**. 2C에서는 잔여 튜닝(중앙 critic 추가 비용 측정)만.
@@ -299,6 +299,16 @@ jobs:
 ---
 
 ## 8. 작업 로그 (append-only · 최신이 위)
+
+### 2026-07-05 (k) — ✅ Phase 2C 완료: MAPPO 6-seed, DoD 통과 (`be816f9`)
+
+> 6-seed 병렬(코어 여유 활용, SEEDS 확장만으로 통계 2배) × 200k, 안정화 레시피 동일. **DoD(MAPPO ≥ IPPO) 통과: vs_ippo(last3) 6/6 양수, 평균 +2.318 (MAPPO 9.050 vs IPPO-3seed 6.732, +34%)**, min/max +0.44/+3.86. 베이스라인 margin +4.11~+7.53(2B보다 강함). NaN 0. §2의 "이득 작을 수 있음" 캐비앗은 비관으로 판명 — 단 비교 캐비앗 유지: 2C−2B = {중앙 critic, value-norm, ortho-init} 3요소, seed 수 6 vs 3.
+
+- **질적 발견 ① 차단+셰이핑 결합 모드(seeds 2·3):** len 80·penetrated 0 유지하며 headline **12.6/13.5** — scripted(10.06)와 run-1 차단 모드(headline 음수)를 모두 초과. value-norm'd 중앙 critic이 80-스텝 장기 차단의 리턴 스케일을 제대로 가격한 결과로 해석((h) 진단의 직접 검증). 침투 저지 + reachable-set 압축 동시 달성 = 현재까지 최강 전술 결과(capture만 남음).
+- **질적 발견 ② boxed-crossing 발사(seed 1):** wasted 1.0/판 = v_soft≥0.9 게이트 도달이 매 판 발생, 단 boxed_in이라 clean 아님 → 미스. 게이트 벽이 "포위 경유"로 뚫리기 시작 — clean(비-boxed) 도달이 다음 관문.
+- **clean crossing 全 seed 0회 유지** → 2D(COMA per-limiter credit) 동기 그대로. λ1 보너스 미발화 상태에서 이 수익 — crossing 열리면 추가 상승 여지.
+- seed 2 중반 eval 1점 −8.06 급락 후 회복 — last-3 판정이 이런 스냅샷 노이즈를 정확히 흡수해줌(판정 설계 검증).
+- **다음 = Phase 2D:** env info의 해석적 `coma_D`를 limiter advantage로 배선(S8 baseline=hold 고정), DoD = D_i>0 ∧ MAPPO+COMA ≥ MAPPO ∧ Δv_shot>0 유지. 러너는 2C 것 재사용(advantage 대체만).
 
 ### 2026-07-04 (j) — Phase 2C 트레이너 구현: MAPPO 중앙 critic (`7e0e98d`) — 서버 런 대기
 
