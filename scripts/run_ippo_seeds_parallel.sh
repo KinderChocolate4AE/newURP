@@ -47,6 +47,7 @@ export CUDA_VISIBLE_DEVICES="$GPU"
 export WANDB_MODE="${WANDB_MODE:-offline}"
 export WANDB_DIR="${WANDB_DIR:-$(cd .. && pwd)/wandb}"
 export OMP_NUM_THREADS="$THREADS" MKL_NUM_THREADS="$THREADS" OPENBLAS_NUM_THREADS="$THREADS"
+export PYTHONUNBUFFERED=1                     # live per-seed logs (stdout to file is block-buffered otherwise)
 
 mkdir -p "$OUT"
 PIDS=()
