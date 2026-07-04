@@ -1,0 +1,24 @@
+{
+  "hold_position": {
+    "episodes": 20,
+    "return_mean": 0.0,
+    "return_std": 0.0,
+    "len_mean": 23.0,
+    "headline_sum_mean": 0.0,
+    "wasted_mean": 0.0,
+    "captured_rate": 0.0,
+    "penetrated_rate": 1.0,
+    "clean_cross_rate": 0.0
+  },
+  "scripted_shaping": {
+    "episodes": 20,
+    "return_mean": 3.059778768093509,
+    "return_std": 0.011129832804725752,
+    "len_mean": 24.0,
+    "headline_sum_mean": 10.05977876809351,
+    "wasted_mean": 0.0,
+    "captured_rate": 0.0,
+    "penetrated_rate": 1.0,
+    "clean_cross_rate": 0.0
+  }
+}
