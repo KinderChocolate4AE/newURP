@@ -12,7 +12,7 @@
 - **목표:** scripted 정책 → **학습된 shaping 정책**. MAPPO **직접 구현**(black-box 금지) + **COMA** limiter credit. CTDE.
 - **동결(건드리지 않음):** S1–S8 계약(`03_formalization.md`), env 계약(`shepherd/env.py`), `configs/m2_l2_train.yaml`, frozen blob 2개(`03_formalization.md`, `shepherd/game/exchange.py`). **유일 비준 예외(2026-07-03, §8 (d)):** env.py step() 내 batched-eval call-site 1건 — **2A에서 구현·커밋 완료(`e99ff34`, §8 (e))**, equiv lock = `tests/test_batched_eval.py`.
 - **L2 산출:** seed≥3 수렴 학습곡선 > baseline + wandb 곡선 + checkpoint + demo GIF.
-- **현 위치:** **Phase 1 완료(2026-07-01)** + **Phase 2A′ 완료(2026-07-03, §8 (d)).** from-scratch PPO 코어(`52a7d58`) → 2A′ 스파이크: 병목 = MC 빌드가 아니라 **per-layout eval E×7회**; **DoD(벽시계) PASS**(베이스라인도 16w≈2.9h<4h, batched 채택 시 1.5h); 비준 = **batched-eval만 env.py 동결 예외 승인(구현은 2A)** + **n_samples 2000 유지**(near-gate err 근거). **Phase 2A 완료(2026-07-03, §8 (e); `e99ff34`+`b3ff97e`):** batched-eval 구현(실측 **117→54.4ms/step, 2.16×**) + torch-free 어댑터 smoke 6종 green. **Phase 2B 트레이너 구현 완료(2026-07-03 (g), `54dfdeb`)** — §7.1 이월(obs normalizer·γ/λ 0.99/0.95)·fire **Bernoulli head 확정**·wandb·공격자 가족 랜덤화 config 전부 반영. **run 1 완료(2026-07-04, §8 (h)):** 서버 bring-up V1–V4 green → 3-seed×200k — seed1/2 margin **+5.44/+6.74** 수렴(비용-인지 셰이핑), seed0 진동 끝 −0.66 → **DoD 2/3 미통과**. 안정화 레시피(`cef170f`) → **run 2(§8 (i)): 3/3 seed last3_margin +2.64/+5.79/+2.59 — ✅ Phase 2B DoD 통과·마감(2026-07-04).** **✅ Phase 2C 완료(§8 (k), `be816f9`): MAPPO 6-seed vs_ippo 평균 +2.32 (9.05 vs 6.73), 6/6 초과** — 차단+셰이핑 결합 모드 발견(headline 13.5 > scripted 10.06). clean crossing 여전히 0 → **다음 = Phase 2D(COMA credit)**.
+- **현 위치:** **Phase 1 완료(2026-07-01)** + **Phase 2A′ 완료(2026-07-03, §8 (d)).** from-scratch PPO 코어(`52a7d58`) → 2A′ 스파이크: 병목 = MC 빌드가 아니라 **per-layout eval E×7회**; **DoD(벽시계) PASS**(베이스라인도 16w≈2.9h<4h, batched 채택 시 1.5h); 비준 = **batched-eval만 env.py 동결 예외 승인(구현은 2A)** + **n_samples 2000 유지**(near-gate err 근거). **Phase 2A 완료(2026-07-03, §8 (e); `e99ff34`+`b3ff97e`):** batched-eval 구현(실측 **117→54.4ms/step, 2.16×**) + torch-free 어댑터 smoke 6종 green. **Phase 2B 트레이너 구현 완료(2026-07-03 (g), `54dfdeb`)** — §7.1 이월(obs normalizer·γ/λ 0.99/0.95)·fire **Bernoulli head 확정**·wandb·공격자 가족 랜덤화 config 전부 반영. **run 1 완료(2026-07-04, §8 (h)):** 서버 bring-up V1–V4 green → 3-seed×200k — seed1/2 margin **+5.44/+6.74** 수렴(비용-인지 셰이핑), seed0 진동 끝 −0.66 → **DoD 2/3 미통과**. 안정화 레시피(`cef170f`) → **run 2(§8 (i)): 3/3 seed last3_margin +2.64/+5.79/+2.59 — ✅ Phase 2B DoD 통과·마감(2026-07-04).** **✅ Phase 2C 완료(§8 (k), `be816f9`): MAPPO 6-seed vs_ippo 평균 +2.32 (9.05 vs 6.73), 6/6 초과** — 차단+셰이핑 결합 모드 발견(headline 13.5 > scripted 10.06). clean crossing 여전히 0 → **2D 트레이너 구현 완료(§8 (l), `df41dd8`: 해석적 D 배선 + recipe-v2)** — **다음 = 2-arm 캠페인**(mappo_run2 = recipe-v2 기준선 3-seed / coma_run1 = +COMA 3-seed, 6-proc 병렬 ~6h).
 
 ---
 
@@ -227,7 +227,7 @@ jobs:
 - **DoD:** MAPPO return **≥ 2B(IPPO)** + 학습 안정(NaN 0, KL 정상). torch-free green.
 - **커밋:** `feat(train): MAPPO (shared central critic, CTDE) on shepherd env`.
 
-#### Phase 2D — COMA limiter credit ablation (D1-A 1단계)
+#### Phase 2D — COMA limiter credit ablation (D1-A 1단계) — 🔧 **트레이너 구현 완료(2026-07-05 (l), `df41dd8`); 2-arm 캠페인 = 랩 서버**
 
 - **할 일:** env의 `info[limiter_i]["coma_D"]`(**해석적** v_shot 차분)를 **limiter advantage**로 배선. baseline = hold_position(고정, S8). = 기존 Phase 3, "ablation"으로 프레이밍.
 - **DoD:** `D_i` 평균 > 0(역할 검증·kill-switch 연동) ∧ **MAPPO+COMA ≥ MAPPO** ∧ `Δv_shot>0` 유지. terminal-only 보상 금지.
@@ -299,6 +299,16 @@ jobs:
 ---
 
 ## 8. 작업 로그 (append-only · 최신이 위)
+
+### 2026-07-05 (l) — Phase 2D 구현(해석적 COMA 배선) + 학습공학 recipe-v2 (`df41dd8`) — 캠페인 대기
+
+> 학습공학 결정(Hyunjun 승인 "추천경로"): ① 500k steps + **lr anneal floor 0.1**(0-동결이 2C run-1 seeds 2/5 저분지 고착 원인 후보) ② rollout 512→1024·minibatch 256(업데이트당 ~12 에피소드 → advantage 분산 절반) ③ **best-sustained ckpt**(rolling last-3 margin 최고점 보존, 판정은 계속 last-3 — seed 2 중반 피크 유실 방지). critic 강화는 기각(실측 ev 0.85–0.95 = 건강). 스윕은 L2 게이트 직전으로 유보.
+
+- **2D 배선(`shepherd/train/mappo.py`+러너):** `coma_mix∈[0,1]` — limiter advantage = (1−mix)·A_shared + mix·normalize(A_D). **A_D = 1-step 시프트된 해석적 coma_D의 (γλ)-할인 forward 합**(`coma_advantages`, compute_gae V≡0 재사용). **시프트 근거(인과성):** env.step은 pre-move 상태에서 coma_D를 계산 → step t 반환분은 행동 t−1의 결과물 — 러너가 한 행 뒤로 write-back(에피소드/rollout 꼬리 행은 D=0, rollout당 1행 손실 문서화). **γ_d=0.99·λ_d=0.95 기본**(transit 구간 크레딧; γ_d=0이면 문자적 매시점 D_i — ablation 노브). mix=0 = 2C와 완전 동일(가비지-coma 불변성 테스트로 lock).
+- **⚠ 설계 캐비앗(Hyunjun 확인 요망):** mix=1(비준 문자형)에서는 limiter 그래디언트가 공유 J의 −λ3 손실비용 항을 안 봄 → 2B의 '비용-인지' 행동이 퇴행할 수 있음. 퇴행 시 폴백 arm = mix 0.5(config 노브 기존재). D-리턴 γλ-할인·1-step 시프트는 D1-A "바로 사용"의 시간축 해석 — 사후 비준 대상.
+- **캠페인 설계:** arm A = `l2_mappo.yaml` recipe-v2 3-seed(`results/mappo_run2`) — 레시피 변경분 통제한 **2D의 공정 비교선**; arm B = `l2_coma.yaml`(= v2 + mix 1.0) 3-seed(`results/coma_run1`, `mappo_ref`로 vs_mappo 자동 로깅 — 병렬 실행이라 최종 비교는 오프라인). 6-proc 병렬 ≈ 6h. **2D DoD: `limiter/coma_D_raw_mean`>0 ∧ vs_mappo(last3) ≥ 0 ∧ Δv_shot>0 유지.**
+- **테스트 +5** (coma 수학 손계산 대조·mix=0 불변성·reset zero 가드·write-back smoke) → **수집 138 = torch-free 105 + torch 33**. frozen 4종 diff 0.
+- **⚠ 마운트 사고 이력(이번 세션):** Edit 툴 편집분이 **크기-보존 torn-view/플래핑**으로 3 py + yaml 1 손상 — git은 clean으로 인식(스탯 기반), `git add`가 구버전을 staging하는 사고 1회(`21642ee`→`df41dd8` amend로 교정). **대책 확립: 이 마운트에서 Edit 툴 사용 금지(heredoc/splice 전용) + staged-blob을 md5가 아니라 파싱으로 검증**(yaml/py 내용 assert). HEAD-바이트 강제 재기록(`git show HEAD:f > f`)이 뷰 리셋에 유효.
 
 ### 2026-07-05 (k) — ✅ Phase 2C 완료: MAPPO 6-seed, DoD 통과 (`be816f9`)
 
