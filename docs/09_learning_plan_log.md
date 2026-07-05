@@ -12,7 +12,7 @@
 - **목표:** scripted 정책 → **학습된 shaping 정책**. MAPPO **직접 구현**(black-box 금지) + **COMA** limiter credit. CTDE.
 - **동결(건드리지 않음):** S1–S8 계약(`03_formalization.md`), env 계약(`shepherd/env.py`), `configs/m2_l2_train.yaml`, frozen blob 2개(`03_formalization.md`, `shepherd/game/exchange.py`). **유일 비준 예외(2026-07-03, §8 (d)):** env.py step() 내 batched-eval call-site 1건 — **2A에서 구현·커밋 완료(`e99ff34`, §8 (e))**, equiv lock = `tests/test_batched_eval.py`.
 - **L2 산출:** seed≥3 수렴 학습곡선 > baseline + wandb 곡선 + checkpoint + demo GIF.
-- **현 위치:** **Phase 1 완료(2026-07-01)** + **Phase 2A′ 완료(2026-07-03, §8 (d)).** from-scratch PPO 코어(`52a7d58`) → 2A′ 스파이크: 병목 = MC 빌드가 아니라 **per-layout eval E×7회**; **DoD(벽시계) PASS**(베이스라인도 16w≈2.9h<4h, batched 채택 시 1.5h); 비준 = **batched-eval만 env.py 동결 예외 승인(구현은 2A)** + **n_samples 2000 유지**(near-gate err 근거). **Phase 2A 완료(2026-07-03, §8 (e); `e99ff34`+`b3ff97e`):** batched-eval 구현(실측 **117→54.4ms/step, 2.16×**) + torch-free 어댑터 smoke 6종 green. **Phase 2B 트레이너 구현 완료(2026-07-03 (g), `54dfdeb`)** — §7.1 이월(obs normalizer·γ/λ 0.99/0.95)·fire **Bernoulli head 확정**·wandb·공격자 가족 랜덤화 config 전부 반영. **run 1 완료(2026-07-04, §8 (h)):** 서버 bring-up V1–V4 green → 3-seed×200k — seed1/2 margin **+5.44/+6.74** 수렴(비용-인지 셰이핑), seed0 진동 끝 −0.66 → **DoD 2/3 미통과**. 안정화 레시피(`cef170f`) → **run 2(§8 (i)): 3/3 seed last3_margin +2.64/+5.79/+2.59 — ✅ Phase 2B DoD 통과·마감(2026-07-04).** **✅ Phase 2C 완료(§8 (k), `be816f9`): MAPPO 6-seed vs_ippo 평균 +2.32 (9.05 vs 6.73), 6/6 초과** — 차단+셰이핑 결합 모드 발견(headline 13.5 > scripted 10.06). clean crossing 여전히 0 → **2D 트레이너 구현 완료(§8 (l), `df41dd8`: 해석적 D 배선 + recipe-v2)** — **다음 = 2-arm 캠페인**(mappo_run2 = recipe-v2 기준선 3-seed / coma_run1 = +COMA 3-seed, 6-proc 병렬 ~6h). **✅ 2D run 1 마감(2026-07-05, `387b4c6`): DoD-1 PASS(coma_D 全 seed 全 구간 양수) / DoD-2 FAIL(vs_mappo 평균 −1.40, 10.40 vs 11.80) / DoD-3 PASS** — mix=1 비용-실명 정량 확인(cost-gap 1.85 vs 3.0~5.1) + D-credit=차단 모드 발견 가속(2/3 vs 1/3, coma s0 peak_roll3 +16.90 역대 최고) → **폴백 arm mix 0.5 준비 완료(`l2_coma_mix05.yaml`), 착수 대기.** **✅ 2D run 2(mix=0.5) DoD 3/3 PASS → Phase 2D 마감(2026-07-05, `4b3c708`): vs_mappo 평균 +2.20(14.00 vs 11.80)·seed1 last3 +16.67 역대최고·차단 모드 3/3·mix 역-U {0: 11.80, 0.5: 14.00, 1.0: 10.40} → 다음 = Phase 4·5 마감 + L2 게이트 판정(D2-A).**
+- **현 위치:** **Phase 1 완료(2026-07-01)** + **Phase 2A′ 완료(2026-07-03, §8 (d)).** from-scratch PPO 코어(`52a7d58`) → 2A′ 스파이크: 병목 = MC 빌드가 아니라 **per-layout eval E×7회**; **DoD(벽시계) PASS**(베이스라인도 16w≈2.9h<4h, batched 채택 시 1.5h); 비준 = **batched-eval만 env.py 동결 예외 승인(구현은 2A)** + **n_samples 2000 유지**(near-gate err 근거). **Phase 2A 완료(2026-07-03, §8 (e); `e99ff34`+`b3ff97e`):** batched-eval 구현(실측 **117→54.4ms/step, 2.16×**) + torch-free 어댑터 smoke 6종 green. **Phase 2B 트레이너 구현 완료(2026-07-03 (g), `54dfdeb`)** — §7.1 이월(obs normalizer·γ/λ 0.99/0.95)·fire **Bernoulli head 확정**·wandb·공격자 가족 랜덤화 config 전부 반영. **run 1 완료(2026-07-04, §8 (h)):** 서버 bring-up V1–V4 green → 3-seed×200k — seed1/2 margin **+5.44/+6.74** 수렴(비용-인지 셰이핑), seed0 진동 끝 −0.66 → **DoD 2/3 미통과**. 안정화 레시피(`cef170f`) → **run 2(§8 (i)): 3/3 seed last3_margin +2.64/+5.79/+2.59 — ✅ Phase 2B DoD 통과·마감(2026-07-04).** **✅ Phase 2C 완료(§8 (k), `be816f9`): MAPPO 6-seed vs_ippo 평균 +2.32 (9.05 vs 6.73), 6/6 초과** — 차단+셰이핑 결합 모드 발견(headline 13.5 > scripted 10.06). clean crossing 여전히 0 → **2D 트레이너 구현 완료(§8 (l), `df41dd8`: 해석적 D 배선 + recipe-v2)** — **다음 = 2-arm 캠페인**(mappo_run2 = recipe-v2 기준선 3-seed / coma_run1 = +COMA 3-seed, 6-proc 병렬 ~6h). **✅ 2D run 1 마감(2026-07-05, `387b4c6`): DoD-1 PASS(coma_D 全 seed 全 구간 양수) / DoD-2 FAIL(vs_mappo 평균 −1.40, 10.40 vs 11.80) / DoD-3 PASS** — mix=1 비용-실명 정량 확인(cost-gap 1.85 vs 3.0~5.1) + D-credit=차단 모드 발견 가속(2/3 vs 1/3, coma s0 peak_roll3 +16.90 역대 최고) → **폴백 arm mix 0.5 준비 완료(`l2_coma_mix05.yaml`), 착수 대기.** **✅ 2D run 2(mix=0.5) DoD 3/3 PASS → Phase 2D 마감(2026-07-05, `4b3c708`): vs_mappo 평균 +2.20(14.00 vs 11.80)·seed1 last3 +16.67 역대최고·차단 모드 3/3·mix 역-U {0: 11.80, 0.5: 14.00, 1.0: 10.40} → 다음 = Phase 4·5 마감 + L2 게이트 판정(D2-A).** 상태 총정리·피어리뷰 브리프 = **§9**(자기완결, 외부 리뷰 export용).
 
 ---
 
@@ -470,3 +470,63 @@ jobs:
 - **Phase 0b 레포 세팅:** `marl` extra에 supersuit·wandb 추가(`requirements.txt`+`pyproject.toml`), `.github/workflows/ci.yml`(torch-free pytest, py3.10) 생성·검증.
 - **mount truncation 발생·복구:** requirements/pyproject/09-doc가 한글 주석 부근에서 잘림 → heredoc ASCII 재기록 + 재읽기 검증으로 복구. 샌드박스 git 커밋 불가(index.lock 권한).
 - 다음 액션: (로컬) `.git/index.lock` 삭제 → venv 설치 → `pytest` 31 green → setup 커밋 → prep→main 머지·push → `feat/l2-mappo-train` 분기 → Phase 1 PPO 코어.
+---
+
+## 9. 상태 총정리 — 피어리뷰 브리프 (2026-07-05 기준, 자기완결)
+
+> 이 섹션은 외부 리뷰(GPT 등)에 단독 export하는 용도로 자기완결로 작성. 세부 근거는 §8 로그 (g)~(n)과 결과 디렉토리 참조.
+
+### 9.0 문제 설정 (1문단 요약)
+
+last-mile C-UAS 협력수비: 회랑을 침투하는 **반응형 scripted 공격 드론 1기**를 상대로, **limiter 4기**(셰이핑 기동으로 공격자의 도달가능집합을 압축)와 **finisher 1기**(net-capture 발사, 탄 K=1)가 협력. 학습 대상은 limiter+finisher 정책(공격자는 환경). 성공의 대리 지표 **v_shot** = net-capture viability의 MC surrogate(n=2000); 보상은 공유 J = 연속 셰이핑 headline(Δv_shot) + λ1·clean-crossing 보너스(1.0) − λ2·낭비 발사(1.0) − λ3·limiter loss-cost(0.5). 발사 게이트 = v_soft≥θ_fire(0.9)∧clean(비-boxed). 에피소드 80스텝(침투 시 조기 종료). 환경/보상/관측·행동 계약은 **동결**(학습 편의로 미변경; 유일 예외 = 비트-동일 batched-eval 최적화). CTDE + 공유 full-state 관측(63-dim), limiter 공유 정책 + one-hot ID. 학습 중 공격자 가족 랜덤화(속도·스폰·회피 ω·가속 하향-전용), eval은 nominal 고정. env가 per-limiter 해석적 counterfactual **coma_D**(hold 베이스라인, CRN) 제공.
+
+### 9.1 학습 사다리 결과 (Phase 1 → 2D, 전부 마감)
+
+| Phase | 세팅 | 결과 (last-3-eval 평균 판정) | 판정 |
+|---|---|---|---|
+| 1 PPO 코어 | Pendulum 검증 | seed 0/1/2 = −131/−186/−156 (random −1200~−1600) | ✅ |
+| 2A(+2A′) | 어댑터·처리량 | env.step 117→54.4ms(2.16×, 비트-동일 lock 5종) | ✅ |
+| 2B IPPO | 200k×3s + 안정화 | last3 margin(vs 최강 baseline) +2.64/+5.79/+2.59 → 평균 return **6.73** | ✅ 3/3 |
+| 2C MAPPO | 200k×6s, 중앙 critic | vs IPPO **+2.32**(9.05 vs 6.73, +34%), 6/6 양수 | ✅ |
+| 2D mix=1.0 | 500k×3s recipe-v2 | vs MAPPO **−1.40**(10.40 vs 11.80), 1/3 양수 | ❌ (예측된 실패) |
+| 2D mix=0.5 | 500k×3s recipe-v2 | vs MAPPO **+2.20**(14.00 vs 11.80), 2/3 양수, s1 **+16.67 역대최고** | ✅ 2D 마감 |
+
+- 베이스라인: hold(정지)·scripted(스크립트 셰이핑, headline 10.06이나 loss-cost 7.0 지출 → net ≈3.06). 전 학습 arm이 크게 초과(최근 margins +8.2~+13.6).
+- 레시피 진화: 2B 안정화(obs RunningNorm·target_kl 0.02 조기중단·lr linear anneal·**last-3-eval 판정**·eval 20판) → recipe-v2(500k·rollout 1024·mb 256·anneal floor 0.1·best-sustained ckpt).
+- 2D 비교는 3-arm 동일-레시피 통제: **coma_mix = {0, 0.5, 1.0} → mean {11.80, 14.00, 10.40} = 역-U.**
+
+### 9.2 행동 모드 지도 & 핵심 발견
+
+1. **모드 2개:** 셰이핑-only(len≈23, 침투 1.0, return≈headline≈10, 비용 0) vs **차단+셰이핑**(len 80, 침투 0, return 14~17). 후자 도달률 = MAPPO 1/3 → mix1.0 2/3 → mix0.5 **3/3**, 도달 시점도 조기화(eval ~20 → 7–8). 차단+셰이핑 = 침투 저지와 도달가능집합 압축의 동시 달성(현재 최강 전술).
+2. **비용-인지가 RL 우월성의 원천:** scripted는 headline을 λ3 지출로 사고(net 3.06), 학습 정책은 유사 headline을 거의 무비용으로 달성.
+3. **mix 역-U의 기전(정량):** cost-gap(=headline−return≈λ3 지출)이 MAPPO {1.85,0,0} / mix1.0 {3.03,3.33,5.09} / mix0.5 {2.61,**1.08**,5.13}. 문자형 COMA(mix=1)는 limiter 그래디언트가 −λ3 항을 구조적으로 못 봄(사전 등록 캐비앗 적중) → **per-limiter credit = 탐색(차단 모드 발견) 가속기, 비용 책정 = 공유 신호 몫, 블렌드가 최적.** coma_D 신호 자체는 전 런 전 구간 양수(말기 +0.03~+0.06)·학습 중 단조 증가.
+4. **fire 체인 미개봉:** clean crossing·capture·wasted 全 seed 0 유지(발사 규율은 학습됨 — 스팸 없음). θ_fire=0.9 > plateau ρ/w=5/6라 셰이핑 강제 창 안 — 무-credit/독립 학습으로 안 열리는 것까지는 명제 N(10_shaping_necessity_prop.md 초안)과 정합. capture는 M3 stretch로 분리된 상태.
+5. **판정 프로토콜 유효성:** eval 스냅샷 급락(예: 2C s2 −8 후 회복)을 last-3 판정이 설계대로 흡수; CUDA도 조건 고정 시 200k-step 비트-재현 사례 확보.
+
+### 9.3 Threats to validity (리뷰 요청 포인트)
+
+- **표본:** seed 3(2C만 6). 차단 모드 발견이 사실상 이산 사건이라 seed 간 분산 큼 — mix0.5도 per-seed vs_mappo는 2/3(s2 −0.52).
+- **비교선 민감도:** 2D ref(11.80)가 MAPPO s0(14.97) 하나에 지배됨. mean-of-means 비교의 한계.
+- **혼입:** 2C−2B 차이 = {중앙 critic, value-norm, ortho-init} 3요소(분해 안 함). 2D는 동일-레시피 통제로 이 문제 없음.
+- **mix 해상도:** {0, 0.5, 1.0} 3점뿐. 역-U의 대안 가설(예: normalize(A_D)의 분산-감소 아티팩트) 미배제.
+- **통계 정식화 미비:** "baseline 유의 초과"(L2 게이트 D2-A)의 검정 방식 미확정 — 현재는 3-seed last3 평균의 부호/크기 서술.
+- **공격자 분포:** scripted 반응형 + 가족 랜덤화까지만. exploitability 측정(방어자 freeze + 공격자 PPO probe)은 게이트 후 예정.
+- **coma_D 시간축:** env의 coma_D는 pre-move 계산이라 1-step 시프트 후 (γλ)-할인 forward 합으로 사용 — 이 시간축 해석은 사후 비준 대상.
+- **surrogate 의존:** headline이 v_shot MC(n=2000)에 의존; near-gate 구간 n 축소 시 오차가 zero-waste 밴드폭 초과함은 측정 완료(그래서 2000 유지).
+- **미달 영역:** clean crossing·physical capture 0 — 게이트 주장 범위는 "J·Δv_shot 유의 초과"로 한정됨.
+
+### 9.4 리뷰 질문 (외부 리뷰어에게)
+
+1. **L2 게이트 판정의 통계 정식화**: 3-seed last3 평균에 대해 무엇이 적절한가 — seed-level bootstrap CI, baseline 에피소드 분포 대비 비모수 검정, 아니면 seed 확장(비용: seed당 ~1h GPU)?
+2. **mix 역-U 해석의 강건성**: 비용-실명 기전 외 대안 설명을 배제할 최소 추가 실험은? (예: mix 0.25/0.75 2점? A_D 비정규화 1-arm?)
+3. **비교 프로토콜**: vs_mappo를 mean-of-means 대신 paired-seed 또는 pooled-episode로 바꿔야 하는가?
+4. **논문 프레이밍**: (a) L2는 게이트로만 쓰고 M3 frontier-shift를 main으로 vs (b) 역-U+비용-실명 정량을 학습 파트 main result로 승격 — 어느 쪽이 강한가?
+5. **fire 체인**: clean crossing 0 상태에서 λ1 커리큘럼(게이트 완화→복원) 시도 가치 vs M3로 직행?
+6. 지금 우선순위에서 빠져 있는 최고 가치 실험 1개는?
+
+### 9.5 재현 스펙 (요약)
+
+- 커밋 체인(브랜치 `feat/l2-mappo-train`): Phase1 `52a7d58` → 2A `e99ff34` → 2B `54dfdeb`/안정화 `cef170f`/결과 `f7ae506` → 2C `7e0e98d`/결과 `be816f9` → 2D `df41dd8`/run1 `387b4c6`/mix05 `4a28e65`/run2 `4b3c708` → 본 브리프 시점 HEAD `b34a974`.
+- 실행: `scripts/run_ippo_seeds_parallel.sh`(TRAIN_MODULE/CONFIG/OUT 환경변수; 코드-신선도 ancestor 가드), configs = `l2_ippo/l2_mappo/l2_coma/l2_coma_mix05.yaml`, 시나리오 동결 = `configs/m2_l2_train.yaml`. seeds {0,1,2}(2C {0..5}), RTX 4090 1장 time-slicing, torch 2.6.0+cu124. CUDA 비결정 캐비앗(단 조건 고정 비트-재현 사례 있음).
+- 결과: `results/{ippo_run2, mappo_run1, mappo_run2, coma_run1, coma_run2}/seed*/{summary,eval_curve,train_curve}.json`; coma_D 커브 = `results/coma_run*/wandb_coma_dump.json`(wandb 0.28 offline 바이너리 파서 `scripts/wandb_offline_dump.py`).
+- 테스트 138 수집(torch-free 105 / torch 33), frozen 계약 4종 diff 0, mix=0 ⇒ 2C 동일성 lock 테스트 포함.
