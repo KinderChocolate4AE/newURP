@@ -17,3 +17,6 @@ data/*.npz
 data/*.h5
 *.mp4
 .DS_Store
+# local venvs / server scratch results
+.venv-l2/
+results/_*/
