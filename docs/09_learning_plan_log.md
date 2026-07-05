@@ -300,6 +300,16 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-05 (o) — 외부 피어리뷰 접수(§9 브리프 대상): "L2 게이트 조건부 pass / 논문 main 불가" — 대응 계획 수립
+
+> 리뷰 전문 사본 = `ANDES/URP/gpt_peer_review_L2_2026-07-05.md`(repo 밖). 요지: **Fatal 2**(① fire 체인 미개봉 → "no-fire blocking policy" 공격 가능 = claim 하향 필요 ② n=3, 차단 모드 발견=이산 사건 → 통계 미달) + **Major 4**(약한 scripted baseline / last-3·best-ckpt selection bias / "COMA" 명명 과함 / 역-U 대안가설 미배제). 프레이밍 권고 = **M3 main, L2는 gate+training insight**(기존 방학 계획과 정합). 리뷰 자체 판정: "L2 gate로는 꽤 강함."
+
+- **즉시 채택(문서·용어, 실험 불요):** ① 안전 claim 문구 채택 — "frozen L2 reward contract 하에서 CTDE MARL이 hold/scripted 대비 capture-viability surrogate를 크게 올리는 cost-aware shaping/blocking 행동을 학습; blended global-local counterfactual credit이 mode discovery를 개선(preliminary, seed-limited)". 금지 claim 4종(net-capture 학습·통계적 우월·역-U 기전 확증·fire 체인 해결) 준수. ② 논문 용어 "per-limiter hold-counterfactual credit (difference reward)"로 하향(코드명 `coma_D` 유지). ③ §9는 export 스냅샷으로 보존(수정 없음), 본 (o)가 대응 기록.
+- **실험 우선순위(리뷰 채택, 실행 비준 대기):** **P1** = MAPPO vs mix0.5 **seed 3→8~10 확장 + held-out CRN paired eval 하네스**(선택지표 last-3/best-ckpt ↔ 보고지표 분리; seed-cluster paired diff + hierarchical bootstrap CI; mode discovery rate 별도 보고) — L2 게이트 판정을 논문급으로. 추산 14런 ≈ 6-proc 야간 배치 2~3회. **P2** = cost-aware D ablation(local 신호에 per-limiter loss-cost 포함, 3-seed) — 역-U 기전 직접 검증(mix 0.25/0.75보다 날카로움). **P3** = safe-scripted(비용 회피 barrier) baseline. **P4** = fire-chain 진단(θ_fire 0.8/0.75 완화 — **비동결 진단 전용 config**, test-only episode_len 선례 패턴; 완화→개방 여부→복원 유지 여부).
+- **판정 함의:** L2 게이트(D2-A)는 "3-seed 서술적 초과"로는 조건부 — P1 완료 후 본판정으로 승격. Phase 4·5(재현성·sanity·rollout GIF)는 P1과 병행 가능.
+- 다음 액션: P1 하네스 설계·구현(신규 WP; 코드/런북 = AI, 서버 실행 = Hyunjun) → P1 캠페인 → 게이트 본판정 → M3.
+
+
 ### 2026-07-05 (n) — ✅ Phase 2D 마감: mix=0.5 폴백 arm DoD 3/3 통과 — 역대 최고 지속 성능 + mix 3점 ablation 완성 (`4b3c708`)
 
 > coma_run2(mix=0.5, 3-seed×500k recipe-v2): last3 = **+14.04/+16.67/+11.28 (mean 14.00)** → **vs_mappo 평균 +2.20**(2/3 seed 양수, s2 −0.52 캐비앗) ∧ coma_D 全 seed 全 구간 양수(lastq +0.040/+0.061/+0.047, Q1→Q4 단조 상승) ∧ headline +16.4~+17.8 → **2D DoD(D>0 ∧ COMA≥MAPPO ∧ Δv_shot>0) 통과 — Phase 2D 마감.** seed1 last3 **+16.67 = 전 실험 통틀어 최고 지속 성능**(직전 최고 = mappo_run2 s0 +14.97; peak_roll3 +16.91@eval23 = 종반 지속형, 일시 피크 아님).
