@@ -300,6 +300,16 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-05 (p) — P1 하네스 구현 + 프로토콜 사전등록 — 캠페인 대기
+
+> 피어리뷰 (o) P1 실행분. **held-out paired eval 하네스 2본 + 테스트 8종** 구현, 아래 프로토콜을 **런 시작 전에 동결**(사전등록 — selection/reporting 분리 위반·사후 규칙 변경 방지).
+
+- **`shepherd/scripts/eval_heldout.py`(torch):** 고정 ckpt(기본 `best`, 부재 시 `latest` 폴백을 meta에 기록) + 동결 obs-norm 로드 → **NOMINAL env, CRN held-out seeds `77_000_000+i`**(학습 eval seed `s·1e6+500k`·학습 episode seed와 전 캠페인 seed 0..9에서 서로소 — 테스트로 lock), 에피소드별 레코드(ret/len/headline/clean/wasted/captured/penetrated/truncated/fire_events/boxed_steps) + git_head·ckpt sha 기록. scripted/hold 베이스라인도 동일 CRN으로.
+- **`shepherd/scripts/analyze_p1.py`(torch-free):** ① mode label = `truncated ∧ ¬penetrated ∧ ¬captured`(=차단), seed의 "발견" = blocking_rate ≥ 0.5 ② **seed-cluster hierarchical bootstrap**(seed 복원추출 → seed 내 에피소드 복원추출, B=10,000, rng 7) ③ **게이트 규칙: arm의 seed-군집 mean CRN margin의 one-sided 95% 하한 > 0을 scripted·hold 둘 다 충족 → L2 게이트(D2-A) PASS** ④ arm 비교 = 공통 train-seed paired diff(같은 CRN 에피소드), CI가 0 포함 시 "분리 안 됨"으로 보고(우월 주장 금지 — 리뷰 금지 claim 준수) ⑤ cost-gap·clean·fire·mode discovery rate 병기.
+- **캠페인 설계(사전등록):** arms = `l2_mappo.yaml→results/mappo_run2` vs `l2_coma_mix05.yaml→results/coma_run2`(레시피 동일), **seeds {0..9}** = 기존 {0,1,2} 재사용 + 신규 {3..9}×2 arm = 14런(6-proc 야간 배치 3-5/6-8/9). 평가 = 20 ckpt × 200 에피소드. **결정규칙:** 게이트 PASS → L2 본판정 승격(D2-A 충족 선언); paired diff 분리 시 해당 arm = main recipe, 미분리 시 "동급 + discovery rate 차이"로 서술하고 recipe는 discovery rate·cost-gap 종합으로 선정(서술 강도 하향).
+- 테스트 +8(t-free 6: 라벨·CRN 불일치 검출·margin/cost-gap·bootstrap 복원·게이트/paired 통합·비분리 케이스 + torch 2: 표면·seed 서로소) → **수집 146 = t-free 111 + torch 35**. frozen 4종 무접촉(eval은 make_train_env 재사용, env.py diff 0).
+
+
 ### 2026-07-05 (o) — 외부 피어리뷰 접수(§9 브리프 대상): "L2 게이트 조건부 pass / 논문 main 불가" — 대응 계획 수립
 
 > 리뷰 전문 사본 = `ANDES/URP/gpt_peer_review_L2_2026-07-05.md`(repo 밖). 요지: **Fatal 2**(① fire 체인 미개봉 → "no-fire blocking policy" 공격 가능 = claim 하향 필요 ② n=3, 차단 모드 발견=이산 사건 → 통계 미달) + **Major 4**(약한 scripted baseline / last-3·best-ckpt selection bias / "COMA" 명명 과함 / 역-U 대안가설 미배제). 프레이밍 권고 = **M3 main, L2는 gate+training insight**(기존 방학 계획과 정합). 리뷰 자체 판정: "L2 gate로는 꽤 강함."
