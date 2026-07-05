@@ -1,0 +1,47 @@
+{
+  "seed": 0,
+  "env_steps": 499712,
+  "final_eval": {
+    "step": 499712,
+    "episodes": 20,
+    "return_mean": 15.840395367412139,
+    "return_std": 0.8231154094197851,
+    "len_mean": 80.0,
+    "headline_sum_mean": 19.39039536741214,
+    "wasted_mean": 0.0,
+    "captured_rate": 0.0,
+    "penetrated_rate": 0.0,
+    "clean_cross_rate": 0.0,
+    "dod_margin": 12.780421347227264,
+    "vs_ippo": 9.108084590975114
+  },
+  "baselines": {
+    "hold_position": {
+      "episodes": 20,
+      "return_mean": 0.0,
+      "return_std": 0.0,
+      "len_mean": 23.0,
+      "headline_sum_mean": 0.0,
+      "wasted_mean": 0.0,
+      "captured_rate": 0.0,
+      "penetrated_rate": 1.0,
+      "clean_cross_rate": 0.0
+    },
+    "scripted_shaping": {
+      "episodes": 20,
+      "return_mean": 3.0599740201848746,
+      "return_std": 0.009543669249667755,
+      "len_mean": 24.0,
+      "headline_sum_mean": 10.059974020184873,
+      "wasted_mean": 0.0,
+      "captured_rate": 0.0,
+      "penetrated_rate": 1.0,
+      "clean_cross_rate": 0.0
+    }
+  },
+  "dod_margin": 12.780421347227264,
+  "dod_margin_last3": 11.912729694049128,
+  "return_mean_last3": 14.972703714234001,
+  "ippo_ref_mean_last3": 6.732310776437026,
+  "vs_ippo_last3": 8.240392937796976
+}

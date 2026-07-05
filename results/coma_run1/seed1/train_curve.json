@@ -1,0 +1,3418 @@
+[
+  {
+    "step": 1024,
+    "train/ep_return": 0.10055607657494452,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.95,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 2048,
+    "train/ep_return": 0.25203522186369365,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.9,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 3072,
+    "train/ep_return": 0.350551822151752,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.8,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 4096,
+    "train/ep_return": 0.20025116754676078,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 1.0,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 5120,
+    "train/ep_return": 0.05014455509490523,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.95,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 6144,
+    "train/ep_return": 0.7223071037575023,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 7168,
+    "train/ep_return": 1.1735919880163743,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 8192,
+    "train/ep_return": 0.8231732516653197,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.8,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 9216,
+    "train/ep_return": 1.5011974847892207,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 10240,
+    "train/ep_return": 0.9245704356947255,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 11264,
+    "train/ep_return": 1.0499049703841077,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 12288,
+    "train/ep_return": 2.121072693614379,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 13312,
+    "train/ep_return": 2.719193714038737,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 14336,
+    "train/ep_return": 2.265447117096458,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 15360,
+    "train/ep_return": 2.222740613265032,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 16384,
+    "train/ep_return": 2.3190748060188833,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 17408,
+    "train/ep_return": 3.1974978286541353,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 18432,
+    "train/ep_return": 3.740811533937412,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 19456,
+    "train/ep_return": 3.8668717317694323,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 20480,
+    "train/ep_return": 3.7435289718797504,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.75,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 21504,
+    "train/ep_return": 3.6142037933511637,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 22528,
+    "train/ep_return": 3.1066743280195745,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 23552,
+    "train/ep_return": 3.0613546399634393,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.8,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 24576,
+    "train/ep_return": 3.82927794870185,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 25600,
+    "train/ep_return": 3.6070904646124746,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.75,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 26624,
+    "train/ep_return": 3.4153335729818117,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.75,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 27648,
+    "train/ep_return": 3.563203006804472,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 28672,
+    "train/ep_return": 4.32036333405337,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.75,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 29696,
+    "train/ep_return": 4.238120462586028,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 30720,
+    "train/ep_return": 4.166470377219456,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.85,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 31744,
+    "train/ep_return": 3.82082242721212,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.75,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 32768,
+    "train/ep_return": 3.912965175620595,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 33792,
+    "train/ep_return": 3.642171824956776,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.75,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 34816,
+    "train/ep_return": 3.969166169800496,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.75,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 35840,
+    "train/ep_return": 3.9295054456636445,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 36864,
+    "train/ep_return": 4.80298862992672,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 37888,
+    "train/ep_return": 3.794601482638945,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 38912,
+    "train/ep_return": 4.3844003334495785,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 39936,
+    "train/ep_return": 4.457993754507429,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.9,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 40960,
+    "train/ep_return": 4.577389995149086,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.75,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 41984,
+    "train/ep_return": 5.248218784666813,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.8,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 43008,
+    "train/ep_return": 4.37124912212515,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.75,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 44032,
+    "train/ep_return": 5.056611467854269,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.9,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 45056,
+    "train/ep_return": 4.244595832502204,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.85,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 46080,
+    "train/ep_return": 5.7489041411037665,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 47104,
+    "train/ep_return": 4.255047241568841,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 48128,
+    "train/ep_return": 4.803323268792051,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 49152,
+    "train/ep_return": 4.59126496175929,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.85,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 50176,
+    "train/ep_return": 5.695438145637047,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 51200,
+    "train/ep_return": 5.597062812778774,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 52224,
+    "train/ep_return": 5.313201248020388,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 53248,
+    "train/ep_return": 5.356097526871993,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 54272,
+    "train/ep_return": 4.793226303363092,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.8,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 55296,
+    "train/ep_return": 5.026917606244661,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 56320,
+    "train/ep_return": 4.975404760564364,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 57344,
+    "train/ep_return": 5.2004555304942475,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 58368,
+    "train/ep_return": 4.877849104569864,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 59392,
+    "train/ep_return": 5.0021847991558595,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 60416,
+    "train/ep_return": 5.060264691182095,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.75,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 61440,
+    "train/ep_return": 5.9890744899309425,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 62464,
+    "train/ep_return": 5.093527762644747,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 63488,
+    "train/ep_return": 4.93350953446507,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 64512,
+    "train/ep_return": 4.52840205992202,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 65536,
+    "train/ep_return": 5.066628381886613,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 66560,
+    "train/ep_return": 4.936991448423063,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 67584,
+    "train/ep_return": 5.855321433678393,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 68608,
+    "train/ep_return": 6.278027215652494,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 69632,
+    "train/ep_return": 5.879484329649141,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.85,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 70656,
+    "train/ep_return": 5.789130519058675,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 71680,
+    "train/ep_return": 5.623752997298373,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 72704,
+    "train/ep_return": 5.9657652226415925,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 73728,
+    "train/ep_return": 5.958203202935888,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 74752,
+    "train/ep_return": 5.008628877612118,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 75776,
+    "train/ep_return": 6.242012696858584,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 76800,
+    "train/ep_return": 5.625475126018661,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 77824,
+    "train/ep_return": 5.274227006126986,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 78848,
+    "train/ep_return": 5.454435408835754,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 79872,
+    "train/ep_return": 5.6979485063123665,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 80896,
+    "train/ep_return": 5.282890631613585,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 81920,
+    "train/ep_return": 5.276703095392947,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 82944,
+    "train/ep_return": 5.771014527556708,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 83968,
+    "train/ep_return": 5.123019158881253,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 84992,
+    "train/ep_return": 5.048266846073817,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 86016,
+    "train/ep_return": 5.1965817395289395,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 87040,
+    "train/ep_return": 4.727513820576116,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 88064,
+    "train/ep_return": 4.158335349636002,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 89088,
+    "train/ep_return": 5.9233222061553334,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 90112,
+    "train/ep_return": 5.428136151316904,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 91136,
+    "train/ep_return": 3.7592992613270297,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 92160,
+    "train/ep_return": 4.483987772702133,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 93184,
+    "train/ep_return": 4.17334656647521,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 94208,
+    "train/ep_return": 3.0953123415105166,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 95232,
+    "train/ep_return": 4.580762056936091,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 96256,
+    "train/ep_return": 5.991462885653329,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 97280,
+    "train/ep_return": 6.174396705919655,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 98304,
+    "train/ep_return": 6.637426967153334,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 99328,
+    "train/ep_return": 6.5883918954028555,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 100352,
+    "train/ep_return": 5.8218352134027125,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 101376,
+    "train/ep_return": 5.978923797000821,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 102400,
+    "train/ep_return": 6.614463803453444,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 103424,
+    "train/ep_return": 5.956034751577192,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 104448,
+    "train/ep_return": 6.514328593228214,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 105472,
+    "train/ep_return": 6.671462015611506,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 106496,
+    "train/ep_return": 5.221312748106859,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 107520,
+    "train/ep_return": 4.772735273024349,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.8,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 108544,
+    "train/ep_return": 5.808812337996022,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 109568,
+    "train/ep_return": 5.476033336058015,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 110592,
+    "train/ep_return": 6.349131731374197,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 111616,
+    "train/ep_return": 6.9744027935702135,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 112640,
+    "train/ep_return": 6.8942956053262945,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 113664,
+    "train/ep_return": 6.348917550935142,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 114688,
+    "train/ep_return": 6.8266736062876685,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 115712,
+    "train/ep_return": 6.924847791082813,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 116736,
+    "train/ep_return": 7.042737276042435,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 117760,
+    "train/ep_return": 6.6669561049302954,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 118784,
+    "train/ep_return": 6.043546292697206,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 119808,
+    "train/ep_return": 4.523004294660508,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 120832,
+    "train/ep_return": 7.517337881237819,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 121856,
+    "train/ep_return": 7.053735647488951,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 122880,
+    "train/ep_return": 5.661496943284103,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 123904,
+    "train/ep_return": 6.269969477080099,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 124928,
+    "train/ep_return": 7.7825617103993725,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 125952,
+    "train/ep_return": 8.062044966574382,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 126976,
+    "train/ep_return": 7.409008421320436,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 128000,
+    "train/ep_return": 7.94518482507066,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 129024,
+    "train/ep_return": 7.358365790476047,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 130048,
+    "train/ep_return": 6.348470602621828,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 131072,
+    "train/ep_return": 7.826099233784172,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 132096,
+    "train/ep_return": 6.539360508237141,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 133120,
+    "train/ep_return": 6.563056167469769,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 134144,
+    "train/ep_return": 5.878843021328551,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 135168,
+    "train/ep_return": 6.652652770632924,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 136192,
+    "train/ep_return": 7.241339788480884,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 137216,
+    "train/ep_return": 6.723236293458298,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 138240,
+    "train/ep_return": 6.560907687273236,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 139264,
+    "train/ep_return": 6.46543296760444,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 140288,
+    "train/ep_return": 6.54354085786826,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 141312,
+    "train/ep_return": 6.167120732966462,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 142336,
+    "train/ep_return": 5.455610790438134,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 143360,
+    "train/ep_return": 6.8648425751851745,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 144384,
+    "train/ep_return": 6.1943248201257495,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 145408,
+    "train/ep_return": 6.034383811752877,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 146432,
+    "train/ep_return": 5.638774015956212,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 147456,
+    "train/ep_return": 6.104439745159885,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 148480,
+    "train/ep_return": 8.36302164401866,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 149504,
+    "train/ep_return": 6.079442815112718,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 150528,
+    "train/ep_return": 5.596172830856235,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 151552,
+    "train/ep_return": 6.2970429954540155,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 152576,
+    "train/ep_return": 6.757862733029218,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 153600,
+    "train/ep_return": 7.458485075036696,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 154624,
+    "train/ep_return": 5.5285969249481735,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 155648,
+    "train/ep_return": 6.157320523255097,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 156672,
+    "train/ep_return": 6.548836582970244,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 157696,
+    "train/ep_return": 7.464509075968708,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 158720,
+    "train/ep_return": 5.98982410225259,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 159744,
+    "train/ep_return": 6.811794075179991,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 160768,
+    "train/ep_return": 5.836392585984874,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 161792,
+    "train/ep_return": 5.806940511972326,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 162816,
+    "train/ep_return": 7.599264411646648,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 163840,
+    "train/ep_return": 8.683084762477952,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 164864,
+    "train/ep_return": 6.015220809822902,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 165888,
+    "train/ep_return": 5.900357497928671,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 166912,
+    "train/ep_return": 6.703629205595607,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 167936,
+    "train/ep_return": 6.4866604642077395,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 168960,
+    "train/ep_return": 6.059102017862397,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 169984,
+    "train/ep_return": 7.296309279706563,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 171008,
+    "train/ep_return": 6.766877473820219,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 172032,
+    "train/ep_return": 7.741962466363267,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 173056,
+    "train/ep_return": 6.558949554500025,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 174080,
+    "train/ep_return": 5.690293920709269,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 175104,
+    "train/ep_return": 6.294838933516872,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 176128,
+    "train/ep_return": 6.1646755400565265,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 177152,
+    "train/ep_return": 7.333127267767532,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 178176,
+    "train/ep_return": 6.142799373391227,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 179200,
+    "train/ep_return": 6.236940558035192,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 180224,
+    "train/ep_return": 5.672911264197493,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 181248,
+    "train/ep_return": 7.803094524783032,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 182272,
+    "train/ep_return": 6.2936097663174175,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 183296,
+    "train/ep_return": 5.892670134629076,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 184320,
+    "train/ep_return": 6.679263039648651,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 185344,
+    "train/ep_return": 7.282736133502851,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 186368,
+    "train/ep_return": 6.716055185388656,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 187392,
+    "train/ep_return": 6.737990279357582,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 188416,
+    "train/ep_return": 5.620076621403575,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 189440,
+    "train/ep_return": 6.010403891787904,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 190464,
+    "train/ep_return": 6.234906677455774,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 191488,
+    "train/ep_return": 6.041825115279375,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 192512,
+    "train/ep_return": 4.621599802906021,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 193536,
+    "train/ep_return": 5.0970725587482795,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 194560,
+    "train/ep_return": 4.762465711684419,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 195584,
+    "train/ep_return": 4.581276823802026,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 196608,
+    "train/ep_return": 6.357004347190394,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 197632,
+    "train/ep_return": 5.498568439642767,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 198656,
+    "train/ep_return": 6.087472059320526,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 199680,
+    "train/ep_return": 5.2138129356651675,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 200704,
+    "train/ep_return": 5.682738750378577,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 201728,
+    "train/ep_return": 6.013232015862944,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 202752,
+    "train/ep_return": 5.413030284006178,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 203776,
+    "train/ep_return": 5.010322611805014,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.1,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 204800,
+    "train/ep_return": 6.0108020211892965,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 205824,
+    "train/ep_return": 4.191366839078882,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 206848,
+    "train/ep_return": 5.516643975926977,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 207872,
+    "train/ep_return": 5.428360509256403,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 208896,
+    "train/ep_return": 5.062380619876454,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 209920,
+    "train/ep_return": 7.289058711668432,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 210944,
+    "train/ep_return": 3.893943218422188,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 211968,
+    "train/ep_return": 5.362104651711023,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 212992,
+    "train/ep_return": 5.489394206053232,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 214016,
+    "train/ep_return": 5.341573901149168,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 215040,
+    "train/ep_return": 5.939757929772627,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 216064,
+    "train/ep_return": 4.886203064875023,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 217088,
+    "train/ep_return": 4.786052798261867,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 218112,
+    "train/ep_return": 5.738340990270148,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 219136,
+    "train/ep_return": 6.239284401357721,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 220160,
+    "train/ep_return": 6.531818468710692,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 221184,
+    "train/ep_return": 6.387300438443161,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 222208,
+    "train/ep_return": 6.157768171190902,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 223232,
+    "train/ep_return": 5.883454944352572,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 224256,
+    "train/ep_return": 6.061872087055294,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.8
+  },
+  {
+    "step": 225280,
+    "train/ep_return": 5.787086277772976,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 226304,
+    "train/ep_return": 6.260333798420691,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 227328,
+    "train/ep_return": 5.362884043620443,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 228352,
+    "train/ep_return": 6.313696214663899,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 229376,
+    "train/ep_return": 5.81027336142308,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 230400,
+    "train/ep_return": 5.492827989167189,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 231424,
+    "train/ep_return": 5.937385168343977,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 232448,
+    "train/ep_return": 4.636236602346603,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 233472,
+    "train/ep_return": 5.641840030356657,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 234496,
+    "train/ep_return": 6.412801754492615,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 235520,
+    "train/ep_return": 6.5111203160141,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 236544,
+    "train/ep_return": 6.7360451541299184,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 237568,
+    "train/ep_return": 6.341359556333094,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 238592,
+    "train/ep_return": 5.806189357079225,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 239616,
+    "train/ep_return": 6.062114354973675,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 240640,
+    "train/ep_return": 7.081850915095563,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 241664,
+    "train/ep_return": 6.738313119574549,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 242688,
+    "train/ep_return": 7.987773286275318,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 243712,
+    "train/ep_return": 7.405267862466422,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 244736,
+    "train/ep_return": 7.032716324003092,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 245760,
+    "train/ep_return": 6.709472176098446,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 246784,
+    "train/ep_return": 6.914923890850671,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.1,
+    "train/wasted": 0.8
+  },
+  {
+    "step": 247808,
+    "train/ep_return": 8.080274447883589,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 248832,
+    "train/ep_return": 6.683871344847131,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 249856,
+    "train/ep_return": 7.638259664950594,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.1,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 250880,
+    "train/ep_return": 6.366628773987808,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 251904,
+    "train/ep_return": 6.336514161000433,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 252928,
+    "train/ep_return": 6.973044137613158,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 253952,
+    "train/ep_return": 6.210908322481114,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 254976,
+    "train/ep_return": 5.712068522891462,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 256000,
+    "train/ep_return": 6.636563975583035,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 257024,
+    "train/ep_return": 7.0770755928309725,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 258048,
+    "train/ep_return": 6.761850508373881,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 259072,
+    "train/ep_return": 6.111341386333635,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 260096,
+    "train/ep_return": 6.385931415671417,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 261120,
+    "train/ep_return": 5.5663077730940005,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 262144,
+    "train/ep_return": 6.361068594124243,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 263168,
+    "train/ep_return": 5.244873500732371,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 264192,
+    "train/ep_return": 5.791426193292557,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 265216,
+    "train/ep_return": 6.97998012444418,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 266240,
+    "train/ep_return": 7.1162358994880055,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 267264,
+    "train/ep_return": 7.137472727444276,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 268288,
+    "train/ep_return": 6.941567594745297,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 269312,
+    "train/ep_return": 7.53453248884068,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 270336,
+    "train/ep_return": 6.40187261819951,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 271360,
+    "train/ep_return": 6.257685394755571,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 272384,
+    "train/ep_return": 5.8413949744361755,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 273408,
+    "train/ep_return": 5.763726029709829,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 274432,
+    "train/ep_return": 7.016418505783065,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 275456,
+    "train/ep_return": 7.1070308748467514,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 276480,
+    "train/ep_return": 6.640340076727435,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 277504,
+    "train/ep_return": 8.289821367918089,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 278528,
+    "train/ep_return": 5.893908425326602,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 279552,
+    "train/ep_return": 6.665907266735298,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 280576,
+    "train/ep_return": 5.687226368452903,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 281600,
+    "train/ep_return": 6.191672061990088,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 282624,
+    "train/ep_return": 7.339765221368751,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 283648,
+    "train/ep_return": 7.965520033836862,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 284672,
+    "train/ep_return": 5.9023198539190656,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 285696,
+    "train/ep_return": 7.697096308031801,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 286720,
+    "train/ep_return": 7.739249640148083,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 287744,
+    "train/ep_return": 7.684536787947955,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 288768,
+    "train/ep_return": 6.6845150138524065,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 289792,
+    "train/ep_return": 6.611220779332318,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 290816,
+    "train/ep_return": 8.565180655848469,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 291840,
+    "train/ep_return": 6.986281160218718,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 292864,
+    "train/ep_return": 6.936740823093933,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 293888,
+    "train/ep_return": 7.488041585891051,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 294912,
+    "train/ep_return": 6.434636941717754,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 295936,
+    "train/ep_return": 6.833748898687022,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 296960,
+    "train/ep_return": 6.9109031783941735,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 297984,
+    "train/ep_return": 6.316125901759118,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 299008,
+    "train/ep_return": 6.991740792994001,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 300032,
+    "train/ep_return": 6.688528384331853,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 301056,
+    "train/ep_return": 6.370275537275395,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 302080,
+    "train/ep_return": 7.217318033189537,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 303104,
+    "train/ep_return": 6.717728369697778,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 304128,
+    "train/ep_return": 8.207799992212804,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.65
+  },
+  {
+    "step": 305152,
+    "train/ep_return": 5.890625346055037,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 306176,
+    "train/ep_return": 6.811064984491056,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 307200,
+    "train/ep_return": 6.1675799173971395,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.6
+  },
+  {
+    "step": 308224,
+    "train/ep_return": 7.010265487480008,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 309248,
+    "train/ep_return": 8.414631580862297,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 310272,
+    "train/ep_return": 7.76005866462332,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 311296,
+    "train/ep_return": 7.862547512416361,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 312320,
+    "train/ep_return": 6.459848410599254,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 313344,
+    "train/ep_return": 6.863272894598003,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 314368,
+    "train/ep_return": 7.886138163553601,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.75
+  },
+  {
+    "step": 315392,
+    "train/ep_return": 6.311156598357717,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 316416,
+    "train/ep_return": 7.535219392330371,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 317440,
+    "train/ep_return": 6.764508185877288,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 318464,
+    "train/ep_return": 6.73383208189168,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 319488,
+    "train/ep_return": 8.163914115299022,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 320512,
+    "train/ep_return": 8.188000272132184,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 321536,
+    "train/ep_return": 7.210921782111969,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 322560,
+    "train/ep_return": 7.094067312490813,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.7
+  },
+  {
+    "step": 323584,
+    "train/ep_return": 7.166796366755032,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 324608,
+    "train/ep_return": 7.640603792189464,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 325632,
+    "train/ep_return": 6.341206021257735,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 326656,
+    "train/ep_return": 6.635398354690087,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 327680,
+    "train/ep_return": 6.759353338052909,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 328704,
+    "train/ep_return": 6.238116327782405,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 329728,
+    "train/ep_return": 7.810744825339154,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 330752,
+    "train/ep_return": 7.538429272974421,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 331776,
+    "train/ep_return": 6.187184886280301,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 332800,
+    "train/ep_return": 7.387377138634662,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 333824,
+    "train/ep_return": 8.207436857648643,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 334848,
+    "train/ep_return": 6.947409967112795,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 335872,
+    "train/ep_return": 8.335112597918961,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 336896,
+    "train/ep_return": 6.1201039112721904,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 337920,
+    "train/ep_return": 7.690072352306567,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 338944,
+    "train/ep_return": 8.239284507039317,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 339968,
+    "train/ep_return": 8.61894354290537,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 340992,
+    "train/ep_return": 7.216260951315263,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 342016,
+    "train/ep_return": 7.660754004779212,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 343040,
+    "train/ep_return": 7.165292273670056,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 344064,
+    "train/ep_return": 8.461383026682997,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 345088,
+    "train/ep_return": 6.8174462634510204,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 346112,
+    "train/ep_return": 7.841793925241251,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 347136,
+    "train/ep_return": 6.861445603731167,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 348160,
+    "train/ep_return": 6.790480809473401,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 349184,
+    "train/ep_return": 7.5155249310908,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 350208,
+    "train/ep_return": 7.366051054656647,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 351232,
+    "train/ep_return": 7.08968646579862,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 352256,
+    "train/ep_return": 9.55849005207344,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 353280,
+    "train/ep_return": 5.841833252430325,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 354304,
+    "train/ep_return": 6.9441163138567505,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 355328,
+    "train/ep_return": 7.814121121600135,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 356352,
+    "train/ep_return": 7.464900281740093,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 357376,
+    "train/ep_return": 8.01541965851105,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.0
+  },
+  {
+    "step": 358400,
+    "train/ep_return": 8.114023060178468,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 359424,
+    "train/ep_return": 8.691789172105377,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.15,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 360448,
+    "train/ep_return": 7.2930728153086095,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 361472,
+    "train/ep_return": 6.363765262917104,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 362496,
+    "train/ep_return": 7.466075640070282,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 363520,
+    "train/ep_return": 6.666318621646587,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 364544,
+    "train/ep_return": 7.34148527137377,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 365568,
+    "train/ep_return": 5.568226049700171,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 366592,
+    "train/ep_return": 7.787680909738391,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 367616,
+    "train/ep_return": 7.021044413995993,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 368640,
+    "train/ep_return": 6.170439510309352,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 369664,
+    "train/ep_return": 7.161179759413645,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 370688,
+    "train/ep_return": 7.688927473412194,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 371712,
+    "train/ep_return": 7.36350127933472,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 372736,
+    "train/ep_return": 9.265560786639536,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 373760,
+    "train/ep_return": 7.139501800659092,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 374784,
+    "train/ep_return": 8.914919640904516,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 375808,
+    "train/ep_return": 8.566008663157508,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 376832,
+    "train/ep_return": 6.964003513989468,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 377856,
+    "train/ep_return": 6.144154849223311,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 378880,
+    "train/ep_return": 9.464054817562522,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 379904,
+    "train/ep_return": 8.261098126280846,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 380928,
+    "train/ep_return": 8.389871283959465,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 381952,
+    "train/ep_return": 7.2690038698284525,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 382976,
+    "train/ep_return": 6.325368154891045,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 384000,
+    "train/ep_return": 7.322255934069238,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.1,
+    "train/wasted": 0.05
+  },
+  {
+    "step": 385024,
+    "train/ep_return": 8.586299417161376,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.1,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 386048,
+    "train/ep_return": 8.839594426586698,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 387072,
+    "train/ep_return": 7.965269895660066,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 388096,
+    "train/ep_return": 7.9603743165625875,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 389120,
+    "train/ep_return": 8.288782699819533,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 390144,
+    "train/ep_return": 7.2452853381523825,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 391168,
+    "train/ep_return": 8.73819124197396,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.1,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 392192,
+    "train/ep_return": 6.829702512479744,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 393216,
+    "train/ep_return": 8.029508889099773,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 394240,
+    "train/ep_return": 9.225203846969169,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 395264,
+    "train/ep_return": 9.394652842378035,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 396288,
+    "train/ep_return": 8.29160701876759,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 397312,
+    "train/ep_return": 9.209116019629967,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 398336,
+    "train/ep_return": 7.761623583364714,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 399360,
+    "train/ep_return": 9.784950951616269,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 400384,
+    "train/ep_return": 6.207867758797329,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 401408,
+    "train/ep_return": 7.362257625095973,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 402432,
+    "train/ep_return": 7.787437717885723,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 403456,
+    "train/ep_return": 7.837803176247658,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 404480,
+    "train/ep_return": 8.634276924072584,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 405504,
+    "train/ep_return": 9.053571362835974,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 406528,
+    "train/ep_return": 9.81192162702501,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 407552,
+    "train/ep_return": 7.80889520591487,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 408576,
+    "train/ep_return": 7.513063261014065,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 409600,
+    "train/ep_return": 7.5129844162897355,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 410624,
+    "train/ep_return": 8.437571729925683,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 411648,
+    "train/ep_return": 9.0190468381516,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 412672,
+    "train/ep_return": 7.654269714048176,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 413696,
+    "train/ep_return": 7.587691788370622,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 414720,
+    "train/ep_return": 9.554125825781473,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 415744,
+    "train/ep_return": 8.691730650698759,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 416768,
+    "train/ep_return": 8.440818834578035,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 417792,
+    "train/ep_return": 7.319647655406962,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 418816,
+    "train/ep_return": 7.215421755231745,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 419840,
+    "train/ep_return": 7.511890668859463,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 420864,
+    "train/ep_return": 8.064039105060568,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 421888,
+    "train/ep_return": 7.662504321611072,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 422912,
+    "train/ep_return": 7.093494449980959,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 423936,
+    "train/ep_return": 7.964827110543617,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 424960,
+    "train/ep_return": 9.158043080476636,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 425984,
+    "train/ep_return": 8.415393343363013,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 427008,
+    "train/ep_return": 7.00632713107367,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 428032,
+    "train/ep_return": 7.44794701330558,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 429056,
+    "train/ep_return": 7.515846398853844,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 430080,
+    "train/ep_return": 7.6446914475136705,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 431104,
+    "train/ep_return": 7.5895912414048095,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.55
+  },
+  {
+    "step": 432128,
+    "train/ep_return": 7.8903132451141005,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 433152,
+    "train/ep_return": 7.5961935028508005,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 434176,
+    "train/ep_return": 7.615811819773003,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.1,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 435200,
+    "train/ep_return": 8.56687151079774,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 436224,
+    "train/ep_return": 7.54208210467363,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 437248,
+    "train/ep_return": 7.127438766910712,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 438272,
+    "train/ep_return": 8.152905990004314,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 439296,
+    "train/ep_return": 8.317121900291804,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 440320,
+    "train/ep_return": 7.565355986226663,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 441344,
+    "train/ep_return": 7.903995725566178,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 442368,
+    "train/ep_return": 8.290010007291595,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 443392,
+    "train/ep_return": 7.1161441397190615,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 444416,
+    "train/ep_return": 6.784983108839626,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 445440,
+    "train/ep_return": 9.190332388487331,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 446464,
+    "train/ep_return": 6.6680709423810285,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 447488,
+    "train/ep_return": 8.16429993861283,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 448512,
+    "train/ep_return": 6.791648196946791,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 449536,
+    "train/ep_return": 7.867371190144006,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 450560,
+    "train/ep_return": 6.714728846167928,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 451584,
+    "train/ep_return": 7.486755164922859,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 452608,
+    "train/ep_return": 7.81494711812731,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 453632,
+    "train/ep_return": 6.991091561068326,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 454656,
+    "train/ep_return": 8.26467829517405,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.25,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 455680,
+    "train/ep_return": 7.863792267777795,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 456704,
+    "train/ep_return": 6.567519935459364,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 457728,
+    "train/ep_return": 7.092428304666344,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 458752,
+    "train/ep_return": 7.143044895692003,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 459776,
+    "train/ep_return": 6.52609761283369,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 460800,
+    "train/ep_return": 7.8720583201483105,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 461824,
+    "train/ep_return": 8.288106986760098,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 462848,
+    "train/ep_return": 8.439801978490937,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 463872,
+    "train/ep_return": 7.794418480214712,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 464896,
+    "train/ep_return": 8.139677253360292,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 465920,
+    "train/ep_return": 6.83825471044121,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 466944,
+    "train/ep_return": 7.016850755012821,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 467968,
+    "train/ep_return": 7.443717573544491,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 468992,
+    "train/ep_return": 7.337271917709214,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 470016,
+    "train/ep_return": 8.441453924836221,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.1,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 471040,
+    "train/ep_return": 7.140465008848591,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.2,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 472064,
+    "train/ep_return": 7.886841021846924,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 473088,
+    "train/ep_return": 7.040630484372022,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 474112,
+    "train/ep_return": 7.640984369528653,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.45
+  },
+  {
+    "step": 475136,
+    "train/ep_return": 8.162605796193805,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 476160,
+    "train/ep_return": 6.488373437249365,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.3,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 477184,
+    "train/ep_return": 6.789136933844183,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.15
+  },
+  {
+    "step": 478208,
+    "train/ep_return": 7.390254207888022,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 479232,
+    "train/ep_return": 7.188570348149753,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 480256,
+    "train/ep_return": 7.214442185522046,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.2
+  },
+  {
+    "step": 481280,
+    "train/ep_return": 6.576934120602888,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 482304,
+    "train/ep_return": 7.338453592230605,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.55,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 483328,
+    "train/ep_return": 6.293488421777796,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 484352,
+    "train/ep_return": 7.766164515079252,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 485376,
+    "train/ep_return": 7.5784362716367415,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 486400,
+    "train/ep_return": 6.911501633411774,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.35,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 487424,
+    "train/ep_return": 7.861167398316074,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.1,
+    "train/wasted": 0.5
+  },
+  {
+    "step": 488448,
+    "train/ep_return": 6.5371399231497875,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 489472,
+    "train/ep_return": 7.189789393848511,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.7,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 490496,
+    "train/ep_return": 7.413093853436424,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 491520,
+    "train/ep_return": 6.740461046316769,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.35
+  },
+  {
+    "step": 492544,
+    "train/ep_return": 7.340776203572854,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.4
+  },
+  {
+    "step": 493568,
+    "train/ep_return": 7.29076296800215,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 494592,
+    "train/ep_return": 6.66623903813544,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.5,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 495616,
+    "train/ep_return": 8.120621553917648,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.25
+  },
+  {
+    "step": 496640,
+    "train/ep_return": 7.563308311533477,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.65,
+    "train/wasted": 0.1
+  },
+  {
+    "step": 497664,
+    "train/ep_return": 7.390164874617062,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.45,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 498688,
+    "train/ep_return": 8.987037092767341,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.4,
+    "train/wasted": 0.3
+  },
+  {
+    "step": 499712,
+    "train/ep_return": 6.912837233000087,
+    "train/captured_rate": 0.0,
+    "train/penetrated_rate": 0.6,
+    "train/wasted": 0.25
+  }
+]
