@@ -300,6 +300,16 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-07 (t) — 리뷰 지침 채택: 프레이밍 교정 + M3 설계 3대 요건 + 서버 증거-잠금 스크립트 준비
+
+> P4 (s) 결과에 대한 리뷰어 지침 접수·채택. **프레이밍 교정: "M2 계약 무죄" → "feasibility 무죄, findability 유죄"** — M2 계약은 clean을 불가능하게 만들지 않았으나 clean 학습에 부적합한 reward topology(boxed·clean headline 등가 + 면도날 창)를 만든다. 논문 배치 = failure analysis/design diagnosis(리뷰어 제공 영문 문단 verbatim 채택). **L2 추가 학습 금지 — 서버 lane은 진단만.**
+
+- **서버 증거-잠금 스크립트 = `shepherd/scripts/p4_fire_geometry.py`(torch·서버 전용):** fire-모드 4본(mappo/coma × s7/s8, best-ckpt)을 nominal env에 10판 롤아웃, **fire_event 시점**의 ① env 게이트 실측값(v_soft·worst·p_feas·boxed·clean) ② pre-move 기하 스냅샷 ③ **radial 섭동 스윕**(리미터를 공격자 탄도축에서 δ∈[−0.2,+1.0] m 방사 이동) → δ_to_unboxed·δ_to_clean 부호거리. 기대 = "learned fire-mode sits in the adjacent boxed basin, not near the razor-thin clean basin" 문장 확보.
+- **M3 설계 3대 요건(리뷰 채택, 설계 착수 시 반영):** **(A) boxed·clean headline 등가 제거** — boxed 시 v:=1.0을 그대로 headline으로 쓰지 말 것; `v_effective = v_soft·I(¬boxed)` 또는 `v_soft·σ(clean_margin/τ)`형 clean-호환 viability 분리(패널티 소량 부과로는 부족 가능). **(B) clean-근접 셰이핑** — 5~20 cm 창은 binary λ1로 못 찾음; signed clean-margin 보상 + "too loose / just right(clean capture-grade) / too tight(boxed)" 3분해로 **역-U형 기하 보상**(현행 단조 조임 보상이 over-compress→boxed의 원인). **(C) 커리큘럼 = 탐색 scaffolding 전용** — 학습 중 채널 폭 완화(θ·tolerance)→복원, **eval은 반드시 frozen 상수**, curriculum 성공을 main claim으로 쓰지 않음(3-스테이지: wide-clean → transition → final frozen).
+- **함정 3종(기록):** ① boxed penalty만으론 headline farming 지속 가능 ② sparse clean bonus는 재실패 ③ **compress→release 2단 행동 필요 가능성** — clean capture는 "압축 → finisher 정렬 → clean 채널 하나 열어주기(release) → 발사"일 공산; 현 L2는 compress→over-compress→boxed. limiter의 "비켜서기"가 학습 가능해야 함(중요 발견 후보).
+- 우선순위 재확인: 서버 진단(학습 아님) → **M3 설계**(A·B·C 필수 반영) → P3(L2 방어용, 그 다음) → P2 optional.
+
+
 ### 2026-07-07 (s) — ✅ P4 분석 lane: clean-fire reachable set **실존 확인** (capture-grade 포함) — 벽의 정체 = "면도날 창 옆의 뚱뚱한 boxed 분지"
 
 > 리뷰 v2 체크리스트 ④(θ_fire=0.9 ∧ clean 동시 만족 reachable set 실존?)를 frozen 상수 그대로 수치 프로브로 판정. **답: 실존 — 4/4 대표 상태(x∈{12,16,20}, v∈{16,20,24}, union seed 0·1)에서 v_soft=1.0 ∧ ¬boxed 구성 발견, 전부 v_shot_worst=1.0(= capture-grade: 모든 feasible 도주가 그물 콘 안).** 도구 = `shepherd/scripts/p4_clean_probe.py`(numpy-only; 링 그리드 + 12-dim 랜덤 탐색 + 국소 정련), 증거 = `results/p4_probe/probe_*.json`.
