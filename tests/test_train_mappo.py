@@ -176,7 +176,12 @@ def test_coma_advantages_math():
 
 
 def test_coma_mix_zero_is_exact_2c():
-    # with coma_mix=0 the coma_D contents must be COMPLETELY ignored
+    # with coma_mix=0 the coma_D contents must be COMPLETELY ignored.
+    # Bit-exactness claim -> pin to ONE thread: threaded CPU matmul reduction
+    # order is run-to-run nondeterministic (~1e-6 jitter on limiter/policy_loss,
+    # first observed on the lab server 2026-07-07; the mix=0 short-circuit in
+    # MAPPOTrainer.update `if cfg.coma_mix > 0.0` is itself exact).
+    torch.set_num_threads(1)
     torch.manual_seed(7)
     tr_a = MAPPOTrainer(OBS, N, _cfg(coma_mix=0.0))
     torch.manual_seed(7)
@@ -213,7 +218,13 @@ def test_runner_coma_writeback_smoke():
     torch.manual_seed(9)
     with open("configs/m2_l2_train.yaml") as f:
         env_cfg = yaml.safe_load(f)
-    cfg = _run_cfg(rollout=8)
+    # rollout must span an ENGAGEMENT window: the analytic D is EXACTLY 0.0
+    # until the attacker's tau-reachable set overlaps a limiter kill sphere
+    # (~15-20 steps from spawn at family speeds) AND the limiters have drifted
+    # off their hold positions p0 (at spawn full==hold layout => D==0).
+    # rollout=8 can NEVER satisfy the nonzero assert (latent defect, first
+    # server execution 2026-07-07); 64 covers >=2 engagement windows.
+    cfg = _run_cfg(rollout=64)
     cfg["mappo"]["coma_mix"] = 1.0
     runner = MAPPORunner(env_cfg, cfg, seed=0, device="cpu")
     runner.collect_rollout()

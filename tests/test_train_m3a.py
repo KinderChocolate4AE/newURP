@@ -94,12 +94,17 @@ def test_warm_start_loads_weights_and_norm(tmp_path):
     src.save(tmp_path, tag="best")
 
     dst = M3ARunner(env_cfg, run_cfg, seed=2, device="cpu")
-    p_src = next(src.tr.lim_actor.parameters()).detach().clone()
-    p_dst_before = next(dst.tr.lim_actor.parameters()).detach().clone()
-    assert not torch.allclose(p_src, p_dst_before)      # different seeds
+
+    def _w(runner):
+        # first WEIGHT matrix -- next(parameters()) is log_std, which is
+        # 0-initialized for every seed (server-caught test defect 2026-07-07)
+        return next(p for p in runner.tr.lim_actor.parameters()
+                    if p.dim() >= 2).detach().clone()
+
+    w_src = _w(src)
+    assert not torch.allclose(w_src, _w(dst))           # different init draws
     meta = load_warm(dst, tmp_path, "best", "cpu")
-    p_dst_after = next(dst.tr.lim_actor.parameters()).detach()
-    assert torch.allclose(p_src, p_dst_after)
+    assert torch.allclose(w_src, _w(dst))
     assert meta["optimizer"] == "fresh" and len(meta["warm_ckpt_sha256_12"]) == 12
     assert dst.norm.state_dict() == src.norm.state_dict()
 

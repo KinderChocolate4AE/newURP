@@ -310,6 +310,8 @@ jobs:
 > ⑤ `shepherd/scripts/eval_heldout_m3.py` — P1 held-out CRN 하네스(77M+i, 200판, 학습 seed 서로소 유지)의 M3-frozen판(fire-체인 포함; Gate A/B 입력). ⑥ `shepherd/scripts/analyze_m3a_playin.py` — 결선 선택규칙 **① clean ② boxed_fire ③ heldout clean ④ 동률 시 scratch** 사전등록 구현(`decide_playin`, tie-eps 0.02 = 사전등록 선택, 테스트 lock).
 > 테스트 **+27**(t-free 21 / torch 6) → 수집 t-free 132 **전부 green(샌드박스 실측)** + torch 41(서버 몫). frozen 4종 + 기존 전 파일 diff 0(git status로 확인).
 
+- **(w-1) 서버 torch 1차 실행 결과(2026-07-07): 169 pass / 3 fail — 全 3건 테스트 결함, 코드 무죄(수정 커밋 본 항목).** ① `test_warm_start_loads_weights_and_norm`(신규) — `next(parameters())`가 log_std(전 seed 0-초기화)라 "seed 다름" 비교가 항상 동일 → 첫 weight 행렬 비교로 수정. ② `test_coma_mix_zero_is_exact_2c`(2D 유산, **서버 첫 실행**) — mix=0 단락(`if coma_mix > 0.0`)은 코드상 정확하나, 멀티스레드 CPU matmul 리덕션 순서 비결정으로 ~1e-6 지터 → `torch.set_num_threads(1)` 핀. ③ `test_runner_coma_writeback_smoke`(2D 유산, 서버 첫 실행) — rollout=8은 공격자 τ-도달집합이 kill 구체에 닿기 전(엔게이지 ~15–20스텝, 스폰 시 full==hold라 D≡0)이라 전제 불충족 → rollout=64. 교훈: torch 테스트는 "수집"만으로 green 간주 금지 — 2C/2D 유산분 서버 실측은 이번이 최초.
+
 - **다음(서버, Hyunjun):** ⓐ push 후 torch 테스트 41 green 확인 ⓑ warm ckpt 경로/seed 확인 ⓒ **결선 3+3**: `TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_s1_scratch.yaml OUT=results/m3a_playin/scratch REQUIRED_COMMIT=<본 커밋> bash scripts/run_ippo_seeds_parallel.sh` + warm 동형(SEEDS "0 1 2", GPU 분리 권장) ⓓ (병행 가능) o* 스윕 {3e-4,3e-3} × 1~2 seed = `--o-star` ⓔ 결선 후 `analyze_m3a_playin`(+선택: `eval_heldout_m3`로 규칙③ 입력) → 본선 arm 확정. **본선(10-seed S1→S3) 전 잔여 도구 1건**: Gate A/paper-grade용 seed-군집 bootstrap 하한 스크립트(analyze_p1 계열, clean_cross/capture 대상) — 캠페인 시작 전 커밋해 사전등록 유지 예정.
 
 ### 2026-07-07 (v) — M3a 설계 조건부 비준 → v0.2 확정, 구현 착수 승인
