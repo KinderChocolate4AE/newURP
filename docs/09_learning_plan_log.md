@@ -312,6 +312,8 @@ jobs:
 
 - **(w-1) 서버 torch 1차 실행 결과(2026-07-07): 169 pass / 3 fail — 全 3건 테스트 결함, 코드 무죄(수정 커밋 본 항목).** ① `test_warm_start_loads_weights_and_norm`(신규) — `next(parameters())`가 log_std(전 seed 0-초기화)라 "seed 다름" 비교가 항상 동일 → 첫 weight 행렬 비교로 수정. ② `test_coma_mix_zero_is_exact_2c`(2D 유산, **서버 첫 실행**) — mix=0 단락(`if coma_mix > 0.0`)은 코드상 정확하나, 멀티스레드 CPU matmul 리덕션 순서 비결정으로 ~1e-6 지터 → `torch.set_num_threads(1)` 핀. ③ `test_runner_coma_writeback_smoke`(2D 유산, 서버 첫 실행) — rollout=8은 공격자 τ-도달집합이 kill 구체에 닿기 전(엔게이지 ~15–20스텝, 스폰 시 full==hold라 D≡0)이라 전제 불충족 → rollout=64. 교훈: torch 테스트는 "수집"만으로 green 간주 금지 — 2C/2D 유산분 서버 실측은 이번이 최초.
 
+- **(w-2) (w-1) 진단 2건 정정 — 서버 재실행이 비트-동일 실패값을 반환(지터 가설 반증):** ② 진짜 원인 = `_fill`이 torch **전역 RNG**로 액션 샘플 → buf_b가 buf_a fill 이후 상태에서 시작(obs만 numpy라 기존 전제조건이 오도 통과) → 각 fill 전 재시드 + 액션 블록 동일성 전제 추가(스레드 핀은 유지). ③ 진짜 원인 = **지오메트리**: nominal 링이 축에서 5 m·kill 2 m라 랜덤 정책으론 어떤 horizon에도 마스크가 안 물림(D≡0) → 테스트-전용 엔게이지 강제(ring_radius 1.5·spawn x 14·랜덤화 off), numpy 복제 검증 = 64스텝 중 21스텝 D≠0(|D|max 1.0, 최초 44). 교훈: 결정론적 실패(값 재현)는 지터 가설 즉시 기각 근거.
+
 - **다음(서버, Hyunjun):** ⓐ push 후 torch 테스트 41 green 확인 ⓑ warm ckpt 경로/seed 확인 ⓒ **결선 3+3**: `TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_s1_scratch.yaml OUT=results/m3a_playin/scratch REQUIRED_COMMIT=<본 커밋> bash scripts/run_ippo_seeds_parallel.sh` + warm 동형(SEEDS "0 1 2", GPU 분리 권장) ⓓ (병행 가능) o* 스윕 {3e-4,3e-3} × 1~2 seed = `--o-star` ⓔ 결선 후 `analyze_m3a_playin`(+선택: `eval_heldout_m3`로 규칙③ 입력) → 본선 arm 확정. **본선(10-seed S1→S3) 전 잔여 도구 1건**: Gate A/paper-grade용 seed-군집 bootstrap 하한 스크립트(analyze_p1 계열, clean_cross/capture 대상) — 캠페인 시작 전 커밋해 사전등록 유지 예정.
 
 ### 2026-07-07 (v) — M3a 설계 조건부 비준 → v0.2 확정, 구현 착수 승인
