@@ -1,0 +1,80 @@
+# M3a FULL staged run -- S1->S2->S3, 10-seed final campaign (docs/11 SS3 본선).
+# WARM arm selected by the play-in (decision.json, rule 2: boxed_fire warm 0.0 <
+# scratch 0.111). Warm-start = mix-0.5 L2 best ckpt (coma_run2/seed1); each of the
+# 10 seeds warm-starts from the SAME L2 ckpt, then trains through the staged
+# curriculum. NO --o-star here (staged); judgment o*=1e-3 is frozen. eval is
+# ALWAYS frozen constants; the gate is post-hoc: eval_heldout_m3 -> analyze_gate_a.
+#
+# Launch (server, tmux; run in waves if cores are tight -- 10 seeds x (1 env + 2
+# BLAS) ~= 30 cores):
+#   TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_full_staged.yaml \
+#     OUT=results/m3a_full REQUIRED_COMMIT=5249ece GPU=0 SEEDS="0 1 2 3 4" \
+#     bash scripts/run_ippo_seeds_parallel.sh
+#   # wave 2:  GPU=1 SEEDS="5 6 7 8 9" ... (or after wave 1 finishes)
+# Confirm results/coma_run2/seed1/ckpt_mappo_best.pt exists before launch.
+
+env_config: configs/m2_l2_train.yaml   # FROZEN scenario (never edited)
+
+m3:                             # judgment/frozen reward params (docs/11 SS1/SS2)
+  o_star: 1.0e-3                # P4-measured feasibility ridge (frozen judgment)
+  sigma_g: 1.0                  # inverted-U width in ln o (frozen/judgment)
+  w_h: 1.0                      # signed headline_M3 weight
+  w_g: 0.3                      # r_geo_step JUDGMENT weight; S1/S2 scaffold -> 1.0
+  w_gf: 1.0                     # r_geo_fire (commit-time) weight
+  lambda_cap: 5.0               # capture bonus (l1/l2/l3 from frozen scenario)
+  v_eff_mode: hard              # MAIN; smooth = ablation knob ONLY
+  o_hi_release: 1.0e-2          # release_event upper bound (fire-chain logging)
+
+curriculum:                     # docs/11 SS2 -- STAGED (S1 wide -> S2 ramp -> S3 frozen)
+  mode: staged
+  s1: {half_angle: 0.20, theta_fire: 0.8, sigma_g: 2.0, w_g: 1.0}
+  s1_min_steps: 100000
+  s1_exit: {clean_cross_min: 0.2, boxed_fire_max: 0.5, sustain_evals: 3}
+  s2_steps: 150000              # linear restore duration -> frozen 0.067/0.9/1.0
+  s2_exit: {heldout_clean_nonzero_last: 3}
+
+warm_start:
+  enabled: true                 # WARM arm (play-in winner)
+  ckpt_dir: results/coma_run2/seed1   # P1 top L2 seed (play-in WARM source)
+  tag: best
+
+loop:                           # recipe-v2; 500k covers S1(>=100k)+S2(150k)+S3
+  total_env_steps: 500000       # bump to 750k-1M if S3 needs more judgment budget
+  rollout_env_steps: 1024
+  eval_interval_updates: 20
+  eval_episodes: 20
+  save_interval_updates: 20
+  lr_anneal: linear
+  lr_anneal_floor: 0.1
+
+mappo:                          # identical to l2_coma_mix05.yaml (P1 main recipe)
+  gamma: 0.99
+  lam: 0.95
+  lr: 3.0e-4
+  epochs: 10
+  minibatch_size: 256
+  clip_eps: 0.2
+  ent_coef_limiter: 0.0
+  ent_coef_finisher: 0.003
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  target_kl: 0.02
+  hidden_sizes: [128, 128]
+  init_log_std: 0.0
+  ortho_init: true
+  value_norm: true
+  coma_mix: 0.5                 # P1-ratified main recipe
+  coma_gamma: 0.99
+  coma_lam: 0.95
+
+randomize:                      # attacker family (train only; eval nominal)
+  enabled: true
+  att_speed: [16.0, 24.0]
+  adversary_start_x: [20.0, 28.0]
+  adversary_omega: [8.0, 12.0]
+  adv_a_max: [21.0, 30.0]
+
+wandb:
+  enabled: true
+  project: newurp-l2
+  group: m3a-full

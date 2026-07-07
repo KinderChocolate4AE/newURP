@@ -300,6 +300,14 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-07 (x) — ✅ M3a play-in 완료 → WARM arm 선택 (rule 2); 본선 staged config + Gate-A 하네스 준비
+
+- **Play-in 판정 (`5249ece`, s1_only 200k × {warm,scratch} × 3-seed):** `analyze_m3a_playin` → rule 1(frozen clean_cross) 0.0=0.0 동률 → **rule 2(boxed_fire) warm 0.0 < scratch 0.111 → WARM** (사전등록 tie-eps 0.02, decided_by_rule=2; diagnostic sel_score −0.014 vs −0.079). `results/m3a_playin/decision.json`.
+- **캐비앗(중요):** 양 arm 모두 **frozen clean=0·capture=0**, 반면 S1-scaffold train clean=1.0·capture_count ~37850/34822. **정상** — s1_only는 S2 anneal 미수행이라 frozen 전이 압력 0. play-in = "초기 정책 선택"만; **Gate A/B(clean-unlock·capture existence)는 전부 본선 frozen held-out 판정 몫**(37k = 넓은 콘 캡처, capture-unlock 아님).
+- **관찰:** warm이 scratch보다 덜 boxed(0 vs 0.111) → 사전등록 rule-4(warm의 L2 boxed-분지 상속 우려로 동률 시 scratch 우선) 우려가 데이터로 반증. ⚠ warm boxed_fire=0이 "깨끗해서"인지 "발사를 덜 해서"인지는 summary `fire_rate` 확인 필요.
+- **본선 준비물(신규 2, 코드 변경 0):** ① `configs/m3a_full_staged.yaml` = warm-start(coma_run2/seed1)·`mode: staged`·500k·10-seed·**`--o-star` 미사용**. ② `shepherd/scripts/analyze_gate_a.py` = clean_cross_rate seed-cluster one-sided 95% 하한>0(Gate A) + capture existence(Gate B) + strong/paper-grade tier; analyze_p1 부트스트랩(B=10k·rng7) 재사용. train_m3a의 s1_only 가드는 `--o-star` 한정이라 staged 무관(확인 완료).
+- **다음:** 본선 staged 10-seed(코어 여유 없으면 웨이브) → `eval_heldout_m3`(77M CRN)로 각 seed best-ckpt held-out → `analyze_gate_a` Gate 판정 → (Gate A PASS ∧ capture≥2 seeds면) M3b(S9 raid) 진입. o* 스윕은 S1이 이미 clean=1.0 자명 해결이라 저가치 → optional.
+
 ### 2026-07-07 (w) — M3a 구현 완료: env 변형 + 커리큘럼 트레이너 + 결선·판정 도구 — 서버 결선(3+3 S1 200k) 대기
 
 > docs/11 v0.2 전 조항 코드화. **frozen 계약 무변경(기존 파일 수정 0, 신규 9파일).**
