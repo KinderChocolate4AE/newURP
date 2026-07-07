@@ -300,6 +300,16 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-07 (u) — ✅ P4 서버 증거-잠금 완료: 40/40 발사 = boxed 분지 심부 — "release 채널" 필요성 실측 확보
+
+> `p4_fire_geometry.py` 실측(4 정책 × 10판, nominal·fresh CRN 85M+): **fire_event 40/40에서 δ=0 boxed(n_open=0, 게이트 실측 v=1.000·clean=False)**. 방사 완화 스윕: **d_clean = None 전원**(+1.0 m까지 clean 부재), d_unbox = mappo_s7 >1.0 m / mappo_s8·coma_s7 +0.85~1.0 m / coma_s8 +0.2~0.25 m. 증거 = `results/p4_probe/fire_geom_*.json`.
+
+- **잠긴 문장:** "Learned fire-mode policies sit **deep inside** the adjacent boxed basin, not near the razor-thin clean window; no clean configuration exists within +1.0 m of purely radial relaxation of their fire-moment geometry."
+- **핵심 함의(설계 요건 B·함정 ③의 실측 근거):** clean은 "덜 조인" 상태가 아니라 **비-방사(축 정렬 채널) 형상** — 단순 완화 학습 신호로는 도달 불가, **compress→release 2단 행동**이 데이터로 지지됨. (s)의 (t) 예상("unbox +O(10cm)")보다 강한 결과 — 정책들은 창 옆이 아니라 분지 바닥에 있음.
+- 서술적 노트: coma(blended) 정책이 mappo보다 얕게 조임(unbox 0.2 vs >1.0 m) — 과압축 경향 차이, n=2/2라 descriptive만.
+- **P4 종결.** 다음 = M3 설계(요건 A·B·C + release 행동 지원).
+
+
 ### 2026-07-07 (t) — 리뷰 지침 채택: 프레이밍 교정 + M3 설계 3대 요건 + 서버 증거-잠금 스크립트 준비
 
 > P4 (s) 결과에 대한 리뷰어 지침 접수·채택. **프레이밍 교정: "M2 계약 무죄" → "feasibility 무죄, findability 유죄"** — M2 계약은 clean을 불가능하게 만들지 않았으나 clean 학습에 부적합한 reward topology(boxed·clean headline 등가 + 면도날 창)를 만든다. 논문 배치 = failure analysis/design diagnosis(리뷰어 제공 영문 문단 verbatim 채택). **L2 추가 학습 금지 — 서버 lane은 진단만.**
