@@ -300,6 +300,17 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-07 (s) — ✅ P4 분석 lane: clean-fire reachable set **실존 확인** (capture-grade 포함) — 벽의 정체 = "면도날 창 옆의 뚱뚱한 boxed 분지"
+
+> 리뷰 v2 체크리스트 ④(θ_fire=0.9 ∧ clean 동시 만족 reachable set 실존?)를 frozen 상수 그대로 수치 프로브로 판정. **답: 실존 — 4/4 대표 상태(x∈{12,16,20}, v∈{16,20,24}, union seed 0·1)에서 v_soft=1.0 ∧ ¬boxed 구성 발견, 전부 v_shot_worst=1.0(= capture-grade: 모든 feasible 도주가 그물 콘 안).** 도구 = `shepherd/scripts/p4_clean_probe.py`(numpy-only; 링 그리드 + 12-dim 랜덤 탐색 + 국소 정련), 증거 = `results/p4_probe/probe_*.json`.
+
+- **단, 창이 면도날임:** 링-가족 그리드에서 clean 창 폭 = **ρ 방향 0.05~0.20 m**(항상 ρ≈kill_radius 2.0 부근, c=0.75), 정련 최적점의 p_feasible = **0.0004~0.0024**(2504 witness 중 1~6개만 도주 가능, 그 전부가 콘 안). 정련 기하 = 탄도 튜브를 ~2 m에서 감싸는 어긋난 나선형 4기 — cm급 협응 요구.
+- **체크리스트 답변:** ① boxed 판정 과보수 아님(clean 구성과 명확 분리) — 진짜 범인은 **boxed 시 v_soft:=1.0 연속성 선택** → ⑥ **확인: 포위가 clean과 headline이 동일**(잘 조여 boxed로 떨어져도 보상 손해 0; clean의 추가 이득 = λ1/step + capture인데 탐색이 그 영역을 못 밟음). ② clean 정의 vs capture 기하 정합(capture-grade가 clean 창 내부에 존재). ③ "잘 조일수록 boxed" 정량화: 창에서 ρ 5~20 cm만 좁혀도 boxed 분지 — **뚱뚱한 boxed 분지 바로 옆에 붙은 hairline**. ⑤ λ1 관측성: 자연 구성공간에서 clean 영역 측도 ~10⁻³ → 무유도 탐색으로 사실상 관측 불가.
+- **결론(리뷰 v2의 M3-전-필수 질문에 대한 답):** clean 0은 **계약의 구조적 불가능이 아니라 발견가능성(findability) 문제.** M2 동결 계약은 무죄 — M3 설계 입력: (a) clean 채널을 넓히는 커리큘럼(net_radius/half_angle/θ 스케줄 후 복원) (b) clean-근접 potential 셰이핑 또는 lobe-open 기하 prior (c) M3 보상 설계에서 boxed의 v:=1.0 headline 등가 재고(동결 아님 — M3는 신규 env). 추가 보너스: clean 구성은 공격자가 kill-radius에 안 들어가므로 **λ3 손실비용도 0** — clean이 boxed보다 전 항목에서 우월한데 오직 못 찾을 뿐.
+- **캐비앗:** 정적 스냅샷 분석(리미터 순간 배치 가정 — 도달 동역학·공격자 closed-loop 반응 미포함), 링-가족+국소탐색(실존 증명이지 전수 지도 아님), 대표 상태 4점.
+- **후속(서버 lane, 선택):** fire-모드 정책 4본(s7·s8×2arm)의 발사 시점 p_feasible/기하 측정 → "boxed 분지에 앉아 있음" 실측 확인(스크립트는 eval_heldout 확장으로 소품).
+
+
 ### 2026-07-07 (r) — 피어리뷰 v2 접수: "L2 게이트 PASS 방어 가능" — 클레임 문구 확정·우선순위 개편(P4 선행)·보조 통계 완비
 
 > 전문 = `ANDES/URP/gpt_peer_review_L2_v2_2026-07-07.md`. 판정: **게이트 PASS 외부 확인**(scope 한정어 "under the frozen L2 scenario and reward contract" 필수), paired 분리 = "frozen setting 한정 blended > shared-only" defendable, 기전·일반화·capture = 여전히 open. 발사 모드 = main 아님·**중요 diagnostic**(제공 문구 채택).
