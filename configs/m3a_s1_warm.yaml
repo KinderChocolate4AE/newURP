@@ -1,0 +1,90 @@
+# M3a S1 play-in -- WARM arm (docs/11 SS3: warm vs scratch, 3-seed x S1-only
+# 200k; pre-registered selection rule applied offline by analyze_m3a_playin).
+#
+# WARM = mix-0.5 L2 best checkpoint (P1 campaign top seed: coma_run2/seed1,
+# heldout +16.67 -- CONFIRM path/seed on the server before launch). Loads
+# actor/critic/value-norm weights + frozen obs-norm; FRESH optimizer
+# (train_m3a.load_warm). obs stays 63-dim -> shape-compatible by design.
+#
+# Recipe = P1-confirmed main recipe: blended coma_mix 0.5 + recipe-v2 loop
+# (l2_coma_mix05.yaml), on the M3a capture-unlock env (shepherd/env_m3.py).
+# The `m3:` block below carries the JUDGMENT (S3-form) reward constants; the
+# S1 scaffold (curriculum.s1) raises w_g/sigma_g and widens the cone for the
+# TRAIN env only -- eval is ALWAYS frozen constants (docs/11 SS2).
+#
+#   TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_s1_warm.yaml \
+#       OUT=results/m3a_playin/warm REQUIRED_COMMIT=<m3a commit> \
+#       bash scripts/run_ippo_seeds_parallel.sh
+#   # o* sweep (S1-limited scaffold selection, docs/11 SS2):
+#   python -m shepherd.scripts.train_m3a --config configs/m3a_s1_scratch.yaml \
+#       --o-star 3e-4 --seed 0 --output results/m3a_ostar/o3e-4
+
+env_config: configs/m2_l2_train.yaml   # FROZEN scenario (never edited)
+
+m3:                             # judgment/frozen reward params (docs/11 SS1/SS2)
+  o_star: 1.0e-3                # P4-measured feasibility ridge (docs/09 (s));
+                                # S1-only sweep {3e-4, 1e-3, 3e-3} via --o-star
+  sigma_g: 1.0                  # inverted-U width in ln o (frozen/judgment)
+  w_h: 1.0                      # signed headline_M3 weight (docs/11 SS1 run-1)
+  w_g: 0.3                      # r_geo_step JUDGMENT weight (S3 row, docs/11 SS2);
+                                # S1/S2 train scaffold overrides to 1.0 below
+  w_gf: 1.0                     # r_geo_fire (commit-time) weight
+  lambda_cap: 5.0               # capture bonus (l1/l2/l3 come from the frozen
+                                # scenario reward block -- single source of truth)
+  v_eff_mode: hard              # MAIN (docs/11 SS1); smooth = ablation knob ONLY
+  o_hi_release: 1.0e-2          # release_event upper bound (fire-chain logging)
+
+curriculum:                     # docs/11 SS2 (scaffolding ONLY; eval frozen)
+  mode: s1_only                 # play-in pins S1 for the whole 200k
+  s1: {half_angle: 0.20, theta_fire: 0.8, sigma_g: 2.0, w_g: 1.0}
+  # staged-mode keys (full S1->S3 run flips mode: staged + total 500k+):
+  s1_min_steps: 100000
+  s1_exit: {clean_cross_min: 0.2, boxed_fire_max: 0.5, sustain_evals: 3}
+  s2_steps: 150000              # linear restore duration -> frozen 0.067/0.9/1.0
+  s2_exit: {heldout_clean_nonzero_last: 3}
+
+warm_start:
+  enabled: true                 # WARM arm
+  ckpt_dir: results/coma_run2/seed1   # P1 top seed (CONFIRM before launch)
+  tag: best
+
+loop:                           # recipe-v2 (docs/09 (m)), play-in horizon
+  total_env_steps: 200000
+  rollout_env_steps: 1024
+  eval_interval_updates: 20
+  eval_episodes: 20
+  save_interval_updates: 20
+  lr_anneal: linear
+  lr_anneal_floor: 0.1
+
+mappo:                          # identical to l2_coma_mix05.yaml (P1 main recipe)
+  gamma: 0.99
+  lam: 0.95
+  lr: 3.0e-4
+  epochs: 10
+  minibatch_size: 256
+  clip_eps: 0.2
+  ent_coef_limiter: 0.0
+  ent_coef_finisher: 0.003
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  target_kl: 0.02
+  hidden_sizes: [128, 128]
+  init_log_std: 0.0
+  ortho_init: true
+  value_norm: true
+  coma_mix: 0.5                 # P1-ratified main recipe (docs/09 (q))
+  coma_gamma: 0.99
+  coma_lam: 0.95
+
+randomize:                      # attacker family (train only; docs/09 SS7)
+  enabled: true
+  att_speed: [16.0, 24.0]
+  adversary_start_x: [20.0, 28.0]
+  adversary_omega: [8.0, 12.0]
+  adv_a_max: [21.0, 30.0]
+
+wandb:
+  enabled: true
+  project: newurp-l2
+  group: m3a-playin
