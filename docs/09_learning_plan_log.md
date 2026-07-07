@@ -300,6 +300,13 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-07 (v) — M3a 설계 조건부 비준 → v0.2 확정, 구현 착수 승인
+
+> 리뷰어 조건부 비준 + Hyunjun 승인. `docs/11_m3_design.md` v0.2 = 수정 4건 반영: ① **headline signed 불변식**(음수 유지·positive-only 클리핑 금지; Δ 의미 = M2-일관 hold-대비 level형으로 확정, 시간차형·smooth v_eff = ablation 노브) ② **o* 스윕 = S1-한정 scaffold 선택**(선택지표 = S1 train-eval 지표만, frozen held-out은 monitoring only) ③ **S1/S2 종료조건 강화**(S1: clean>0.2 ∧ boxed_fire<0.5 ∧ fire>0 / S2: frozen 도달 ∧ frozen-heldout clean 비영) + 웜스타트 결선 규칙(clean→boxed_fire→frozen clean→**동률 시 scratch**) ④ **판정 tier**(Gate A clean 하한>0 / Gate B capture existence / strong ≥2 seeds or ≥1% / paper-grade 하한>0) + M3b 진입조건(Gate A ∧ capture ≥2 seeds). fire-체인 분해 로깅 필수 목록(release_event·boxed_dwell 포함), r_geo step/fire 분리 + 게이밍 폴백(w_g→0.3~0.5), near-capture 보조항 = 2차 처방 예약.
+
+- 다음 = **M3a 구현**: env 변형(m3 config + reward 모듈 + o/boxed obs) → 테스트(레벨형 signed headline lock·boxed→0 lock·역-U 형상) → 웜스타트 결선 3+3-seed(S1 200k, 서버).
+
+
 ### 2026-07-07 (u) — ✅ P4 서버 증거-잠금 완료: 40/40 발사 = boxed 분지 심부 — "release 채널" 필요성 실측 확보
 
 > `p4_fire_geometry.py` 실측(4 정책 × 10판, nominal·fresh CRN 85M+): **fire_event 40/40에서 δ=0 boxed(n_open=0, 게이트 실측 v=1.000·clean=False)**. 방사 완화 스윕: **d_clean = None 전원**(+1.0 m까지 clean 부재), d_unbox = mappo_s7 >1.0 m / mappo_s8·coma_s7 +0.85~1.0 m / coma_s8 +0.2~0.25 m. 증거 = `results/p4_probe/fire_geom_*.json`.
