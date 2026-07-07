@@ -300,6 +300,17 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-07 (r) — 피어리뷰 v2 접수: "L2 게이트 PASS 방어 가능" — 클레임 문구 확정·우선순위 개편(P4 선행)·보조 통계 완비
+
+> 전문 = `ANDES/URP/gpt_peer_review_L2_v2_2026-07-07.md`. 판정: **게이트 PASS 외부 확인**(scope 한정어 "under the frozen L2 scenario and reward contract" 필수), paired 분리 = "frozen setting 한정 blended > shared-only" defendable, 기전·일반화·capture = 여전히 open. 발사 모드 = main 아님·**중요 diagnostic**(제공 문구 채택).
+
+- **채택 ① 논문 클레임 문단 = 리뷰어 교정본 verbatim**(§4 대체): 게이트 수치 → paired +1.91 CI → discovery는 "higher observed rate" descriptive → 결구 "stronger L2 training recipe **in this frozen setting**; mechanism·physical capture·generalization = open follow-up". 금지 목록 유지.
+- **채택 ② 통계 표기:** 게이트 = one-sided 하한(사전등록 그대로), 효과 보고 = two-sided 95% CI 병기, seed = 최상위 군집 단위 유지, mode discovery 통계 claim 금지.
+- **보조 통계 완비(기존 held-out 200판 데이터로 즉시 계산 — 전부 bootstrap 결론과 일치):** paired diff 9/10 양수 → **sign test one-sided p=0.0107**; **paired-t +1.909, two-sided 95% CI [+0.497, +3.322] (t=3.06, df=9)**; **exact sign-flip permutation(2¹⁰) one-sided p=0.0029**; **split-half 일관성**(ep0–99 vs 100–199): paired diff +1.934(8/10) / +1.885(9/10), coma 게이트 마진 +13.36 / +13.34 — 6.1·6.3 대응(독립 CRN set B는 여유 시 400판 확장으로 상위 호환 가능).
+- **채택 ③ 우선순위 개편: P4(clean-condition 진단) → M3 → P3(소규모 병렬) → P2(optional/appendix).** 근거: 발사 모드로 게이트 도달이 열린 지금, clean이 왜 안 열리는지 모르고 M3 설계하면 M3에서 clean 0 재발 위험. **P4 = 학습 런 이전에 분석 진단 우선** — 리뷰 체크리스트 6항: boxed 판정 과보수성 / clean 정의 vs capture 기하 정합 / "잘 조일수록 boxed" 구조 모순 / **θ_fire=0.9 ∧ clean 동시 만족 reachable set 실존**(핵심; 명제 N 연장) / λ1 관측가능성 / 포위-장려 보상 모순. 진단 재료 기존재: fire-모드 정책 4본(s7·s8×2 arm) rollout + env 기하 검사.
+- P2 판단 확정: M3-main 논문 → optional(가설 문구 "consistent with ... but unconfirmed" 사용); credit 논문으로 키울 때만 mandatory.
+
+
 ### 2026-07-07 (q) — ✅ P1 캠페인 완료: L2 게이트 본판정 PASS + main recipe 분리 확정 + "발사 모드" 발견 (`52e0046`)
 
 > seed {0..9}×2 arm(레시피 동일) → held-out CRN 200판/ckpt(전부 best-ckpt, 코드 핀 `c58fceb` 단일) → 사전등록 규칙((p)) 그대로 판정. **① L2 게이트(D2-A): 양 arm PASS** — seed-군집 margin one-sided 95% 하한 = coma +12.59(vs scripted)/+15.65(vs hold), mappo +10.24/+13.28 (전부 ≫0). **② paired coma−mappo = +1.91, 95% CI [+0.83, +3.13] — 분리(separated)**, per-seed 9/10 양수(최대 s1 +6.37, 유일 음수 s9 −0.28) → **main recipe = coma mix 0.5 확정(사전등록 결정규칙)**. ③ mode discovery 80%(coma) vs 60%(mappo); arm 평균 return +16.41 vs +14.50.
