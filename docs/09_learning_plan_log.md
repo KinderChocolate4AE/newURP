@@ -300,6 +300,16 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-09 (y) — ❌ M3a 본선(full staged) 완료 → Gate A/B 미달 (10-seed held-out CRN): capture-unlock = findability 벽 확정
+
+- **본선:** warm-start(coma_run2/seed1)·`mode: staged` S1→S3·10-seed·500k (`configs/m3a_full_staged.yaml`, `6d56e62`), GPU 웨이브 2회(0-4/5-9).
+- **결과:** 전 10 seed **s2 정지**(s3 미도달), in-training frozen clean=0·cap=0·ret≈0(−1.0~0.0).
+- **정식 판정(`analyze_gate_a`, held-out CRN 77M+i·200 eps/seed·B=10k·rng7):** **Gate A FAIL**(clean_cross point 0.0·one-sided 95% 하한 0.0·CI[0,0]) · **Gate B FAIL**(total capture 0, 0/10 seeds) · strong/paper-grade FAIL. 아티팩트 `results/m3a_heldout/{m3a_full_seed*.json,gate_a.*}`.
+- **해석:** S1(넓은 콘)선 clean 발사 학습 성공(전 seed s1→s2 전환) → S2 anneal서 콘 좁히자 clean 붕괴, s2 탈출조건(frozen clean>0 지속) 미충족. **P4 "feasibility 무죄, findability 유죄"가 본선 held-out으로 확정**(하드 0, 샘플 노이즈 배제).
+- **프레이밍(음성=자산):** ① M2 레버(L2 게이트 PASS) ② M3 capture-unlock findability 벽(이 결과) ③ P4 기하 진단(clean 채널 ρ 0.05~0.2m·p_feas~1e-3 면도날) 3조각 정합 = 방어 가능한 논문 서사.
+- **다음 갈림길(교수님 상의):** A. 보상 재처방(P4 A/B/C: hard v_eff 강화·clean-margin 역-U·near-capture 항·채널-폭 커리큘럼; p_feas~1e-3라 RL 미발견 고위험) vs B. 스코프 동결(M2 레버+findability 진단으로 프레이밍 확정). 기본선 = A 1~2회 제한 시도 → 실패 시 B. 착수 전 fire_rate 실패 모드 진단(무발사 vs boxed-발사).
+- **ops 캐비앗:** 서버 루트(`/`) 100% full 발생(seed4 heredoc temp 실패 원인) — 학습·데이터는 /data(6.9T 여유)라 무영향, 원인=타 사용자/시스템, TMPDIR=/data 우회·admin 통보 권장.
+
 ### 2026-07-07 (x) — ✅ M3a play-in 완료 → WARM arm 선택 (rule 2); 본선 staged config + Gate-A 하네스 준비
 
 - **Play-in 판정 (`5249ece`, s1_only 200k × {warm,scratch} × 3-seed):** `analyze_m3a_playin` → rule 1(frozen clean_cross) 0.0=0.0 동률 → **rule 2(boxed_fire) warm 0.0 < scratch 0.111 → WARM** (사전등록 tie-eps 0.02, decided_by_rule=2; diagnostic sel_score −0.014 vs −0.079). `results/m3a_playin/decision.json`.
