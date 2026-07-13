@@ -1,0 +1,608 @@
+{
+ "meta": {
+  "git_head": "16355a2",
+  "thresholds": {
+   "FIRE_EP_MIN": 0.05,
+   "BOXED_AT_FIRE_MIN": 0.5,
+   "CONSENSUS_FRAC": 0.7,
+   "CLEAN_DEAD": 0.1,
+   "S2_STEPS": 150000
+  },
+  "heldout_glob": "results/m3a_heldout/m3a_full_seed*.json",
+  "curves_glob": "results/m3a_full/seed*/eval_curve.json"
+ },
+ "per_seed": {
+  "0": {
+   "n_episodes": 200,
+   "fire_ep_frac": 0.0,
+   "fires_total": 0,
+   "boxed_at_fire": 0.0,
+   "clean_at_fire": 0.0,
+   "release_before_fire": 0.0,
+   "captured_at_fire": 0.0,
+   "wasted_at_fire": 0.0,
+   "clean_cross_rate": 0.0,
+   "captured_total": 0,
+   "wasted_rate": 0.0,
+   "penetrated_rate": 1.0,
+   "boxed_dwell_frac": 0.0,
+   "len_mean": 23.0,
+   "ret_mean": 0.005928921389727686,
+   "fire_step_mean": null,
+   "boxed_dwell_before_fire_mean": null,
+   "o_zero_at_fire_frac": null,
+   "o_at_fire_median": null,
+   "o_dist_log_median": null,
+   "meta_tag": "best",
+   "mode": "NO_FIRE",
+   "path": "results/m3a_heldout/m3a_full_seed0.json"
+  },
+  "1": {
+   "n_episodes": 200,
+   "fire_ep_frac": 0.0,
+   "fires_total": 0,
+   "boxed_at_fire": 0.0,
+   "clean_at_fire": 0.0,
+   "release_before_fire": 0.0,
+   "captured_at_fire": 0.0,
+   "wasted_at_fire": 0.0,
+   "clean_cross_rate": 0.0,
+   "captured_total": 0,
+   "wasted_rate": 0.0,
+   "penetrated_rate": 1.0,
+   "boxed_dwell_frac": 0.0,
+   "len_mean": 23.0,
+   "ret_mean": -0.0031066338845509144,
+   "fire_step_mean": null,
+   "boxed_dwell_before_fire_mean": null,
+   "o_zero_at_fire_frac": null,
+   "o_at_fire_median": null,
+   "o_dist_log_median": null,
+   "meta_tag": "best",
+   "mode": "NO_FIRE",
+   "path": "results/m3a_heldout/m3a_full_seed1.json"
+  },
+  "2": {
+   "n_episodes": 200,
+   "fire_ep_frac": 0.0,
+   "fires_total": 0,
+   "boxed_at_fire": 0.0,
+   "clean_at_fire": 0.0,
+   "release_before_fire": 0.0,
+   "captured_at_fire": 0.0,
+   "wasted_at_fire": 0.0,
+   "clean_cross_rate": 0.0,
+   "captured_total": 0,
+   "wasted_rate": 0.0,
+   "penetrated_rate": 1.0,
+   "boxed_dwell_frac": 0.0,
+   "len_mean": 23.0,
+   "ret_mean": 0.0009683637476598227,
+   "fire_step_mean": null,
+   "boxed_dwell_before_fire_mean": null,
+   "o_zero_at_fire_frac": null,
+   "o_at_fire_median": null,
+   "o_dist_log_median": null,
+   "meta_tag": "best",
+   "mode": "NO_FIRE",
+   "path": "results/m3a_heldout/m3a_full_seed2.json"
+  },
+  "3": {
+   "n_episodes": 200,
+   "fire_ep_frac": 0.0,
+   "fires_total": 0,
+   "boxed_at_fire": 0.0,
+   "clean_at_fire": 0.0,
+   "release_before_fire": 0.0,
+   "captured_at_fire": 0.0,
+   "wasted_at_fire": 0.0,
+   "clean_cross_rate": 0.0,
+   "captured_total": 0,
+   "wasted_rate": 0.0,
+   "penetrated_rate": 0.0,
+   "boxed_dwell_frac": 0.0625,
+   "len_mean": 80.0,
+   "ret_mean": -1.5118207231228635,
+   "fire_step_mean": null,
+   "boxed_dwell_before_fire_mean": null,
+   "o_zero_at_fire_frac": null,
+   "o_at_fire_median": null,
+   "o_dist_log_median": null,
+   "meta_tag": "best",
+   "mode": "NO_FIRE",
+   "path": "results/m3a_heldout/m3a_full_seed3.json"
+  },
+  "4": {
+   "n_episodes": 200,
+   "fire_ep_frac": 0.0,
+   "fires_total": 0,
+   "boxed_at_fire": 0.0,
+   "clean_at_fire": 0.0,
+   "release_before_fire": 0.0,
+   "captured_at_fire": 0.0,
+   "wasted_at_fire": 0.0,
+   "clean_cross_rate": 0.0,
+   "captured_total": 0,
+   "wasted_rate": 0.0,
+   "penetrated_rate": 1.0,
+   "boxed_dwell_frac": 0.0,
+   "len_mean": 23.0,
+   "ret_mean": -0.006737851803612915,
+   "fire_step_mean": null,
+   "boxed_dwell_before_fire_mean": null,
+   "o_zero_at_fire_frac": null,
+   "o_at_fire_median": null,
+   "o_dist_log_median": null,
+   "meta_tag": "best",
+   "mode": "NO_FIRE",
+   "path": "results/m3a_heldout/m3a_full_seed4.json"
+  },
+  "5": {
+   "n_episodes": 200,
+   "fire_ep_frac": 0.0,
+   "fires_total": 0,
+   "boxed_at_fire": 0.0,
+   "clean_at_fire": 0.0,
+   "release_before_fire": 0.0,
+   "captured_at_fire": 0.0,
+   "wasted_at_fire": 0.0,
+   "clean_cross_rate": 0.0,
+   "captured_total": 0,
+   "wasted_rate": 0.0,
+   "penetrated_rate": 1.0,
+   "boxed_dwell_frac": 0.0,
+   "len_mean": 23.0,
+   "ret_mean": -0.00466333899831136,
+   "fire_step_mean": null,
+   "boxed_dwell_before_fire_mean": null,
+   "o_zero_at_fire_frac": null,
+   "o_at_fire_median": null,
+   "o_dist_log_median": null,
+   "meta_tag": "best",
+   "mode": "NO_FIRE",
+   "path": "results/m3a_heldout/m3a_full_seed5.json"
+  },
+  "6": {
+   "n_episodes": 200,
+   "fire_ep_frac": 0.0,
+   "fires_total": 0,
+   "boxed_at_fire": 0.0,
+   "clean_at_fire": 0.0,
+   "release_before_fire": 0.0,
+   "captured_at_fire": 0.0,
+   "wasted_at_fire": 0.0,
+   "clean_cross_rate": 0.0,
+   "captured_total": 0,
+   "wasted_rate": 0.0,
+   "penetrated_rate": 0.0,
+   "boxed_dwell_frac": 0.1278125,
+   "len_mean": 80.0,
+   "ret_mean": -1.5002939820401489,
+   "fire_step_mean": null,
+   "boxed_dwell_before_fire_mean": null,
+   "o_zero_at_fire_frac": null,
+   "o_at_fire_median": null,
+   "o_dist_log_median": null,
+   "meta_tag": "best",
+   "mode": "NO_FIRE",
+   "path": "results/m3a_heldout/m3a_full_seed6.json"
+  },
+  "7": {
+   "n_episodes": 200,
+   "fire_ep_frac": 0.0,
+   "fires_total": 0,
+   "boxed_at_fire": 0.0,
+   "clean_at_fire": 0.0,
+   "release_before_fire": 0.0,
+   "captured_at_fire": 0.0,
+   "wasted_at_fire": 0.0,
+   "clean_cross_rate": 0.0,
+   "captured_total": 0,
+   "wasted_rate": 0.0,
+   "penetrated_rate": 1.0,
+   "boxed_dwell_frac": 0.08695652173913042,
+   "len_mean": 23.0,
+   "ret_mean": -0.0065494297908515065,
+   "fire_step_mean": null,
+   "boxed_dwell_before_fire_mean": null,
+   "o_zero_at_fire_frac": null,
+   "o_at_fire_median": null,
+   "o_dist_log_median": null,
+   "meta_tag": "best",
+   "mode": "NO_FIRE",
+   "path": "results/m3a_heldout/m3a_full_seed7.json"
+  },
+  "8": {
+   "n_episodes": 200,
+   "fire_ep_frac": 0.0,
+   "fires_total": 0,
+   "boxed_at_fire": 0.0,
+   "clean_at_fire": 0.0,
+   "release_before_fire": 0.0,
+   "captured_at_fire": 0.0,
+   "wasted_at_fire": 0.0,
+   "clean_cross_rate": 0.0,
+   "captured_total": 0,
+   "wasted_rate": 0.0,
+   "penetrated_rate": 1.0,
+   "boxed_dwell_frac": 0.0,
+   "len_mean": 23.0,
+   "ret_mean": 0.000666908319825516,
+   "fire_step_mean": null,
+   "boxed_dwell_before_fire_mean": null,
+   "o_zero_at_fire_frac": null,
+   "o_at_fire_median": null,
+   "o_dist_log_median": null,
+   "meta_tag": "best",
+   "mode": "NO_FIRE",
+   "path": "results/m3a_heldout/m3a_full_seed8.json"
+  },
+  "9": {
+   "n_episodes": 200,
+   "fire_ep_frac": 0.0,
+   "fires_total": 0,
+   "boxed_at_fire": 0.0,
+   "clean_at_fire": 0.0,
+   "release_before_fire": 0.0,
+   "captured_at_fire": 0.0,
+   "wasted_at_fire": 0.0,
+   "clean_cross_rate": 0.0,
+   "captured_total": 0,
+   "wasted_rate": 0.0,
+   "penetrated_rate": 1.0,
+   "boxed_dwell_frac": 0.0,
+   "len_mean": 23.0,
+   "ret_mean": -0.007670865104017242,
+   "fire_step_mean": null,
+   "boxed_dwell_before_fire_mean": null,
+   "o_zero_at_fire_frac": null,
+   "o_at_fire_median": null,
+   "o_dist_log_median": null,
+   "meta_tag": "best",
+   "mode": "NO_FIRE",
+   "path": "results/m3a_heldout/m3a_full_seed9.json"
+  }
+ },
+ "curves": {
+  "0": {
+   "n_points": 25,
+   "s1_last_train_clean": 1.0,
+   "s2_entry_step": 102400,
+   "final_stage": "s2",
+   "final_frozen_clean": 0.0,
+   "final_frozen_fire_rate": 0.0,
+   "collapse": {
+    "step": 184320,
+    "ramp_frac": 0.546,
+    "implied": {
+     "half_angle": 0.1274,
+     "theta_fire": 0.8546
+    },
+    "train_clean": 0.0,
+    "train_fire_rate": 0.0,
+    "train_boxed_fire_rate": 0.0,
+    "last_alive": {
+     "step": 163840,
+     "ramp_frac": 0.41,
+     "implied": {
+      "half_angle": 0.1455,
+      "theta_fire": 0.841
+     },
+     "train_clean": 0.6,
+     "train_fire_rate": 0.6,
+     "train_boxed_fire_rate": 0.0
+    }
+   },
+   "path": "results/m3a_full/seed0/eval_curve.json"
+  },
+  "1": {
+   "n_points": 25,
+   "s1_last_train_clean": 1.0,
+   "s2_entry_step": 102400,
+   "final_stage": "s2",
+   "final_frozen_clean": 0.0,
+   "final_frozen_fire_rate": 0.0,
+   "collapse": {
+    "step": 184320,
+    "ramp_frac": 0.546,
+    "implied": {
+     "half_angle": 0.1274,
+     "theta_fire": 0.8546
+    },
+    "train_clean": 0.0,
+    "train_fire_rate": 0.0,
+    "train_boxed_fire_rate": 0.0,
+    "last_alive": {
+     "step": 163840,
+     "ramp_frac": 0.41,
+     "implied": {
+      "half_angle": 0.1455,
+      "theta_fire": 0.841
+     },
+     "train_clean": 0.5,
+     "train_fire_rate": 0.5,
+     "train_boxed_fire_rate": 0.0
+    }
+   },
+   "path": "results/m3a_full/seed1/eval_curve.json"
+  },
+  "2": {
+   "n_points": 25,
+   "s1_last_train_clean": 1.0,
+   "s2_entry_step": 102400,
+   "final_stage": "s2",
+   "final_frozen_clean": 0.0,
+   "final_frozen_fire_rate": 0.0,
+   "collapse": {
+    "step": 184320,
+    "ramp_frac": 0.546,
+    "implied": {
+     "half_angle": 0.1274,
+     "theta_fire": 0.8546
+    },
+    "train_clean": 0.0,
+    "train_fire_rate": 0.0,
+    "train_boxed_fire_rate": 0.0,
+    "last_alive": {
+     "step": 163840,
+     "ramp_frac": 0.41,
+     "implied": {
+      "half_angle": 0.1455,
+      "theta_fire": 0.841
+     },
+     "train_clean": 0.8,
+     "train_fire_rate": 0.8,
+     "train_boxed_fire_rate": 0.0
+    }
+   },
+   "path": "results/m3a_full/seed2/eval_curve.json"
+  },
+  "3": {
+   "n_points": 25,
+   "s1_last_train_clean": 1.0,
+   "s2_entry_step": 102400,
+   "final_stage": "s2",
+   "final_frozen_clean": 0.0,
+   "final_frozen_fire_rate": 0.0,
+   "collapse": {
+    "step": 184320,
+    "ramp_frac": 0.546,
+    "implied": {
+     "half_angle": 0.1274,
+     "theta_fire": 0.8546
+    },
+    "train_clean": 0.0,
+    "train_fire_rate": 0.0,
+    "train_boxed_fire_rate": 0.0,
+    "last_alive": {
+     "step": 163840,
+     "ramp_frac": 0.41,
+     "implied": {
+      "half_angle": 0.1455,
+      "theta_fire": 0.841
+     },
+     "train_clean": 0.7,
+     "train_fire_rate": 0.7,
+     "train_boxed_fire_rate": 0.0
+    }
+   },
+   "path": "results/m3a_full/seed3/eval_curve.json"
+  },
+  "4": {
+   "n_points": 25,
+   "s1_last_train_clean": 1.0,
+   "s2_entry_step": 102400,
+   "final_stage": "s2",
+   "final_frozen_clean": 0.0,
+   "final_frozen_fire_rate": 0.0,
+   "collapse": {
+    "step": 184320,
+    "ramp_frac": 0.546,
+    "implied": {
+     "half_angle": 0.1274,
+     "theta_fire": 0.8546
+    },
+    "train_clean": 0.0,
+    "train_fire_rate": 0.0,
+    "train_boxed_fire_rate": 0.0,
+    "last_alive": {
+     "step": 163840,
+     "ramp_frac": 0.41,
+     "implied": {
+      "half_angle": 0.1455,
+      "theta_fire": 0.841
+     },
+     "train_clean": 0.5,
+     "train_fire_rate": 0.5,
+     "train_boxed_fire_rate": 0.0
+    }
+   },
+   "path": "results/m3a_full/seed4/eval_curve.json"
+  },
+  "5": {
+   "n_points": 25,
+   "s1_last_train_clean": 1.0,
+   "s2_entry_step": 102400,
+   "final_stage": "s2",
+   "final_frozen_clean": 0.0,
+   "final_frozen_fire_rate": 0.0,
+   "collapse": {
+    "step": 184320,
+    "ramp_frac": 0.546,
+    "implied": {
+     "half_angle": 0.1274,
+     "theta_fire": 0.8546
+    },
+    "train_clean": 0.0,
+    "train_fire_rate": 0.0,
+    "train_boxed_fire_rate": 0.0,
+    "last_alive": {
+     "step": 163840,
+     "ramp_frac": 0.41,
+     "implied": {
+      "half_angle": 0.1455,
+      "theta_fire": 0.841
+     },
+     "train_clean": 0.7,
+     "train_fire_rate": 0.7,
+     "train_boxed_fire_rate": 0.0
+    }
+   },
+   "path": "results/m3a_full/seed5/eval_curve.json"
+  },
+  "6": {
+   "n_points": 25,
+   "s1_last_train_clean": 1.0,
+   "s2_entry_step": 102400,
+   "final_stage": "s2",
+   "final_frozen_clean": 0.0,
+   "final_frozen_fire_rate": 0.0,
+   "collapse": {
+    "step": 184320,
+    "ramp_frac": 0.546,
+    "implied": {
+     "half_angle": 0.1274,
+     "theta_fire": 0.8546
+    },
+    "train_clean": 0.0,
+    "train_fire_rate": 0.0,
+    "train_boxed_fire_rate": 0.0,
+    "last_alive": {
+     "step": 163840,
+     "ramp_frac": 0.41,
+     "implied": {
+      "half_angle": 0.1455,
+      "theta_fire": 0.841
+     },
+     "train_clean": 0.7,
+     "train_fire_rate": 0.7,
+     "train_boxed_fire_rate": 0.0
+    }
+   },
+   "path": "results/m3a_full/seed6/eval_curve.json"
+  },
+  "7": {
+   "n_points": 25,
+   "s1_last_train_clean": 1.0,
+   "s2_entry_step": 102400,
+   "final_stage": "s2",
+   "final_frozen_clean": 0.0,
+   "final_frozen_fire_rate": 0.0,
+   "collapse": {
+    "step": 184320,
+    "ramp_frac": 0.546,
+    "implied": {
+     "half_angle": 0.1274,
+     "theta_fire": 0.8546
+    },
+    "train_clean": 0.0,
+    "train_fire_rate": 0.0,
+    "train_boxed_fire_rate": 0.0,
+    "last_alive": {
+     "step": 163840,
+     "ramp_frac": 0.41,
+     "implied": {
+      "half_angle": 0.1455,
+      "theta_fire": 0.841
+     },
+     "train_clean": 0.8,
+     "train_fire_rate": 0.8,
+     "train_boxed_fire_rate": 0.0
+    }
+   },
+   "path": "results/m3a_full/seed7/eval_curve.json"
+  },
+  "8": {
+   "n_points": 25,
+   "s1_last_train_clean": 1.0,
+   "s2_entry_step": 102400,
+   "final_stage": "s2",
+   "final_frozen_clean": 0.0,
+   "final_frozen_fire_rate": 0.0,
+   "collapse": {
+    "step": 184320,
+    "ramp_frac": 0.546,
+    "implied": {
+     "half_angle": 0.1274,
+     "theta_fire": 0.8546
+    },
+    "train_clean": 0.0,
+    "train_fire_rate": 0.0,
+    "train_boxed_fire_rate": 0.0,
+    "last_alive": {
+     "step": 163840,
+     "ramp_frac": 0.41,
+     "implied": {
+      "half_angle": 0.1455,
+      "theta_fire": 0.841
+     },
+     "train_clean": 0.95,
+     "train_fire_rate": 0.95,
+     "train_boxed_fire_rate": 0.0
+    }
+   },
+   "path": "results/m3a_full/seed8/eval_curve.json"
+  },
+  "9": {
+   "n_points": 25,
+   "s1_last_train_clean": 1.0,
+   "s2_entry_step": 102400,
+   "final_stage": "s2",
+   "final_frozen_clean": 0.0,
+   "final_frozen_fire_rate": 0.0,
+   "collapse": {
+    "step": 184320,
+    "ramp_frac": 0.546,
+    "implied": {
+     "half_angle": 0.1274,
+     "theta_fire": 0.8546
+    },
+    "train_clean": 0.0,
+    "train_fire_rate": 0.0,
+    "train_boxed_fire_rate": 0.0,
+    "last_alive": {
+     "step": 163840,
+     "ramp_frac": 0.41,
+     "implied": {
+      "half_angle": 0.1455,
+      "theta_fire": 0.841
+     },
+     "train_clean": 0.55,
+     "train_fire_rate": 0.55,
+     "train_boxed_fire_rate": 0.0
+    }
+   },
+   "path": "results/m3a_full/seed9/eval_curve.json"
+  }
+ },
+ "verdict": {
+  "per_seed_modes": {
+   "0": "NO_FIRE",
+   "1": "NO_FIRE",
+   "2": "NO_FIRE",
+   "3": "NO_FIRE",
+   "4": "NO_FIRE",
+   "5": "NO_FIRE",
+   "6": "NO_FIRE",
+   "7": "NO_FIRE",
+   "8": "NO_FIRE",
+   "9": "NO_FIRE"
+  },
+  "counts": {
+   "NO_FIRE": 10,
+   "BOXED_FIRE": 0,
+   "CLEAN_MISS": 0
+  },
+  "pooled_mode": "NO_FIRE",
+  "consensus": true,
+  "verdict": "NO_FIRE",
+  "branch": "NF",
+  "pooled_fire_ep_frac": 0.0,
+  "pooled_boxed_at_fire_firing_seeds": null,
+  "collapse_ramp_frac_median": 0.546,
+  "collapse_implied_median": {
+   "half_angle": 0.1274,
+   "theta_fire": 0.8546
+  }
+ }
+}
