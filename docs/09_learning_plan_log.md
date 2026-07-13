@@ -300,6 +300,15 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-14 (aa) — ✅ Step 0 진단 판독: **NO_FIRE 10/10 합의** → 브랜치 NF, A-2 = L-fire + L-margin (+L-adaptive) [사다리 기계적 확정]
+
+- **판정** (`results/m3a_heldout/a2_fire_mode.json`, `5f43027`): 전 10 seed **NO_FIRE** — held-out 2,000 에피소드에서 발사 **전무**(fire_ep_frac 0.000), wasted 全 0. (x) 캐비앗 해소: warm boxed_fire=0은 "깨끗해서"가 아니라 **발사를 안 해서**였음.
+- **붕괴 = 절벽(연속 열화 아님)**: eval_curve 전 seed 동일 패턴 — ha 0.1455에서 clean 0.6~0.7·fire 0.6~0.7·boxedF 0.0(건강한 clean 발사) → 바로 다음 eval, ha 0.1274에서 clean 0.0·fire 0.0 **동시 사멸**. **절벽 폭 = ha [0.1274, 0.1455]**(frozen 0.067의 약 2×; eval 케이던스 ~20k 해상도, 시간-선형 램프라 전 seed 동일 지점). boxed-발사 중간상 없음 — "clean 발사"→"무발사" 이산 전환. 기전: 콘 축소로 EV(발사) = w_gf·v·g(o)+λ1·P(clean)+λ_cap·P(cap)−λ2·P(wasted) 부호 음전(P(clean)·g(o) 급락, P(wasted)→1), binary λ1과 미세 g(o)는 절벽 너머 gradient 0 — NF 가설 정합.
+- **수동 평형 발견(신규 증거)**: held-out 종점 2모드 — **방관형 8 seed**(len 23·pen 100%·ret ≈0) vs **무발사-차단형 2 seed**(s3/s6: len 80·**pen 0%**·ret −1.5·dwellF 0.06/0.13). 판정 J 하에서 **"아무것도 안 함"(≈0) > "차단"(−1.5)** — hold-대비 headline + λ3가 작전상 우월한 교전(침투 0%)을 수동성보다 낮게 가격(J에 침투 비용 부재). M3a J의 구조적 캐비앗 = 벽 논문 진단 서사의 증거 행.
+- **A-2 확정(12 §4 NF 열, 기계적)**: **L-fire**(S2 동안 λ2 1.0→0.3, 램프 완료 후 3-eval에 걸쳐 복원 + w_gf 1.0→1.5) + **L-margin**(λ1 binary → graded σ((v−θ_stage)/τ_m), τ_m 0.05, ¬boxed 게이트, S3 진입 시 binary 복원) + **L-adaptive**(폭-스텝 8 이산화·전진 = 현재 폭 train-eval clean≥0.1 최근-2 지속·stall 3-eval 시 1스텝 백오프·S2 상한 300k). **파일럿 중간 게이트 정량화**: train-eval clean≥0.1 지속 @ **ha < 0.1274**(A-1 사멸 폭 개선) or frozen-heldout clean 비영 ≥1 seed.
+- **수정안 후보(S-6, 비준 판단)**: 수동 평형 대응 "교전/침투 스캐폴드 비용"은 **A-2 미포함 권고**(번들 confound 3요소 초과 방지) — A-2 파일럿에서 λ2 완화에도 fire 사멸 지속 시의 **사전등록 폴백**으로만 12에 기재.
+- 대기: 12 §7 **S-1~S-5 비준**(+S-6 폴백 기재 여부) → A-2 구현(env_m3 스캐폴드 항 + Curriculum adaptive ramp + config + 테스트) → 3-seed 파일럿.
+
 ### 2026-07-14 (z) — 방침: A-전력 레버 사다리 캠페인 전환 (트립와이어 8/31) + Step 0 실패-모드 진단 도구 — 비준·서버 실행 대기
 
 - **방침 전환 (Hyunjun):** (y) 갈림길의 "A 1~2회 제한 → B"를 **A-전력 레버 사다리 캠페인**으로 개정 — novelty의 본체는 capture-unlock 성공이라는 판단. 시도당 가설 1개·실패도 기전 증거로 계측(음성=자산 정합)·**하드 트립와이어 2026-08-31**(이후 신규 A-런 금지 → B 프레이밍 확정). 예산 ~6주 = A-2~A-5. 교수님 공유 = 통보형("A 전력·트립와이어·실패 시 B"). 사전등록 = **`docs/12_a_campaign.md` v0.1** (레버 풀 7종·브랜치별 사다리·시도 프로토콜·비준 체크리스트 S-1~S-5) — **진단 데이터 접촉 전 커밋**으로 임계·순서 고정.
