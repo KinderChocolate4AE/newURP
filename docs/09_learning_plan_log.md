@@ -300,6 +300,13 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-14 (z) — 방침: A-전력 레버 사다리 캠페인 전환 (트립와이어 8/31) + Step 0 실패-모드 진단 도구 — 비준·서버 실행 대기
+
+- **방침 전환 (Hyunjun):** (y) 갈림길의 "A 1~2회 제한 → B"를 **A-전력 레버 사다리 캠페인**으로 개정 — novelty의 본체는 capture-unlock 성공이라는 판단. 시도당 가설 1개·실패도 기전 증거로 계측(음성=자산 정합)·**하드 트립와이어 2026-08-31**(이후 신규 A-런 금지 → B 프레이밍 확정). 예산 ~6주 = A-2~A-5. 교수님 공유 = 통보형("A 전력·트립와이어·실패 시 B"). 사전등록 = **`docs/12_a_campaign.md` v0.1** (레버 풀 7종·브랜치별 사다리·시도 프로토콜·비준 체크리스트 S-1~S-5) — **진단 데이터 접촉 전 커밋**으로 임계·순서 고정.
+- **Step 0 (학습 런 아님):** `shepherd/scripts/a2_fire_mode_diagnosis.py` — (y) 아티팩트로 무발사/boxed-발사/clean-miss 판별(사전등록 임계: fire_ep_frac<0.05 → NO_FIRE; boxed_at_fire≥0.5 → BOXED_FIRE; else CLEAN_MISS; 합의 ≥70% seed, 미달 MIXED) + eval_curve로 **S2 붕괴 폭 계측**(램프 분율 → half_angle/θ 환산; s2 진입 = eval 라벨 근사 캐비앗). numpy-only·torch 불요. 산출 브랜치(NF/BF/CM) → 12 §4 사다리에서 A-2 레버 기계적 확정. 합성 3-모드 데이터로 분류·MIXED·붕괴 계측(램프 0.40 → half_angle 0.147) 검증 완료(샌드박스).
+- **서버 (Hyunjun):** pull 후 `python -m shepherd.scripts.a2_fire_mode_diagnosis --heldout-glob 'results/m3a_heldout/m3a_full_seed*.json' --curves-glob 'results/m3a_full/seed*/eval_curve.json' --out results/m3a_heldout/a2_fire_mode.json` (TMPDIR=/data 권장, (y) ops 캐비앗) → 결과 JSON 커밋·회수 → A-2 구현 착수(브랜치 확정 후).
+- 다음: ① 진단 회수 → ② 12 비준(S-1~S-5) → ③ A-2 구현(스캐폴드 항 + L-adaptive 램프)·테스트 → ④ 3-seed 파일럿.
+
 ### 2026-07-09 (y) — ❌ M3a 본선(full staged) 완료 → Gate A/B 미달 (10-seed held-out CRN): capture-unlock = findability 벽 확정
 
 - **본선:** warm-start(coma_run2/seed1)·`mode: staged` S1→S3·10-seed·500k (`configs/m3a_full_staged.yaml`, `6d56e62`), GPU 웨이브 2회(0-4/5-9).
