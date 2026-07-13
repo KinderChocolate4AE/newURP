@@ -300,6 +300,14 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-14 (bb) — ✅ A-2 구현 완료: NF 번들 L-fire + L-margin (+L-adaptive) — 서버 torch 테스트·3-seed 파일럿 대기
+
+- **원칙 준수(12 §1)**: frozen 계약·판정 경로 무변경 — 스캐폴드 3종 전부 **stage-주입 전용**, 판정 m3(기본값 lam2_scale 1.0·clean_margin_tau 0.0)는 **비트-동일 lock**(test_default_params_bit_identical_to_ratified_j); run-config `m3:` 블록은 스캐폴드 키 설정 불가(STRICT 키 검사 유지) → 판정 J·Gate A/B 정의 불변.
+- 구현: ① `env_m3.py` — M3Params `lam2_scale`/`clean_margin_tau` + `m3_step_terms(clean_margin=…)`: τ>0 시 λ1 binary → **graded σ(margin/τ)·1[¬boxed]**(`l1_term` 반환), wasted 항 = `l2·lam2_scale`; env가 clean_margin = v_soft − θ_stage 상시 전달. ② `make_env_m3.py` — `SCAFFOLD_KEYS=(w_gf, lam2_scale, clean_margin_tau)` 스테이지 옵션(미지 키 거부 유지) + **Curriculum `adaptive` 모드**: 폭-사다리 k/8 (전진 = 현재 폭 train-eval clean≥0.1 지속 2-eval; 백오프 = 비-ok stall 3-eval, k>0; **cap 340k freeze = stall 폭 증거**; 폭 도달 후 lam2 60k 선형 복원; s2 exit = 폭 도달 ∧ 복원 완료 ∧ heldout clean 최근-3 비영) + `describe()`. ③ `train_m3a.py` — eval_curve point에 `cur`(k·half_angle·capped) 1줄. ④ `configs/m3a_a2_pilot.yaml` — s1 블록에 스캐폴드 3종(w_gf 1.5·lam2_scale 0.3·τ 0.05), judgment `m3:` = full_staged와 동일, 550k·WARM(coma_run2/seed1). ⑤ `tests/test_a2_scaffolds.py` **+14**(판정 비트-동일·graded 시그모이드/boxed 게이트/margin 필수·lam2 wasted-한정·스테이지 플럼빙·adaptive 전진/백오프/cap/복원/exit·staged 회귀).
+- **S-4 부속 정정**: L-adaptive S2 상한 300k → **340k** — 8스텝×지속2×케이던스 20,480 = 327,680 최소 소요라 300k는 완주 수학적 불가(구현 중 발견; 12 §3 표·§7 반영).
+- 테스트: 신규 14/14 + t-free 전 스위트 green(샌드박스 실측, viability·net_forward 포함 — 스크래치 트리 실패 2건은 `prototypes/` 미복사, 코드 무죄). torch 몫(웜스타트 경로 등)은 서버 실측 필요((w-1) 교훈).
+- **파일럿(서버, Hyunjun)**: push 후 ⓐ torch 테스트 확인 ⓑ `TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_a2_pilot.yaml OUT=results/m3a_a2_pilot REQUIRED_COMMIT=<본 커밋> GPU=0 SEEDS="0 1 2" bash scripts/run_ippo_seeds_parallel.sh` ⓒ 종료 후 eval_curve `cur.k`/stall 폭 + frozen/heldout clean → **중간 게이트**(12 §7 S-4: clean≥0.1 지속 @ ha<0.1274 or heldout clean 비영 ≥1 seed) → 통과 시 10-seed 본선 / 미달 시: fire 사멸 지속이면 **S-6 폴백** 검토, 아니면 A-3(L-reverse).
+
 ### 2026-07-14 (aa) — ✅ Step 0 진단 판독: **NO_FIRE 10/10 합의** → 브랜치 NF, A-2 = L-fire + L-margin (+L-adaptive) [사다리 기계적 확정]
 
 - **판정** (`results/m3a_heldout/a2_fire_mode.json`, `5f43027`): 전 10 seed **NO_FIRE** — held-out 2,000 에피소드에서 발사 **전무**(fire_ep_frac 0.000), wasted 全 0. (x) 캐비앗 해소: warm boxed_fire=0은 "깨끗해서"가 아니라 **발사를 안 해서**였음.

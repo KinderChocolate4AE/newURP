@@ -525,6 +525,7 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
                      f"@ {runner.env_steps}")
             margin = frozen_ev["return_mean"] - base_best
             point = {"step": runner.env_steps, "stage": runner.cur.stage,
+                     "cur": runner.cur.describe(),
                      "dod_margin": margin,
                      **{k: v for k, v in frozen_ev.items() if k != "fire_chains"},
                      "fire_chains": frozen_ev["fire_chains"],

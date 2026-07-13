@@ -23,6 +23,18 @@ Curriculum stage dicts have exactly the keys STAGE_KEYS:
     w_g         -> M3Params.w_g                        (S1/S2: 1.0; S3 uses base 0.3)
 S2 = linear restore of (half_angle, theta_fire, sigma_g) toward frozen with w_g
 held at the S1 value; S3 = stage None (frozen constants + base m3). docs/11 SS2.
+
+A-2 scaffold keys (docs/12 SS3/SS4, NF branch; OPTIONAL per stage):
+    w_gf             -> M3Params.w_gf             (L-fire commit-side boost)
+    lam2_scale       -> M3Params.lam2_scale       (L-fire wasted-penalty relief)
+    clean_margin_tau -> M3Params.clean_margin_tau (L-margin graded l1)
+They ride through S2 at the S1 value like w_g (lam2_scale gets a post-full-width
+linear restore in adaptive mode) and vanish at S3/stage=None -- the judgment m3
+block cannot carry them (STRICT m3-key check), so the judged reward is
+untouched (docs/12 SS1 principle 3). Curriculum mode "adaptive" (docs/12 SS3
+L-adaptive) replaces the time-linear S2 ramp with a metric-gated width ladder:
+advance on sustained train-eval clean, back off on stall, freeze at the step
+budget cap (stall width = campaign evidence), restore lam2 after full width.
 """
 from __future__ import annotations
 
@@ -36,7 +48,8 @@ from shepherd.env_m3 import M3Params, M3ShapingEnv
 from shepherd.train.adapter import ShepherdAdapter, StepResult, SHARED_FLAG_KEYS
 from shepherd.train.make_env import make_train_env, pad_env_action
 
-__all__ = ["M3_REQUIRED", "M3_OPTIONAL", "STAGE_KEYS", "M3_FLAG_KEYS", "Curriculum",
+__all__ = ["M3_REQUIRED", "M3_OPTIONAL", "STAGE_KEYS", "SCAFFOLD_KEYS",
+           "M3_FLAG_KEYS", "Curriculum",
            "m3_params_from_cfg", "stage_from_cfg", "frozen_constants",
            "interp_stage", "apply_stage_env_overrides", "make_m3_train_env",
            "build_m3_attacker_env", "M3Adapter"]
@@ -44,6 +57,7 @@ __all__ = ["M3_REQUIRED", "M3_OPTIONAL", "STAGE_KEYS", "M3_FLAG_KEYS", "Curricul
 M3_REQUIRED = ("o_star", "sigma_g", "w_h", "w_g", "w_gf", "lambda_cap")
 M3_OPTIONAL = {"v_eff_mode": "hard", "tau_m": 3e-4, "o_hi_release": 1e-2}
 STAGE_KEYS = ("half_angle", "theta_fire", "sigma_g", "w_g")
+SCAFFOLD_KEYS = ("w_gf", "lam2_scale", "clean_margin_tau")  # A-2 (docs/12 SS3), optional
 
 # extended flag set surfaced by M3Adapter (superset of the frozen adapter's)
 M3_FLAG_KEYS = SHARED_FLAG_KEYS + (
@@ -85,10 +99,13 @@ def m3_params_from_cfg(m3_cfg: Mapping, env_cfg: Mapping) -> M3Params:
 def stage_from_cfg(stage_cfg: Mapping) -> Dict[str, float]:
     """Validate one curriculum stage dict (exactly STAGE_KEYS)."""
     stage = {k: float(_req(stage_cfg, k, "curriculum.stage")) for k in STAGE_KEYS}
-    unknown = set(stage_cfg) - set(STAGE_KEYS)
+    unknown = set(stage_cfg) - set(STAGE_KEYS) - set(SCAFFOLD_KEYS)
     if unknown:
         raise KeyError(f"unknown stage keys: {sorted(unknown)} "
-                       f"(allowed: {list(STAGE_KEYS)})")
+                       f"(allowed: {list(STAGE_KEYS) + list(SCAFFOLD_KEYS)})")
+    for k in SCAFFOLD_KEYS:
+        if k in stage_cfg:
+            stage[k] = float(stage_cfg[k])
     return stage
 
 
@@ -110,6 +127,9 @@ def interp_stage(s1: Dict[str, float], frozen: Dict[str, float],
     out = {k: (1.0 - a) * s1[k] + a * frozen[k]
            for k in ("half_angle", "theta_fire", "sigma_g")}
     out["w_g"] = s1["w_g"]
+    for k in SCAFFOLD_KEYS:               # A-2: ride at the S1 value through S2
+        if k in s1:
+            out[k] = s1[k]
     return out
 
 
@@ -132,8 +152,11 @@ def _stage_m3(m3: M3Params, stage: Optional[Dict[str, float]]) -> M3Params:
     """M3Params with the stage's REWARD-level constants applied."""
     if stage is None:
         return m3
-    return M3Params(**{**m3.__dict__, "sigma_g": float(stage["sigma_g"]),
-                       "w_g": float(stage["w_g"])})
+    upd = {"sigma_g": float(stage["sigma_g"]), "w_g": float(stage["w_g"])}
+    for k in SCAFFOLD_KEYS:
+        if k in stage:
+            upd[k] = float(stage[k])
+    return M3Params(**{**m3.__dict__, **upd})
 
 
 def make_m3_train_env(env_cfg: dict, m3: M3Params,
@@ -211,8 +234,9 @@ class Curriculum:
 
     def __init__(self, cur_cfg: dict, frozen: Dict[str, float]):
         self.mode = str(cur_cfg["mode"])
-        if self.mode not in ("s1_only", "staged"):
-            raise ValueError(f"curriculum.mode '{self.mode}' (s1_only|staged)")
+        if self.mode not in ("s1_only", "staged", "adaptive"):
+            raise ValueError(
+                f"curriculum.mode '{self.mode}' (s1_only|staged|adaptive)")
         self.s1 = stage_from_cfg(cur_cfg["s1"])
         self.frozen = dict(frozen)
         self.stage = "s1"
@@ -220,19 +244,48 @@ class Curriculum:
         self.history: List[dict] = [{"stage": "s1", "step": 0}]
         self._streak = 0
         self._heldout_clean: List[float] = []
-        if self.mode == "staged":
+        if self.mode in ("staged", "adaptive"):
             self.s1_min_steps = int(cur_cfg["s1_min_steps"])
             e1 = cur_cfg["s1_exit"]
             self.s1_clean_min = float(e1["clean_cross_min"])
             self.s1_boxed_fire_max = float(e1["boxed_fire_max"])
             self.s1_sustain = int(e1["sustain_evals"])
-            self.s2_steps = int(cur_cfg["s2_steps"])
             self.s2_heldout_last = int(cur_cfg["s2_exit"]["heldout_clean_nonzero_last"])
+        if self.mode == "staged":
+            self.s2_steps = int(cur_cfg["s2_steps"])
+        if self.mode == "adaptive":                    # A-2 L-adaptive (docs/12 SS3)
+            a2 = cur_cfg["s2_adaptive"]
+            self.n_width = int(a2["n_width_steps"])
+            self.adv_clean_min = float(a2["advance_clean_min"])
+            self.adv_sustain = int(a2["advance_sustain"])
+            self.stall_evals = int(a2["stall_evals"])
+            self.s2_max_steps = int(a2["max_steps"])
+            self.lam2_restore_steps = int(a2["lam2_restore_steps"])
+            if self.n_width < 1:
+                raise ValueError("s2_adaptive.n_width_steps must be >= 1")
+            self.k = 0                       # width index: 0 = S1, n_width = frozen
+            self._adv_streak = 0
+            self._stall = 0
+            self._full_step: Optional[int] = None   # env_steps when k first == n_width
+            self._capped = False
 
     def overrides(self, env_steps: int) -> Optional[Dict[str, float]]:
         if self.stage == "s1":
             return dict(self.s1)
         if self.stage == "s2":
+            if self.mode == "adaptive":
+                stage = interp_stage(self.s1, self.frozen,
+                                     self.k / self.n_width)
+                if "lam2_scale" in self.s1:           # post-full-width restore
+                    if self._full_step is None:
+                        stage["lam2_scale"] = float(self.s1["lam2_scale"])
+                    else:
+                        a = min((env_steps - self._full_step)
+                                / max(self.lam2_restore_steps, 1), 1.0)
+                        stage["lam2_scale"] = ((1.0 - a)
+                                               * float(self.s1["lam2_scale"])
+                                               + a * 1.0)
+                return stage
             alpha = (env_steps - self.entry_step) / max(self.s2_steps, 1)
             return interp_stage(self.s1, self.frozen, alpha)
         return None                                   # s3 -> frozen constants
@@ -252,6 +305,42 @@ class Curriculum:
                 self.stage, self.entry_step, self._streak = "s2", env_steps, 0
                 self.history.append({"stage": "s2", "step": env_steps})
                 return "s2"
+        elif self.stage == "s2" and self.mode == "adaptive":
+            if self._full_step is None and not self._capped:
+                if env_steps - self.entry_step >= self.s2_max_steps:
+                    self._capped = True               # stall width = evidence
+                    self.history.append({"stage": "s2", "step": env_steps,
+                                         "event": "cap", "k": self.k})
+                else:
+                    ok = float(train_ev["clean_cross_rate"]) >= self.adv_clean_min
+                    self._adv_streak = self._adv_streak + 1 if ok else 0
+                    advanced = False
+                    if self._adv_streak >= self.adv_sustain and self.k < self.n_width:
+                        self.k += 1
+                        self._adv_streak = self._stall = 0
+                        advanced = True
+                        self.history.append({"stage": "s2", "step": env_steps,
+                                             "event": "advance", "k": self.k})
+                        if self.k == self.n_width:
+                            self._full_step = env_steps
+                    if not advanced:
+                        self._stall += 1
+                        if (not ok) and self._stall >= self.stall_evals and self.k > 0:
+                            self.k -= 1               # back off one width step
+                            self._stall = self._adv_streak = 0
+                            self.history.append({"stage": "s2", "step": env_steps,
+                                                 "event": "backoff", "k": self.k})
+            restored = (self._full_step is not None
+                        and ("lam2_scale" not in self.s1
+                             or env_steps - self._full_step
+                             >= self.lam2_restore_steps))
+            last = self._heldout_clean[-self.s2_heldout_last:]
+            nonzero = (len(last) >= self.s2_heldout_last
+                       and all(c > 0.0 for c in last))
+            if restored and nonzero:
+                self.stage, self.entry_step = "s3", env_steps
+                self.history.append({"stage": "s3", "step": env_steps})
+                return "s3"
         elif self.stage == "s2":
             ramp_done = env_steps - self.entry_step >= self.s2_steps
             last = self._heldout_clean[-self.s2_heldout_last:]
@@ -262,3 +351,15 @@ class Curriculum:
                 self.history.append({"stage": "s3", "step": env_steps})
                 return "s3"
         return None
+
+    def describe(self) -> dict:
+        """Compact curriculum state for eval_curve points / prints (A-2)."""
+        d = {"stage": self.stage, "mode": self.mode}
+        if self.mode == "adaptive":
+            a = self.k / self.n_width
+            d.update(k=self.k, n_width=self.n_width,
+                     half_angle=round((1.0 - a) * float(self.s1["half_angle"])
+                                      + a * float(self.frozen["half_angle"]), 4),
+                     capped=self._capped,
+                     lam2_restoring=self._full_step is not None)
+        return d

@@ -1,0 +1,100 @@
+# A-2 PILOT -- NF-branch lever bundle (docs/12 SS4 row A-2; ratified 2026-07-14):
+#   L-fire     lam2_scale 0.3 through S1/S2 (+ linear restore to 1.0 over
+#              lam2_restore_steps after full width) + w_gf 1.0 -> 1.5 scaffold
+#   L-margin   clean_margin_tau 0.05 (graded l1, binary restored at S3)
+#   L-adaptive curriculum mode "adaptive": 8-step metric-gated width ladder
+#              (advance = train-eval clean >= 0.1 sustained 2 evals; stall 3
+#              evals -> back off 1 step; budget cap -> freeze = stall width)
+# All three are SCAFFOLDS: the judgment m3: block below is byte-identical to
+# m3a_full_staged.yaml -- frozen-eval J and Gate A/B definitions unchanged.
+# PILOT mid-gate (docs/09 (aa)): sustained train-eval clean >= 0.1 at
+# half_angle < 0.1274 (the A-1 death width), or frozen-heldout clean nonzero
+# on >= 1 seed. WARM arm kept (play-in decision, docs/09 (x)).
+#
+# Launch (server, 3 seeds, single GPU):
+#   TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_a2_pilot.yaml \
+#     OUT=results/m3a_a2_pilot REQUIRED_COMMIT=<A-2 commit> GPU=0 SEEDS="0 1 2" \
+#     bash scripts/run_ippo_seeds_parallel.sh
+# Note s2_adaptive.max_steps = 340000, NOT the 300k in docs/12 SS3: 8 width
+# steps x sustain-2 x eval cadence 20480 = 327,680 minimum -- a 300k cap is
+# unreachable even for a perfect run (implementation-forced S-4 correction,
+# docs/09 (bb)).
+
+env_config: configs/m2_l2_train.yaml   # FROZEN scenario (never edited)
+
+m3:                             # judgment/frozen reward params -- UNCHANGED
+  o_star: 1.0e-3
+  sigma_g: 1.0
+  w_h: 1.0
+  w_g: 0.3
+  w_gf: 1.0
+  lambda_cap: 5.0
+  v_eff_mode: hard
+  o_hi_release: 1.0e-2
+
+curriculum:
+  mode: adaptive                # A-2 L-adaptive (docs/12 SS3)
+  s1:                           # S1 wide-clean + A-2 scaffold knobs
+    half_angle: 0.20
+    theta_fire: 0.8
+    sigma_g: 2.0
+    w_g: 1.0
+    w_gf: 1.5                   # L-fire commit-side boost (scaffold)
+    lam2_scale: 0.3             # L-fire wasted-penalty relief (scaffold)
+    clean_margin_tau: 0.05      # L-margin graded l1 (scaffold)
+  s1_min_steps: 100000
+  s1_exit: {clean_cross_min: 0.2, boxed_fire_max: 0.5, sustain_evals: 3}
+  s2_adaptive:
+    n_width_steps: 8
+    advance_clean_min: 0.1
+    advance_sustain: 2
+    stall_evals: 3
+    max_steps: 340000           # see header note (300k mathematically unreachable)
+    lam2_restore_steps: 60000   # ~3 evals at cadence 20480
+  s2_exit: {heldout_clean_nonzero_last: 3}
+
+warm_start:
+  enabled: true                 # WARM arm (play-in winner, docs/09 (x))
+  ckpt_dir: results/coma_run2/seed1
+  tag: best
+
+loop:                           # recipe-v2 loop; budget covers S1 + capped S2 + restore
+  total_env_steps: 550000
+  rollout_env_steps: 1024
+  eval_interval_updates: 20
+  eval_episodes: 20
+  save_interval_updates: 20
+  lr_anneal: linear
+  lr_anneal_floor: 0.1
+
+mappo:                          # identical to m3a_full_staged.yaml (P1 main recipe)
+  gamma: 0.99
+  lam: 0.95
+  lr: 3.0e-4
+  epochs: 10
+  minibatch_size: 256
+  clip_eps: 0.2
+  ent_coef_limiter: 0.0
+  ent_coef_finisher: 0.003
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  target_kl: 0.02
+  hidden_sizes: [128, 128]
+  init_log_std: 0.0
+  ortho_init: true
+  value_norm: true
+  coma_mix: 0.5
+  coma_gamma: 0.99
+  coma_lam: 0.95
+
+randomize:                      # attacker family (train only; eval nominal)
+  enabled: true
+  att_speed: [16.0, 24.0]
+  adversary_start_x: [20.0, 28.0]
+  adversary_omega: [8.0, 12.0]
+  adv_a_max: [21.0, 30.0]
+
+wandb:
+  enabled: true
+  project: newurp-l2
+  group: m3a-a2-pilot

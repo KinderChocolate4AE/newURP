@@ -113,17 +113,32 @@ class M3Params:
     v_eff_mode: str = "hard"
     tau_m: float = 3e-4
     o_hi_release: float = 1e-2
+    # --- A-2 scaffold knobs (docs/12 SS3/SS4, NF branch; STAGE-injected ONLY).
+    # Judgment-neutral defaults reproduce the ratified J_M3a bit-for-bit
+    # (docs/12 SS1 principle 3): the run-config m3: block cannot set these
+    # (STRICT key check in make_env_m3); they enter via curriculum stage dicts
+    # and vanish at S3 / stage=None.
+    lam2_scale: float = 1.0        # L-fire: scales l2 (wasted) during scaffold
+    clean_margin_tau: float = 0.0  # L-margin: >0 -> graded l1*sigmoid((v-theta)/tau)*1[not boxed]
 
 
 def m3_step_terms(*, v_full: float, boxed_full: bool, o_full: float,
                   v_base: float, boxed_base: bool, o_base: float,
                   fire_event: bool, clean: bool, captured: bool,
                   wasted_inc: float, limiter_loss: float,
-                  p: M3Params) -> Dict[str, float]:
+                  p: M3Params,
+                  clean_margin: Optional[float] = None) -> Dict[str, float]:
     """Pure J_M3a assembly (docs/11 SS1) -- unit-testable, no env state.
 
     INVARIANT (ratified): headline_m3 = v_eff(full) - v_eff(hold) is returned
-    and consumed SIGNED. This function performs no clipping of any kind."""
+    and consumed SIGNED. This function performs no clipping of any kind.
+
+    A-2 scaffolds (docs/12 SS3, stage-only): p.clean_margin_tau > 0 swaps the
+    binary l1 clean bonus for the graded L-margin form l1 * sigmoid(
+    clean_margin / tau) * 1[not boxed] (clean_margin = v_soft - theta_fire of
+    the CURRENT stage env, passed by the caller); p.lam2_scale scales the l2
+    wasted penalty (L-fire). With the default M3Params both paths are
+    bit-identical to the ratified judgment J."""
     ve = v_effective(v_full, boxed_full, o_full, mode=p.v_eff_mode,
                      o_star=p.o_star, tau_m=p.tau_m)
     vb = v_effective(v_base, boxed_base, o_base, mode=p.v_eff_mode,
@@ -132,16 +147,27 @@ def m3_step_terms(*, v_full: float, boxed_full: bool, o_full: float,
     g_o = g_geo(o_full, p.o_star, p.sigma_g)
     r_geo_step = float(v_full) * g_o
     r_geo_fire = r_geo_step if fire_event else 0.0     # commit-state v * g(o)
+    if p.clean_margin_tau > 0.0:
+        if clean_margin is None:
+            raise ValueError(
+                "clean_margin_tau > 0 requires clean_margin (= v_soft - "
+                "theta_fire of the CURRENT stage env); the composition root "
+                "always passes it -- direct callers must too")
+        l1_term = (0.0 if boxed_full else
+                   p.l1 / (1.0 + math.exp(-float(clean_margin)
+                                          / p.clean_margin_tau)))
+    else:
+        l1_term = p.l1 * (1.0 if clean else 0.0)
     J = (p.w_h * headline_m3
          + p.w_g * r_geo_step
          + p.w_gf * r_geo_fire
-         + p.l1 * (1.0 if clean else 0.0)
+         + l1_term
          + p.lam_cap * (1.0 if captured else 0.0)
-         - p.l2 * max(float(wasted_inc), 0.0)
+         - p.l2 * p.lam2_scale * max(float(wasted_inc), 0.0)
          - p.l3 * float(limiter_loss))
     return {"v_eff": ve, "v_eff_base": vb, "headline_m3": float(headline_m3),
             "g_o": g_o, "r_geo_step": r_geo_step, "r_geo_fire": r_geo_fire,
-            "J": float(J)}
+            "l1_term": float(l1_term), "J": float(J)}
 
 
 # ------------------------------------------------------------------ the env ---
@@ -300,7 +326,8 @@ class M3ShapingEnv(ShapingParallelEnv):
             v_base=float(vbase.v_shot_soft), boxed_base=bool(vbase.boxed_in),
             o_base=float(vbase.p_feasible),
             fire_event=fire_event, clean=clean_crossed, captured=captured,
-            wasted_inc=wasted_inc, limiter_loss=limiter_loss, p=self.m3)
+            wasted_inc=wasted_inc, limiter_loss=limiter_loss, p=self.m3,
+            clean_margin=float(vfull.v_shot_soft) - float(self.theta_fire))
         J = terms["J"]
 
         # --- fire-chain trackers (docs/11 SS3) ---------------------------------

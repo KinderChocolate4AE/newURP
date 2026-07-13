@@ -1,4 +1,4 @@
-# 12 — A-캠페인: capture-unlock 레버 사다리 (사전등록 v0.1, 2026-07-14) — 비준 대기
+# 12 — A-캠페인: capture-unlock 레버 사다리 (v0.2 — S-1~S-5 비준 + S-6 폴백 등재, 2026-07-14)
 
 > 입력: 09 (y) Gate A/B FAIL · P4 (s)/(t)/(u) · docs/11 v0.2. 이 문서는 **진단 데이터 접촉 전에 커밋**되는 사전등록이다 — 임계값·브랜치 규칙·사다리 순서는 이 커밋으로 고정.
 
@@ -48,7 +48,7 @@ python -m shepherd.scripts.a2_fire_mode_diagnosis \
 | **L-margin** | binary λ1·1[clean] → S1·S2 동안 graded λ1·σ((v−θ_stage)/τ_m)·1[¬boxed], τ_m=0.05; S3 진입 시 binary 복원 | binary clean은 좁은 콘에서 너무 희소해 gradient 소실 | P4 요건 B ("binary λ1 불충분") |
 | **L-release** | boxed_dwell per-step 패널티 −λ_bd(0.02) + release_event 원샷 보너스 +r_rel(0.5, 에피소드당 1회); S1~S2 활성 | boxed 분지 심부(unbox 0.2~1.0m+)에서 탈출 gradient 부재 | P4 (u) 40/40 deep-boxed·release 채널 필요성 실측 |
 | **L-fire** | S2 동안 λ2(wasted) 1.0→0.3 인하 후 램프 완료 시 3-eval에 걸쳐 복원; w_gf 1.0→1.5 옵션 | 좁은 콘에서 wasted 기대비용이 발사 시도를 지배 → 발사 소거 | (y) ret −1.0~0.0·clean 붕괴 |
-| **L-adaptive** | S2 시간-선형 램프 → 폭-스텝 8개로 이산화, 전진 = 현재 폭 train-eval clean≥0.1 최근-2 지속, stall 3-eval 시 1스텝 백오프, S2 상한 300k(미달 시 stall 폭 기록 후 정지) | 전이 압력이 학습 속도와 미스매치 (시간-선형 램프가 붕괴 지점 정보도 안 남김) | (y) 전 seed s2 정지 |
+| **L-adaptive** | S2 시간-선형 램프 → 폭-스텝 8개로 이산화, 전진 = 현재 폭 train-eval clean≥0.1 최근-2 지속, stall 3-eval 시 1스텝 백오프, S2 상한 **340k**(정정: 8스텝×지속2×케이던스 20,480 = 327,680 최소 소요 → 300k는 완주 불가; 구현 강제 S-4 부속 수정, 09 (bb)) — 미달 시 stall 폭 기록 후 정지 | 전이 압력이 학습 속도와 미스매치 (시간-선형 램프가 붕괴 지점 정보도 안 남김) | (y) 전 seed s2 정지 |
 | **L-reverse** | 후진 커리큘럼: P4 probe의 capture-grade clean-fire 상태 4본 근방 스폰(σ_pos 0.5→2.0m 스케줄, 후진 5단) → release→fire 말단 체인부터 학습; **eval 스폰 frozen** | clean = 비-방사 release 기하 + p_feas~1e-3 → 전방 탐색 발견 불가, 도달가능 상태의 역방향 확장으로만 발견 | P4 (s) 면도날 창 실측 + (u) release 채널 |
 | **L-nearcap** | near-capture 항 — **[docs/11 수정 4] 예약 유지**: clean>0 ∧ capture=0 도달 시에만 해제 | — | docs/11 §1 |
 | **L-2stage** | 명시적 compress→release 2단 행동 구조(모드 스위치/옵션) — **최후 레버** (행동공간 변경, 무거움) | clean 발사는 단일 반응 정책으로 표현 불가 | P4 (u) 2단 행동 실측 지지 |
@@ -81,9 +81,10 @@ python -m shepherd.scripts.a2_fire_mode_diagnosis \
 
 ## 7. 비준 체크리스트 (Hyunjun S-슬롯)
 
-- [ ] **S-1** 방침 개정: "1~2회 제한" → "전력 사다리 + 트립와이어 8/31" (§0)
-- [ ] **S-2** 진단 규칙: 임계 0.05/0.5, 합의 70%, 동률 순서 (§2)
-- [ ] **S-3** 레버 풀·브랜치 사다리·시작값 (§3·§4)
-- [ ] **S-4** 시도 프로토콜: 파일럿 중간 게이트 기준 (§5)
-- [ ] **S-5** "신규 항 = 스캐폴드 전용, 판정 J·게이트 정의 불변" 원칙 (§1)
+- [x] **S-1** 방침 개정: "1~2회 제한" → "전력 사다리 + 트립와이어 8/31" (§0) — 2026-07-14 일괄 비준 (09 (aa))
+- [x] **S-2** 진단 규칙: 임계 0.05/0.5, 합의 70%, 동률 순서 (§2) — 판독: **NO_FIRE 10/10 → 브랜치 NF** (09 (aa))
+- [x] **S-3** 레버 풀·브랜치 사다리·시작값 (§3·§4) — 단 L-adaptive S2 상한 300k→**340k** 구현 정정 (§3 표)
+- [x] **S-4** 시도 프로토콜 (§5) — A-2 중간 게이트 정량화: train-eval clean≥0.1 지속 @ **ha<0.1274**(A-1 사멸 폭) or frozen-heldout clean 비영 ≥1 seed
+- [x] **S-5** "신규 항 = 스캐폴드 전용, 판정 J·게이트 정의 불변" 원칙 (§1) — lock: tests/test_a2_scaffolds.py (판정 비트-동일)
+- [x] **S-6** 수동-평형 폴백 (09 (aa)): "교전/침투 스캐폴드 비용"은 A-2 **미포함** — A-2 파일럿에서 λ2 완화에도 fire 사멸 지속 시 발동하는 사전등록 폴백으로만 등재
 - [ ] 교수님 공유 문구(통보형) 확정 (§0)
