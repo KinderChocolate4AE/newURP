@@ -205,3 +205,57 @@ def test_a3_configs_differ_only_in_warm_start():
     assert st[-1].get("nominal") and len(st) == 5
     assert pilot["curriculum"]["mode"] == "reverse"
     assert pilot["m3"] == warm["m3"]               # judgment identical
+
+
+# ----------------------------------------------------- A-3b (docs/13 SS8) ---
+BANK = ROOT / "results/a3_robust_bank.json"
+
+
+def test_robust_bank_loads_and_gates():
+    if not BANK.exists():
+        pytest.skip("robust bank not built yet")
+    states = sb.load_t0(str(BANK))
+    assert len(states) >= 3                        # R-6 target
+    surv, report = sb.verify_t0(states, copy.deepcopy(ENV_CFG),
+                                robust_seeds=tuple(range(7, 12)),
+                                robust_min=0.8)
+    assert len(surv) >= 2
+    for r in report:
+        assert r["robust_min"] == 0.8 and r["robust_clean_frac"] is not None
+
+
+def test_verify_robust_gate_drops_fragile():
+    states = sb.load_t0(PROBE_GLOB)                # old fragile bank
+    surv, report = sb.verify_t0(states, copy.deepcopy(ENV_CFG),
+                                robust_seeds=tuple(range(100, 105)),
+                                robust_min=0.9)
+    # (ff): 3/4 old witnesses are sample-fragile -> gate must drop some
+    assert len(surv) < len(states)
+    with pytest.raises(ValueError, match="robust_seeds"):
+        sb.verify_t0(states, copy.deepcopy(ENV_CFG), robust_seeds=(),
+                     robust_min=0.9)
+
+
+def test_probe_transplant_math():
+    from shepherd.scripts.a3_robust_witness_probe import transplant
+    t0s = sb.load_t0(PROBE_GLOB)
+    donor = max(t0s, key=lambda t: (t.x, t.v))     # x20v24
+    L = transplant(donor, 16.0, 20.0)
+    rel_d = np.asarray(donor.limiters, float) - [donor.x, 0, 0]
+    rel_t = L - np.array([16.0, 0, 0])
+    assert np.allclose(rel_t[:, 1:], rel_d[:, 1:])           # lateral kept
+    assert np.allclose(rel_t[:, 0], rel_d[:, 0] * (20.0 / donor.v))
+
+
+def test_a3b_config_ladder_sane():
+    cfgp = ROOT / "configs/m3a_a3b_pilot.yaml"
+    if not cfgp.exists():
+        pytest.skip("a3b config not present")
+    c = yaml.safe_load(open(cfgp))
+    rv = c["curriculum"]["reverse"]
+    st = rv["stages"]
+    assert st[0]["sigma_pos"] == 0.0 and st[-1].get("nominal")
+    sigs = [s["sigma_pos"] for s in st[:-1]]
+    assert sigs == sorted(sigs)                    # monotone widening
+    assert rv["verify_robust_min"] >= 0.9 and len(rv["verify_robust_seeds"]) >= 10
+    assert rv["probe_glob"].endswith("a3_robust_bank.json")

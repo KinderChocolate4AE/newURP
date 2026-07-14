@@ -300,6 +300,16 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-14 (gg) — ✅ A-3b 구현 완료: robust-witness probe(bank 3본 확보) + R-8 게이트 + 창-스케일 사다리 config — scratch 3-seed 파일럿 대기
+
+- R-6~R-8 비준 → 구현·실행. **판정 경로 불변**(probe = 분석 lane, 학습 아님).
+- **① robust-witness probe** (`shepherd/scripts/a3_robust_witness_probe.py`): E_seeds[clean] 목적의 greedy 리파인먼트 — **비용 트릭: (x,v)당 union을 seed별 1회만 빌드, 후보 평가는 캐시 union의 저가 eval**(리파인 = ~1000 eval, ~1000 빌드 아님 → 샌드박스 완주). CRN 위생: search seeds 100–104 / **validation 200–209 서로소**, 수락 = val ≥ 0.9. 후보 = 자기 witness + 도너(x20v24) 패턴 이식(공격자-상대, x축 속도비 스케일).
+- **② probe 결과 (샌드박스 실행, 결정론 rng23·`results/a3_robust_bank.json` 커밋)**: **bank 3본 수락** — x20v24 val **1.00**/cap 1.00, x16v20 **0.50 → 1.00**(리파인먼트가 취약 witness를 완전 강건으로 이동 — robust-clean이 로컬 탐색으로 도달 가능함 실증), x12v16 0.38 → **0.90**; x16v20u1은 0.70 reject(동일 (x,v) u0 확보로 무방). **σ-베이스라인**(스폰-clean, R-7 상대화 근거): σ0.02 → 0.27~0.42, 0.05 → 0.08~0.12, 0.1 → 0.01~0.09, 0.2 → ≈0, 0.5 → 0 (A-3 R1 전멸의 정량 확정).
+- **③ R-8 게이트**: `spawn_bank.verify_t0(robust_min=, robust_seeds=)` — 강건성 진단을 드롭 게이트로 승격; Curriculum reverse가 `verify_robust_min`/`verify_robust_seeds` 전달. 테스트: 구 T0 뱅크에 0.9 게이트 적용 시 실제로 탈락 발생 lock.
+- **④ config `m3a_a3b_pilot.yaml`**: bank 스폰·R0(σ=0, **exit 0.45 = 표현 테스트 본체**)→R1(0.02/0.17)→R2(0.05/0.10 floor)→R3(0.10/0.10 — 베이스라인 ~0.05 초과 요구 = 셰이핑 시작)→R4(0.2+rw5)→R5(0.5+rw15)→R6(nominal); exit floor 0.10 = eval 20판 해상도(2판). 450k·scratch 3-seed; **warmref 생략**(A-3에서 warm=scratch 동일 실패 + 교란이 스폰측이었음 — 사유 기록). 테스트 +4(뱅크 로딩·R-8 게이트·이식 수학·사다리 단조성), A-3 스위트 16/16 + M3계 회귀 35 green.
+- **파일럿 중간 게이트 (사전등록)**: **R0 통과 ≥2 seed** ∧ R2(σ0.05) 도달 ≥1 seed, or frozen-heldout clean 비영 ≥1 seed. **R0 실패 = (이번에야말로) 표현 가설 기각 → L-2stage 순서 논의.** 스폰은 이제 fresh-seed 하에서도 ~90–100% clean이므로 "즉시 발사"만 배우면 R0는 통과된다 — 못 배우면 행동 표현의 문제.
+- **서버(Hyunjun)**: push 후 ⓐ torch 테스트 ⓑ (선택) probe 서버 재현(`python -m shepherd.scripts.a3_robust_witness_probe --iters 100` — 결정론, bank 일치 확인) ⓒ `TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_a3b_pilot.yaml OUT=results/m3a_a3b_pilot REQUIRED_COMMIT=<본 커밋> GPU=0 SEEDS="0 1 2"`.
+
 ### 2026-07-14 (ff) — ❌ A-3 파일럿 중간 게이트 FAIL — 단 **L-2stage 신호 미발동**: R1 교란 2건 실측(σ≫창 + T0 3/4 union-표본 비강건) + **robust witness 실존** → A-3b 수정안 제안
 
 - **런** (`5430246`, 아티팩트 `aaf51cf`): scratch 3-seed + warmref 1-seed **전부 r_max=0**(R1 정체, 전진 0회), train-eval clean 全 0.00(fire 첫 eval 0.10 → 0), cap @307k, heldout 0/200 ×4 (방관 3본 ret ≈0·pen 100%, warmref 무발사-차단 ret −1.18·pen 0% — (aa) 수동 평형 재현). 형식 판정: (i) R1 통과 0/3 (ii) R3 도달 0 (iii) heldout 비영 0 → **A-3(현 파라미터) kill**.

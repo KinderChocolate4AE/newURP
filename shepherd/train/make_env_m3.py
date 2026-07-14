@@ -293,7 +293,11 @@ class Curriculum:
                 if env_cfg is None:
                     raise ValueError("reverse.verify_t0=true needs env_cfg "
                                      "(pass verify_t0: false in tests)")
-                self.t0, self.t0_verify = _sb.verify_t0(self.t0, env_cfg)
+                rmin = rv.get("verify_robust_min")     # A-3b R-8 gate
+                rseeds = tuple(rv.get("verify_robust_seeds", (7, 8, 9)))
+                self.t0, self.t0_verify = _sb.verify_t0(
+                    self.t0, env_cfg, robust_seeds=rseeds,
+                    robust_min=(float(rmin) if rmin is not None else None))
         if self.mode == "adaptive":                    # A-2 L-adaptive (docs/12 SS3)
             a2 = cur_cfg["s2_adaptive"]
             self.n_width = int(a2["n_width_steps"])

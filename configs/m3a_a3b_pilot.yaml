@@ -1,0 +1,105 @@
+# A-3b PILOT -- L-reverse, ROBUST bank + window-scaled sigma ladder
+# (docs/13 v0.3 SS8, R-6..R-8 ratified; docs/09 (ff)/(gg)). SCRATCH 3-seed.
+# warmref omitted this round: A-3 showed warm == scratch failure mode at R1
+# and the confounds were spawn-side, not arm-side (09 (gg)).
+#
+# Bank = results/a3_robust_bank.json (probe: E_seeds[clean] refinement,
+# search seeds 100-104, validation 200-209, accept >= 0.9): 3 witnesses
+# (x20v24 1.0 / x16v20 1.0 / x12v16 0.9). Startup re-gate: verify_t0 with
+# robust_min 0.9 over 10 fresh seeds (R-8).
+#
+# Ladder starts BELOW the clean-window width (sigma 0.02; measured spawn-clean
+# baselines 0.27-0.42) and exits are baseline-relative with a 0.10 floor
+# (= 2/20 eval episodes, measurement resolution):
+#   R0 sigma 0    exit 0.45   (~0.5 x robust-frac ~0.9; THE representation test)
+#   R1 0.02       exit 0.17   (~0.5 x 0.34)
+#   R2 0.05       exit 0.10   (floor; baseline ~0.10)
+#   R3 0.10       exit 0.10   (must BEAT baseline ~0.05 -> shaping begins)
+#   R4 0.20 +rw5  exit 0.10
+#   R5 0.50 +rw15 exit 0.10
+#   R6 nominal
+# Pre-registered pilot mid-gate (docs/09 (gg)): R0 pass >=2 seeds AND R2
+# reached >=1 seed, OR frozen-heldout clean nonzero >=1 seed.
+# R0 FAILURE = representation hypothesis REJECTED (spawns ARE clean now) ->
+# L-2stage reorder discussion.
+#
+# Launch (server):
+#   TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_a3b_pilot.yaml \
+#     OUT=results/m3a_a3b_pilot REQUIRED_COMMIT=<A-3b commit> GPU=0 SEEDS="0 1 2" \
+#     bash scripts/run_ippo_seeds_parallel.sh
+
+env_config: configs/m2_l2_train.yaml   # FROZEN scenario (never edited)
+
+m3:                             # judgment/frozen reward params -- UNCHANGED
+  o_star: 1.0e-3
+  sigma_g: 1.0
+  w_h: 1.0
+  w_g: 0.3
+  w_gf: 1.0
+  lambda_cap: 5.0
+  v_eff_mode: hard
+  o_hi_release: 1.0e-2
+
+curriculum:
+  mode: reverse
+  reverse:
+    probe_glob: results/a3_robust_bank.json
+    verify_t0: true
+    verify_robust_min: 0.9      # R-8: robustness diagnostic promoted to gate
+    verify_robust_seeds: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    stages:
+      - {name: r0, sigma_pos: 0.0,  sigma_vel: 0.0,  rewind_dx: 0.0,  exit_clean: 0.45}
+      - {name: r1, sigma_pos: 0.02, sigma_vel: 0.02, rewind_dx: 0.0,  exit_clean: 0.17}
+      - {name: r2, sigma_pos: 0.05, sigma_vel: 0.02, rewind_dx: 0.0,  exit_clean: 0.10}
+      - {name: r3, sigma_pos: 0.10, sigma_vel: 0.05, rewind_dx: 0.0,  exit_clean: 0.10}
+      - {name: r4, sigma_pos: 0.20, sigma_vel: 0.05, rewind_dx: 5.0,  exit_clean: 0.10}
+      - {name: r5, sigma_pos: 0.50, sigma_vel: 0.05, rewind_dx: 15.0, exit_clean: 0.10}
+      - {name: r6, nominal: true}
+    advance_sustain: 2
+    stall_evals: 3
+    max_steps: 300000
+  s2_exit: {heldout_clean_nonzero_last: 3}
+
+warm_start:
+  enabled: false                # SCRATCH (R-2; warmref omitted, see header)
+
+loop:
+  total_env_steps: 450000       # 7 stages x sustain-2 x 20480 ~= 287k + tail
+  rollout_env_steps: 1024
+  eval_interval_updates: 20
+  eval_episodes: 20
+  save_interval_updates: 20
+  lr_anneal: linear
+  lr_anneal_floor: 0.1
+
+mappo:                          # P1 main recipe (unchanged)
+  gamma: 0.99
+  lam: 0.95
+  lr: 3.0e-4
+  epochs: 10
+  minibatch_size: 256
+  clip_eps: 0.2
+  ent_coef_limiter: 0.0
+  ent_coef_finisher: 0.003
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  target_kl: 0.02
+  hidden_sizes: [128, 128]
+  init_log_std: 0.0
+  ortho_init: true
+  value_norm: true
+  coma_mix: 0.5
+  coma_gamma: 0.99
+  coma_lam: 0.95
+
+randomize:                      # attacker family (train only; eval nominal)
+  enabled: true
+  att_speed: [16.0, 24.0]
+  adversary_start_x: [20.0, 28.0]
+  adversary_omega: [8.0, 12.0]
+  adv_a_max: [21.0, 30.0]
+
+wandb:
+  enabled: true
+  project: newurp-l2
+  group: m3a-a3b-pilot

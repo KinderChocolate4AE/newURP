@@ -78,6 +78,6 @@
 | exit | 절대 clean ≥ 0.5/0.3/... | **상대화**: exit_clean = 0.5 × 스테이지 스폰-clean 베이스라인(probe 사전 측정) |
 | L-2stage 신호 | R1 실패 시 | **A-3b R0 실패 시에만** (표현 테스트 성립 후) |
 
-- [ ] **R-6** robust-witness probe(분석 lane): E_seeds[clean] refinement + (x,v) 그리드 확장, bank 문턱 0.9
-- [ ] **R-7** σ-사다리·상대화 exit 파라미터
-- [ ] **R-8** verify_t0 robust-seed 진단을 **게이트로 승격**(사다리 착수 전 필수 실행)
+- [x] **R-6** robust-witness probe — 2026-07-14 비준·실행: **bank 3본**(x20v24 1.00 / x16v20 0.50→1.00 / x12v16 0.38→0.90; val seeds 200–209 서로소), `results/a3_robust_bank.json` (09 (gg))
+- [x] **R-7** σ-사다리·상대화 exit — σ-베이스라인 실측(0.02→~0.35 … 0.5→0) 기반, floor 0.10 = eval 해상도; `configs/m3a_a3b_pilot.yaml`
+- [x] **R-8** verify_t0 robust 게이트 — `robust_min`/`robust_seeds` 파라미터로 승격, a3b config는 0.9 × 10-seed; 구-뱅크 탈락 lock 테스트

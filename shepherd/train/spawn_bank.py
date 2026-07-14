@@ -115,10 +115,18 @@ def spawn_from(t0: T0State, rng: Optional[np.random.Generator] = None, *,
 
 
 def verify_t0(states: List[T0State], env_cfg: Dict,
-              robust_seeds: Tuple[int, ...] = ROBUST_SEEDS
+              robust_seeds: Tuple[int, ...] = ROBUST_SEEDS,
+              robust_min: Optional[float] = None
               ) -> Tuple[List[T0State], List[Dict]]:
     """R-1 gate: replay each T0 through the FROZEN composition root; drop
-    non-reproducing states; raise if none survive (docs/13 SS1)."""
+    non-reproducing states; raise if none survive (docs/13 SS1).
+
+    robust_min (A-3b R-8, docs/13 SS8): when set, the fresh-seed robustness
+    check becomes a GATE -- states whose clean fraction over robust_seeds is
+    below robust_min are dropped (09 (ff): sample-fragile witnesses poisoned
+    the A-3 bank; the diagnostic is now mandatory)."""
+    if robust_min is not None and not robust_seeds:
+        raise ValueError("robust_min gating needs non-empty robust_seeds")
     from shepherd.env_m3 import M3Params                       # lazy (no cycle)
     from shepherd.train.make_env_m3 import make_m3_train_env
     check_frame(env_cfg)
@@ -143,10 +151,14 @@ def verify_t0(states: List[T0State], env_cfg: Dict,
         for s in robust_seeds:                                 # diagnostic only
             rr = readout(s, t0)
             rob.append(bool(rr["v_soft"] >= theta and rr["p_feas"] > 0.0))
+        rfrac = float(np.mean(rob)) if rob else None
+        if robust_min is not None and (rfrac is None or rfrac < robust_min):
+            ok = False                                 # R-8 robust gate
         row = {"src": t0.src, "probe": {"v_soft": t0.v_soft, "worst": t0.worst,
                                         "p_feas": t0.p_feas},
                "env_at_union_seed": r0, "pass": bool(ok),
-               "robust_clean_frac": float(np.mean(rob)) if rob else None}
+               "robust_clean_frac": rfrac,
+               "robust_min": robust_min}
         report.append(row)
         if ok:
             survivors.append(t0)
