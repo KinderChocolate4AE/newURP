@@ -1,0 +1,1 @@
+{"env_steps": 399360, "episodes": 7454, "seed": 0, "stage": "s2", "stage_history": [{"stage": "s2", "step": 0, "event": "r_enter", "r": 0}, {"stage": "s2", "step": 307200, "event": "cap", "r": 0}], "capture_count_train": 1}
