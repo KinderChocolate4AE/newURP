@@ -86,16 +86,22 @@ def ntfy(msg: str) -> None:
 # ------------------------------------------------------------ eval bundle ---
 def m3_eval_bundle(env_cfg: dict, m3: M3Params, limiter_fn, finisher_fn,
                    episodes: int, seed0: int,
-                   stage: Optional[Dict[str, float]] = None) -> dict:
+                   stage: Optional[Dict[str, float]] = None,
+                   spawn_fn=None) -> dict:
     """Deterministic bundle eval on the M3 env (nominal attacker, fixed CRN
     seeds). stage=None -> FROZEN constants + judgment m3 (the ONLY numbers
     judgment may use, docs/11 SS2); stage=dict -> train-eval diagnostics.
-    Records the full fire-chain decomposition per episode (docs/11 SS3)."""
+    Records the full fire-chain decomposition per episode (docs/11 SS3).
+
+    spawn_fn (A-3 L-reverse, docs/13): optional ep->spawn dict sampler for the
+    TRAIN-EVAL gating bundle only -- the judgment/frozen bundle and every
+    held-out harness call this with spawn_fn=None (R-5 STRICT)."""
     env, _, _ = make_m3_train_env(copy.deepcopy(env_cfg), m3, stage=stage)
     ad = M3Adapter(env)
     recs = []
     for ep in range(episodes):
-        obs_d, _ = ad.reset(seed=seed0 + ep)
+        obs_d, _ = (ad.reset_to(spawn_fn(ep), seed=seed0 + ep)
+                    if spawn_fn is not None else ad.reset(seed=seed0 + ep))
         obs = obs_d[ad.limiter_ids[0]]
         flags: Dict[str, object] = {}
         ret = head = head_m3 = rgeo = 0.0
@@ -187,7 +193,8 @@ class M3ARunner:
 
         self.m3 = m3_params_from_cfg(run_cfg["m3"], env_cfg)
         self.cur = Curriculum(run_cfg["curriculum"],
-                              frozen_constants(env_cfg, self.m3))
+                              frozen_constants(env_cfg, self.m3),
+                              env_cfg=env_cfg)
 
         env, _, _ = make_m3_train_env(copy.deepcopy(env_cfg), self.m3)
         ad = M3Adapter(env)
@@ -226,10 +233,13 @@ class M3ARunner:
     def _begin_episode(self) -> None:
         params = sample_attacker_params(self.rand_cfg, self.rand_rng)
         stage = self.cur.overrides(self.env_steps)
+        spawn = self.cur.spawn(self.rand_rng)      # A-3: None unless reverse
         env, _, _ = build_m3_attacker_env(self.env_cfg, self.m3, params,
                                           stage=stage)
         self._adapter = M3Adapter(env)
-        obs_d, _ = self._adapter.reset(seed=self.base_seed + self._ep_idx)
+        seed = self.base_seed + self._ep_idx
+        obs_d, _ = (self._adapter.reset_to(spawn, seed=seed)
+                    if spawn is not None else self._adapter.reset(seed=seed))
         self._obs = obs_d[self._adapter.limiter_ids[0]]
         self._ep = {"ret": 0.0, "headline": 0.0, "headline_m3": 0.0,
                     "limiter_loss": 0.0, "coma_sum": 0.0, "fire_events": 0.0,
@@ -383,10 +393,12 @@ class M3ARunner:
         frozen_ev = m3_eval_bundle(self.env_cfg, self.m3, lim_fn, fin_fn,
                                    episodes, self.eval_seed0, stage=None)
         stage = self.cur.overrides(self.env_steps)
-        if stage is None:
+        spawn_fn = self.cur.eval_spawn_fn()        # A-3: gating bundle spawns
+        if stage is None and spawn_fn is None:
             return frozen_ev, frozen_ev
         train_ev = m3_eval_bundle(self.env_cfg, self.m3, lim_fn, fin_fn,
-                                  episodes, self.eval_seed0, stage=stage)
+                                  episodes, self.eval_seed0, stage=stage,
+                                  spawn_fn=spawn_fn)
         return frozen_ev, train_ev
 
     def save(self, out_dir: pathlib.Path, tag: str = "latest") -> None:

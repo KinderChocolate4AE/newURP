@@ -208,6 +208,12 @@ class M3Adapter(ShepherdAdapter):
     key set; headline stays the M2 delta_v_shot_headline (aux/non-inferiority
     logging) -- the M3 reward already lives in StepResult.rewards."""
 
+    def reset_to(self, spawn: dict, seed: int):
+        """A-3 TRAIN-ONLY spawn injection passthrough (docs/13 SS6-1)."""
+        obs, _ = self.env.reset_to(spawn, seed=seed)
+        self._check_obs(obs)
+        return obs, self.env.state()
+
     def step(self, live_actions) -> StepResult:
         acts = dict(live_actions)
         acts.setdefault(self.adversary_id, np.zeros(3, np.float32))
@@ -232,18 +238,25 @@ class Curriculum:
     (None = frozen constants = S3); on_eval() advances stages on the ratified
     metric-gated exit conditions."""
 
-    def __init__(self, cur_cfg: dict, frozen: Dict[str, float]):
+    def __init__(self, cur_cfg: dict, frozen: Dict[str, float],
+                 env_cfg: Optional[dict] = None):
         self.mode = str(cur_cfg["mode"])
-        if self.mode not in ("s1_only", "staged", "adaptive"):
+        if self.mode not in ("s1_only", "staged", "adaptive", "reverse"):
             raise ValueError(
-                f"curriculum.mode '{self.mode}' (s1_only|staged|adaptive)")
-        self.s1 = stage_from_cfg(cur_cfg["s1"])
+                f"curriculum.mode '{self.mode}' (s1_only|staged|adaptive|reverse)")
         self.frozen = dict(frozen)
-        self.stage = "s1"
         self.entry_step = 0
-        self.history: List[dict] = [{"stage": "s1", "step": 0}]
         self._streak = 0
         self._heldout_clean: List[float] = []
+        if self.mode == "reverse":                 # A-3 L-reverse (docs/13)
+            self.s1 = None                         # no width/reward stages
+            self.stage = "s2"                      # ladder active from step 0
+            self.history: List[dict] = [{"stage": "s2", "step": 0,
+                                         "event": "r_enter", "r": 0}]
+        else:
+            self.s1 = stage_from_cfg(cur_cfg["s1"])
+            self.stage = "s1"
+            self.history = [{"stage": "s1", "step": 0}]
         if self.mode in ("staged", "adaptive"):
             self.s1_min_steps = int(cur_cfg["s1_min_steps"])
             e1 = cur_cfg["s1_exit"]
@@ -253,6 +266,34 @@ class Curriculum:
             self.s2_heldout_last = int(cur_cfg["s2_exit"]["heldout_clean_nonzero_last"])
         if self.mode == "staged":
             self.s2_steps = int(cur_cfg["s2_steps"])
+        if self.mode == "reverse":
+            rv = cur_cfg["reverse"]
+            self.rv_stages = [dict(st) for st in rv["stages"]]
+            if not self.rv_stages or not self.rv_stages[-1].get("nominal"):
+                raise ValueError("reverse.stages must end with a nominal stage "
+                                 "(docs/13 SS2 R5)")
+            for st in self.rv_stages[:-1]:
+                for k in ("name", "sigma_pos", "sigma_vel", "rewind_dx",
+                          "exit_clean"):
+                    if k not in st:
+                        raise KeyError(f"reverse stage missing '{k}': {st}")
+            self.adv_sustain = int(rv["advance_sustain"])
+            self.stall_evals = int(rv["stall_evals"])
+            self.rv_max_steps = int(rv["max_steps"])
+            self.s2_heldout_last = int(
+                cur_cfg["s2_exit"]["heldout_clean_nonzero_last"])
+            self.r_idx = 0
+            self._adv_streak = 0
+            self._stall = 0
+            self._capped = False
+            from shepherd.train import spawn_bank as _sb   # no import cycle
+            self._sb = _sb
+            self.t0 = _sb.load_t0(str(rv["probe_glob"]))
+            if bool(rv.get("verify_t0", True)):
+                if env_cfg is None:
+                    raise ValueError("reverse.verify_t0=true needs env_cfg "
+                                     "(pass verify_t0: false in tests)")
+                self.t0, self.t0_verify = _sb.verify_t0(self.t0, env_cfg)
         if self.mode == "adaptive":                    # A-2 L-adaptive (docs/12 SS3)
             a2 = cur_cfg["s2_adaptive"]
             self.n_width = int(a2["n_width_steps"])
@@ -270,6 +311,8 @@ class Curriculum:
             self._capped = False
 
     def overrides(self, env_steps: int) -> Optional[Dict[str, float]]:
+        if self.mode == "reverse":
+            return None      # A-3: frozen constants + judgment m3 ALWAYS (R-5)
         if self.stage == "s1":
             return dict(self.s1)
         if self.stage == "s2":
@@ -290,6 +333,41 @@ class Curriculum:
             return interp_stage(self.s1, self.frozen, alpha)
         return None                                   # s3 -> frozen constants
 
+    def spawn(self, rng: np.random.Generator) -> Optional[dict]:
+        """A-3 per-episode spawn directive; None = nominal frozen reset.
+        Only the TRAIN rollout path consumes this (R-5: eval spawns frozen
+        except the train-eval gating bundle via eval_spawn_fn)."""
+        if self.mode != "reverse" or self.stage != "s2":
+            return None
+        st = self.rv_stages[self.r_idx]
+        if st.get("nominal"):
+            return None
+        t0 = self.t0[int(rng.integers(len(self.t0)))]
+        return self._sb.spawn_from(
+            t0, rng, sigma_pos=float(st["sigma_pos"]),
+            sigma_vel=float(st["sigma_vel"]),
+            rewind_dx=float(st["rewind_dx"]))
+
+    def eval_spawn_fn(self):
+        """Deterministic spawn sampler for the TRAIN-EVAL (gating) bundle --
+        stage-stable draws so the advancement metric is comparable across
+        evals at the same R-stage. None -> train-eval == frozen bundle."""
+        if self.mode != "reverse" or self.stage != "s2":
+            return None
+        st = self.rv_stages[self.r_idx]
+        if st.get("nominal"):
+            return None
+        r_idx, t0s, sb = self.r_idx, self.t0, self._sb
+        sp, sv, rd = (float(st["sigma_pos"]), float(st["sigma_vel"]),
+                      float(st["rewind_dx"]))
+
+        def fn(ep: int) -> dict:
+            rng = np.random.default_rng(424_243 + r_idx * 991 + ep)
+            t0 = t0s[int(rng.integers(len(t0s)))]
+            return sb.spawn_from(t0, rng, sigma_pos=sp, sigma_vel=sv,
+                                 rewind_dx=rd)
+        return fn
+
     def on_eval(self, env_steps: int, train_ev: dict,
                 frozen_ev: dict) -> Optional[str]:
         self._heldout_clean.append(float(frozen_ev["clean_cross_rate"]))
@@ -305,6 +383,43 @@ class Curriculum:
                 self.stage, self.entry_step, self._streak = "s2", env_steps, 0
                 self.history.append({"stage": "s2", "step": env_steps})
                 return "s2"
+        elif self.stage == "s2" and self.mode == "reverse":
+            st = self.rv_stages[self.r_idx]
+            nominal = bool(st.get("nominal"))
+            if not nominal and not self._capped:
+                if env_steps - self.entry_step >= self.rv_max_steps:
+                    self._capped = True            # stall stage = evidence
+                    self.history.append({"stage": "s2", "step": env_steps,
+                                         "event": "cap", "r": self.r_idx})
+                else:
+                    ok = (float(train_ev["clean_cross_rate"])
+                          >= float(st["exit_clean"]))
+                    self._adv_streak = self._adv_streak + 1 if ok else 0
+                    advanced = False
+                    if (self._adv_streak >= self.adv_sustain
+                            and self.r_idx < len(self.rv_stages) - 1):
+                        self.r_idx += 1
+                        self._adv_streak = self._stall = 0
+                        advanced = True
+                        self.history.append(
+                            {"stage": "s2", "step": env_steps,
+                             "event": "advance", "r": self.r_idx})
+                    if not advanced:
+                        self._stall += 1
+                        if ((not ok) and self._stall >= self.stall_evals
+                                and self.r_idx > 0):
+                            self.r_idx -= 1        # back off one R-stage
+                            self._stall = self._adv_streak = 0
+                            self.history.append(
+                                {"stage": "s2", "step": env_steps,
+                                 "event": "backoff", "r": self.r_idx})
+            last = self._heldout_clean[-self.s2_heldout_last:]
+            nonzero = (len(last) >= self.s2_heldout_last
+                       and all(c > 0.0 for c in last))
+            if nominal and nonzero:                # R5 exit (docs/13 SS2)
+                self.stage, self.entry_step = "s3", env_steps
+                self.history.append({"stage": "s3", "step": env_steps})
+                return "s3"
         elif self.stage == "s2" and self.mode == "adaptive":
             if self._full_step is None and not self._capped:
                 if env_steps - self.entry_step >= self.s2_max_steps:
@@ -355,6 +470,14 @@ class Curriculum:
     def describe(self) -> dict:
         """Compact curriculum state for eval_curve points / prints (A-2)."""
         d = {"stage": self.stage, "mode": self.mode}
+        if self.mode == "reverse":
+            st = (self.rv_stages[self.r_idx] if self.stage == "s2"
+                  else {"name": "done"})
+            d.update(r_idx=self.r_idx, r_name=st.get("name"),
+                     nominal=bool(st.get("nominal")),
+                     sigma_pos=st.get("sigma_pos"),
+                     rewind_dx=st.get("rewind_dx"),
+                     n_t0=len(self.t0), capped=self._capped)
         if self.mode == "adaptive":
             a = self.k / self.n_width
             d.update(k=self.k, n_width=self.n_width,

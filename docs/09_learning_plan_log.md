@@ -300,6 +300,15 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-14 (ee) — ✅ A-3(L-reverse) 구현 완료: 스폰 주입 + T0 재구성·재검증(4/4 실측) + reverse 커리큘럼 — scratch 3-seed 파일럿 대기
+
+- R-1~R-5 일괄 비준 → 구현. **frozen 계약·판정 경로 무변경**; 신규 2 + 수정 3 + config 2 + 테스트 +12.
+- ① `shepherd/train/spawn_bank.py`(신규): probe `refined_best` → T0 로딩(capture-grade만)·**STRICT 프레임 체크**(apex [2,0,0] = layout finisher_p0, 불일치 시 변환 없이 raise)·`spawn_from`(σ_pos/σ_vel 지터 + rewind_dx 접근-역방향 후진)·`verify_t0`(frozen 조립 루트 재계산, 미재현 DROP·전멸 raise) + CLI. **샌드박스 실측: T0 4/4 PASS**(전부 v_soft 1.000·worst 1.000·p_feas 4.0e-4~2.4e-3) — R-1 게이트 그린; robust-seed 진단은 서버 몫.
+- ② `env_m3.reset_to`(TRAIN-ONLY): 정상 reset 후 backend AgentKin 오버라이드(리미터 4 + 공격자 pos/vel; **피니셔 불가침**) → viability·obs 재계산 + m3 트래커 재시드; RotorPy형 백엔드는 별도 주입 어댑터 필요 명시. ③ `make_env_m3`: Curriculum **`reverse` 모드** — `overrides()` 상시 None(frozen 상수 + judgment m3 = R-5 "보상 무개입"이 구조적으로 보장), `spawn()`(rollout)·`eval_spawn_fn()`(게이팅 번들, 스테이지-안정 결정론 draw)·R-사다리 전진/백오프/cap(A-2 기계 재사용; cap = stall 스테이지 증거)·R5(nominal) exit = heldout clean 최근-3 비영·T0 검증은 생성자(env_cfg 경유; 테스트는 verify_t0:false); `M3Adapter.reset_to` 패스스루. ④ `train_m3a`: `_begin_episode` 스폰 시임, `m3_eval_bundle(spawn_fn=)`은 **train-eval 게이팅 번들 전용**(frozen/judgment 번들·heldout 하네스는 스폰 경로 부재 — 소스-lock 테스트), `evaluate()` reverse-인지.
+- ⑤ configs: `m3a_a3_pilot.yaml`(scratch·R1~R5·400k) / `m3a_a3_warmref.yaml`(**warm_start + wandb group만 상이** — R-2 참고런, arm 선택 사용 금지). ⑥ `tests/test_a3_reverse.py` +12(로딩/프레임 STRICT/spawn_from 결정론·rewind 방향/reset_to capture-grade 재현·피니셔 불가침/어댑터/eval 격리 소스-lock/reverse 전이·백오프·cap·exit/nominal 종단 필수/config diff lock) — **t-free 전 스위트 green**(청크: 기타 80+4skip / coma 8 / M3계 47+1skip / viability·net_forward 23).
+- 캐비앗: 스폰은 **상태만** 주입(v_nominal·컨트롤러 불변 — 스폰 순간 viability는 probe와 일치, 이후 거동은 env 소관); scratch obs-norm이 privileged 스폰 분포로 초기화됨(R5 전이 시 norm drift 캐비앗).
+- **파일럿(서버, Hyunjun)**: push 후 ⓐ torch 테스트 ⓑ (선택) `python -m shepherd.train.spawn_bank`로 robust-seed 진단 커밋 ⓒ scratch 3-seed: `TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_a3_pilot.yaml OUT=results/m3a_a3_pilot REQUIRED_COMMIT=<본 커밋> GPU=0 SEEDS="0 1 2"` (+ warmref 1-seed: `CONFIG=configs/m3a_a3_warmref.yaml OUT=results/m3a_a3_warmref SEEDS="0"`) ⓓ **중간 게이트(13 §4)**: (i) R1 통과 ≥2 seed ∧ (ii) R3 도달 ≥1 or (iii) heldout clean 비영 — **(i) 실패 = 표현 가설 기각 신호 → L-2stage 순서 조정**.
+
 ### 2026-07-14 (dd) — A-3(L-reverse) 설계 초안 v0.1 — 비준 대기
 
 - Hyunjun 결정: A-2 kill 후 다음 레버 = **A-3 L-reverse** (S-6 수동성-비용은 보류 — 발사 강제로는 release-채널 기하를 못 가르침, (cc) 증거 정합).

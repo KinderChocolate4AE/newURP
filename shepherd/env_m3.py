@@ -209,6 +209,40 @@ class M3ShapingEnv(ShapingParallelEnv):
         return abs(math.log(o) - math.log(o_star)) if o > 0.0 else float("nan")
 
     # ------------------------------------------------------------------- API
+    def reset_to(self, spawn: dict, seed=None, options=None):
+        """TRAIN-ONLY spawn injection (A-3 L-reverse, docs/13 SS6-1; R-5).
+
+        Normal reset() first (seed/FSM/trackers), then overwrite the backend
+        kinematic states with the spawn dict ({"limiters": (N,3), "att_p": 3,
+        "att_v": 3}) and recompute viability + obs at the injected state.
+        The finisher is NEVER moved (frame contract, docs/13 SS1). No eval
+        path may call this -- eval bundles/harnesses reset() only (STRICT
+        lock: tests/test_a3_reverse.py)."""
+        self.reset(seed=seed, options=options)
+        if not hasattr(self.backend, "by_name"):
+            raise TypeError("reset_to needs a backend with mutable named "
+                            "agent states (AnalyticBackend); RotorPy-style "
+                            "backends need their own injection adapter")
+        L = np.asarray(spawn["limiters"], float)
+        if L.shape != (len(self.limiter_ids), 3):
+            raise ValueError(f"spawn['limiters'] shape {L.shape} != "
+                             f"({len(self.limiter_ids)}, 3)")
+        for i, lid in enumerate(self.limiter_ids):
+            a = self.backend.by_name(lid)
+            a.p = L[i].copy()
+            a.v = np.zeros(3)
+        att = self.backend.by_name(self.adversary_id)
+        att.p = np.asarray(spawn["att_p"], float).copy()
+        att.v = np.asarray(spawn["att_v"], float).copy()
+        lims, fin, att_s = self._states()
+        vres = self._vshot(self._p(att_s), self._v(att_s),
+                           [self._p(s) for s in lims], fin, seed=self._seed)
+        obs_vec = self._obs_vector(lims, fin, att_s, vres)
+        self._reset_m3_trackers(p_feasible0=float(obs_vec[-1]))
+        obs = {a: obs_vec.copy() for a in self.agents}
+        infos = {a: {} for a in self.agents}
+        return obs, infos
+
     def reset(self, seed=None, options=None):
         obs, infos = super().reset(seed=seed, options=options)
         # seed the release tracker with the reset-state feasibility (same
