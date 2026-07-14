@@ -18,8 +18,12 @@
 #   R4 0.20 +rw5  exit 0.10
 #   R5 0.50 +rw15 exit 0.10
 #   R6 nominal
-# Pre-registered pilot mid-gate (docs/09 (gg)): R0 pass >=2 seeds AND R2
-# reached >=1 seed, OR frozen-heldout clean nonzero >=1 seed.
+# Pre-registered pilot mid-gate (docs/09 (gg); metric = captured_rate per
+# T-2a): R0 pass >=2 seeds AND R2 reached >=1 seed, OR frozen-heldout clean
+# nonzero >=1 seed. PRE-LAUNCH GATE (T-1): a3b_fire_oracle pooled
+# step1-commit-and-clean >= 0.8 (n>=100/witness) must PASS first.
+# Framing (T-4): this pilot = TERMINAL ACTION ACQUISITION experiment
+# (R0..R3 focus), not an end-to-end reverse-curriculum validation.
 # R0 FAILURE = representation hypothesis REJECTED (spawns ARE clean now) ->
 # L-2stage reorder discussion.
 #
@@ -55,16 +59,20 @@ curriculum:
       - {name: r4, sigma_pos: 0.20, sigma_vel: 0.05, rewind_dx: 5.0,  exit_clean: 0.10}
       - {name: r5, sigma_pos: 0.50, sigma_vel: 0.05, rewind_dx: 15.0, exit_clean: 0.10}
       - {name: r6, nominal: true}
+    exit_metric: captured_rate  # T-2a: dwell-gaming block (clean_cross is
+                                #   achievable WITHOUT firing; captured is not)
+                                #   + no-fire baseline = 0 -> any capture = learning evidence
     advance_sustain: 2
     stall_evals: 3
-    max_steps: 300000
+    max_steps: 360000           # T-3: min-required 286,720 x ~1.25 (300k was
+                                #   mechanically unreachable R6 -- review finding)
   s2_exit: {heldout_clean_nonzero_last: 3}
 
 warm_start:
   enabled: false                # SCRATCH (R-2; warmref omitted, see header)
 
 loop:
-  total_env_steps: 450000       # 7 stages x sustain-2 x 20480 ~= 287k + tail
+  total_env_steps: 520000       # T-3: ladder cap 360k + R6-exit window + tail
   rollout_env_steps: 1024
   eval_interval_updates: 20
   eval_episodes: 20

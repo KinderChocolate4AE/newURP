@@ -247,6 +247,24 @@ def test_probe_transplant_math():
     assert np.allclose(rel_t[:, 0], rel_d[:, 0] * (20.0 / donor.v))
 
 
+def test_reverse_exit_metric_captured_rate():
+    cfg = _rv_cfg(exit_metric="captured_rate")
+    cur = Curriculum(cfg, dict(FROZEN))
+    hi_clean_no_cap = {"clean_cross_rate": 1.0, "captured_rate": 0.0,
+                       "boxed_fire_rate": 0.0, "fire_rate": 0.0}
+    for i in range(4):                             # dwell-gaming: no advance
+        cur.on_eval(10 + i, dict(hi_clean_no_cap), dict(FZ0))
+    assert cur.r_idx == 0
+    cap_ok = {"clean_cross_rate": 0.0, "captured_rate": 0.9,
+              "boxed_fire_rate": 0.0, "fire_rate": 1.0}
+    for i in range(2):
+        cur.on_eval(20 + i, dict(cap_ok), dict(FZ0))
+    assert cur.r_idx == 1
+    assert cur.describe()["exit_metric"] == "captured_rate"
+    with pytest.raises(ValueError, match="exit_metric"):
+        Curriculum(_rv_cfg(exit_metric="bogus"), dict(FROZEN))
+
+
 def test_a3b_config_ladder_sane():
     cfgp = ROOT / "configs/m3a_a3b_pilot.yaml"
     if not cfgp.exists():
@@ -259,3 +277,5 @@ def test_a3b_config_ladder_sane():
     assert sigs == sorted(sigs)                    # monotone widening
     assert rv["verify_robust_min"] >= 0.9 and len(rv["verify_robust_seeds"]) >= 10
     assert rv["probe_glob"].endswith("a3_robust_bank.json")
+    assert rv["exit_metric"] == "captured_rate"    # T-2a
+    assert rv["max_steps"] >= 340000               # T-3 (min-required x1.2)

@@ -280,6 +280,10 @@ class Curriculum:
             self.adv_sustain = int(rv["advance_sustain"])
             self.stall_evals = int(rv["stall_evals"])
             self.rv_max_steps = int(rv["max_steps"])
+            self.exit_metric = str(rv.get("exit_metric", "clean_cross_rate"))
+            if self.exit_metric not in ("clean_cross_rate", "captured_rate"):
+                raise ValueError(f"reverse.exit_metric '{self.exit_metric}' "
+                                 "(clean_cross_rate|captured_rate)")
             self.s2_heldout_last = int(
                 cur_cfg["s2_exit"]["heldout_clean_nonzero_last"])
             self.r_idx = 0
@@ -396,7 +400,7 @@ class Curriculum:
                     self.history.append({"stage": "s2", "step": env_steps,
                                          "event": "cap", "r": self.r_idx})
                 else:
-                    ok = (float(train_ev["clean_cross_rate"])
+                    ok = (float(train_ev[self.exit_metric])   # T-2a (docs/13 SS9)
                           >= float(st["exit_clean"]))
                     self._adv_streak = self._adv_streak + 1 if ok else 0
                     advanced = False
@@ -478,6 +482,7 @@ class Curriculum:
             st = (self.rv_stages[self.r_idx] if self.stage == "s2"
                   else {"name": "done"})
             d.update(r_idx=self.r_idx, r_name=st.get("name"),
+                     exit_metric=self.exit_metric,
                      nominal=bool(st.get("nominal")),
                      sigma_pos=st.get("sigma_pos"),
                      rewind_dx=st.get("rewind_dx"),

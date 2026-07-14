@@ -300,6 +300,15 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-15 (ii) — ✅ A-3b′ 구현 + oracle 스모크 3/3 잠정 PASS — 서버 정식 oracle(n≥100) → 파일럿 런치 대기
+
+- T-1~T-5 일괄 비준 → 구현. 신규 1 + 수정 3 + 테스트 +1.
+- **① T-1 oracle** (`shepherd/scripts/a3b_fire_oracle.py`): bank×N fresh CRN(seed0 31M, 전 대역과 서로소), FIRE arm(매 스텝 강제 발사 — FSM R2 게이트가 v≥θ 표본에서만 커밋, sub-θ 명령은 무시라 wasted 없음)·DWELL arm(무발사) — 4시점 계측 + γ-할인 return 비교. **스모크(n 4~6/witness, 샌드박스)**: commit@1 = 0.75/1.00/1.00, **clean@1 = 1.0 전원**, capture = 0.75/1.00/1.00, pooled gate 0.917 → 잠정 PASS(정식 = 서버 n≥100). **스텝 2+ 커밋 1건은 비-clean** — "스텝 1 아니면 창 밖" 리뷰 지적 실증.
+- **② T-2 dwell-annuity 실측**: hold-리미터 조건에서 **fire(+4.9~+6.8) ≫ dwell(+0.6~+1.7)** — 연금은 차단이 있어야 유지되므로 무-차단 스폰에선 발사가 argmax. → **T-2b(ep_len 스캐폴드) 불발동·보류**(연금 착취는 학습된 차단 시에만 가능 — captured_rate exit가 그 경로의 사다리 게이밍을 차단; 파일럿에서 fire_rate·captured 시계열 감시). T-2a는 구현: Curriculum reverse `exit_metric`(clean_cross_rate|captured_rate 검증), a3b config = **captured_rate**.
+- **③ T-3**: cap 300k→**360k**, total 450k→**520k** (config 주석에 근거 명기).
+- ④ 테스트 +1(captured_rate 게이팅: dwell-게이밍 무전진·capture로 전진·bogus 거부) + config 단언(exit_metric·cap) — A-3 스위트 17/17, M3계 회귀 green.
+- **서버 시퀀스(Hyunjun)**: push → torch 테스트 → **정식 oracle**: `python -m shepherd.scripts.a3b_fire_oracle --n 100 --dwell-n 10 --out results/a3b_fire_oracle.json` (witness당 분할 가능: `--witness 0..2`) → **pooled ≥ 0.8 확인** → 파일럿: `TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_a3b_pilot.yaml OUT=results/m3a_a3b_pilot REQUIRED_COMMIT=<본 커밋> GPU=0 SEEDS="0 1 2"`. oracle FAIL 시 런치 금지(13 §9 T-1) → 진단 표(13 §10) 첫 행 경로.
+
 ### 2026-07-15 (hh) — 외부 감사 리뷰 접수 (14 브리프 대상) — 정정 2·채택 5; A-3b′ 수정안 비준 대기
 
 > 전문 = `URP/gpt_review_a3b_2026-07-15.md` (Hyunjun 보관). 총평: "무발사 = 현 MDP 표본 하의 합리적 수렴; 병목은 PPO가 아니라 판정 기하→기대수익→advantage→전이의 상류" — 캠페인 자체 결론과 정합. 이하 판독.
