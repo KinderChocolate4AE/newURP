@@ -300,6 +300,12 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-15 (jj) — ✅ T-1 정식 oracle PASS (n=100/witness, pooled 0.960) → 파일럿 런치
+
+- 서버 실측(`a3b_fire_oracle`, seed0 31M): x20v24 commit@1 1.00·clean@1 1.0·cap 1.00 / x16v20 1.00·1.0·1.00 / x12v16 0.88·1.0·0.88(waste 0.12 — 자기 robust_frac 0.90과 정합). **pooled gate 0.960 ≥ 0.8 → PASS**: R0는 해석 가능한 표현 테스트임이 확정(주입 상태에서 스텝-1 강제 발사 = clean 커밋·포획 성립). fire return(+5.4~+6.8) ≫ dwell(+1.2~+2.0) hold-조건 재확인.
+- 파일럿 런치(`d663a51`, scratch 3-seed, captured_rate exit, cap 360k/total 520k, OUT=results/m3a_a3b_pilot). 아티팩트(oracle JSON 포함)는 파일럿 마감 시 일괄 커밋 예정.
+- 판독 예고: ntfy는 R-전진을 알리지 않음(START/DONE + s3 전환만) — 진행은 eval_curve `cur.r_idx`/captured_rate로. 중간 게이트 = **R0 통과 ≥2 seed ∧ R2 도달 ≥1** or heldout clean 비영; R0 실패 시 13 §10 첫 행(진단 표) 경로.
+
 ### 2026-07-15 (ii) — ✅ A-3b′ 구현 + oracle 스모크 3/3 잠정 PASS — 서버 정식 oracle(n≥100) → 파일럿 런치 대기
 
 - T-1~T-5 일괄 비준 → 구현. 신규 1 + 수정 3 + 테스트 +1.
