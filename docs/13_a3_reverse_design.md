@@ -1,4 +1,4 @@
-# 13 — A-3 설계: L-reverse 후진 커리큘럼 (v0.2 — R-1~R-5 비준·구현 완료 2026-07-14, 09 (ee))
+# 13 — A-3 설계: L-reverse 후진 커리큘럼 (v0.3 — 파일럿 FAIL(09 (ff)) 반영, A-3b 수정안 §8 비준 대기)
 
 > 입력: 12 §4 사다리(NF 열 A-3) · 09 (cc) A-2 kill 증거(벽 (0.1335, 0.1501]·발사-EV 수리 무효·쌍안정 스위치-오프) · P4 (s)/(u) 실측(capture-grade clean 상태 실존, ρ 0.05~0.2m·p_feas~1e-3·release-채널 기하).
 > **단일 가설: clean 발사는 학습 가능한 행동이다 — 나쁜 스폰 분포 아래서 발견이 안 될 뿐.** 검증 = 아는 지점(실측 clean 상태)에서 역류.
@@ -66,3 +66,18 @@
 - [x] **R-3** R-스테이지 파라미터 (§2) — m3a_a3_pilot.yaml에 사전등록값 그대로
 - [x] **R-4** 파일럿 중간 게이트 + (i) 실패 시 L-2stage 신호 (§4)
 - [x] **R-5** "보상 스캐폴드 0, 스폰 분포만" + eval 스폰 frozen STRICT (§0·§6) — 구조 보장: reverse 모드 overrides() 상시 None + 스폰 경로 소스-lock 테스트
+
+## 8. A-3b 수정안 (09 (ff) 교란 실측 반영 — 비준 대기)
+
+파일럿 FAIL의 원인 = 설계 파라미터 교란 2건(σ 0.5 ≫ clean 창 0.05~0.2m → 스폰-clean 0/10; T0 3/4가 union-표본 비강건). **robust witness 실존 실측**(x20v24u0: fresh seeds 8/8 clean, v_soft 고정 1.00) → 노선 유지, 재파라미터화.
+
+| 항목 | A-3 (killed) | A-3b |
+|---|---|---|
+| T0 | probe 자기-seed capture-grade 4본 | **robust bank**: robust_clean_frac ≥ 0.9 (E_seeds[clean], 10 seeds) — probe 재실행으로 ≥3본 확보 목표 |
+| σ-사다리 | 0.5 → 4.0 m | **0.02 → 0.05 → 0.1 → 0.2 → 0.5 → ...** (창 폭 이하 시작, 기하급수) |
+| exit | 절대 clean ≥ 0.5/0.3/... | **상대화**: exit_clean = 0.5 × 스테이지 스폰-clean 베이스라인(probe 사전 측정) |
+| L-2stage 신호 | R1 실패 시 | **A-3b R0 실패 시에만** (표현 테스트 성립 후) |
+
+- [ ] **R-6** robust-witness probe(분석 lane): E_seeds[clean] refinement + (x,v) 그리드 확장, bank 문턱 0.9
+- [ ] **R-7** σ-사다리·상대화 exit 파라미터
+- [ ] **R-8** verify_t0 robust-seed 진단을 **게이트로 승격**(사다리 착수 전 필수 실행)

@@ -300,6 +300,15 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-14 (ff) — ❌ A-3 파일럿 중간 게이트 FAIL — 단 **L-2stage 신호 미발동**: R1 교란 2건 실측(σ≫창 + T0 3/4 union-표본 비강건) + **robust witness 실존** → A-3b 수정안 제안
+
+- **런** (`5430246`, 아티팩트 `aaf51cf`): scratch 3-seed + warmref 1-seed **전부 r_max=0**(R1 정체, 전진 0회), train-eval clean 全 0.00(fire 첫 eval 0.10 → 0), cap @307k, heldout 0/200 ×4 (방관 3본 ret ≈0·pen 100%, warmref 무발사-차단 ret −1.18·pen 0% — (aa) 수동 평형 재현). 형식 판정: (i) R1 통과 0/3 (ii) R3 도달 0 (iii) heldout 비영 0 → **A-3(현 파라미터) kill**.
+- **교란 1 — σ ≫ 창 폭**: 스폰-시점 clean 확률 실측(frozen env·fresh seeds·n=10/σ): σ_pos **0.5(R1값) → 0/10**, 0.1 → 0/10, 0.02 → 0/10, **σ=0 → 3/10**. R1은 말단 체인 학습이 아니라 "0.5m 밖에서 면도날 찾기" = 원문제 재출제였음. exit_clean ≥ 0.5는 구성상 도달 불가 — 정책이 완벽해도 통과 못 함.
+- **교란 2 — T0 비강건**: witness별 fresh-seed(100~107) clean 빈도 = **x20v24u0 8/8 (v_soft 고정 1.00)** / x16v20u0 4/8 / x12v16u0 3/8 / x16v20u1 1/8. P4 witness는 "자기 union seed 하에서의" capture-grade였고 3/4는 CRN 표본 교체 시 창이 닫힘. (verify_t0의 robust-seed 진단이 이를 잡도록 설계돼 있었으나 스모크에서 생략·서버 미실행 — 교훈: 설계한 진단은 실행까지가 진단.)
+- **사전등록 해석 판단**: "(i) 실패 = 표현 가설 기각 → L-2stage"는 **발동 안 함** — R1 스폰이 사실상 전혀 clean이 아니었으므로(0/10) 표현 가설을 테스트하지 못함. 표현 가설 = 미판정 유지.
+- **신규 발견 (캠페인 최중요 증거)**: clean 술어는 공간 면도날(ρ 0.05~0.2m)에 더해 **CRN-표본 차원의 면도날** — 동일 기하가 union 표본에 따라 clean↔비clean 요동. A-1/A-2 무발사 붕괴의 심층 설명 완성: EV(clean 시도) = 공간 명중률 × 표본 강건성 **이중 할인** → 발사 포기는 학습된 합리성. **단 robust witness 실존**(x20v24u0, 8/8) → robust-clean 집합 비어있지 않음 = A-3 노선 폐기 불요, 재파라미터화로 충분.
+- **A-3b 수정안 (docs/13 v0.3 부록 §8, 비준 대기 R-6~R-8)**: ① **robust-witness probe**(분석 lane, 학습 아님): P4 refinement를 E_seeds[clean](10 seeds) 목적으로 재실행 → robust_clean_frac ≥ 0.9 bank(현 1본 → 목표 ≥3본, (x,v) 그리드 확장) ② 스폰 = robust bank만 ③ **σ-사다리 창-스케일 재설정**: R0 σ 0.02부터 기하급수(0.02→0.05→0.1→0.2→0.5→...) ④ **exit 상대화**: exit_clean = 0.5 × (스테이지별 스폰-clean 베이스라인, probe로 사전 측정 — 절대문턱은 스폰-clean<1에서 과엄격) ⑤ L-2stage 논의는 "표현 테스트가 성립한" A-3b 실패 후에만.
+
 ### 2026-07-14 (ee) — ✅ A-3(L-reverse) 구현 완료: 스폰 주입 + T0 재구성·재검증(4/4 실측) + reverse 커리큘럼 — scratch 3-seed 파일럿 대기
 
 - R-1~R-5 일괄 비준 → 구현. **frozen 계약·판정 경로 무변경**; 신규 2 + 수정 3 + config 2 + 테스트 +12.

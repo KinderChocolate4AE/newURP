@@ -83,6 +83,7 @@ python -m shepherd.scripts.a2_fire_mode_diagnosis \
 |---|---|---|---|---|---|---|---|---|
 | A-1 (09 (y)) | — | 원처방(시간-램프) | 10-seed 본선 | 사멸 0.127 / 생존 0.146 (램프 통과) | NO_FIRE 10/10 | 0 | 0 | S2 anneal 절벽 — 무발사 붕괴 |
 | A-2 (09 (cc)) | NF | L-fire+L-margin+L-adaptive | 3-seed 파일럿 | 지속 0.1501(k=3) / 즉사 0.1335(k=4), 정적-폭 적응에도 | NO_FIRE (k≥4) | 0/200 ×3 | 0 | 발사-EV 수리 무효 → 표현/발견(기하) 가설 강화 |
+| A-3 (09 (ff)) | NF | L-reverse (σ 0.5·자기-seed T0) | 3+1-seed 파일럿 | R1 정체(전진 0) | NO_FIRE 재현 | 0/200 ×4 | 0 | 교란 2건(σ≫창·T0 비강건) — **CRN-표본 면도날 발견**, robust witness 실존(8/8) → A-3b |
 
 ## 7. 비준 체크리스트 (Hyunjun S-슬롯)
 
