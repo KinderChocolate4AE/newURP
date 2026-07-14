@@ -81,3 +81,28 @@
 - [x] **R-6** robust-witness probe — 2026-07-14 비준·실행: **bank 3본**(x20v24 1.00 / x16v20 0.50→1.00 / x12v16 0.38→0.90; val seeds 200–209 서로소), `results/a3_robust_bank.json` (09 (gg))
 - [x] **R-7** σ-사다리·상대화 exit — σ-베이스라인 실측(0.02→~0.35 … 0.5→0) 기반, floor 0.10 = eval 해상도; `configs/m3a_a3b_pilot.yaml`
 - [x] **R-8** verify_t0 robust 게이트 — `robust_min`/`robust_seeds` 파라미터로 승격, a3b config는 0.9 × 10-seed; 구-뱅크 탈락 lock 테스트
+
+## 9. A-3b′ 수정안 (외부 감사 리뷰 반영, 09 (hh) — 비준 대기 T-1~T-5)
+
+| # | 수정 | 근거 |
+|---|---|---|
+| T-1 | **forced-first-fire oracle 선행 게이트**: bank×≥100 CRN, 4시점(reset/commit/스텝2대조/resolution) 계측 + dwell-vs-fire 귀속 return; 통과 = commit-clean ≥ 0.8 | 리뷰 최우선 권고; R0 해석 가능성의 전제 |
+| T-2a | R-exit 지표 **clean_cross → captured_rate** (문턱 동일) | dwell-게이밍 차단(clean_cross는 무발사로 달성 가능) + 무학습 baseline=0으로 통계 유의성 확보 |
+| T-2b | (조건부) **ep_len 스테이지 스캐폴드** R0≈20스텝 | dwell-annuity(≈66) ≫ fire(≈27) 실측 시 인센티브 균형 장치; oracle 결과 후 결정 |
+| T-3 | cap 300k → **360k**, total 450k → **520k** | 최소소요 286,720 vs cap 300k = 여유 13k < eval 1회 (기계적 불능) |
+| T-4 | 파일럿 = **말단 행동 습득 실험**으로 재프레이밍; v2 = 성공 궤적 스냅샷 되감기 예약; R5→R6 리미터 보간 = confirmatory 전 필수 | config-only 스폰의 구조 한계(리미터 속도 0·이력 무) |
+| T-5 | 진단 표(§10) 채택 | 실패 위치별 판독 프로토콜 |
+
+정정 2건(코드 실측): 판정은 pre-move commit 시점(스텝1 발사 = 주입 상태 판정; capture = commit 동결) — 단 스텝1 union은 fresh CRN(robust bank의 존재 이유)이고 **스텝2+ 발사는 창 밖**(R0 = "스텝 1 발사" 테스트로 협소); deterministic eval Bernoulli는 (p>0.5) 엄격 부등이라 초기 무발사 정상.
+
+## 10. 실패 위치별 진단 표 (리뷰 채택)
+
+| 관측 | 최우선 의심 원인 |
+|---|---|
+| R0 全 seed 실패 | oracle로 선판별: state injection/타이밍 vs fire plumbing vs dwell-annuity |
+| R0 일부 성공 | CRN flip·speed draw 불일치·Bernoulli 조기 붕괴(로짓 시계열 확인) |
+| R0 통과, R1 급락 | 3-상태 암기·속도/컨트롤러 불일치·RunningNorm 과적합 |
+| R1~R2 통과, R3 정체 | config-only 후진 한계(유효 셰이핑 gradient 부재) — v2 신호 |
+| R3~R5 오실레이션 | 20판 게이트 잡음·백오프 분포 순환·value-norm |
+| R5 통과, R6 붕괴 | 리미터 스폰 절벽·obs/critic OOD (사전 예측됨 — 후진 실패로 오독 금지) |
+| train-eval 성공, heldout 0 | CRN 과적합·best-ckpt 선택 불일치(frozen-only sel_score) |

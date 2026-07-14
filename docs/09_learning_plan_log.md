@@ -300,6 +300,21 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-15 (hh) — 외부 감사 리뷰 접수 (14 브리프 대상) — 정정 2·채택 5; A-3b′ 수정안 비준 대기
+
+> 전문 = `URP/gpt_review_a3b_2026-07-15.md` (Hyunjun 보관). 총평: "무발사 = 현 MDP 표본 하의 합리적 수렴; 병목은 PPO가 아니라 판정 기하→기대수익→advantage→전이의 상류" — 캠페인 자체 결론과 정합. 이하 판독.
+
+**반박/정정 (코드 실측):**
+1. **first-action 타이밍 우려 → 구조적으로 해소**: env step()은 **pre-move 상태에서 판정**(viability 평가 → FSM/fire commit → backend.step 순). 스텝 1 발사는 주입 상태 그대로 판정되고, capture도 commit 시점 동결 worst-case(전개 8스텝 지연은 재판정 없음). 단 리뷰의 우려는 두 형태로 잔존: (a) 스텝 1 union은 reset과 다른 CRN 표본(step_seed) → flip 위험 — robust bank(0.9~1.0)가 정확히 이를 위해 존재 (b) **스텝 2+ 발사는 공격자 0.8~1.2m 이동 후 = 창 밖** → R0는 사실상 "스텝 1 발사 습득" 테스트로 협소함(리뷰 지적 이 형태로 유효). → oracle이 실측 확정.
+2. **deterministic eval의 Bernoulli**: `(p > 0.5)` 엄격 부등 → 초기 로짓 0은 eval 무발사, 훈련 rollout은 샘플링(p≈0.5 탐색) — 우려 해소. A-3 첫 eval fire 0.10은 초기 학습 로짓 이동분.
+
+**채택 (A-3b′ 수정, 비준 대상 T-1~T-5):**
+- **T-1 forced-first-fire oracle = 파일럿 선행 게이트 (최우선)**: bank 3본 × ≥100 fresh CRN — reset/commit(스텝1 pre-move)/스텝2-발사 대조/resolution 4시점의 v_soft·o·boxed·worst·clean·capture + **dwell-vs-fire 귀속 return 실측**(hold-still vs forced-fire 누적 J, γ 0.99). 통과 기준: commit-clean ≥ 0.8. 미달 시 R0 해석 불능(리뷰 문구 채택).
+- **T-2 dwell-annuity 결함 대응**: level-form headline+r_geo 매 스텝 지급 + 발사 = 에피소드 조기 종결 → witness 상태에서 할인 dwell 수익(~1.2/step × 55 ≈ 66) ≫ fire 경로(≈27) — **"발사가 연금을 끊는다"**: 全 캠페인 무발사 수렴의 제3 기전 후보(공간·표본 면도날에 추가). 대응 2단: ① **R-exit 지표 교체 clean_cross → captured_rate**(dwelling은 capture 불가 → 게이밍 차단; 동시에 리뷰 §통계 지적 해소 — 무발사 baseline capture=0이므로 어떤 capture도 곧 학습 증거; 문턱 0.45/0.17/0.10 유지, bank robust_capture 0.9~1.0이라 도달 가능) ② **ep_len 스테이지 스캐폴드 후보**(R0 ~20스텝: dwell 상한 ≈ fire 수익으로 인센티브 균형) — oracle의 dwell-vs-fire 실측 후 조건부 비준.
+- **T-3 예산 정정**: 7 스테이지 × 지속2 × 20,480 = 286,720 vs cap 300k(여유 13k < eval 1회) = "한 번이라도 미끄러지면 R6 기계적 불능" — **cap 360k·total 520k 상향**. (A-2 340k 정정과 동일 유형 재발 — 사다리 예산은 최소소요 ×1.2 룰 채택.)
+- **T-4 재프레이밍**: A-3b 파일럿 = end-to-end 후진 커리큘럼 검증이 아니라 **말단 행동 습득 실험**(R0~R3 중심; 리뷰 용어 "terminal-state randomization" 인정). config-only 스폰(리미터 속도 0·컨트롤러 이력 무) 한계 명시 → **v2 = 성공 궤적 스냅샷 되감기**(R0/R1 성공 정책의 clean-fire 궤적에서 t−1,−2,... 상태 뱅크) 예약; R5→R6 리미터 보간 스테이지 = confirmatory 전 필수 확정(파일럿과 무관).
+- **T-5 진단 표 채택**(실패 위치 → 최우선 원인 매핑, 13 §10 수록) + 짧은 에피소드 = 저우선(truncation bootstrap 기존 테스트 확인만).
+
 ### 2026-07-14 (gg) — ✅ A-3b 구현 완료: robust-witness probe(bank 3본 확보) + R-8 게이트 + 창-스케일 사다리 config — scratch 3-seed 파일럿 대기
 
 - R-6~R-8 비준 → 구현·실행. **판정 경로 불변**(probe = 분석 lane, 학습 아님).
