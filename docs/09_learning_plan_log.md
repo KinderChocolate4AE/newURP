@@ -300,6 +300,12 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-14 (dd) — A-3(L-reverse) 설계 초안 v0.1 — 비준 대기
+
+- Hyunjun 결정: A-2 kill 후 다음 레버 = **A-3 L-reverse** (S-6 수동성-비용은 보류 — 발사 강제로는 release-채널 기하를 못 가르침, (cc) 증거 정합).
+- 설계 = **`docs/13_a3_reverse_design.md` v0.1**: 단일 가설 "clean은 학습 가능, 스폰 분포가 발견을 막을 뿐" — 콘 폭 상시 frozen 고정(폭 사다리 폐지)·보상 스캐폴드 0·커리큘럼 = 스폰 분포만(P4 probe capture-grade 4본 재구성 T0 → σ/Δx 후진 확장 R1~R5, adaptive 전진/백오프 기계 재사용)·scratch 기본(warm 습관 상속 회피, 참고런 1-seed)·중간 게이트 = R1 통과∧R3 도달 or heldout clean 비영, **R1 실패 = 표현 가설 기각 위험 → L-2stage 신호**. 구현 리스크 1순위 = 백엔드 상태 주입(RotorPy state set 경로).
+- 대기: R-1~R-5 비준 → 구현(스폰 주입 + 재구성기 + reverse 커리큘럼 + config + 테스트) → scratch 3-seed 파일럿.
+
 ### 2026-07-14 (cc) — ❌ A-2 파일럿 중간 게이트 FAIL → 레버 kill; 벽 정밀화 (0.1335, 0.1501] — 다음 = A-3(L-reverse) 제안
 
 - **런**: `9584177` · 3-seed · 550k · WARM (`results/m3a_a2_pilot`, 아티팩트 `3830021`).
