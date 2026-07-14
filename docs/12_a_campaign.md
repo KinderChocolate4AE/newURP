@@ -77,7 +77,12 @@ python -m shepherd.scripts.a2_fire_mode_diagnosis \
 
 - **성공** = Gate A PASS ∧ capture ≥2 seeds (docs/11 §4·§5 그대로) → **M3b 진입** (2~3주 박스, frontier = main figure).
 - **트립와이어** = 2026-08-31 후 신규 A-런 금지 → B 프레이밍 확정: main = M2 레버(L2 게이트 PASS) + findability 벽(본선 held-out 하드 0) + 기전 증거 테이블.
-- 증거 테이블 스키마 (시도별 1행): {시도, 브랜치, 레버, 파일럿/본선, stall 폭(half_angle), fire-모드, heldout clean 하한, capture, 한 줄 기전}. A-1(=M3a run 1, (y))이 첫 행.
+- 증거 테이블 (시도별 1행, 갱신 = 각 시도 마감 시):
+
+| 시도 | 브랜치 | 레버 | 단계 | 벽/stall 폭 (ha) | fire-모드 | heldout clean | cap | 기전 한 줄 |
+|---|---|---|---|---|---|---|---|---|
+| A-1 (09 (y)) | — | 원처방(시간-램프) | 10-seed 본선 | 사멸 0.127 / 생존 0.146 (램프 통과) | NO_FIRE 10/10 | 0 | 0 | S2 anneal 절벽 — 무발사 붕괴 |
+| A-2 (09 (cc)) | NF | L-fire+L-margin+L-adaptive | 3-seed 파일럿 | 지속 0.1501(k=3) / 즉사 0.1335(k=4), 정적-폭 적응에도 | NO_FIRE (k≥4) | 0/200 ×3 | 0 | 발사-EV 수리 무효 → 표현/발견(기하) 가설 강화 |
 
 ## 7. 비준 체크리스트 (Hyunjun S-슬롯)
 
