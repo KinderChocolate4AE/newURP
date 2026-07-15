@@ -214,7 +214,8 @@ class M3ShapingEnv(ShapingParallelEnv):
 
         Normal reset() first (seed/FSM/trackers), then overwrite the backend
         kinematic states with the spawn dict ({"limiters": (N,3), "att_p": 3,
-        "att_v": 3}) and recompute viability + obs at the injected state.
+        "att_v": 3}, optional "limiter_v": (N,3) -- A-3d SBE arrival velocity,
+        default zeros) and recompute viability + obs at the injected state.
         The finisher is NEVER moved (frame contract, docs/13 SS1). No eval
         path may call this -- eval bundles/harnesses reset() only (STRICT
         lock: tests/test_a3_reverse.py)."""
@@ -227,10 +228,16 @@ class M3ShapingEnv(ShapingParallelEnv):
         if L.shape != (len(self.limiter_ids), 3):
             raise ValueError(f"spawn['limiters'] shape {L.shape} != "
                              f"({len(self.limiter_ids)}, 3)")
+        Lv = spawn.get("limiter_v")                       # A-3d SBE (optional)
+        if Lv is not None:
+            Lv = np.asarray(Lv, float)
+            if Lv.shape != (len(self.limiter_ids), 3):
+                raise ValueError(f"spawn['limiter_v'] shape {Lv.shape} != "
+                                 f"({len(self.limiter_ids)}, 3)")
         for i, lid in enumerate(self.limiter_ids):
             a = self.backend.by_name(lid)
             a.p = L[i].copy()
-            a.v = np.zeros(3)
+            a.v = Lv[i].copy() if Lv is not None else np.zeros(3)
         att = self.backend.by_name(self.adversary_id)
         att.p = np.asarray(spawn["att_p"], float).copy()
         att.v = np.asarray(spawn["att_v"], float).copy()

@@ -300,6 +300,13 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-15 (oo) — ✅ A-3d 위임분(bank 생성기 + reset_to 속도 주입) 검수 합격·수록 — 트레이너(ΔΦ/teacher-gate) 착수
+
+- **위임 산출물** (Opus 4.8, 하네스 `b3c8997` 계약): `a3d_sbe_bank.py`(SBE 합성+4조건 게이트+분할/merge CLI) · `env_m3.reset_to`의 optional `limiter_v` (수 줄 diff, shape 검증) · `tests/test_a3d_bank.py` 9종 · 구현 노트(`URP/a3d_impl_notes/`).
+- **검수(독립 재현)**: ① env_m3 diff 최소 확인 ② 테스트 47 green 재실행(신규 9+회귀 38) ③ **bank 전체를 샌드박스에서 재생성 → 노트 수치와 일치**(144/144 kept·roll_err max 7.1e-15·robust min 0.90/med 1.00·per-k 36×4) — 결정론 재현으로 조작·환각 배제 ④ 이산 유도 (k−1)/2 + 잔차 1회 보정 = 타당(docs/17의 (k+1)/2는 연속 근사 표기 — 17 정정 불요, 구현 노트가 정본 유도). `results/a3d_sbe_bank.json` 수록(스키마: spawn{limiters·limiter_v·att_p/v·att_speed}+demo_accels+verify).
+- **인수 TODO 2건**: ① robust_frac min 0.90 임계 밀착 — 트레이너 σ_pos 0.02 지터 후 재확인(커리큘럼 D0 회귀 앵커에서 계측) ② bank clean 판정 = standalone union vs env readout 미세 경로차 — D0에서 교차 확인(파라미터 동일이라 실질 일치 예상).
+- 다음 = 트레이너: phi_potential 모듈(고정 Z_train PBRS)·Curriculum sbe 모드(k-사다리+Wilson LCB/UCB 게이트)·train_m3a a3d 훅(teacher-gate·fin freeze·ΔΦ write-back·att_speed 핀·U-4 분해)·config·테스트.
+
 ### 2026-07-15 (nn) — ❎ U-1 정식 oracle: **G0 확정 (물리 지배)** — A-3c 학습 실험 생략, A-3d 설계로 직행 (사전등록 분기 이행)
 
 - **정식 결과** (`27a8c68`, 3 witness × σ{0.02,0.05,0.1} × 스폰 12 × 후보 32, k{1,2,3}): **r@2 = r@3 = 0.00 전 셀**(스폰 108) — "정지 리미터(2스텝 15cm)는 이동 창(스텝당 0.8~1.2m)을 물리적으로 못 쫓는다"의 실측 확정. r@1만 얇게 생존: x20v24 σ0.02 **0.50**·x16v20 0.08·x12v16 0.00 (action volume 0.03~0.09 = 후보 32중 1~3개의 좁은 통로; winner robust 0.67~1.0, 단 x20v24 σ0.05는 0.0). 게이트: σ0.02 r@≤2 pooled **0.194 < 0.3**, σ0.05 r@≤3 **0.056 < 0.1** → **G0**.
