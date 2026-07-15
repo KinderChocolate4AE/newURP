@@ -42,12 +42,15 @@ curriculum:
     bank: results/a3d_sbe_bank.json
     robust_bank: results/a3_robust_bank.json
     sigma_pos: 0.02
-    stages:
-      - {name: d0, k: 0, exit: 0.45}   # A-3b R0 regression anchor
-      - {name: d1, k: 1, exit: 0.40}
-      - {name: d2, k: 2, exit: 0.30}
-      - {name: d3, k: 4, exit: 0.20}
-      - {name: d4, k: 8, exit: 0.10}
+    stages:                     # per-stage sigma_pos (docs/09 (qq) A-3d'):
+      # D0 sigma MUST be 0.0 = true A-3b R0 anchor (global 0.02 had cut
+      # spawn-clean to ~0.30 -> exit 0.45 mechanically unreachable).
+      # d1+ sigma ramps 0.005 -> 0.02 (correction-scale curriculum).
+      - {name: d0, k: 0, exit: 0.45, sigma_pos: 0.0}
+      - {name: d1, k: 1, exit: 0.40, sigma_pos: 0.005}
+      - {name: d2, k: 2, exit: 0.30, sigma_pos: 0.01}
+      - {name: d3, k: 4, exit: 0.20, sigma_pos: 0.015}
+      - {name: d4, k: 8, exit: 0.10, sigma_pos: 0.02}
       - {name: d5, nominal: true}
     gate: {episodes: 80, z: 1.645, backoff_margin: 0.05}   # U-5 Wilson
     max_steps: 360000

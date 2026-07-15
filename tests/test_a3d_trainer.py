@@ -154,6 +154,21 @@ def test_sbe_gate_advance_backoff_cap():
     assert d["mode"] == "sbe" and d["capped"] and d["gate_episodes"] == 80
 
 
+def test_sbe_per_stage_sigma():
+    if not BANK.exists():
+        pytest.skip("SBE bank not built")
+    cfg = _sbe_cfg()
+    cfg["sbe"]["stages"][0]["sigma_pos"] = 0.0   # D0 anchor
+    cur = Curriculum(cfg, dict(FROZEN))
+    t0_pos = np.asarray(sb.load_t0(str(RBANK))[0].limiters, float)
+    draws = [cur.spawn(np.random.default_rng(i)) for i in range(6)]
+    # sigma 0: every draw sits EXACTLY on some witness (no jitter)
+    for d in draws:
+        errs = [float(np.abs(np.asarray(d["limiters"]) - np.asarray(w.limiters)).max())
+                for w in sb.load_t0(str(RBANK))]
+        assert min(errs) == 0.0
+
+
 def test_a3d_config_sane():
     cfgp = ROOT / "configs/m3a_a3d_pilot.yaml"
     if not cfgp.exists():
@@ -167,5 +182,8 @@ def test_a3d_config_sane():
     exits = [s["exit"] for s in st[:-1]]
     assert exits == sorted(exits, reverse=True)
     assert c["curriculum"]["sbe"]["max_steps"] >= 6 * 2 * 20480  # budget rule
+    assert st[0]["sigma_pos"] == 0.0             # (qq) D0 anchor lock
+    sigs = [s.get("sigma_pos") for s in st[:-1]]
+    assert sigs == sorted(sigs)                  # sigma monotone ramp
     assert c["m3"] == yaml.safe_load(
         open(ROOT / "configs/m3a_a3b_pilot.yaml"))["m3"]   # judgment identical

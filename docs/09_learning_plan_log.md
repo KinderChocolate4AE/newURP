@@ -300,6 +300,14 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-15 (qq) — ❎ A-3d 파일럿: D0 정체 = **게이트 산식 오류(자체 설계 실수)** — 재성형 가설 미테스트; A-3d′ 픽스(스테이지별 σ) 후 재런치
+
+- **결과** (`07c94cb`, 아티팩트 `1c71d9f`): 3-seed 전원 D0 정체(전진 0, cap@369k), captured 0.21~0.26 flat, k≥1 표본 0 → V-5 형식 FAIL(미도달).
+- **원인 (즉시 특정)**: sbe 전역 σ_pos 0.02가 D0에도 적용 — **A-3b R0(σ=0) 앵커 의미론을 조용히 파괴**. σ0.02의 스폰-clean = 0.27~0.42(프로브 실측 그대로: 게이팅 reset_clean 0.28~0.33 관측 일치) → teacher 하 captured 상한 ≈ 0.30 + 회복껍질(0.7×r@1 0.19) ≈ 0.43 < exit 0.45 = **구성상 통과 불가**. A-3(σ≫창)과 동형의 "잘못 출제된 시험"이 exit 문턱 쪽에서 재발 — 이번엔 진단 로깅(reset_clean_rate)이 즉시 잡음.
+- 부수 관찰: D0에서 arrival_capture 0.01 blip(1/80) 산발 — σ0.02 비-clean 스폰의 1-step 껍질 회복이 간헐 발생(oracle r@1과 정합). 유의성 없음(계측만).
+- **A-3d′ 픽스** (코드 소, 테스트 +2, 판정 경로 무접촉): sbe 스테이지별 `sigma_pos` 오버라이드 — **D0 = 0.0(진짜 앵커 복원)**, d1+ = 0.005→0.02 램프(보정-스케일 커리큘럼; k-스폰 지터는 도착 종점을 동일 σ만큼 흔들므로 작게 시작). exits 불변.
+- 재런치: `REQUIRED_COMMIT=<본 커밋>` 동일 커맨드. 예상: D0 첫 eval에 cap ~0.9(A-3b R0 재현) → D1 진입부터가 본 실험.
+
 ### 2026-07-15 (pp) — ✅ A-3d 트레이너 구현 완료 (teacher-gate + ΔΦ PBRS + SBE k-사다리 + Wilson 게이트) — 서버 torch 테스트·파일럿 대기
 
 - **① `shepherd/train/phi_potential.py`(신규, torch-free)**: robust potential Φ = mean_z σ((v_z−θ)/τ)·1[¬boxed] − β·std_z (**고정 Z_train = seeds 61~65**, audit 71~75 예약, n_phi 600 = 스캐폴드-충실도 선택·판정 미사용) + obs 파싱(frozen 레이아웃) + Wilson LCB/UCB + `teacher_fire`(obs[-3]≥θ ∧ obs[-1]>0). 실측: witness Φ=0.881 결정론·열화 상태 0.000·75ms/call.

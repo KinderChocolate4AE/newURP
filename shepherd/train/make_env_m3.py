@@ -383,7 +383,8 @@ class Curriculum:
             st = self.sbe_stages[self.d_idx]
             if st.get("nominal"):
                 return None
-            return self._sbe_draw(int(st["k"]), rng)
+            return self._sbe_draw(int(st["k"]), rng,
+                                  float(st.get("sigma_pos", self.sbe_sigma)))
         if self.mode != "reverse":
             return None
         st = self.rv_stages[self.r_idx]
@@ -395,21 +396,24 @@ class Curriculum:
             sigma_vel=float(st["sigma_vel"]),
             rewind_dx=float(st["rewind_dx"]))
 
-    def _sbe_draw(self, k: int, rng: np.random.Generator) -> dict:
-        """One A-3d spawn: k=0 -> jittered robust witness (zero limiter vel);
-        k>0 -> SBE bank entry, POSITION jitter only (velocities exact)."""
+    def _sbe_draw(self, k: int, rng: np.random.Generator,
+                  sigma: Optional[float] = None) -> dict:
+        """One A-3d spawn: k=0 -> robust witness (zero limiter vel);
+        k>0 -> SBE bank entry, POSITION jitter only (velocities exact).
+        sigma: per-stage override (docs/09 (qq) A-3d' fix -- D0 anchor = 0.0;
+        the global sbe_sigma had silently broken the A-3b R0 semantics)."""
+        sig = self.sbe_sigma if sigma is None else float(sigma)
         if k == 0:
             t0 = self.t0[int(rng.integers(len(self.t0)))]
-            return self._sb.spawn_from(t0, rng, sigma_pos=self.sbe_sigma,
+            return self._sb.spawn_from(t0, rng, sigma_pos=sig,
                                        sigma_vel=0.0)
         e = self.sbe_by_k[k][int(rng.integers(len(self.sbe_by_k[k])))]
         L = (np.asarray(e["limiters"], float)
-             + rng.normal(0.0, self.sbe_sigma,
-                          (len(e["limiters"]), 3)))
+             + rng.normal(0.0, sig, (len(e["limiters"]), 3)))
         return {"limiters": L,
                 "limiter_v": np.asarray(e["limiter_v"], float).copy(),
                 "att_p": (np.asarray(e["att_p"], float)
-                          + rng.normal(0.0, self.sbe_sigma, 3)),
+                          + rng.normal(0.0, sig, 3)),
                 "att_v": np.asarray(e["att_v"], float).copy(),
                 "att_speed": float(e["att_speed"]),
                 "src": f"sbe_k{k}"}
@@ -425,10 +429,11 @@ class Curriculum:
             if st.get("nominal"):
                 return None
             d_idx, k = self.d_idx, int(st["k"])
+            sig = float(st.get("sigma_pos", self.sbe_sigma))
 
             def fn(ep: int) -> dict:
                 rng = np.random.default_rng(515_151 + d_idx * 991 + ep)
-                return self._sbe_draw(k, rng)
+                return self._sbe_draw(k, rng, sig)
             return fn
         if self.mode != "reverse":
             return None
