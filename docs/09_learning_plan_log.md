@@ -300,6 +300,13 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-15 (mm) — A-3c 설계 v0.1 (docs/16, U-1~U-7 비준) + U-1 회복가능성 oracle 구현·스모크 — 정식 oracle(서버) 대기
+
+- **docs/16**: Q1(비-clean 스폰 물리 회복가능성) → Q2(교사-게이트+ΔΦ로 재성형 학습) 순서 고정; **분기 사전등록** — G1(σ0.02 r@≤2 ≥0.3 ∧ σ0.05 r@≤3 ≥0.1) → A-3c 학습 실험(U-2 teacher-gate·U-3 PBRS ΔΦ(고정 Z_train·terminal 0·α0.5/β1.0/τ0.05)·U-4 reshape_capture 분해·U-5 confidence 게이트·U-6 진단 로깅·U-7 3-seed→confirmatory) / **G0(미달)** → 학습 생략, **A-3d 궤적-되감기 직행**(R0 정책 3본 = 검증된 성공-궤적 생성기 → t−k 스냅샷 뱅크(리미터 속도 포함), 회복가능성 구성상 보장).
+- **U-1 구현** (`a3c_recoverability_oracle.py`): reset-nonclean 스폰에서 리미터 상수-가속 후보 M개를 **순수 kinematics k스텝**(무발사 구간 = 결정론; 공격자 = 실제 scripted 정책) → 종점 union 1회 평가 — recoverable@k·action volume·best Δv·winner robust. 물리 상한 명기: 정지 리미터 변위 3.75/15/34cm(k=1/2/3) vs 공격자 0.8~1.2m/스텝 → k≥2는 "추적"이 아니라 "예측 배치"만 가능.
+- **스모크 (샌드박스, 참고치 — 약한 탐색·소표본)**: x16v20 σ0.05 → r@1,2 = 0/4; σ0.02 → r@1 = 1/4(vol 0.05), r@2,3 = 0/4. 물리-지배(G0) 방향 신호이나 **단정 금지** — 정식 판은 서버(3 witness × σ 3종 × 스폰 12 × 후보 32).
+- **서버(Hyunjun)**: push 후 `python -m shepherd.scripts.a3c_recoverability_oracle --out results/a3c_recoverability.json` (분할: `--witness 0..2 --sigma 0.02|0.05|0.1`; ~1h급) → JSON 커밋 → G1/G0 판정 → G1이면 U-2/U-3 구현 착수, G0이면 A-3d 설계 상세화.
+
 ### 2026-07-15 (ll) — 심층 피드백 접수·검증 판독 (15 브리프 대상) — 자기-정정 1·리뷰어-정정 3·채택 9; A-3c = "회복가능성 oracle → 교사-게이트 발사 → ΔΦ 리미터 학습" (U-1~U-7 비준 대기)
 
 > 전문 = `URP/gpt_deep_feedback_a3b_2026-07-15.md`. 원칙: 무조건 수용 금지 — 산수·코드 대조 후 채택.
