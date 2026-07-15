@@ -300,6 +300,23 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-15 (ll) — 심층 피드백 접수·검증 판독 (15 브리프 대상) — 자기-정정 1·리뷰어-정정 3·채택 9; A-3c = "회복가능성 oracle → 교사-게이트 발사 → ΔΦ 리미터 학습" (U-1~U-7 비준 대기)
+
+> 전문 = `URP/gpt_deep_feedback_a3b_2026-07-15.md`. 원칙: 무조건 수용 금지 — 산수·코드 대조 후 채택.
+
+**자기-정정 (우리 (kk) 판독의 오류):**
+- **seed1 "선택적 발사" 철회.** 리뷰어의 무조건부-발사 모델(상태 무관 fire 0.31, prevalence 0.42) → cap 0.130·waste 0.180 예측이 관측(0.14/0.17)에 적합함을 재계산으로 확인. TPR/FPR 미계측 상태에서 선택성 주장 불가 — 정확한 표현은 **"전역 발사 성향(logit intercept)의 시드별 상이한 이동"**(seed0/2 상향 고착, seed1 하향 활주). "상태 조건부 선택 발사"의 존재는 미확인.
+
+**리뷰어-정정 (코드·데이터 실측):**
+1. §6 관측가능성 전제 — "**actor가 sample-specific clean을 알 수 없다**"는 부정확: obs[-3:] = 현재 상태의 표본 (v_soft, worst, p_feasible) — clean 지표가 관측에 직접 포함됨. 단 obs 표본(전 스텝 post-move 평가)과 판정 표본(당 스텝 재추첨)이 달라 **flip 잔여 노이즈 = robust-frac 갭**은 실재 — separability probe는 여전히 가치(예상: 높은 AUC), fire 결정 기준을 robust 기대-clean으로 두라는 결론은 유지.
+2. §3 리미터 물리 — a=80 m/s²(0.1m/1스텝) 산수는 맞으나 **a_lim_max = 30**: 1스텝 3.75cm·2스텝 15cm·3스텝 34cm — 단일-스텝 불가론은 과장, 관건은 "이동하는 창(공격자 0.8~1.2m/스텝)의 2~3스텝 추적". → 불가능 단정 금지, oracle이 판정.
+3. "witness도 step2+ non-clean" — 우리 oracle의 systematic 측정 아님(사례 n=1 + 이론). recoverability oracle이 정식 측정.
+
+**채택 (9):** ① Bayes-bias 플립 프레임 — p* = 1/(R+1) ≈ 0.13~0.16 vs 스테이지 prevalence(R1 0.27~0.42 > p* > R3 0.01~0.09) → **두 모드 = 상태-무관 전역 bias의 합리적 양극단**, 커리큘럼이 최적 bias를 뒤집음 ② **인과 교착**: 즉시-발사가 리미터 transition 삭제 ↔ 재성형 부재가 대기 가치 삭제 ③ **recoverability oracle 선행**(reset-nonclean에서 리미터 행동 최적화 + step2~4 oracle fire → recoverable@k·action volume·robust recovery — 실패 원인 3분법: 물리 불능/탐사 문제/credit 문제) ④ 보상 순위: **ΔΦ robust potential(PBRS 차분형, 고정 seed bank·terminal Φ=0)** > per-limiter 현재-상태 hold-차분 D^Φ > margin level 단독(기각 — 스폰-운 지불·dwell 유도) ⑤ **teacher-gated finisher scaffold**(R0가 trigger 학습을 이미 검증 — 재성형 실험에서 fire 동시학습은 해석 혼입) ⑥ reshape_capture 6분해(spawn/reshape/missed/false/improved/recoverable-reshape) — 성공 지표 = P(capture | reset-nonclean, recoverable) LCB > 0 ⑦ LCB/UCB confidence 게이트 + 고정 80~100판 CRN bank(명시적 사전등록 개정으로) ⑧ 진단 로깅: TPR/FPR·fire-logit AUC(reset/robust-clean)·**fire vs cont PPO ratio 분리**(joint-ratio가 Bernoulli gradient를 clip할 가능성 점검) ⑨ 클레임 경계(§9 목록 그대로 — 지지: privileged-스폰 말단 습득·spawn-luck 천장·모드 분기 / 불지지: 능동 재성형·nominal 포획·선택 발사).
+**기각/보류:** 강제 최소발사율·글로벌 entropy floor·fire-advantage clipping(리뷰어 자신도 비추천 — 동의), fire-head 최적화 분리(진단 ⑧ 결과 후 필요시), margin level 단독(기각).
+
+**A-3c 설계 골자 (U-슬롯, docs/16 초안 예정):** U-1 recoverability oracle 선행 게이트(사전등록 문턱 포함) / U-2 teacher-gated finisher(reset-clean 즉발·Φ-문턱 발사·그 외 mask; TRAIN 전용 — frozen/heldout 판정은 learned policy 그대로, fire-head는 freeze→후속 unfreeze) / U-3 리미터 보상 = r_team + α·ΔΦ (Φ = mean_z σ((v_z−θ)/τ)·1[¬boxed] − β·std_z, 고정 Z_train, 차분형·terminal 0; U-3b: D^Φ는 phase 2) / U-4 지표 = reshape_capture 분해 / U-5 confidence 게이트 + 고정 bank / U-6 진단 로깅 일괄 / U-7 스코프 = 3-seed 기전 실험 → 성공 시 10-seed confirmatory (트립와이어 8/31 불변).
+
 ### 2026-07-15 (kk) — ✅ A-3b 파일럿 중간 게이트 **PASS** — 표현 가설 확정(캠페인 최초 학습 포획, R0 cap 0.95~1.00); 새 벽 = "clean일 때 쏘기"는 배웠으나 "clean으로 만들기"는 아직
 
 - **런** (`d663a51`, 아티팩트 `4d4a750`): scratch 3-seed × 520k, captured_rate exit.
