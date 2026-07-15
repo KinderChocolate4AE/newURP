@@ -1,0 +1,67 @@
+{
+ "meta": {
+  "n": 100,
+  "dwell_n": 10,
+  "seed0": 31000000,
+  "gamma": 0.99,
+  "gate": "step1-commit AND clean >= 0.8 pooled"
+ },
+ "witnesses": {
+  "a3_robust_bank.json:x20v24u200": {
+   "src": "a3_robust_bank.json:x20v24u200",
+   "reset_clean_rate": 1.0,
+   "commit_rate": 1.0,
+   "commit_step1_rate": 1.0,
+   "step1_clean_rate": 1.0,
+   "step1_commit_and_clean_rate": 1.0,
+   "step2plus_clean_rate": null,
+   "n_step2plus": 0,
+   "capture_rate": 1.0,
+   "wasted_rate": 0.0,
+   "fire_return_disc_mean": 6.824701833080525,
+   "fire_len_mean": 11.0,
+   "dwell_return_disc_mean": 1.98441768338474,
+   "dwell_len_mean": 80.0,
+   "dwell_j_per_step": 0.023952918989371262,
+   "dwell_clean_ever_rate": 0.0
+  },
+  "a3_robust_bank.json:x16v20u200": {
+   "src": "a3_robust_bank.json:x16v20u200",
+   "reset_clean_rate": 1.0,
+   "commit_rate": 1.0,
+   "commit_step1_rate": 1.0,
+   "step1_clean_rate": 1.0,
+   "step1_commit_and_clean_rate": 1.0,
+   "step2plus_clean_rate": null,
+   "n_step2plus": 0,
+   "capture_rate": 1.0,
+   "wasted_rate": 0.0,
+   "fire_return_disc_mean": 5.35686078178276,
+   "fire_len_mean": 11.0,
+   "dwell_return_disc_mean": 1.5687801122389413,
+   "dwell_len_mean": 16.0,
+   "dwell_j_per_step": 0.09580008936773365,
+   "dwell_clean_ever_rate": 0.0
+  },
+  "a3_robust_bank.json:x12v16u200": {
+   "src": "a3_robust_bank.json:x12v16u200",
+   "reset_clean_rate": 0.88,
+   "commit_rate": 1.0,
+   "commit_step1_rate": 0.88,
+   "step1_clean_rate": 1.0,
+   "step1_commit_and_clean_rate": 0.88,
+   "step2plus_clean_rate": 0.0,
+   "n_step2plus": 12,
+   "capture_rate": 0.88,
+   "wasted_rate": 0.12,
+   "fire_return_disc_mean": 5.8343265805220845,
+   "fire_len_mean": 11.12,
+   "dwell_return_disc_mean": 1.1892748203631034,
+   "dwell_len_mean": 12.0,
+   "dwell_j_per_step": 0.09174383315885296,
+   "dwell_clean_ever_rate": 0.0
+  }
+ },
+ "pooled_gate_metric": 0.96,
+ "gate_pass": true
+}
