@@ -241,18 +241,18 @@ class Curriculum:
     def __init__(self, cur_cfg: dict, frozen: Dict[str, float],
                  env_cfg: Optional[dict] = None):
         self.mode = str(cur_cfg["mode"])
-        if self.mode not in ("s1_only", "staged", "adaptive", "reverse"):
-            raise ValueError(
-                f"curriculum.mode '{self.mode}' (s1_only|staged|adaptive|reverse)")
+        if self.mode not in ("s1_only", "staged", "adaptive", "reverse", "sbe"):
+            raise ValueError(f"curriculum.mode '{self.mode}' "
+                             "(s1_only|staged|adaptive|reverse|sbe)")
         self.frozen = dict(frozen)
         self.entry_step = 0
         self._streak = 0
         self._heldout_clean: List[float] = []
-        if self.mode == "reverse":                 # A-3 L-reverse (docs/13)
+        if self.mode in ("reverse", "sbe"):        # A-3/A-3d ladders (docs/13/17)
             self.s1 = None                         # no width/reward stages
             self.stage = "s2"                      # ladder active from step 0
             self.history: List[dict] = [{"stage": "s2", "step": 0,
-                                         "event": "r_enter", "r": 0}]
+                                         "event": "enter", "r": 0}]
         else:
             self.s1 = stage_from_cfg(cur_cfg["s1"])
             self.stage = "s1"
@@ -302,6 +302,38 @@ class Curriculum:
                 self.t0, self.t0_verify = _sb.verify_t0(
                     self.t0, env_cfg, robust_seeds=rseeds,
                     robust_min=(float(rmin) if rmin is not None else None))
+        if self.mode == "sbe":                     # A-3d SBE k-ladder (docs/17)
+            import json as _json
+            import pathlib as _pl
+            from shepherd.train import spawn_bank as _sb
+            self._sb = _sb
+            sc = cur_cfg["sbe"]
+            self.sbe_stages = [dict(s) for s in sc["stages"]]
+            if not self.sbe_stages or not self.sbe_stages[-1].get("nominal"):
+                raise ValueError("sbe.stages must end with a nominal stage "
+                                 "(docs/17 SS2 D5)")
+            for st in self.sbe_stages[:-1]:
+                for kk in ("name", "k", "exit"):
+                    if kk not in st:
+                        raise KeyError(f"sbe stage missing '{kk}': {st}")
+            self.sbe_sigma = float(sc.get("sigma_pos", 0.02))
+            g = sc["gate"]                          # U-5 confidence gate
+            self.gate_episodes = int(g["episodes"])
+            self.gate_z = float(g.get("z", 1.645))
+            self.gate_backoff_margin = float(g.get("backoff_margin", 0.05))
+            self.sbe_max_steps = int(sc["max_steps"])
+            self.s2_heldout_last = int(
+                cur_cfg["s2_exit"]["heldout_clean_nonzero_last"])
+            self.d_idx = 0
+            self._capped = False
+            self.t0 = _sb.load_t0(str(sc["robust_bank"]))   # D0 witnesses
+            bank = _json.loads(_pl.Path(str(sc["bank"])).read_text())
+            self.sbe_by_k: Dict[int, list] = {}
+            for e in bank["entries"]:
+                self.sbe_by_k.setdefault(int(e["k"]), []).append(e["spawn"])
+            for st in self.sbe_stages[:-1]:
+                if int(st["k"]) > 0 and int(st["k"]) not in self.sbe_by_k:
+                    raise ValueError(f"SBE bank has no k={st['k']} entries")
         if self.mode == "adaptive":                    # A-2 L-adaptive (docs/12 SS3)
             a2 = cur_cfg["s2_adaptive"]
             self.n_width = int(a2["n_width_steps"])
@@ -319,8 +351,8 @@ class Curriculum:
             self._capped = False
 
     def overrides(self, env_steps: int) -> Optional[Dict[str, float]]:
-        if self.mode == "reverse":
-            return None      # A-3: frozen constants + judgment m3 ALWAYS (R-5)
+        if self.mode in ("reverse", "sbe"):
+            return None      # frozen constants + judgment m3 ALWAYS (R-5/V-3)
         if self.stage == "s1":
             return dict(self.s1)
         if self.stage == "s2":
@@ -345,7 +377,14 @@ class Curriculum:
         """A-3 per-episode spawn directive; None = nominal frozen reset.
         Only the TRAIN rollout path consumes this (R-5: eval spawns frozen
         except the train-eval gating bundle via eval_spawn_fn)."""
-        if self.mode != "reverse" or self.stage != "s2":
+        if self.stage != "s2":
+            return None
+        if self.mode == "sbe":
+            st = self.sbe_stages[self.d_idx]
+            if st.get("nominal"):
+                return None
+            return self._sbe_draw(int(st["k"]), rng)
+        if self.mode != "reverse":
             return None
         st = self.rv_stages[self.r_idx]
         if st.get("nominal"):
@@ -356,11 +395,42 @@ class Curriculum:
             sigma_vel=float(st["sigma_vel"]),
             rewind_dx=float(st["rewind_dx"]))
 
+    def _sbe_draw(self, k: int, rng: np.random.Generator) -> dict:
+        """One A-3d spawn: k=0 -> jittered robust witness (zero limiter vel);
+        k>0 -> SBE bank entry, POSITION jitter only (velocities exact)."""
+        if k == 0:
+            t0 = self.t0[int(rng.integers(len(self.t0)))]
+            return self._sb.spawn_from(t0, rng, sigma_pos=self.sbe_sigma,
+                                       sigma_vel=0.0)
+        e = self.sbe_by_k[k][int(rng.integers(len(self.sbe_by_k[k])))]
+        L = (np.asarray(e["limiters"], float)
+             + rng.normal(0.0, self.sbe_sigma,
+                          (len(e["limiters"]), 3)))
+        return {"limiters": L,
+                "limiter_v": np.asarray(e["limiter_v"], float).copy(),
+                "att_p": (np.asarray(e["att_p"], float)
+                          + rng.normal(0.0, self.sbe_sigma, 3)),
+                "att_v": np.asarray(e["att_v"], float).copy(),
+                "att_speed": float(e["att_speed"]),
+                "src": f"sbe_k{k}"}
+
     def eval_spawn_fn(self):
         """Deterministic spawn sampler for the TRAIN-EVAL (gating) bundle --
         stage-stable draws so the advancement metric is comparable across
         evals at the same R-stage. None -> train-eval == frozen bundle."""
-        if self.mode != "reverse" or self.stage != "s2":
+        if self.stage != "s2":
+            return None
+        if self.mode == "sbe":
+            st = self.sbe_stages[self.d_idx]
+            if st.get("nominal"):
+                return None
+            d_idx, k = self.d_idx, int(st["k"])
+
+            def fn(ep: int) -> dict:
+                rng = np.random.default_rng(515_151 + d_idx * 991 + ep)
+                return self._sbe_draw(k, rng)
+            return fn
+        if self.mode != "reverse":
             return None
         st = self.rv_stages[self.r_idx]
         if st.get("nominal"):
@@ -391,6 +461,40 @@ class Curriculum:
                 self.stage, self.entry_step, self._streak = "s2", env_steps, 0
                 self.history.append({"stage": "s2", "step": env_steps})
                 return "s2"
+        elif self.stage == "s2" and self.mode == "sbe":
+            st = self.sbe_stages[self.d_idx]
+            nominal = bool(st.get("nominal"))
+            if not nominal and not self._capped:
+                if env_steps - self.entry_step >= self.sbe_max_steps:
+                    self._capped = True            # stall stage = evidence
+                    self.history.append({"stage": "s2", "step": env_steps,
+                                         "event": "cap", "d": self.d_idx})
+                else:
+                    from shepherd.train.phi_potential import (wilson_lcb,
+                                                              wilson_ucb)
+                    n_ep = int(train_ev.get("episodes", 0))
+                    kc = int(round(float(train_ev["captured_rate"]) * n_ep))
+                    exit_p = float(st["exit"])
+                    if (wilson_lcb(kc, n_ep, self.gate_z) > exit_p
+                            and self.d_idx < len(self.sbe_stages) - 1):
+                        self.d_idx += 1            # U-5 advance: LCB > exit
+                        self.history.append(
+                            {"stage": "s2", "step": env_steps,
+                             "event": "advance", "d": self.d_idx})
+                    elif (self.d_idx > 0
+                          and wilson_ucb(kc, n_ep, self.gate_z)
+                          < exit_p - self.gate_backoff_margin):
+                        self.d_idx -= 1            # U-5 backoff: UCB < exit-m
+                        self.history.append(
+                            {"stage": "s2", "step": env_steps,
+                             "event": "backoff", "d": self.d_idx})
+            last = self._heldout_clean[-self.s2_heldout_last:]
+            nonzero = (len(last) >= self.s2_heldout_last
+                       and all(c > 0.0 for c in last))
+            if nominal and nonzero:
+                self.stage, self.entry_step = "s3", env_steps
+                self.history.append({"stage": "s3", "step": env_steps})
+                return "s3"
         elif self.stage == "s2" and self.mode == "reverse":
             st = self.rv_stages[self.r_idx]
             nominal = bool(st.get("nominal"))
@@ -478,6 +582,12 @@ class Curriculum:
     def describe(self) -> dict:
         """Compact curriculum state for eval_curve points / prints (A-2)."""
         d = {"stage": self.stage, "mode": self.mode}
+        if self.mode == "sbe":
+            st = (self.sbe_stages[self.d_idx] if self.stage == "s2"
+                  else {"name": "done"})
+            d.update(d_idx=self.d_idx, d_name=st.get("name"),
+                     k=st.get("k"), nominal=bool(st.get("nominal")),
+                     gate_episodes=self.gate_episodes, capped=self._capped)
         if self.mode == "reverse":
             st = (self.rv_stages[self.r_idx] if self.stage == "s2"
                   else {"name": "done"})

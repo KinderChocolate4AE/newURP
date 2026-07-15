@@ -62,6 +62,8 @@ from shepherd.train.make_env_m3 import (Curriculum, M3Adapter,
                                         build_m3_attacker_env,
                                         frozen_constants, m3_params_from_cfg,
                                         make_m3_train_env)
+from shepherd.train.phi_potential import (PHI_SEEDS_TRAIN, phi_value,
+                                           teacher_fire)
 from shepherd.train.mappo import MAPPOConfig, MAPPORollout, MAPPOTrainer
 from shepherd.train.obs_norm import RunningNorm
 from shepherd.scripts.train_ippo import (hold_bundle, make_scripted_ctx,
@@ -103,6 +105,8 @@ def m3_eval_bundle(env_cfg: dict, m3: M3Params, limiter_fn, finisher_fn,
         obs_d, _ = (ad.reset_to(spawn_fn(ep), seed=seed0 + ep)
                     if spawn_fn is not None else ad.reset(seed=seed0 + ep))
         obs = obs_d[ad.limiter_ids[0]]
+        reset_clean = bool(obs[-3] >= float(ad.env.theta_fire)
+                           and obs[-1] > 0.0)      # A-3d U-4
         flags: Dict[str, object] = {}
         ret = head = head_m3 = rgeo = 0.0
         steps = boxed_steps = near_steps = 0
@@ -135,6 +139,7 @@ def m3_eval_bundle(env_cfg: dict, m3: M3Params, limiter_fn, finisher_fn,
             "penetrated": bool(r.flags["penetrated"]),
             "boxed_frac": boxed_steps / max(steps, 1),
             "o_near_rate": near_steps / max(steps, 1),
+            "reset_clean": reset_clean,
             "fire_chains": chains,
         })
     return _aggregate_m3(recs, episodes)
@@ -173,6 +178,12 @@ def _aggregate_m3(recs: List[dict], episodes: int) -> dict:
         "o_dist_log_at_fire_mean": (float(np.mean(od)) if od else float("nan")),
         "fire_chains": chains,
     }
+    out["reset_clean_rate"] = float(np.mean([x["reset_clean"] for x in recs]))
+    out["arrival_capture_rate"] = float(np.mean(
+        [(x["captured"] and (not x["reset_clean"]) and x["clean"])
+         for x in recs]))
+    out["spawn_capture_rate"] = float(np.mean(
+        [(x["captured"] and x["reset_clean"]) for x in recs]))
     # pre-registered reference score (docs/11 SS3): boxed_dwell as ep fraction
     out["sel_score"] = (out["clean_cross_rate"] + 0.5 * out["captured_rate"]
                         - 0.5 * out["boxed_fire_rate"]
@@ -195,6 +206,25 @@ class M3ARunner:
         self.cur = Curriculum(run_cfg["curriculum"],
                               frozen_constants(env_cfg, self.m3),
                               env_cfg=env_cfg)
+        # ---- A-3d hooks (docs/17 SS3; ALL no-ops unless `a3d:` block) -------
+        self.a3d = run_cfg.get("a3d") or None
+        self._theta = float(env_cfg["fire_gate"]["theta_fire"])
+        self._phi_cur = 0.0
+        self._ep_reset_clean = False
+        if self.a3d:
+            ph = dict(self.a3d.get("phi", {}))
+            _seeds = tuple(int(s) for s in ph.get("seeds", PHI_SEEDS_TRAIN))
+            _n = int(ph.get("n", 600))
+            _tau = float(ph.get("tau", 0.05))
+            _beta = float(ph.get("beta", 1.0))
+            _theta = self._theta
+            self._phi_alpha = float(ph.get("alpha", 0.5))
+            self._phi_gamma = float(run_cfg["mappo"]["gamma"])
+            self._phi = (lambda o: phi_value(o, seeds=_seeds, n=_n,
+                                             theta=_theta, tau=_tau,
+                                             beta=_beta))
+            self._teacher = bool(self.a3d.get("teacher_gate", True))
+            self._freeze_fin = bool(self.a3d.get("freeze_finisher", True))
 
         env, _, _ = make_m3_train_env(copy.deepcopy(env_cfg), self.m3)
         ad = M3Adapter(env)
@@ -233,7 +263,10 @@ class M3ARunner:
     def _begin_episode(self) -> None:
         params = sample_attacker_params(self.rand_cfg, self.rand_rng)
         stage = self.cur.overrides(self.env_steps)
-        spawn = self.cur.spawn(self.rand_rng)      # A-3: None unless reverse
+        spawn = self.cur.spawn(self.rand_rng)   # None unless reverse/sbe
+        if spawn is not None and "att_speed" in spawn:
+            params = {**params,                  # V-4: pin approach speed
+                      "att_speed": float(spawn["att_speed"])}
         env, _, _ = build_m3_attacker_env(self.env_cfg, self.m3, params,
                                           stage=stage)
         self._adapter = M3Adapter(env)
@@ -246,6 +279,11 @@ class M3ARunner:
                     "steps": 0.0, "clean": 0.0, "boxed_steps": 0.0}
         self._ep_params = params
         self._ep_stage = self.cur.stage
+        self._ep_reset_clean = bool(self._obs[-3] >= self._theta
+                                    and self._obs[-1] > 0.0)
+        self._ep["phi_shape"] = 0.0
+        if self.a3d:
+            self._phi_cur = self._phi(self._obs)
 
     def _finish_episode(self, r) -> None:
         steps = max(self._ep["steps"], 1.0)
@@ -268,6 +306,11 @@ class M3ARunner:
             "truncated": bool(r.truncated),
             "stage": self._ep_stage,
             "attacker_params": dict(self._ep_params),
+            "reset_clean": bool(self._ep_reset_clean),
+            "arrival_capture": bool(captured and (not self._ep_reset_clean)
+                                    and bool(self._ep["clean"])),
+            "spawn_capture": bool(captured and self._ep_reset_clean),
+            "phi_shape_sum": float(self._ep.get("phi_shape", 0.0)),
         })
         if len(self.ep_records) > 500:
             del self.ep_records[:-500]
@@ -295,6 +338,11 @@ class M3ARunner:
             raw_f = raw_f_t[0].cpu().numpy()
             clip_f = raw_f.copy()
             clip_f[:3] = np.clip(raw_f[:3], -1.0, 1.0)
+            if self.a3d and self._teacher:         # U-2: obs-clean -> fire
+                fire = 1.0 if teacher_fire(obs, self._theta) else 0.0
+                raw_f = np.array([0.0, 0.0, 0.0, fire], np.float32)
+                clip_f = raw_f.copy()
+                logp_f = torch.zeros(1, device=device)
 
             value = self.tr.value_np(nobs)
 
@@ -305,6 +353,14 @@ class M3ARunner:
 
             r = ad.step(live)
             next_obs = r.obs[ad.limiter_ids[0]]
+            rew = float(r.rewards[ad.finisher_id])
+            if self.a3d:                           # U-3: r_Phi = g*Phi' - Phi
+                phi_next = 0.0 if r.done else self._phi(next_obs)
+                shape = self._phi_alpha * (self._phi_gamma * phi_next
+                                           - self._phi_cur)
+                rew += shape
+                self._ep["phi_shape"] += shape
+                self._phi_cur = phi_next
             if r.terminated:
                 next_value = 0.0
             else:
@@ -318,7 +374,7 @@ class M3ARunner:
                          lim_logp=logp_l.cpu().numpy(),
                          fin_raw=raw_f, fin_clip=clip_f,
                          fin_logp=float(logp_f[0].item()),
-                         rewards=r.rewards[ad.finisher_id],
+                         rewards=rew,
                          values=value, next_values=next_value,
                          dones=1.0 if r.done else 0.0)
 
@@ -342,7 +398,13 @@ class M3ARunner:
                 self._obs = next_obs
 
     def update(self) -> Dict[str, float]:
+        fin_snap = None
+        if self.a3d and self._freeze_fin:          # U-2: fire head FROZEN
+            fin_snap = {k: v.detach().clone() for k, v
+                        in self.tr.fin_actor.state_dict().items()}
         stats = self.tr.update(self.buf)
+        if fin_snap is not None:                   # weight-restore freeze
+            self.tr.fin_actor.load_state_dict(fin_snap)
         self.buf.reset()
         return stats
 
@@ -363,6 +425,14 @@ class M3ARunner:
             "train/penetrated_rate": float(np.mean([x["penetrated"] for x in recs])),
             "train/clean_cross_rate": float(np.mean([x["clean"] for x in recs])),
             "train/boxed_frac": float(np.mean([x["boxed_frac"] for x in recs])),
+            "train/arrival_capture_rate": float(np.mean(
+                [x.get("arrival_capture", False) for x in recs])),
+            "train/spawn_capture_rate": float(np.mean(
+                [x.get("spawn_capture", False) for x in recs])),
+            "train/reset_clean_rate": float(np.mean(
+                [x.get("reset_clean", False) for x in recs])),
+            "train/phi_shape_sum": float(np.mean(
+                [x.get("phi_shape_sum", 0.0) for x in recs])),
         }
 
     # ----------------------------------------------------------- eval / io ---
@@ -396,8 +466,17 @@ class M3ARunner:
         spawn_fn = self.cur.eval_spawn_fn()        # A-3: gating bundle spawns
         if stage is None and spawn_fn is None:
             return frozen_ev, frozen_ev
-        train_ev = m3_eval_bundle(self.env_cfg, self.m3, lim_fn, fin_fn,
-                                  episodes, self.eval_seed0, stage=stage,
+        g_eps = int(getattr(self.cur, "gate_episodes", 0) or episodes)
+        g_fin = fin_fn
+        if self.a3d and self._teacher:             # arrival-competence gauge
+            _th = self._theta
+
+            def g_fin(obs, flags):                 # noqa: F811
+                return np.array(
+                    [0.0, 0.0, 0.0,
+                     1.0 if teacher_fire(obs, _th) else 0.0], np.float32)
+        train_ev = m3_eval_bundle(self.env_cfg, self.m3, lim_fn, g_fin,
+                                  g_eps, self.eval_seed0, stage=stage,
                                   spawn_fn=spawn_fn)
         return frozen_ev, train_ev
 

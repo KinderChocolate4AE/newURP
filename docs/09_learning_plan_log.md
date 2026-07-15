@@ -300,6 +300,15 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-15 (pp) — ✅ A-3d 트레이너 구현 완료 (teacher-gate + ΔΦ PBRS + SBE k-사다리 + Wilson 게이트) — 서버 torch 테스트·파일럿 대기
+
+- **① `shepherd/train/phi_potential.py`(신규, torch-free)**: robust potential Φ = mean_z σ((v_z−θ)/τ)·1[¬boxed] − β·std_z (**고정 Z_train = seeds 61~65**, audit 71~75 예약, n_phi 600 = 스캐폴드-충실도 선택·판정 미사용) + obs 파싱(frozen 레이아웃) + Wilson LCB/UCB + `teacher_fire`(obs[-3]≥θ ∧ obs[-1]>0). 실측: witness Φ=0.881 결정론·열화 상태 0.000·75ms/call.
+- **② Curriculum `sbe` 모드**(make_env_m3): D-사다리 {d0 k0 (A-3b R0 앵커)…d4 k8, d5 nominal}, 스폰 = k0→robust witness(σ0.02·영속도) / k>0→**SBE bank 엔트리(limiter_v 정확 복사, 위치만 σ0.02 지터)**·att_speed 동반; **U-5 Wilson confidence 게이트**(80판 고정 CRN·전진 LCB>exit·후퇴 UCB<exit−0.05·sustain 불요)·cap 360k freeze·overrides() 상시 None(보상 무개입 구조 유지).
+- **③ train_m3a a3d 훅**(`a3d:` 블록 없으면 전부 no-op): teacher-gate 발사(rollout+게이팅 번들, raw-obs 판독) · **fin freeze = 가중치 스냅샷-복원**(mappo.py 무접촉) · **ΔΦ write-in**(rew += α[γΦ(s′)−Φ(s)], terminal Φ≔0, phi 캐시로 스텝당 1회 평가·ep 시작 1회) · V-4 att_speed 핀(spawn→params) · U-4 분해(reset_clean/arrival_capture/spawn_capture/phi_shape_sum — ep records·rolling·eval 번들 集계 공통) · 게이팅 번들 episodes = gate.episodes(80).
+- ④ `configs/m3a_a3d_pilot.yaml`(scratch 3-seed·520k) + `tests/test_a3d_trainer.py` **+9**(phi 파싱/결정론/β·Wilson·teacher·sbe 스폰 의미론(limiter_v≠0·att_speed·d0 영속도)·게이트 전진/후퇴/hold/cap·config 사전등록 정합(Z_train·k 단조·exit 단조·예산 룰·judgment 블록 = a3b와 동일)). t-free 5 스위트 70 green + 기타 회귀 기존 green.
+- 캐비앗: fin freeze 중 frozen/heldout 번들은 learned(무학습 fire-head) → frozen 지표 무의미 기간(문서화, best-ckpt는 참고만·사다리 판정은 게이팅 번들); phi n=600·|Z|=5로 스텝 비용 ~+60%(520k ≈ 4h급/3-seed 병렬 예상).
+- **서버(Hyunjun)**: push 후 ⓐ torch 테스트(수집≠green 교훈 — a3d 훅 경로 포함 실측) ⓑ 파일럿: `TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_a3d_pilot.yaml OUT=results/m3a_a3d_pilot REQUIRED_COMMIT=<본 커밋> GPU=0 SEEDS="0 1 2"` ⓒ 마감 시 held-out 4본 불요(teacher 기간) — eval_curve/run_state + 게이팅 지표 커밋. **판정(V-5)**: arrival_capture LCB95 > 0 (k≥1 스테이지 게이팅 번들) = 재성형 등가물 최초 실증; D0 앵커에서 위임 TODO 2건(robust 마진·union 경로차) 교차 확인.
+
 ### 2026-07-15 (oo) — ✅ A-3d 위임분(bank 생성기 + reset_to 속도 주입) 검수 합격·수록 — 트레이너(ΔΦ/teacher-gate) 착수
 
 - **위임 산출물** (Opus 4.8, 하네스 `b3c8997` 계약): `a3d_sbe_bank.py`(SBE 합성+4조건 게이트+분할/merge CLI) · `env_m3.reset_to`의 optional `limiter_v` (수 줄 diff, shape 검증) · `tests/test_a3d_bank.py` 9종 · 구현 노트(`URP/a3d_impl_notes/`).
