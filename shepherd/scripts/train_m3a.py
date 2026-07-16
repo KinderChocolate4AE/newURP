@@ -60,8 +60,8 @@ from shepherd.train.attacker_rand import sample_attacker_params
 from shepherd.train.ippo import limiter_inputs
 from shepherd.train.make_env_m3 import (Curriculum, M3Adapter,
                                         build_m3_attacker_env,
-                                        frozen_constants, m3_params_from_cfg,
-                                        make_m3_train_env)
+                                        frozen_constants, gating_env_for_spawn,
+                                        m3_params_from_cfg, make_m3_train_env)
 from shepherd.train.phi_potential import (PHI_SEEDS_TRAIN, phi_value,
                                            teacher_fire)
 from shepherd.train.mappo import MAPPOConfig, MAPPORollout, MAPPOTrainer
@@ -101,9 +101,18 @@ def m3_eval_bundle(env_cfg: dict, m3: M3Params, limiter_fn, finisher_fn,
     env, _, _ = make_m3_train_env(copy.deepcopy(env_cfg), m3, stage=stage)
     ad = M3Adapter(env)
     recs = []
+    pinned: List[float] = []       # V-4' parity audit (docs/09 (ss))
     for ep in range(episodes):
-        obs_d, _ = (ad.reset_to(spawn_fn(ep), seed=seed0 + ep)
-                    if spawn_fn is not None else ad.reset(seed=seed0 + ep))
+        if spawn_fn is not None:
+            spawn = spawn_fn(ep)
+            if "att_speed" in spawn:       # V-4' train-gate parity pin
+                env, _, _ = gating_env_for_spawn(env_cfg, m3, spawn,
+                                                 stage=stage)
+                ad = M3Adapter(env)
+                pinned.append(float(spawn["att_speed"]))
+            obs_d, _ = ad.reset_to(spawn, seed=seed0 + ep)
+        else:
+            obs_d, _ = ad.reset(seed=seed0 + ep)
         obs = obs_d[ad.limiter_ids[0]]
         reset_clean = bool(obs[-3] >= float(ad.env.theta_fire)
                            and obs[-1] > 0.0)      # A-3d U-4
@@ -142,7 +151,11 @@ def m3_eval_bundle(env_cfg: dict, m3: M3Params, limiter_fn, finisher_fn,
             "reset_clean": reset_clean,
             "fire_chains": chains,
         })
-    return _aggregate_m3(recs, episodes)
+    out = _aggregate_m3(recs, episodes)
+    if pinned:                     # V-4' audit trail (eval_curve visible)
+        out["gating_parity"] = {"pinned_episodes": len(pinned),
+                                "att_speeds": sorted(set(pinned))}
+    return out
 
 
 def _aggregate_m3(recs: List[dict], episodes: int) -> dict:
@@ -609,14 +622,17 @@ def run_one(run_cfg: dict, env_cfg: dict, seed: int, device: str,
 
         if upd % eval_every == 0 or upd == n_updates:
             frozen_ev, train_ev = runner.evaluate(eval_eps)
+            cur_pre = runner.cur.describe()    # measured-bundle state (ss fix)
+            stage_pre = runner.cur.stage
             transition = runner.cur.on_eval(runner.env_steps, train_ev, frozen_ev)
             if transition:
                 print(f"  [curriculum] -> {transition} at step {runner.env_steps}")
                 ntfy(f"m3a {arm} seed {seed}: stage -> {transition} "
                      f"@ {runner.env_steps}")
             margin = frozen_ev["return_mean"] - base_best
-            point = {"step": runner.env_steps, "stage": runner.cur.stage,
-                     "cur": runner.cur.describe(),
+            point = {"step": runner.env_steps, "stage": stage_pre,
+                     "cur": cur_pre,           # (ss): PRE-transition = the
+                     "transition": transition,  # bundle actually measured
                      "dod_margin": margin,
                      **{k: v for k, v in frozen_ev.items() if k != "fire_chains"},
                      "fire_chains": frozen_ev["fire_chains"],

@@ -201,6 +201,33 @@ def build_m3_attacker_env(env_cfg: dict, m3: M3Params,
     return env, scn, lay
 
 
+def gating_env_for_spawn(env_cfg: dict, m3: M3Params, spawn: Optional[dict],
+                         stage: Optional[Dict[str, float]] = None):
+    """V-4' train--gate parity (docs/09 (ss)): the SBE gating bundle must roll
+    the attacker at the spawn's pinned att_speed exactly like the TRAIN
+    rollout path (train_m3a._begin_episode). Pilot2 ran the gating bundle at
+    nominal 20 -> 2/3 of gate episodes were geometrically incoherent (v16
+    cells dead for EVERY policy, v24 near-free).
+
+    Pin ONLY -- no attacker-family randomization here: the gating bundle
+    stays a deterministic fixed-CRN instrument. Spawns without an
+    "att_speed" key (D0 robust witnesses; teacher fires at t=0 before the
+    controller correction can act) build the nominal env unchanged. The
+    judgment/frozen bundle never carries spawns and never routes here.
+
+    Raises AssertionError if the built env's scripted-adversary speed does
+    not read back as the pinned value (parity assert)."""
+    params = ({"att_speed": float(spawn["att_speed"])}
+              if (spawn is not None and "att_speed" in spawn) else {})
+    env, scn, lay = build_m3_attacker_env(env_cfg, m3, params, stage=stage)
+    if params:
+        got, want = float(env.v_nominal), params["att_speed"]
+        if abs(got - want) > 1e-9:
+            raise AssertionError(
+                f"V-4' parity: env v_nominal {got} != pinned att_speed {want}")
+    return env, scn, lay
+
+
 class M3Adapter(ShepherdAdapter):
     """ShepherdAdapter with the M3 fire-chain flag superset (M3_FLAG_KEYS).
 
