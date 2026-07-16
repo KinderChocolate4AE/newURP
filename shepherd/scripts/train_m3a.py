@@ -89,7 +89,8 @@ def ntfy(msg: str) -> None:
 def m3_eval_bundle(env_cfg: dict, m3: M3Params, limiter_fn, finisher_fn,
                    episodes: int, seed0: int,
                    stage: Optional[Dict[str, float]] = None,
-                   spawn_fn=None, per_episode: bool = False) -> dict:
+                   per_episode: bool = False,
+                   spawn_fn=None) -> dict:
     """Deterministic bundle eval on the M3 env (nominal attacker, fixed CRN
     seeds). stage=None -> FROZEN constants + judgment m3 (the ONLY numbers
     judgment may use, docs/11 SS2); stage=dict -> train-eval diagnostics.
