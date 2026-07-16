@@ -300,6 +300,29 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-17 (uu) — ✅ Phase 0-c 마감 (`970b039`): 12셀 전체 지도 — admissible **2/12**(d1/v20·d3/v24), 관성 공짜는 k-비단조(d2·d4의 v24만), v16 가족 전멸 — bank v2 설계 입력 확정
+
+- **재현성**: 서버 1440판 중 샌드박스 선행 360판(d1/d2×zero·demo)과 겹치는 12셀 **정확 일치**(동일 번들·seed의 크로스 플랫폼 결정론 실측 — run 2a "비트-재현" 관찰의 CPU 교차판).
+- **전체 표** (arrival_capture, 30판/셀, 예시 규칙 = demo≥.8 ∧ zero≤.2 ∧ gap≥.4):
+
+| 셀 | zero | random | brake | demo | 판정 |
+|---|---|---|---|---|---|
+| d1/v16 | .00 | .03 | .13 | .40 | fail(demo) |
+| **d1/v20** | .00 | .10 | **.93** | .83 | **PASS** |
+| d1/v24 | — | — | — | — | 선점(reset_clean .97) |
+| d2/v16 | .03 | .00 | .00 | .13 | fail(demo) |
+| d2/v20 | .00 | .03 | .37 | .53 | fail(demo) |
+| d2/v24 | **.70** | .43 | .77 | .77 | fail(zero) |
+| d3/v16 | .00 | .00 | .00 | .13 | fail(demo) |
+| d3/v20 | .00 | .00 | .00 | .47 | fail(demo) |
+| **d3/v24** | **.00** | .00 | .63 | **.80** | **PASS** |
+| d4/v16 | .00 | .00 | .00 | .07 | fail(demo) |
+| d4/v20 | .00 | .00 | .00 | .33 | fail(demo) |
+| d4/v24 | .30 | .00 | .00 | .77 | fail(zero) |
+
+- **판독 5**: ① **관성 공짜 = k-비단조**: v24에서 d2 .70 → d3 .00 → d4 .30 — 핀이 d3 공짜를 소거(미핀 시절 d3 zero .57과 대조; 과도 overshoot가 창 시점과 어긋남)하되 d2(overshoot 소)·d4(장기 coast)는 잔존 → ⓑ(zero-fail 마진)는 **셀 단위**로 걸어야 함, k 단조 가정 금지 ② **v16 가족 전멸**(demo max .40): 약한 witness 창은 배치 σ+fresh CRN에서 개방루프로 못 버팀 ③ **v20 demo 감쇠**(.83→.53→.47→.33): 개방루프 재생의 지터 누적 — "셀 불능"과 "개방루프 취약"이 교락 → **feasibility 오라클을 폐루프 추적기(demo_a + K_p(p_demo−p) + K_d(v_demo−v))로 승격할지가 0-d 결정 사항**(리뷰의 demo≥.8은 개방루프 전제였음) ④ brake는 k≤2에서 강(d1/v20 .93 = demo 초과)·k≥4에서 자멸(스트랜딩) — 경쟁선으로 유지하되 스테이지별 해석 주의 ⑤ 선점은 d1/v24 한 셀 = ⓐ(스폰 비-clean)로 정확히 소거 가능.
+- **0-d 설계 입력 (Hyunjun 결정 5)**: (1) v24 계열 관성 예산 — 운동량 축소 vs 측면 도착 기하 vs 해당 (k,witness) 셀 제외 (2) v16 계열 — 재리파인(신규 witness 탐색) vs 폐기(가족 폭 축소 수용) (3) feasibility 오라클 = 개방루프 demo 유지 vs 폐루프 추적기 추가(③의 교락 해소; 추가 시 admissibility의 "demo" 정의 변경 = 사전등록 문구에 명시) (4) admissibility 최종 수치(예시 .8/.2/.4 vs 완화) + zero-fail 마진의 CRN 표본 수 (5) 스테이지 σ 정책 유지 여부(감쇠의 주인이 σ 누적인지 확인용 σ-스윕은 bank v2 검증 게이트에 내장 가능). 결정 후 = bank v2 생성식 구현 → 재생성·재검증 → 번들 재생성 → 0-e 일괄 사전등록.
+
 ### 2026-07-16 (tt) — Phase 0-a·0-b 완료 + 0-c 중간 판독(d1/d2 × zero·demo, 핀·균형 번들): **bank v2 필요 확정** — 실패 모드 3분류(선점/관성 공짜/지터 취약), 유일 클린 셀 = d1/v20
 
 - **0-a (`96b0326`)**: `gating_env_for_spawn`(V-4′ 핀, readback assert, 가족랜덤 미적용 = 번들 결정론; d0 무키 = nominal 원칙) + m3_eval_bundle per-ep 핀 라우팅·`gating_parity` 출력 + **eval_curve `cur`/`stage` = 사전-전이 기록**(+`transition` 필드; (rr) d3 오라벨 재발 방지) + 테스트 4. **0-b (`c8cf70f`)**: 균형 번들 30×{16,20,24}×{d1..d4} dev/sealed(`results/a3d_bundle_{dev,sealed}.json`, 360판씩) — 스폰 물질화(+demo_accels; bank 편집 면역)·스테이지별 σ 반영·reset seed 연속(재생 verbatim)·dev/sealed·역사 seed족 전부 서로소·**sealed = Phase 2 전 롤 금지**(러너가 --allow-sealed 없이 거부); m3_eval_bundle 핀-env 캐시(속도당 1빌드)+`per_episode` 플래그(기본 False = eval_curve 불변); calibration 러너 `a3d_calibration.py`(재개형·teacher 동반·--finalize 셀 표) + 테스트 5(균형·seed 서로소/연속·결정론 재생성·핀 소비 스키마·지터 스케일). 샌드박스 t-free green.
