@@ -89,7 +89,7 @@ def ntfy(msg: str) -> None:
 def m3_eval_bundle(env_cfg: dict, m3: M3Params, limiter_fn, finisher_fn,
                    episodes: int, seed0: int,
                    stage: Optional[Dict[str, float]] = None,
-                   spawn_fn=None) -> dict:
+                   spawn_fn=None, per_episode: bool = False) -> dict:
     """Deterministic bundle eval on the M3 env (nominal attacker, fixed CRN
     seeds). stage=None -> FROZEN constants + judgment m3 (the ONLY numbers
     judgment may use, docs/11 SS2); stage=dict -> train-eval diagnostics.
@@ -102,14 +102,18 @@ def m3_eval_bundle(env_cfg: dict, m3: M3Params, limiter_fn, finisher_fn,
     ad = M3Adapter(env)
     recs = []
     pinned: List[float] = []       # V-4' parity audit (docs/09 (ss))
+    pin_cache: Dict[float, M3Adapter] = {}   # 0-b: one build per att_speed
     for ep in range(episodes):
         if spawn_fn is not None:
             spawn = spawn_fn(ep)
             if "att_speed" in spawn:       # V-4' train-gate parity pin
-                env, _, _ = gating_env_for_spawn(env_cfg, m3, spawn,
-                                                 stage=stage)
-                ad = M3Adapter(env)
-                pinned.append(float(spawn["att_speed"]))
+                v = float(spawn["att_speed"])
+                if v not in pin_cache:
+                    env, _, _ = gating_env_for_spawn(env_cfg, m3, spawn,
+                                                     stage=stage)
+                    pin_cache[v] = M3Adapter(env)
+                ad = pin_cache[v]
+                pinned.append(v)
             obs_d, _ = ad.reset_to(spawn, seed=seed0 + ep)
         else:
             obs_d, _ = ad.reset(seed=seed0 + ep)
@@ -155,6 +159,16 @@ def m3_eval_bundle(env_cfg: dict, m3: M3Params, limiter_fn, finisher_fn,
     if pinned:                     # V-4' audit trail (eval_curve visible)
         out["gating_parity"] = {"pinned_episodes": len(pinned),
                                 "att_speeds": sorted(set(pinned))}
+    if per_episode:                # 0-b: paired/calibration consumers only
+        out["per_episode"] = [
+            {"captured": bool(x["captured"]), "clean": bool(x["clean"]),
+             "reset_clean": bool(x["reset_clean"]),
+             "arrival_capture": bool(x["captured"]
+                                     and not x["reset_clean"]
+                                     and x["clean"]),
+             "spawn_capture": bool(x["captured"] and x["reset_clean"]),
+             "len": int(x["len"]),
+             "n_fires": len(x["fire_chains"])} for x in recs]
     return out
 
 
