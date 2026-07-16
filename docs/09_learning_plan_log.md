@@ -300,6 +300,17 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-16 (rr) — ⚠️ A-3d′ 파일럿 2차: σ픽스 성공·V-5 문면 3/3 PASS — 그러나 **V-5 전제("무행동≈0") 측정 반증(무행동도 全 스테이지 PASS)** → 판정 보류, V-5′(paired contrast) 비준 대기
+
+- **런 결과** (`79e6305`, 아티팩트 `bfdc3b9`): **D0 앵커 복원** — 첫 eval cap 0.9125/0.9125/0.900(reset_clean 0.950~0.975), 3/3 seed 20480에 d1 진입 = (qq) 픽스 의도대로 작동. 플래토: seed0 d1 arr 9/80(LCB95 0.067)·seed1/2 d2 arr 29/80(LCB95 0.269) → **V-5 문면 3/3 PASS**.
+- **반증 (신규 무결성 컨트롤, 480판)**: 동일 하네스(`m3_eval_bundle`)·동일 게이팅 번들(`eval_spawn_fn`, eval_seed0 500000·ep 1:1 짝지음)·동일 teacher에서 리미터만 무행동/무작위로 교체 — zero: d1 1/80(LCB 0.003)·**d2 19/80(LCB 0.169)**·**d3 15/80(LCB 0.126)** / random(±30 uniform): d1 2/80·**d2 22/80(LCB 0.201)**·d3 7/80. **무행동 정책이 전 k≥1 스테이지에서 V-5를 통과** → docs/17 §4 "무행동·무도착 기준선 ≈ 0"은 k≥2에서 거짓(측정된 적 없는 가정이었음). **기전**: SBE 스폰이 주입한 limiter_v 관성이 a=0에서도 witness 창을 통과시키고 teacher가 그 순간 발사 = **구성이 만든 포획**. 컨트롤 정합성: null reset_clean이 실런과 정확 일치(d1 0.312=25/80·d2/d3 0.000) + spawn_capture ≡ reset_clean 항등(스폰-clean → t=0 즉발, 실런 전 seed·전 eval 동일 항등) — 실런 d1 cap 0.425 중 0.312는 teacher 공짜분.
+- **contrast 재검정** (trained vs 스테이지별 최강 null, Fisher 단측): d1 seed0 9/80 vs 2/80 **p=0.028 유의** / **d2 seed1·2 29/80 vs 22/80 p=0.154 비유의**(vs zero도 p=0.060) / d3 seed1(최고 eval) 31/80 vs 15/80 **p=0.004 유의**. **판정: "arrival_capture = 재성형 등가물 1차 실증" 주장 불가. 생존 주장 = "SBE가 G0 물리 벽을 설계로 제거 + d1·d3에서 정책의 유의 증분". 주력 플래토 d2는 무행동과 미구별.** 방증: seed1·2가 d2에서 동일 29/80 수렴(게이팅 스폰 rng가 run seed 무관 → 번들 공유) = 결과의 스폰 지배.
+- **V-5′ 개정안 (비준 대기 — 다음 런 착수 전 확정, 골대이동 방지 위해 본 반증 기록이 선행)**: 성공 = **동일 번들·동일 ep paired contrast** `arr(policy) − arr(zero-action)`의 LCB95 > 0 (절대 LCB 폐기). 무행동 컨트롤 = **상설 스캐폴드-무결성 게이트**(스폰이 정책이 벌지 않은 상태를 나르는 모든 캠페인에 적용). exit(captured 기준)의 공짜 성분 주석: d1 free 0.312 vs exit 0.40·d2 null 0.237 vs exit 0.30 — 자명 통과는 아니나 마진 얇음, contrast/net-지표 exit 검토. ※ 본 (rr) contrast는 MC seed 불일치 캐비앗(trained=seed1/2 런 eval_seed0 상이, ±3~5%p 판독 잡음) — **최종 재판정은 동일-seed 짝지음으로 재계산**.
+- **부수 이상 3건**: ① seed0 102400 이후 21 eval 완전 flatline(예산 80% 무학습)·seed1/2 후반 동형 ② backoff 트리거 전부 **"전멸 eval"**(전 지표 0.000, fire_rate 포함) 후 즉시 복귀(seed1 d3↔d2 4회 thrash) — 정책 일시 붕괴 vs 전이 직후 오염, 규명 전 재런치 무의미 ③ **eval_curve `cur` 라벨 = 전이 후 기록이라 한 칸 어긋남**(0.000 eval은 실제 상위 d에서 측정) — 곡선 해석 주의; best.json 3/3 step 20480 고정(teacher 기간 frozen 무의미의 예상된 귀결).
+- **인수 TODO 2건 (oo)**: ② **해소** — D0 σ=0 비트동일 스폰에서 reset_clean 0.950~0.975가 eval seed별로만 상이 → standalone-vs-env 경로차 아닌 θ=0.9 경계 MC 판독 잡음(n_samples 2000, 2.5~5%). ① **미해소·계획 무효화 발견** — (qq) 픽스가 D0 σ를 0.0으로 만들어 "D0 앵커에서 σ0.02 지터 후 robust 마진 재확인" 계측 위치 자체가 소멸 → **d4(σ0.02)로 재지정**.
+- **산출물**: `shepherd/scripts/a3d_null_baseline.py`(상설 컨트롤 러너; ep-단위 게이팅 번들 정확 재현, 12-ep prefix로 데이터 동일성 검증) + `results/a3d_null_baseline.json`(6 arm × 80판, per-ep 0/1 벡터 포함 — paired 재판정에 재런 불요). **다음 순서**: ⓐ 정체·붕괴 규명(최우선) ⓑ V-5′ 비준 ⓒ 동일-seed paired 재판정 ⓓ d2 잔존 시 스폰/exit 재설계 → 이후에야 unfreeze(V-6).
+
+
 ### 2026-07-15 (qq) — ❎ A-3d 파일럿: D0 정체 = **게이트 산식 오류(자체 설계 실수)** — 재성형 가설 미테스트; A-3d′ 픽스(스테이지별 σ) 후 재런치
 
 - **결과** (`07c94cb`, 아티팩트 `1c71d9f`): 3-seed 전원 D0 정체(전진 0, cap@369k), captured 0.21~0.26 flat, k≥1 표본 0 → V-5 형식 FAIL(미도달).
