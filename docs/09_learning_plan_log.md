@@ -300,6 +300,23 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-16 (tt) — Phase 0-a·0-b 완료 + 0-c 중간 판독(d1/d2 × zero·demo, 핀·균형 번들): **bank v2 필요 확정** — 실패 모드 3분류(선점/관성 공짜/지터 취약), 유일 클린 셀 = d1/v20
+
+- **0-a (`96b0326`)**: `gating_env_for_spawn`(V-4′ 핀, readback assert, 가족랜덤 미적용 = 번들 결정론; d0 무키 = nominal 원칙) + m3_eval_bundle per-ep 핀 라우팅·`gating_parity` 출력 + **eval_curve `cur`/`stage` = 사전-전이 기록**(+`transition` 필드; (rr) d3 오라벨 재발 방지) + 테스트 4. **0-b (`c8cf70f`)**: 균형 번들 30×{16,20,24}×{d1..d4} dev/sealed(`results/a3d_bundle_{dev,sealed}.json`, 360판씩) — 스폰 물질화(+demo_accels; bank 편집 면역)·스테이지별 σ 반영·reset seed 연속(재생 verbatim)·dev/sealed·역사 seed족 전부 서로소·**sealed = Phase 2 전 롤 금지**(러너가 --allow-sealed 없이 거부); m3_eval_bundle 핀-env 캐시(속도당 1빌드)+`per_episode` 플래그(기본 False = eval_curve 불변); calibration 러너 `a3d_calibration.py`(재개형·teacher 동반·--finalize 셀 표) + 테스트 5(균형·seed 서로소/연속·결정론 재생성·핀 소비 스키마·지터 스케일). 샌드박스 t-free green.
+- **0-c 중간 (d1/d2 × zero/demo, 360판; 잔여 = brake·random·d3·d4 → 서버 1커맨드)**: arrival_capture —
+
+| 셀 | zero | demo | gap | 판정(예시 규칙) |
+|---|---|---|---|---|
+| d1/v16 | .000 | .400 | .40 | FAIL(demo 낮음) |
+| **d1/v20** | **.000** | **.833** | **.83** | **PASS — 유일 클린 셀** |
+| d1/v24 | (reset_clean .967) | — | — | **선점**: k=1 되감기가 아직 창 안 → teacher 스폰 즉발, arrival 시험 불능 |
+| d2/v16 | .033 | **.133** | .10 | FAIL: **지터 취약**(σ0.01 + fresh CRN이 약한 witness 창 파괴 — v1 검증은 정확상태 한정) |
+| d2/v20 | .000 | .533 | .53 | FAIL(demo 낮음) |
+| d2/v24 | **.700** | .767 | .07 | FAIL: **관성 공짜**(핀 상태에서도 — 속도 비정합이 아니라 limiter_v 자체가 해법을 나름; 리뷰 "이미 거의 해결된 상태" 실측) |
+
+- **판독**: ① 예측 반반 — "핀 후 저k zero 확대"는 k=1에서 기각(zero 0/90, 선점 제외 전 셀 0), k=2 v24에서 강화(0.70) ② d1/v20 존재 = **SBE가 action-necessary 셀을 만들 수 있음의 실증**(개념 생존) ③ 나머지 셀 전멸 = **bank v2 필요 확정**, 생성 조건 = 실패 모드 1:1 대응: **ⓐ 스폰 비-clean**(선점 소거) **ⓑ zero-roll 실패 마진**(관성 공짜 소거 — 강한 witness에는 운동량 예산 축소/측면 도착 기하 등 설계 필요) **ⓒ demo를 배치 σ지터 × fresh CRN 하에서 검증**(취약 소거 — v1의 정확상태 검증에서 승격) = 리뷰 ⑤⑥ε + 선점 조건(자체 발견).
+- 잔여 0-c: 서버 `python -m shepherd.scripts.a3d_calibration && … --finalize` → `results/a3d_calibration_dev.json` 커밋 → **0-d bank v2 생성식 설계(Hyunjun 결정: 운동량 예산·도착 기하·마진 수치) → 0-e 사전등록 일괄 커밋**. 부분 원자료 스냅샷 = outputs `a3d_calibration_partial_d1d2.jsonl`(진행 파일은 results/_calib/, gitignore).
+
 ### 2026-07-16 (ss) — 규명 + 외부 리뷰 채택: **게이팅 att_speed 미핀(오출제 3호) 확정 · (rr) d3 증분 철회 · SBE → action-necessary 재정의** — 파일럿2 긍정 주장 전면 유보, Phase 0(무학습 사전검증) 착수
 
 - **규명((rr) ⓐ 이행; 리포트 = `results/a3d_stall_forensics.md`, 프로브 원자료 960판)**: ① "전멸 eval" = 붕괴 아닌 **全 d3 번들 측정치**(재귀속: `cur` 라벨이 전이 후 기록이라 오프바이원). trained d3 = **0~3/320 < zero 15/80 = 능동 이탈**(v24 공짜까지 소거·fire 0·len=자연 침투 길이) ② flatline = 비트동결 아닌 **수렴 + 고정 CRN + 이산 카운트**(return 미세표류 = 트레이너 정상; seed1/2 = d2 전진선 31/80에 정확히 2판 부족 고착, seed0 = 죽은 v16 34판 탓 살아있는 46판 중 87% 요구) ③ **근본 원인 = 게이팅 번들 att_speed 미핀**: `reset_to`가 att_speed 미소비 + 핀은 train rollout만(`_begin_episode`) + 공격자 env-scripted nominal 20 → **v16 全 arm 0/202(죽은 시험)·v24 무행동 0.57~0.93(공짜)·변별 v20뿐**. 코드 버그 아닌 **비준 설계 갭**(V-4 "eval nominal"과 게이팅 스폰의 자기모순) = A-3 σ·pilot1 D0 σ 이은 오출제 3호 ④ 리그(`results/a3d_mechanism_probe.json`): **brake(-30·unit(v) 1줄) 45/36/15 ≫ trained 34/29/0~3** — brake·demo는 전진선 통과, trained만 전 스테이지 미달.
