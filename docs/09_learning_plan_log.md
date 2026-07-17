@@ -302,6 +302,11 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-17 (eee) — 0-e 사전등록 패키지 조립 (docs/19 v0.1) — 3자 검토 → 비준 시 0-e 동결
+
+- **`docs/19_a3d_0e_preregistration.md`** = §8 1~3 동결 일괄본(3자 사본 = `URP/a3d_0e_prereg_brief_2026-07-17.md`): 측정기(PFC (1.0,0.5)·**Gate B family 8멤버 확정 [D-1]**: brake + λ∈{2,5,10,20} + attpd 3조합·obs-hard 문턱 0.4)·witness/coverage((ccc))·생성식(**v0 first-fit 구속 확정 [D-2]**, argmax 폐기)·**admissibility validation [D-3]**: n=100/셀·seed 600–699 신규 예약·LCB95(paired Δ PFC−zero) > ε=0.4(부트스트랩 10k·rng 777)·**V-5′ δ_min = 0.10 [D-4]**·exit 유도식 = UCB95(zero)+δ_min(수치는 validation 후 부록 A 기계 대입)·**번들 계획 [D-5]**: dev/sealed-v1 구조 폐기 기록(보존), dev-v2 = 75k/12.0M·sealed-v2 = 95k/13.0M(해시 기록·P2 전 롤 금지)·seed 대장 전 가족 표.
+- 신규 결정 = [D-1]~[D-5] 5건뿐(나머지 전부 기존 비준 사양의 수치 대입). **대기: 3자 검토 1회(각 D-슬롯 승인/수정 + 누락 자유도 지적) → Hyunjun 비준 = 0-e 동결 커밋 → bank v2 1회 생성(셀-병렬 허용, ≈4–7h) → validation → 부록 A → P1.**
+
 ### 2026-07-17 (ddd) — ✅ §8-3 생성식 구현·동결 후보: bank v2 생성기(draw-level 6조건 rejection) + 테스트 7 + 스모크 PASS — 생성 실행은 0-e 이후
 
 - **산출**: ① `a3d_sbe_bank_v2.py` — 동결 coverage 매트릭스(witness bank v2 meta에서 로드)의 셀만 생성; **draw-level paired screen 내장**(frozen 게인 (1.0,0.5)·teacher, PASS = pfc≥16/20 ∧ zero≤4/20 ∧ reset_clean≤4/20, fail-fast) + **생성 전용 seed 대역 400–419**(신규, 전 대역 서로소) + **시도 상한 48/셀·목표 12·최소 수록 8** + **v0 후보 grid {v1분포 U[0.3,0.8], U[0.5,0.8], U[0.15,0.5]} first-fit**(후보 0 = v1 분포 = "v1 최근접" tie-break의 try-순서 실현; argmax 모드 플래그 병존 — **어느 규칙이 구속력인지는 0-e에서 확정**) + 셀별 분포 리포트(시도/수락/드랍 사유/수락 v0 통계) + **zero-arm 포획 에피소드 len 히스토그램**(발사 = 에피소드 종결이므로 len ≈ commit 시점 = d4 en-route 가설 판별 프록시) ② v1 생성기 = `v0_range` 파라미터 스레딩(기본값 보존 — 기존 재생성 회귀 9 green으로 바이트-불변 확인) ③ `tests/test_a3d_bank_v2.py` +7(seed 대역 서로소·first-fit/에스컬레이션/제외/상한/드랍 카운트 로직 = 가짜 synth/screen 주입 유닛, rng 스트림 47k 대역 유일성).
