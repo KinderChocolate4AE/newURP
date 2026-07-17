@@ -302,6 +302,13 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-17 (bbb) — ✅ v16 재리파인 1회 실행: **ACCEPT — transplant 후보(val 1.00) 도착형 스크린 전판 만점** — witness 교체 후보 확보(동결은 다음 스텝)
+
+- (aaa) 기준 그대로 1회 실행(`shepherd/scripts/a3d_v16_refine.py` → `results/a3d_v16_refine.json`): **stage 1** = probe 규약 v16-only 재실행(fresh rng(23) — 원 전체-스윕 실행과는 rng 스트림 위치만 상이, 결정론·문서화) → **후보 2 모두 1차 통과: own .90 / transplant 1.00**. 원 뱅크의 x12v16(.90)은 best-of 선택의 산물이었고, 도너(x20v24) 패턴 x-스케일 이식이 이번 경로에서 완전 강건(val 1.00)으로 리파인됨.
+- **stage 2 도착형 paired screen**(seed 300–319, frozen 게인 (1.0,0.5), reset_clean 면도날 ≤4/20로 운용): **own = k1 0/12 탈락**(전 draw pfc 8/13 abort — dev PFC .47과 정합, "얇은 창" 실측 재확인) / **transplant = k1 8/8·k2 8/8, 전 통과 draw 20/20 PFC·0/20 zero·0/20 reset_clean** → (aaa) 선택 규칙 적용 = **transplant 채택**.
+- 해석: 재리파인의 정의("더 좋은 컨트롤러가 아니라 본질적으로 더 뚱뚱한 창을 찾는 탐색") 그대로 적중 — v16의 문제는 witness 창 두께였고, 두꺼운 창은 저속에서도 실존. **v16 = d1–d2 coverage 목표 회생.**
+- 다음 스텝(③ 동결): witness set = {v16-transplant(신규 등재), v20, v24} 확정 + coverage 매트릭스 동결(v16 d1–d2 / v20 d1 / v24 d2–d4) + 신규 witness의 robust bank 교체 커밋 → 이후 생성식 draw-필터.
+
 ### 2026-07-17 (aaa) — v16 재리파인 수락 기준 사전 고정 (탐색 전 커밋, 18 §4 이행) — 탐색 실행은 다음 스텝
 
 - **1회 한정.** 기준은 본 엔트리로 동결(결과 불문 사후 변경 금지). 실패 = v16 폐기 + negative result 보존(12 §6 행) + coverage 매트릭스에서 v16 제거.

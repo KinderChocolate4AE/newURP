@@ -1,0 +1,282 @@
+{
+ "meta": {
+  "criteria": "docs/09 (aaa) preregistered; screen seeds 300-319; frozen gains (1.0, 0.5); reset_clean razor operationalized as <=4/20 (same as zero razor)",
+  "n_stage1": 2,
+  "n_keep": 2,
+  "n_pass": 1
+ },
+ "candidates": [
+  {
+   "x": 12.0,
+   "v": 16.0,
+   "src": "own",
+   "refine_step": 0,
+   "search": 0.8,
+   "val": 0.9,
+   "stage1_accept": true,
+   "limiters": [
+    [
+     6.568391177253588,
+     -0.7233841786719442,
+     1.6052562472441794
+    ],
+    [
+     9.228517948290296,
+     1.946536426702324,
+     -0.4716868273125961
+    ],
+    [
+     5.408751544888115,
+     0.7586635535248286,
+     2.864684139026559
+    ],
+    [
+     7.493969698635832,
+     -0.49806981581814347,
+     -1.8779596704100923
+    ]
+   ],
+   "k_results": {
+    "k1": {
+     "attempts": 12,
+     "kept_draws": 12,
+     "construction_drops": {},
+     "passing": 0,
+     "pass": false,
+     "details": [
+      {
+       "pass": false,
+       "pfc": 8,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 13
+      },
+      {
+       "pass": false,
+       "pfc": 8,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 13
+      },
+      {
+       "pass": false,
+       "pfc": 8,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 13
+      },
+      {
+       "pass": false,
+       "pfc": 8,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 13
+      },
+      {
+       "pass": false,
+       "pfc": 8,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 13
+      }
+     ]
+    }
+   },
+   "accept": false
+  },
+  {
+   "x": 12.0,
+   "v": 16.0,
+   "src": "transplant",
+   "refine_step": 1,
+   "search": 1.0,
+   "val": 1.0,
+   "stage1_accept": true,
+   "limiters": [
+    [
+     6.911652123182581,
+     0.34896142612155806,
+     2.098663362440437
+    ],
+    [
+     9.503817432521721,
+     2.575347843782624,
+     -1.6409435343841177
+    ],
+    [
+     7.93698400210524,
+     -1.8044994968172048,
+     -0.9241445983503639
+    ],
+    [
+     9.772074602447798,
+     1.185786074149002,
+     -1.4862529449562085
+    ]
+   ],
+   "k_results": {
+    "k1": {
+     "attempts": 12,
+     "kept_draws": 12,
+     "construction_drops": {},
+     "passing": 8,
+     "pass": true,
+     "details": [
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      }
+     ]
+    },
+    "k2": {
+     "attempts": 12,
+     "kept_draws": 12,
+     "construction_drops": {},
+     "passing": 8,
+     "pass": true,
+     "details": [
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      },
+      {
+       "pass": true,
+       "pfc": 20,
+       "zero": 0,
+       "reset_clean": 0,
+       "seeds_used": 20
+      }
+     ]
+    }
+   },
+   "accept": true
+  }
+ ],
+ "verdict": "ACCEPT",
+ "chosen": {
+  "x": 12.0,
+  "v": 16.0,
+  "src": "transplant",
+  "val": 1.0,
+  "refine_step": 1,
+  "limiters": [
+   [
+    6.911652123182581,
+    0.34896142612155806,
+    2.098663362440437
+   ],
+   [
+    9.503817432521721,
+    2.575347843782624,
+    -1.6409435343841177
+   ],
+   [
+    7.93698400210524,
+    -1.8044994968172048,
+    -0.9241445983503639
+   ],
+   [
+    9.772074602447798,
+    1.185786074149002,
+    -1.4862529449562085
+   ]
+  ]
+ }
+}
