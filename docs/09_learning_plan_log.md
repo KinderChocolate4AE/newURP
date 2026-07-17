@@ -300,6 +300,8 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+> 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
+
 ### 2026-07-17 (yy) — ✅ 0-d Step 1 구현: Gate A PFC + Gate B family + 폐형식·trace 락 (t-free +17) — 게인 스캔·witness 재평가 대기
 
 - **산출**: ① `shepherd/train/pfc.py` — PFC(무차원 게인 K_p=c_p/T_k²·K_d=c_d/T_k, T_k=kΔt; **nominal-앵커 참조 롤아웃** — 동역학이 결정론이라 개방루프 demo는 스폰 지터를 그대로 보존하고, PFC의 가치는 명목 참조 추적으로 그 지터를 상쇄하는 것; 참조 소진 후 터미널 홀드; norm-클립 ≤30) + Gate B family(λ-brake a=−λv·attpd = 공격자-유도 리드 포인트 PD — obs-전용, k 미사용(뱅크 메타라 구조적 불가), 생성자 시그니처에 특권 인자 금지) + 폐형식 R·O·nominal_from_bank(entry_idx = bank["entries"] 전역 인덱스, a3d_bundle_gen 그룹핑과 일치 확인) ② `a3d_calibration.py` arm 확장(pfc/lam<λ>/attpd; --bank·--cp/--cd·--gb-*; pfc/attpd 행에 params 기록; finalize = **feasibility_arm 자동 선택(pfc>demo)**·gateb_best·pfc_gateb_gap·obs_hard EXAMPLE 플래그(0.4, 0-e 확정)·note에 "point screen은 인증 아님·binding 판정 = 독립 validation LCB" 명시; 구 arm 4종 레코드 포맷 불변 = 기존 progress 재개 호환) ③ `tests/test_a3d_pfc.py` **+17 테스트**.
