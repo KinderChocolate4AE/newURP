@@ -165,7 +165,7 @@ def ev_state(p_att, v_att, L, seed):
 
 
 # --- one draw --------------------------------------------------------------
-def _draw_directions(anchors, Lstar, k, rng):
+def _draw_directions(anchors, Lstar, k, rng, v0_range=(0.3, 0.8)):
     """Sample per-limiter arrival direction (cone-jittered) + v0 -> demo accel,
     start vel, analytic start pos (before residual correction)."""
     u = np.zeros((N_LIM, 3))
@@ -175,7 +175,8 @@ def _draw_directions(anchors, Lstar, k, rng):
     p_start = np.zeros((N_LIM, 3))
     for i in range(N_LIM):
         ui = _cone_jitter(_unit(Lstar[i] - anchors[i]), rng)
-        v0i = float(rng.uniform(0.3, 0.8)) * (A_LIM_MAX * k * DT)
+        v0i = float(rng.uniform(v0_range[0], v0_range[1])) \
+            * (A_LIM_MAX * k * DT)
         ai = v0i / (k * DT)                              # |accel|
         assert ai <= A_DEMO_MAX + 1e-6, f"|a|={ai} > {A_DEMO_MAX}"
         u[i], v0[i] = ui, v0i
@@ -188,7 +189,7 @@ def _draw_directions(anchors, Lstar, k, rng):
     return u, v0, a_demo, v_start, p_start
 
 
-def synth_draw(t0, k, rng, anchors, Lstar):
+def synth_draw(t0, k, rng, anchors, Lstar, v0_range=(0.3, 0.8)):
     """Synthesize one draw -> (entry|None, drop_reason). None = discarded."""
     v_star = float(t0.v)
     # direction draws + repel pre-screen (redraw <=10)
@@ -196,7 +197,8 @@ def synth_draw(t0, k, rng, anchors, Lstar):
     av0 = np.array([-v_star, 0.0, 0.0])
     a_demo = v_start = p_start = None
     for _ in range(10):
-        _, _, a_demo, v_start, p_start = _draw_directions(anchors, Lstar, k, rng)
+        _, _, a_demo, v_start, p_start = _draw_directions(
+            anchors, Lstar, k, rng, v0_range=v0_range)
         # residual correction: fold the (linear) closed-form residual into p_start
         for i in range(N_LIM):
             p_end, _ = _lim_roll(p_start[i], v_start[i], a_demo[i], k)

@@ -302,6 +302,12 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-17 (ddd) — ✅ §8-3 생성식 구현·동결 후보: bank v2 생성기(draw-level 6조건 rejection) + 테스트 7 + 스모크 PASS — 생성 실행은 0-e 이후
+
+- **산출**: ① `a3d_sbe_bank_v2.py` — 동결 coverage 매트릭스(witness bank v2 meta에서 로드)의 셀만 생성; **draw-level paired screen 내장**(frozen 게인 (1.0,0.5)·teacher, PASS = pfc≥16/20 ∧ zero≤4/20 ∧ reset_clean≤4/20, fail-fast) + **생성 전용 seed 대역 400–419**(신규, 전 대역 서로소) + **시도 상한 48/셀·목표 12·최소 수록 8** + **v0 후보 grid {v1분포 U[0.3,0.8], U[0.5,0.8], U[0.15,0.5]} first-fit**(후보 0 = v1 분포 = "v1 최근접" tie-break의 try-순서 실현; argmax 모드 플래그 병존 — **어느 규칙이 구속력인지는 0-e에서 확정**) + 셀별 분포 리포트(시도/수락/드랍 사유/수락 v0 통계) + **zero-arm 포획 에피소드 len 히스토그램**(발사 = 에피소드 종결이므로 len ≈ commit 시점 = d4 en-route 가설 판별 프록시) ② v1 생성기 = `v0_range` 파라미터 스레딩(기본값 보존 — 기존 재생성 회귀 9 green으로 바이트-불변 확인) ③ `tests/test_a3d_bank_v2.py` +7(seed 대역 서로소·first-fit/에스컬레이션/제외/상한/드랍 카운트 로직 = 가짜 synth/screen 주입 유닛, rng 스트림 47k 대역 유일성).
+- **플러밍 스모크(정보-무해 셀 v16/d1, 산출물 폐기)**: 12/12 시도 전부 수락, 구성 드랍 0·스크린 실패 0, pfc_mean .95·zero 0.0 — 400–419 대역에서도 (bbb)의 300–319 결과 재현 = **스크린의 CRN-밴드 민감성 없음**(v16 신규 witness 한정 확인). 비용 실측: ~2.5–3분/수락 draw(robust 게이트 10 union 빌드 + 40 eps) → **전체 7셀 생성 ≈ 4–7 h 단일 스레드** — 생성 시 셀-병렬(7 proc) 또는 서버 실행 검토.
+- **다음 = 0-e 사전등록 패키지 조립**(측정기·witness·coverage·생성식·수치·seed 대장·번들 계획·V-5′/exit/δ_min 문구 일괄) → **3자 검토 1회** → bank v2 1회 생성. 학습 금지 유지.
+
 ### 2026-07-17 (ccc) — ✅ §8-2 마감: witness set·coverage 매트릭스 동결 — robust witness bank v2 생성
 
 - **witness set 동결 = {v16 = transplant(신규), v20 = x16v20(기존), v24 = x20v24(기존)}.** 산출 = `results/a3_robust_bank_v2.json`(`a3d_witness_freeze.py`): v1 파일 불변 보존, x12v16 행만 교체 — 채택 limiters로 **전 수치 독립 재계산**: robust val **1.00**·cap 1.00·vmin 1.000(구 0.90 대체), σ-베이스라인 재계측 {.02→.43, .05→.12, .1→.06, .2→.01, .5→0}(타 witness와 동급 = 창 두께 정상화 확인), provenance(출처 = a3d_v16_refine.json·기준 = (aaa)·스크린 성적) 동봉, load_t0 왕복 검증(3 witnesses).
