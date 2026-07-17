@@ -302,6 +302,14 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-17 (aaa) — v16 재리파인 수락 기준 사전 고정 (탐색 전 커밋, 18 §4 이행) — 탐색 실행은 다음 스텝
+
+- **1회 한정.** 기준은 본 엔트리로 동결(결과 불문 사후 변경 금지). 실패 = v16 폐기 + negative result 보존(12 §6 행) + coverage 매트릭스에서 v16 제거.
+- **탐색 기계(변경 금지)**: `a3_robust_witness_probe` 기존 규약 그대로 — v=16 계열 초기점·도너-이식 후보(기존 기능 범위 내, 신규 탐색 축 추가 금지)·E_seeds[clean] greedy 리파인·search seeds 100–104 / robust validation 200–209. **수락 1차** = robust-clean val ≥ 0.9(기존 R-8 동일).
+- **수락 2차(도착형 — 채택의 실질 관문, 신규)**: 1차 통과 후보에 bank v1 생성식 그대로(폐형식 감속-도착·콘 ±15°·v0 U[0.3,0.8]·\|a\|≤24) **k∈{1,2} predecessor draws 각 12본** 생성 → draw-level paired screen(frozen 계측기: PFC (c_p,c_d)=(1.0,0.5)·teacher 동반): p̂_PFC ≥ .8 ∧ p̂_zero ≤ .2 ∧ reset 비-clean, **CRN 20 seeds/draw** — **k=1·k=2 각각 통과 draw ≥ 8/12**(coverage 목표 = d1–d2, 18 §4 ⓒ). screen CRN seed 대역 = **300–319 신규 예약**(全 기존 대역과 서로소; 0-e seed 대장 등재).
+- **복수 후보 선택 규칙**: robust val 최대 → tie: min(k1, k2) 통과 draw 수 최대 → tie: 리파인 스텝 최소(결정론).
+- 주의: 본 screen = 탐색-시점 필터이지 admissibility 인증 아님(18 §6) — 채택 witness도 bank v2 생성·독립 validation(n=100)을 타 witness와 동일하게 통과해야 함.
+
 ### 2026-07-17 (zz) — ✅ 게인 동결 (c_p,c_d)=(1.0,0.5) + dev 12셀 PFC 재평가: v20 감쇠 = 실질 난이도(교락 해소) · v24 = d2–d4 회생 · v16 = 재리파인 트리거
 
 - **게인 스캔**(인프라 커밋 `24c3026` = 결과 판독 전 커밋 = 선택 규칙 사전등록 순서 준수): tune 번들 = 신규 variant(rng 81k·seed 8.0M — dev 7.0M/sealed 9.0M/전 역사 seed족과 서로소, `tests/test_a3d_gain_scan.py` 락; dev·sealed 재생성 바이트-동일 회귀 확인) → 9 combo × 12셀 × 10판 = **1080판**: pooled .433–.492 **평탄**(계측기 게인-강건 = 좋은 신호) → 사전등록 규칙 적용 = **(c_p, c_d) = (1.0, 0.5)**(59/120, tie-break 미발동 순수 argmax). 산출 = `results/a3d_gain_scan.json` + `results/a3d_bundle_tune.json`.
