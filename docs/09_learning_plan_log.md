@@ -302,6 +302,15 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-17 (zz) — ✅ 게인 동결 (c_p,c_d)=(1.0,0.5) + dev 12셀 PFC 재평가: v20 감쇠 = 실질 난이도(교락 해소) · v24 = d2–d4 회생 · v16 = 재리파인 트리거
+
+- **게인 스캔**(인프라 커밋 `24c3026` = 결과 판독 전 커밋 = 선택 규칙 사전등록 순서 준수): tune 번들 = 신규 variant(rng 81k·seed 8.0M — dev 7.0M/sealed 9.0M/전 역사 seed족과 서로소, `tests/test_a3d_gain_scan.py` 락; dev·sealed 재생성 바이트-동일 회귀 확인) → 9 combo × 12셀 × 10판 = **1080판**: pooled .433–.492 **평탄**(계측기 게인-강건 = 좋은 신호) → 사전등록 규칙 적용 = **(c_p, c_d) = (1.0, 0.5)**(59/120, tie-break 미발동 순수 argmax). 산출 = `results/a3d_gain_scan.json` + `results/a3d_bundle_tune.json`.
+- **dev 12셀 PFC 재평가**(frozen 게인, 30판/셀 = 360판; `results/a3d_calibration_dev_pfc.json`): screen(.8 point) **PASS 4셀 = d1/v20 .93 · d2/v24 .80 · d3/v24 .80 · d4/v24 .80** (0-c 개방루프 2셀 → 4셀; v24 d2·d4가 폐루프에서 feasibility 진입 — 단 zero 공짜 .70/.30 잔존 = draw-필터 대상). d1/v24 .03 = 구조 선점 재확인(C 유지). v16 = .47/.10/.17/.07.
+- **교락 해소((uu) ③에 대한 답)**: v20 k-감쇠는 개방루프 취약이 **아니라 실질 난이도** — 지터-상쇄 PFC로도 d2 .63 / d3 .40 / d4 .37(개방루프 대비 +.10/−.07/+.04 = 이득 미미). 반면 v24는 회생. 잔여 실패 = 명목-참조 추적이 못 잡는 성분(공격자-반응 창 이동·MC 판정 잡음) — "회복 가능 셀 오폐기" 우려는 v20에선 사실상 불성립, 계측기 승격은 v24 회생으로 정당화.
+- **v16 판정**: 전 셀 PFC ≤ .47 → 18 §4 비준 플로우대로 **재리파인 1회 트리거**(수락 기준 = 도착형 6조건 + coverage 목표, 탐색 **전** 고정 — 다음 구현). **coverage 매트릭스 초안(0-e 동결 대상)**: v24 → d2·d3·d4 / v20 → d1(+d2 저신뢰 조건부) / v16 → d1·d2(재리파인 목표; 3자 예시 정합). 스테이지 커버: d1 = v20 / d2 = v24(+조건부) / d3·d4 = v24.
+- 생성기 스펙 큐(0d-1 구현 시): paired screen(PFC-pass ∧ zero-fail) 결합 수율 추정 — d2/v24 ~.24·d4/v24 ~.56 → 12 draws로는 최소 수록 8 미달 위험 → **draw 시도 상한 상향(예: 48시도/셀) 사전등록 필요**.
+- seed 대장 += tune(rng 81k / reset 8.01M–8.08M). **다음: ⓐ v16 재리파인 probe(도착형 6조건 수락) 구현·1회 실행 → witness set·coverage 매트릭스 동결 ⓑ 생성식 draw-필터(6조건 rejection + zero 발사시점 히스토그램 + 시도 상한) 구현 → bank v2 1회 생성.**
+
 ### 2026-07-17 (yy) — ✅ 0-d Step 1 구현: Gate A PFC + Gate B family + 폐형식·trace 락 (t-free +17) — 게인 스캔·witness 재평가 대기
 
 - **산출**: ① `shepherd/train/pfc.py` — PFC(무차원 게인 K_p=c_p/T_k²·K_d=c_d/T_k, T_k=kΔt; **nominal-앵커 참조 롤아웃** — 동역학이 결정론이라 개방루프 demo는 스폰 지터를 그대로 보존하고, PFC의 가치는 명목 참조 추적으로 그 지터를 상쇄하는 것; 참조 소진 후 터미널 홀드; norm-클립 ≤30) + Gate B family(λ-brake a=−λv·attpd = 공격자-유도 리드 포인트 PD — obs-전용, k 미사용(뱅크 메타라 구조적 불가), 생성자 시그니처에 특권 인자 금지) + 폐형식 R·O·nominal_from_bank(entry_idx = bank["entries"] 전역 인덱스, a3d_bundle_gen 그룹핑과 일치 확인) ② `a3d_calibration.py` arm 확장(pfc/lam<λ>/attpd; --bank·--cp/--cd·--gb-*; pfc/attpd 행에 params 기록; finalize = **feasibility_arm 자동 선택(pfc>demo)**·gateb_best·pfc_gateb_gap·obs_hard EXAMPLE 플래그(0.4, 0-e 확정)·note에 "point screen은 인증 아님·binding 판정 = 독립 validation LCB" 명시; 구 arm 4종 레코드 포맷 불변 = 기존 progress 재개 호환) ③ `tests/test_a3d_pfc.py` **+17 테스트**.

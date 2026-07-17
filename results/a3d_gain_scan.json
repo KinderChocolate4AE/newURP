@@ -1,0 +1,827 @@
+{
+ "meta": {
+  "note": "pre-registered selection rule in module docstring; TUNE bundle only -- adequacy not optimality; frozen pair restated in the Phase 0-e commit",
+  "n_rows": 1080
+ },
+ "pooled": [
+  {
+   "cp": 0.5,
+   "cd": 0.5,
+   "arr": 55,
+   "n": 120
+  },
+  {
+   "cp": 0.5,
+   "cd": 1.0,
+   "arr": 55,
+   "n": 120
+  },
+  {
+   "cp": 0.5,
+   "cd": 2.0,
+   "arr": 53,
+   "n": 120
+  },
+  {
+   "cp": 1.0,
+   "cd": 0.5,
+   "arr": 59,
+   "n": 120
+  },
+  {
+   "cp": 1.0,
+   "cd": 1.0,
+   "arr": 58,
+   "n": 120
+  },
+  {
+   "cp": 1.0,
+   "cd": 2.0,
+   "arr": 56,
+   "n": 120
+  },
+  {
+   "cp": 2.0,
+   "cd": 0.5,
+   "arr": 54,
+   "n": 120
+  },
+  {
+   "cp": 2.0,
+   "cd": 1.0,
+   "arr": 52,
+   "n": 120
+  },
+  {
+   "cp": 2.0,
+   "cd": 2.0,
+   "arr": 56,
+   "n": 120
+  }
+ ],
+ "cells": [
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d1",
+   "att_speed": 16.0,
+   "arr": 3,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d1",
+   "att_speed": 20.0,
+   "arr": 10,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d1",
+   "att_speed": 24.0,
+   "arr": 0,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d2",
+   "att_speed": 16.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d2",
+   "att_speed": 20.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d2",
+   "att_speed": 24.0,
+   "arr": 9,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d3",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d3",
+   "att_speed": 20.0,
+   "arr": 5,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d3",
+   "att_speed": 24.0,
+   "arr": 8,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d4",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d4",
+   "att_speed": 20.0,
+   "arr": 2,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd0.5",
+   "stage": "d4",
+   "att_speed": 24.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d1",
+   "att_speed": 16.0,
+   "arr": 3,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d1",
+   "att_speed": 20.0,
+   "arr": 10,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d1",
+   "att_speed": 24.0,
+   "arr": 0,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d2",
+   "att_speed": 16.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d2",
+   "att_speed": 20.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d2",
+   "att_speed": 24.0,
+   "arr": 9,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d3",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d3",
+   "att_speed": 20.0,
+   "arr": 5,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d3",
+   "att_speed": 24.0,
+   "arr": 8,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d4",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d4",
+   "att_speed": 20.0,
+   "arr": 2,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd1",
+   "stage": "d4",
+   "att_speed": 24.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d1",
+   "att_speed": 16.0,
+   "arr": 3,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d1",
+   "att_speed": 20.0,
+   "arr": 10,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d1",
+   "att_speed": 24.0,
+   "arr": 0,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d2",
+   "att_speed": 16.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d2",
+   "att_speed": 20.0,
+   "arr": 5,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d2",
+   "att_speed": 24.0,
+   "arr": 9,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d3",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d3",
+   "att_speed": 20.0,
+   "arr": 5,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d3",
+   "att_speed": 24.0,
+   "arr": 8,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d4",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d4",
+   "att_speed": 20.0,
+   "arr": 2,
+   "n": 10
+  },
+  {
+   "combo": "cp0.5_cd2",
+   "stage": "d4",
+   "att_speed": 24.0,
+   "arr": 5,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d1",
+   "att_speed": 16.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d1",
+   "att_speed": 20.0,
+   "arr": 10,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d1",
+   "att_speed": 24.0,
+   "arr": 0,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d2",
+   "att_speed": 16.0,
+   "arr": 3,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d2",
+   "att_speed": 20.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d2",
+   "att_speed": 24.0,
+   "arr": 9,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d3",
+   "att_speed": 16.0,
+   "arr": 2,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d3",
+   "att_speed": 20.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d3",
+   "att_speed": 24.0,
+   "arr": 8,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d4",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d4",
+   "att_speed": 20.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd0.5",
+   "stage": "d4",
+   "att_speed": 24.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d1",
+   "att_speed": 16.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d1",
+   "att_speed": 20.0,
+   "arr": 10,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d1",
+   "att_speed": 24.0,
+   "arr": 0,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d2",
+   "att_speed": 16.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d2",
+   "att_speed": 20.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d2",
+   "att_speed": 24.0,
+   "arr": 9,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d3",
+   "att_speed": 16.0,
+   "arr": 2,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d3",
+   "att_speed": 20.0,
+   "arr": 5,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d3",
+   "att_speed": 24.0,
+   "arr": 8,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d4",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d4",
+   "att_speed": 20.0,
+   "arr": 3,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd1",
+   "stage": "d4",
+   "att_speed": 24.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d1",
+   "att_speed": 16.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d1",
+   "att_speed": 20.0,
+   "arr": 10,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d1",
+   "att_speed": 24.0,
+   "arr": 0,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d2",
+   "att_speed": 16.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d2",
+   "att_speed": 20.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d2",
+   "att_speed": 24.0,
+   "arr": 9,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d3",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d3",
+   "att_speed": 20.0,
+   "arr": 5,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d3",
+   "att_speed": 24.0,
+   "arr": 8,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d4",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d4",
+   "att_speed": 20.0,
+   "arr": 2,
+   "n": 10
+  },
+  {
+   "combo": "cp1_cd2",
+   "stage": "d4",
+   "att_speed": 24.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d1",
+   "att_speed": 16.0,
+   "arr": 2,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d1",
+   "att_speed": 20.0,
+   "arr": 7,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d1",
+   "att_speed": 24.0,
+   "arr": 0,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d2",
+   "att_speed": 16.0,
+   "arr": 3,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d2",
+   "att_speed": 20.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d2",
+   "att_speed": 24.0,
+   "arr": 9,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d3",
+   "att_speed": 16.0,
+   "arr": 3,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d3",
+   "att_speed": 20.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d3",
+   "att_speed": 24.0,
+   "arr": 7,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d4",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d4",
+   "att_speed": 20.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd0.5",
+   "stage": "d4",
+   "att_speed": 24.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d1",
+   "att_speed": 16.0,
+   "arr": 2,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d1",
+   "att_speed": 20.0,
+   "arr": 7,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d1",
+   "att_speed": 24.0,
+   "arr": 0,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d2",
+   "att_speed": 16.0,
+   "arr": 3,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d2",
+   "att_speed": 20.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d2",
+   "att_speed": 24.0,
+   "arr": 9,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d3",
+   "att_speed": 16.0,
+   "arr": 3,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d3",
+   "att_speed": 20.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d3",
+   "att_speed": 24.0,
+   "arr": 7,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d4",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d4",
+   "att_speed": 20.0,
+   "arr": 2,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd1",
+   "stage": "d4",
+   "att_speed": 24.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d1",
+   "att_speed": 16.0,
+   "arr": 2,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d1",
+   "att_speed": 20.0,
+   "arr": 7,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d1",
+   "att_speed": 24.0,
+   "arr": 0,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d2",
+   "att_speed": 16.0,
+   "arr": 3,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d2",
+   "att_speed": 20.0,
+   "arr": 7,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d2",
+   "att_speed": 24.0,
+   "arr": 9,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d3",
+   "att_speed": 16.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d3",
+   "att_speed": 20.0,
+   "arr": 6,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d3",
+   "att_speed": 24.0,
+   "arr": 7,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d4",
+   "att_speed": 16.0,
+   "arr": 1,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d4",
+   "att_speed": 20.0,
+   "arr": 4,
+   "n": 10
+  },
+  {
+   "combo": "cp2_cd2",
+   "stage": "d4",
+   "att_speed": 24.0,
+   "arr": 6,
+   "n": 10
+  }
+ ],
+ "chosen": {
+  "c_p": 1.0,
+  "c_d": 0.5,
+  "arr": 59,
+  "n": 120,
+  "rate": 0.49166666666666664
+ }
+}
