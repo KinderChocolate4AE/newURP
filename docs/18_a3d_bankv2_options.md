@@ -1,6 +1,6 @@
-# 18 — Phase 0-d 결정 5건: bank v2 생성식 — 옵션 비교·비준 체크 (v0.2, 2026-07-17 — 3자 검토 반영판, Hyunjun 최종 비준 대기)
+# 18 — Phase 0-d 결정 5건: bank v2 생성식 — 옵션 비교·비준 체크 (v0.2, 2026-07-17 — 3자 검토 반영판 · **비준 완료 2026-07-17: 0d-1~5 승인 + 0d-3b=(ii)**)
 
-> **성격**: 자기완결 비준 문서. v0.1(옵션 비교)에 대한 **3자 독립 검토(2026-07-17 접수)를 전 항목 판독·반영**한 개정판. 3자 판정 = 5슬롯 전부 "수정 승인"(0d-1 수정 A+C / 0d-2 조건부 A / 0d-3 수정 B / 0d-4 수정 B / 0d-5 수정 A). 우리 측 재검증에서 **리뷰어 지적 중 오류 0건**(§1.1 검증 노트) — 필수 정정 3건 및 수정 조건 전체를 아래에 반영했다. 남은 것은 Hyunjun 최종 비준(§10; 오픈 포인트 0d-3b 1건 포함). 정본 = `newURP/docs/18_a3d_bankv2_options.md`.
+> **성격**: 자기완결 비준 문서. v0.1(옵션 비교)에 대한 **3자 독립 검토(2026-07-17 접수)를 전 항목 판독·반영**한 개정판. 3자 판정 = 5슬롯 전부 "수정 승인"(0d-1 수정 A+C / 0d-2 조건부 A / 0d-3 수정 B / 0d-4 수정 B / 0d-5 수정 A). 우리 측 재검증에서 **리뷰어 지적 중 오류 0건**(§1.1 검증 노트) — 필수 정정 3건 및 수정 조건 전체를 아래에 반영했다. **Hyunjun 최종 비준 완료(2026-07-17)**: 0d-1~5 = 본 문서 사양대로 승인, 0d-3b = **(ii)** 채택(§10). 정본 = `newURP/docs/18_a3d_bankv2_options.md`.
 >
 > **v0.1 → v0.2 변경 요지**: ① §1 k=1 오버슛 표 **2× 산술 오류 정정**(0.045–0.12 → 0.0225–0.06; 적분기 복제 시뮬로 전 k 재검증) ② 0d-3 = **2-게이트 오라클**로 개편(Gate A 특권 feasibility + Gate B 관측-실현성; "행동공간 동일 = 클래스 정합" 논리 철회) ③ **§8 실행 순서 교체**(v16 재리파인이 재생성 뒤에 있던 충돌 해소: 측정기 동결 → witness 동결 → 생성식 동결 → bank v2 **1회** 생성) ④ 0d-4 = 2단계 통계(gap point 조건 = 중복이라 삭제, 독립 검증의 LCB 조건으로 전환) ⑤ 0d-5 = 공통-σ 평가 grid(전 arm + learned policy) ⑥ 구조 지적 5건 채택(§8.5) ⑦ bank v2 정의 확장 = **action-necessary, forward-verified, observation-realizable predecessor synthesis**.
 >
@@ -79,7 +79,7 @@ v0.1의 "정책과 동일 행동공간이므로 클래스 정합" 논리는 **�
   - **게인 무차원화(3자 채택)**: K_p(k) = c_p/T_k², K_d(k) = c_d/T_k, T_k = kΔt. 전역 선택 대상은 **(c_p, c_d) 한 쌍**(k별 시간척도 자동 정합, 셀별 튜닝 금지). 후보 grid는 0-e에 사전 명기.
   - **게인 선택 편향 차단**: gain-tuning seed set을 admissibility 평가 seed와 **서로소**로 분리(스크린·검증 seed와도 서로소).
 - **Gate B — 관측-실현성(reference-free) 컨트롤러**: 정책 obs로 도출 가능한 정보만 사용 — 데모 궤적·draw ID·witness 라벨·참조 시점 **사용 금지**. 컨트롤러 family(사전 고정): ① 기존 brake(−a_max·unit(v)) ② λ-brake(a = −λv, λ 유한 grid) ③ obs-유도 타깃 유도 1종(**공격자-상대 기하로만** 타깃 도출 — 3자 예시의 "limiter–목표 상대"에서 '목표'가 witness 슬롯 좌표라면 그 자체가 특권이므로, obs에 실재하는 공격자 상태 기반으로 한정). **전 셀 기록 의무**: GateB_best 성공률 + PFC와의 격차. 격차 > 사전등록 문턱 → **"physically-feasible but observation-hard" 경고 플래그**.
-  - **오픈 포인트 0d-3b (Hyunjun 결정)**: Gate B의 지위 — (i) **기록+경고 전용**(3자 본문 문면: "0.8 요구 아님, 격차 시 경고") vs (ii) **경고 셀은 confirmatory 클레임에서 제외**(training bank에는 유지) vs (iii) 하드 admissibility 게이트. 권고 = **(ii)**: §8.5-②의 2-tier 클레임 구조와 정합(mechanistic 학습 증거는 유지하되 method-competence 클레임 대상에서 제외), (i)보다 강하고 (iii)처럼 커버리지를 즉사시키지 않음.
+  - **0d-3b (비준 확정 = (ii))**: Gate B의 지위 — (i) **기록+경고 전용**(3자 본문 문면: "0.8 요구 아님, 격차 시 경고") vs (ii) **경고 셀은 confirmatory 클레임에서 제외**(training bank에는 유지) vs (iii) 하드 admissibility 게이트. **비준 = (ii)** (2026-07-17): §8.5-②의 2-tier 클레임 구조와 정합(mechanistic 학습 증거는 유지하되 method-competence 클레임 대상에서 제외), (i)보다 강하고 (iii)처럼 커버리지를 즉사시키지 않음.
 - 개방루프 demo는 **진단 열로 병기**(리그 연속성·감쇠 교락 데이터). admissibility "demo" 정의 변경(개방루프→Gate A)은 0-e 사전등록에 명시(리뷰의 demo≥.8 예시가 개방루프 전제로 읽혔음을 함께 기록).
 
 ## 6. 0d-4 — admissibility 수치·표본: **수정 B = 2단계 통계** (3자 승인 반영)
@@ -140,15 +140,15 @@ v0.1 안의 통계 결함 2건 정정(3자 지적, 우리 재검증 합치):
 
 ## 10. 비준 체크 (Hyunjun 최종)
 
-3자 판정은 기입 완료. Hyunjun 비준으로 확정되며, 확정본은 0-e 커밋에 사전등록으로 수록(docs/09 (xx)로 기록).
+3자 판정·Hyunjun 비준 모두 확정(2026-07-17, docs/09 (xx)). 확정 사양의 수치·seed 대장·게인 grid 문구화는 0-e 일괄 사전등록 커밋에 수록.
 
 | 슬롯 | 결정 | 3자 판정 | Hyunjun 비준 |
 |---|---|---|---|
-| 0d-1 | v24: A+C(§3 사양) | 수정 A+C 승인 | [ ] |
-| 0d-2 | v16: 조건부 A(§4 사양) | 조건부 A 승인 | [ ] |
-| 0d-3 | 오라클: 2-게이트 B(§5 사양) | 수정 B 승인 | [ ] |
-| **0d-3b** | **Gate B 지위: (i) 기록·경고 / (ii) confirmatory 클레임 제외 / (iii) 하드 게이트 — 권고 (ii)** | (문면 = i, 총평 = 정의 포함) | [ ] i [ ] ii [ ] iii |
-| 0d-4 | 수치·표본: 2단계(§6 사양; screen 20 → validation 100·LCB95(Δ)>.4) | 수정 B 승인 | [ ] |
-| 0d-5 | σ: ramp 유지 + 공통-σ 평가 grid(§7 사양) | 수정 A 승인 | [ ] |
+| 0d-1 | v24: A+C(§3 사양) | 수정 A+C 승인 | **[x] 승인** |
+| 0d-2 | v16: 조건부 A(§4 사양) | 조건부 A 승인 | **[x] 승인** |
+| 0d-3 | 오라클: 2-게이트 B(§5 사양) | 수정 B 승인 | **[x] 승인** |
+| **0d-3b** | **Gate B 지위: (i) 기록·경고 / (ii) confirmatory 클레임 제외 / (iii) 하드 게이트** | (문면 = i, 총평 = 정의 포함) | **[x] (ii) 채택** — 경고 셀 = 학습 bank 유지·confirmatory 클레임 제외 |
+| 0d-4 | 수치·표본: 2단계(§6 사양; screen 20 → validation 100·LCB95(Δ)>.4) | 수정 B 승인 | **[x] 승인** |
+| 0d-5 | σ: ramp 유지 + 공통-σ 평가 grid(§7 사양) | 수정 A 승인 | **[x] 승인** |
 
 - 관련 경로: 생성기 `shepherd/scripts/a3d_sbe_bank.py` / 번들 `a3d_bundle_gen.py` / calibration `a3d_calibration.py` / 컨트롤 `a3d_null_baseline.py` / 결과 `results/a3d_calibration_dev.json`·`results/a3d_bundle_{dev,sealed}.json`·`results/a3d_sbe_bank.json` / 설계 `docs/17` / 리뷰 v0.1분 `URP/a3d_pilot2_external_review_2026-07-16.md`·본 검토 접수본 `URP/a3d_0d_external_review_2026-07-17.md`.

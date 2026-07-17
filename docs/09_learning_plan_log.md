@@ -300,6 +300,12 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-17 (xx) — ✅ 비준 확정: 0d-1~5(3자 수정승인 사양 그대로) + 0d-3b = (ii) — 0-d 구현 착수
+
+- **Hyunjun 최종 비준(18 v0.2 §10 확정)**: 0d-1 A+C / 0d-2 조건부 A / 0d-3 2-게이트 B / 0d-4 2단계 B / 0d-5 A + **0d-3b = (ii)** — Gate B 경고 셀은 training bank에 유지하되 **confirmatory(method-competence) 클레임 대상에서 제외**(2-tier 클레임 구조 18 §8.5-②와 정합). 확정 사양의 수치·seed 대장·게인 grid 문구 고정 = 0-e 일괄 사전등록 커밋.
+- git 위생 확인: Windows `git reset` 실패 = plumbing 커밋 잔류 stale `HEAD.lock`(mount unlink 불가) — VM측 mv-aside 조치, 이후 HEAD·branch ref `3ab3fb2` 일치·index 정상(50KB)·워킹트리 clean·origin 동기(970b039..3ab3fb2 push 완료). 잔재(HEAD.lock.aside*·*.stale*·objects tmp_obj·URP/_to_delete/) = 전부 무해, Windows에서 일괄 삭제 가능.
+- **다음 = 0-d Step 1(18 §8-1 측정기 동결)**: `shepherd/train/pfc.py`(PFC 무차원 게인 + Gate B reference-free family) + `a3d_calibration.py` arm 확장(pfc/gateb) + 폐형식 R·O unit test + teacher 판정 시점 rollout trace 대조 → 게인 스캔(tuning seed 전용, admissibility 데이터 불가침) → §8-2 witness 재평가(v16).
+
 ### 2026-07-17 (ww) — 3자 검토 접수·판독: 5/5 "수정 승인" → docs/18 v0.2(전 항목 반영) — Hyunjun 최종 비준 대기(+오픈 포인트 0d-3b)
 
 - **검토 결과(docs/18 v0.1 대상, 접수본 = `URP/a3d_0d_external_review_2026-07-17.md`)**: 0d-1 수정 A+C / 0d-2 조건부 A / 0d-3 수정 B / 0d-4 수정 B / 0d-5 수정 A — 방향 전부 승인. 필수 정정 3: ① §1 k=1 오버슛 표 2× 오류 ② demo_cl 특권 정보 = realizability 갭(최대 누락 지적) ③ §8 순서(v16 재리파인이 재생성 뒤 = 재생성 1회 원칙 충돌).
