@@ -1,7 +1,11 @@
-"""bank v2 generator freeze locks (docs/09 (ddd); docs/18 SS3/SS6). t-free.
+"""bank v2 generator freeze locks (docs/09 (ddd)/(ggg); docs/18 SS3/SS6).
+t-free.
 
-Locks: (1) generation seed band 400..419 disjoint from every known family;
-(2) the first-fit candidate loop honors the attempt cap, MIN_ACCEPT
+Locks: (1) generation seed band 420..439 disjoint from every known family
+(incl. the retired 400..419 smoke-only band, 0-e review conflict-4);
+(2) the LEXICOGRAPHIC first-fit rule (0-e binding): first candidate at
+DRAWS_TARGET, else first at MIN_ACCEPT, else exclude -- incl. the
+"12-draw candidate beats an earlier 8-draw marginal" case; attempt cap,
 exclusion, and candidate escalation (fake synth/screen injection);
 (3) per-(cell, candidate) draw rng is deterministic and distinct;
 (4) the v1 generator's default v0_range still reproduces bank v1 draws
@@ -20,10 +24,13 @@ from shepherd.scripts import a3d_sbe_bank_v2 as v2
 
 def test_generation_seed_band_disjoint():
     band = set(v2.SCREEN_SEEDS)
-    assert band == set(range(400, 420))
-    for fam in (set(range(300, 320)),          # (aaa) refine screen
+    assert band == set(range(420, 440))
+    assert set(v2.SMOKE_SEEDS) == set(range(400, 420))   # retired band
+    for fam in (set(v2.SMOKE_SEEDS),           # (ddd) smoke-only, retired
+                set(range(300, 320)),          # (aaa) refine screen
                 set(range(100, 110)), set(range(200, 210)),
                 set(range(7, 17)), set(range(61, 76)),
+                set(range(600, 700)),          # D-3 validation band
                 {500_000, 1_500_000, 2_500_000, 31_000_000}):
         assert not (band & fam)
 
@@ -102,6 +109,29 @@ def test_min_accept_boundary(monkeypatch):
                          screen_seq=scr0 + scr1)
     assert rep["selected_candidate"] == 1 and len(acc) == 12
     assert rep["candidates"][0]["accepted"] == 7
+
+
+def test_lexicographic_target_beats_marginal(monkeypatch):
+    # cand 0 scrapes exactly MIN_ACCEPT=8; cand 1 reaches DRAWS_TARGET=12
+    # -> rule 1 selects cand 1 (the pre-review rule would have kept cand 0)
+    scr0 = [True] * 8 + [False] * (v2.ATTEMPT_CAP - 8)
+    acc, rep = _run_cell(monkeypatch,
+                         synth_seq=[True] * (v2.ATTEMPT_CAP + 12),
+                         screen_seq=scr0 + [True] * 12)
+    assert rep["selected_candidate"] == 1 and len(acc) == 12
+    assert rep["candidates"][0]["accepted"] == 8
+    assert all(e["v0_candidate"] == 1 for e in acc)
+
+
+def test_lexicographic_min_fallback_earliest(monkeypatch):
+    # all three candidates stall at 8 (< target 12) -> rule 2 picks cand 0
+    scr = ([True] * 8 + [False] * (v2.ATTEMPT_CAP - 8)) * 3
+    acc, rep = _run_cell(monkeypatch,
+                         synth_seq=[True] * (v2.ATTEMPT_CAP * 3),
+                         screen_seq=scr)
+    assert rep["selected_candidate"] == 0 and len(acc) == 8
+    assert len(rep["candidates"]) == 3          # no early break below target
+    assert not rep["excluded"]
 
 
 def test_construction_drops_counted(monkeypatch):

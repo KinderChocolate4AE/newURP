@@ -302,6 +302,14 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-17 (ggg) — ✅ 3자 회신(조건부 승인) 반영 + Hyunjun 비준 = **0-e 동결 커밋** (docs/19 v0.3)
+
+- **회신 요지**(접수본 = `URP/a3d_0e_external_review_2026-07-17.md`): "수정 반영 후 bank v2 생성 승인" — D-1 수정승인 / D-2 수정승인 / D-3 **중요수정후승인** / D-4 V-5′수정승인·**exit식 기각** / D-5 수정승인, 충돌 4·잔여 자유도 11·체크리스트 15항. **판독**: D-3 지적이 실질 적중 — (fff)의 σ-물질화 명확화가 만든 구멍(σ 하 PFC .55짜리 셀이 gap LCB>.4 단독으로 생존)을 4조건 복구(reset_clean≤.2 ∧ PFC≥.8 ∧ zero≤.2 ∧ gap LCB>.4, outcome=arrival_capture)로 봉인. D-4도 정당(McNemar는 H₀:Δ=0라 δ_min 결합 규칙 미정의; exit_d=UCB(zero)+δ_min은 absolute 회귀). 정정 1건: attpd "수식 미정의"는 문서 누락 문제 — 코드는 `715ab70`에 동결·락 존재(v0.3에 재기술로 봉인, 코드 변경 0). 무해 확인: 학습 0–9 vs union 7–16은 상이 namespace = 누출 아님(ledger 재편만).
+- **Hyunjun 비준 2건**: ① stage exit = **점추정 히스테리시스형**(dev-v2 zero-캐시, 전진 Δ̂_d>0.10 2-eval 연속 / 후퇴 UCB95(Δ_d)<0.05 ∧ stall 3; LCB 엄격형 기각 — n=80 과보수) ② 나머지 14항 리뷰어 권장안 일괄 수용.
+- **v0.3 반영**(15항 전부, §12 대조표): lexicographic first-fit(target 12 → min 8 → 제외) / **생성 대역 420–439 신규**(400–419 = smoke-only 은퇴, 부분 unblinding 해소) / D-3 4조건 + 100판 draw 균등배정(⌊100/n⌋+index순 잔여) + 부트스트랩 이중(primary episode / sensitivity draw-cluster) + nested-success 전제 문구 / P1(≥2/3 seed Δ̂>0.10 ∧ 전 seed Δ̂≥0)·P2(seed-계층 부트스트랩 LCB>0.10) 분리, McNemar 보조 격하 / 번들 = validation→C-제외→matrix 동결 **후** 생성, 조성 동결(셀 균등·draw 라운드로빈·러너 assert), SHA-256 manifest, sealed 우회 테스트 4종(P1 전) / 0·1-cell 규칙(0=중단, 1=mechanistic만 — **d3·d4는 애초 1셀 = family claim 불가 명시**), coverage minimum = d1·d2 각 ≥1 아니면 bank FAIL / bank 정의문 완화("…with an observation-controller realizability audit") + obs-hard → hand-controller realizability warning / seed 대장 namespace 재편 + random arm 정의(성분별 U[−1,1]³×30, 클립 없음) + teacher 보조 진단 3종 등재.
+- **코드**: `a3d_sbe_bank_v2.py` — SCREEN_SEEDS 420–439(+SMOKE_SEEDS 은퇴 기록), build_cell 선택 로직 = lexicographic `_pick()`(argmax = 비구속 진단), meta에 규칙 명기. 테스트: band 서로소(스모크 대역·600–699 포함) + **lexicographic 신규 2종**(8-한계가 12-안정을 차단하지 못함 / 전원 8이면 최앞) — bank_v2 9 + v1 회귀 9 + pfc 17 = **35 green**. 3자 전달본 `URP/a3d_0e_prereg_brief_2026-07-17.md` v0.3 동기화.
+- **다음 = bank v2 1회 생성**(420–439, ≈4–7h, 셀-병렬 허용) → §6 validation(n=100, 4조건) → C-제외·matrix 동결 → 부록 A → dev-v2/sealed-v2 + manifest → P1. 학습 금지 유지.
+
 ### 2026-07-17 (fff) — docs/19 v0.1 → v0.2: 자기완결 3자 검토판 확장 — D-결정 5건 불변
 
 - **사유**: v0.1은 결정 슬롯 위주라 3자에게 맥락 부족(Hyunjun 지적). v0.2 = 자기완결 재작성 — §1 최소 배경(게임/SBE 폐형식 R·O) · §2 경위(0-c 12셀 표 포함) · §3 0-d 실행 기록 전체(측정기 하드닝 + 리뷰 필수항목 이행표 · 게인 스캔 9조합 표 · dev 12셀 PFC 지도 · v16 재정련 기준/성적/rng 캐비앗 · witness 동결 재계산 수치 · 생성기+스모크, PFC≡demo-on-exact-spawns 정직 표기) · §4–8 [D-1]~[D-5] 각 근거/대안/리스크 · §9 σ grid + seed 대장 전 가족 · §10 자기신고 7항 · §11 검토 출력 형식. 3자 전달본 `URP/a3d_0e_prereg_brief_2026-07-17.md` 동일본으로 갱신.

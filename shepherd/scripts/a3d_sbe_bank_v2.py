@@ -9,18 +9,23 @@ its output is discarded.
 
 Per (k, witness) cell of the FROZEN coverage matrix (embedded in
 results/a3_robust_bank_v2.json meta):
-  for each v0 candidate interval in V0_GRID (FIRST-FIT order, candidate 0 =
-  the v1 distribution -- the (0d-1) tie-break "closest to v1" realized as
-  try-order; argmax-over-candidates available via --v0-select argmax, the
-  0-e commit fixes which rule is binding):
-    draw up to ATTEMPT_CAP construction attempts (v1 synth_draw: closed-form
-    decel arrival, cone +-15deg, |a|<=24, 4 construction gates) and pass
-    each KEPT draw through the paired screen (frozen instruments, seeds
-    400..419 -- generation band, disjoint from every prior family):
+  candidates = V0_GRID in order (candidate 0 = the v1 distribution).
+  BINDING selection = LEXICOGRAPHIC FIRST-FIT (0-e freeze, 3rd-party
+  review adoption -- an 8-draw marginal candidate must not shadow a
+  12-draw stable one):
+    1. the FIRST candidate reaching DRAWS_TARGET accepted wins
+       immediately (later candidates are not run);
+    2. else (all candidates run) the FIRST with accepted >= MIN_ACCEPT;
+    3. else the cell is EXCLUDED (rule C).
+  --v0-select argmax remains as a NON-BINDING diagnostic mode only.
+  Per candidate: up to ATTEMPT_CAP construction attempts (v1 synth_draw:
+  closed-form decel arrival, cone +-15deg, |a|<=24, 4 construction gates);
+  each KEPT draw goes through the paired screen (frozen instruments, seeds
+  420..439 = generation band, disjoint from every prior family; 400..419
+  is RETIRED as smoke-only -- its v16/d1 result was observed pre-freeze,
+  3rd-party review conflict-4):
         PASS <=> pfc_succ >= 16/20 AND zero_succ <= 4/20
                  AND reset_clean <= 4/20        (early-abort fail-fast)
-    stop at DRAWS_TARGET accepted; candidate succeeds if accepted >=
-    MIN_ACCEPT. All candidates fail -> cell EXCLUDED (rule C).
 Diagnostics recorded per cell (0d-1 condition 3 + en-route hypothesis):
   attempts, construction drops by reason, screen fails, accepted v0 stats,
   zero-arm captured-episode length histogram (fire ends the episode, so
@@ -47,7 +52,8 @@ from shepherd.train.make_env_m3 import (Curriculum, frozen_constants,
 from shepherd.train.phi_potential import teacher_fire
 from shepherd.train.spawn_bank import load_t0
 
-SCREEN_SEEDS = tuple(range(400, 420))       # generation band (0-e ledger)
+SCREEN_SEEDS = tuple(range(420, 440))       # generation band (0-e ledger);
+SMOKE_SEEDS = tuple(range(400, 420))        # retired smoke-only band ((ddd))
 CP, CD = 1.0, 0.5                           # frozen gains ((zz))
 PFC_MIN, ZERO_MAX, RESETC_MAX = 16, 4, 4    # /20
 ATTEMPT_CAP = 48                            # per (cell, candidate)
@@ -101,8 +107,7 @@ def build_cell(t0, sname, k, env_cfg, m3, stage, theta,
     anchors = _ring()
     Lstar = np.asarray(t0.limiters, float)
     v = float(t0.v)
-    cand_reports = []
-    winners = None, None                     # (cand_idx, accepted)
+    cand_reports, cand_accepts = [], []
     for ci, v0_range in enumerate(v0_grid):
         rng = np.random.default_rng(47_000 + 1_000 * k + int(v)
                                     + 100_000 * ci)
@@ -139,16 +144,34 @@ def build_cell(t0, sname, k, env_cfg, m3, stage, theta,
                    [e["screen"]["zero"] for e in accepted])) / 20, 3)
                    if accepted else None)}
         cand_reports.append(rep)
+        cand_accepts.append(accepted)
         log(f"  {t0.src} {sname} cand{ci}{tuple(v0_range)}: "
             f"acc={len(accepted)}/{attempts} scr_fail={screen_fail} "
             f"drops={drops}")
-        if len(accepted) >= MIN_ACCEPT:
-            winners = ci, accepted
-            if select == "first_fit":
-                break
-    ci, accepted = winners
+        if select == "first_fit" and len(accepted) >= DRAWS_TARGET:
+            break                       # lexicographic rule 1: immediate win
+
+    def _pick():
+        """Lexicographic first-fit (0-e BINDING): first candidate at
+        DRAWS_TARGET, else first at MIN_ACCEPT, else excluded. argmax =
+        non-binding diagnostic (max accepted, earliest on ties)."""
+        if select == "argmax":
+            best = max(range(len(cand_accepts)),
+                       key=lambda i: (len(cand_accepts[i]), -i))
+            if len(cand_accepts[best]) >= MIN_ACCEPT:
+                return best, cand_accepts[best]
+            return None, None
+        for i, acc in enumerate(cand_accepts):      # rule 1: target first
+            if len(acc) >= DRAWS_TARGET:
+                return i, acc
+        for i, acc in enumerate(cand_accepts):      # rule 2: minimum fallback
+            if len(acc) >= MIN_ACCEPT:
+                return i, acc
+        return None, None                           # rule 3: exclude
+
+    ci, accepted = _pick()
     report = {"stage": sname, "witness": t0.src, "att_speed": float(t0.v),
-              "k": k, "selected_candidate": ci,
+              "k": k, "select_rule": select, "selected_candidate": ci,
               "excluded": ci is None, "candidates": cand_reports}
     return (accepted or []), report
 
@@ -195,7 +218,10 @@ def main():
                     "min_accept": MIN_ACCEPT, "v0_grid": [list(g) for g in
                                                           V0_GRID],
                     "v0_select": a.v0_select,
+                    "smoke_seeds_retired": list(SMOKE_SEEDS),
                     "note": "generation gated behind the 0-e commit; "
+                            "binding v0 rule = lexicographic first-fit "
+                            "(target 12 -> min 8 -> exclude); "
                             "cells filter = smoke only (output discarded)"},
            "reports": reports, "entries": entries}
     pathlib.Path(a.out).write_text(json.dumps(doc, indent=1))
