@@ -300,6 +300,13 @@ jobs:
 
 ## 8. 작업 로그 (append-only · 최신이 위)
 
+### 2026-07-17 (yy) — ✅ 0-d Step 1 구현: Gate A PFC + Gate B family + 폐형식·trace 락 (t-free +17) — 게인 스캔·witness 재평가 대기
+
+- **산출**: ① `shepherd/train/pfc.py` — PFC(무차원 게인 K_p=c_p/T_k²·K_d=c_d/T_k, T_k=kΔt; **nominal-앵커 참조 롤아웃** — 동역학이 결정론이라 개방루프 demo는 스폰 지터를 그대로 보존하고, PFC의 가치는 명목 참조 추적으로 그 지터를 상쇄하는 것; 참조 소진 후 터미널 홀드; norm-클립 ≤30) + Gate B family(λ-brake a=−λv·attpd = 공격자-유도 리드 포인트 PD — obs-전용, k 미사용(뱅크 메타라 구조적 불가), 생성자 시그니처에 특권 인자 금지) + 폐형식 R·O·nominal_from_bank(entry_idx = bank["entries"] 전역 인덱스, a3d_bundle_gen 그룹핑과 일치 확인) ② `a3d_calibration.py` arm 확장(pfc/lam<λ>/attpd; --bank·--cp/--cd·--gb-*; pfc/attpd 행에 params 기록; finalize = **feasibility_arm 자동 선택(pfc>demo)**·gateb_best·pfc_gateb_gap·obs_hard EXAMPLE 플래그(0.4, 0-e 확정)·note에 "point screen은 인증 아님·binding 판정 = 독립 validation LCB" 명시; 구 arm 4종 레코드 포맷 불변 = 기존 progress 재개 호환) ③ `tests/test_a3d_pfc.py` **+17 테스트**.
+- **3자 필수 항목 이행**: ⓐ 폐형식 unit test — R·O vs 적분기 복제 k∈{1,2,4,8}×{v0 하한·상한} 정확 일치 + **docs/18 정정 k=1 행(0.0225–0.06) 명시 락** ⓑ **zero-coast env rollout trace 대조 PASS** — gating_env_for_spawn(d2 ep0) reset_to 후 k+2 스텝 전 구간 limiter 위치 == p0+j·v0·Δt(atol 5e-4, obs float32) = "스폰→t=0 사이 정확히 k회 이동" 시간 인덱스 계약을 실제 env 경로에서 실측 확인(bank 스크립트 k회 이동과 정합 — 3자 "k+1이면 식 재기술" 분기는 불발) ⓒ PFC ≡ demo(무지터 시 보정항 0)·**지터 상쇄 락**(σ0.02급 지터에서 endpoint 오차: 개방루프 = |δ| 보존(1e-9 정확) vs PFC < 0.6·|δ| 전 리미터).
+- **검증**: 신규 17 + 인접 회귀 66(test_a3d_bank/bundles/v4prime_pin/trainer·a3_reverse·env_m3) **전부 green** — 클라우드 샌드박스에서 GitHub 클론(3ab3fb2, 리포 공개 상태라 무인증 클론 가능) 기반 실행; gymnasium/pettingzoo pip 설치로 t-free 스위트 구동 확인. arm 플러밍 스모크 1 ep(pfc len13/fire1·lam5/attpd 80스텝 무발사 — **기록 없음**; dev admissibility 측정은 §8 순서 준수 = 게인 동결 전 롤 금지).
+- **다음(§8-1 잔여 → §8-2)**: ⓐ 게인 스캔 — tuning-seed 전용 에피소드(모든 기존 seed족과 서로소)에서 (c_p,c_d) grid·Gate B grid 선택 → 0-e 동결 후보 확정 ⓑ v16 PFC 재평가(§8-2) → 재리파인 1회 여부 → witness set 동결 ⓒ 생성식 draw-필터(6조건 rejection + zero-arm 발사 시점 히스토그램) 구현.
+
 ### 2026-07-17 (xx) — ✅ 비준 확정: 0d-1~5(3자 수정승인 사양 그대로) + 0d-3b = (ii) — 0-d 구현 착수
 
 - **Hyunjun 최종 비준(18 v0.2 §10 확정)**: 0d-1 A+C / 0d-2 조건부 A / 0d-3 2-게이트 B / 0d-4 2단계 B / 0d-5 A + **0d-3b = (ii)** — Gate B 경고 셀은 training bank에 유지하되 **confirmatory(method-competence) 클레임 대상에서 제외**(2-tier 클레임 구조 18 §8.5-②와 정합). 확정 사양의 수치·seed 대장·게인 grid 문구 고정 = 0-e 일괄 사전등록 커밋.
