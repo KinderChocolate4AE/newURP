@@ -1,0 +1,223 @@
+{
+ "theta_fire": 0.9,
+ "constants": {
+  "tau": 0.4,
+  "a_att": 30.0,
+  "kill_radius": 2.0,
+  "net_apex": [
+   2.0,
+   0.0,
+   0.0
+  ],
+  "n_F": [
+   1.0,
+   0.0,
+   0.0
+  ],
+  "theta_net": 0.067,
+  "range_min": 0.0,
+  "range_max": 29.847
+ },
+ "seeds": {
+  "search": [
+   100,
+   101,
+   102,
+   103,
+   104
+  ],
+  "validate": [
+   200,
+   201,
+   202,
+   203,
+   204,
+   205,
+   206,
+   207,
+   208,
+   209
+  ]
+ },
+ "accept_min": 0.9,
+ "states": [
+  {
+   "x": 20.0,
+   "v": 24.0,
+   "union_seed": 200,
+   "src": "probe_s20v24_0.json:x20v24u0",
+   "candidate": "own",
+   "search_clean_frac": 1.0,
+   "robust_clean_frac": 1.0,
+   "robust_capture_frac": 1.0,
+   "v_soft_min_val": 1.0,
+   "capture_grade_found": true,
+   "refined_best": {
+    "limiters": [
+     [
+      12.869610782520887,
+      0.5740982384111856,
+      1.6704153145033676
+     ],
+     [
+      15.736288314718792,
+      1.8800994088629193,
+      -1.6453908822668788
+     ],
+     [
+      14.005144738501674,
+      -1.9597143846607927,
+      -0.6035995160451195
+     ],
+     [
+      17.22684870670107,
+      1.2802976760910352,
+      -1.548219398327415
+     ]
+    ],
+    "v_soft": 1.0,
+    "worst": 1.0,
+    "p_feas": 0.001
+   },
+   "sigma_baselines": {
+    "0.02": 0.32,
+    "0.05": 0.11,
+    "0.1": 0.06,
+    "0.2": 0.0,
+    "0.5": 0.0
+   }
+  },
+  {
+   "x": 16.0,
+   "v": 20.0,
+   "union_seed": 200,
+   "src": "probe_s16v20_0.json:x16v20u0",
+   "candidate": "own",
+   "search_clean_frac": 1.0,
+   "robust_clean_frac": 1.0,
+   "robust_capture_frac": 1.0,
+   "v_soft_min_val": 1.0,
+   "capture_grade_found": true,
+   "refined_best": {
+    "limiters": [
+     [
+      9.734248152276175,
+      1.2127675863926293,
+      1.696119456116637
+     ],
+     [
+      12.345959845421781,
+      1.8723908733782624,
+      -1.7165319992128452
+     ],
+     [
+      10.96386306455606,
+      -2.052478173148069,
+      -0.13477812454360846
+     ],
+     [
+      13.755908485125442,
+      1.3770581100584989,
+      -1.3776176507495999
+     ]
+    ],
+    "v_soft": 1.0,
+    "worst": 1.0,
+    "p_feas": 0.001
+   },
+   "sigma_baselines": {
+    "0.02": 0.42,
+    "0.05": 0.12,
+    "0.1": 0.01,
+    "0.2": 0.0,
+    "0.5": 0.0
+   }
+  },
+  {
+   "x": 16.0,
+   "v": 20.0,
+   "union_seed": 200,
+   "src": "probe_s16v20_1.json:x16v20u1",
+   "candidate": "own",
+   "search_clean_frac": 1.0,
+   "robust_clean_frac": 0.7,
+   "robust_capture_frac": 0.7,
+   "v_soft_min_val": 1.0,
+   "capture_grade_found": false,
+   "refined_best": null,
+   "sigma_baselines": null
+  },
+  {
+   "x": 12.0,
+   "v": 16.0,
+   "union_seed": 200,
+   "src": "probe_s12v16_0.json:x12v16u0",
+   "candidate": "v16_refine_transplant",
+   "search_clean_frac": null,
+   "robust_clean_frac": 1.0,
+   "robust_capture_frac": 1.0,
+   "v_soft_min_val": 1.0,
+   "capture_grade_found": true,
+   "refined_best": {
+    "limiters": [
+     [
+      6.911652123182581,
+      0.34896142612155806,
+      2.098663362440437
+     ],
+     [
+      9.503817432521721,
+      2.575347843782624,
+      -1.6409435343841177
+     ],
+     [
+      7.93698400210524,
+      -1.8044994968172048,
+      -0.9241445983503639
+     ],
+     [
+      9.772074602447798,
+      1.185786074149002,
+      -1.4862529449562085
+     ]
+    ],
+    "v_soft": 1.0,
+    "worst": 1.0,
+    "p_feas": 0.001
+   },
+   "sigma_baselines": {
+    "0.02": 0.43,
+    "0.05": 0.12,
+    "0.1": 0.06,
+    "0.2": 0.01,
+    "0.5": 0.0
+   },
+   "provenance": {
+    "from": "results/a3d_v16_refine.json",
+    "criteria": "docs/09 (aaa)",
+    "screen": "k1 8/8, k2 8/8, all 20/20 PFC / 0/20 zero",
+    "replaced_val": 0.9
+   }
+  }
+ ],
+ "witness_freeze": {
+  "date": "2026-07-17",
+  "log": "docs/09 (ccc)",
+  "coverage_matrix": {
+   "v16": [
+    "d1",
+    "d2"
+   ],
+   "v20": [
+    "d1",
+    "d2"
+   ],
+   "v24": [
+    "d2",
+    "d3",
+    "d4"
+   ]
+  },
+  "note": "targets only; admissibility verdicts come from the bank-v2 generator screen + independent validation (docs/18 SS6). v1 bank preserved at results/a3_robust_bank.json."
+ }
+}

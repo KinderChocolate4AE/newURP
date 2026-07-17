@@ -302,6 +302,12 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-17 (ccc) — ✅ §8-2 마감: witness set·coverage 매트릭스 동결 — robust witness bank v2 생성
+
+- **witness set 동결 = {v16 = transplant(신규), v20 = x16v20(기존), v24 = x20v24(기존)}.** 산출 = `results/a3_robust_bank_v2.json`(`a3d_witness_freeze.py`): v1 파일 불변 보존, x12v16 행만 교체 — 채택 limiters로 **전 수치 독립 재계산**: robust val **1.00**·cap 1.00·vmin 1.000(구 0.90 대체), σ-베이스라인 재계측 {.02→.43, .05→.12, .1→.06, .2→.01, .5→0}(타 witness와 동급 = 창 두께 정상화 확인), provenance(출처 = a3d_v16_refine.json·기준 = (aaa)·스크린 성적) 동봉, load_t0 왕복 검증(3 witnesses).
+- **coverage 매트릭스 동결(bank meta 동봉, 0-e에 사전등록 문구로 재수록)**: **v16 → d1·d2 / v20 → d1·d2(d2 = 저신뢰 표기 — dev PFC .63, 미달 시 규칙 제외만) / v24 → d2·d3·d4**; d1/v24 = C 구조 제외 확정. 스테이지 커버: d1 = v20+v16 / d2 = v24+v16(+v20 저신뢰) / d3·d4 = v24. 매트릭스 = 목표 선언일 뿐 — admissibility 판정은 생성기 screen + 독립 validation(n=100)이 담당(18 §6).
+- 다음 = **§8-3 생성식 동결·구현**: draw-level 6조건 rejection 필터(paired PFC/zero/비-clean screen seed 300–319 재사용? → 아니오, 생성용 신규 대역 지정 예정) + zero-arm 발사 시점 히스토그램 + **시도 상한 48/셀** + v0 후보 grid + 최소 수록 8/12 → 이후 bank v2 1회 생성.
+
 ### 2026-07-17 (bbb) — ✅ v16 재리파인 1회 실행: **ACCEPT — transplant 후보(val 1.00) 도착형 스크린 전판 만점** — witness 교체 후보 확보(동결은 다음 스텝)
 
 - (aaa) 기준 그대로 1회 실행(`shepherd/scripts/a3d_v16_refine.py` → `results/a3d_v16_refine.json`): **stage 1** = probe 규약 v16-only 재실행(fresh rng(23) — 원 전체-스윕 실행과는 rng 스트림 위치만 상이, 결정론·문서화) → **후보 2 모두 1차 통과: own .90 / transplant 1.00**. 원 뱅크의 x12v16(.90)은 best-of 선택의 산물이었고, 도너(x20v24) 패턴 x-스케일 이식이 이번 경로에서 완전 강건(val 1.00)으로 리파인됨.
