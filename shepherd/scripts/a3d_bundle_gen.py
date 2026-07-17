@@ -37,7 +37,18 @@ import yaml
 SPEEDS = (16.0, 20.0, 24.0)
 PER_SPEED = 30
 VARIANTS = {"dev": {"rng_base": 71_000, "seed_base": 7_000_000},
-            "sealed": {"rng_base": 93_000, "seed_base": 9_000_000}}
+            "sealed": {"rng_base": 93_000, "seed_base": 9_000_000},
+            # 0-d SS8-1 (docs/18 RATIFIED): gain-tuning episodes ONLY.
+            # Disjoint from dev (7.0M) / sealed (9.0M) / eval_seed0 families
+            # (5e5, 1.5e6, 2.5e6) / oracle 31M; rng 81k family tops out at
+            # 89_024 < the 90_000+7*ep random-arm family.
+            "tune": {"rng_base": 81_000, "seed_base": 8_000_000}}
+PURPOSES = {"dev": "ladder gating + Phase-0c calibration",
+            "sealed": ("SEALED: Phase-2 confirmatory only "
+                       "(docs/09 (ss)) -- do not roll before"),
+            "tune": ("GAIN-TUNING ONLY (docs/18 SS5): PFC (c_p, c_d) "
+                     "selection data; never used for admissibility "
+                     "verdicts or exits")}
 
 
 def _stage_sigmas(run_cfg: dict) -> dict:
@@ -100,23 +111,22 @@ def main():
     ap.add_argument("--bank", default=None,
                     help="default: curriculum.sbe.bank from --config")
     ap.add_argument("--out-dir", default="results")
+    ap.add_argument("--variants", nargs="+", default=["dev", "sealed"],
+                    choices=sorted(VARIANTS))
     a = ap.parse_args()
     run_cfg = yaml.safe_load(open(a.config))
     bank_path = a.bank or run_cfg["curriculum"]["sbe"]["bank"]
     raw = pathlib.Path(bank_path).read_bytes()
     bank = json.loads(raw)
     stages = _stage_sigmas(run_cfg)
-    for variant in ("dev", "sealed"):
+    for variant in a.variants:
         doc = {"meta": {"variant": variant, "config": a.config,
                         "bank": bank_path,
                         "bank_md5": hashlib.md5(raw).hexdigest(),
                         "per_speed": PER_SPEED, "speeds": list(SPEEDS),
                         "rng_base": VARIANTS[variant]["rng_base"],
                         "seed_base": VARIANTS[variant]["seed_base"],
-                        "purpose": ("ladder gating + Phase-0c calibration"
-                                    if variant == "dev" else
-                                    "SEALED: Phase-2 confirmatory only "
-                                    "(docs/09 (ss)) -- do not roll before")},
+                        "purpose": PURPOSES[variant]},
                "stages": build_bundle(variant, bank, stages)}
         out = pathlib.Path(a.out_dir) / f"a3d_bundle_{variant}.json"
         out.write_text(json.dumps(doc, indent=1))
