@@ -302,6 +302,11 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-18 (jjj) — [R-1] 비준 = **A-3e 선택** → 사전등록 초안 docs/21 v0.1 (E-1~E-6 비준 대기)
+
+- Hyunjun [R-1] = A-3e(d1-only 파일럿 → 성공 궤적 수확 → rewind-v2). docs/21 v0.1 작성 — 신규 결정 6슬롯: **[E-1]** bank-v2-d1 = 기존 admissible 24 draws 부분집합(신규 생성 아님)·클레임 = mechanistic·D1 / **[E-2]** dev-v2d1 {75k, 12.0M}·sealed-v2d1 {95k, 13.0M}(0-e 예약분 승계, 미생성이라 무오염), 스테이지 {d0 앵커, d1}, zero-캐시 동봉, sealed 불가침 테스트 4종 / **[E-3]** P1′ = 3-seed scratch, exit = 19 v0.3 §7 동결형 구현(Wilson 폐지), step 예산 = 최소소요×1.2 룰(구현 시 확정), 판정 = sealed에서 ≥2/3 seed Δ̂>0.10 ∧ 전원 ≥0, FAIL→B / **[E-4]** 수확 = best-ckpt × d1 물질화(78k) × seeds 700–749 × 200판/셀, 성공 에피소드의 발사−k 스냅샷(k∈{2,4,8}, dedup 0.05m, per-k 12/8) + **RT-PFC**(기록-궤적 참조 PFC, 게인 (1.0,0.5) 승계) → rewind-v2 = 생성 screen(750–769, 16/4/4) → 4조건 validation(800–899, 79k, n=100) — k=2 admissible ≥1 = on-manifold 가설 채택 / **[E-5]** seed·rng 증보 전 대역 서로소 / **[E-6]** 중단 규칙 4종(각 실패 = 12 §6 증거 행) + 하드 스톱 8/31.
+- 다음: E-슬롯 비준(+[R-3] 3자 1회 여부) → 구현·동결 커밋 → P1′. 학습 금지 유지(동결 전).
+
 ### 2026-07-18 (iii) — ❌ bank v2 독립 validation: **BANK FAIL 선언**(admissible = d1 2셀뿐, 규칙 기계 적용) → 재설계 분기 docs/20
 
 - **결과**(`results/a3d_bank_v2_validation.json`, 서버 `b6b970a`; 12 arms × 700판·seeds 600–699·σ-물질화·부트스트랩 777): **d1 압승** — v16/d1 PFC .94/zero .03/Δ̂ .91(LCB95 .86), v20/d1 .95/.04/.91(.86); reset_clean 전 셀 0, p₀₁ 전 셀 0(파워 스케치의 nested 전제 실측 성립), cluster-LCB ≈ episode-LCB. **k≥2 전멸**: v16/d2 **.79 [B — 1판 차 near-miss]** / v20/d2 .61 [B](사전 저신뢰 .63 적중) / v24/d2 .81·zero **.39** [C·D](σ가 관성-공짜 부활; brake .92 > PFC .81) / v24/d3 .64 [B] / v24/d4 .66 [B]. **coverage minimum(d1∧d2 각 ≥1) 미달 → BANK FAIL** — 문턱 재조정·재생성 금지 조항 그대로 적용(near-miss 구제 없음, 기록만). **부록 A·dev-v2/sealed-v2·P1 취소.** admissible matrix(기록) = {d1: v16, v20}.
