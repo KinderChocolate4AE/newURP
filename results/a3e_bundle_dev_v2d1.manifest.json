@@ -1,0 +1,30 @@
+{
+ "bundle": "results/a3e_bundle_dev_v2d1.json",
+ "sha256": "0aded4a0f5ac4a8629d7ece65a6e4c2d4144c5e537dca1bb216d9c6e87b7ad52",
+ "inputs_sha256": {
+  "bank": "284b49474fb0d134f6984d38babee02c233c5271994d20f0a75b7c12d55a4635",
+  "validation": "74b792b9330535116b98fc6ca1e17960bbc7a6f395bd4ee60d4990636b7333fd",
+  "robust_bank": "7f3a7dcb95ee5dcfb1551b17bdc02832cce0868551b8d7e3b4f1164101e7b5c2",
+  "config": "033266d8b06cd61d61c50c309fd37eeced2bb422d246e46b70d1ca2becb3d6a8"
+ },
+ "gains": [
+  1.0,
+  0.5
+ ],
+ "gateb": [
+  "brake",
+  "lam2",
+  "lam5",
+  "lam10",
+  "lam20",
+  "attpd_2_3",
+  "attpd_4_4",
+  "attpd_8_6"
+ ],
+ "seed_map": {
+  "episode_reset_seed": "spec.seed_base + 10000*stage_idx + i -> M3Adapter.reset_to(seed=...)",
+  "spawn_jitter_seed": "default_rng(rng_base + 1000*k + v), one stream per cell, episode order",
+  "bootstrap_seed": "777 (shared across all analyses; no independence claim)"
+ },
+ "doc": "docs/21 v0.3 SS3 (SHA-256 manifest)"
+}

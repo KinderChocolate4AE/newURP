@@ -1,0 +1,80 @@
+# A-3e P1' -- d1-only 3-phase pilot (docs/21 v0.3 FROZEN; docs/09 (kkk)).
+# SCRATCH 3-seed. Judgment J / gate defs / eval path unchanged; frozen
+# constants + judgment m3 ALWAYS (no stage overrides). Phase schedule,
+# caps, and gates live in shepherd/train/a3e.py (frozen constants there).
+#
+# Launch (server):
+#   TRAIN_MODULE=shepherd.scripts.train_m3a CONFIG=configs/m3a_a3e_p1.yaml \
+#     OUT=results/m3a_a3e_p1 REQUIRED_COMMIT=<A-3e impl commit> \
+#     SEEDS="0 1 2" bash scripts/run_ippo_seeds_parallel.sh
+
+env_config: configs/m2_l2_train.yaml   # FROZEN scenario (never edited)
+
+m3:                             # judgment/frozen reward params -- UNCHANGED
+  o_star: 1.0e-3
+  sigma_g: 1.0
+  w_h: 1.0
+  w_g: 0.3
+  w_gf: 1.0
+  lambda_cap: 5.0
+  v_eff_mode: hard
+  o_hi_release: 1.0e-2
+
+a3d:                            # A-3d ratified train scaffolds carried over:
+  teacher_gate: true            #   base flags -- the A-3e PHASE machine
+  freeze_finisher: true         #   overrides both per phase (docs/21 SS4)
+  phi: {alpha: 0.5, beta: 1.0, tau: 0.05, n: 600,
+        seeds: [61, 62, 63, 64, 65]}   # PBRS unchanged (reward-only)
+
+a3e:                            # docs/21 v0.3 -- 3-phase P1'
+  bank: results/a3d_sbe_bank_v2.json
+  validation: results/a3d_bank_v2_validation.json
+  robust_bank: results/a3_robust_bank_v2.json
+  dev_bundle: results/a3e_bundle_dev_v2d1.json
+  # sealed bundle is NEVER referenced here -- a3e_sealed_judgment only.
+
+curriculum:                     # UNUSED under a3e (stub); kept for schema
+  mode: s1_only
+  s1: {}
+
+warm_start:
+  enabled: false                # SCRATCH (A-3 lesson: warm inherits no-fire)
+
+loop:
+  total_env_steps: 450560       # frozen total cap = 22 evals x 20,480
+  rollout_env_steps: 1024
+  eval_interval_updates: 20     # cadence 20,480 (asserted == frozen)
+  eval_episodes: 20
+  save_interval_updates: 20
+  lr_anneal: none               # phase machine owns the schedule; no anneal
+                                # across phase boundaries (frozen choice)
+
+mappo:                          # P1 main recipe (unchanged)
+  gamma: 0.99
+  lam: 0.95
+  lr: 3.0e-4
+  epochs: 10
+  minibatch_size: 256
+  clip_eps: 0.2
+  ent_coef_limiter: 0.0
+  ent_coef_finisher: 0.003
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  target_kl: 0.02
+  hidden_sizes: [128, 128]
+  init_log_std: 0.0
+  ortho_init: true
+  value_norm: true
+  coma_mix: 0.5
+  coma_gamma: 0.99
+  coma_lam: 0.95
+
+randomize:                      # family (train; att_speed pinned by spawns)
+  enabled: true
+  att_speed: [16.0, 24.0]
+  adversary_start_x: [20.0, 28.0]
+  adversary_omega: [8.0, 12.0]
+  adv_a_max: [21.0, 30.0]
+
+wandb:
+  enabled: false                # json curves are canonical for P1'

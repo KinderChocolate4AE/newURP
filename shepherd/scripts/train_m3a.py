@@ -231,9 +231,15 @@ class M3ARunner:
         self.seed = int(seed)
 
         self.m3 = m3_params_from_cfg(run_cfg["m3"], env_cfg)
-        self.cur = Curriculum(run_cfg["curriculum"],
-                              frozen_constants(env_cfg, self.m3),
-                              env_cfg=env_cfg)
+        if run_cfg.get("a3e"):
+            # A-3e P1' (docs/21 v0.3): the 3-phase machine replaces the
+            # Curriculum entirely -- frozen constants + judgment m3 always,
+            # spawns come from A3ESpawner, gates from the dev bundle.
+            self.cur = _A3ECurStub()
+        else:
+            self.cur = Curriculum(run_cfg["curriculum"],
+                                  frozen_constants(env_cfg, self.m3),
+                                  env_cfg=env_cfg)
         # ---- A-3d hooks (docs/17 SS3; ALL no-ops unless `a3d:` block) -------
         self.a3d = run_cfg.get("a3d") or None
         self._theta = float(env_cfg["fire_gate"]["theta_fire"])
@@ -253,6 +259,24 @@ class M3ARunner:
                                              beta=_beta))
             self._teacher = bool(self.a3d.get("teacher_gate", True))
             self._freeze_fin = bool(self.a3d.get("freeze_finisher", True))
+        # ---- A-3e hooks (docs/21 v0.3 SS4; no-ops unless `a3e:` block) ------
+        self.a3e = run_cfg.get("a3e") or None
+        self._a3e_phases = None
+        if self.a3e:
+            if not self.a3d:
+                raise ValueError("a3e requires the a3d block (phi/teacher)")
+            from shepherd.scripts.a3e_bundle_gen import load_bundle
+            from shepherd.train.a3e import A3EPhases, A3ESpawner
+            self._a3e_phases = A3EPhases()
+            self._a3e_spawner = A3ESpawner(self.a3e["robust_bank"],
+                                           self.a3e["bank"],
+                                           self.a3e["validation"])
+            self._a3e_dev = load_bundle(self.a3e["dev_bundle"])
+            if self._a3e_dev["meta"].get("sealed"):
+                raise ValueError("training must gate on the DEV bundle")
+            if not all("zero_arrival" in e for e in
+                       self._a3e_dev["stages"]["d1"]["episodes"]):
+                raise ValueError("dev bundle missing the d1 zero-cache")
 
         env, _, _ = make_m3_train_env(copy.deepcopy(env_cfg), self.m3)
         ad = M3Adapter(env)
@@ -291,7 +315,11 @@ class M3ARunner:
     def _begin_episode(self) -> None:
         params = sample_attacker_params(self.rand_cfg, self.rand_rng)
         stage = self.cur.overrides(self.env_steps)
-        spawn = self.cur.spawn(self.rand_rng)   # None unless reverse/sbe
+        if self._a3e_phases is not None:        # A-3e: phase-driven spawns
+            spawn = self._a3e_spawner.spawn(self._a3e_phases.phase,
+                                            self.rand_rng)
+        else:
+            spawn = self.cur.spawn(self.rand_rng)   # None unless reverse/sbe
         if spawn is not None and "att_speed" in spawn:
             params = {**params,                  # V-4: pin approach speed
                       "att_speed": float(spawn["att_speed"])}
@@ -306,7 +334,8 @@ class M3ARunner:
                     "limiter_loss": 0.0, "coma_sum": 0.0, "fire_events": 0.0,
                     "steps": 0.0, "clean": 0.0, "boxed_steps": 0.0}
         self._ep_params = params
-        self._ep_stage = self.cur.stage
+        self._ep_stage = (self._a3e_phases.phase if self._a3e_phases
+                          else self.cur.stage)
         self._ep_reset_clean = bool(self._obs[-3] >= self._theta
                                     and self._obs[-1] > 0.0)
         self._ep["phi_shape"] = 0.0
@@ -349,6 +378,10 @@ class M3ARunner:
         if self._adapter is None:
             self._begin_episode()
         device = self.tr.device
+        fl = self._a3e_phases.flags() if self._a3e_phases else None
+        teacher_on = (fl["teacher"] if fl is not None
+                      else bool(self.a3d and self._teacher))
+        hold_lim = bool(fl and fl["hold_lim"])   # F0: limiter env action = 0
         prev_row = None                        # one-step-shifted coma_D (2D)
         for _ in range(self.rollout_env_steps):
             ad = self._adapter
@@ -366,7 +399,7 @@ class M3ARunner:
             raw_f = raw_f_t[0].cpu().numpy()
             clip_f = raw_f.copy()
             clip_f[:3] = np.clip(raw_f[:3], -1.0, 1.0)
-            if self.a3d and self._teacher:         # U-2: obs-clean -> fire
+            if teacher_on:                         # U-2: obs-clean -> fire
                 fire = 1.0 if teacher_fire(obs, self._theta) else 0.0
                 raw_f = np.array([0.0, 0.0, 0.0, fire], np.float32)
                 clip_f = raw_f.copy()
@@ -374,8 +407,12 @@ class M3ARunner:
 
             value = self.tr.value_np(nobs)
 
-            live = {lid: (clip_l[i] * self.lim_scale).astype(np.float32)
-                    for i, lid in enumerate(ad.limiter_ids)}
+            if hold_lim:                           # A-3e F0 (docs/21 SS4)
+                live = {lid: np.zeros(3, np.float32)
+                        for lid in ad.limiter_ids}
+            else:
+                live = {lid: (clip_l[i] * self.lim_scale).astype(np.float32)
+                        for i, lid in enumerate(ad.limiter_ids)}
             live[ad.finisher_id] = np.concatenate(
                 [clip_f[:3] * self.fin_axis_scale, clip_f[3:]]).astype(np.float32)
 
@@ -426,15 +463,33 @@ class M3ARunner:
                 self._obs = next_obs
 
     def update(self) -> Dict[str, float]:
-        fin_snap = None
-        if self.a3d and self._freeze_fin:          # U-2: fire head FROZEN
+        fl = self._a3e_phases.flags() if self._a3e_phases else None
+        freeze_fin = (fl["freeze_fin"] if fl is not None
+                      else bool(self.a3d and self._freeze_fin))
+        freeze_lim = bool(fl and fl["freeze_lim"])   # A-3e F0
+        fin_snap = lim_snap = None
+        if freeze_fin:                             # U-2: fire head FROZEN
             fin_snap = {k: v.detach().clone() for k, v
                         in self.tr.fin_actor.state_dict().items()}
+        if freeze_lim:                             # A-3e F0: limiter FROZEN
+            lim_snap = {k: v.detach().clone() for k, v
+                        in self.tr.lim_actor.state_dict().items()}
         stats = self.tr.update(self.buf)
         if fin_snap is not None:                   # weight-restore freeze
             self.tr.fin_actor.load_state_dict(fin_snap)
+        if lim_snap is not None:
+            self.tr.lim_actor.load_state_dict(lim_snap)
         self.buf.reset()
         return stats
+
+    def a3e_fresh_fin_optimizer(self) -> None:
+        """J1 entry (docs/21 SS4): drop the shared Adam's per-parameter state
+        for the fire head only -- momentum earned under freeze must not leak
+        into the unfrozen phase. Adam re-initialises lazily."""
+        fin_ids = {id(p) for p in self.tr.fin_actor.parameters()}
+        for p in list(self.tr.optimizer.state.keys()):
+            if id(p) in fin_ids:
+                del self.tr.optimizer.state[p]
 
     def rolling(self, k: int = 20) -> Dict[str, float]:
         recs = self.ep_records[-k:]
@@ -508,6 +563,49 @@ class M3ARunner:
                                   spawn_fn=spawn_fn)
         return frozen_ev, train_ev
 
+    def a3e_eval(self) -> dict:
+        """A-3e gate eval on the DEV bundle (docs/21 v0.3 SS4): the current
+        phase's stage episodes, frozen constants (stage=None), arm contract
+        per phase -- F0: limiter HOLD + policy fire (teacher-free);
+        L1: policy limiter + TEACHER fire, paired vs the zero-cache;
+        J1: full joint policy, paired vs the zero-cache."""
+        from shepherd.train import a3e as _a
+        ph = self._a3e_phases.phase
+        stage_name = "d0" if ph == "F0" else "d1"
+        eps = self._a3e_dev["stages"][stage_name]["episodes"]
+        lim_fn, fin_fn = self.learned_bundle()
+        if ph == "F0":
+            n = self.n
+            lim_used = (lambda obs, flags:
+                        [np.zeros(3, np.float32) for _ in range(n)])
+        else:
+            lim_used = lim_fn
+        if ph == "L1":
+            th = self._theta
+            fin_used = (lambda obs, flags: np.array(
+                [0.0, 0.0, 0.0,
+                 1.0 if teacher_fire(obs, th) else 0.0], np.float32))
+        else:
+            fin_used = fin_fn                     # F0/J1: policy fire
+        ev = m3_eval_bundle(self.env_cfg, self.m3, lim_used, fin_used,
+                            len(eps), int(eps[0]["reset_seed"]), stage=None,
+                            spawn_fn=lambda i, _e=eps: dict(_e[i]["spawn"]),
+                            per_episode=True)
+        rows = ev["per_episode"]
+        m = {"phase": ph, "stage": stage_name, "episodes": len(eps),
+             "captured_rate": float(ev["captured_rate"]),
+             "arrival_capture_rate": float(ev["arrival_capture_rate"]),
+             "fire_rate": float(ev["fire_rate"]),
+             "diag": _a.diagnostics(rows)}
+        if ph != "F0":
+            pol = [int(r["arrival_capture"]) for r in rows]
+            zero = [int(e["zero_arrival"]) for e in eps]
+            pd = _a.paired_delta(pol, zero)
+            m.update(pd)
+            m["delta_teacher" if ph == "L1" else "delta_free"] = \
+                pd["delta_hat"]
+        return m
+
     def save(self, out_dir: pathlib.Path, tag: str = "latest") -> None:
         out_dir.mkdir(parents=True, exist_ok=True)
         self.tr.save(out_dir / f"ckpt_mappo_{tag}.pt")
@@ -544,6 +642,110 @@ def load_warm(runner: M3ARunner, ckpt_dir: pathlib.Path, tag: str,
     sha = hashlib.sha256(ckpt_path.read_bytes()).hexdigest()[:12]
     return {"warm_ckpt": str(ckpt_path), "warm_ckpt_sha256_12": sha,
             "warm_tag": tag, "optimizer": "fresh"}
+
+
+class _A3ECurStub:
+    """Curriculum stand-in for A-3e (docs/21 v0.3): frozen constants +
+    judgment m3 always; no scaffold overrides; spawns/gates live in the
+    A-3e machinery, not here."""
+    mode, stage = "a3e", "s2"
+
+    def __init__(self):
+        self.history: list = []
+
+    def overrides(self, env_steps):
+        return None
+
+    def spawn(self, rng):
+        return None
+
+    def eval_spawn_fn(self):
+        return None
+
+    def describe(self):
+        return {"mode": "a3e"}
+
+    def on_eval(self, env_steps, train_ev, frozen_ev):
+        return None
+
+
+def run_one_a3e(run_cfg: dict, env_cfg: dict, seed: int, device: str,
+                out_root: pathlib.Path) -> dict:
+    """A-3e P1' loop (docs/21 v0.3 SS4): cadence-locked dev-bundle gates,
+    3-phase machine, J1 best-ckpt tracking. The sealed judgment is a
+    SEPARATE script (a3e_sealed_judgment) -- never run here."""
+    from shepherd.train import a3e as _a
+    seed_everything(seed)
+    loop = run_cfg["loop"]
+    eval_every = int(loop["eval_interval_updates"])
+    out_dir = out_root / f"seed{seed}"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    runner = M3ARunner(env_cfg, run_cfg, seed, device)
+    cadence = eval_every * runner.rollout_env_steps
+    if cadence != _a.CADENCE:
+        raise ValueError(f"cadence {cadence} != frozen {_a.CADENCE}")
+    if int(loop["total_env_steps"]) != _a.TOTAL_CAP_STEPS:
+        raise ValueError("loop.total_env_steps must equal the frozen "
+                         f"total cap {_a.TOTAL_CAP_STEPS}")
+    n_updates = _a.TOTAL_CAP_STEPS // runner.rollout_env_steps
+    ph = runner._a3e_phases
+    ntfy(f"a3e P1' seed {seed}: START (cap {_a.TOTAL_CAP_STEPS})")
+    eval_curve, train_curve = [], []
+    best_key, best_meta = None, None
+    j1_eval_idx = 0
+    t0 = time.monotonic()
+    for upd in range(1, n_updates + 1):
+        runner.collect_rollout()
+        runner.update()
+        roll = runner.rolling()
+        train_curve.append({"step": runner.env_steps, "phase": ph.phase,
+                            **{k: roll.get(k, float("nan")) for k in
+                               ("train/ep_return", "train/captured_rate",
+                                "train/clean_cross_rate",
+                                "train/fire_events")}})
+        if upd % eval_every != 0:
+            continue
+        m = runner.a3e_eval()
+        event = ph.on_eval(m)
+        point = {"step": runner.env_steps, "event": event,
+                 "state": ph.state(), **m}
+        if ph.phase == "J1" and "delta_free" in m:
+            j1_eval_idx += 1
+            runner.save(out_dir, tag=f"j1_e{j1_eval_idx}")
+            key = _a.best_ckpt_key(m["delta_free"],
+                                   m["diag"]["p_fire_given_nonclean"],
+                                   j1_eval_idx)
+            if best_key is None or key > best_key:
+                best_key, best_meta = key, {"eval_idx": j1_eval_idx,
+                                            "step": runner.env_steps,
+                                            "delta_free": m["delta_free"],
+                                            "p_fire_nonclean":
+                                                m["diag"]
+                                                ["p_fire_given_nonclean"]}
+                runner.save(out_dir, tag="best")
+                (out_dir / "best.json").write_text(json.dumps(best_meta))
+        eval_curve.append(point)
+        (out_dir / "eval_curve.json").write_text(json.dumps(eval_curve,
+                                                            indent=2))
+        (out_dir / "train_curve.json").write_text(json.dumps(train_curve))
+        sps = runner.env_steps / max(time.monotonic() - t0, 1e-9)
+        gate = m.get("delta_free", m.get("delta_teacher",
+                                         m.get("captured_rate")))
+        print(f"[a3e seed {seed}|{m['phase']}] step={runner.env_steps} "
+              f"gate={gate:+.3f} cap={m['captured_rate']:.2f} "
+              f"fire={m['fire_rate']:.2f} "
+              f"pfnc={m['diag']['p_fire_given_nonclean']} "
+              f"event={event} sps={sps:.0f}", flush=True)
+        if event in ("fail", "J1_exit", "J1_cap"):
+            break
+    summary = {"seed": seed, "mode": "a3e", "env_steps": runner.env_steps,
+               "phase_state": ph.state(), "phase_history": ph.history,
+               "best_ckpt": best_meta,
+               "verdict_note": "P1' PASS/FAIL comes ONLY from the sealed "
+                               "holdout judgment (docs/21 SS4)"}
+    (out_dir / "summary.json").write_text(json.dumps(summary, indent=2))
+    ntfy(f"a3e P1' seed {seed}: DONE {ph.state()}")
+    return summary
 
 
 # --------------------------------------------------------------------- main ---
@@ -750,6 +952,13 @@ def main() -> None:
 
     seeds = args.seeds if args.seeds is not None else [args.seed]
     out_root = pathlib.Path(args.output)
+    if run_cfg.get("a3e"):                     # A-3e P1' (docs/21 v0.3)
+        results = [run_one_a3e(run_cfg, env_cfg, s, args.device, out_root)
+                   for s in seeds]
+        for res in results:
+            print(f"  a3e seed {res['seed']}: {res['phase_state']} "
+                  f"best={res['best_ckpt']}")
+        return
     results = [run_one(run_cfg, env_cfg, s, args.device, out_root, use_wandb)
                for s in seeds]
 
