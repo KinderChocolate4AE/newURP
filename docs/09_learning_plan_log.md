@@ -302,6 +302,12 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-18 (iii) — ❌ bank v2 독립 validation: **BANK FAIL 선언**(admissible = d1 2셀뿐, 규칙 기계 적용) → 재설계 분기 docs/20
+
+- **결과**(`results/a3d_bank_v2_validation.json`, 서버 `b6b970a`; 12 arms × 700판·seeds 600–699·σ-물질화·부트스트랩 777): **d1 압승** — v16/d1 PFC .94/zero .03/Δ̂ .91(LCB95 .86), v20/d1 .95/.04/.91(.86); reset_clean 전 셀 0, p₀₁ 전 셀 0(파워 스케치의 nested 전제 실측 성립), cluster-LCB ≈ episode-LCB. **k≥2 전멸**: v16/d2 **.79 [B — 1판 차 near-miss]** / v20/d2 .61 [B](사전 저신뢰 .63 적중) / v24/d2 .81·zero **.39** [C·D](σ가 관성-공짜 부활; brake .92 > PFC .81) / v24/d3 .64 [B] / v24/d4 .66 [B]. **coverage minimum(d1∧d2 각 ≥1) 미달 → BANK FAIL** — 문턱 재조정·재생성 금지 조항 그대로 적용(near-miss 구제 없음, 기록만). **부록 A·dev-v2/sealed-v2·P1 취소.** admissible matrix(기록) = {d1: v16, v20}.
+- **판독**: 생성 스크린(정확-스폰, PFC≡demo)과 validation(σ-물질화)의 괴리가 그대로 실현 — **특권 오라클조차 k≥2에서 σ-강건 도달 .8 미달**(σ 램프 .005→.02와 감쇠 .94→.61~.81 동행). action-necessity(D)는 v24/d2 외 전 셀 생존(Δ̂ .58–.91) → **벽 재정밀화: 행동 필요성이 아니라 "폐형식 후방합성(off-manifold·정지구성·이력무) 상태의 σ-강건 도달성"이 k=1 너머에서 붕괴.** 부수: hand-controller 경고 d4 유일(gap .43 — k=8만 데모-지식 필수), lam20 .65–.89 = k≤4 obs-hard 아님. 3자 B-조건(v0.3 수정분)이 설계 목적 그대로 작동한 사례.
+- docs/12 §6에 A-3d 증거 행 추가. **다음 = docs/20 v0.1 재설계 분기(Hyunjun [R-1]~[R-3] 결정 대기)**: (a) A-3e = d1-only 파일럿(P1′, 클레임 mechanistic·D1) → 성공 궤적 스냅샷 수확 → rewind-v2(T-4 예약분, on-manifold d2 재구축) / (b) B-프레이밍 조기 확정 / (c) 병행(권고 — P1′ 게이트 ~1주 컷, 실패 즉시 B; 8/31 불변). 학습 금지 유지(새 사전등록 전).
+
 ### 2026-07-18 (hhh) — ✅ bank v2 1회 생성 완료(서버, 7/7 셀·제외 0·81 draws) + §6 validation 하네스 동결·커밋
 
 - **생성 결과**(`results/a3d_sbe_bank_v2.json`, 서버 커밋 `91205cb`; meta로 동결 코드 실행 확인 — seeds 420–439·first_fit·게인 (1.0,0.5)·smoke 대역 은퇴 기록): **7/7 셀 OK, 총 81 draws.** v16/d1·d2, v20/d1·d2, v24/d3 = 12/12 무결(pfc_mean .95–1.0, zero 0); v16/d1은 300–319·400–419에 이어 **3번째 CRN 대역 재현**. **v24/d2 = 유일 fallback 셀**: 3후보 전부 목표 12 미달(9/9/3, 각 48시도) → lexicographic rule-2로 cand0 9 draws 수록 — 거부 39건/후보의 다수가 zero-공짜(zero-포획 195회 관측, len≈12) = **0-c "관성 공짜" 모드가 draw-필터에서 구조적으로 배제됨**. **v24/d4 = 12/24**(rule-1): 거부 12건에서 **zero-포획 63회·len≈17 = d4 en-route 공짜 발사 가설 실측 데이터 확보**. 구성-게이트 드랍 전 셀 0(거부 전부 스크린 단) = 폐형식 구성 안정. 캐비앗: 스크린 = 정확-스폰(PFC≡demo) 20판 — admissibility 확정 아님, σ-validation이 판정.
