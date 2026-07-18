@@ -149,6 +149,8 @@ def test_jitter_derivations_enumerated_disjoint():
     for k in (2, 4, 8):
         for v in (16, 20):
             add("rewind_val", 310_000 + 1_000 * k + v)
+    for v in (16, 20, 24):
+        add("comparator", 320_000 + 1_000 * 2 + v)
 
 
 def test_new_reset_bands_disjoint_from_legacy():
