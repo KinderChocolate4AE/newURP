@@ -1,0 +1,17 @@
+  a3_robust_bank_v2.json:x12v16u200 d1 cand0(0.3, 0.8): acc=12/12 scr_fail=0 drops={}
+CELL v16/d1: OK (12 entries)
+  a3_robust_bank_v2.json:x12v16u200 d2 cand0(0.3, 0.8): acc=12/12 scr_fail=0 drops={}
+CELL v16/d2: OK (12 entries)
+  a3_robust_bank_v2.json:x16v20u200 d1 cand0(0.3, 0.8): acc=12/12 scr_fail=0 drops={}
+CELL v20/d1: OK (12 entries)
+  a3_robust_bank_v2.json:x16v20u200 d2 cand0(0.3, 0.8): acc=12/12 scr_fail=0 drops={}
+CELL v20/d2: OK (12 entries)
+  a3_robust_bank_v2.json:x20v24u200 d2 cand0(0.3, 0.8): acc=9/48 scr_fail=39 drops={}
+  a3_robust_bank_v2.json:x20v24u200 d2 cand1(0.5, 0.8): acc=9/48 scr_fail=39 drops={}
+  a3_robust_bank_v2.json:x20v24u200 d2 cand2(0.15, 0.5): acc=3/48 scr_fail=45 drops={}
+CELL v24/d2: OK (9 entries)
+  a3_robust_bank_v2.json:x20v24u200 d3 cand0(0.3, 0.8): acc=12/12 scr_fail=0 drops={}
+CELL v24/d3: OK (12 entries)
+  a3_robust_bank_v2.json:x20v24u200 d4 cand0(0.3, 0.8): acc=12/24 scr_fail=12 drops={}
+CELL v24/d4: OK (12 entries)
+wrote results/a3d_sbe_bank_v2.json: cells=7 excluded=0 entries=81
