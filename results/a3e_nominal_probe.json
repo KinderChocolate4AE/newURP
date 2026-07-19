@@ -1,0 +1,66 @@
+{
+ "meta": {
+  "doc": "docs/09 (ppp) fork diagnostic; discovery",
+  "spawns": "nominal (spawn_fn=None, frozen judgment env)",
+  "n": 100,
+  "seed0": 950,
+  "tag": "j1_e1"
+ },
+ "arms": {
+  "brake": {
+   "captured_rate": 0.0,
+   "arrival_capture_rate": 0.0,
+   "fire_rate": 0.0,
+   "n_fires": 0,
+   "wasted_mean": 0.0,
+   "len_mean": 23.0,
+   "fire_steps": [],
+   "fire_step_ge9": 0,
+   "fire_step_ge3": 0
+  },
+  "seed0:j1_e1": {
+   "captured_rate": 0.0,
+   "arrival_capture_rate": 0.0,
+   "fire_rate": 0.0,
+   "n_fires": 0,
+   "wasted_mean": 0.0,
+   "len_mean": 23.0,
+   "fire_steps": [],
+   "fire_step_ge9": 0,
+   "fire_step_ge3": 0
+  },
+  "seed1:j1_e1": {
+   "captured_rate": 0.0,
+   "arrival_capture_rate": 0.0,
+   "fire_rate": 0.0,
+   "n_fires": 0,
+   "wasted_mean": 0.0,
+   "len_mean": 24.0,
+   "fire_steps": [],
+   "fire_step_ge9": 0,
+   "fire_step_ge3": 0
+  },
+  "seed2:j1_e1": {
+   "captured_rate": 0.0,
+   "arrival_capture_rate": 0.0,
+   "fire_rate": 0.0,
+   "n_fires": 0,
+   "wasted_mean": 0.0,
+   "len_mean": 23.0,
+   "fire_steps": [],
+   "fire_step_ge9": 0,
+   "fire_step_ge3": 0
+  },
+  "zero": {
+   "captured_rate": 0.0,
+   "arrival_capture_rate": 0.0,
+   "fire_rate": 0.0,
+   "n_fires": 0,
+   "wasted_mean": 0.0,
+   "len_mean": 23.0,
+   "fire_steps": [],
+   "fire_step_ge9": 0,
+   "fire_step_ge3": 0
+  }
+ }
+}

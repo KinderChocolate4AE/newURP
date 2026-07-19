@@ -1,0 +1,85 @@
+{
+ "meta": {
+  "doc": "docs/21 v0.3 SS5 + docs/09 (ppp) hybrid",
+  "tag": "j1_e1",
+  "fire": "rule guard (teacher_fire; hybrid)",
+  "n_per_source": 50,
+  "sources": [
+   0,
+   1,
+   2
+  ],
+  "jitter_base": 300000,
+  "seeds": [
+   700,
+   749
+  ],
+  "stats": {
+   "episodes": 300,
+   "success": 195,
+   "post_commit": 0,
+   "F_hist": {
+    "2": 195
+   }
+  },
+  "rt2_ratio_pooled": null,
+  "instrument_ok": false,
+  "instrument_failures": []
+ },
+ "cells": {
+  "v16:k2": {
+   "pool": 0,
+   "deduped": 0,
+   "accepted": [],
+   "missing": true,
+   "reason": "sources<2",
+   "n_candidates": 0,
+   "per_source": {}
+  },
+  "v16:k4": {
+   "pool": 0,
+   "deduped": 0,
+   "accepted": [],
+   "missing": true,
+   "reason": "sources<2",
+   "n_candidates": 0,
+   "per_source": {}
+  },
+  "v16:k8": {
+   "pool": 0,
+   "deduped": 0,
+   "accepted": [],
+   "missing": true,
+   "reason": "sources<2",
+   "n_candidates": 0,
+   "per_source": {}
+  },
+  "v20:k2": {
+   "pool": 0,
+   "deduped": 0,
+   "accepted": [],
+   "missing": true,
+   "reason": "sources<2",
+   "n_candidates": 0,
+   "per_source": {}
+  },
+  "v20:k4": {
+   "pool": 0,
+   "deduped": 0,
+   "accepted": [],
+   "missing": true,
+   "reason": "sources<2",
+   "n_candidates": 0,
+   "per_source": {}
+  },
+  "v20:k8": {
+   "pool": 0,
+   "deduped": 0,
+   "accepted": [],
+   "missing": true,
+   "reason": "sources<2",
+   "n_candidates": 0,
+   "per_source": {}
+  }
+ }
+}

@@ -1,0 +1,7 @@
+source 0 tag=j1_e1: {'ckpt': 'results/m3a_a3e_p1/seed0/ckpt_mappo_j1_e1.pt', 'ckpt_sha256_12': 'dc23186d156d'}
+source 1 tag=j1_e1: {'ckpt': 'results/m3a_a3e_p1/seed1/ckpt_mappo_j1_e1.pt', 'ckpt_sha256_12': '634d9f57faf7'}
+source 2 tag=j1_e1: {'ckpt': 'results/m3a_a3e_p1/seed2/ckpt_mappo_j1_e1.pt', 'ckpt_sha256_12': '03be9eec22b0'}
+cell v16: eps so far 150 success 86 cands 0
+cell v20: eps so far 300 success 195 cands 0
+instrument_ok=False rt2_ratio=None cells_with_bank=[] -> results/a3e_rewind_candidates.json
+INSTRUMENT FAILURE (stop rule 6): record + halt; do NOT proceed to screen/validation or tune gains.

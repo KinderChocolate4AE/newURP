@@ -1,0 +1,6 @@
+brake: captured=0.000 fires=0 F>=3:0 F>=9:0 wasted=0.00 len=23
+seed0:j1_e1: captured=0.000 fires=0 F>=3:0 F>=9:0 wasted=0.00 len=23
+seed1:j1_e1: captured=0.000 fires=0 F>=3:0 F>=9:0 wasted=0.00 len=24
+seed2:j1_e1: captured=0.000 fires=0 F>=3:0 F>=9:0 wasted=0.00 len=23
+zero: captured=0.000 fires=0 F>=3:0 F>=9:0 wasted=0.00 len=23
+NOMINAL PROBE done -> results/a3e_nominal_probe.json
