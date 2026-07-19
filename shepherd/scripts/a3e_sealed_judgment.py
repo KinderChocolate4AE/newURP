@@ -1,15 +1,18 @@
-"""A-3e P1' SEALED HOLDOUT PILOT judgment (docs/21 v0.3 SS4 FROZEN;
-docs/09 (kkk)/(mmm)). SERVER script (loads the 3 best ckpts). SINGLE
-CONSUMPTION: policy and zero arms run together on the same episodes in
-this one invocation; the consumption marker is written at the end and any
-later load is refused (stop rule 8 -- no ckpt reselection, no fine-tune,
-no re-evaluation).
+"""A-3e P1' SEALED HOLDOUT PILOT judgment (docs/21 v0.3.2 FROZEN;
+docs/09 (kkk)/(mmm)/(ooo)). SERVER script (loads the 3 best ckpts). SINGLE
+CONSUMPTION: policy, zero, and the v0.3.2 DIAGNOSTIC arms (brake, lam20)
+all run together on the same episodes in this one invocation; the
+consumption marker is written at the end and any later load is refused
+(stop rule 8 -- no ckpt reselection, no fine-tune, no re-evaluation).
 
-Verdict (P1' PASS, docs/19 v0.3 SS7 P1 rule): per training seed s,
-Delta^_s = mean_e[ arrival(pi_s, e) - arrival(zero, e) ] over the SEALED
-d1 episodes (120, paired). PASS <=> (>= 2 of 3 seeds with Delta^ > 0.10)
-AND (all seeds Delta^ >= 0). Pooled numbers + per-seed exact McNemar are
-DIAGNOSTIC ONLY. d0 episodes: policy captured_rate recorded (diagnostic).
+Verdict (P1' PASS, docs/19 v0.3 SS7 P1 rule -- UNCHANGED by v0.3.2): per
+training seed s, Delta^_s = mean_e[ arrival(pi_s, e) - arrival(zero, e) ]
+over the SEALED d1 episodes (120, paired). PASS <=> (>= 2 of 3 seeds with
+Delta^ > 0.10) AND (all seeds Delta^ >= 0). Pooled numbers + per-seed
+exact McNemar are DIAGNOSTIC ONLY. d0 episodes: policy captured_rate
+recorded (diagnostic). DIAG_ARMS measure the RL-necessity bottleneck
+(docs/20 SS6): they NEVER enter the verdict -- they let the readout
+distinguish "beats zero" from "beats a simple controller".
 This is holdout *pilot* evidence -- never population-confirmatory.
 """
 from __future__ import annotations
@@ -24,6 +27,7 @@ import yaml
 from shepherd.train import a3e as A
 
 DELTA_GATE = A.DELTA_GATE                       # 0.10
+DIAG_ARMS = ("brake", "lam20")                  # v0.3.2: recorded, non-verdict
 
 
 def mcnemar_exact_onesided(b: int, c: int) -> float:
@@ -85,6 +89,17 @@ def main():
     # zero arm ONCE (shared same-episode baseline for every seed)
     zero_rows, _ = bundle_eval(_lim_fn("zero", {}), fin_teacher, d1)
     zero_arr = [int(r["arrival_capture"]) for r in zero_rows]
+    # v0.3.2 diagnostic arms (policy-independent; NEVER in the verdict)
+    from shepherd.train import pfc as pfc_mod
+    diag = {}
+    for arm in DIAG_ARMS:
+        fn = (_lim_fn("brake", {}) if arm == "brake"
+              else pfc_mod.make_lambda_brake_fn(float(arm[3:])))
+        rows, _ = bundle_eval(fn, fin_teacher, d1)
+        diag[arm] = {"arrival": float(np.mean(
+            [r["arrival_capture"] for r in rows])),
+            "per_episode": [int(r["arrival_capture"]) for r in rows]}
+        print(f"diag {arm}: arrival={diag[arm]['arrival']:.3f}", flush=True)
     per_seed = {}
     for s in (0, 1, 2):
         lf, ff, meta = learned_fns(pathlib.Path(a.ckpt_root) / f"seed{s}",
@@ -101,6 +116,10 @@ def main():
                        "delta_hat": float(np.mean(diffs)),
                        "policy_arrival": float(np.mean(pol)),
                        "zero_arrival": float(np.mean(zero_arr)),
+                       "policy_minus_brake": (float(np.mean(pol))
+                                              - diag["brake"]["arrival"]),
+                       "policy_minus_lam20": (float(np.mean(pol))
+                                              - diag["lam20"]["arrival"]),
                        "mcnemar_b_c": [b, c],
                        "mcnemar_p_onesided": mcnemar_exact_onesided(b, c),
                        "d0_captured_rate": float(d0_ev["captured_rate"])}
@@ -109,13 +128,17 @@ def main():
               f"zero={per_seed[s]['zero_arrival']:.3f} "
               f"McNemar b/c={b}/{c}", flush=True)
     rule = p1_pass_rule([per_seed[s]["delta_hat"] for s in (0, 1, 2)])
-    doc = {"meta": {"doc": "docs/21 v0.3 SS4",
+    doc = {"meta": {"doc": "docs/21 v0.3.2 SS4",
                     "label": "sealed holdout pilot (NOT population-"
                              "confirmatory)",
                     "bundle": a.sealed, "episodes_d1": len(d1),
-                    "delta_gate": DELTA_GATE},
+                    "delta_gate": DELTA_GATE,
+                    "diag_arms_note": "brake/lam20 recorded for the "
+                                      "RL-necessity readout; verdict uses "
+                                      "policy vs zero ONLY (v0.3.2)"},
+           "diagnostic_arms": diag,
            "per_seed": per_seed, "rule": rule,
-           "verdict": "P1_PASS" if rule["PASS"] else "P1_FAIL_TO_B"}
+           "verdict": "P1_PASS" if rule["PASS"] else "P1_FAIL"}
     pathlib.Path(a.out).write_text(json.dumps(doc, indent=1))
     marker = mark_sealed_consumed(".", note=f"a3e P1' judgment -> {a.out}")
     print(f"VERDICT {doc['verdict']} {rule} -> {a.out}; sealed consumed "

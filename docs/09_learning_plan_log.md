@@ -302,6 +302,23 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-19 (ooo) — P1′ 판독: **L1 = 캠페인 최초 재성형 학습(양성)** / J1 = learned trigger 결합 실패 → **hybrid 아키텍처 전환 + 2-모드 연구 프로토콜 비준** (docs/20 v0.3 §6-보론)
+
+- **결과**(서버 `54a9bf8`; sealed 소진 완료): F0 = captured 1.00 ×3(2-eval 즉시 통과) / **L1 = Δ^teacher +.79/+.80/+.93, cap .81/.82/.94**(zero-캐시 .017; P(fire|clean) .87–.99, P(fire|nonclean) .03–.16, P(cap|¬reset-clean) .73–.94) — **action-necessary 스폰에서 리미터가 행동으로 clean을 만든 최초 증거, A-3b spawn-luck 천장 돌파(Tier 1)** / J1 = 전 seed cap 0.00 ×8 evals·추세 없음·gate 정확히 −.017(=0−2/120) / sealed = Δ̂ 0.000 ×3, **P1_FAIL 공식 기록**(d0 1.00).
+- **J1 기전(eval 진단으로 확정)**: seeds 0/2 = fire_rate 1.00·P(fire|nonclean)=1.0·**clean 에피소드 0**(pfc=None) — F0(d0 = reset-clean)가 "즉시 발사" 습관을 주입했고, FSM은 v_soft≥θ **첫 표본**에서 커밋하므로 p_feas 미성립 시점의 조기 커밋 = wasted = **에피소드 종결**이 성공 중이던 shaping 궤적을 전부 삭제. seed 1 = 무발사 진동(fire 0→.5→0) = 반대 어트랙터(A-3b 양극단 재현). **재성형 실패가 아니라 "학습된 셰이핑 위에 learned one-shot trigger를 얹는 방식"의 실패** — F0 스캐폴드가 문제를 좁힌 게 아니라 조건부를 오염시킨 사례(스캐폴드-오염 실증).
+- **비준 3건(Hyunjun; GPT 방법 리뷰 2건 연속 판독 포함)**: ① **hybrid 아키텍처** = MARL cooperative shaping + **rule-based autonomous terminal guard**(fire ⇔ v_soft≥θ ∧ p_feas>0 — obs[−3]/obs[−1], 동결 관측 계약 내 자율; 실계 이식 시 onboard 추정기 필요 캐비앗 명시). learned-fire 계열 중단(F0 커리큘럼 단계·fire-head 튜닝·distill 필수화 폐지 — distill은 부가 진단으로만). learned-shot 실패 = hybrid 선택의 근거 증거로 논문 편입. ② **스캐폴드 6-레벨 재정의**: 레벨 3 = "learned 대체"가 아니라 **autonomous scaffold replacement**(실구현 가능 자율 메커니즘, rule 포함); 스캐폴드마다 제거(대체) 조건 명부 의무. ③ **2-모드 프로토콜**: Discovery(1–3 seed·dev-only·비준 없음·짧은 로그) / Confirmation(양성 신호 후에만 동결·sealed·감사); Discovery 최소선 = 판정 J·평가 경로·sealed 소진·seed 대장·증거 테이블. 모든 계획 말미 = "원래 문제 해결력이 무엇만큼 느는가".
+- **부기**: (a) v0.3.2 sealed 진단 arm 개정은 **무산**(sealed이 개정 착지 전 소진) — brake 비교는 dev 사후 진단으로 이동(코드·테스트는 향후 sealed용으로 보존·커밋). (b) git 히스토리 평탄화: 서버 결과 커밋(54a9bf8)이 로컬 docs 2커밋(a04842f·3e29f8d)과 분기 → 본 커밋이 54a9bf8 위에 누적본으로 재수록(내용 전량 승계 — docs/21 v0.3.2·docs/20 v0.3·(mmm-1)(nnn) 로그 텍스트 포함; 구 커밋 2개는 미푸시 폐기). (c) docs/12 §6에 A-3e P1′ 증거 행.
+- **Discovery 스프린트 Arm A 착수**(`a3e_hybrid_eval.py`, dev-only): 각 seed의 J1 ckpt 스윕(j1_e1..e8·best — L1-말 스냅샷 부재 갭 명시, j1_e1 = 최근접) × [학습 리미터 + rule guard]를 dev d1 120판 paired(vs zero-캐시) + d0 40판 평가; 기록 = paired Δ·wasted·P(fire|clean/nonclean)·발사 시점 v_soft·feasible frac·d0 cap. **가드가 L1 수준(cap ~.8)을 재현하면 즉시 수확→rewind로 진행**(fire-head 튜닝에 시간 불사용). Arm B(distill) = 보류(부가 진단). 질문-의무 답: 이 실험 통과 = teacher 제거(자율 대체) 완성 = 스캐폴드 레벨 3 달성 + end-to-end 국소 포획 양성.
+
+### 2026-07-18 (nnn) — docs/20 v0.2: 수준 사다리 L0~L5 + B 아웃라인 뼈대 부록 (거시 목표선 비준)
+
+- Hyunjun 거시 질문("구현 가능한가·어느 수준까지 가야 하나") 논의 결과를 docs/20 §6으로 명문화: **L0(셰이핑 학습) 달성 / L1(k=1 mechanistic 포획) P1′ 시험 중 / L2(rewind k=2) 대기 / L3(재귀 사다리) 학기 규모 / L4(nominal capture-unlock) = 프레임-의존 미결(판정 면도날이 만든 난이도 → 후속 논문 질문으로 승격; 단 obs-컨트롤러 k=2~4 일부 셀 .8+ 실측 = 불가능 증명도 없음) / L5 일반화**. 목표선: 보고서 필요선 이미 충족(L0+벽 규명); 가을 논문 = L0+B 필요선에 L1 상방·L2 방법론 기여; **이번 여름 = L1 최소·L2 목표**. B 아웃라인 6절 뼈대(사다리 = 논문 구조; 병행-준비 조항의 실체) 동봉. [R-1]~[R-3] 해소 표기.
+
+### 2026-07-18 (mmm-1) — docs/21 v0.3 → **v0.3.1: §7 중단 라우팅 분기형 개정** (Hyunjun 지적·비준; 결과 판독 전 = 사전등록 무손상)
+
+- **지적**: "왜 이렇게 B를 급하게 가나 — 시간 많다"(잔여 6주, 1사이클 ≈ 1주). **판독**: 구 §7의 "실패 → 즉시 B"는 (i) 무결성 장치(해당 실험 구제 금지 — 양보 불가)와 (ii) docs/20 옵션 C의 "1주 컷" 라우팅이 섞여 세습된 과잉 조임 — 무결성이 요구하는 것은 (i)까지이며, 실패 후 **신규 사전등록 실험**은 정당(각 실패는 어느 분기든 B 증거 사슬을 강화). (iii) BANK FAIL 때 실제로 쓴 패턴도 자동-B가 아니라 docs/20 분기였음.
+- **개정 내용**: 무결성 조항 전부 불변(구제 금지·측정기/가설 분리·source 결측·sealed 소진·pooled 규칙·증거 행) / 과학적 실패 3종(P1′ FAIL·수확 결측·pooled 기각)의 사후 라우팅 = "즉시 B" → **분기 결정(새 사전등록 실험 vs B, Hyunjun 비준)** / **신규 실험 착수 마감 2026-08-15**(이후 = B 집필·재현 패키징 전용; 트립와이어 8/31 불변) / **B 준비 병행** 조항 편입(아웃라인·그림 목록·12 §6 유지 — 전환 비용 최소화). 판정 기준·게이트·seed 일절 무변경, P1′ 진행 무영향. 3자에는 다음 접촉 시 통보(데이터 미열람 시점 라우팅 개정·기준 무변경 — 전용 라운드 불요 판단).
+
 ### 2026-07-18 (mmm) — ✅ A-3e 구현 2/2: 수확·RT-PFC·rewind 파이프라인·sealed judgment (+테스트 11, a3d/a3e 스위트 63 green) — **P1′ 런치 가능**
 
 - **RT-PFC**(`a3e.py`): a = clip_norm(a_rec(t) + K_p(p_rec−p) + K_d(v_rec−v)), t=0 = 스냅샷·참조 소진 후 terminal hold(수확 궤적은 발사 시점 v≠0 → hold = 도착점 제동 — 테스트가 수식 그대로 락). **유닛 락 2종 = PFC≡demo 락의 유사물**: 정확-재생 항등(float32 정밀도) + 고정 perturbation(rng 212,121·σ.005·n8)에서 개방루프 대비 endpoint 오차 < 0.6×.

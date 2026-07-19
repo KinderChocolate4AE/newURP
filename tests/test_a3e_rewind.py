@@ -246,3 +246,12 @@ def test_rewind_arm_dispatcher():
                        A_rec[0], atol=1e-5)
     for arm in ("brake", "lam2", "lam20", "attpd_2_3", "attpd_8_6"):
         assert callable(R.arm_fn(arm, {"rec": None, "snapshot": None}, 800))
+
+
+def test_sealed_diag_arms_lock():
+    """v0.3.2: diagnostic arms are fixed and the verdict rule takes ONLY
+    the three per-seed deltas (no diag input path exists)."""
+    import inspect
+    from shepherd.scripts.a3e_sealed_judgment import DIAG_ARMS, p1_pass_rule
+    assert DIAG_ARMS == ("brake", "lam20")
+    assert list(inspect.signature(p1_pass_rule).parameters) == ["deltas"]
