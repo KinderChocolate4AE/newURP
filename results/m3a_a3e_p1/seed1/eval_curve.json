@@ -1,0 +1,345 @@
+[
+  {
+    "step": 20480,
+    "event": null,
+    "state": {
+      "phase": "F0",
+      "evals_in_phase": 1,
+      "consec": 1,
+      "stall": 0,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "F0",
+    "stage": "d0",
+    "episodes": 40,
+    "captured_rate": 1.0,
+    "arrival_capture_rate": 0.0,
+    "fire_rate": 1.0,
+    "diag": {
+      "p_fire_given_clean": 1.0,
+      "p_fire_given_nonclean": null,
+      "p_capture_given_reset_nonclean": null
+    }
+  },
+  {
+    "step": 40960,
+    "event": "advance_L1",
+    "state": {
+      "phase": "L1",
+      "evals_in_phase": 0,
+      "consec": 0,
+      "stall": 0,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "F0",
+    "stage": "d0",
+    "episodes": 40,
+    "captured_rate": 1.0,
+    "arrival_capture_rate": 0.0,
+    "fire_rate": 1.0,
+    "diag": {
+      "p_fire_given_clean": 1.0,
+      "p_fire_given_nonclean": null,
+      "p_capture_given_reset_nonclean": null
+    }
+  },
+  {
+    "step": 61440,
+    "event": null,
+    "state": {
+      "phase": "L1",
+      "evals_in_phase": 1,
+      "consec": 0,
+      "stall": 0,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "L1",
+    "stage": "d1",
+    "episodes": 120,
+    "captured_rate": 0.05,
+    "arrival_capture_rate": 0.05,
+    "fire_rate": 0.075,
+    "diag": {
+      "p_fire_given_clean": 0.8571428571428571,
+      "p_fire_given_nonclean": 0.02654867256637168,
+      "p_capture_given_reset_nonclean": 0.05
+    },
+    "delta_hat": 0.03333333333333333,
+    "lcb95": 0.0,
+    "ucb95": 0.075,
+    "delta_teacher": 0.03333333333333333
+  },
+  {
+    "step": 81920,
+    "event": null,
+    "state": {
+      "phase": "L1",
+      "evals_in_phase": 2,
+      "consec": 1,
+      "stall": 0,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "L1",
+    "stage": "d1",
+    "episodes": 120,
+    "captured_rate": 0.8166666666666667,
+    "arrival_capture_rate": 0.8166666666666667,
+    "fire_rate": 0.825,
+    "diag": {
+      "p_fire_given_clean": 0.98989898989899,
+      "p_fire_given_nonclean": 0.047619047619047616,
+      "p_capture_given_reset_nonclean": 0.8166666666666667
+    },
+    "delta_hat": 0.8,
+    "lcb95": 0.7416666666666667,
+    "ucb95": 0.8583333333333333,
+    "delta_teacher": 0.8
+  },
+  {
+    "step": 102400,
+    "event": "advance_J1",
+    "state": {
+      "phase": "J1",
+      "evals_in_phase": 0,
+      "consec": 0,
+      "stall": 0,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "L1",
+    "stage": "d1",
+    "episodes": 120,
+    "captured_rate": 0.7916666666666666,
+    "arrival_capture_rate": 0.7916666666666666,
+    "fire_rate": 0.8166666666666667,
+    "diag": {
+      "p_fire_given_clean": 0.9405940594059405,
+      "p_fire_given_nonclean": 0.15789473684210525,
+      "p_capture_given_reset_nonclean": 0.7916666666666666
+    },
+    "delta_hat": 0.775,
+    "lcb95": 0.7083333333333334,
+    "ucb95": 0.8333333333333334,
+    "delta_teacher": 0.775
+  },
+  {
+    "step": 122880,
+    "event": null,
+    "state": {
+      "phase": "J1",
+      "evals_in_phase": 1,
+      "consec": 0,
+      "stall": 1,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "J1",
+    "stage": "d1",
+    "episodes": 120,
+    "captured_rate": 0.0,
+    "arrival_capture_rate": 0.0,
+    "fire_rate": 0.5,
+    "diag": {
+      "p_fire_given_clean": null,
+      "p_fire_given_nonclean": 0.5,
+      "p_capture_given_reset_nonclean": 0.0
+    },
+    "delta_hat": -0.016666666666666666,
+    "lcb95": -0.041666666666666664,
+    "ucb95": 0.0,
+    "delta_free": -0.016666666666666666
+  },
+  {
+    "step": 143360,
+    "event": null,
+    "state": {
+      "phase": "J1",
+      "evals_in_phase": 2,
+      "consec": 0,
+      "stall": 2,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "J1",
+    "stage": "d1",
+    "episodes": 120,
+    "captured_rate": 0.0,
+    "arrival_capture_rate": 0.0,
+    "fire_rate": 0.125,
+    "diag": {
+      "p_fire_given_clean": null,
+      "p_fire_given_nonclean": 0.125,
+      "p_capture_given_reset_nonclean": 0.0
+    },
+    "delta_hat": -0.016666666666666666,
+    "lcb95": -0.041666666666666664,
+    "ucb95": 0.0,
+    "delta_free": -0.016666666666666666
+  },
+  {
+    "step": 163840,
+    "event": null,
+    "state": {
+      "phase": "J1",
+      "evals_in_phase": 3,
+      "consec": 0,
+      "stall": 3,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "J1",
+    "stage": "d1",
+    "episodes": 120,
+    "captured_rate": 0.0,
+    "arrival_capture_rate": 0.0,
+    "fire_rate": 0.0,
+    "diag": {
+      "p_fire_given_clean": null,
+      "p_fire_given_nonclean": 0.0,
+      "p_capture_given_reset_nonclean": 0.0
+    },
+    "delta_hat": -0.016666666666666666,
+    "lcb95": -0.041666666666666664,
+    "ucb95": 0.0,
+    "delta_free": -0.016666666666666666
+  },
+  {
+    "step": 184320,
+    "event": null,
+    "state": {
+      "phase": "J1",
+      "evals_in_phase": 4,
+      "consec": 0,
+      "stall": 4,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "J1",
+    "stage": "d1",
+    "episodes": 120,
+    "captured_rate": 0.0,
+    "arrival_capture_rate": 0.0,
+    "fire_rate": 0.31666666666666665,
+    "diag": {
+      "p_fire_given_clean": null,
+      "p_fire_given_nonclean": 0.31666666666666665,
+      "p_capture_given_reset_nonclean": 0.0
+    },
+    "delta_hat": -0.016666666666666666,
+    "lcb95": -0.041666666666666664,
+    "ucb95": 0.0,
+    "delta_free": -0.016666666666666666
+  },
+  {
+    "step": 204800,
+    "event": null,
+    "state": {
+      "phase": "J1",
+      "evals_in_phase": 5,
+      "consec": 0,
+      "stall": 5,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "J1",
+    "stage": "d1",
+    "episodes": 120,
+    "captured_rate": 0.0,
+    "arrival_capture_rate": 0.0,
+    "fire_rate": 0.325,
+    "diag": {
+      "p_fire_given_clean": null,
+      "p_fire_given_nonclean": 0.325,
+      "p_capture_given_reset_nonclean": 0.0
+    },
+    "delta_hat": -0.016666666666666666,
+    "lcb95": -0.041666666666666664,
+    "ucb95": 0.0,
+    "delta_free": -0.016666666666666666
+  },
+  {
+    "step": 225280,
+    "event": null,
+    "state": {
+      "phase": "J1",
+      "evals_in_phase": 6,
+      "consec": 0,
+      "stall": 6,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "J1",
+    "stage": "d1",
+    "episodes": 120,
+    "captured_rate": 0.0,
+    "arrival_capture_rate": 0.0,
+    "fire_rate": 0.4083333333333333,
+    "diag": {
+      "p_fire_given_clean": null,
+      "p_fire_given_nonclean": 0.4083333333333333,
+      "p_capture_given_reset_nonclean": 0.0
+    },
+    "delta_hat": -0.016666666666666666,
+    "lcb95": -0.041666666666666664,
+    "ucb95": 0.0,
+    "delta_free": -0.016666666666666666
+  },
+  {
+    "step": 245760,
+    "event": null,
+    "state": {
+      "phase": "J1",
+      "evals_in_phase": 7,
+      "consec": 0,
+      "stall": 7,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "J1",
+    "stage": "d1",
+    "episodes": 120,
+    "captured_rate": 0.0,
+    "arrival_capture_rate": 0.0,
+    "fire_rate": 0.0,
+    "diag": {
+      "p_fire_given_clean": null,
+      "p_fire_given_nonclean": 0.0,
+      "p_capture_given_reset_nonclean": 0.0
+    },
+    "delta_hat": -0.016666666666666666,
+    "lcb95": -0.041666666666666664,
+    "ucb95": 0.0,
+    "delta_free": -0.016666666666666666
+  },
+  {
+    "step": 266240,
+    "event": "J1_cap",
+    "state": {
+      "phase": "J1",
+      "evals_in_phase": 8,
+      "consec": 0,
+      "stall": 8,
+      "failed": null,
+      "passed_exit": false
+    },
+    "phase": "J1",
+    "stage": "d1",
+    "episodes": 120,
+    "captured_rate": 0.0,
+    "arrival_capture_rate": 0.0,
+    "fire_rate": 0.5,
+    "diag": {
+      "p_fire_given_clean": null,
+      "p_fire_given_nonclean": 0.5,
+      "p_capture_given_reset_nonclean": 0.0
+    },
+    "delta_hat": -0.016666666666666666,
+    "lcb95": -0.041666666666666664,
+    "ucb95": 0.0,
+    "delta_free": -0.016666666666666666
+  }
+]

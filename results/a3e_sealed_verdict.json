@@ -1,0 +1,67 @@
+{
+ "meta": {
+  "doc": "docs/21 v0.3 SS4",
+  "label": "sealed holdout pilot (NOT population-confirmatory)",
+  "bundle": "results/a3e_bundle_sealed_v2d1.json",
+  "episodes_d1": 120,
+  "delta_gate": 0.1
+ },
+ "per_seed": {
+  "0": {
+   "ckpt": {
+    "ckpt": "results/m3a_a3e_p1/seed0/ckpt_mappo_best.pt",
+    "ckpt_sha256_12": "ad85d0cbb8cf"
+   },
+   "delta_hat": 0.0,
+   "policy_arrival": 0.0,
+   "zero_arrival": 0.0,
+   "mcnemar_b_c": [
+    0,
+    0
+   ],
+   "mcnemar_p_onesided": 1.0,
+   "d0_captured_rate": 1.0
+  },
+  "1": {
+   "ckpt": {
+    "ckpt": "results/m3a_a3e_p1/seed1/ckpt_mappo_best.pt",
+    "ckpt_sha256_12": "94e4dc6dcc03"
+   },
+   "delta_hat": 0.0,
+   "policy_arrival": 0.0,
+   "zero_arrival": 0.0,
+   "mcnemar_b_c": [
+    0,
+    0
+   ],
+   "mcnemar_p_onesided": 1.0,
+   "d0_captured_rate": 1.0
+  },
+  "2": {
+   "ckpt": {
+    "ckpt": "results/m3a_a3e_p1/seed2/ckpt_mappo_best.pt",
+    "ckpt_sha256_12": "fd9efc2678a4"
+   },
+   "delta_hat": 0.0,
+   "policy_arrival": 0.0,
+   "zero_arrival": 0.0,
+   "mcnemar_b_c": [
+    0,
+    0
+   ],
+   "mcnemar_p_onesided": 1.0,
+   "d0_captured_rate": 1.0
+  }
+ },
+ "rule": {
+  "deltas": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "n_above_gate": 0,
+  "all_nonneg": true,
+  "PASS": false
+ },
+ "verdict": "P1_FAIL_TO_B"
+}

@@ -1,0 +1,4 @@
+seed 0: delta=+0.000 pol=0.000 zero=0.000 McNemar b/c=0/0
+seed 1: delta=+0.000 pol=0.000 zero=0.000 McNemar b/c=0/0
+seed 2: delta=+0.000 pol=0.000 zero=0.000 McNemar b/c=0/0
+VERDICT P1_FAIL_TO_B {'deltas': [0.0, 0.0, 0.0], 'n_above_gate': 0, 'all_nonneg': True, 'PASS': False} -> results/a3e_sealed_verdict.json; sealed consumed (results/a3e_sealed_consumed.json)

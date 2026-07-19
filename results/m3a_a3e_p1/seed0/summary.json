@@ -1,0 +1,67 @@
+{
+  "seed": 0,
+  "mode": "a3e",
+  "env_steps": 266240,
+  "phase_state": {
+    "phase": "J1",
+    "evals_in_phase": 8,
+    "consec": 0,
+    "stall": 8,
+    "failed": null,
+    "passed_exit": false
+  },
+  "phase_history": [
+    {
+      "phase": "L1",
+      "eval": 0,
+      "event": "advance_L1"
+    },
+    {
+      "phase": "J1",
+      "eval": 0,
+      "event": "advance_J1_teacher_released"
+    },
+    {
+      "phase": "J1",
+      "eval": 3,
+      "event": "stall_recorded"
+    },
+    {
+      "phase": "J1",
+      "eval": 4,
+      "event": "stall_recorded"
+    },
+    {
+      "phase": "J1",
+      "eval": 5,
+      "event": "stall_recorded"
+    },
+    {
+      "phase": "J1",
+      "eval": 6,
+      "event": "stall_recorded"
+    },
+    {
+      "phase": "J1",
+      "eval": 7,
+      "event": "stall_recorded"
+    },
+    {
+      "phase": "J1",
+      "eval": 8,
+      "event": "stall_recorded"
+    },
+    {
+      "phase": "J1",
+      "eval": 8,
+      "event": "J1_cap"
+    }
+  ],
+  "best_ckpt": {
+    "eval_idx": 1,
+    "step": 122880,
+    "delta_free": -0.016666666666666666,
+    "p_fire_nonclean": 1.0
+  },
+  "verdict_note": "P1' PASS/FAIL comes ONLY from the sealed holdout judgment (docs/21 SS4)"
+}

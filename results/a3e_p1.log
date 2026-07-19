@@ -1,0 +1,43 @@
+[a3e seed 0|F0] step=20480 gate=+1.000 cap=1.00 fire=1.00 pfnc=None event=None sps=16
+[a3e seed 0|F0] step=40960 gate=+1.000 cap=1.00 fire=1.00 pfnc=None event=advance_L1 sps=16
+[a3e seed 0|L1] step=61440 gate=+0.067 cap=0.08 fire=0.11 pfnc=0.027522935779816515 event=None sps=15
+[a3e seed 0|L1] step=81920 gate=+0.500 cap=0.52 fire=0.58 pfnc=0.16326530612244897 event=None sps=15
+[a3e seed 0|L1] step=102400 gate=+0.792 cap=0.81 fire=0.82 pfnc=0.058823529411764705 event=advance_J1 sps=15
+[a3e seed 0|J1] step=122880 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 0|J1] step=143360 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 0|J1] step=163840 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 0|J1] step=184320 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 0|J1] step=204800 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 0|J1] step=225280 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 0|J1] step=245760 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 0|J1] step=266240 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=J1_cap sps=15
+[a3e seed 1|F0] step=20480 gate=+1.000 cap=1.00 fire=1.00 pfnc=None event=None sps=16
+[a3e seed 1|F0] step=40960 gate=+1.000 cap=1.00 fire=1.00 pfnc=None event=advance_L1 sps=16
+[a3e seed 1|L1] step=61440 gate=+0.033 cap=0.05 fire=0.07 pfnc=0.02654867256637168 event=None sps=15
+[a3e seed 1|L1] step=81920 gate=+0.800 cap=0.82 fire=0.82 pfnc=0.047619047619047616 event=None sps=15
+[a3e seed 1|L1] step=102400 gate=+0.775 cap=0.79 fire=0.82 pfnc=0.15789473684210525 event=advance_J1 sps=15
+[a3e seed 1|J1] step=122880 gate=-0.017 cap=0.00 fire=0.50 pfnc=0.5 event=None sps=15
+[a3e seed 1|J1] step=143360 gate=-0.017 cap=0.00 fire=0.12 pfnc=0.125 event=None sps=15
+[a3e seed 1|J1] step=163840 gate=-0.017 cap=0.00 fire=0.00 pfnc=0.0 event=None sps=15
+[a3e seed 1|J1] step=184320 gate=-0.017 cap=0.00 fire=0.32 pfnc=0.31666666666666665 event=None sps=15
+[a3e seed 1|J1] step=204800 gate=-0.017 cap=0.00 fire=0.33 pfnc=0.325 event=None sps=15
+[a3e seed 1|J1] step=225280 gate=-0.017 cap=0.00 fire=0.41 pfnc=0.4083333333333333 event=None sps=15
+[a3e seed 1|J1] step=245760 gate=-0.017 cap=0.00 fire=0.00 pfnc=0.0 event=None sps=15
+[a3e seed 1|J1] step=266240 gate=-0.017 cap=0.00 fire=0.50 pfnc=0.5 event=J1_cap sps=15
+[a3e seed 2|F0] step=20480 gate=+1.000 cap=1.00 fire=1.00 pfnc=None event=None sps=16
+[a3e seed 2|F0] step=40960 gate=+1.000 cap=1.00 fire=1.00 pfnc=None event=advance_L1 sps=16
+[a3e seed 2|L1] step=61440 gate=-0.017 cap=0.00 fire=0.01 pfnc=0.008403361344537815 event=None sps=16
+[a3e seed 2|L1] step=81920 gate=+0.000 cap=0.02 fire=0.03 pfnc=0.008547008547008548 event=None sps=15
+[a3e seed 2|L1] step=102400 gate=+0.925 cap=0.94 fire=0.94 pfnc=0.0 event=None sps=15
+[a3e seed 2|L1] step=122880 gate=+0.708 cap=0.72 fire=0.73 pfnc=0.03571428571428571 event=advance_J1 sps=15
+[a3e seed 2|J1] step=143360 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 2|J1] step=163840 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 2|J1] step=184320 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 2|J1] step=204800 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 2|J1] step=225280 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 2|J1] step=245760 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 2|J1] step=266240 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=None sps=15
+[a3e seed 2|J1] step=286720 gate=-0.017 cap=0.00 fire=1.00 pfnc=1.0 event=J1_cap sps=15
+  a3e seed 0: {'phase': 'J1', 'evals_in_phase': 8, 'consec': 0, 'stall': 8, 'failed': None, 'passed_exit': False} best={'eval_idx': 1, 'step': 122880, 'delta_free': -0.016666666666666666, 'p_fire_nonclean': 1.0}
+  a3e seed 1: {'phase': 'J1', 'evals_in_phase': 8, 'consec': 0, 'stall': 8, 'failed': None, 'passed_exit': False} best={'eval_idx': 3, 'step': 163840, 'delta_free': -0.016666666666666666, 'p_fire_nonclean': 0.0}
+  a3e seed 2: {'phase': 'J1', 'evals_in_phase': 8, 'consec': 0, 'stall': 8, 'failed': None, 'passed_exit': False} best={'eval_idx': 1, 'step': 143360, 'delta_free': -0.016666666666666666, 'p_fire_nonclean': 1.0}
