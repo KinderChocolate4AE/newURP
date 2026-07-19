@@ -51,8 +51,7 @@ def _traj_rollout(env_cfg, m3, spawn, seed, lim_fn, fin_fn,
                   record_steps: int):
     """Deterministic rollout with per-step limiter state/action recording
     for the first `record_steps` steps; runs to episode end."""
-    from shepherd.train.adapter import M3Adapter
-    from shepherd.train.make_env_m3 import gating_env_for_spawn
+    from shepherd.train.make_env_m3 import M3Adapter, gating_env_for_spawn
     from shepherd.train.pfc import ATT_P0, ATT_V0
     env, _, _ = gating_env_for_spawn(env_cfg, m3, spawn, stage=None)
     ad = M3Adapter(env)
@@ -198,7 +197,9 @@ def main():
         policies[s] = ((lambda o, f, _lf=lf: _lf(o, f, lim_scale)), meta)
         print(f"source {s} tag={a.tag}: {meta}", flush=True)
 
-    all_cands, stats = [], {"episodes": 0, "success": 0, "post_commit": 0}
+    all_cands = []
+    stats = {"episodes": 0, "success": 0, "post_commit": 0,
+             "F_hist": {}}                    # (ppp) discovery instrumentation
     for v in sorted(cells):
         jr = np.random.default_rng(A.HARVEST_JIT_BASE + 1_000 * 1 + v)
         spawns = []
@@ -226,6 +227,7 @@ def main():
                     continue
                 F = int(chains[0]["fire_step"])
                 stats["success"] += 1
+                stats["F_hist"][str(F)] = stats["F_hist"].get(str(F), 0) + 1
                 for k, t in A.snapshot_times(F).items():
                     assert t < F                    # pre-commit (commit==F)
                     snap = {"limiters": np.asarray(r["P"][t]).tolist(),
