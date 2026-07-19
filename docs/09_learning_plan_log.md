@@ -302,6 +302,23 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-19 (qqq-1) — (qqq) 3자 정정 수용: **"닫힘-음성" 과잉 결론 철회** — 검정한 명제/미검 명제 분리 (docs/20 §6-보론-2 개정)
+
+- **정정 요지**: (qqq)의 "L2·L3 닫힘-음성 · 3중 독립 증거 · 포획은 1-스텝 껍질에서만 결정" = 과잉 결론. 세 결과는 동일 가설의 독립 3검정이 아니라 **서로 다른 명제의 측정**: ① U-1 = witness 근방 local recovery **음성** ② A-3d = 특정 폐형식 합성의 robust feasibility **음성** ③ A-3e F=2 = **d1 궤적에 d2 구성용 과거 이력 부재 — 가설 기각이 아니라 실험 식별 불능**(on-manifold rewind는 검정된 적 없음). nominal 0/500 무발사 = d1-분포 정책의 **transfer 실패 증거**이지 회랑 부재 증거 아님(동일 엔트리의 "회랑 미검사" 문구와 내부 모순이었음 — 해소).
+- **채택 상태 표기**: synthetic k≥2 음성 / 근방 2-step recoverability 음성 / d1-궤적 rewind k=2 **구조적 생성 불가·미판정** / nominal→shell 접근 회랑 **미검** / 재귀 ladder **현 경로 blocked·일반 falsified 아님**. 종합 문구 = "현행 synthetic 및 d1-수확 기반 horizon-extension 경로는 닫혔으나, nominal 접근 회랑과 더 긴 실궤적 기반 predecessor의 실존은 미검이다." "3중 독립 증거" → "분석·합성·학습 경로에서 각각 확인된 **세 종류의 horizon-extension 장애**".
+- **연구축 2분리(후보 경로 재배치)**: **축1 = A2 하 접근 회랑 실존 검사**(trajectory optimization·MPC oracle·scripted corral·direct shooting) / **축2 = 강한 공격자 하 MARL 필요성**(A3 cost-aware MPC·A4 exploiter·self-play). A3는 회랑 확인 도구가 아니라 난도 상승축 — (qqq) 슬롯의 선택지에서 두 축을 분리.
+- **부수 정정(docs/20)**: ① L4 각주 "판정 설계가 만든 난이도" 확정 표현 → "**포획 물리의 정밀도 요구 × 이진·MC 판정 설계의 결합으로 형성 — 상대 기여 미분리**"로 개방 복원 ② Q-tier hybrid 갱신: 워크샵 = **teacher-free autonomous hybrid capture**(learned fire 필요조건 아님), Q2 = **MARL shaping + autonomous guard k=1 성공 + rewind k=2 oracle 우월 + rewind k=2 learned shaping 성공** ③ ladder L2 = 현 경로 닫힘·on-manifold 미판정, L3 = blocked·일반 falsified 아님.
+- 유지(검토 합치 확인): L1 재성형 기록 · learned-fire 실패 = hybrid 선택 근거 · Level 3 = autonomous replacement · 2-모드 · 제4병목 · A2 = identification opponent 한정.
+
+### 2026-07-19 (qqq) — 수확·nominal 프로브 판독: **rewind(지평 확장) 3중 사망 확정** — 수확 풀 공집합(F=2 전원)·nominal 무발사 0/500 → 방향 결정 슬롯 개설
+
+- **수확**(fd07664, d1 2셀 × 3소스 × 50 CRN): 성공 195/300(.65). **F_hist = {2: 195} — 전 성공이 2스텝 발사**; 학습 limiter도 brake와 동일(느긋함 가설 기각). t=F−k(t≥1) 풀 = **전 셀 × 전 k 공집합** → 후보 0, 게이트 미가동(`instrument_ok=False`는 stop-rule-6 아님 — 계기 미가동 N/A 판독). d1 = witness 1스텝 전 구조의 산술적 귀결.
+- **nominal 프로브**(n=100 × 5 arms, reset 950–1049 신규 대역, dev discovery): **전 arm captured 0.000 + 발사 이벤트 0**(learned j1_e1 ×3·brake·zero; 창 ~23스텝 = 관통 시간). 가드 술어(v_soft≥θ ∧ p_feas>0)가 500판에서 1회도 미성립 — L1 성형 하에서도 접근 단계가 껍질에 접근 불가.
+- **판정: Level 4(후진 지평 확장 = rewind) 3중 독립 증거로 닫힘-음성** — ① U-1 오라클 r@2+ ≡ 0(1-스텝 껍질만 생존) ② A-3d 폐형식 k≥2 σ-validation 전멸 ③ A-3e 실궤적(수확 공집합 + nominal 무발사). 분석·합성·실궤적 세 각도 동일 벽 = **"포획은 1-스텝 껍질 위에서만 결정된다"의 3중 재현**. docs/20 §6-보론-2 + ladder L2·L3 닫힘 반영.
+- **맥락 고정**: witness 출처 = probe 탐색·정련 상태(docs/13 p4_probe refined_best) — **캠페인 사상 nominal 포획 관측 0**(docs/14 "전 시도의 무발사 수렴은 학습된 합리성"). 금일 프로브가 이를 hybrid에 대해 정량 확정.
+- **열린 질문(미검사)**: nominal→껍질 **접근 회랑의 물리적 실존** — U-1은 껍질 근방 복원성만 측정; 23스텝 창 내 fire-eligible 기하 생성은 오라클도 미검사(witness p_feas ~2.4e-3 → 부재 가능성 상당; 부재 시 "mission 설계 과잉 난도" 자체가 발견).
+- **방향 결정 슬롯(개설, Hyunjun)**: ① 회랑 실존 오라클 프로브(PFC scripted corral, discovery) ② 껍질 재무장(A3 MPC 공격자·4+1 협동으로 MAPPO-필요성 재배치) ③ B-fork 발동. 마감 계보: 신규 실험 착수 8/15·트립와이어 8/31. **선(先)기록 지시에 따라 본 엔트리 = 기록만, 방향 미정.**
+
 ### 2026-07-19 (ppp) — Discovery Arm A 판독: **hybrid 가드 검증 성공(Level 3 달성·dev)** / J1 부식 곡선 정량화 / **제4병목 실측 — brake+guard가 learned 상회** → 즉시 수확 진입(harvest hybrid 패치)
 
 - **스윕 결과**(origin d0fe2e9 · dev d1 120판 paired vs zero-cache · d0 40판): **seed1 j1_e1 = .775 (Δ̂ +.758, LCB95 +.692)**; seed0/2 j1_e1 = .500 (Δ̂ +.483, LCB +.408); zero .017. 가드 규율 완벽 — fire_clean ≈ .98–1.0, wasted ≈ 0, d0 1.00×3. → **학습된 협동 성형이 규칙 가드로 자율 포획 체인으로 전환됨 = claim ② discovery-수준 지지, 스캐폴드 Level 3(자율 대체) 달성.**

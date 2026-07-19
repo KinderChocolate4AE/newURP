@@ -38,12 +38,12 @@
 |---|---|---|
 | **L0** | 비용-인지 협력 셰이핑 학습이 baseline 초과 (L2 캠페인: 3-seed DoD, mix 역-U ablation) | ✅ **달성** |
 | **L1** | mechanistic 포획 학습 — action-necessary k=1 전임자에서 one-step 재성형 + 자율 발사 | **재성형 학습 ✅ 달성**(P1′ L1-phase: Δ^teacher +.79/+.80/+.93, cap .81/.82/.94 — 캠페인 최초 양성). 자율 발사는 **hybrid 재정의**(아래): learned trigger → rule-based guard, 가드 결합 dev 평가로 종결 판정 |
-| **L2** | on-manifold 되감기로 k=2 회생 (rewind-v2 pooled ADOPTED) — **oracle-level**. 방법론 논문 척추는 추가로 **learned-policy level**(d2 학습 성공 = L3 진입) 요구(외부 리뷰 교정 — 자기기만 방지 명시) | 대기 (P1′ PASS 조건부) |
-| **L3** | 재귀 사다리: d2 학습 → 재수확 → d3/d4 (learned-trajectory bootstrapping 완성형) | 학기 규모 — 이번 스코프 밖 |
-| **L4** | nominal 스폰에서 유의미한 capture rate (원래 의미의 capture-unlock) | **미결 — 프레임 의존**(아래) |
+| **L2** | on-manifold 되감기로 k=2 회생 (rewind-v2 pooled ADOPTED) — **oracle-level**. 방법론 논문 척추는 추가로 **learned-policy level**(d2 학습 성공 = L3 진입) 요구(외부 리뷰 교정 — 자기기만 방지 명시) | **현 경로 닫힘**(합성 음성·근방 음성·d1-수확 = 구조적 생성 불가) — **on-manifold rewind 자체는 미판정**(장궤적 소스 부재; §6-보론-2) |
+| **L3** | 재귀 사다리: d2 학습 → 재수확 → d3/d4 (learned-trajectory bootstrapping 완성형) | **현 경로 blocked — 일반 falsified 아님**(전제인 rewind 소스가 미확보 상태; §6-보론-2) |
+| **L4** | nominal 스폰에서 유의미한 capture rate (원래 의미의 capture-unlock) | **미결 — 프레임 의존 + 접근 회랑 실존 미검**(09 (qqq)/(qqq-1): nominal 무발사 = d1-분포 정책의 transfer 실패 증거이지 회랑 부재 증거 아님) |
 | **L5** | 랜덤화 공격자 일반화 | L4 이후 |
 
-- **L4의 지위(명시)**: witness 자연 발생 ~10⁻³ 희소 + 판정 면도날(θ=0.9가 무-셰이핑 plateau 5/6 직상 + 2000-표본 MC CRN 민감성)은 **판정 설계가 만든 난이도** — 동결 유지 하에서는 "넘는 과제"가 아니라 프레임 협상 과제. **후속 논문 질문으로 승격**: "판정 면도날(θ 스케줄·MC 표본·그물 반경)을 완화하면 사다리가 어디까지 자라는가". 단 **불가능 증명도 없음**: obs-전용 단순 컨트롤러(brake/λ-brake)가 k=2~4 일부 셀에서 .8+ 실측(bank v2 validation Gate B 데이터) = 중간-k 물리는 열려 있고, 미해결은 도달성 인증 계기와 커리큘럼.
+- **L4의 지위(명시)**: witness 자연 발생 ~10⁻³ 희소 + 판정 면도날(θ=0.9가 무-셰이핑 plateau 5/6 직상 + 2000-표본 MC CRN 민감성)은 **포획 물리의 정밀도 요구와 이진·MC 판정 설계가 결합해 형성된 난이도 — 두 요소의 상대 기여는 미분리**((qqq-1) 정정: 판정 탓 확정도, 자연법칙 수용도 아님). 동결 유지 하에서는 프레임 협상 과제 성격 병존. **후속 논문 질문으로 승격**: "판정 면도날(θ 스케줄·MC 표본·그물 반경)을 완화하면 사다리가 어디까지 자라는가". 단 **불가능 증명도 없음**: obs-전용 단순 컨트롤러(brake/λ-brake)가 k=2~4 일부 셀에서 .8+ 실측(bank v2 validation Gate B 데이터) = 중간-k 물리는 열려 있고, 미해결은 도달성 인증 계기와 커리큘럼.
 - **목표선(외부 리뷰 교정 반영)**: 보고서/학위 필요선 = **이미 충족(L0 + 벽 규명)**. 단 **저널 기준으로는 L0+B도 질문 재정의 하에서만 성립**("희귀 terminal event를 가진 협력 MARL에서 surrogate shaping과 terminal feasibility가 왜 분리되는가" — 본 부록 B-아웃라인 1~3절의 프레이밍) — **capture-method 논문의 필요선은 미충족**이며 최소 L1 양성(또는 강하게 계기화된 L1 음성)이 필요. **이번 여름 = L1 확보(최소) → L2 시도(목표)**, L3 초입 = 보너스. P1′은 어느 결과든 논문을 강화(L1 성공 = 최초 양성 / 실패 = 오라클-가능·학습-불가 분리 증거).
 
 **Q-tier 필요선(외부 리뷰 채택; 목표 배분의 공용 기준):**
@@ -51,8 +51,8 @@
 | 티어 | 필요선 |
 |---|---|
 | URP 보고서 | 현 확보분으로 충족(셰이핑 학습·벽 규명·방법론 체인) |
-| 워크샵/진단 논문 | **L1 성공**(teacher-free k=1, zero 대비 paired>0.10, 선택적 발사 분리, ≥3 seeds) **또는** 강하게 계기화된 L1 실패(오라클·단순컨트롤러 성공 ∧ zero 실패 ∧ 배선·탐색 감사 통과 ∧ 정책만 실패) |
-| Q2 방법론 | **L2 oracle + learned 양쪽**: k=1 teacher-free 성공 + rewind k=2가 동일 σ·판정에서 synthetic 대비 우월(comparator) + **learned policy가 rewind k=2에서 학습 성공** + 5–10 seeds + held-out + on-manifold ablation |
+| 워크샵/진단 논문 | **teacher-free autonomous hybrid capture**(k=1 — MARL shaping + autonomous rule guard, zero 대비 paired>0.10, ≥3 seeds; learned fire는 필요조건 아님, (qqq-1) 갱신) **또는** 강하게 계기화된 L1 실패(오라클·단순컨트롤러 성공 ∧ zero 실패 ∧ 배선·탐색 감사 통과 ∧ 정책만 실패) |
+| Q2 방법론 | **L2 oracle + learned 양쪽**: MARL shaping + autonomous guard로 k=1 성공 + rewind k=2가 동일 σ·판정에서 synthetic 대비 우월(comparator) + **rewind k=2에서 learned shaping 학습 성공**((qqq-1) hybrid 기준) + 5–10 seeds + held-out + on-manifold ablation |
 | Q1 | + 일반성(L3 재귀 확장 or 다른 attacker family/환경/강한 baseline/다중 witness; nominal 필수는 아님 — "여러 조건에서 synthetic은 실패, trajectory-유래는 일관 확장"이면 성립 가능) |
 
 - **L1 실패 시 1차 감사 체크리스트(사전 등재 — 실패 '해석'의 순서 규정이지 실패 런의 구제가 아님)**: L1은 자재 여유상 "넘을 수 있어야 하는" 과제이므로, FAIL 시 분기 결정 전에 다음을 감사한다: ① PBRS(Φ)와 paired-Δ 목표의 정렬 ② shared limiter actor의 역할 분화(에이전트별 행동 분산·one-hot 의존) ③ action 스케일/해상도 ④ teacher→free 전환 역학(optimizer 상태·분포 이동) ⑤ obs/action 배선 스모크 ⑥ exploration(log_std·엔트로피 궤적). 감사 결과 = 분기 결정의 입력(구현 결함 발견 = "측정기/구현 실패" 계열로 기록, 신규 사전등록 실험의 근거).
@@ -78,6 +78,13 @@
 - **스캐폴드 6-레벨 재정의(레벨 3 교정)**: 1 Scaffold feasibility(oracle/teacher 하 성공 가능) → 2 Scaffold learnability(해당 분포에서 셰이핑 학습) **[P1′ L1로 달성]** → **3 Autonomous scaffold replacement**(특권 개입을 "learned로 대체"가 아니라 **실구현 가능한 자율 메커니즘으로 대체** — rule guard 포함) → 4 Horizon extension(rewind) → 5 Nominal transfer → 6 Mission success. 각 스캐폴드는 도입 이유 + **제거(대체) 조건** 명부 의무 — 제거되지 않는 스캐폴드는 방법이 아니라 새 문제 정의.
 - **2-모드 연구 프로토콜(방법 전환 비준)**: **Discovery**(핵심 가설 직접 시험·1–3 seeds·dev-only·짧은 로그·치명 자유도만 고정) / **Confirmation**(양성 신호 후에만 동결·통계·sealed·감사). Discovery에서도 지키는 최소선 = 판정 J·평가 경로 동결, sealed류 1회 소진, seed 대장 비재사용, 증거 테이블 기록. 모든 계획 말미 의무 질문 = **"이 실험이 통과하면 원래 문제 해결력이 무엇만큼 느는가."**
 - **클레임 사다리(갱신)**: ① 확보 — "MARL 리미터 정책이 action-necessary 전임자에서 행동-유발 국소 capturability 셰이핑을 학습한다"(L1) ② 가드 평가 성공 시 — "학습된 협력 셰이핑은 검증된 terminal guard와 결합해 자율 포획으로 전환된다"(end-to-end 국소 포획 양성) ③ rewind k=2 성공 시 — "실궤적 유래 전임자가 폐형식 합성보다 강건한 커리큘럼 기질이다"(Paper A 척추). shot의 learned/rule 여부는 핵심 기여와 무관 — 역할 분담(MARL = 협력 셰이핑 / guard = 비가역 종말 행동)이 오히려 선명.
+
+**§6-보론-2 (2026-07-19 판독; 동일자 3자 정정 (qqq-1) 반영) — 현행 horizon-extension 경로 닫힘 + 미검 명제 분리:**
+
+- **경로별 상태(정확 표기)**: ① synthetic k≥2 predecessor(A-3d 폐형식) = **음성**(σ-validation 전멸) ② witness 근방 2-step recoverability(A-3c U-1) = **음성**(r@2+ ≡ 0) ③ d1-궤적 rewind k=2(A-3e 수확) = **구조적 생성 불가·미판정** — F_hist={2:195}: d1 궤적에 d2 구성용 과거 이력 자체가 부재. **가설 기각이 아니라 실험 식별 불능**(on-manifold rewind는 검정되지 않음) ④ nominal→shell 접근 회랑 = **미검** — nominal 0/500 무발사는 d1-분포 학습 정책의 nominal transfer 실패 증거이지 회랑 부재 증거 아님 ⑤ 재귀 ladder = **현 경로 blocked, 일반 falsified 아님**.
+- **종합(채택 문구)**: "현행 synthetic 및 d1-수확 기반 horizon-extension 경로는 닫혔으나, nominal 접근 회랑과 더 긴 실궤적 기반 predecessor의 실존은 미검이다." 세 결과는 동일 가설의 독립 3검정이 아니라 **분석·합성·학습 경로에서 각각 확인된 세 종류의 horizon-extension 장애**(서로 다른 명제의 측정 — "3중 독립 증거" 표현 철회).
+- **연구축 2분리((qqq-1))**: **축1 = A2 하 접근 회랑 실존 검사** — trajectory optimization / MPC oracle / scripted corral / direct shooting(회랑을 확인하는 도구들). **축2 = 강한 공격자 하 MARL 필요성** — A3 cost-aware MPC → A4 exploiter → self-play(회랑 도구 아님 — 난도 상승축). A3를 회랑 질문과 같은 선택지로 배치하지 않는다.
+- **후보 경로(방향 결정 슬롯, 09 (qqq)/(qqq-1))**: ① 축1 회랑 실존 프로브(discovery) ② 축2 껍질 재무장(A3/4+1) ③ B-fork(공통 fallback). 어느 경로든 자산 불변: L1 재성형 + hybrid Level-3 자율화 + 세 종류 장애의 특성화(장애 각각의 명제 구분이 곧 논문의 정직성).
 
 **B 아웃라인 뼈대(사다리가 곧 논문 구조; 병행 준비 조항의 실체):**
 
