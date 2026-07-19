@@ -1,12 +1,20 @@
 """A-3e trajectory harvest -> rewind-v2 candidates (docs/21 v0.3 SS5 FROZEN;
-docs/09 (kkk)/(mmm)). SERVER script (loads P1' ckpts; torch via learned_fns).
+docs/09 (kkk)/(mmm)/(ppp)). SERVER script (loads ckpts; torch via learned_fns).
 
-Run ONLY after P1' PASS (stop rule 1). Per admissible d1 cell (v16, v20):
+HYBRID amendment (docs/09 (ppp), DISCOVERY mode, disclosed): P1' FAIL'd on
+the learned shot but the L1 shaping survived (hybrid sweep: guard converts
+it to autonomous capture). Harvest therefore runs on the HYBRID chain:
+learned limiter (per-seed hybrid-argmax tag, default j1_e1 -- the closest
+surviving snapshot to L1-exit; the "best" tag is a J1-corroded selection,
+obsolete under hybrid) + RULE GUARD fire (teacher_fire; == the terminal
+guard, obs-only). The policy finisher is NOT used anywhere.
+
+Per admissible d1 cell (v16, v20):
   spawns  = 50 sigma-materialised d1 spawns (jitter rng 300_000+1000*k+v,
             k=1, ONE stream per cell) SHARED by all 3 source policies (CRN);
             reset seeds 700..749; episode key = (cell, source, reset_seed).
-  rollout = each source seed's BEST ckpt (dev-selected; sealed untouched),
-            deterministic policy, full state/action recording.
+  rollout = each source seed's limiter ckpt (--tag) + guard fire,
+            deterministic, full state/action recording.
   success = arrival_capture AND the fire chain fired CLEAN.
   snapshot= t = F - k for k in {2,4,8} with t >= 1 (pre-commit by
             construction: commit == F; asserted). Stored state = limiter
@@ -162,6 +170,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default="configs/m3a_a3e_p1.yaml")
     ap.add_argument("--ckpt-root", default="results/m3a_a3e_p1")
+    ap.add_argument("--tag", default="j1_e1",
+                    help="limiter ckpt tag (hybrid argmax; docs/09 (ppp))")
     ap.add_argument("--out", default="results/a3e_rewind_candidates.json")
     ap.add_argument("--device", default="cpu")
     a = ap.parse_args()
@@ -180,14 +190,13 @@ def main():
         cells.setdefault(int(float(e["spawn"]["att_speed"])), []).append(e)
 
     lim_scale = np.full(3, 30.0, np.float32)      # limiter accel bound
-    axis_scale = np.ones(3, np.float32)
+    guard = _teacher_fin(theta)                   # HYBRID: rule guard fire
     policies = {}
     for s in SOURCES:
-        lf, ff, meta = learned_fns(pathlib.Path(a.ckpt_root) / f"seed{s}",
-                                   "best", a.device)
-        policies[s] = ((lambda o, f, _lf=lf: _lf(o, f, lim_scale)),
-                       (lambda o, f, _ff=ff: _ff(o, f, axis_scale)), meta)
-        print(f"source {s}: {meta}", flush=True)
+        lf, _ff, meta = learned_fns(pathlib.Path(a.ckpt_root) / f"seed{s}",
+                                    a.tag, a.device)
+        policies[s] = ((lambda o, f, _lf=lf: _lf(o, f, lim_scale)), meta)
+        print(f"source {s} tag={a.tag}: {meta}", flush=True)
 
     all_cands, stats = [], {"episodes": 0, "success": 0, "post_commit": 0}
     for v in sorted(cells):
@@ -206,10 +215,10 @@ def main():
                            "att_speed": float(e["att_speed"]),
                            "src": "a3e_harvest"})
         for s in SOURCES:
-            lf, ff, _ = policies[s]
+            lf, _m = policies[s]
             for j, seed in enumerate(A.HARVEST_SEEDS):
                 stats["episodes"] += 1
-                r = _traj_rollout(env_cfg, m3, spawns[j], seed, lf, ff,
+                r = _traj_rollout(env_cfg, m3, spawns[j], seed, lf, guard,
                                   record_steps=10_000)
                 chains = r["chains"]
                 clean_fire = any(c.get("clean") for c in chains)
@@ -254,7 +263,10 @@ def main():
     instrument_ok = (not inst_fail) and (rt2_ratio is not None
                                          and rt2_ratio < A.RT2_RATIO)
 
-    out = {"meta": {"doc": "docs/21 v0.3 SS5", "n_per_source": N_PER_SOURCE,
+    out = {"meta": {"doc": "docs/21 v0.3 SS5 + docs/09 (ppp) hybrid",
+                    "tag": a.tag,
+                    "fire": "rule guard (teacher_fire; hybrid)",
+                    "n_per_source": N_PER_SOURCE,
                     "sources": list(SOURCES),
                     "jitter_base": A.HARVEST_JIT_BASE,
                     "seeds": [A.HARVEST_SEEDS[0], A.HARVEST_SEEDS[-1]],

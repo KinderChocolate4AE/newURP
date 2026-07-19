@@ -88,6 +88,7 @@ python -m shepherd.scripts.a2_fire_mode_diagnosis \
 | A-3c U-1 (09 (nn)) | — | recoverability oracle (분석) | 108 스폰 × 32 후보 | — | — | — | — | **G0: r@2+ ≡ 0 (물리 지배)** — 1-step 껍질만 생존(σ0.02 최대 0.5) → A-3d 궤적-합성 후진으로 |
 | A-3d (09 (iii)) | NF | SBE bank v2 (2-게이트 오라클 + 4조건 σ-validation) | 생성 7/7(81 draws) → 독립 validation 7셀 | **admissible = d1 2셀뿐**; k≥2 전멸 [B] — PFC .61–.81 < .8 (v16/d2 .79 near-miss 1판; v24/d2는 [C·D] zero .39) | — (학습 미진입) | — | — | **특권 오라클도 σ-하 k≥2 도달 불가** — 벽 재정밀화: action-necessity(D 생존)가 아니라 폐형식 후방합성(off-manifold) 상태의 σ-강건 도달성; BANK FAIL 선언 → docs/20 재설계 분기 |
 | A-3e P1′ (09 (ooo)) | — | 3-phase F0/L1/J1 + d1-only bank + paired exit | 3-seed 파일럿 + sealed 1회 | **L1 = 캠페인 최초 재성형 학습**(Δ^teacher +.79/+.80/+.93, cap .81~.94, zero .017) / J1 = cap 0 ×3 즉사 | seeds 0/2 always-fire·seed 1 무발사 진동 | sealed Δ̂ 0.000 ×3 (P1_FAIL) | d0 1.00 | **F0(reset-clean 부트스트랩)가 always-fire 습관 주입 + 단발·발사=종결 구조의 조기 커밋이 성공 궤적 삭제 — 재성형 실패 아님, learned trigger 결합 실패 → hybrid(rule guard) 전환 근거** |
+| A-3e hybrid (09 (ppp), discovery) | — | learned limiter(j1_e1) + rule guard fire, dev 스윕 | 3-seed × 9태그, dev-only | **seed1 .775 (Δ̂ +.758, LCB +.692)**; seed0/2 .500; 가드 fire_clean ≈1.0·wasted ≈0·d0 1.00 — **Level 3(자율 대체) 달성** | J1 부식: seed0 →.008(e6)·seed1 →.25(e8)·seed2 flat(sha 상이) | dev-only (sealed 소진) | **brake/lam20+guard .858 > learned .775** | **가드 전환 성공 = claim ② 지지; 단 d1 단독으론 RL 불필요 실측(제4병목) → MAPPO 필요성은 rewind k≥2·A3+·4+1로 이동. 다음 = 수확(가드 발사·j1_e1)** |
 
 ## 7. 비준 체크리스트 (Hyunjun S-슬롯)
 

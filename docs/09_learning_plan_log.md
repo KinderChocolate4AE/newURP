@@ -302,6 +302,13 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-19 (ppp) — Discovery Arm A 판독: **hybrid 가드 검증 성공(Level 3 달성·dev)** / J1 부식 곡선 정량화 / **제4병목 실측 — brake+guard가 learned 상회** → 즉시 수확 진입(harvest hybrid 패치)
+
+- **스윕 결과**(origin d0fe2e9 · dev d1 120판 paired vs zero-cache · d0 40판): **seed1 j1_e1 = .775 (Δ̂ +.758, LCB95 +.692)**; seed0/2 j1_e1 = .500 (Δ̂ +.483, LCB +.408); zero .017. 가드 규율 완벽 — fire_clean ≈ .98–1.0, wasted ≈ 0, d0 1.00×3. → **학습된 협동 성형이 규칙 가드로 자율 포획 체인으로 전환됨 = claim ② discovery-수준 지지, 스캐폴드 Level 3(자율 대체) 달성.**
+- **J1 부식 곡선**(태그 스윕 j1_e1→e8): seed0 .500→.008(e6), seed1 .775→.25(e8), seed2 전 태그 .500 균일(ckpt sha 상이·행동 동일 — 이상 기록, 무해). j1_e1 = L1-exit 최근접 생존 스냅샷(L1-end ckpt 미저장 gap). L1 cap(.81/.82/.94) 대비 수치 갭은 가드가 아닌 **스냅샷 부식** 탓(seed1 .775 ≈ 자기 L1 cap .82; seed0/2는 j1_e1 시점에 이미 부식). J1-선정 "best" 태그는 hybrid 하 폐기.
+- **제4병목(RL-필요성) 실측** — sandbox dev post-hoc(공개: 동일 dev d1 120판·동일 가드·부트스트랩 777): **brake+guard .858 (Δ̂ +.842, LCB +.783) ≒ lam20+guard .858 > learned 최고 .775.** 단일 공격자 d1 포획에는 **학습이 불필요함이 실측** — docs/20 §6 진단 그대로. MAPPO 필요성 시험대 = ① rewind k≥2(claims ladder ③; validate 12 arms에 brake/lam20 내장 → 직접 비교 예정) ② A3+ 공격자 ③ 4+1 협동.
+- **결정(지시 이행)**: fire-head 튜닝 종료 유지 → **즉시 수확**. `a3e_harvest.py` hybrid 패치: fire = 규칙 가드(teacher_fire·정책 finisher 미사용), `--tag` 기본 j1_e1(per-seed hybrid argmax = 전 시드 j1_e1), 소스 3-seed 유지(성공률 .78/.50/.50 → 셀당 150판 충분). "P1′ PASS 후에만" 전제는 (ooo) hybrid 경로로 대체(discovery·공개 기록). 다음 = 서버 수확 → screen → validation+comparator → k=2 pooled 판정.
+
 ### 2026-07-19 (ooo) — P1′ 판독: **L1 = 캠페인 최초 재성형 학습(양성)** / J1 = learned trigger 결합 실패 → **hybrid 아키텍처 전환 + 2-모드 연구 프로토콜 비준** (docs/20 v0.3 §6-보론)
 
 - **결과**(서버 `54a9bf8`; sealed 소진 완료): F0 = captured 1.00 ×3(2-eval 즉시 통과) / **L1 = Δ^teacher +.79/+.80/+.93, cap .81/.82/.94**(zero-캐시 .017; P(fire|clean) .87–.99, P(fire|nonclean) .03–.16, P(cap|¬reset-clean) .73–.94) — **action-necessary 스폰에서 리미터가 행동으로 clean을 만든 최초 증거, A-3b spawn-luck 천장 돌파(Tier 1)** / J1 = 전 seed cap 0.00 ×8 evals·추세 없음·gate 정확히 −.017(=0−2/120) / sealed = Δ̂ 0.000 ×3, **P1_FAIL 공식 기록**(d0 1.00).
