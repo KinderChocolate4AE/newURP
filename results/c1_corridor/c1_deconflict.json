@@ -1,0 +1,121 @@
+{
+ "seed": 1100,
+ "fire_step": 11,
+ "deploy_steps": 8,
+ "axial_to_attacker": 10.999999999988999,
+ "net_radius": 2.0,
+ "arms": {
+  "cem_tail": {
+   "min_clearance": {
+    "narrow": -0.07253149355222827,
+    "nominal": -0.6778170149379024,
+    "conservative": -1.719001088915029
+   },
+   "intersects": {
+    "narrow": true,
+    "nominal": true,
+    "conservative": true
+   },
+   "first_cross": {
+    "narrow": 13,
+    "nominal": 12,
+    "conservative": 11
+   },
+   "risky_limiter": {
+    "narrow": 0,
+    "nominal": 1,
+    "conservative": 0
+   },
+   "min_v_soft_deploy": 0.0,
+   "tags": {
+    "narrow": "FF_RISK_NARROW",
+    "nominal": "FF_RISK_NOMINAL",
+    "conservative": "FF_RISK_CONSERVATIVE"
+   }
+  },
+  "hold": {
+   "min_clearance": {
+    "narrow": -0.011888997878534924,
+    "nominal": -0.661335002663757,
+    "conservative": -1.680912443487698
+   },
+   "intersects": {
+    "narrow": true,
+    "nominal": true,
+    "conservative": true
+   },
+   "first_cross": {
+    "narrow": 13,
+    "nominal": 12,
+    "conservative": 11
+   },
+   "risky_limiter": {
+    "narrow": 0,
+    "nominal": 1,
+    "conservative": 0
+   },
+   "min_v_soft_deploy": 0.0,
+   "tags": {
+    "narrow": "FF_RISK_NARROW",
+    "nominal": "FF_RISK_NOMINAL",
+    "conservative": "FF_RISK_CONSERVATIVE"
+   }
+  },
+  "radial": {
+   "min_clearance": {
+    "narrow": 0.018505908204982158,
+    "nominal": -0.5449529507475611,
+    "conservative": -1.6519170620756862
+   },
+   "intersects": {
+    "narrow": false,
+    "nominal": true,
+    "conservative": true
+   },
+   "first_cross": {
+    "narrow": null,
+    "nominal": 12,
+    "conservative": 11
+   },
+   "risky_limiter": {
+    "narrow": 0,
+    "nominal": 0,
+    "conservative": 0
+   },
+   "min_v_soft_deploy": 0.0,
+   "tags": {
+    "narrow": "FF_SAFE_NARROW",
+    "nominal": "FF_RISK_NOMINAL",
+    "conservative": "FF_RISK_CONSERVATIVE"
+   }
+  },
+  "lateral_behind": {
+   "min_clearance": {
+    "narrow": -0.03435707198054416,
+    "nominal": -0.5613129498213885,
+    "conservative": -1.726131280065973
+   },
+   "intersects": {
+    "narrow": true,
+    "nominal": true,
+    "conservative": true
+   },
+   "first_cross": {
+    "narrow": 14,
+    "nominal": 12,
+    "conservative": 11
+   },
+   "risky_limiter": {
+    "narrow": 0,
+    "nominal": 0,
+    "conservative": 0
+   },
+   "min_v_soft_deploy": 0.0,
+   "tags": {
+    "narrow": "FF_RISK_NARROW",
+    "nominal": "FF_RISK_NOMINAL",
+    "conservative": "FF_RISK_CONSERVATIVE"
+   }
+  }
+ }
+}

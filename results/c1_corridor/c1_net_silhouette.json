@@ -1,0 +1,60 @@
+{
+ "operating_point": [
+  45.0,
+  60.0,
+  35.0
+ ],
+ "net_radius_equiv_engage": 1.997609529883393,
+ "lateral_support": {
+  "max": 2.2440803245081367,
+  "p95": 2.146461689386165,
+  "p50": 1.6711644651474147,
+  "mean": 1.5263836704657863
+ },
+ "directional_sectors_max": {
+  "-180:-120": 2.221855348068091,
+  "-120:-60": 2.1679215044259093,
+  "-60:0": 2.189479292824411,
+  "0:59": 2.093115115826943,
+  "59:120": 2.2440803245081367,
+  "120:180": 2.1296729273518347
+ },
+ "isotropy_note": "sectors ~2.09-2.24 -> near-isotropic, no thin escape dir",
+ "Req_vs_travel_FLAGGED": {
+  "3": 2.933655018500068,
+  "5": 2.9305901941004984,
+  "7": 2.9107061127172327,
+  "10": 2.8346341007094025,
+  "15": 2.5258841022195595,
+  "20": 1.9974564766742633
+ },
+ "temporal_caveat": "early S_NP over-stated by flat-init (n1 D-notes); engage(20m) snapshot is the anchored value",
+ "boxers": {
+  "L0": {
+   "off_axis_m": 1.82,
+   "inside_at_Rmin_grounded": true,
+   "inside_at_Rmax_directional": true,
+   "verdict": "INSIDE"
+  },
+  "L1": {
+   "off_axis_m": 2.11,
+   "inside_at_Rmin_grounded": false,
+   "inside_at_Rmax_directional": true,
+   "verdict": "borderline"
+  },
+  "L2": {
+   "off_axis_m": 1.94,
+   "inside_at_Rmin_grounded": true,
+   "inside_at_Rmax_directional": true,
+   "verdict": "INSIDE"
+  },
+  "L3": {
+   "off_axis_m": 2.16,
+   "inside_at_Rmin_grounded": false,
+   "inside_at_Rmax_directional": true,
+   "verdict": "borderline"
+  }
+ },
+ "case": "C_unsafe",
+ "summary": "2/4 boxers inside at Rmin=2.00m; 4/4 inside directional Rmax=2.24m -> C_unsafe"
+}

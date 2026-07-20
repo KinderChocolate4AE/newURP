@@ -1,0 +1,41 @@
+{
+ "seed": 1100,
+ "fire_step": 11,
+ "deploy_steps": 8,
+ "window": [
+  11,
+  19
+ ],
+ "axial_to_attacker": 10.999999999988999,
+ "net_radius": 2.0,
+ "cone_half_deg": 3.838817227376516,
+ "envelopes": {
+  "narrow": {
+   "half_angle_deg": 3.838817227376516,
+   "tube_radius": 0.0,
+   "min_friendly_clearance_m": -0.07253149355222827,
+   "intersects": true,
+   "first_cross_step": 13,
+   "risky_limiter": 0,
+   "tag": "FF_RISK_NARROW"
+  },
+  "nominal": {
+   "half_angle_deg": 10.304846468776116,
+   "tube_radius": 0.0,
+   "min_friendly_clearance_m": -0.6778170149379024,
+   "intersects": true,
+   "first_cross_step": 12,
+   "risky_limiter": 1,
+   "tag": "FF_RISK_NOMINAL"
+  },
+  "conservative": {
+   "half_angle_deg": 10.304846468776116,
+   "tube_radius": 2.0,
+   "min_friendly_clearance_m": -1.719001088915029,
+   "intersects": true,
+   "first_cross_step": 11,
+   "risky_limiter": 0,
+   "tag": "FF_RISK_CONSERVATIVE"
+  }
+ }
+}
