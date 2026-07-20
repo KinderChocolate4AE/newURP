@@ -1,0 +1,54 @@
+{
+ "meta": {
+  "stage": "robust",
+  "theta": 0.9,
+  "finisher": "point_at_attacker",
+  "rng_base": 332000000,
+  "tiers": "R1 exact / R2 local basin / R3 attacker / R4 feedback realizability"
+ },
+ "corral_fresh": {
+  "cfg_idx": 1,
+  "params": {
+   "pattern": "press2_block2",
+   "d_lead": 2.4928945398315014,
+   "d_back": 1.701919096514854,
+   "R0": 3.0467632714336004,
+   "R1": 0.10989610701838648,
+   "t_shrink0": 11.690784342737231,
+   "shrink_len": 17.75319843924792,
+   "phi0": 0.07824044665716885,
+   "kp": 3.984597931416869,
+   "kd": 1.2374447753660018,
+   "vmatch": 0.6547957285730402
+  },
+  "fresh_band": [
+   1200,
+   1249
+  ],
+  "summary": {
+   "n": 50,
+   "shell_reached_rate": 0.0,
+   "n_shell_reached": 0,
+   "guard_fired_rate": 0.0,
+   "local_capture_rate": 0.0,
+   "mission_capture_rate": 0.0,
+   "eligible_rate": 0.0,
+   "n_eligible": 0,
+   "sustained_rate": 0.0,
+   "single_frame_rate": 0.0,
+   "M_v_given_pfeas_mean": 0.2158865812420845,
+   "M_v_given_pfeas_max": 0.23043130338191986,
+   "M_p_given_vsoft_max": 0.0,
+   "M_joint_max": -Infinity,
+   "max_v_soft_mean": 1.0,
+   "max_v_soft_max": 1.0,
+   "boxed_shell_rate": 10.0,
+   "penetrated_rate": 0.0,
+   "wasted_mean": 0.0,
+   "len_mean": 80.0,
+   "first_eligible_steps": [],
+   "score_mean": -999920000.0
+  }
+ },
+ "cem": []
+}
