@@ -1,0 +1,880 @@
+{
+ "meta": {
+  "theta": 0.9,
+  "r_body": 0.2,
+  "m_safety": 0.2,
+  "r_net0": 2.24,
+  "eta_def": "r_kill_eff/(r_net_dir+r_body+m_safety)",
+  "current_eta": 0.7575757575757575,
+  "rng_base": 370000000,
+  "realizable_core": {
+   "r_kill_max": 2.6,
+   "r_net_min": 2.0
+  },
+  "seed": 1100,
+  "moveB_verdict_carried": [
+   "HISTORY_COMMITMENT_KINEMATICS_CONFIRMED",
+   "CASE_B_CAPTURE_NOT_VALIDATED",
+   "GROUNDED_LOWER_BOUND_FAIL",
+   "TEMPORAL_PREMISE_UNRESOLVED"
+  ],
+  "folded_track": "PARALLEL, does not block A0; full Move C opens only when a grounded folded model shows R_cap>=R_req at the 10 m crossing",
+  "pop": 36,
+  "iters": 12
+ },
+ "phys_manifest": {
+  "r_kill_eff": {
+   "meaning": "limiter terminal-effector neutralization radius (kinetic/net-gun/proximity)",
+   "unit": "m",
+   "baseline": 2.0,
+   "realizable_range": [
+    2.0,
+    2.6
+   ],
+   "beyond": "2.6-3.0 needs heavier payload/charge -> diagnostic"
+  },
+  "r_net_dir": {
+   "meaning": "finisher deployed-net directional lateral reach = friendly-lane half-width AND capture aperture (coupled)",
+   "unit": "m",
+   "baseline": 2.24,
+   "realizable_range": [
+    2.0,
+    2.24
+   ],
+   "beyond": "<2.0 over-collimated (large aperture loss) -> diagnostic",
+   "coupling": "capture theta_net *= r_net_dir/2.24; aperture area loss = 1-(r_net_dir/2.24)^2"
+  },
+  "r_body": {
+   "meaning": "limiter airframe half-span (rotor tip)",
+   "unit": "m",
+   "baseline": 0.2,
+   "range": [
+    0.2,
+    0.4
+   ]
+  },
+  "m_safety": {
+   "meaning": "net-lane engineering safety buffer (net billow, position/timing uncertainty)",
+   "unit": "m",
+   "baseline": 0.2
+  },
+  "eta": {
+   "def": "r_kill_eff / (r_net_dir + r_body + m_safety)"
+  }
+ },
+ "picks": {
+  "current": [
+   2.0,
+   2.24
+  ],
+  "just_above_boundary": [
+   2.6,
+   2.1
+  ],
+  "feasible_interior": [
+   2.6,
+   2.0
+  ],
+  "boundary_band": [
+   [
+    2.6,
+    2.24
+   ],
+   [
+    2.6,
+    2.1
+   ],
+   [
+    2.3,
+    2.0
+   ]
+  ]
+ },
+ "geometry_grid": [
+  {
+   "r_kill": 2.0,
+   "r_net_dir": 2.24,
+   "eta": 0.7575757575757575,
+   "realizable": true,
+   "aperture_loss": 0.0,
+   "lane": 2.6400000000000006,
+   "safe_exists": false,
+   "capture_margin": 0.1597444089456869,
+   "clearance_margin": -0.8208504612927967,
+   "p_cap": null,
+   "p_feas": null,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     1.7944952249526978,
+     -0.2984827160835266
+    ],
+    [
+     9.009516716003418,
+     -0.1860363483428955,
+     2.0992050170898438
+    ],
+    [
+     7.8603034019470215,
+     -1.8561911582946777,
+     -0.555666446685791
+    ],
+    [
+     6.978150844573975,
+     1.244879126548767,
+     -1.7632185220718384
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.1597444089456869,
+    "clearance_margin": -0.8208504612927967
+   },
+   "diagnostic_only": false
+  },
+  {
+   "r_kill": 2.0,
+   "r_net_dir": 2.1,
+   "eta": 0.7999999999999998,
+   "realizable": true,
+   "aperture_loss": 0.12109375,
+   "lane": 2.5000000000000004,
+   "safe_exists": false,
+   "capture_margin": 0.1597444089456869,
+   "clearance_margin": -0.6808504612927966,
+   "p_cap": null,
+   "p_feas": null,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     1.7944952249526978,
+     -0.2984827160835266
+    ],
+    [
+     9.009516716003418,
+     -0.1860363483428955,
+     2.0992050170898438
+    ],
+    [
+     7.8603034019470215,
+     -1.8561911582946777,
+     -0.555666446685791
+    ],
+    [
+     6.978150844573975,
+     1.244879126548767,
+     -1.7632185220718384
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.1597444089456869,
+    "clearance_margin": -0.6808504612927966
+   },
+   "diagnostic_only": false
+  },
+  {
+   "r_kill": 2.0,
+   "r_net_dir": 2.0,
+   "eta": 0.8333333333333333,
+   "realizable": true,
+   "aperture_loss": 0.20280612244897966,
+   "lane": 2.4000000000000004,
+   "safe_exists": false,
+   "capture_margin": 0.1597444089456869,
+   "clearance_margin": -0.5808504612927965,
+   "p_cap": null,
+   "p_feas": null,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     1.7944952249526978,
+     -0.2984827160835266
+    ],
+    [
+     9.009516716003418,
+     -0.1860363483428955,
+     2.0992050170898438
+    ],
+    [
+     7.8603034019470215,
+     -1.8561911582946777,
+     -0.555666446685791
+    ],
+    [
+     6.978150844573975,
+     1.244879126548767,
+     -1.7632185220718384
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.1597444089456869,
+    "clearance_margin": -0.5808504612927965
+   },
+   "diagnostic_only": false
+  },
+  {
+   "r_kill": 2.0,
+   "r_net_dir": 1.8,
+   "eta": 0.9090909090909091,
+   "realizable": false,
+   "aperture_loss": 0.35427295918367363,
+   "lane": 2.2,
+   "safe_exists": false,
+   "capture_margin": 0.1597444089456869,
+   "clearance_margin": -0.3808504612927963,
+   "p_cap": null,
+   "p_feas": null,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     1.7944952249526978,
+     -0.2984827160835266
+    ],
+    [
+     9.009516716003418,
+     -0.1860363483428955,
+     2.0992050170898438
+    ],
+    [
+     7.8603034019470215,
+     -1.8561911582946777,
+     -0.555666446685791
+    ],
+    [
+     6.978150844573975,
+     1.244879126548767,
+     -1.7632185220718384
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.1597444089456869,
+    "clearance_margin": -0.3808504612927963
+   },
+   "diagnostic_only": true
+  },
+  {
+   "r_kill": 2.3,
+   "r_net_dir": 2.24,
+   "eta": 0.871212121212121,
+   "realizable": true,
+   "aperture_loss": 0.0,
+   "lane": 2.6400000000000006,
+   "safe_exists": false,
+   "capture_margin": 0.1996805111821086,
+   "clearance_margin": -0.38218912067349065,
+   "p_cap": null,
+   "p_feas": null,
+   "active_limiter_geometry": [
+    [
+     8.168442356985416,
+     2.38433631228114,
+     -0.01616377955678716
+    ],
+    [
+     8.594559066100244,
+     -0.705313156571332,
+     2.1448177819974665
+    ],
+    [
+     7.1743119321813085,
+     -2.22663246439501,
+     -1.0233597965277244
+    ],
+    [
+     6.633739734901407,
+     0.7755362403349902,
+     -2.1219695281763906
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.1996805111821086,
+    "clearance_margin": -0.38218912067349065
+   },
+   "diagnostic_only": false
+  },
+  {
+   "r_kill": 2.3,
+   "r_net_dir": 2.1,
+   "eta": 0.9199999999999998,
+   "realizable": true,
+   "aperture_loss": 0.12109375,
+   "lane": 2.5000000000000004,
+   "safe_exists": false,
+   "capture_margin": 0.3194888178913738,
+   "clearance_margin": -0.3137787523235276,
+   "p_cap": null,
+   "p_feas": null,
+   "active_limiter_geometry": [
+    [
+     7.282019214691222,
+     2.140703493477804,
+     -0.44379262815418613
+    ],
+    [
+     8.629722443438776,
+     0.24897738935805128,
+     2.3906032608289034
+    ],
+    [
+     7.296613990559329,
+     -2.3232618696320326,
+     -0.6177915675118163
+    ],
+    [
+     7.254534242170862,
+     0.27377550775413884,
+     -2.2420943893097647
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.3194888178913738,
+    "clearance_margin": -0.3137787523235276
+   },
+   "diagnostic_only": false
+  },
+  {
+   "r_kill": 2.3,
+   "r_net_dir": 2.0,
+   "eta": 0.9583333333333331,
+   "realizable": true,
+   "aperture_loss": 0.20280612244897966,
+   "lane": 2.4000000000000004,
+   "safe_exists": false,
+   "capture_margin": 0.1996805111821086,
+   "clearance_margin": -0.1408098437076455,
+   "p_cap": null,
+   "p_feas": null,
+   "active_limiter_geometry": [
+    [
+     7.313297754752189,
+     2.2609204350881162,
+     0.359209711661487
+    ],
+    [
+     8.116824461553188,
+     0.6133269199393103,
+     2.259909546963119
+    ],
+    [
+     8.013047654482726,
+     -2.1642512761113926,
+     -0.8508633674193804
+    ],
+    [
+     7.249397436955883,
+     0.790966056333675,
+     -2.1162024619625193
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.1996805111821086,
+    "clearance_margin": -0.1408098437076455
+   },
+   "diagnostic_only": false
+  },
+  {
+   "r_kill": 2.3,
+   "r_net_dir": 1.8,
+   "eta": 1.0454545454545452,
+   "realizable": false,
+   "aperture_loss": 0.35427295918367363,
+   "lane": 2.2,
+   "safe_exists": true,
+   "capture_margin": 0.5191693290734823,
+   "clearance_margin": 0.09999999999999964,
+   "p_cap": 1.0,
+   "p_feas": 0.005191693290734824,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     2.2688288838114636,
+     -0.3773797768598981
+    ],
+    [
+     9.009516716003418,
+     -0.20303550695692754,
+     2.29102086042767
+    ],
+    [
+     7.8603034019470215,
+     -2.203389154199399,
+     -0.6596030891046946
+    ],
+    [
+     6.978150844573975,
+     1.3265522039558364,
+     -1.8788984140128255
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.5191693290734823,
+    "clearance_margin": 0.09999999999999964
+   },
+   "diagnostic_only": true
+  },
+  {
+   "r_kill": 2.6,
+   "r_net_dir": 2.24,
+   "eta": 0.9848484848484846,
+   "realizable": true,
+   "aperture_loss": 0.0,
+   "lane": 2.6400000000000006,
+   "safe_exists": false,
+   "capture_margin": null,
+   "clearance_margin": null,
+   "p_cap": null,
+   "p_feas": null,
+   "active_limiter_geometry": null,
+   "best_pareto": {
+    "capture_margin": null,
+    "clearance_margin": null
+   },
+   "diagnostic_only": false
+  },
+  {
+   "r_kill": 2.6,
+   "r_net_dir": 2.1,
+   "eta": 1.0399999999999998,
+   "realizable": true,
+   "aperture_loss": 0.12109375,
+   "lane": 2.5000000000000004,
+   "safe_exists": true,
+   "capture_margin": 0.5191693290734823,
+   "clearance_margin": 0.0999999999999992,
+   "p_cap": 1.0,
+   "p_feas": 0.005191693290734824,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     2.564763086047742,
+     -0.426603226015537
+    ],
+    [
+     9.009516716003418,
+     -0.22951839916870073,
+     2.58984966830954
+    ],
+    [
+     7.8603034019470215,
+     -2.4907877395297557,
+     -0.7456382746400896
+    ],
+    [
+     6.978150844573975,
+     1.4995807522979023,
+     -2.1239721201884114
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.5191693290734823,
+    "clearance_margin": 0.0999999999999992
+   },
+   "diagnostic_only": false
+  },
+  {
+   "r_kill": 2.6,
+   "r_net_dir": 2.0,
+   "eta": 1.0833333333333333,
+   "realizable": true,
+   "aperture_loss": 0.20280612244897966,
+   "lane": 2.4000000000000004,
+   "safe_exists": true,
+   "capture_margin": 0.5191693290734823,
+   "clearance_margin": 0.1999999999999993,
+   "p_cap": 1.0,
+   "p_feas": 0.005191693290734824,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     2.564763086047742,
+     -0.426603226015537
+    ],
+    [
+     9.009516716003418,
+     -0.22951839916870073,
+     2.58984966830954
+    ],
+    [
+     7.8603034019470215,
+     -2.4907877395297557,
+     -0.7456382746400896
+    ],
+    [
+     6.978150844573975,
+     1.4995807522979023,
+     -2.1239721201884114
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.5191693290734823,
+    "clearance_margin": 0.1999999999999993
+   },
+   "diagnostic_only": false
+  },
+  {
+   "r_kill": 2.6,
+   "r_net_dir": 1.8,
+   "eta": 1.1818181818181817,
+   "realizable": false,
+   "aperture_loss": 0.35427295918367363,
+   "lane": 2.2,
+   "safe_exists": true,
+   "capture_margin": 0.5191693290734823,
+   "clearance_margin": 0.39999999999999947,
+   "p_cap": 1.0,
+   "p_feas": 0.005191693290734824,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     2.564763086047742,
+     -0.426603226015537
+    ],
+    [
+     9.009516716003418,
+     -0.22951839916870073,
+     2.58984966830954
+    ],
+    [
+     7.8603034019470215,
+     -2.4907877395297557,
+     -0.7456382746400896
+    ],
+    [
+     6.978150844573975,
+     1.4995807522979023,
+     -2.1239721201884114
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.5191693290734823,
+    "clearance_margin": 0.39999999999999947
+   },
+   "diagnostic_only": true
+  },
+  {
+   "r_kill": 3.0,
+   "r_net_dir": 2.24,
+   "eta": 1.136363636363636,
+   "realizable": false,
+   "aperture_loss": 0.0,
+   "lane": 2.6400000000000006,
+   "safe_exists": true,
+   "capture_margin": 0.5191693290734823,
+   "clearance_margin": 0.359999999999999,
+   "p_cap": 1.0,
+   "p_feas": 0.005191693290734824,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     2.959342022362779,
+     -0.4922344915563889
+    ],
+    [
+     9.009516716003418,
+     -0.2648289221177316,
+     2.9882880788187003
+    ],
+    [
+     7.8603034019470215,
+     -2.873985853303564,
+     -0.8603518553539495
+    ],
+    [
+     6.978150844573975,
+     1.7302854834206562,
+     -2.4507370617558593
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.5191693290734823,
+    "clearance_margin": 0.359999999999999
+   },
+   "diagnostic_only": true
+  },
+  {
+   "r_kill": 3.0,
+   "r_net_dir": 2.1,
+   "eta": 1.1999999999999997,
+   "realizable": false,
+   "aperture_loss": 0.12109375,
+   "lane": 2.5000000000000004,
+   "safe_exists": true,
+   "capture_margin": 0.5191693290734823,
+   "clearance_margin": 0.4999999999999991,
+   "p_cap": 1.0,
+   "p_feas": 0.005191693290734824,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     2.959342022362779,
+     -0.4922344915563889
+    ],
+    [
+     9.009516716003418,
+     -0.2648289221177316,
+     2.9882880788187003
+    ],
+    [
+     7.8603034019470215,
+     -2.873985853303564,
+     -0.8603518553539495
+    ],
+    [
+     6.978150844573975,
+     1.7302854834206562,
+     -2.4507370617558593
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.5191693290734823,
+    "clearance_margin": 0.4999999999999991
+   },
+   "diagnostic_only": true
+  },
+  {
+   "r_kill": 3.0,
+   "r_net_dir": 2.0,
+   "eta": 1.2499999999999998,
+   "realizable": false,
+   "aperture_loss": 0.20280612244897966,
+   "lane": 2.4000000000000004,
+   "safe_exists": true,
+   "capture_margin": 0.5191693290734823,
+   "clearance_margin": 0.5999999999999992,
+   "p_cap": 1.0,
+   "p_feas": 0.005191693290734824,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     2.959342022362779,
+     -0.4922344915563889
+    ],
+    [
+     9.009516716003418,
+     -0.2648289221177316,
+     2.9882880788187003
+    ],
+    [
+     7.8603034019470215,
+     -2.873985853303564,
+     -0.8603518553539495
+    ],
+    [
+     6.978150844573975,
+     1.7302854834206562,
+     -2.4507370617558593
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.5191693290734823,
+    "clearance_margin": 0.5999999999999992
+   },
+   "diagnostic_only": true
+  },
+  {
+   "r_kill": 3.0,
+   "r_net_dir": 1.8,
+   "eta": 1.3636363636363635,
+   "realizable": false,
+   "aperture_loss": 0.35427295918367363,
+   "lane": 2.2,
+   "safe_exists": true,
+   "capture_margin": 0.5191693290734823,
+   "clearance_margin": 0.7999999999999994,
+   "p_cap": 1.0,
+   "p_feas": 0.005191693290734824,
+   "active_limiter_geometry": [
+    [
+     7.458545207977295,
+     2.959342022362779,
+     -0.4922344915563889
+    ],
+    [
+     9.009516716003418,
+     -0.2648289221177316,
+     2.9882880788187003
+    ],
+    [
+     7.8603034019470215,
+     -2.873985853303564,
+     -0.8603518553539495
+    ],
+    [
+     6.978150844573975,
+     1.7302854834206562,
+     -2.4507370617558593
+    ]
+   ],
+   "best_pareto": {
+    "capture_margin": 0.5191693290734823,
+    "clearance_margin": 0.7999999999999994
+   },
+   "diagnostic_only": true
+  }
+ ],
+ "theta_slice": [
+  {
+   "r_kill": 2.6,
+   "r_net_dir": 2.24,
+   "theta": 0.9,
+   "eta": 0.9848484848484846,
+   "safe_exists": false,
+   "capture_margin": null,
+   "clearance_margin": null
+  },
+  {
+   "r_kill": 2.6,
+   "r_net_dir": 2.24,
+   "theta": 0.875,
+   "eta": 0.9848484848484846,
+   "safe_exists": false,
+   "capture_margin": 0.050000000000000044,
+   "clearance_margin": -4.440892098500626e-16
+  },
+  {
+   "r_kill": 2.6,
+   "r_net_dir": 2.24,
+   "theta": 0.85,
+   "eta": 0.9848484848484846,
+   "safe_exists": false,
+   "capture_margin": 0.30000000000000027,
+   "clearance_margin": -4.440892098500626e-16
+  },
+  {
+   "r_kill": 2.6,
+   "r_net_dir": 2.1,
+   "theta": 0.9,
+   "eta": 1.0399999999999998,
+   "safe_exists": true,
+   "capture_margin": 0.5191693290734823,
+   "clearance_margin": 0.0999999999999992
+  },
+  {
+   "r_kill": 2.6,
+   "r_net_dir": 2.1,
+   "theta": 0.875,
+   "eta": 1.0399999999999998,
+   "safe_exists": true,
+   "capture_margin": 0.5191693290734823,
+   "clearance_margin": 0.0999999999999992
+  },
+  {
+   "r_kill": 2.6,
+   "r_net_dir": 2.1,
+   "theta": 0.85,
+   "eta": 1.0399999999999998,
+   "safe_exists": true,
+   "capture_margin": 0.5191693290734823,
+   "clearance_margin": 0.0999999999999992
+  },
+  {
+   "r_kill": 2.3,
+   "r_net_dir": 2.0,
+   "theta": 0.9,
+   "eta": 0.9583333333333331,
+   "safe_exists": false,
+   "capture_margin": 0.11980830670926516,
+   "clearance_margin": -0.14391679002553381
+  },
+  {
+   "r_kill": 2.3,
+   "r_net_dir": 2.0,
+   "theta": 0.875,
+   "eta": 0.9583333333333331,
+   "safe_exists": false,
+   "capture_margin": null,
+   "clearance_margin": null
+  },
+  {
+   "r_kill": 2.3,
+   "r_net_dir": 2.0,
+   "theta": 0.85,
+   "eta": 0.9583333333333331,
+   "safe_exists": false,
+   "capture_margin": 0.1597444089456869,
+   "clearance_margin": -0.2080004147114276
+  }
+ ],
+ "dynamic_g3": [
+  {
+   "cell": "current",
+   "r_kill": 2.0,
+   "r_net_dir": 2.24,
+   "eta": 0.7575757575757575,
+   "warm": {
+    "tier": 2,
+    "E_safe": false,
+    "m_clear": -2.3590010889150292
+   },
+   "standoff_ring": {
+    "best_tier": 0,
+    "E_safe": false,
+    "E_capture": false,
+    "E_lane": false,
+    "m_clear": null,
+    "fire_step": null,
+    "M_capture": null
+   },
+   "dynamic_safe": false
+  },
+  {
+   "cell": "just_above_boundary",
+   "r_kill": 2.6,
+   "r_net_dir": 2.1,
+   "eta": 1.0399999999999998,
+   "warm": {
+    "tier": 2,
+    "E_safe": false,
+    "m_clear": -2.219001088915029
+   },
+   "standoff_ring": {
+    "best_tier": 0,
+    "E_safe": false,
+    "E_capture": false,
+    "E_lane": false,
+    "m_clear": null,
+    "fire_step": null,
+    "M_capture": null
+   },
+   "dynamic_safe": false
+  },
+  {
+   "cell": "feasible_interior",
+   "r_kill": 2.6,
+   "r_net_dir": 2.0,
+   "eta": 1.0833333333333333,
+   "warm": {
+    "tier": 2,
+    "E_safe": false,
+    "m_clear": -2.119001088915029
+   },
+   "standoff_ring": {
+    "best_tier": 0,
+    "E_safe": false,
+    "E_capture": false,
+    "E_lane": false,
+    "m_clear": null,
+    "fire_step": null,
+    "M_capture": null
+   },
+   "dynamic_safe": false
+  }
+ ],
+ "readout": {
+  "verdict": "A0_TERMINAL_FEASIBLE_DYNAMIC_UNSOLVED",
+  "note": "realizable cells pass the TERMINAL gate at eta>1 (a static safe placement exists, engage-independent, cap>0 AND clearance>0) but no CHEAP dynamic corridor reaches tier>=4: the E1 warm replay CROWDS limiters to perp~0.3 (old-eta trajectory), and a standoff ring tracking at radius r_kill is too SPARSE to seal the box (never fires). eta>1 resolves the STATIC box/clear tension, but the DYNAMIC challenge -- track the moving attacker AND seal the escape gaps AND hold perp>=lane -- is unmet by cheap controllers. -> barrier is TRAJECTORY-level; next = focused dynamic co-design (a sealing standoff formation / post-fire deconfliction (zzz) / MARL) at the identified realizable cells (2.6/2.0-2.1) before the full sweep. NOT a blind sweep.",
+  "cold_beats_warm": false,
+  "n_realizable_terminal_safe": 2,
+  "n_gate_pass": 0,
+  "gate_cells": [],
+  "terminal_safe_cells": [
+   [
+    2.6,
+    2.1
+   ],
+   [
+    2.6,
+    2.0
+   ]
+  ]
+ }
+}
