@@ -54,6 +54,7 @@ R_NET0 = 2.24
 S_V, S_P = 0.1, 0.01
 RNG_A1_BASE = 380_000_000
 DT = 0.05
+LANE_W = 2.0            # arm-S lane-clearance guidance weight (search guidance only; 0 = off)
 
 
 def _override(E, r_kill, r_net_dir):
@@ -303,11 +304,14 @@ def _traj_metrics(pe, acts, fin, cell, seed=1100):
 
 def _aux_cost(m, cell):
     """Search-guidance auxiliary cost (arm S), NEVER the verdict: pull toward the
-    standoff band (perp~r_kill), angular sealing (small max gap), and firing."""
+    standoff band (perp~r_kill), angular sealing (small max gap), firing, AND a clear
+    net lane (perp>=lane -> no friendly limiter in the shot corridor at fire)."""
     rd = m["radial_dev"] if not np.isnan(m["radial_dev"]) else 3.0
     ag = m["max_angular_gap_deg"] if not np.isnan(m["max_angular_gap_deg"]) else 360.0
     no_fire = 1.0 if m["fire_step"] is None else 0.0
-    return 1.0 * rd + 0.01 * ag + 2.0 * no_fire
+    clr = m["clearance_margin"]
+    lane = max(0.0, -clr) if clr is not None else 0.0   # penalize lane intrusion (clr<0)
+    return 1.0 * rd + 0.01 * ag + 2.0 * no_fire + LANE_W * lane
 
 
 def a1b_arm(pe, E, cell, warm_knots, rng, *, arm, pop=8, iters=4, t_open=14, knots=6):
@@ -545,6 +549,7 @@ def a1b(pe, E, cell, P=None, att_p=None, att_v=None, *, pop=24, iters=15, t_open
 
 
 def main():
+    global LANE_W
     ap = argparse.ArgumentParser()
     ap.add_argument("--stage", default="a1a", choices=("a1a", "a1b", "both"))
     ap.add_argument("--a0", default="results/c1_corridor/c1_moveA0.json")
@@ -556,7 +561,10 @@ def main():
                     help="run the backward horizon ladder diagnostic (a1b)")
     ap.add_argument("--horizons", default="2,4,6,8,10",
                     help="comma-separated ladder rung horizons (steps back from terminal)")
+    ap.add_argument("--lane-weight", type=float, default=LANE_W, dest="lane_weight",
+                    help="arm-S lane-clearance guidance weight (0 = baseline, no lane term)")
     a = ap.parse_args()
+    LANE_W = a.lane_weight
     env_cfg, m3, theta = _load("configs/m3a_a3e_p1.yaml")
     pe = ProbeEnv(env_cfg, m3)
     E = pe.ad.env
@@ -570,7 +578,8 @@ def main():
                     "pre-commit); verdict on exact replay: capture>0, grounded lane "
                     "clearance>=0, no penetration",
                     "a1b_run": {"pop": a.pop, "iters": a.iters, "t_open": a.t_open,
-                                "ladder": a.ladder, "horizons": a.horizons}},
+                                "ladder": a.ladder, "horizons": a.horizons,
+                                "lane_weight": a.lane_weight}},
            "cells": []}
     for cell in (PRIMARY, SECONDARY):
         c0 = next(c for c in d["geometry_grid"]
