@@ -302,6 +302,59 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-21 (gggg) — ✅ Move A0 물리-접지 terminal 경계 probe → **판정 = A0_TERMINAL_FEASIBLE_DYNAMIC_UNSOLVED** — η>1(realizable 2.6/2.0-2.1)서 terminal safe 실존(engage-무관)이나 dynamic corridor 미해결(barrier = trajectory-level)
+
+- **채택**: 사용자 지시(A0 boundary probe, full sweep 아님). Move B 판정 4개 carried: HISTORY_COMMITMENT_KINEMATICS_CONFIRMED / CASE_B_CAPTURE_NOT_VALIDATED / GROUNDED_LOWER_BOUND_FAIL / TEMPORAL_PREMISE_UNRESOLVED. θ=0.9 **고정**(pt1, geometry+judge 동시완화 금지). 산출 = `shepherd/scripts/c1_moveA0_probe.py`(+`_plot.py`) + `results/c1_corridor/c1_moveA0.{json,png}`. Case A·E1 불변.
+- **보정 η(pt2, body+safety 필수)**: **η = r_kill_eff / (r_net_dir + r_body 0.2 + m_safety 0.2)**. 친사 lane = r_net_dir+0.4(bare net 아님). ⇒ 현재점 정직한 **η=0.758**(naive 0.89 아님).
+- **물리 manifest(pt3, 자유 knob 아님)**: r_kill_eff = limiter 종말 effector 무력화 반경(realizable 2.0-2.6). r_net_dir = net directional reach = **친사 lane AND capture aperture(결합)** — 축소=더 collimated net, capture aperture도 축소(theta_net *= r_net/2.24; **apLoss=1-(r_net/2.24)²**). r_body=airframe 반경(0.2). m_safety=lane 안전버퍼(0.2). realizable core = r_kill≤2.6 ∧ r_net≥2.0.
+- **terminal grid 4×4(pt4-6, Case A)**: r_kill{2.0,2.3,2.6,3.0}×r_net_dir{2.24,2.10,2.00,1.80}, seed-1100 boxer init CEM. **η<1 전부 unsafe; η>1서 terminal safe 실존.** **realizable-safe = (2.6,2.1)η1.04 · (2.6,2.0)η1.08**(cap 0.52, clr +0.1/+0.2, **apLoss 12-20%, p_feas thin 0.005**). 경계 η≈1(0.958 fail·0.985 fail·1.04 safe). safe shell = **perp≈r_kill**(narrow ~0.1m: perp<r_kill over-box p_feas→0=clean 아님, perp≫r_kill v_soft 붕괴) → η=r_kill/lane≥1 경계 유도됨. **η만으로 판정 안 함**(apLoss 병기).
+- **θ-slice(pt8, boundary cell만 0.90/0.875/0.85)**: (2.6,2.1) θ 전부 safe(robust); (2.6,2.24)η0.985 θ완화도 clr~0(경계 못 넘음); (2.3,2.0)η0.958 θ무관 fail. ⇒ 결속축 = **η(clearance)**, θ 아님(dddd 2요인 중 여기선 η 지배).
+- **dynamic G3(pt7, warm+standoff-ring, per-cell kill_radius/cone override)**: current·boundary·interior 3셀 **전부 tier<4 fail**. warm(E1 replay) m_clear −2.1~−2.4(E1이 perp~0.3 crowd=old-η 궤적). standoff ring(track@r_kill) **never fires**(4-ring sparse, gap seal 실패). ⇒ **η>1이 STATIC box/clear 긴장은 해소하나 DYNAMIC(이동 attacker track + escape gap seal + perp≥lane 동시)은 cheap controller로 미해결.**
+- **판정 = A0_TERMINAL_FEASIBLE_DYNAMIC_UNSOLVED**: 성공게이트(pt9: realizable cell서 cap>0 ∧ clr>0 ∧ dynamic safe replay 동시) **미충족**(dynamic fail). ⇒ **full sweep+MARL blind 진입 금지**(pt10). 단 **terminal feasible interior 확인** → 다음 = 식별 셀(2.6/2.0-2.1)서 **focused dynamic co-design**(sealing standoff formation / post-fire deconfliction (zzz) / MARL), blind sweep 아님.
+- **folded track(pt10)**: 병행 유지, A0 block 안 함. full Move C = grounded folded R_cap≥R_req@10m 시에만.
+- **다음(선택)**: ⓐ **focused dynamic co-design**(sealing standoff 궤적 설계, (2.6,2.0-2.1)서 tier≥4 탐색; 성공 시 full dynamic sweep+MARL 개방) vs ⓑ **folded-deployment 모델**(init='folded' 구현, (ffff) 전제 최종해소). 사용자 판단.
+
+### 2026-07-21 (ffff) — ✅ N1 temporal grounding: (eeee) 전제 검증 → **판정 = CONDITIONAL(Move C sensitivity + Move A 병행)** — grounded lower bound 미달(R_cap 1.00 < R_req 1.26 @crossing), 통과는 비물리 flat-init뿐
+
+- **채택**: 사용자 지시(2026-07-21). 목표 = net_forward 초기 silhouette를 그대로 capture로 간주하지 말고, seed 1100 crossing(travel~10m/τ*0.19s)서 net이 **실제 capture-effective**한지 검증. 산출 = `shepherd/scripts/n1_temporal.py`(+`_plot.py`) + `results/c1_corridor/n1_temporal.{json,png}`; Move A skeleton = `c1_moveA_codesign.py` + `c1_moveA_eta.json`. Case A·E1 불변.
+- **방법**: net_forward mesh snapshot(travel 5/7.5/10/12.5/15/20m; model 불변, building block 재사용). metric = max support·**connected axis inradius**·aperture·anisotropy·silhouette area·axial depth·centroid speed·**folding ratio**. **R_geom(silhouette) vs R_cap(capture-effective) 분리**. 3 band: **upper**(flat-init silhouette)/**nominal**(connected inradius, flat IC)/**lower**(folded-opening = net_radius·travel/engage, inradius cap).
+- **중심 캐비앗**: net은 **flat(완전개방) launch 후 붕괴** = 실제(folded→개방)의 **정반대**. ⇒ pre-engage silhouette는 **과대평가**; net_forward는 **engage(20m)서만** Xu-anchored(rho_air 보정). init='folded' = **NotImplementedError**(미구현). folding 1.00·anisotropy 1.05·depth 0.27→3.19 = flat-init mesh는 coherent(등방·무balling)이나 **그 IC 자체가 비물리**.
+- **R_req(τ*=0.19s)** = 횡offset 0.08 + |v_perp|·τ(0.285) + ½·30·τ²(0.54) + uncertainty(0.2~0.5) = **1.11~1.41m**(nom 1.26).
+- **결과(crossing travel 10m)**: R_cap **lower=1.00 < R_req(전 uncertainty sweep 1.11~1.41) = FAIL**; nominal=2.59·upper=2.83(통과하나 flat-init 낙관·비-grounded). retention_plausible=True(depth 1.0>0.5·연결 aperture; 단 heuristic, Xu는 coverage/hang만 검증). fail 여유 작음(1.00 vs 1.11) → net 개방이 linear보다 조금만 빨라도 뒤집힘 = folded 모델이 결정적.
+- **판정 = CONDITIONAL_MOVE_C_SENSITIVITY + MOVE_A 병행**: grounded lower bound 미달 → **Case B 미승격**(사용자 pt8: lower 또는 grounded nominal 통과 시만; nominal 통과는 flat-init 낙관이라 미인정). ⇒ **Move C = sensitivity 보류**, **Move A(engage-무관 η>1) 병행**. 전제 최종 해소 = **실제 folded-deployment net 모델(init='folded') 구현**(N1 human-lane).
+- **Move A skeleton(사용자 pt10)**: static **η=r_kill/r_net_eff=2.0/2.24=0.893**; η≥1 도달 = r_kill **+0.24**(→2.24) 또는 r_net_eff **−0.24**(→2.00). η는 필요-불충분(dddd 2요인). **full sweep 보류**(NotImplementedError gate).
+- **다음(선택)**: ⓐ **folded-deployment net 모델(init='folded') 구현** → 전제 최종 해소(Move C 확정/기각; N1 물리 확장) vs ⓑ **Move A full sweep 착수**(net/kill η>1 co-design, engage-무관·즉시 실행 가능). 사용자 판단 대기.
+
+### 2026-07-21 (eeee) — ✅ Move B: capturability-PERSISTENCE 반사실 진단 → **판정 = PREMISE_NET_TEMPORAL**(history-dependent 포획 REAL이나 net 조기전개 전제 하에서만; wall↔history가 단일 미검증 전제로 환원)
+
+- **채택**: 사용자 지시(2026-07-21). **diagnostic ONLY** — Case-A instantaneous judge·E1 불변, Case-B는 gate 양성 시에만 공식화 후보(사용자 pt7). 산출 = `shepherd/scripts/c1_persistence.py`(+`_plot.py`) + `results/c1_corridor/c1_persistence.{json,png}` + `tests/test_c1_persistence.py`(6 green).
+- **재정의 질문(사용자)**: "crowded eligible state가 dynamic tube서 포획?"이 아니라 — limiter가 net lane을 **비우기 시작(release)한 뒤**에도 이전 shaping이 만든 attacker velocity/heading **commitment**가 deployment window 동안 capturability를 **유지**하는가.
+- **설계**: seed 1100 exact replay(manifest = acts/obs md5 + t6..10 snapshot). release t∈{6..10} × branch{cem_tail·hold·radial·lateral_behind·greedy_clear} × evaluator{Case A instantaneous / Case B-phys bounded-accel reachable tube / Case B-A2 realized policy path}. net = **net_forward swept cone**(front=cum_travel(τ), 접지 se3 cone half-angle=Case-A와 동일) + **moving-limiter no-go**. gate = min_friendly_clearance≥0(G3 (bbbb) convention, 유지) AND Case-B p_cap>0.
+- **기전 확인(probe)**: 발사 시 attacker offset **0.08m(축 위)**·v=[−20,1.5](20 m/s 접근); net front가 attacker 축거리 도달 **τ*≈0.19s(~4/8 step)**. Case-A 적격성 = **boxing**(p_feas 0.97→**1.6e-3**@t10→0@t11), net cone 사실상 무관 = 순간기하(A). 조기 crossing이라 worst-case 횡기동(½·30·τ*²≈0.34m)도 crossing-range cone 못 벗어남 = velocity-commitment 채널.
+- **이중 경계(결정적)**: **(판별성)** null control(v를 축-수직 회전) → p_cap **1.00(축-commit) vs 0.00(null)** = metric 정상. **(optimistic**, cone launch부터 유효**)** p_cap≈1, gate 통과 **t6 {radial,lateral_behind,greedy_clear}**(min_clear +0.03~+0.38). **(engaged**, net이 20m engage서만 유효 포획자**)** p_cap=**0 전부** — median capture travel **9.2~11.7m ≪ engage 20m**. fresh-CRN Δp_cap 0.001; capture(step~11) < penetration(step~22) 선행(관통이 결과 뒤집지 않음).
+- **판정 = PREMISE_NET_TEMPORAL**: history-dependent(velocity-commitment) 포획은 **REAL·robust**(null 판별·CRN 안정·persistence ~0.3s)하나 **오직 "net이 ~10m travel(engage의 절반)서 유효 포획자인가"라는 N1-flagged 미검증 조기전개 전제 하에서만**. ⇒ wall vs history-dependence가 **단일 전제**로 환원. blind Move C/A 아님 — **다음 = net 시간전개(조기 reach) grounding**(N1 temporal)이 그 전제를 해소.
+- **persistence(그림 b)**: velocity-commitment window **~0.3s**(delay 0-5 capture alive + lane clear, delay6 붕괴). 그림 = (a) capture-clearance Pareto (b) persistence curve (c) capture-travel vs engage 전제.
+- **캐비앗(plan §18)**: engaged 경계(20m 이진 open)는 보수적, optimistic(cone launch)은 낙관 — 진실은 사이(부분개방 cone 0.74m@11m), 그 gap이 곧 전제. seed 1개(일반화 미검). "impossible" 금지 → "tested solver가 engage 전 유효 포획 미확인/전제 미해소". Case-B 공식 judge 승격 = **engaged gate 통과 시에만(현재 미통과)**.
+- **다음(선택)**: ⓐ **N1 temporal grounding**(net 조기 reach 검증 → 전제 해소; 성공 시 Case-B 승격→Move C corridor 두껍게) vs ⓑ 병행 **Move A**(net/kill 반경 co-design η>1, engage-무관 경로). 사용자 지시 대기.
+
+### 2026-07-19 (dddd) — ✅ Terminal operating-envelope map (plan §9-10): safe cell 0/25(θ=0.9, η 0.38–2.08) + θ-slice → 장벽 = **2요인(radius ratio η × capture-quality θ)**, 단일 η 아님
+
+- **채택**: 외부 plan(deployment_safe_capture_operating_envelope) 확인·실행. 산출 = `shepherd/scripts/c1_envelope.py` + `results/c1_corridor/c1_envelope.json`. Case A(순간기하 지배) = (xxx) drop-one으로 확인(발사 시 boxer 제거→v_soft 붕괴) → 기하 필요조건 r_kill≥r_net_eff tight.
+- **terminal map**(seed 1100 eligible 고정, 4-limiter placement CEM, kill_radius=r_kill 가변, v_soft≥θ∧p_feas>0∧lateral clear≥r_net_eff): (r_kill,r_net_eff) 5×5 그리드(α∈{.6,.8,1,1.2,1.4}) **θ=0.9서 safe 0/25** — η=2.08까지도 미발견. 단 terminal clear는 dynamic보다 나음(known boxers terminal −0.42m vs G3 dynamic −1.85m; G3 −1.85 = post-fire 추격 = plan §12 dynamic barrier).
+- **θ-slice(plan §14.1, 결정적)**: (r_kill2.4/r_net1.79, η1.34)서 θ 0.9~0.6 safe 없음 → **θ=0.5서 safe-eligible 열림(mcap .28)**; 현재점(η0.89) 어떤 θ도 안 열림. **⇒ η>1 = 필요조건이나 불충분; capture-quality(θ + 얇은 cone)가 2번째 결속.** 안전=η>1 AND θ 완화 동시. 현 grounded 점(η0.89·θ0.9) = 두 축 모두 밖.
+- **refined finding(논문)**: crowding 기반 net-capture shaping의 deployment-safe operating envelope는 **kill/net 반경비 η와 capture-quality θ(cone)에 의해 공동 bounded**; 현 설계점은 밖. plan의 단일-η 경계보다 정확(2D envelope). = [[project_moat_disclosure_strategy]] (b) 작동영역.
+- **캐비앗(plan §18 규율)**: placement CEM noisy(특정 셀 방향성만; 2.8/1.34가 θ.5서 미개방 = 탐색 분산). 깔끔한 논문 그림엔 **analytic 경계(r_kill≥r_net_eff + cone-masking 조건) + 검증된 solver** 필요(plan P1-P2 정련). "impossible" 표현 금지 — "tested solver 미발견/envelope 밖".
+- **다음(선택)**: ⓐ envelope 정련(analytic 경계 유도 + solver 강화 + θ×η 2D heatmap = 논문 Figure 3) vs ⓑ 현 확보분으로 학회 논문 집필 착수(L0 학습+hybrid 포획+E1 회랑+grounded 제약+envelope 방향성). 산출 = c1_envelope.py·c1_envelope.json.
+
+### 2026-07-19 (cccc) — ✅ G3 판독: **NOT_FOUND_UNDER_TESTED_G3 확정 — compress-clear Pareto가 disjoint·구조적**(kill_radius≈net_radius) → task-design 민감도 = usability envelope 결과
+
+- **결과**(서버 `cc71495`; local warm seed1100 + cold 광역 13seed): **양 arm best_tier=2·n_tier4plus=0.** capture 잡은 전 해(Tier 2)에서 **m_clear −1.85~−2.28m**(안전선 m_clear≥0까지 ~2m 갭 = near-miss 아님); **수천 rollout 중 E_capture∧E_lane 동시 만족 = 0.** cold 절반은 capture 미도달(Tier 1, warm 없인 얇은 회랑 못 찾음).
+- **판정**: CEM에 전 horizon(pre-fire 압축+post-fire 비우기) 자유를 줬는데도 0 → **제어 전략 한계 아닌 구조적**. **compress–clear Pareto가 disjoint.** 원인 = **kill_radius(2.0)≈net_radius(2.24)**: 탈출을 막을 만큼 가까운(≤kill_r) limiter는 필연적으로 net lane(≤net_r) 안. "압축할 만큼 가까움"="net에 걸림"이 파라미터에 내재. (m_clear −2 → 전개창 중 최악 limiter가 축에서 ~0.6m = post-fire 공격자 추격이 축으로 수렴.)
+- **발견(논문 자산)**: "crowding 기반 capturability 제조 협력 shaping은 kill_radius≈net_radius regime에서 **deployment-infeasible**(친사 교차 불가피)." E1(추상 모델 회랑 실존) + 이 grounded 제약 = 자기완결 finding. [[project_moat_disclosure_strategy]] (b) 작동영역 산출물 직결.
+- **다음(리뷰 §15·doctrine 분기 — 종결 아님)**: **task-design 민감도 스윕** = kill_radius / net_radius(및 비율)·finisher standoff·θ·horizon을 변화시켜 **compress–clear가 양립하는 regime(operating envelope) 지도** 산출. 저비용(기하 + 몇 파라미터점 G3 재평가). = usability envelope 결과 = 두 학회 논문 그림 재료. MARL 필요성/일반화는 그 위에서 재개.
+- **논문 정합(현 스코프)**: 항우 학회 = 문제·그물물리 접지·회랑 존재/제약·operating envelope(방어/GNC); AI 학회 = MARL 협력 shaping·hybrid·회랑 존재(학습). 현 확보분(L0 학습+hybrid 포획+E1 회랑+grounded 제약+envelope 스윕)으로 두 편 자기완결.
+- 산출 = results/c1_corridor/{g3,g3_cold}/c1_g3_search.json.
+
 ### 2026-07-19 (bbbb) — ✅ G3 deployment-aware CEM 구현 (net-lane clearance + safe-fire 분리 + 5-tier) — 배선 스모크 green(E1 winner=Tier 2 확정), 본 탐색 = 서버 대기
 
 - **채택**(외부 "G3 decision"): G3 즉시 착수 + human-lane 병행. 산출 = `shepherd/scripts/c1_g3_deploy.py` + `tests/test_c1_g3.py`(6 green, E1 winner=Tier 2 통합락 포함).

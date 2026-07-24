@@ -1,0 +1,16 @@
+{
+ "current": {
+  "r_kill": 2.0,
+  "r_net_eff": 2.24,
+  "eta": 0.8928571428571428,
+  "theta": 0.9
+ },
+ "analytic_boundary": "eta = r_kill / r_net_eff = 1 (necessary, docs/09 (dddd))",
+ "deltas_to_eta1": {
+  "raise_r_kill_to": 2.24,
+  "d_r_kill": 0.2400000000000002,
+  "shrink_r_net_eff_to": 2.0,
+  "d_r_net_eff": -0.2400000000000002
+ },
+ "note": "eta axis is necessary-not-sufficient (docs/09 (dddd) 2-factor envelope: also needs theta relaxed). Move A pairs an eta>1 design with a theta-relaxation check on the SAME envelope. Engage-independent (unlike Move C / the (ffff) net-temporal premise)."
+}

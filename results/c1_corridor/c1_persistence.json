@@ -1,0 +1,3749 @@
+{
+ "meta": {
+  "seed": 1100,
+  "release_times": [
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "branches": [
+   "cem_tail",
+   "hold",
+   "radial",
+   "lateral_behind",
+   "greedy_clear"
+  ],
+  "n_samp": 2000,
+  "rng_base": 360000000,
+  "R_LANE": 2.24,
+  "R_BODY": 0.2,
+  "engage_dist": 20.0,
+  "capture_judge": "grounded se3 cone (env cone_half_angle), SWEPT (front=net_forward cum_travel); consistent with Case-A cone",
+  "gate": "min_friendly_clearance>=0 (sustained, G3 (bbbb) convention) AND Case-B p_cap>0; optimistic=cone-from-launch, engaged=net travel>=engage at capture",
+  "note_diagnostic": "does NOT replace Case-A judge or E1 (user pt7); Case-B formalization only if gate passes under the engaged bound"
+ },
+ "manifest": {
+  "seed": 1100,
+  "cem_json": "results/c1_corridor/cem_warm/c1_cem.json",
+  "acts_md5": "00d14548938bf282a0f28962b7f9ac4e",
+  "obs_md5": "ff864f81cf302b38d4f2dbb84b1c9ad8",
+  "fire_step": 11,
+  "len": 21,
+  "n_dep": 8,
+  "dt": 0.05,
+  "env": {
+   "tau_deploy": 0.4,
+   "a_att_max": 30.0,
+   "kill_radius": 2.0,
+   "cone_half_angle": 0.067,
+   "cone_range_max": 29.847,
+   "theta": 0.9,
+   "net_radius": 2.0
+  },
+  "net_sweep": {
+   "net_radius_engage": 1.997609529883393,
+   "front@0.15s": 8.223796985642384,
+   "r_sil@0.15s": 2.889044992985942,
+   "R_LANE": 2.24,
+   "R_BODY": 0.2
+  },
+  "snapshots": {
+   "6": {
+    "limiters_p": [
+     [
+      8.025572776794434,
+      3.6087303161621094,
+      -0.2692406475543976
+     ],
+     [
+      8.892017364501953,
+      0.05821724608540535,
+      3.8041889667510986
+     ],
+     [
+      8.34207820892334,
+      -3.5466556549072266,
+      -0.17701564729213715
+     ],
+     [
+      7.805721759796143,
+      0.4083205759525299,
+      -3.6841721534729004
+     ]
+    ],
+    "limiters_v": [
+     [
+      -0.555904746055603,
+      -7.444385528564453,
+      -1.069281816482544
+     ],
+     [
+      3.566413164138794,
+      -0.057918574661016464,
+      -6.566562652587891
+     ],
+     [
+      0.7597928643226624,
+      7.540322303771973,
+      -1.1177341938018799
+     ],
+     [
+      -1.702113389968872,
+      2.5357236862182617,
+      7.277360916137695
+     ]
+    ],
+    "att_p": [
+     18.0,
+     0.0,
+     0.0
+    ],
+    "att_v": [
+     -20.0,
+     0.0,
+     0.0
+    ],
+    "apex": [
+     2.0,
+     0.0,
+     0.0
+    ],
+    "nF": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "v_soft": 0.06828465312719345,
+    "p_feas": 0.9708466529846191
+   },
+   "7": {
+    "limiters_p": [
+     [
+      7.952193260192871,
+      3.203975200653076,
+      -0.3042433261871338
+     ],
+     [
+      9.010760307312012,
+      0.03205433115363121,
+      3.4366936683654785
+     ],
+     [
+      8.316695213317871,
+      -3.1513993740081787,
+      -0.24841275811195374
+     ],
+     [
+      7.671901226043701,
+      0.5680481195449829,
+      -3.2737560272216797
+     ]
+    ],
+    "limiters_v": [
+     [
+      -1.4675981998443604,
+      -8.095101356506348,
+      -0.7000532150268555
+     ],
+     [
+      2.3748457431793213,
+      -0.5232583284378052,
+      -7.349905490875244
+     ],
+     [
+      -0.507674515247345,
+      7.90512228012085,
+      -1.427942156791687
+     ],
+     [
+      -2.67641019821167,
+      3.1945512294769287,
+      8.20832347869873
+     ]
+    ],
+    "att_p": [
+     17.0,
+     0.0,
+     0.0
+    ],
+    "att_v": [
+     -20.0,
+     0.0,
+     0.0
+    ],
+    "apex": [
+     2.0,
+     0.0,
+     0.0
+    ],
+    "nF": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "v_soft": 0.06790123134851456,
+    "p_feas": 0.7763578295707703
+   },
+   "8": {
+    "limiters_p": [
+     [
+      7.833228588104248,
+      2.7666842937469482,
+      -0.3207845389842987
+     ],
+     [
+      9.069924354553223,
+      -0.01737557165324688,
+      3.030031204223633
+     ],
+     [
+      8.227937698364258,
+      -2.737903356552124,
+      -0.33532026410102844
+     ],
+     [
+      7.489366054534912,
+      0.7607170939445496,
+      -2.8167917728424072
+     ]
+    ],
+    "limiters_v": [
+     [
+      -2.379291534423828,
+      -8.745818138122559,
+      -0.330824613571167
+     ],
+     [
+      1.1832784414291382,
+      -0.9885980486869812,
+      -8.133248329162598
+     ],
+     [
+      -1.775141954421997,
+      8.269922256469727,
+      -1.7381501197814941
+     ],
+     [
+      -3.650707244873047,
+      3.8533787727355957,
+      9.139286994934082
+     ]
+    ],
+    "att_p": [
+     16.0,
+     0.0,
+     0.0
+    ],
+    "att_v": [
+     -20.0,
+     0.0,
+     0.0
+    ],
+    "apex": [
+     2.0,
+     0.0,
+     0.0
+    ],
+    "nF": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "v_soft": 0.09624796360731125,
+    "p_feas": 0.48961660265922546
+   },
+   "9": {
+    "limiters_p": [
+     [
+      7.668679237365723,
+      2.2968575954437256,
+      -0.3188643455505371
+     ],
+     [
+      9.069509506225586,
+      -0.09007246047258377,
+      2.5842015743255615
+     ],
+     [
+      8.075807571411133,
+      -2.3061673641204834,
+      -0.43773818016052246
+     ],
+     [
+      7.258115768432617,
+      0.9863274097442627,
+      -2.313279151916504
+     ]
+    ],
+    "limiters_v": [
+     [
+      -3.290984869003296,
+      -9.396533966064453,
+      0.038403987884521484
+     ],
+     [
+      -0.00828893855214119,
+      -1.4539377689361572,
+      -8.91659164428711
+     ],
+     [
+      -3.042609453201294,
+      8.634722709655762,
+      -2.048358201980591
+     ],
+     [
+      -4.625004291534424,
+      4.512206077575684,
+      10.070249557495117
+     ]
+    ],
+    "att_p": [
+     15.0,
+     0.0,
+     0.0
+    ],
+    "att_v": [
+     -20.0,
+     0.0,
+     0.0
+    ],
+    "apex": [
+     2.0,
+     0.0,
+     0.0
+    ],
+    "nF": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "v_soft": 0.2136363685131073,
+    "p_feas": 0.17571884393692017
+   },
+   "10": {
+    "limiters_p": [
+     [
+      7.458545207977295,
+      1.7944952249526978,
+      -0.2984827160835266
+     ],
+     [
+      9.009516716003418,
+      -0.1860363483428955,
+      2.0992050170898438
+     ],
+     [
+      7.8603034019470215,
+      -1.8561911582946777,
+      -0.555666446685791
+     ],
+     [
+      6.978150844573975,
+      1.244879126548767,
+      -1.7632185220718384
+     ]
+    ],
+    "limiters_v": [
+     [
+      -4.202678203582764,
+      -10.047249794006348,
+      0.40763258934020996
+     ],
+     [
+      -1.1998562812805176,
+      -1.919277548789978,
+      -9.699934005737305
+     ],
+     [
+      -4.310076713562012,
+      8.99952220916748,
+      -2.3585660457611084
+     ],
+     [
+      -5.599301338195801,
+      5.17103385925293,
+      11.001212120056152
+     ]
+    ],
+    "att_p": [
+     14.0,
+     0.0,
+     0.0
+    ],
+    "att_v": [
+     -20.0,
+     0.0,
+     0.0
+    ],
+    "apex": [
+     2.0,
+     0.0,
+     0.0
+    ],
+    "nF": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "v_soft": 1.0,
+    "p_feas": 0.00159744406118989
+   }
+  }
+ },
+ "grid": [
+  {
+   "t_rel": 6,
+   "branch": "cem_tail",
+   "axial_len": 15.999999999983999,
+   "att_offaxis0": 3.200284481863491e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.06828465312719345,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.06828465312719345,
+    0.06790123134851456,
+    0.09624796360731125,
+    0.2136363685131073,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 0.9985,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 11.687232113859517,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.25,
+   "min_friendly_clearance": -2.159001088915029,
+   "clearance_t": [
+    1.1110703842463698,
+    0.72117492601911,
+    0.3183608301555056,
+    -0.1211146460829709,
+    -0.6208504612927963,
+    -1.1321076370910468,
+    -1.6524310235296011,
+    -2.159001088915029,
+    -2.0812771352014674
+   ],
+   "safe_capture_overlap": 3,
+   "persistence_alive_steps": 5,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 0.9995,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 1.1110703842463698,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.72117492601911,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.3183608301555056,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.1211146460829709,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.21,
+     "clearance": -0.6208504612927963,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.1321076370910468,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.6524310235296011,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.159001088915029,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.0812771352014674,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0004999999999999449,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 6,
+   "branch": "hold",
+   "axial_len": 15.999999999983999,
+   "att_offaxis0": 3.200284481863491e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.06828465312719345,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.06828465312719345,
+    0.06666667014360428,
+    0.08721359819173813,
+    0.11401425302028656,
+    0.130952388048172,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 0.9994997498749375,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 11.687232113859517,
+   "p_feas_B": 0.9995,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.25,
+   "min_friendly_clearance": -1.620871748023373,
+   "clearance_t": [
+    1.1110703842463698,
+    0.7381848002739535,
+    0.36751561270209726,
+    7.368845055361062e-05,
+    -0.3624282985038881,
+    -0.7168698177641026,
+    -1.057039545578772,
+    -1.3692474844459706,
+    -1.620871748023373
+   ],
+   "safe_capture_overlap": 4,
+   "persistence_alive_steps": 4,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.999,
+     "clearance": 1.1110703842463698,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.7381848002739535,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.36751561270209726,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.724,
+     "clearance": 7.368845055361062e-05,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.3624282985038881,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.7168698177641026,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.057039545578772,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.3692474844459706,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.620871748023373,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 23,
+   "freshCRN_dpcap": 0.0010005002501251026,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 6,
+   "branch": "radial",
+   "axial_len": 15.999999999983999,
+   "att_offaxis0": 3.200284481863491e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.06828465312719345,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.06828465312719345,
+    0.06401552259922028,
+    0.07095610350370407,
+    0.05860805884003639,
+    0.031562335789203644,
+    0.016934800893068314,
+    0.00958466436713934,
+    0.005990415345877409,
+    0.00319488812237978
+   ],
+   "p_cap_B_phys": 0.9995,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 11.687232113859517,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.25,
+   "min_friendly_clearance": 0.38339872266784053,
+   "clearance_t": [
+    1.1110703842463698,
+    0.8131644358721928,
+    0.5922866212524427,
+    0.44890415970380654,
+    0.38339872266784053,
+    0.39597093183995175,
+    0.48658073170527566,
+    0.6549602285172005,
+    0.9006892203166996
+   ],
+   "safe_capture_overlap": 6,
+   "persistence_alive_steps": 6,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 0.9975,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 1.1110703842463698,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.8131644358721928,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.5922866212524427,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.44890415970380654,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.38339872266784053,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.9185,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.39597093183995175,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.48658073170527566,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.6549602285172005,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.9006892203166996,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 22,
+   "freshCRN_dpcap": 0.0010000000000000009,
+   "gate_B_phys_optimistic": true,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": true,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 6,
+   "branch": "lateral_behind",
+   "axial_len": 15.999999999983999,
+   "att_offaxis0": 3.200284481863491e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.06828465312719345,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.06828465312719345,
+    0.06435885280370712,
+    0.07458912581205368,
+    0.07002188265323639,
+    0.04304160550236702,
+    0.027045300230383873,
+    0.014285714365541935,
+    0.007006071973592043,
+    0.0032284099142998457
+   ],
+   "p_cap_B_phys": 0.999,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 11.687232113859517,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.25,
+   "min_friendly_clearance": 0.03075720300238477,
+   "clearance_t": [
+    1.1110703842463698,
+    0.7912034268897703,
+    0.5264495831460712,
+    0.31741054557300535,
+    0.16473370671675508,
+    0.06902941741650775,
+    0.03075720300238477,
+    0.050120575746992635,
+    0.12701510585710202
+   ],
+   "safe_capture_overlap": 6,
+   "persistence_alive_steps": 6,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 0.9995,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 1.1110703842463698,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.7912034268897703,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.5264495831460712,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.31741054557300535,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.16473370671675508,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.9305,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.06902941741650775,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.03075720300238477,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.050120575746992635,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.12701510585710202,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 22,
+   "freshCRN_dpcap": 0.000500000000000056,
+   "gate_B_phys_optimistic": true,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": true,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 6,
+   "branch": "greedy_clear",
+   "axial_len": 15.999999999983999,
+   "att_offaxis0": 3.200284481863491e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.06828465312719345,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.06828465312719345,
+    0.06401552259922028,
+    0.07095610350370407,
+    0.05860805884003639,
+    0.031562335789203644,
+    0.016934800893068314,
+    0.00958466436713934,
+    0.005990415345877409,
+    0.00319488812237978
+   ],
+   "p_cap_B_phys": 0.9989994997498749,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 11.687232113859517,
+   "p_feas_B": 0.9995,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.25,
+   "min_friendly_clearance": 0.38339872266784053,
+   "clearance_t": [
+    1.1110703842463698,
+    0.8131644358721928,
+    0.5922866212524427,
+    0.44890415970380654,
+    0.38339872266784053,
+    0.39597093183995175,
+    0.48658073170527566,
+    0.6549602285172005,
+    0.9006892203166996
+   ],
+   "safe_capture_overlap": 6,
+   "persistence_alive_steps": 6,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 0.9979989994997499,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.9995,
+     "clearance": 1.1110703842463698,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.8131644358721928,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.5922866212524427,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.44890415970380654,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.38339872266784053,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.912,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.39597093183995175,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.48658073170527566,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.6549602285172005,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.9006892203166996,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 22,
+   "freshCRN_dpcap": 5.002501251016866e-07,
+   "gate_B_phys_optimistic": true,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": true,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 7,
+   "branch": "cem_tail",
+   "axial_len": 14.999999999984999,
+   "att_offaxis0": 3.000266701747023e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.06790123134851456,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.06790123134851456,
+    0.09624796360731125,
+    0.2136363685131073,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 11.201722188348132,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.25,
+   "min_friendly_clearance": -2.159001088915029,
+   "clearance_t": [
+    0.72117492601911,
+    0.3183608301555056,
+    -0.1211146460829709,
+    -0.6208504612927963,
+    -1.1321076370910468,
+    -1.6524310235296011,
+    -2.159001088915029,
+    -2.0812771352014674,
+    -1.5386864654163344
+   ],
+   "safe_capture_overlap": 2,
+   "persistence_alive_steps": 4,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.72117492601911,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.3183608301555056,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.1211146460829709,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.225,
+     "clearance": -0.6208504612927963,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.1321076370910468,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.6524310235296011,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.159001088915029,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.0812771352014674,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.5386864654163344,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 7,
+   "branch": "hold",
+   "axial_len": 14.999999999984999,
+   "att_offaxis0": 3.000266701747023e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.06790123134851456,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.06790123134851456,
+    0.09328063577413559,
+    0.15311004221439362,
+    0.26249998807907104,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 11.201722188348132,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.25,
+   "min_friendly_clearance": -1.912591911279357,
+   "clearance_t": [
+    0.72117492601911,
+    0.3346359052422973,
+    -0.046920040493592385,
+    -0.42066638227771574,
+    -0.793961163129737,
+    -1.1662030654408537,
+    -1.509528478473564,
+    -1.7773541416661887,
+    -1.912591911279357
+   ],
+   "safe_capture_overlap": 2,
+   "persistence_alive_steps": 3,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.72117492601911,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.3346359052422973,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.8365,
+     "clearance": -0.046920040493592385,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.42066638227771574,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.793961163129737,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.1662030654408537,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.509528478473564,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.7773541416661887,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.912591911279357,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 23,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 7,
+   "branch": "radial",
+   "axial_len": 14.999999999984999,
+   "att_offaxis0": 3.000266701747023e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.06790123134851456,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.06790123134851456,
+    0.0854453295469284,
+    0.08847926557064056,
+    0.05524861812591553,
+    0.030188679695129395,
+    0.013208585791289806,
+    0.006190672516822815,
+    0.00319488812237978,
+    0.002396166091784835
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 11.201722188348132,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.25,
+   "min_friendly_clearance": -0.06103452905857126,
+   "clearance_t": [
+    0.72117492601911,
+    0.4095863125723735,
+    0.1774911362177793,
+    0.02616513221149458,
+    -0.05013276214250545,
+    -0.06103452905857126,
+    0.007110872576046201,
+    0.15398255650602993,
+    0.378995880127271
+   ],
+   "safe_capture_overlap": 4,
+   "persistence_alive_steps": 6,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.72117492601911,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.4095863125723735,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.1774911362177793,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.02616513221149458,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.05013276214250545,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.06103452905857126,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.007110872576046201,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.15398255650602993,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.378995880127271,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 22,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 7,
+   "branch": "lateral_behind",
+   "axial_len": 14.999999999984999,
+   "att_offaxis0": 3.000266701747023e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.06790123134851456,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.06790123134851456,
+    0.08792846649885178,
+    0.10094637423753738,
+    0.08915304392576218,
+    0.07183364778757095,
+    0.035785287618637085,
+    0.00764818349853158,
+    0.0,
+    0.0047846888191998005
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 11.201722188348132,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.25,
+   "min_friendly_clearance": -0.4457610254281637,
+   "clearance_t": [
+    0.72117492601911,
+    0.387633646938841,
+    0.11175315719935791,
+    -0.10481912396269372,
+    -0.26838596792781716,
+    -0.3867503605127836,
+    -0.4457610254281637,
+    -0.44485436857089594,
+    -0.38403936120165333
+   ],
+   "safe_capture_overlap": 3,
+   "persistence_alive_steps": 6,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.72117492601911,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.387633646938841,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.11175315719935791,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.10481912396269372,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.26838596792781716,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.3867503605127836,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.4457610254281637,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.44485436857089594,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.38403936120165333,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 22,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 7,
+   "branch": "greedy_clear",
+   "axial_len": 14.999999999984999,
+   "att_offaxis0": 3.000266701747023e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.06790123134851456,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.06790123134851456,
+    0.0854453295469284,
+    0.08847926557064056,
+    0.05524861812591553,
+    0.030188679695129395,
+    0.013208585791289806,
+    0.006190672516822815,
+    0.00319488812237978,
+    0.002396166091784835
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 11.201722188348132,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.25,
+   "min_friendly_clearance": -0.06103452905857126,
+   "clearance_t": [
+    0.72117492601911,
+    0.4095863125723735,
+    0.1774911362177793,
+    0.02616513221149458,
+    -0.05013276214250545,
+    -0.06103452905857126,
+    0.007110872576046201,
+    0.15398255650602993,
+    0.378995880127271
+   ],
+   "safe_capture_overlap": 4,
+   "persistence_alive_steps": 6,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.72117492601911,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.4095863125723735,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.1774911362177793,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.02616513221149458,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.05013276214250545,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.06103452905857126,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.007110872576046201,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.15398255650602993,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.378995880127271,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 22,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 8,
+   "branch": "cem_tail",
+   "axial_len": 13.999999999985999,
+   "att_offaxis0": 2.8002489216305548e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.09624796360731125,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.09624796360731125,
+    0.2136363685131073,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 10.222499980380714,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.2,
+   "min_friendly_clearance": -2.159001088915029,
+   "clearance_t": [
+    0.3183608301555056,
+    -0.1211146460829709,
+    -0.6208504612927963,
+    -1.1321076370910468,
+    -1.6524310235296011,
+    -2.159001088915029,
+    -2.0812771352014674,
+    -1.5386864654163344,
+    -1.010291665438568
+   ],
+   "safe_capture_overlap": 1,
+   "persistence_alive_steps": 3,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.3183608301555056,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.1211146460829709,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.239,
+     "clearance": -0.6208504612927963,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.1321076370910468,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.6524310235296011,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.159001088915029,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.0812771352014674,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.5386864654163344,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.010291665438568,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 8,
+   "branch": "hold",
+   "axial_len": 13.999999999985999,
+   "att_offaxis0": 2.8002489216305548e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.09624796360731125,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.09624796360731125,
+    0.19672131538391113,
+    0.3333333432674408,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 10.222499980380714,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.2,
+   "min_friendly_clearance": -2.0329594197019105,
+   "clearance_t": [
+    0.3183608301555056,
+    -0.08630880666582358,
+    -0.5150911462098733,
+    -0.9387740603443715,
+    -1.3513869152314641,
+    -1.733267009527981,
+    -1.9963127162081205,
+    -2.0329594197019105,
+    -1.9706762917647498
+   ],
+   "safe_capture_overlap": 1,
+   "persistence_alive_steps": 2,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.3183608301555056,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.981,
+     "clearance": -0.08630880666582358,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.5150911462098733,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.9387740603443715,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.3513869152314641,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.733267009527981,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.9963127162081205,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.0329594197019105,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.9706762917647498,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 8,
+   "branch": "radial",
+   "axial_len": 13.999999999985999,
+   "att_offaxis0": 2.8002489216305548e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.09624796360731125,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.09624796360731125,
+    0.14791987836360931,
+    0.15309445559978485,
+    0.09333333373069763,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.00159744406118989
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 10.222499980380714,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.2,
+   "min_friendly_clearance": -0.6527027392490883,
+   "clearance_t": [
+    0.3183608301555056,
+    -0.011337948818559707,
+    -0.2904760901200965,
+    -0.49114866080658653,
+    -0.6122058654811435,
+    -0.6527027392490883,
+    -0.6122668888209397,
+    -0.49127011930184633,
+    -0.2906571095545967
+   ],
+   "safe_capture_overlap": 1,
+   "persistence_alive_steps": 6,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.3183608301555056,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.011337948818559707,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.2904760901200965,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.974,
+     "clearance": -0.49114866080658653,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.6122058654811435,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.6527027392490883,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.6122668888209397,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.49127011930184633,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.2906571095545967,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 22,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 8,
+   "branch": "lateral_behind",
+   "axial_len": 13.999999999985999,
+   "att_offaxis0": 2.8002489216305548e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.09624796360731125,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.09624796360731125,
+    0.1621621549129486,
+    0.24025973677635193,
+    0.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 10.222499980380714,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.2,
+   "min_friendly_clearance": -1.0740084448840121,
+   "clearance_t": [
+    0.3183608301555056,
+    -0.03329652772215824,
+    -0.3562720551050316,
+    -0.6223636065734823,
+    -0.8296508347123048,
+    -0.9756655905630525,
+    -1.0577764718994296,
+    -1.0740084448840121,
+    -1.0239165443644191
+   ],
+   "safe_capture_overlap": 1,
+   "persistence_alive_steps": 6,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.3183608301555056,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.03329652772215824,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.3562720551050316,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.6223636065734823,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.6965,
+     "clearance": -0.8296508347123048,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.1675,
+     "clearance": -0.9756655905630525,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.0577764718994296,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.0740084448840121,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.0239165443644191,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 8,
+   "branch": "greedy_clear",
+   "axial_len": 13.999999999985999,
+   "att_offaxis0": 2.8002489216305548e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.09624796360731125,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.09624796360731125,
+    0.14791987836360931,
+    0.15309445559978485,
+    0.09333333373069763,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.00159744406118989
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 10.222499980380714,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.2,
+   "min_friendly_clearance": -0.6527027392490883,
+   "clearance_t": [
+    0.3183608301555056,
+    -0.011337948818559707,
+    -0.2904760901200965,
+    -0.49114866080658653,
+    -0.6122058654811435,
+    -0.6527027392490883,
+    -0.6122668888209397,
+    -0.49127011930184633,
+    -0.2906571095545967
+   ],
+   "safe_capture_overlap": 1,
+   "persistence_alive_steps": 6,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": 0.3183608301555056,
+     "safe_opt": true,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.011337948818559707,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.2904760901200965,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.9765,
+     "clearance": -0.49114866080658653,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.6122058654811435,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.6527027392490883,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.6122668888209397,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.49127011930184633,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.2906571095545967,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 22,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 9,
+   "branch": "cem_tail",
+   "axial_len": 12.999999999986999,
+   "att_offaxis0": 2.6002311415140866e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.2136363685131073,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.2136363685131073,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 9.728066068388644,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.2,
+   "min_friendly_clearance": -2.159001088915029,
+   "clearance_t": [
+    -0.1211146460829709,
+    -0.6208504612927963,
+    -1.1321076370910468,
+    -1.6524310235296011,
+    -2.159001088915029,
+    -2.0812771352014674,
+    -1.5386864654163344,
+    -1.010291665438568,
+    -0.41469967170001737
+   ],
+   "safe_capture_overlap": 0,
+   "persistence_alive_steps": 2,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.1211146460829709,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.23,
+     "clearance": -0.6208504612927963,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.1321076370910468,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.6524310235296011,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.159001088915029,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.0812771352014674,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.5386864654163344,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.010291665438568,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.41469967170001737,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 9,
+   "branch": "hold",
+   "axial_len": 12.999999999986999,
+   "att_offaxis0": 2.6002311415140866e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.2136363685131073,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.2136363685131073,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 9.728066068388644,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.2,
+   "min_friendly_clearance": -2.126349596491272,
+   "clearance_t": [
+    -0.1211146460829709,
+    -0.5856818152579162,
+    -1.04671479751324,
+    -1.4990042565600048,
+    -1.9192467294242328,
+    -2.126349596491272,
+    -1.9059744130558374,
+    -1.6358313408769443,
+    -1.249920633620342
+   ],
+   "safe_capture_overlap": 0,
+   "persistence_alive_steps": 2,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.1211146460829709,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0835,
+     "clearance": -0.5856818152579162,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.04671479751324,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.4990042565600048,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.9192467294242328,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.126349596491272,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.9059744130558374,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.6358313408769443,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.249920633620342,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 9,
+   "branch": "radial",
+   "axial_len": 12.999999999986999,
+   "att_offaxis0": 2.6002311415140866e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.2136363685131073,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.2136363685131073,
+    0.3333333432674408,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 9.728066068388644,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.2,
+   "min_friendly_clearance": -1.265587455346312,
+   "clearance_t": [
+    -0.1211146460829709,
+    -0.510723059174577,
+    -0.8223500187047248,
+    -1.0539643730245936,
+    -1.2027185856044655,
+    -1.265587455346312,
+    -1.2408382610927993,
+    -1.129192860361695,
+    -0.9333174013645229
+   ],
+   "safe_capture_overlap": 0,
+   "persistence_alive_steps": 3,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.1211146460829709,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.9755,
+     "clearance": -0.510723059174577,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.1445,
+     "clearance": -0.8223500187047248,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.0539643730245936,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.2027185856044655,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.265587455346312,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.2408382610927993,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.129192860361695,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.9333174013645229,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 23,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 9,
+   "branch": "lateral_behind",
+   "axial_len": 12.999999999986999,
+   "att_offaxis0": 2.6002311415140866e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.2136363685131073,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.2136363685131073,
+    0.4000000059604645,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 9.728066068388644,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.2,
+   "min_friendly_clearance": -1.6515098841292144,
+   "clearance_t": [
+    -0.1211146460829709,
+    -0.532678307118065,
+    -0.8880821899888742,
+    -1.1846494067901299,
+    -1.4172756215497875,
+    -1.5770013425398848,
+    -1.6515098841292144,
+    -1.631736961961564,
+    -1.5203693128709401
+   ],
+   "safe_capture_overlap": 0,
+   "persistence_alive_steps": 3,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.1211146460829709,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.532678307118065,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.812,
+     "clearance": -0.8880821899888742,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.1846494067901299,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.4172756215497875,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.5770013425398848,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.6515098841292144,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.631736961961564,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.5203693128709401,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 9,
+   "branch": "greedy_clear",
+   "axial_len": 12.999999999986999,
+   "att_offaxis0": 2.6002311415140866e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 0.2136363685131073,
+   "eligible_A": false,
+   "vsoft_win": [
+    0.2136363685131073,
+    0.3333333432674408,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 9.728066068388644,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 1.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": 0.2,
+   "min_friendly_clearance": -1.265587455346312,
+   "clearance_t": [
+    -0.1211146460829709,
+    -0.510723059174577,
+    -0.8223500187047248,
+    -1.0539643730245936,
+    -1.2027185856044655,
+    -1.265587455346312,
+    -1.2408382610927993,
+    -1.129192860361695,
+    -0.9333174013645229
+   ],
+   "safe_capture_overlap": 0,
+   "persistence_alive_steps": 3,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.1211146460829709,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.9745,
+     "clearance": -0.510723059174577,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.1545,
+     "clearance": -0.8223500187047248,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.0539643730245936,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.2027185856044655,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.265587455346312,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.2408382610927993,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.129192860361695,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.9333174013645229,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": true,
+   "penetrated_at": 23,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 10,
+   "branch": "cem_tail",
+   "axial_len": 11.999999999987999,
+   "att_offaxis0": 2.4002133613976184e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 1.0,
+   "eligible_A": true,
+   "vsoft_win": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 9.230265371119298,
+   "p_feas_B": 0.2225,
+   "boxed_B": false,
+   "p_cap_B_A2": 0.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": null,
+   "min_friendly_clearance": -2.159001088915029,
+   "clearance_t": [
+    -0.6208504612927963,
+    -1.1321076370910468,
+    -1.6524310235296011,
+    -2.159001088915029,
+    -2.0812771352014674,
+    -1.5386864654163344,
+    -1.010291665438568,
+    -0.41469967170001737,
+    0.21786858987699292
+   ],
+   "safe_capture_overlap": 0,
+   "persistence_alive_steps": 1,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.214,
+     "clearance": -0.6208504612927963,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.1321076370910468,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.6524310235296011,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.159001088915029,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.0812771352014674,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.5386864654163344,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.010291665438568,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.41469967170001737,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": 0.21786858987699292,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 10,
+   "branch": "hold",
+   "axial_len": 11.999999999987999,
+   "att_offaxis0": 2.4002133613976184e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 1.0,
+   "eligible_A": true,
+   "vsoft_win": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 9.230265371119298,
+   "p_feas_B": 0.5325,
+   "boxed_B": false,
+   "p_cap_B_A2": 0.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": null,
+   "min_friendly_clearance": -2.1345895090457168,
+   "clearance_t": [
+    -0.6208504612927963,
+    -1.1182786905371902,
+    -1.609243558433126,
+    -2.0672635940626254,
+    -2.1345895090457168,
+    -1.6987203107792934,
+    -1.3274687184089446,
+    -0.8860315966198267,
+    -0.41990795749468185
+   ],
+   "safe_capture_overlap": 0,
+   "persistence_alive_steps": 1,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.5275,
+     "clearance": -0.6208504612927963,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.1182786905371902,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.609243558433126,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.0672635940626254,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -2.1345895090457168,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.6987203107792934,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -1.3274687184089446,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.8860315966198267,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0,
+     "clearance": -0.41990795749468185,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 10,
+   "branch": "radial",
+   "axial_len": 11.999999999987999,
+   "att_offaxis0": 2.4002133613976184e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 1.0,
+   "eligible_A": true,
+   "vsoft_win": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 9.230265371119298,
+   "p_feas_B": 0.9595,
+   "boxed_B": false,
+   "p_cap_B_A2": 0.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": null,
+   "min_friendly_clearance": -1.8323076275532995,
+   "clearance_t": [
+    -0.6208504612927963,
+    -1.043357634466511,
+    -1.3859225926901613,
+    -1.6420579273312292,
+    -1.7976632257328264,
+    -1.8323076275532995,
+    -1.7389821811398982,
+    -1.534187704227877,
+    -1.2366032008812473
+   ],
+   "safe_capture_overlap": 0,
+   "persistence_alive_steps": 2,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.9525,
+     "clearance": -0.6208504612927963,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 0.9308510638297872,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.094,
+     "clearance": -1.043357634466511,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0115,
+     "clearance": -1.3859225926901613,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.097,
+     "clearance": -1.6420579273312292,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.4835,
+     "clearance": -1.7976632257328264,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.8323076275532995,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.7389821811398982,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.534187704227877,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.2366032008812473,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 10,
+   "branch": "lateral_behind",
+   "axial_len": 11.999999999987999,
+   "att_offaxis0": 2.4002133613976184e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 1.0,
+   "eligible_A": true,
+   "vsoft_win": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 9.230265371119298,
+   "p_feas_B": 1.0,
+   "boxed_B": false,
+   "p_cap_B_A2": 0.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": null,
+   "min_friendly_clearance": -2.0208046354335054,
+   "clearance_t": [
+    -0.6208504612927963,
+    -1.0653023821524874,
+    -1.4514051006048363,
+    -1.7697986004814126,
+    -1.9877506170648351,
+    -2.0208046354335054,
+    -1.8459176346161212,
+    -1.5513088238604198,
+    -1.1833162302897369
+   ],
+   "safe_capture_overlap": 0,
+   "persistence_alive_steps": 3,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -0.6208504612927963,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 0.9205076820307281,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.7485,
+     "clearance": -1.0653023821524874,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 0.0026954177897574125,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.371,
+     "clearance": -1.4514051006048363,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.923,
+     "clearance": -1.7697986004814126,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.9877506170648351,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -2.0208046354335054,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.8459176346161212,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.5513088238604198,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.1833162302897369,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  },
+  {
+   "t_rel": 10,
+   "branch": "greedy_clear",
+   "axial_len": 11.999999999987999,
+   "att_offaxis0": 2.4002133613976184e-11,
+   "att_speed0": 20.0,
+   "p_cap_A": 1.0,
+   "eligible_A": true,
+   "vsoft_win": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "p_cap_B_phys": 1.0,
+   "p_cap_B_engaged": 0.0,
+   "p_cap_B_null": 0.0,
+   "median_capture_travel": 9.230265371119298,
+   "p_feas_B": 0.953,
+   "boxed_B": false,
+   "p_cap_B_A2": 0.0,
+   "p_cap_B_A2_engaged": 0.0,
+   "a2_capture_tau": null,
+   "min_friendly_clearance": -1.8323076275532995,
+   "clearance_t": [
+    -0.6208504612927963,
+    -1.043357634466511,
+    -1.3859225926901613,
+    -1.6420579273312292,
+    -1.7976632257328264,
+    -1.8323076275532995,
+    -1.7389821811398982,
+    -1.534187704227877,
+    -1.2366032008812473
+   ],
+   "safe_capture_overlap": 0,
+   "persistence_alive_steps": 2,
+   "persistence": [
+    {
+     "delay": 0,
+     "p_cap_B_phys": 1.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.958,
+     "clearance": -0.6208504612927963,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 1,
+     "p_cap_B_phys": 0.9420289855072463,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.1035,
+     "clearance": -1.043357634466511,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 2,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0125,
+     "clearance": -1.3859225926901613,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 3,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.0885,
+     "clearance": -1.6420579273312292,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 4,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 0.508,
+     "clearance": -1.7976632257328264,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 5,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.8323076275532995,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 6,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.7389821811398982,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 7,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.534187704227877,
+     "safe_opt": false,
+     "safe_eng": false
+    },
+    {
+     "delay": 8,
+     "p_cap_B_phys": 0.0,
+     "p_cap_engaged": 0.0,
+     "p_feas": 1.0,
+     "clearance": -1.2366032008812473,
+     "safe_opt": false,
+     "safe_eng": false
+    }
+   ],
+   "penetrated": false,
+   "penetrated_at": null,
+   "freshCRN_dpcap": 0.0,
+   "gate_B_phys_optimistic": false,
+   "gate_B_phys_engaged": false,
+   "gate_B_A2": false,
+   "gate_B_A2_engaged": false
+  }
+ ],
+ "readout": {
+  "verdict": "PREMISE_NET_TEMPORAL",
+  "note": "Case B-phys passes the gate ONLY under the OPTIMISTIC bound (cone trusted from launch); median capture travel ~10.222499980380714 m < engage 20.0 m, so capture falls in the N1-flagged UNVALIDATED early-deployment regime. The wall-vs-history-dependence question REDUCES to one premise: is the net an effective catcher before engage travel? NEXT = ground the net temporal/early-deployment reach (N1 temporal), NOT a blind Move C or Move A.",
+  "n_gate_optimistic": 3,
+  "n_gate_engaged": 0,
+  "n_gate_A2_engaged": 0,
+  "null_discriminates": true,
+  "cap_mean": 0.9998199699849926,
+  "null_mean": 0.0,
+  "median_capture_travel": 10.222499980380714,
+  "engage_dist": 20.0,
+  "gate_opt_cells": [
+   [
+    6,
+    "radial"
+   ],
+   [
+    6,
+    "lateral_behind"
+   ],
+   [
+    6,
+    "greedy_clear"
+   ]
+  ],
+  "gate_eng_cells": []
+ }
+}

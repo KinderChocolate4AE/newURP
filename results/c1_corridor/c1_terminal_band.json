@@ -1,0 +1,81 @@
+{
+ "meta": {
+  "phase": "1A",
+  "reset_seed": 1100,
+  "witness": "A0_(2.6,2.1)",
+  "invariants": {
+   "r_kill": 2.6,
+   "r_net_dir": 2.1,
+   "eta": 1.04,
+   "theta": 0.9
+  }
+ },
+ "rungs": {
+  "2.6": {
+   "tier": 4,
+   "safe": true,
+   "capture_margin": 0.519169308245182,
+   "clearance_margin": 0.09999998363567586,
+   "p_feas_at_fire": 0.00519169308245182,
+   "fire_step": 0,
+   "seed": 390000260,
+   "psi_deg": [
+    -9.4,
+    95.1,
+    -163.3,
+    -54.8
+   ],
+   "axial": [
+    5.46,
+    7.01,
+    5.86,
+    4.98
+   ],
+   "exact_replay": true
+  },
+  "2.5": {
+   "tier": 0,
+   "safe": false,
+   "capture_margin": null,
+   "clearance_margin": null,
+   "p_feas_at_fire": 1.0,
+   "fire_step": null,
+   "seed": 390000250,
+   "psi_deg": [
+    28.1,
+    113.9,
+    -255.9,
+    -40.6
+   ],
+   "axial": [
+    4.9,
+    8.39,
+    4.39,
+    3.0
+   ],
+   "exact_replay": true
+  },
+  "2.4": {
+   "tier": 0,
+   "safe": false,
+   "capture_margin": null,
+   "clearance_margin": null,
+   "p_feas_at_fire": 1.0,
+   "fire_step": null,
+   "seed": 390000240,
+   "psi_deg": [
+    28.1,
+    113.9,
+    -255.9,
+    -40.6
+   ],
+   "axial": [
+    4.9,
+    8.39,
+    4.39,
+    3.0
+   ],
+   "exact_replay": true
+  }
+ }
+}
