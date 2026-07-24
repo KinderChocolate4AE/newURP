@@ -66,6 +66,7 @@ def _band_metrics(pe, spawn, knots, ctrl_len, fin, r_lane, r_body):
             dv = (lim[t] - lim[t - 1]) / DT; term_vel = float(np.mean([np.linalg.norm(dv[i]) for i in range(N_LIM)]))
     rec["terminal_radial_err"] = rad_err; rec["max_angular_gap_deg"] = ang_gap
     rec["terminal_velocity"] = term_vel; rec["band_cost"] = band_cost
+    rec["safe"] = bool(rec["tier"] >= 4 and not rec["penetrated"])
     return rec
 
 
@@ -119,7 +120,7 @@ def cem_O(pe, spawn, fin, r_lane, r_body, warm, seed, ctrl_len, pop, iters, K=6)
 
 
 def classify(rec, T_avail, T_lb):
-    if rec["safe"]: return "OK", ""
+    if rec.get("safe") or (rec["tier"] >= 4 and not rec["penetrated"]): return "OK", ""
     prim, sec = "UNCLASSIFIED", ""
     if T_avail < T_lb: prim = "KINEMATIC_NEGATIVE_MARGIN"
     elif rec["penetrated"]: prim = "PENETRATION"
