@@ -1,0 +1,852 @@
+{
+ "meta": {
+  "phase": "1C_controller_gap",
+  "rho_star": 2.6,
+  "safe_band": [
+   2.55,
+   2.65
+  ],
+  "a_max": 30.0,
+  "v_closing": 20.0,
+  "x_fire": 14.0,
+  "reset_seed": 1100,
+  "crn_seed": 1101,
+  "LB": "set-based: min_{rho_T in band} 2*sqrt(|rho0-rho_T|/a_max)"
+ },
+ "cells": [
+  {
+   "rho0": 3.2,
+   "T_LB_set": 0.271,
+   "T_O_star": null,
+   "per_T": [
+    {
+     "rho0": 3.2,
+     "T_lead": 0.3,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.5990415345877409,
+       "clr": -0.4291549567832097,
+       "term_vel": 5.935432420687992,
+       "ang_gap": 108.61381245365027,
+       "band_cost": 0.01337321884730695,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_OVERSHOOT",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.7188498508185148,
+       "clr": -0.701066818180966,
+       "term_vel": 5.25925412854887,
+       "ang_gap": 111.22320576676138,
+       "band_cost": 0.00843718554850288,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_OVERSHOOT",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 1.6436021674282195,
+       "ang_gap": 95.7978737699265,
+       "band_cost": 1.1383155065101127,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": ""
+      }
+     ]
+    },
+    {
+     "rho0": 3.2,
+     "T_lead": 0.35,
+     "n_safe": 1,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": true,
+       "tier": 4,
+       "cap": 0.2795527223497629,
+       "clr": 0.025000049698772453,
+       "term_vel": 0.0,
+       "ang_gap": 90.00000000000001,
+       "band_cost": 0.0024999900602553317,
+       "crn_tier": 4,
+       "primary_fail": "OK",
+       "secondary_fail": ""
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.519169308245182,
+       "clr": -1.4666100593121096,
+       "term_vel": 5.168425576017853,
+       "ang_gap": 98.63080576554952,
+       "band_cost": 0.02178250976481216,
+       "crn_tier": 2,
+       "primary_fail": "RADIAL_OVERSHOOT",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 1.134173465491931,
+       "ang_gap": 102.62133192730491,
+       "band_cost": 1.02391966278434,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": ""
+      }
+     ]
+    },
+    {
+     "rho0": 3.2,
+     "T_lead": 0.4,
+     "n_safe": 1,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": true,
+       "tier": 4,
+       "cap": 0.319488812237978,
+       "clr": 0.052998528485108554,
+       "term_vel": 0.559969575726724,
+       "ang_gap": 90.0,
+       "band_cost": 0.0,
+       "crn_tier": 4,
+       "primary_fail": "OK",
+       "secondary_fail": ""
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.19968051929026842,
+       "clr": -0.8936143621575335,
+       "term_vel": 4.15561689414546,
+       "ang_gap": 111.00532297312533,
+       "band_cost": 0.0425204050492392,
+       "crn_tier": 2,
+       "primary_fail": "RADIAL_OVERSHOOT",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 1.8067488015602247,
+       "ang_gap": 104.78729131782349,
+       "band_cost": 1.3743688297305718,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": ""
+      }
+     ]
+    },
+    {
+     "rho0": 3.2,
+     "T_lead": 0.45,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.159744406118989,
+       "clr": -0.5358181396531004,
+       "term_vel": 3.6128171070895525,
+       "ang_gap": 119.23540047471523,
+       "band_cost": 0.29916070581119114,
+       "crn_tier": 2,
+       "primary_fail": "RADIAL_OVERSHOOT",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.159744406118989,
+       "clr": -1.5443433276077627,
+       "term_vel": 5.602523377996887,
+       "ang_gap": 115.10110478822621,
+       "band_cost": 1.0579999851913011,
+       "crn_tier": 2,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.0798722030594945,
+       "clr": -1.9126761727547317,
+       "term_vel": 4.247104959091586,
+       "ang_gap": 120.87306472720657,
+       "band_cost": 0.21811438956729268,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_OVERSHOOT",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      }
+     ]
+    },
+    {
+     "rho0": 3.2,
+     "T_lead": 0.5,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.2795527223497629,
+       "clr": -0.2939842353532437,
+       "term_vel": 3.8276066774014073,
+       "ang_gap": 123.43172026695295,
+       "band_cost": 0.16443927921812523,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_OVERSHOOT",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.19968051929026842,
+       "clr": -2.1159694851331876,
+       "term_vel": 7.021135446862678,
+       "ang_gap": 129.49397875904853,
+       "band_cost": 2.9716271785142894,
+       "crn_tier": 0,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.319488812237978,
+       "clr": -1.0913234651100923,
+       "term_vel": 3.696189770537077,
+       "ang_gap": 113.06178372626788,
+       "band_cost": 0.19138091999646684,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_OVERSHOOT",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "rho0": 4.0,
+   "T_LB_set": 0.424,
+   "T_O_star": null,
+   "per_T": [
+    {
+     "rho0": 4.0,
+     "T_lead": 0.45,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.159744406118989,
+       "clr": -0.6361947605360444,
+       "term_vel": 7.558234470637821,
+       "ang_gap": 132.52333039496065,
+       "band_cost": 0.6260119372017289,
+       "crn_tier": 2,
+       "primary_fail": "RADIAL_OVERSHOOT",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.03993610152974725,
+       "clr": -2.000956352295681,
+       "term_vel": 6.680220397231702,
+       "ang_gap": 109.50334393934386,
+       "band_cost": 1.2419222104358978,
+       "crn_tier": 0,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 1.978605660868238,
+       "ang_gap": 94.19304498687455,
+       "band_cost": 3.9500993822705235,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": ""
+      }
+     ]
+    },
+    {
+     "rho0": 4.0,
+     "T_lead": 0.5,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.19968051929026842,
+       "clr": -1.651348160751882,
+       "term_vel": 7.273323221410948,
+       "ang_gap": 127.44678683969313,
+       "band_cost": 1.1593460716103734,
+       "crn_tier": 2,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.19968051929026842,
+       "clr": -1.9544253023978242,
+       "term_vel": 10.389027008229485,
+       "ang_gap": 97.53423587160711,
+       "band_cost": 1.9157741895582245,
+       "crn_tier": 2,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 3.903250011884176,
+       "ang_gap": 108.07232593502124,
+       "band_cost": 4.270784153382916,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      }
+     ]
+    },
+    {
+     "rho0": 4.0,
+     "T_lead": 0.55,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.2795527223497629,
+       "clr": -2.251627438576693,
+       "term_vel": 6.509471633110996,
+       "ang_gap": 111.96785951139023,
+       "band_cost": 4.074510218981804,
+       "crn_tier": 0,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.39936103858053684,
+       "clr": -2.1423128952790984,
+       "term_vel": 8.546859161702468,
+       "ang_gap": 112.34930980915968,
+       "band_cost": 1.8540281836380523,
+       "crn_tier": 0,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 3.8299867804887455,
+       "ang_gap": 112.89800907769643,
+       "band_cost": 3.17781462182717,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      }
+     ]
+    },
+    {
+     "rho0": 4.0,
+     "T_lead": 0.6,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.159744406118989,
+       "clr": -2.226110478212957,
+       "term_vel": 6.509813379586133,
+       "ang_gap": 100.90773016520426,
+       "band_cost": 4.512162320109743,
+       "crn_tier": 2,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 9.154654833066594,
+       "ang_gap": 150.94323293009438,
+       "band_cost": 6.272396487456146,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.2795527223497629,
+       "clr": -1.9497948227953548,
+       "term_vel": 4.884198951388088,
+       "ang_gap": 112.37875149398933,
+       "band_cost": 0.5170335092911302,
+       "crn_tier": 2,
+       "primary_fail": "RADIAL_OVERSHOOT",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      }
+     ]
+    },
+    {
+     "rho0": 4.0,
+     "T_lead": 0.65,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.03993610152974725,
+       "clr": -1.9969363040612764,
+       "term_vel": 7.160846874840236,
+       "ang_gap": 174.21374906045725,
+       "band_cost": 9.730898697063452,
+       "crn_tier": 0,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 9.364503650246156,
+       "ang_gap": 158.004539210304,
+       "band_cost": 5.400227327333276,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 2.6933356823256727,
+       "ang_gap": 96.5392085438133,
+       "band_cost": 4.118276642377631,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": ""
+      }
+     ]
+    },
+    {
+     "rho0": 4.0,
+     "T_lead": 0.7,
+     "n_safe": 1,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.03993610152974725,
+       "clr": -1.1905433515243264,
+       "term_vel": 6.110799978577436,
+       "ang_gap": 134.42049545209068,
+       "band_cost": 2.066803242674282,
+       "crn_tier": 0,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": true,
+       "tier": 4,
+       "cap": 0.9999999999999998,
+       "clr": 0.17499993807003988,
+       "term_vel": 16.49999939707639,
+       "ang_gap": 90.00000000000001,
+       "band_cost": 0.002499987614023358,
+       "crn_tier": 4,
+       "primary_fail": "OK",
+       "secondary_fail": ""
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 1.571780529742812,
+       "ang_gap": 103.0041517174587,
+       "band_cost": 5.207377665404115,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "rho0": 5.0,
+   "T_LB_set": 0.56,
+   "T_O_star": null,
+   "per_T": [
+    {
+     "rho0": 5.0,
+     "T_lead": 0.55,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.03993610152974725,
+       "clr": -0.28665318280411933,
+       "term_vel": 4.364656731476946,
+       "ang_gap": 138.61560497077517,
+       "band_cost": 0.01463689855071778,
+       "crn_tier": 0,
+       "primary_fail": "KINEMATIC_NEGATIVE_MARGIN",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.319488812237978,
+       "clr": -0.6888846227158677,
+       "term_vel": 9.025666359946593,
+       "ang_gap": 142.92581213002813,
+       "band_cost": 2.490906409958144,
+       "crn_tier": 2,
+       "primary_fail": "KINEMATIC_NEGATIVE_MARGIN",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 3.3115981810800865,
+       "ang_gap": 103.81455275817855,
+       "band_cost": 16.658620682000738,
+       "crn_tier": 0,
+       "primary_fail": "KINEMATIC_NEGATIVE_MARGIN",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      }
+     ]
+    },
+    {
+     "rho0": 5.0,
+     "T_lead": 0.6,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.4392971284687519,
+       "clr": -0.9020156696147662,
+       "term_vel": 4.685063434841204,
+       "ang_gap": 113.88252735298046,
+       "band_cost": 0.009416468763501462,
+       "crn_tier": 2,
+       "primary_fail": "RADIAL_OVERSHOOT",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.03993610152974725,
+       "clr": -2.1021733450814564,
+       "term_vel": 9.022795098655056,
+       "ang_gap": 123.50949288646005,
+       "band_cost": 2.322000892428574,
+       "crn_tier": 2,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 3.1609993181849063,
+       "ang_gap": 96.88108462744873,
+       "band_cost": 19.131773282221083,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      }
+     ]
+    },
+    {
+     "rho0": 5.0,
+     "T_lead": 0.7,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.159744406118989,
+       "clr": -1.8529848246691598,
+       "term_vel": 5.765549128682428,
+       "ang_gap": 120.33355341944485,
+       "band_cost": 3.208887684135793,
+       "crn_tier": 2,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.159744406118989,
+       "clr": -2.1540672873318947,
+       "term_vel": 12.301970581962237,
+       "ang_gap": 148.6671610522268,
+       "band_cost": 7.091216905558715,
+       "crn_tier": 2,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 3.4670377078179144,
+       "ang_gap": 95.00686286434298,
+       "band_cost": 18.24129228954993,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      }
+     ]
+    },
+    {
+     "rho0": 5.0,
+     "T_lead": 0.8,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.2396166091784835,
+       "clr": -1.7953426371664882,
+       "term_vel": 10.996513245175471,
+       "ang_gap": 142.52240057384765,
+       "band_cost": 3.7318245182310816,
+       "crn_tier": 2,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.319488812237978,
+       "clr": -0.8898268829939365,
+       "term_vel": 10.950681472994415,
+       "ang_gap": 136.75702752092403,
+       "band_cost": 1.459573807135556,
+       "crn_tier": 2,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 2.610967658188472,
+       "ang_gap": 98.26703030862984,
+       "band_cost": 17.70882352482282,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": ""
+      }
+     ]
+    },
+    {
+     "rho0": 5.0,
+     "T_lead": 0.9,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.3594249254092574,
+       "clr": -1.852377205529152,
+       "term_vel": 3.090150007743645,
+       "ang_gap": 118.6004823609723,
+       "band_cost": 3.9010528641421685,
+       "crn_tier": 0,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.0798722030594945,
+       "clr": -1.9518007909565913,
+       "term_vel": 13.688004757632244,
+       "ang_gap": 182.854989438672,
+       "band_cost": 5.52022527565182,
+       "crn_tier": 0,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 3.6546444909403895,
+       "ang_gap": 125.26563837965757,
+       "band_cost": 33.76072715153191,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      }
+     ]
+    },
+    {
+     "rho0": 5.0,
+     "T_lead": 1.0,
+     "n_safe": 0,
+     "O_success": false,
+     "runs": [
+      {
+       "warm": "WS1",
+       "safe": false,
+       "tier": 2,
+       "cap": 0.0798722030594945,
+       "clr": -1.0618034156155458,
+       "term_vel": 7.714315064734594,
+       "ang_gap": 157.0685826084714,
+       "band_cost": 2.7385963005772087,
+       "crn_tier": 0,
+       "primary_fail": "CLEARANCE_VIOLATION",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS2",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 11.137674759899873,
+       "ang_gap": 149.91663182760604,
+       "band_cost": 11.234497020073347,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      },
+      {
+       "warm": "WS3",
+       "safe": false,
+       "tier": 0,
+       "cap": null,
+       "clr": null,
+       "term_vel": 6.294718357004016,
+       "ang_gap": 125.9082029781247,
+       "band_cost": 18.32486343313953,
+       "crn_tier": 0,
+       "primary_fail": "RADIAL_TOO_SLOW",
+       "secondary_fail": "TERMINAL_RELATIVE_VELOCITY"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "gap": {
+  "3.2": {
+   "T_LB_set": 0.271,
+   "T_O_star": null
+  },
+  "4.0": {
+   "T_LB_set": 0.424,
+   "T_O_star": null
+  },
+  "5.0": {
+   "T_LB_set": 0.56,
+   "T_O_star": null
+  }
+ }
+}

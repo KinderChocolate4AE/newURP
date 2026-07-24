@@ -1,0 +1,21 @@
+  rho0=3.2 T=0.30 -> O n_safe=0/3 success=False (-)
+  rho0=3.2 T=0.35 -> O n_safe=1/3 success=False (WS1)
+  rho0=3.2 T=0.40 -> O n_safe=1/3 success=False (WS1)
+  rho0=3.2 T=0.45 -> O n_safe=0/3 success=False (-)
+  rho0=3.2 T=0.50 -> O n_safe=0/3 success=False (-)
+  >>> rho0=3.2  T_O*=None  T_LB,set=0.271
+  rho0=4.0 T=0.45 -> O n_safe=0/3 success=False (-)
+  rho0=4.0 T=0.50 -> O n_safe=0/3 success=False (-)
+  rho0=4.0 T=0.55 -> O n_safe=0/3 success=False (-)
+  rho0=4.0 T=0.60 -> O n_safe=0/3 success=False (-)
+  rho0=4.0 T=0.65 -> O n_safe=0/3 success=False (-)
+  rho0=4.0 T=0.70 -> O n_safe=1/3 success=False (WS2)
+  >>> rho0=4.0  T_O*=None  T_LB,set=0.424
+  rho0=5.0 T=0.55 -> O n_safe=0/3 success=False (-)
+  rho0=5.0 T=0.60 -> O n_safe=0/3 success=False (-)
+  rho0=5.0 T=0.70 -> O n_safe=0/3 success=False (-)
+  rho0=5.0 T=0.80 -> O n_safe=0/3 success=False (-)
+  rho0=5.0 T=0.90 -> O n_safe=0/3 success=False (-)
+  rho0=5.0 T=1.00 -> O n_safe=0/3 success=False (-)
+  >>> rho0=5.0  T_O*=None  T_LB,set=0.560
+wrote results/c1_corridor/c1_controller_gap.json
