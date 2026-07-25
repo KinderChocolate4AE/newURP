@@ -302,6 +302,107 @@ jobs:
 
 > 라벨 규약(2026-07-17 명문화): 엔트리 라벨 = 단순 순번 — (a)~(z) → (aa)~(zz) → 소진 시 (aaa)~ 3중자 연장. 라벨 자체에 의미 없음(커밋·문서·메모리 상호참조용 고정 ID). 정정·부속은 부모 라벨 + `-n` 서브라벨((w-1)식). 과거 라벨은 참조 보존을 위해 변경 금지.
 
+### 2026-07-25 (ssss) — ✅ Phase 1O governance: seed namespace · evidence identity · invariant test · claim ledger → **판정 = 검증 종료조건 4항 충족, mode analysis 진입 승인**
+
+- **채택**: 외부검토 진단(오류 3층 분류 — ⓐ예방 가능했던 공학 결함 ⓑ주장 범위 과장 ⓒ판정기 강화의 정상적 진전). 새 실험 없음, 재발 방지 장치만. 산출 = `shepherd/scripts/{c1_governance.py, c1_invariant_tests.py}` + `URP/{c1_phase1o_governance, c1_claim_ledger}_2026-07-25.md`.
+- **반복 패턴 명명**: **"제한된 객체에서 참인 명제를 전체 시스템 명제로 너무 빨리 승격"** — 5회 재발(rest-to-rest를 플랜트 하한 / restricted LP infeasible을 전체 infeasible / fixed-path remask를 dynamic certification / 10 mm를 전체 model uncertainty / 수치근을 exact). 계산이 아니라 **이름과 headline이 증거보다 한 단계 앞섰다.**
+- **seed namespace**(`derive_seed`): SHA-256 기반(파이썬 `hash()` 금지 — 프로세스 salt). **`paired`**(witness_id 제외, CRN·난이도 비교) vs **`diversity`**(witness_id 포함, basin 발견) 2모드. 1J–1N은 사실상 paired로 돌며 diversity를 주장 중이었음.
+- **evidence identity 2분할**: `attack_policy_hash`(제어열만, 공유 가능) vs `evidence_bundle_hash`(scenario·config·defender 궤적·attacker 제어열과 궤적·reset과 모든 seed·fire step·verifier version·판정과 margin·dynamics hash).
+- **invariant property test 11/11 PASS**(`c1_invariant_tests.py`, **headline 실험보다 먼저 실행 의무**): I1 강한 attacker class는 viability 개선 없음 / I2 K=8이 K=4 nest(delta 1.8e-15 m)·I2b K=6은 nest 미주장 / I3 독립 적분기 endpoint 일치(0.0) / I4·I5·I5b seed 모드 동작·프로세스 안정 / I6 10개 필드 전부 bundle hash 변경·I6b 정책해시 공유≠번들 충돌 / **I7 sufficient screen 실패가 collision 라벨로 변환되지 않음**(24건, 오분류 0) / I8 LP 창 == judge 창(N_DEP=8).
+- **claim ledger 도입**(living, `URP/c1_claim_ledger_2026-07-25.md`): headline마다 **Claim/Evidence object/Scope/Does not establish/Invalidators** 5칸 필수. 6건 등재 + 폐기 8건 사유 보존. **규칙 2(provisional)**: 새 해석은 최소 한 회차 묵힌 뒤 승격 — C-6(seed 공유)이 첫 적용.
+- **강도·일반성 2축 분리**: `SEARCH_CANDIDATE`→`NUMERICALLY_VERIFIED_COUNTEREXAMPLE`→`INTERVAL_CERTIFIED_COUNTEREXAMPLE` × `FIXED_CONDITION`→`MULTI_RESET`→`DISTRIBUTION_LEVEL`. 한 단어(`certified`/`robust`/`exact`)에 두 의미 금지.
+- **종료조건 4항 충족**: ①headline 뒤집는 미해결 결함 없음 ②시간·seed·hash·nesting·단조성 property test 존재 ③주요 반례가 독립 적분·clearance·predicate 전부 통과 ④남은 한계가 명시된 scope limitation. ⇒ **mode analysis·controller 설계 진입 승인.**
+- **캐비앗**: I1이 이번 인스턴스에서 `v_fixed = v_union = 1.000`이라 단조성이 **비자명하게 검증되지 않음** → 다음 회차 첫 항목으로 escape 있는 셀 교체.
+
+### 2026-07-25 (rrrr) — ✅ Phase 1N: net-cone predicate 독립성 · 유리수 전구간 인증 · 강도 집계 정의 · D2 분리 + **신규 결함(탐색 seed witness 간 공유) 자기신고**
+
+- **채택**: 외부검토 수정 3건. 산출 = `shepherd/scripts/c1_phase1n_hardening.py` + `results/c1_corridor/c1_phase1n_hardening.json` + `URP/c1_phase1n_hardening_2026-07-25.md`.
+- **N1 net-cone 독립성**: V4가 원본 `_caught_se3_cone`을 그대로 호출 → **predicate 오류로부터 비독립**이었음. **arccos 없는** 독립 구현(`ax ≥ |r|cosθ`) 추가, 11개 시험 전부 PASS(폐형식 점·range 0/29.847 경계·축 정규화 불변·1e-9 m 경계 walk·**randomized parity 20,000건 불일치 0**). ⇒ 정본 표현 = *"…together with the frozen net-cone predicate"*, **`independently verified` 단독 사용 금지**.
+- **N2 유리수 인증**: 4점 보간이 대수적 정확이어도 float에서는 인증 아님 → **샘플 이후 전 계산을 `fractions.Fraction`**, 샘플은 구간 팽창(rel 1e-13/abs 1e-11). 인증 대상 = **`g(t)=‖r(t)‖²−r_kill²`(제곱근 미사용)**. 결과: 두 최소 margin 건 `CERTIFIED_COLLISION_FREE`, **margin 하한 ≥1.695 mm / ≥8.319 mm**, subdivision depth 0.
+- **N3 강도 집계 정의 고정**: **`m_scenario = max over sealed verified artifacts of (min_t d(t) − r_kill)`**. artifact sha·argmin·`audited_min_margin_m`·verifier version·예산 비교 동시 저장. **12건 중 10건이 10 mm 초과.**
+- **N4 D2 분리**: K=8은 K=4를 정확 nest하나 **K=6은 breakpoint 미정렬 → 정확 포함 불가**. ⇒ **D2a**(K=8, NESTED, containment 필수, 정식 escalation) / **D2b**(K=6, NOT NESTED, exploratory 전용, 생존 주장 사용 금지).
+- **🚨 신규 결함(자기신고)**: 두 인증 artifact의 **제어열이 완전 동일**(max abs diff 0.0, 4세그먼트 ‖a‖=29.983 포화). 원인 = `reachable_accels`가 (a_att_max,n,seed)에만 의존하고 CEM seed도 `replan+cert`뿐 → **witness 식별자 부재, 전 witness가 같은 난수 스트림**. **D0 falsification은 무효화되지 않음**(반례는 통계적 독립 불필요)이나 **raw/unique 수가 탐색 다양성을 과대표시** ⇒ mode analysis 전 탈상관 필요. 부수 가설: 동일 포화 bang-bang 하나가 서로 다른 두 방어 배치를 모두 탈출 = **지배 escape mode 존재 시사**(진단 지위만).
+
+### 2026-07-25 (qqqq) — ✅ Phase 1M: 1E exploit 3건 동일 판정기 이관 · 최소 margin 2건 구간 인증 · escalation 사전등록 동결
+
+- **채택**: 외부검토 지정 필수조치. 산출 = `shepherd/scripts/{c1_interval_certificate.py, c1_phase1m_certificates.py}` + `results/c1_corridor/c1_phase1m_certificates.json` + `URP/c1_phase1m_certificates_2026-07-25.md`.
+- **M1**: 1E optimizer-exploit 3건(3.2/0.35·3.2/0.40 O-WS1, 4.0/0.70 O-WS2)을 Phase 1C CEM seed로 결정론 재현 후 **1L 판정기로 재판정** → 전부 falsified, margin 0.224/0.251/2.407 m, collision·unresolved 0. ⇒ **15개 시나리오가 하나의 판정기 아래**로 통합(판정기 이원화 해소).
+- **M2**: Bernstein 볼록껍질 + de Casteljau + outward rounding으로 최소 margin 2건 재결정 → 둘 다 `CERTIFIED_COLLISION_FREE`.
+- **M3 escalation 사전등록(숫자까지 고정, dormant)**: **D0**(실행·동결, 결과 덮어쓰기 금지) → **D1**(트리거 = D0 verified escape 0인 controller-scenario에만 자동 발동; K/pop/iters 불변, **restart 2→16**, seed 64000201–216; controller는 D0 **전에** 봉인·D1 내 재최적화 금지·verifier/objective/attacker dynamics 불변·D0 seed 재사용 금지) → **D2**(공격자 클래스 변경, 별도 버전) → **D3**. 별도 프로토콜: **D0-MARGIN-STRENGTHENING**(FALSIFIED 불변·강도만 상향) / **D0-MODE-DIVERSITY**(`FIXED_CONDITION_CONTROLLER_DESIGN_DIAGNOSTIC`·**빈도 주장 금지**). 라벨 누적 기록.
+- **용어 축소**: "exact" → **`NUMERICALLY_RESOLVED_CONTINUOUS_MINIMUM_DISTANCE`**(companion-matrix 수치근) / `ROBUSTLY_FALSIFIED_UNDER_MODEL_UNCERTAINTY` → **`CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR`**(예산은 **상대거리 가산 기하오차만**; 동역학·tracking·Hermite mismatch·cone·admissibility 미포함, `meta.budget_scope`에 명문화).
+
+### 2026-07-25 (pppp) — 🚨 Phase 1L: 정확 연속-clearance 판정 → **D0 생존자 소멸**, 그리고 1K 판독 정정
+
+- **채택**: 외부검토 지정 "가장 먼저 할 일"(예산 증액이 아니라 V3 탈락 candidate 2건의 정확 판정). 산출 = `shepherd/scripts/{c1_exact_clearance.py, c1_phase1l_exact_adjudication.py}` + `results/c1_corridor/c1_phase1l_{exact_adjudication,survivor_adjudication}.json` + `URP/c1_phase1l_exact_adjudication_2026-07-25.md`.
+- **방법**: breakpoint 합집합(공격자 `tau/K`, 리미터 Hermite `dt`)으로 구간 분할 → 각 구간에서 공격자=포물선(2차)·리미터=cubic Hermite(3차) ⇒ **`d²(t)`=6차 다항식**, 정류점 = **5차 도함수 실근**(companion matrix). 양 끝점+실근 평가 = 구간 최소거리. 계수는 4점 정확 보간(계수 대수 재유도 없음).
+- **생존자 판정**: `BASE 2.8/0.30 C`의 raw candidate 2건 → unique 1건, **`VERIFIED_COLLISION_FREE`, 정확 margin +1.70 mm**, net cone escape ⇒ **`FALSIFIED_BY_ADVERSARIAL_REPLAN_D0`**. **D0 생존자 0.**
+- **전건 재분류**: 12/12 falsified, **`VERIFIED_COLLISION` 0건 · `UNRESOLVED` 0건**. 정확 margin: RH 0.050–0.068 m / baseline 0.0017–0.0230 m / max-clr 0.95–1.07 m.
+- **⚠ (nnnn) 판독 정정**: "독립 판정기가 38건 기각으로 한 건을 구했다"는 **틀림**. 그 38건은 **전부 보수적 스크린의 오기각**이었고 실제 충돌 0. 유효했던 부분 = **V1·V2·V5**, 결함 = **V3**(1.25배 empirical padding) → **`CONSERVATIVE_CONTINUOUS_CLEARANCE_SCREEN`**으로 격하, 판정에서 제외.
+- **3분류 도입**: `VERIFIED_COLLISION_FREE` / `VERIFIED_COLLISION` / `UNRESOLVED_CONTINUOUS_CLEARANCE`(+`COLLISION_FREE_BUT_CAUGHT`, `INADMISSIBLE_ARTIFACT`). **열 분리 의무**: raw/unique/audited/not_audited/verified_escape/verified_collision/unresolved. **margin 라벨 분리**(사전등록 예산 0.010 m).
+
+### 2026-07-25 (oooo) — ✅ Phase 1K: 독립 판정기(V1–V5) 도입 + 1E exploit 포함 재감사 + D0 프로토콜 동결 → **15건 중 14건 falsified**
+
+- **채택**: 외부검토 비준 순서 `A구현→B검증→C재감사→D동결→E탐색`의 B·C·D. 산출 = `shepherd/scripts/{c1_replan_verify.py, c1_phase1k_frozen_audit.py}` + `results/c1_corridor/c1_phase1k_frozen_audit.json` + `URP/c1_phase1k_frozen_audit_2026-07-25.md`. **E(넓은 controller 탐색)는 착수하지 않음.**
+- **B 독립 판정기**: 탐색과 **적분기·마진함수·마스킹 헬퍼 무공유** 별도 모듈. V1 제어허용성 / V2 독립 재적분 / V3 연속충돌(Lipschitz 하한) / V4 `_caught_se3_cone` / V5 exact replay.
+- **C 결과**: RH 4/4 · max-clr 2/2 · **1E exploit 3/3** · legacy baseline 5/6 falsified. 유일 생존 = `BASE 2.8/0.30 C`(당시 판독; (pppp)에서 falsified로 정정). 양성대조가 RH/baseline보다 1–3 자릿수 큰 margin으로 무너져 **변별력 정상**. 결정론 bank 존재시험: RH·baseline 전부 False ⇒ escape가 **최적화 경로에서만** 나옴.
+- **D 동결**(`FROZEN`): **판정 = 이진 존재 시험**. **`v_soft_replan`은 판정 입력 아님** — `(k₀+k_new)/(n₀+n_new)`가 (탐색예산)/(n_cert) 임의비의 함수. K=4·pop192·iters14·restart2 / cert seed 91000101–103 / replan 확인 63000101–2 / n_cert 20,000 / 판정기 n_sub 64 / **reset 1100 단일 → 분포 주장 금지**. **추정량 3분할**: (i)stochastic Block-1 (ii)결정론 bank **존재 시험** (iii)union falsification=판정.
+
+### 2026-07-25 (nnnn) — 🚨 Phase 1J: ADVERSARIAL_REPLAN_FALSIFIER 구축 → **RH witness 4건 + legacy baseline 6건 전부 escape 존재**
+
+- **채택**: 외부검토 판정 "2번(replan)을 1번(넓은 controller 탐색)보다 먼저". 산출 = `shepherd/scripts/c1_replan_falsifier.py` + `results/c1_corridor/c1_replan_falsifier{,_lowEffort}.json` + `URP/c1_phase1j_replan_falsifier_2026-07-25.md`.
+- **역할 = 반증기, 인증기 아님**: escape 발견 → 실패 확정 / escape 미발견 → 해당 예산 생존. **`ADVERSARIAL_DYNAMIC_CERTIFIED` 코드에 미구현.**
+- **필수 사양 4건**: ① `P_replan = P_fixed ∪ P_optimized`(union 자체 `_seg_paths_turn` 사용) — **containment 12/12 exact**(old bank만 → 기존 remask 1e-12 일치) + **monotone 12/12** ② objective = `min(kill_margin, cone_exit_margin)` [m], `>0 ⟺ escape` — 대리량 없음 ③ bank warm start ④ attacker search/confirm seed 분리(탐색 52000001–2 / 확인 63000101–2).
+- **결과**: **12/12 escape 존재**(고강도). RH margin 34–66 mm / **legacy baseline 2–23 mm** / max-clr ~1 m. **substep n_t 24→192 재계산에서 kill-margin 소수 5자리 불변 ⇒ 이산화 산물 아님.**
+- **⚠ 방법론 문제 발견**: `v_soft_replan`이 탐색 강도에 따라 **판정을 양방향으로 뒤집음**(FLIP 3건). 이진 escape 존재는 강도 단조(저 7/12 → 고 12/12) ⇒ 판정을 이진으로 이관 제안((oooo)에서 동결).
+- **함의**: **`T*_RH-remask,grid` · `T*_simple` · `η_RH-ref` 전부 기준선 지위 상실.** 넓은 controller 탐색을 먼저 했다면 "세 번째 반복"이 됐을 것.
+
+### 2026-07-25 (mmmm) — ✅ Phase 1I: 외부검토 Q1~Q8 회신 + 자기신고 외 결함 7건 처리
+
+- **채택**: 외부검토 판정 전부 수용(수정 4·기각 4). 산출 = `shepherd/scripts/c1_phase1i_audit_response.py` + `results/c1_corridor/c1_phase1i_audit_response.json` + `URP/c1_phase1i_review_response_2026-07-25.md`.
+- **명칭 개정**: `T*_dyn`/`T*_plant` → **`T*_RH-remask,grid`** · `ΔT_residual`/`G_closure` → `ΔT_RH-ref`/`η_RH-ref` · **"plant bound/플랜트 하한" 금지** · "폐루프 replay" → **"open-loop sequence replay in the full simulator"**. 절차 규칙 **`proposal–verification separation`** 승격(목적함수 정렬은 보조).
+- **#2 off-by-one 실재·수정**: judge `n_dep = int(round(0.4/0.05)) = 8`(E_lane = f..f+8, 0.40 s) vs LP `N_DEP = 9`(f..f+9, 0.45 s) = **한 격자 과다 구속**. `N_DEP=8` 수정. **56셀 전수 재계산 feasibility flip 0**(오차 방향 보수적) — 결함은 실재, 결론 불변.
+- **#3 선택편향**: 탐색(77000001–3, n=2000) → **봉인** → 확증(**91000101–3**, 미사용) n=20,000 **1회**. 4/4 통과.
+- **#4 Wilson 부당**: union = Block1 20,000 + 결정론 504(2.5 %)이나 **feasible 부분집합에서 결정론 비중 5.8–9.8 %**(extreme point 과대표집) + 3seed pooling **3회 계수**. ⇒ headline은 **across-scramble t-LCB**, pooled Wilson은 참고열. 지위 = **`provisional confirmatory`**(scramble 8–10 전까지).
+- **#1 fixed-ray**: 봉인 witness 4건 **LP-ρ 잔차 0.000000 m · 방위 드리프트 0° · v_tan=v_axial=0** ⇒ LP는 **"fixed-ray 1D radial subsystem의 정확한 LP"**. **`INFEASIBLE = 해당 certificate class에 해 없음`**(플랜트 진술 아님). **#7**: feedback 항 항등적 비활성 → **open-loop sequence replay**. **#5** 봉인법칙 문면 축소. **#6** `d*≤0.038` = heuristic classifier, **offline screen 전용**(보상 삽입 금지).
+- **표본 정정**: constructive response witnesses **4** / unique post-fire certification states **3**(전체를 3으로 낮추는 표현은 부정확).
+
+### 2026-07-25 (llll) — ✅ 3자 검토 브리프(1F·1G, Q1~Q8) + 1H 방위 봉인 계획
+
+- 산출 = `URP/c1_phase1fg_review_brief_2026-07-25.md`(자기신고 6항 포함) + `URP/c1_phase1h_angular_sealing_plan_2026-07-25.md`(G0/G1/G2 게이트).
+- **1H 계획 요지**: 방위 arm을 바로 만들지 않고 **G0(sham transit seal로 방위 개방의 인과효과만 분리)** 를 먼저. 터미널은 이미 30° 여유로 봉인돼 있고 열린 곳은 **transit `ρ ∈ (3.40, 5.0]`** 뿐이며 그 손해는 미측정. G1 = 방위 LP 확장(`T*_dyn,seal` 가격), G2 = MARL. **목적함수는 최소화 방향만**(1G 교훈 반영).
+
+### 2026-07-25 (kkkk) — ✅ 1H 진단: escape 기하 분해 + **방위 봉인 법칙 유도·실측 일치**
+
+- 산출 = `shepherd/scripts/{c1_escape_geometry.py, c1_seal_law.py}` + `results/c1_corridor/{c1_escape_geometry,c1_seal_law}.json`.
+- **escape 기하(6 witness)**: 살아남은 escape 종점 perp **0.05–0.60 m, 링(2.6) 안쪽 100 %**. 통계력 있는 유일 사례(n=73) 방위 skew = null 대비 **+0.05**(무의미). 실제 기전 = **half-angle 3.84° net cone**(반경 0.067·R)에서 짧은 사거리 lateral 이탈. baseline은 escape 0건. ⇒ **잔여는 방위 문제가 아님**(직전 예단 부분 부정).
+- **봉인 법칙(닫힌 형태)**: 간격 중점까지 현 길이 `2ρ·sin(Δφ/4) ≤ r_kill` ⇒ **`SEAL ⟺ Δφ_max ≤ 4·arcsin(r_kill/2ρ)`**. ρ=2.6→**120.0°** · 3.40→89.9° · 5.00→**60.3°**.
+- **실측 일치**(ρ0 5.0/T 0.55/Arm L hold, actual judge, n=20k×3): 90°·105°·115°·**120° SEALED**(LCB .959/.946/.935/.909) → **125° FAIL**(.888) → 135°(.806) → 150°(.488). **측정 경계 (120°,125°] vs 예측 117.5–120° — 한 격자 일치.**
+- **따름정리**: ①터미널 방위는 사실상 공짜(균등 4-ring 90°는 30° 여유) ②**균등 4-ring 봉인은 ρ ≤ 3.40부터** ⇒ nominal 다이브 5.0→2.65의 **앞 절반은 방위 개방**.
+
+### 2026-07-25 (jjjj) — 🚨 Phase 1G: Arm L을 E1.5 authoritative judge로 감사 → **max-clr witness 8/8 기각(증거 생성기 착취)**, 변위구속으로 재수립
+
+- **채택**: 1F 산출물을 판정기에 통과시키기 전에 확정 취급 금지. 산출 = `shepherd/scripts/{c1_phase1g.py, c1_phase1g_search.py, c1_phase1g_plot.py}` + `results/c1_corridor/c1_phase1g_{dynamic_judge,maxclr_falsified,search,rho0_knob}.json` + `witness_artifacts_1g.tar.gz` + `URP/c1_phase1g_readout_2026-07-25.md`.
+- **기각**: 1F의 `solve_witness`(max-min-clearance)가 **under-constrained** — 최소여유 최대화가 **발사 후 링을 바깥으로 밀어내는 것을 보상**. n=20,000 감사: **8/8 기각**(sup_disp **1.15–2.30 m** vs 허용 0.26; static 0.84–1.00 → **actual 0.011–0.076**). **1E 착취해와 같은 형태.** ⇒ 1E = 판정기 착취 / 1G = **증거 생성기 착취**.
+- **수정**: `solve_witness_hold` — 목적함수 "최소여유 최대화"→**"전개창 변위 최소화"**, `|ρ_t−ρ_f| ≤ d ≤ 0.26`(감사 스크린과 동일값) 구속 추가. 여전히 LP.
+- **재수립**(당시 판독; (nnnn)에서 전량 falsified): `T*_dyn` = {2.8 .15 / 3.2 .25 / 4.0 .40 / 5.0 .55}, actual v_soft .954–.976 / LCB .939–.959. **재현성 대조**: legacy baseline 6건이 1E 값(actual .988–.995, LCB .969–.977)을 **6/6 정확 재현**, 경로 parity 불일치 0.
+- **부산물**: LP 변위 `d*`가 판정 결과를 예측(`≤0.038` 통과 / `0.050` 기각) — **MC 없는 offline screen**((mmmm)에서 보상 삽입 금지로 격하).
+
+### 2026-07-25 (iiii) — ✅ Phase 1F: 플랜트 LP 하한 + 폐루프 재생 → **기존 rest-to-rest 하한 무효 확정**(R-1/R-2)
+
+- **채택**: 사용자 지시(R-1 제어 효율비 정밀화, R-2 nominal 결손 최소 변경량). 샌드박스에서 공개 리포 `b978f1b` 클론 실행. 산출 = `shepherd/scripts/{c1_plant_bound.py, c1_plant_bound_plot.py, c1_amax_sweep.py}` + `results/c1_corridor/{c1_plant_bound,c1_response_envelope_fine,c1_rho0_axis,c1_amax_sweep}.json` + `c1_plant_bound.png` + `URP/c1_phase1f_readout_2026-07-25.md`.
+- **핵심 정정**: `T_LB = 2√(|ρ0−ρ*|/a_max)`는 **rest-to-rest 바운드**이나 인증조건(`E_cap` 스냅샷 1회 + `E_lane` 전개창 매 스텝 perp ≥ 2.50)은 **종단 정지를 요구하지 않음** ⇒ **하한이 아님**. 1B/1C의 `ΔT_residual`·`G_closure` 재정규화 대상.
+- **방법**: 반경 부분문제가 시뮬레이터 자체 적분기(semi-implicit Euler)에서 **선형**(`ρ_t = ρ0 + dt²Σ(t−k)a_k`) ⇒ **LP**. 증거 수열을 폐루프 재생해 검증.
+- **재현성**: 샌드박스 실행이 디바이스 `c1_response_envelope.json` 해당 셀을 `capture_margin`·`clearance_margin` 기준 **1e-12 이내 5/5 정확 재현**. a_max 패치 경로도 30에서 무섭동 재현.
+- **정밀 포락선**: 4 ρ0 × 18 T × 3 arm = **216 롤아웃**(0.05 s 해상도). **1B의 `max_angular_gap_deg`는 216셀 전부 180.0** = Phase 1D 정정 ④(arctan2 degenerate)의 잔재 확인.
+- **단순 arm은 여유를 못 씀**: ρ0 3.4–5.0 @T=0.5 전 셀 실패(비단조) / **a_max 30→45 전 셀 실패**(minclr 진동) ⇒ 구속 자원 = 작동 권한이 아니라 정책.
+
+### 2026-07-25 (hhhh) — 📌 backfill 포인터: 2026-07-23~24 Phase 1/1B/1C/1D/1E는 `URP/` 문서에만 존재(로그 미기록)
+
+- 이 로그는 (gggg) 2026-07-21 이후 **7/23~24 작업이 미기록**인 상태로 7/25를 맞았다. 해당 회차를 실행하지 않은 세션이 내용을 재구성해 적는 것은 날조 위험이 있으므로, **내용 기재 대신 문서 색인만** 남긴다.
+- `URP/c1_phase1d_plan_2026-07-24.md` · `URP/c1_phase1d_E0E1_readout_2026-07-24.md` · `URP/c1_phase1d_E0E1_review_brief_2026-07-24.md` · `URP/c1_phase1e_review_response_2026-07-24.md` · `newURP/docs/c1_response_envelope_briefing.md` · `newURP/docs/c1_review_response.md`
+- 코드 `shepherd/scripts/{c1_response_probe.py, c1_controller_gap.py}`(커밋 `b978f1b`까지 반영) · `{c1_phase1d.py, c1_phase1e.py}`(**디바이스 untracked**) · 결과 `results/c1_corridor/{c1_response_envelope, c1_terminal_band, c1_terminal_band_refine, c1_response_audit, c1_controller_gap, c1_containment, c1_viable_rescore, c1_dynamic_judge}.json` + `witness_artifacts.tar.gz`.
+- 요지(해당 문서 기준): 1B response envelope → 1C Arm O 17셀 전부 실패 → 1D E0 per-step containment PASS·low-knot 무효 / E1 CV-swept 감사 → **E1.5 `OPTIMIZER_JUDGE_EXPLOITATION_DEMONSTRATED`**(baseline 6/6 생존, O 후보 3/3 기각). 상세는 위 문서 참조.
+
 ### 2026-07-21 (gggg) — ✅ Move A0 물리-접지 terminal 경계 probe → **판정 = A0_TERMINAL_FEASIBLE_DYNAMIC_UNSOLVED** — η>1(realizable 2.6/2.0-2.1)서 terminal safe 실존(engage-무관)이나 dynamic corridor 미해결(barrier = trajectory-level)
 
 - **채택**: 사용자 지시(A0 boundary probe, full sweep 아님). Move B 판정 4개 carried: HISTORY_COMMITMENT_KINEMATICS_CONFIRMED / CASE_B_CAPTURE_NOT_VALIDATED / GROUNDED_LOWER_BOUND_FAIL / TEMPORAL_PREMISE_UNRESOLVED. θ=0.9 **고정**(pt1, geometry+judge 동시완화 금지). 산출 = `shepherd/scripts/c1_moveA0_probe.py`(+`_plot.py`) + `results/c1_corridor/c1_moveA0.{json,png}`. Case A·E1 불변.
