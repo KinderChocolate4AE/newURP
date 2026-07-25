@@ -1,0 +1,89 @@
+{
+ "meta": {
+  "phase": "1L_exact_adjudication",
+  "budget": "D0 (frozen, unchanged)",
+  "frozen_protocol": {
+   "verdict_rule": "binary existence test on INDEPENDENTLY verified escapes",
+   "K": 4,
+   "pop": 192,
+   "iters": 14,
+   "restarts": 2,
+   "n_cert": 20000,
+   "cert_seeds": [
+    91000101,
+    91000102,
+    91000103
+   ],
+   "replan_seeds_search": [
+    52000001,
+    52000002
+   ],
+   "replan_seeds_confirm": [
+    63000101,
+    63000102
+   ],
+   "verifier_n_sub": 64,
+   "reset": 1100,
+   "v_soft_replan_is_verdict_input": false
+  },
+  "uncertainty_budget_m": 0.01,
+  "exact_method": "degree-6 d^2 on breakpoint-aligned sub-intervals; exact stationary points of the degree-5 derivative",
+  "screen_status": "c1_replan_verify.certified_kill_clearance is a CONSERVATIVE_CONTINUOUS_CLEARANCE_SCREEN (1.25x empirical padding) and is NOT used for adjudication here",
+  "role": "FALSIFIER, not certifier"
+ },
+ "rows": [
+  {
+   "tag": "BASE   2.8/0.30",
+   "class": "D0_SURVIVOR",
+   "n_raw_claims": 2,
+   "n_unique": 1,
+   "n_audited": 1,
+   "n_not_audited": 0,
+   "n_verified_escape": 1,
+   "n_verified_collision": 0,
+   "n_unresolved_v3": 0,
+   "n_collision_free_but_caught": 0,
+   "best_exact_margin_m": 0.001695455028905446,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN_D0",
+   "strength_label": "FALSIFIED_BY_ADVERSARIAL_REPLAN_IN_NOMINAL_MODEL",
+   "uncertainty_budget_m": 0.01,
+   "candidates": [
+    {
+     "screen_lipschitz_margin_m": -0.005331292487012362,
+     "exact_margin_m": 0.001695455028905446,
+     "exact_verdict": "VERIFIED_COLLISION_FREE",
+     "escapes_net": true,
+     "classification": "VERIFIED_COLLISION_FREE_ESCAPE",
+     "argmin": {
+      "t0": 0.35,
+      "t1": 0.4,
+      "limiter": 2
+     },
+     "search_score": 0.001695455028905446,
+     "acc": [
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}
