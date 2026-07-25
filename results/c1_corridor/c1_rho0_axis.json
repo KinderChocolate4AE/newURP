@@ -1,0 +1,425 @@
+{
+ "meta": {
+  "phase": "1B_response_envelope",
+  "rho_star": 2.6,
+  "x_fire": 14.0,
+  "v_closing": 20.0,
+  "a_max": 30.0,
+  "tau_pipeline": 0.0,
+  "reset_seed": 1100,
+  "invariants": {
+   "r_kill": 2.6,
+   "r_net_dir": 2.1,
+   "eta": 1.04,
+   "theta": 0.9
+  },
+  "analytic_LB": "T=2*sqrt(|rho0-rho_star|/a_max)"
+ },
+ "cells": [
+  {
+   "rho0": 3.4,
+   "T_lead": 0.5,
+   "D_lead": 10.0,
+   "T_available": 0.5,
+   "T_radial_LB": 0.327,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 0.8,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.159744406118989,
+     "clearance_margin": -0.22500007252483967,
+     "terminal_radial_err": 0.325,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "RADIAL_OVERSHOOT",
+     "exact_replay": true
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 0.164,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    }
+   }
+  },
+  {
+   "rho0": 3.6,
+   "T_lead": 0.5,
+   "D_lead": 10.0,
+   "T_available": 0.5,
+   "T_radial_LB": 0.365,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 1.0,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.319488812237978,
+     "clearance_margin": -0.04656245470423104,
+     "terminal_radial_err": 0.147,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "RADIAL_OVERSHOOT",
+     "exact_replay": true
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 0.204,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    }
+   }
+  },
+  {
+   "rho0": 3.8,
+   "T_lead": 0.5,
+   "D_lead": 10.0,
+   "T_available": 0.5,
+   "T_radial_LB": 0.4,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 1.2,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.319488812237978,
+     "clearance_margin": -0.014606660012364547,
+     "terminal_radial_err": 0.104,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "RADIAL_OVERSHOOT",
+     "exact_replay": true
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 0.245,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    }
+   }
+  },
+  {
+   "rho0": 4.0,
+   "T_lead": 0.5,
+   "D_lead": 10.0,
+   "T_available": 0.5,
+   "T_radial_LB": 0.432,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 1.4,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    },
+    "C": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 0.475,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 0.298,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    }
+   }
+  },
+  {
+   "rho0": 4.2,
+   "T_lead": 0.5,
+   "D_lead": 10.0,
+   "T_available": 0.5,
+   "T_radial_LB": 0.462,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 1.6,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.159744406118989,
+     "clearance_margin": -0.17499995559866754,
+     "terminal_radial_err": 0.275,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "RADIAL_OVERSHOOT",
+     "exact_replay": true
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 0.351,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    }
+   }
+  },
+  {
+   "rho0": 4.4,
+   "T_lead": 0.5,
+   "D_lead": 10.0,
+   "T_available": 0.5,
+   "T_radial_LB": 0.49,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 1.8,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.3594249254092574,
+     "clearance_margin": -0.05875154994473475,
+     "terminal_radial_err": 0.09,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "RADIAL_OVERSHOOT",
+     "exact_replay": true
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 0.407,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION",
+     "exact_replay": true
+    }
+   }
+  },
+  {
+   "rho0": 4.6,
+   "T_lead": 0.5,
+   "D_lead": 10.0,
+   "T_available": 0.5,
+   "T_radial_LB": 0.516,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.0,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN",
+     "exact_replay": true
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.319488812237978,
+     "clearance_margin": -0.29999991851701735,
+     "terminal_radial_err": 0.175,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN",
+     "exact_replay": true
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 0.473,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN",
+     "exact_replay": true
+    }
+   }
+  },
+  {
+   "rho0": 4.8,
+   "T_lead": 0.5,
+   "D_lead": 10.0,
+   "T_available": 0.5,
+   "T_radial_LB": 0.542,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.2,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN",
+     "exact_replay": true
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.159744406118989,
+     "clearance_margin": -0.4000000193591938,
+     "terminal_radial_err": 0.275,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN",
+     "exact_replay": true
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.2,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN",
+     "exact_replay": true
+    }
+   }
+  },
+  {
+   "rho0": 5.0,
+   "T_lead": 0.5,
+   "D_lead": 10.0,
+   "T_available": 0.5,
+   "T_radial_LB": 0.566,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN",
+     "exact_replay": true
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.39936103858053684,
+     "clearance_margin": -0.19999990426272662,
+     "terminal_radial_err": 0.075,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN",
+     "exact_replay": true
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "max_angular_gap_deg": 180.0,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN",
+     "exact_replay": true
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,334 @@
+{
+ "meta": {
+  "phase": "R2_axis3_amax",
+  "rho0": 5.0,
+  "T_lead": 0.5,
+  "D_lead": 10.0,
+  "rho_star": 2.6,
+  "band_hi": 2.65,
+  "reset_seed": 1100,
+  "note": "limiter a_max patched at script+backend; attacker a_att_max held at config value"
+ },
+ "cells": [
+  {
+   "a_max": 30.0,
+   "adv_a_att_max": 30.0,
+   "T_available": 0.5,
+   "T_LB_point": 0.5657,
+   "T_LB_set": 0.5598,
+   "margin_set": -0.0598,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.39936103858053684,
+     "clearance_margin": -0.19999990426272662,
+     "terminal_radial_err": 0.075,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    }
+   }
+  },
+  {
+   "a_max": 32.0,
+   "adv_a_att_max": 30.0,
+   "T_available": 0.5,
+   "T_LB_point": 0.5477,
+   "T_LB_set": 0.542,
+   "margin_set": -0.042,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.2396166091784835,
+     "clearance_margin": -0.3799999552711478,
+     "terminal_radial_err": 0.24,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    }
+   }
+  },
+  {
+   "a_max": 34.0,
+   "adv_a_att_max": 30.0,
+   "T_available": 0.5,
+   "T_LB_point": 0.5314,
+   "T_LB_set": 0.5258,
+   "margin_set": -0.0258,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.159744406118989,
+     "clearance_margin": -0.5600000062795688,
+     "terminal_radial_err": 0.405,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    }
+   }
+  },
+  {
+   "a_max": 36.0,
+   "adv_a_att_max": 30.0,
+   "T_available": 0.5,
+   "T_LB_point": 0.5164,
+   "T_LB_set": 0.511,
+   "margin_set": -0.011,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.2795527223497629,
+     "clearance_margin": -0.3799999320600055,
+     "terminal_radial_err": 0.21,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    }
+   }
+  },
+  {
+   "a_max": 38.0,
+   "adv_a_att_max": 30.0,
+   "T_available": 0.5,
+   "T_LB_point": 0.5026,
+   "T_LB_set": 0.4974,
+   "margin_set": 0.0026,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.638977624475956,
+     "clearance_margin": -0.03138388473069764,
+     "terminal_radial_err": 0.0015,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "KINEMATIC_NEGATIVE_MARGIN"
+    }
+   }
+  },
+  {
+   "a_max": 40.0,
+   "adv_a_att_max": 30.0,
+   "T_available": 0.5,
+   "T_LB_point": 0.4899,
+   "T_LB_set": 0.4848,
+   "margin_set": 0.0152,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION"
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.319488812237978,
+     "clearance_margin": -0.0845000554524421,
+     "terminal_radial_err": 0.12,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "RADIAL_OVERSHOOT"
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION"
+    }
+   }
+  },
+  {
+   "a_max": 42.0,
+   "adv_a_att_max": 30.0,
+   "T_available": 0.5,
+   "T_LB_point": 0.4781,
+   "T_LB_set": 0.4731,
+   "margin_set": 0.0269,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION"
+    },
+    "C": {
+     "tier": 2,
+     "safe": false,
+     "capture_margin": 0.2396166091784835,
+     "clearance_margin": -0.1519999214876312,
+     "terminal_radial_err": 0.2385,
+     "fire_step": 9,
+     "penetrated": false,
+     "failure_mode": "RADIAL_OVERSHOOT"
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION"
+    }
+   }
+  },
+  {
+   "a_max": 45.0,
+   "adv_a_att_max": 30.0,
+   "T_available": 0.5,
+   "T_LB_point": 0.4619,
+   "T_LB_set": 0.457,
+   "margin_set": 0.043,
+   "arms": {
+    "H": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 2.4,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION"
+    },
+    "C": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 0.4125,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION"
+    },
+    "P": {
+     "tier": 0,
+     "safe": false,
+     "capture_margin": null,
+     "clearance_margin": null,
+     "terminal_radial_err": 0.526,
+     "fire_step": null,
+     "penetrated": true,
+     "failure_mode": "PENETRATION"
+    }
+   }
+  }
+ ]
+}
