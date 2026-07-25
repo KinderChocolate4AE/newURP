@@ -1,0 +1,1429 @@
+{
+ "meta": {
+  "phase": "1K_frozen_audit",
+  "frozen_protocol": {
+   "verdict_rule": "binary existence test on INDEPENDENTLY verified escapes",
+   "K": 4,
+   "pop": 192,
+   "iters": 14,
+   "restarts": 2,
+   "n_cert": 20000,
+   "cert_seeds": [
+    91000101,
+    91000102,
+    91000103
+   ],
+   "replan_seeds_search": [
+    52000001,
+    52000002
+   ],
+   "replan_seeds_confirm": [
+    63000101,
+    63000102
+   ],
+   "verifier_n_sub": 64,
+   "reset": 1100,
+   "v_soft_replan_is_verdict_input": false
+  },
+  "estimator_split": {
+   "i_stochastic": "Block-1 sample estimate (reported as v_soft_fixed_path)",
+   "ii_deterministic_bank": "boundary/dogleg blocks as an EXISTENCE test (deterministic_bank_escape_exists), not probability mass",
+   "iii_union_falsification": "the binary verdict"
+  },
+  "role": "FALSIFIER, not certifier"
+ },
+ "rows": [
+  {
+   "tag": "RH      2.8/0.15",
+   "class": "RH_hold",
+   "v_soft_fixed_path": 0.9828068264342775,
+   "raw_search_escapes": 25,
+   "independently_verified_escapes": 11,
+   "search_claimed_but_verifier_rejected": 10,
+   "best_verified_certified_margin_m": 0.04210954189062477,
+   "deterministic_bank_escape_exists": false,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.45852912758494,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.020967947722862146,
+     "V3_sampled_kill_margin_m": 0.029923871976778926,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.020967947722862146,
+     "cert_seed": 91000101,
+     "replan_seed": 63000102,
+     "search_score": 0.029923871976778926,
+     "acc": [
+      [
+       28.8735375303823,
+       -1.9884567552145365,
+       -5.356218559767701
+      ],
+      [
+       28.79915246676282,
+       -4.1349989509362635,
+       -4.616875483774185
+      ],
+      [
+       26.938989054854122,
+       -1.3361817063921726,
+       -7.411694568798437
+      ],
+      [
+       23.478256855229937,
+       -1.92421202716221,
+       -7.047559906767205
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.999999999999076,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.02545823988159368,
+     "V3_sampled_kill_margin_m": 0.034677298080687535,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.022993749323208336,
+     "cert_seed": 91000101,
+     "replan_seed": 63000102,
+     "search_score": 0.022993749323208336,
+     "acc": [
+      [
+       28.525587356555036,
+       -3.310180096249181,
+       -4.83018601520606
+      ],
+      [
+       29.515173227519043,
+       -1.7521715188472813,
+       -3.51190403209724
+      ],
+      [
+       25.69039242373087,
+       -1.0141196889868747,
+       -5.890723418206135
+      ],
+      [
+       23.32843452272462,
+       -3.5090789636456208,
+       -18.532957334052067
+      ]
+     ]
+    }
+   ],
+   "lp_d": 0.0,
+   "tier": 4
+  },
+  {
+   "tag": "RH      3.2/0.25",
+   "class": "RH_hold",
+   "v_soft_fixed_path": 0.9828068264342775,
+   "raw_search_escapes": 25,
+   "independently_verified_escapes": 11,
+   "search_claimed_but_verifier_rejected": 10,
+   "best_verified_certified_margin_m": 0.04145850014830499,
+   "deterministic_bank_escape_exists": false,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.45852912758494,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.02031690598054192,
+     "V3_sampled_kill_margin_m": 0.029923871976778926,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.02031690598054192,
+     "cert_seed": 91000101,
+     "replan_seed": 63000102,
+     "search_score": 0.029923871976778926,
+     "acc": [
+      [
+       28.8735375303823,
+       -1.9884567552145365,
+       -5.356218559767701
+      ],
+      [
+       28.79915246676282,
+       -4.1349989509362635,
+       -4.616875483774185
+      ],
+      [
+       26.938989054854122,
+       -1.3361817063921726,
+       -7.411694568798437
+      ],
+      [
+       23.478256855229937,
+       -1.92421202716221,
+       -7.047559906767205
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.999999999999076,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.024807198139273456,
+     "V3_sampled_kill_margin_m": 0.034677298080687535,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.022993749323208336,
+     "cert_seed": 91000101,
+     "replan_seed": 63000102,
+     "search_score": 0.022993749323208336,
+     "acc": [
+      [
+       28.525587356555036,
+       -3.310180096249181,
+       -4.83018601520606
+      ],
+      [
+       29.515173227519043,
+       -1.7521715188472813,
+       -3.51190403209724
+      ],
+      [
+       25.69039242373087,
+       -1.0141196889868747,
+       -5.890723418206135
+      ],
+      [
+       23.32843452272462,
+       -3.5090789636456208,
+       -18.532957334052067
+      ]
+     ]
+    }
+   ],
+   "lp_d": 0.0,
+   "tier": 4
+  },
+  {
+   "tag": "RH      4.0/0.40",
+   "class": "RH_hold",
+   "v_soft_fixed_path": 0.9358991584428464,
+   "raw_search_escapes": 372,
+   "independently_verified_escapes": 30,
+   "search_claimed_but_verifier_rejected": 0,
+   "best_verified_certified_margin_m": 0.05704931801582047,
+   "deterministic_bank_escape_exists": false,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.72343839842541,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.02592657964334988,
+     "V3_sampled_kill_margin_m": 0.03537857799551869,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.02592657964334988,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 0.03537857799551869,
+     "acc": [
+      [
+       28.84582339861314,
+       6.364974541444617,
+       -3.299751773660377
+      ],
+      [
+       28.84582339861314,
+       6.364974541444617,
+       -3.299751773660377
+      ],
+      [
+       28.84582339861314,
+       6.364974541444617,
+       -3.299751773660377
+      ],
+      [
+       28.84582339861314,
+       6.364974541444617,
+       -3.299751773660377
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.01055459713241,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.016076476276126073,
+     "V3_sampled_kill_margin_m": 0.02691450935104367,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.016076476276126073,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 0.02430358263287776,
+     "acc": [
+      [
+       28.971201624467337,
+       -1.234557154262697,
+       -0.870415475804597
+      ],
+      [
+       26.997599322127133,
+       -1.354892631487122,
+       -4.690163536160929
+      ],
+      [
+       19.55191512439272,
+       -0.6565529218974349,
+       -20.038008426673272
+      ],
+      [
+       22.02542816369634,
+       -18.350592714262312,
+       2.623774923476284
+      ]
+     ]
+    }
+   ],
+   "lp_d": 0.05,
+   "tier": 4
+  },
+  {
+   "tag": "RH      5.0/0.55",
+   "class": "RH_hold",
+   "v_soft_fixed_path": 0.9712115058596934,
+   "raw_search_escapes": 224,
+   "independently_verified_escapes": 18,
+   "search_claimed_but_verifier_rejected": 6,
+   "best_verified_certified_margin_m": 0.05886803607874613,
+   "deterministic_bank_escape_exists": false,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.72343839842541,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.0008478029318039759,
+     "V3_sampled_kill_margin_m": 0.009713863706561465,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.0008478029318039759,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 0.009713863706561465,
+     "acc": [
+      [
+       28.84582339861314,
+       6.364974541444617,
+       -3.299751773660377
+      ],
+      [
+       28.84582339861314,
+       6.364974541444617,
+       -3.299751773660377
+      ],
+      [
+       28.84582339861314,
+       6.364974541444617,
+       -3.299751773660377
+      ],
+      [
+       28.84582339861314,
+       6.364974541444617,
+       -3.299751773660377
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.267627308254443,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.010429285260161958,
+     "V3_sampled_kill_margin_m": 0.0199531413667855,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.010429285260161958,
+     "cert_seed": 91000101,
+     "replan_seed": 63000102,
+     "search_score": 0.0199531413667855,
+     "acc": [
+      [
+       26.927948043453217,
+       10.70795164118175,
+       -4.101145458780776
+      ],
+      [
+       28.79541108943995,
+       -0.43420838137899875,
+       1.3119768449799507
+      ],
+      [
+       24.821509188574424,
+       6.703094495945532,
+       -4.3549368833618916
+      ],
+      [
+       22.61552239505415,
+       -4.922861849107402,
+       0.7653705467364009
+      ]
+     ]
+    }
+   ],
+   "lp_d": 0.02,
+   "tier": 4
+  },
+  {
+   "tag": "MAXCLR  5.0/0.55",
+   "class": "maxclr_positive_control",
+   "v_soft_fixed_path": 0.030095144285659386,
+   "raw_search_escapes": 16009,
+   "independently_verified_escapes": 30,
+   "search_claimed_but_verifier_rejected": 0,
+   "best_verified_certified_margin_m": 1.0507155330751972,
+   "deterministic_bank_escape_exists": true,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.99999999999901,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 1.0495504665973154,
+     "V3_sampled_kill_margin_m": 1.0707970046136759,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 1.0495504665973154,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 1.0707353469853746,
+     "acc": [
+      [
+       25.19688527407481,
+       -14.042837933950668,
+       6.420050637056988
+      ],
+      [
+       20.888188870094783,
+       -19.98036221165737,
+       7.718337666220142
+      ],
+      [
+       23.086159615539767,
+       -18.556339388930912,
+       4.763559875615343
+      ],
+      [
+       6.712644179230532,
+       -21.332705043037016,
+       19.217180928764595
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.99999999999906,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 1.048735350758998,
+     "V3_sampled_kill_margin_m": 1.069910315060933,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 1.048735350758998,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 1.0698699559041964,
+     "acc": [
+      [
+       25.254386766010313,
+       -13.95838224211584,
+       6.885314203964119
+      ],
+      [
+       20.706225962420596,
+       -20.187931212591394,
+       7.660460720036627
+      ],
+      [
+       23.2187180471474,
+       -18.677582123516054,
+       3.4184150749664983
+      ],
+      [
+       7.806026081394451,
+       -21.236050066707445,
+       19.700155694329624
+      ]
+     ]
+    }
+   ],
+   "tier": 4
+  },
+  {
+   "tag": "MAXCLR  4.0/0.40",
+   "class": "maxclr_positive_control",
+   "v_soft_fixed_path": 0.034847355888086275,
+   "raw_search_escapes": 15929,
+   "independently_verified_escapes": 30,
+   "search_claimed_but_verifier_rejected": 0,
+   "best_verified_certified_margin_m": 0.9320014250346809,
+   "deterministic_bank_escape_exists": true,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.999999999999016,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.9249834228600728,
+     "V3_sampled_kill_margin_m": 0.9448308344454523,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.9249834228600728,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 0.9450275794427276,
+     "acc": [
+      [
+       24.12609166998917,
+       -5.827509021139309,
+       -16.66208711534512
+      ],
+      [
+       25.491330509557564,
+       -6.984734470846301,
+       -11.978241491013803
+      ],
+      [
+       22.05141111224415,
+       -7.275991625364231,
+       -18.994610125674225
+      ],
+      [
+       16.92956672201331,
+       -2.8166122214340756,
+       -23.74748844560376
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.999999999999037,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.9251558686157746,
+     "V3_sampled_kill_margin_m": 0.9449012750600425,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.9251558686157746,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 0.9447002501665644,
+     "acc": [
+      [
+       23.878761732049757,
+       -5.9878838647853865,
+       -15.783962728174785
+      ],
+      [
+       25.669439037177114,
+       -6.655825641352342,
+       -14.027825367764791
+      ],
+      [
+       22.891598885595233,
+       -7.369875389405233,
+       -17.93487209894725
+      ],
+      [
+       17.72299192524021,
+       -5.253858212585232,
+       -21.441669382831044
+      ]
+     ]
+    }
+   ],
+   "tier": 4
+  },
+  {
+   "tag": "EXPLOIT 3.2/0.35",
+   "class": "e15_optimizer_exploit",
+   "v_soft_fixed_path": 0.3928117005416576,
+   "raw_search_escapes": 6051,
+   "independently_verified_escapes": 30,
+   "search_claimed_but_verifier_rejected": 0,
+   "best_verified_certified_margin_m": 0.21490271066037892,
+   "deterministic_bank_escape_exists": true,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.97172828679635,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.16864197242752121,
+     "V3_sampled_kill_margin_m": 0.1784568361182406,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.16864197242752121,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 0.1735812688784772,
+     "acc": [
+      [
+       29.033563293508127,
+       3.6118729754983727,
+       -6.5046961949249065
+      ],
+      [
+       23.074032019625744,
+       10.55176904823757,
+       -1.6953563601667132
+      ],
+      [
+       26.498682525948325,
+       10.971503077384519,
+       2.825345301800838
+      ],
+      [
+       21.362880455424353,
+       3.4559999978564453,
+       -2.428947044383126
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.99999999999912,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.16177039785302405,
+     "V3_sampled_kill_margin_m": 0.1711200882584687,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.16177039785302405,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 0.1711200882584687,
+     "acc": [
+      [
+       24.563635802007852,
+       2.1910194863937087,
+       -3.7272248629005187
+      ],
+      [
+       27.828157788566973,
+       10.741604127600786,
+       -3.19555548543227
+      ],
+      [
+       25.77552379155279,
+       14.496508241867616,
+       -5.047139988597598
+      ],
+      [
+       28.45279054363711,
+       3.025084498528137,
+       9.01596218141026
+      ]
+     ]
+    }
+   ],
+   "cem_seed": 401320735,
+   "note": "1E exploit, deterministic reproduction",
+   "tier": 4
+  },
+  {
+   "tag": "EXPLOIT 3.2/0.40",
+   "class": "e15_optimizer_exploit",
+   "v_soft_fixed_path": 0.31741059789774173,
+   "raw_search_escapes": 7266,
+   "independently_verified_escapes": 30,
+   "search_claimed_but_verifier_rejected": 0,
+   "best_verified_certified_margin_m": 0.2423593353520852,
+   "deterministic_bank_escape_exists": true,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 28.5797327047213,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.1749505260698796,
+     "V3_sampled_kill_margin_m": 0.18412297542626632,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.1749505260698796,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 0.18412297542626632,
+     "acc": [
+      [
+       27.402236368139814,
+       2.1371641534739094,
+       7.83269384560755
+      ],
+      [
+       27.402236368139814,
+       2.1371641534739094,
+       7.83269384560755
+      ],
+      [
+       27.402236368139814,
+       2.1371641534739094,
+       7.83269384560755
+      ],
+      [
+       27.402236368139814,
+       2.1371641534739094,
+       7.83269384560755
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.99999999999919,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.13620483473240652,
+     "V3_sampled_kill_margin_m": 0.1472181342086043,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.13620483473240652,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 0.1472181342086043,
+     "acc": [
+      [
+       25.8088217433537,
+       -12.209778262526436,
+       -9.210105048242996
+      ],
+      [
+       25.152603714811065,
+       -3.392945371385243,
+       15.99482566558384
+      ],
+      [
+       28.105802026270837,
+       -5.087897545948845,
+       7.247154264835952
+      ],
+      [
+       6.121560293713994,
+       1.629398174043161,
+       14.928535180734182
+      ]
+     ]
+    }
+   ],
+   "cem_seed": 401320740,
+   "note": "1E exploit, deterministic reproduction",
+   "tier": 4
+  },
+  {
+   "tag": "EXPLOIT 4.0/0.70",
+   "class": "e15_optimizer_exploit",
+   "v_soft_fixed_path": 0.027555598907530243,
+   "raw_search_escapes": 16126,
+   "independently_verified_escapes": 30,
+   "search_claimed_but_verifier_rejected": 0,
+   "best_verified_certified_margin_m": 2.4386264156586575,
+   "deterministic_bank_escape_exists": true,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.999999999999016,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 2.411522062363273,
+     "V3_sampled_kill_margin_m": 2.446177632008997,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 2.137052664442649,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 2.137052664442649,
+     "acc": [
+      [
+       -1.3110813026768198,
+       -13.566280641704509,
+       -26.725214599105186
+      ],
+      [
+       -3.9835115288630645,
+       -14.761488460848508,
+       -25.811407031471827
+      ],
+      [
+       -3.594347096496084,
+       -16.105508995699267,
+       -25.053807074760137
+      ],
+      [
+       -1.3805687184623543,
+       -11.559626796402597,
+       -27.649033587838737
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.943272313011427,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 2.219972589982761,
+     "V3_sampled_kill_margin_m": 2.2546966552048366,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 2.1369195087443718,
+     "cert_seed": 91000101,
+     "replan_seed": 63000101,
+     "search_score": 2.1369195087443718,
+     "acc": [
+      [
+       -1.962759102822743,
+       -4.730809742152354,
+       -29.501975742295624
+      ],
+      [
+       -1.962759102822743,
+       -4.730809742152354,
+       -29.501975742295624
+      ],
+      [
+       -1.962759102822743,
+       -4.730809742152354,
+       -29.501975742295624
+      ],
+      [
+       -1.962759102822743,
+       -4.730809742152354,
+       -29.501975742295624
+      ]
+     ]
+    }
+   ],
+   "cem_seed": 401400771,
+   "note": "1E exploit, deterministic reproduction",
+   "tier": 4
+  },
+  {
+   "tag": "BASE    2.8/0.30",
+   "class": "legacy_baseline",
+   "v_soft_fixed_path": 0.9938271604938271,
+   "raw_search_escapes": 2,
+   "independently_verified_escapes": 0,
+   "search_claimed_but_verifier_rejected": 2,
+   "best_verified_certified_margin_m": null,
+   "deterministic_bank_escape_exists": false,
+   "verifier_checks_all_pass": true,
+   "verdict": "SURVIVED_ADVERSARIAL_REPLAN_SEARCH",
+   "verified_sample": [],
+   "arm": "C",
+   "tier": 4
+  },
+  {
+   "tag": "BASE    3.2/0.50",
+   "class": "legacy_baseline",
+   "v_soft_fixed_path": 0.990990990990991,
+   "raw_search_escapes": 4,
+   "independently_verified_escapes": 3,
+   "search_claimed_but_verifier_rejected": 1,
+   "best_verified_certified_margin_m": 0.00910955691853177,
+   "deterministic_bank_escape_exists": false,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.784925993529516,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.00836115632073442,
+     "V3_sampled_kill_margin_m": 0.015962399116103754,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.00836115632073442,
+     "cert_seed": 91000102,
+     "replan_seed": 63000101,
+     "search_score": 0.015962399116103754,
+     "acc": [
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ],
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ],
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ],
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.9903960600387,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.00910955691853177,
+     "V3_sampled_kill_margin_m": 0.01767601554426168,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.0020955684190907906,
+     "cert_seed": 91000102,
+     "replan_seed": 63000101,
+     "search_score": 0.0020955684190907906,
+     "acc": [
+      [
+       29.502334659448266,
+       2.8957810664246555,
+       -4.5442884476272845
+      ],
+      [
+       27.675744034060767,
+       -2.8239937968257642,
+       -6.165698075951278
+      ],
+      [
+       27.183060252191932,
+       -10.89458771054668,
+       -5.219745849221629
+      ],
+      [
+       20.43959979221661,
+       -8.032369181059728,
+       -6.337985659344798
+      ]
+     ]
+    }
+   ],
+   "arm": "C",
+   "tier": 4
+  },
+  {
+   "tag": "BASE    3.2/0.70",
+   "class": "legacy_baseline",
+   "v_soft_fixed_path": 0.9907407407407408,
+   "raw_search_escapes": 10,
+   "independently_verified_escapes": 4,
+   "search_claimed_but_verifier_rejected": 2,
+   "best_verified_certified_margin_m": 0.007322941267951855,
+   "deterministic_bank_escape_exists": false,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.982601835878626,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.004359463713196288,
+     "V3_sampled_kill_margin_m": 0.01136919919322299,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.004359463713196288,
+     "cert_seed": 91000102,
+     "replan_seed": 63000101,
+     "search_score": 0.010281360964589474,
+     "acc": [
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.691922285431602,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.003485449148812325,
+     "V3_sampled_kill_margin_m": 0.010903469852560299,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.003485449148812325,
+     "cert_seed": 91000102,
+     "replan_seed": 63000101,
+     "search_score": 0.008034420186398024,
+     "acc": [
+      [
+       28.669568689530106,
+       6.293106927359955,
+       -4.479161234119498
+      ],
+      [
+       28.824249282152195,
+       3.243530457680545,
+       3.520284527901313
+      ],
+      [
+       25.458643733969673,
+       6.591482617545188,
+       -7.491279364296941
+      ],
+      [
+       29.079020073515682,
+       5.574975900231931,
+       0.36789198353139074
+      ]
+     ]
+    }
+   ],
+   "arm": "P",
+   "tier": 4
+  },
+  {
+   "tag": "BASE    4.0/0.70",
+   "class": "legacy_baseline",
+   "v_soft_fixed_path": 0.993939393939394,
+   "raw_search_escapes": 11,
+   "independently_verified_escapes": 3,
+   "search_claimed_but_verifier_rejected": 7,
+   "best_verified_certified_margin_m": 0.011789540362874273,
+   "deterministic_bank_escape_exists": false,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.784925993529516,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.011789540362874273,
+     "V3_sampled_kill_margin_m": 0.023018086531279902,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.011789540362874273,
+     "cert_seed": 91000102,
+     "replan_seed": 63000101,
+     "search_score": 0.023018086531279902,
+     "acc": [
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ],
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ],
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ],
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.784925993529516,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.011789540362874273,
+     "V3_sampled_kill_margin_m": 0.023018086531279902,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.011789540362874273,
+     "cert_seed": 91000102,
+     "replan_seed": 63000102,
+     "search_score": 0.023018086531279902,
+     "acc": [
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ],
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ],
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ],
+      [
+       29.13358356569955,
+       -5.512176172402788,
+       2.8270194383531138
+      ]
+     ]
+    }
+   ],
+   "arm": "C",
+   "tier": 4
+  },
+  {
+   "tag": "BASE    4.0/0.70",
+   "class": "legacy_baseline",
+   "v_soft_fixed_path": 0.9907407407407408,
+   "raw_search_escapes": 2,
+   "independently_verified_escapes": 2,
+   "search_claimed_but_verifier_rejected": 0,
+   "best_verified_certified_margin_m": 0.004544629825515845,
+   "deterministic_bank_escape_exists": false,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.982601835878626,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.004544629825515845,
+     "V3_sampled_kill_margin_m": 0.011952275406950985,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.004544629825515845,
+     "cert_seed": 91000102,
+     "replan_seed": 63000101,
+     "search_score": 0.010281360964589474,
+     "acc": [
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.982601835878626,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.004544629825515845,
+     "V3_sampled_kill_margin_m": 0.011952275406950985,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.004544629825515845,
+     "cert_seed": 91000102,
+     "replan_seed": 63000102,
+     "search_score": 0.010281360964589474,
+     "acc": [
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ]
+     ]
+    }
+   ],
+   "arm": "P",
+   "tier": 4
+  },
+  {
+   "tag": "BASE    5.0/1.00",
+   "class": "legacy_baseline",
+   "v_soft_fixed_path": 0.9897435897435898,
+   "raw_search_escapes": 2,
+   "independently_verified_escapes": 2,
+   "search_claimed_but_verifier_rejected": 0,
+   "best_verified_certified_margin_m": 0.0013491358129935627,
+   "deterministic_bank_escape_exists": false,
+   "verifier_checks_all_pass": true,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN",
+   "verified_sample": [
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.982601835878626,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.0013491358129935627,
+     "V3_sampled_kill_margin_m": 0.008319144098822395,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.0013491358129935627,
+     "cert_seed": 91000102,
+     "replan_seed": 63000101,
+     "search_score": 0.008319144098822395,
+     "acc": [
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ]
+     ]
+    },
+    {
+     "n_segments": 4,
+     "n_sub": 64,
+     "V1_control_admissible": true,
+     "max_accel_norm": 29.982601835878626,
+     "V2_endpoint_residual_m": 0.0,
+     "V2_dynamics_match": true,
+     "V3_certified_kill_margin_m": 0.0013491358129935627,
+     "V3_sampled_kill_margin_m": 0.008319144098822395,
+     "V3_no_tunneling": true,
+     "V4_caught_by_net": false,
+     "V4_escapes_net": true,
+     "V5_exact_replay": true,
+     "is_escape": true,
+     "margin_m": 0.0013491358129935627,
+     "cert_seed": 91000102,
+     "replan_seed": 63000102,
+     "search_score": 0.008319144098822395,
+     "acc": [
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ],
+      [
+       29.39465860225325,
+       -5.758498881861128,
+       1.322932021464186
+      ]
+     ]
+    }
+   ],
+   "arm": "P",
+   "tier": 4
+  }
+ ],
+ "summary": {
+  "falsified": 14,
+  "total": 15
+ }
+}
