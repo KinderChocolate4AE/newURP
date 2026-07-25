@@ -1,0 +1,264 @@
+{
+ "meta": {
+  "phase": "1G_search_T_dyn",
+  "n_cert": 2000,
+  "theta": 0.9,
+  "criterion": "tier 4 AND actual-model point estimate >= theta",
+  "lp": "solve_witness_hold (displacement-constrained)"
+ },
+ "cells": [
+  {
+   "rho0": 2.8,
+   "T": 0.15,
+   "f": 2,
+   "lp_d": 0.0,
+   "lp_min_clr": 0.15,
+   "tier": 4,
+   "sup_disp": 0.010986327698258275,
+   "v_soft_static": 0.9746835443037974,
+   "v_soft_actual": 0.9746835443037974,
+   "lcb_actual": 0.9263376179088434,
+   "n_feas_actual": 79,
+   "dynamic_ok": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "rho0": 3.2,
+   "T": 0.15,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 3.2,
+   "T": 0.2,
+   "f": 4,
+   "lp_d": 0.05,
+   "lp_min_clr": 0.1,
+   "tier": 4,
+   "sup_disp": 0.10854493572639247,
+   "v_soft_static": 1.0,
+   "v_soft_actual": 0.6976744186046512,
+   "lcb_actual": 0.6112033560672914,
+   "n_feas_actual": 86,
+   "dynamic_ok": false,
+   "labels": [
+    "TIER4_GEOM",
+    "JUDGE_MODEL_SENSITIVE",
+    "FALSIFIED_UNDER_ACTUAL_TRAJECTORY_JUDGE"
+   ]
+  },
+  {
+   "rho0": 3.2,
+   "T": 0.25,
+   "f": 5,
+   "lp_d": 0.0,
+   "lp_min_clr": 0.15,
+   "tier": 4,
+   "sup_disp": 0.038216208269680634,
+   "v_soft_static": 0.97,
+   "v_soft_actual": 0.9746835443037974,
+   "lcb_actual": 0.9263376179088434,
+   "n_feas_actual": 79,
+   "dynamic_ok": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.15,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.2,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.25,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.3,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.35,
+   "f": 7,
+   "lp_d": 0.05,
+   "lp_min_clr": 0.1,
+   "tier": 4,
+   "sup_disp": 0.105777931803485,
+   "v_soft_static": 1.0,
+   "v_soft_actual": 0.6484375,
+   "lcb_actual": 0.5765962002290104,
+   "n_feas_actual": 128,
+   "dynamic_ok": false,
+   "labels": [
+    "TIER4_GEOM",
+    "JUDGE_MODEL_SENSITIVE",
+    "FALSIFIED_UNDER_ACTUAL_TRAJECTORY_JUDGE"
+   ]
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.4,
+   "f": 8,
+   "lp_d": 0.0,
+   "lp_min_clr": 0.15,
+   "tier": 0,
+   "sup_disp": 0.08598639328913407,
+   "v_soft_static": 0.8920863309352518,
+   "v_soft_actual": 0.9746835443037974,
+   "lcb_actual": 0.9263376179088434,
+   "n_feas_actual": 79,
+   "dynamic_ok": false,
+   "labels": [
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.4,
+   "f": 7,
+   "lp_d": 0.05,
+   "lp_min_clr": 0.1,
+   "tier": 4,
+   "sup_disp": 0.05732411618065032,
+   "v_soft_static": 0.9746835443037974,
+   "v_soft_actual": 0.9727272727272728,
+   "lcb_actual": 0.9337047242890708,
+   "n_feas_actual": 110,
+   "dynamic_ok": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.15,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.2,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.25,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.3,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.35,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.4,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.45,
+   "lp": "INFEASIBLE"
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.5,
+   "f": 10,
+   "lp_d": 0.02,
+   "lp_min_clr": 0.13,
+   "tier": 0,
+   "sup_disp": 0.11626953964880936,
+   "v_soft_static": 0.7486631016042781,
+   "v_soft_actual": 1.0,
+   "lcb_actual": 0.9668809613489335,
+   "n_feas_actual": 79,
+   "dynamic_ok": false,
+   "labels": [
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.55,
+   "f": 11,
+   "lp_d": 0.0,
+   "lp_min_clr": 0.15,
+   "tier": 0,
+   "sup_disp": 0.08598639346231178,
+   "v_soft_static": 0.8920863309352518,
+   "v_soft_actual": 0.9746835443037974,
+   "lcb_actual": 0.9263376179088434,
+   "n_feas_actual": 79,
+   "dynamic_ok": false,
+   "labels": [
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.55,
+   "f": 10,
+   "lp_d": 0.02,
+   "lp_min_clr": 0.13,
+   "tier": 4,
+   "sup_disp": 0.025859352360851018,
+   "v_soft_static": 0.9746835443037974,
+   "v_soft_actual": 0.9764705882352941,
+   "lcb_actual": 0.9313562103807579,
+   "n_feas_actual": 85,
+   "dynamic_ok": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  }
+ ],
+ "T_star_dyn": {
+  "2.8": 0.15,
+  "3.2": 0.25,
+  "4.0": 0.4,
+  "5.0": 0.55
+ },
+ "winners": {
+  "2.8": {
+   "T": 0.15,
+   "f": 2,
+   "lp_d": 0.0
+  },
+  "3.2": {
+   "T": 0.25,
+   "f": 5,
+   "lp_d": 0.0
+  },
+  "4.0": {
+   "T": 0.4,
+   "f": 7,
+   "lp_d": 0.05
+  },
+  "5.0": {
+   "T": 0.55,
+   "f": 10,
+   "lp_d": 0.02
+  }
+ }
+}

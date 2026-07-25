@@ -1,0 +1,385 @@
+{
+ "meta": {
+  "phase": "1G_arm_L_dynamic_judge",
+  "lp_variant": "hold",
+  "commit": "b978f1b",
+  "config_sha": "92b243f3ee39c86f",
+  "n_cert": 20000,
+  "cert_seeds": [
+   77000001,
+   77000002,
+   77000003
+  ],
+  "theta": 0.9,
+  "eps_disp": 0.1,
+  "substeps": 8,
+  "models": "static | cv_swept | actual (fixed-path REMASK; no adversarial replan)",
+  "caveat": "a pass is TIER4_DYNAMIC_REMASK, not a full dynamic certificate; the attacker sample bank is not replanned against moving limiters"
+ },
+ "path_parity": [
+  {
+   "rho0": 2.8,
+   "T": 0.15,
+   "f": 2,
+   "mismatch": []
+  },
+  {
+   "rho0": 3.2,
+   "T": 0.25,
+   "f": 5,
+   "mismatch": []
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.4,
+   "f": 7,
+   "mismatch": []
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.55,
+   "f": 10,
+   "mismatch": []
+  },
+  {
+   "rho0": 3.2,
+   "T": 0.2,
+   "f": 4,
+   "mismatch": []
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.35,
+   "f": 7,
+   "mismatch": []
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.6,
+   "f": 11,
+   "mismatch": []
+  }
+ ],
+ "rows": [
+  {
+   "src": "ARM_L",
+   "rho0": 2.8,
+   "T": 0.15,
+   "arm": "LH(f=2)",
+   "tier": 4,
+   "legacy_clr": 0.1499999894059808,
+   "dense_clr": 0.13901366170772256,
+   "sup_disp": 0.010986327698258275,
+   "disp_limit": 0.26,
+   "v_fire_max": 1.4999999415373444,
+   "v_soft_static": 0.9736842105263158,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.9736842105263158,
+   "lcb_actual": 0.9564642823249402,
+   "n_feas_static": 380,
+   "n_feas_actual": 380,
+   "certifies_actual": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 3.2,
+   "T": 0.25,
+   "arm": "LH(f=5)",
+   "tier": 4,
+   "legacy_clr": 0.1499999894059808,
+   "dense_clr": 0.14511717694636717,
+   "sup_disp": 0.038216208269680634,
+   "disp_limit": 0.26,
+   "v_fire_max": 2.1666666856729617,
+   "v_soft_static": 0.9561688311688312,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.9736842105263158,
+   "lcb_actual": 0.9564642823249402,
+   "n_feas_static": 616,
+   "n_feas_actual": 380,
+   "certifies_actual": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 4.0,
+   "T": 0.4,
+   "arm": "LH(f=7)",
+   "tier": 4,
+   "legacy_clr": 0.10000009207786309,
+   "dense_clr": 0.0926758732253602,
+   "sup_disp": 0.05732411618065032,
+   "disp_limit": 0.26,
+   "v_fire_max": 2.5000000778235734,
+   "v_soft_static": 0.9736842105263158,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.9535211267605633,
+   "lcb_actual": 0.9387134919029526,
+   "n_feas_static": 380,
+   "n_feas_actual": 710,
+   "certifies_actual": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 5.0,
+   "T": 0.55,
+   "arm": "LH(f=10)",
+   "tier": 4,
+   "legacy_clr": 0.130000011905821,
+   "dense_clr": 0.12719727489501487,
+   "sup_disp": 0.025859352360851018,
+   "disp_limit": 0.26,
+   "v_fire_max": 1.89999999855451,
+   "v_soft_static": 0.9736842105263158,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.9739130434782609,
+   "lcb_actual": 0.9586408783115553,
+   "n_feas_static": 380,
+   "n_feas_actual": 460,
+   "certifies_actual": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 3.2,
+   "T": 0.2,
+   "arm": "LH(f=4)",
+   "tier": 4,
+   "legacy_clr": 0.10000009207786309,
+   "dense_clr": 0.09267587310285019,
+   "sup_disp": 0.10854493572639247,
+   "disp_limit": 0.26,
+   "v_fire_max": 0.999999994798829,
+   "v_soft_static": 1.0,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.8841698841698842,
+   "lcb_actual": 0.8474145345692475,
+   "n_feas_static": 43,
+   "n_feas_actual": 259,
+   "certifies_actual": false,
+   "labels": [
+    "TIER4_GEOM",
+    "JUDGE_MODEL_SENSITIVE",
+    "FALSIFIED_UNDER_ACTUAL_TRAJECTORY_JUDGE"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 4.0,
+   "T": 0.35,
+   "arm": "LH(f=7)",
+   "tier": 4,
+   "legacy_clr": 0.10000009207786309,
+   "dense_clr": 0.0926758732253602,
+   "sup_disp": 0.105777931803485,
+   "disp_limit": 0.26,
+   "v_fire_max": 0.9999999831932577,
+   "v_soft_static": 1.0,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.6753782668500687,
+   "lcb_actual": 0.6462067362198529,
+   "n_feas_static": 43,
+   "n_feas_actual": 727,
+   "certifies_actual": false,
+   "labels": [
+    "TIER4_GEOM",
+    "JUDGE_MODEL_SENSITIVE",
+    "FALSIFIED_UNDER_ACTUAL_TRAJECTORY_JUDGE"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 5.0,
+   "T": 0.6,
+   "arm": "LH(f=11)",
+   "tier": 4,
+   "legacy_clr": 0.1499999894059808,
+   "dense_clr": 0.1390136615339007,
+   "sup_disp": 0.010986327872079935,
+   "disp_limit": 0.26,
+   "v_fire_max": 1.4999999415373444,
+   "v_soft_static": 0.9736842105263158,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.9736842105263158,
+   "lcb_actual": 0.9564642823249402,
+   "n_feas_static": 380,
+   "n_feas_actual": 380,
+   "certifies_actual": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 5.0,
+   "T": 0.5,
+   "arm": "L(f=9)",
+   "variant": "hold",
+   "lp": "INFEASIBLE"
+  },
+  {
+   "src": "1B",
+   "rho0": 2.8,
+   "T": 0.3,
+   "arm": "C",
+   "tier": 4,
+   "legacy_clr": 0.0817085909193781,
+   "dense_clr": 0.0814804304770308,
+   "sup_disp": 0.015406487606731852,
+   "disp_limit": 0.26,
+   "v_fire_max": 0.30264991226854737,
+   "v_soft_static": 0.9948453608247423,
+   "v_soft_cv": 1.0,
+   "v_soft_actual": 0.9942196531791907,
+   "lcb_actual": 0.9745069472809872,
+   "n_feas_static": 194,
+   "n_feas_actual": 173,
+   "certifies_actual": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_SWEPT_CONSISTENT",
+    "TIER4_DYNAMIC_REMASK"
+   ]
+  },
+  {
+   "src": "1B",
+   "rho0": 3.2,
+   "T": 0.5,
+   "arm": "C",
+   "tier": 4,
+   "legacy_clr": 0.03515380689027825,
+   "dense_clr": 0.03515380689027825,
+   "sup_disp": 0.07474265553284476,
+   "disp_limit": 0.26,
+   "v_fire_max": 0.7856413036329571,
+   "v_soft_static": 1.0,
+   "v_soft_cv": 0.6680421824850986,
+   "v_soft_actual": 0.9875,
+   "lcb_actual": 0.9691353190317454,
+   "n_feas_static": 121,
+   "n_feas_actual": 240,
+   "certifies_actual": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "src": "1B",
+   "rho0": 3.2,
+   "T": 0.7,
+   "arm": "P",
+   "tier": 4,
+   "legacy_clr": 0.10026959168364724,
+   "dense_clr": 0.10026959168364724,
+   "sup_disp": 0.037640981396970294,
+   "disp_limit": 0.26,
+   "v_fire_max": 0.28522958751624133,
+   "v_soft_static": 0.9785932721712538,
+   "v_soft_cv": 1.0,
+   "v_soft_actual": 0.9906976744186047,
+   "lcb_actual": 0.972279738880084,
+   "n_feas_static": 327,
+   "n_feas_actual": 215,
+   "certifies_actual": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_SWEPT_CONSISTENT",
+    "TIER4_DYNAMIC_REMASK"
+   ]
+  },
+  {
+   "src": "1B",
+   "rho0": 4.0,
+   "T": 0.7,
+   "arm": "C",
+   "tier": 4,
+   "legacy_clr": 0.07499992381574916,
+   "dense_clr": 0.07499992381574916,
+   "sup_disp": 0.24586915447359278,
+   "disp_limit": 0.26,
+   "v_fire_max": 4.499999957622202,
+   "v_soft_static": 1.0,
+   "v_soft_cv": 0.029619007152467954,
+   "v_soft_actual": 0.9879154078549849,
+   "lcb_actual": 0.9733540018346554,
+   "n_feas_static": 155,
+   "n_feas_actual": 331,
+   "certifies_actual": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "src": "1B",
+   "rho0": 4.0,
+   "T": 0.7,
+   "arm": "P",
+   "tier": 4,
+   "legacy_clr": 0.10095631050230958,
+   "dense_clr": 0.10095631050230958,
+   "sup_disp": 0.09225542273193578,
+   "disp_limit": 0.26,
+   "v_fire_max": 0.6926895313585008,
+   "v_soft_static": 0.9363241678726484,
+   "v_soft_cv": 1.0,
+   "v_soft_actual": 0.9907834101382489,
+   "lcb_actual": 0.9725316847028752,
+   "n_feas_static": 691,
+   "n_feas_actual": 217,
+   "certifies_actual": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_SWEPT_CONSISTENT",
+    "TIER4_DYNAMIC_REMASK"
+   ]
+  },
+  {
+   "src": "1B",
+   "rho0": 5.0,
+   "T": 1.0,
+   "arm": "P",
+   "tier": 4,
+   "legacy_clr": 0.09656047236136123,
+   "dense_clr": 0.09654807629677753,
+   "sup_disp": 0.02246345076045327,
+   "disp_limit": 0.26,
+   "v_fire_max": 0.24454894065767122,
+   "v_soft_static": 0.9844357976653697,
+   "v_soft_cv": 1.0,
+   "v_soft_actual": 0.9948453608247423,
+   "lcb_actual": 0.9772265182092051,
+   "n_feas_static": 257,
+   "n_feas_actual": 194,
+   "certifies_actual": true,
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_SWEPT_CONSISTENT",
+    "TIER4_DYNAMIC_REMASK"
+   ]
+  }
+ ]
+}

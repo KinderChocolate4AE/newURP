@@ -1,0 +1,92 @@
+[
+ {
+  "rho0": 4.95,
+  "d_star": 0.1375,
+  "tier": 4,
+  "sup_disp": 0.1420775507941977,
+  "v_soft_static": 0.9736842105263158,
+  "v_soft_actual": 0.9668874172185431,
+  "lcb_actual": 0.9453767636138095,
+  "certified": true,
+  "labels": [
+   "TIER4_GEOM",
+   "TIER4_DYNAMIC_REMASK",
+   "JUDGE_MODEL_SENSITIVE"
+  ]
+ },
+ {
+  "rho0": 4.9,
+  "d_star": 0.1125,
+  "tier": 4,
+  "sup_disp": 0.11613278370797045,
+  "v_soft_static": 0.9736842105263158,
+  "v_soft_actual": 0.8958652373660031,
+  "lcb_actual": 0.8745422284449662,
+  "certified": false,
+  "labels": [
+   "TIER4_GEOM",
+   "JUDGE_MODEL_SENSITIVE",
+   "FALSIFIED_UNDER_ACTUAL_TRAJECTORY_JUDGE"
+  ]
+ },
+ {
+  "rho0": 4.8,
+  "d_star": 0.0687,
+  "tier": 4,
+  "sup_disp": 0.07882086780436542,
+  "v_soft_static": 0.9736842105263158,
+  "v_soft_actual": 0.9568245125348189,
+  "lcb_actual": 0.9425373572819093,
+  "certified": true,
+  "labels": [
+   "TIER4_GEOM",
+   "TIER4_DYNAMIC_REMASK",
+   "JUDGE_MODEL_SENSITIVE"
+  ]
+ },
+ {
+  "rho0": 4.7,
+  "d_star": 0.0437,
+  "tier": 4,
+  "sup_disp": 0.05213218577461286,
+  "v_soft_static": 0.9736842105263158,
+  "v_soft_actual": 0.975736568457539,
+  "lcb_actual": 0.96277140808846,
+  "certified": true,
+  "labels": [
+   "TIER4_GEOM",
+   "TIER4_DYNAMIC_REMASK",
+   "JUDGE_MODEL_SENSITIVE"
+  ]
+ },
+ {
+  "rho0": 4.6,
+  "d_star": 0.0187,
+  "tier": 4,
+  "sup_disp": 0.024243113716586058,
+  "v_soft_static": 0.9736842105263158,
+  "v_soft_actual": 0.9698275862068966,
+  "lcb_actual": 0.9537960904911967,
+  "certified": true,
+  "labels": [
+   "TIER4_GEOM",
+   "TIER4_DYNAMIC_REMASK",
+   "JUDGE_MODEL_SENSITIVE"
+  ]
+ },
+ {
+  "rho0": 4.5,
+  "d_star": 0.0,
+  "tier": 4,
+  "sup_disp": 0.010986328589400409,
+  "v_soft_static": 0.9736842105263158,
+  "v_soft_actual": 0.9736842105263158,
+  "lcb_actual": 0.9564642823249402,
+  "certified": true,
+  "labels": [
+   "TIER4_GEOM",
+   "TIER4_DYNAMIC_REMASK",
+   "JUDGE_MODEL_SENSITIVE"
+  ]
+ }
+]

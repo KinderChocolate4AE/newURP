@@ -1,0 +1,267 @@
+{
+ "meta": {
+  "phase": "1G_arm_L_dynamic_judge",
+  "lp_variant": "maxclr",
+  "commit": "b978f1b",
+  "config_sha": "92b243f3ee39c86f",
+  "n_cert": 20000,
+  "cert_seeds": [
+   77000001,
+   77000002,
+   77000003
+  ],
+  "theta": 0.9,
+  "eps_disp": 0.1,
+  "substeps": 8,
+  "models": "static | cv_swept | actual (fixed-path REMASK; no adversarial replan)",
+  "caveat": "a pass is TIER4_DYNAMIC_REMASK, not a full dynamic certificate; the attacker sample bank is not replanned against moving limiters"
+ },
+ "path_parity": [
+  {
+   "rho0": 2.8,
+   "T": 0.15,
+   "f": 2,
+   "mismatch": []
+  },
+  {
+   "rho0": 3.2,
+   "T": 0.25,
+   "f": 5,
+   "mismatch": []
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.4,
+   "f": 7,
+   "mismatch": []
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.55,
+   "f": 10,
+   "mismatch": []
+  },
+  {
+   "rho0": 3.2,
+   "T": 0.2,
+   "f": 4,
+   "mismatch": []
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.35,
+   "f": 7,
+   "mismatch": []
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.6,
+   "f": 11,
+   "mismatch": []
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.5,
+   "f": 9,
+   "mismatch": []
+  }
+ ],
+ "rows": [
+  {
+   "src": "ARM_L",
+   "rho0": 2.8,
+   "T": 0.15,
+   "arm": "LM(f=2)",
+   "tier": 4,
+   "legacy_clr": 0.1499999894059808,
+   "dense_clr": 0.13901366170772256,
+   "sup_disp": 2.099999894052925,
+   "disp_limit": 0.26,
+   "v_fire_max": 1.4999999415373444,
+   "v_soft_static": 0.9736842105263158,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.028019226582257282,
+   "lcb_actual": 0.026929463686565625,
+   "n_feas_static": 380,
+   "n_feas_actual": 59709,
+   "certifies_actual": false,
+   "labels": [
+    "TIER4_GEOM",
+    "JUDGE_MODEL_SENSITIVE",
+    "FALSIFIED_UNDER_ACTUAL_TRAJECTORY_JUDGE",
+    "STATIC_JUDGE_DISPLACEMENT_SCREEN_FAIL"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 3.2,
+   "T": 0.25,
+   "arm": "LM(f=5)",
+   "tier": 0,
+   "legacy_clr": null,
+   "dense_clr": null,
+   "sup_disp": 1.4999998549494626,
+   "disp_limit": 0.26,
+   "v_fire_max": 2.999999929496974,
+   "v_soft_static": 0.8404785643070788,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.037933927397229214,
+   "lcb_actual": 0.036465652310276354,
+   "n_feas_static": 1003,
+   "n_feas_actual": 44103,
+   "certifies_actual": false,
+   "labels": [
+    "STATIC_JUDGE_DISPLACEMENT_SCREEN_FAIL"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 4.0,
+   "T": 0.4,
+   "arm": "LM(f=7)",
+   "tier": 4,
+   "legacy_clr": 0.10000009207786309,
+   "dense_clr": 0.09570320910662022,
+   "sup_disp": 1.6999998834580472,
+   "disp_limit": 0.26,
+   "v_fire_max": 2.5000000778235734,
+   "v_soft_static": 0.9736842105263158,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.03437577052683488,
+   "lcb_actual": 0.03304290340412242,
+   "n_feas_static": 380,
+   "n_feas_actual": 48668,
+   "certifies_actual": false,
+   "labels": [
+    "TIER4_GEOM",
+    "JUDGE_MODEL_SENSITIVE",
+    "FALSIFIED_UNDER_ACTUAL_TRAJECTORY_JUDGE",
+    "STATIC_JUDGE_DISPLACEMENT_SCREEN_FAIL"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 5.0,
+   "T": 0.55,
+   "arm": "LM(f=10)",
+   "tier": 4,
+   "legacy_clr": 0.13000005832810346,
+   "dense_clr": 0.12969731835562104,
+   "sup_disp": 1.9400002133184866,
+   "disp_limit": 0.26,
+   "v_fire_max": 1.89999999855451,
+   "v_soft_static": 0.9736842105263158,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.02964629997164729,
+   "lcb_actual": 0.028494163709693113,
+   "n_feas_static": 380,
+   "n_feas_actual": 56432,
+   "certifies_actual": false,
+   "labels": [
+    "TIER4_GEOM",
+    "JUDGE_MODEL_SENSITIVE",
+    "FALSIFIED_UNDER_ACTUAL_TRAJECTORY_JUDGE",
+    "STATIC_JUDGE_DISPLACEMENT_SCREEN_FAIL"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 3.2,
+   "T": 0.2,
+   "arm": "LM(f=4)",
+   "tier": 4,
+   "legacy_clr": 0.10000009207786309,
+   "dense_clr": 0.09570320903861862,
+   "sup_disp": 2.29999987613922,
+   "disp_limit": 0.26,
+   "v_fire_max": 0.999999994798829,
+   "v_soft_static": 1.0,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.01129581216396192,
+   "lcb_actual": 0.01061231825747883,
+   "n_feas_static": 43,
+   "n_feas_actual": 60819,
+   "certifies_actual": false,
+   "labels": [
+    "TIER4_GEOM",
+    "JUDGE_MODEL_SENSITIVE",
+    "FALSIFIED_UNDER_ACTUAL_TRAJECTORY_JUDGE",
+    "STATIC_JUDGE_DISPLACEMENT_SCREEN_FAIL"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 4.0,
+   "T": 0.35,
+   "arm": "LM(f=7)",
+   "tier": 4,
+   "legacy_clr": 0.10000009207786309,
+   "dense_clr": 0.09570320910662022,
+   "sup_disp": 2.29999987613922,
+   "disp_limit": 0.26,
+   "v_fire_max": 0.9999999831932577,
+   "v_soft_static": 1.0,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.01129581216396192,
+   "lcb_actual": 0.01061231825747883,
+   "n_feas_static": 43,
+   "n_feas_actual": 60819,
+   "certifies_actual": false,
+   "labels": [
+    "TIER4_GEOM",
+    "JUDGE_MODEL_SENSITIVE",
+    "FALSIFIED_UNDER_ACTUAL_TRAJECTORY_JUDGE",
+    "STATIC_JUDGE_DISPLACEMENT_SCREEN_FAIL"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 5.0,
+   "T": 0.6,
+   "arm": "LM(f=11)",
+   "tier": 4,
+   "legacy_clr": 0.1499999894059808,
+   "dense_clr": 0.13901366141015659,
+   "sup_disp": 2.0999998476306376,
+   "disp_limit": 0.26,
+   "v_fire_max": 1.499999964748487,
+   "v_soft_static": 0.9736842105263158,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.028019226582257282,
+   "lcb_actual": 0.026929463686565625,
+   "n_feas_static": 380,
+   "n_feas_actual": 59709,
+   "certifies_actual": false,
+   "labels": [
+    "TIER4_GEOM",
+    "JUDGE_MODEL_SENSITIVE",
+    "FALSIFIED_UNDER_ACTUAL_TRAJECTORY_JUDGE",
+    "STATIC_JUDGE_DISPLACEMENT_SCREEN_FAIL"
+   ]
+  },
+  {
+   "src": "ARM_L",
+   "rho0": 5.0,
+   "T": 0.5,
+   "arm": "LM(f=9)",
+   "tier": 2,
+   "legacy_clr": -0.012499873297315944,
+   "dense_clr": -0.015771360649905142,
+   "sup_disp": 1.1500001344565276,
+   "disp_limit": 0.26,
+   "v_fire_max": 3.8749999698546804,
+   "v_soft_static": 0.9736842105263158,
+   "v_soft_cv": null,
+   "v_soft_actual": 0.07557141566537176,
+   "lcb_actual": 0.0727007922249481,
+   "n_feas_static": 380,
+   "n_feas_actual": 22138,
+   "certifies_actual": false,
+   "labels": [
+    "JUDGE_MODEL_SENSITIVE",
+    "LANE_CLEARANCE_FAILS_DENSE",
+    "STATIC_JUDGE_DISPLACEMENT_SCREEN_FAIL"
+   ]
+  }
+ ]
+}
