@@ -1,0 +1,1040 @@
+{
+ "meta": {
+  "phase": "1I_audit_response",
+  "n_dep_judge": 8,
+  "N_DEP_lp": 8,
+  "search_seeds": [
+   77000001,
+   77000002,
+   77000003
+  ],
+  "confirm_seeds": [
+   91000101,
+   91000102,
+   91000103
+  ],
+  "search_ncert": 2000,
+  "confirm_ncert": 20000,
+  "theta": 0.9
+ },
+ "offbyone": {
+  "cells": [
+   {
+    "rho0": 2.8,
+    "T": 0.15,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 2
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 2
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.2,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 2
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 2
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.25,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 3
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 3
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.3,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 4
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 4
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.35,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 5
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 5
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.4,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 6
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 6
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.45,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 7
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 7
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.5,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 8
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 8
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.55,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 9
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 9
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.6,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 10
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 10
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.65,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.7,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 12
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 12
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.75,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 13
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 13
+    },
+    "differs": false
+   },
+   {
+    "rho0": 2.8,
+    "T": 0.8,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 14
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 14
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.15,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.2,
+    "nd8": {
+     "d_star": 0.05,
+     "f": 4
+    },
+    "nd9": {
+     "d_star": 0.05,
+     "f": 4
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.25,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 5
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 5
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.3,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 5
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 5
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.35,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 5
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 5
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.4,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 6
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 6
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.45,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 7
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 7
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.5,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 8
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 8
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.55,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 9
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 9
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.6,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 10
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 10
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.65,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.7,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 12
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 12
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.75,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 13
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 13
+    },
+    "differs": false
+   },
+   {
+    "rho0": 3.2,
+    "T": 0.8,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 14
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 14
+    },
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.15,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.2,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.25,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.3,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.35,
+    "nd8": {
+     "d_star": 0.05,
+     "f": 7
+    },
+    "nd9": {
+     "d_star": 0.05,
+     "f": 7
+    },
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.4,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 8
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 8
+    },
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.45,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 8
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 8
+    },
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.5,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 8
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 8
+    },
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.55,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 9
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 9
+    },
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.6,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 10
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 10
+    },
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.65,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.7,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 12
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 12
+    },
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.75,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 13
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 13
+    },
+    "differs": false
+   },
+   {
+    "rho0": 4.0,
+    "T": 0.8,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 14
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 14
+    },
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.15,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.2,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.25,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.3,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.35,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.4,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.45,
+    "nd8": null,
+    "nd9": null,
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.5,
+    "nd8": {
+     "d_star": 0.02,
+     "f": 10
+    },
+    "nd9": {
+     "d_star": 0.02,
+     "f": 10
+    },
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.55,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.6,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.65,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 11
+    },
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.7,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 12
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 12
+    },
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.75,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 13
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 13
+    },
+    "differs": false
+   },
+   {
+    "rho0": 5.0,
+    "T": 0.8,
+    "nd8": {
+     "d_star": 0.0,
+     "f": 14
+    },
+    "nd9": {
+     "d_star": 0.0,
+     "f": 14
+    },
+    "differs": false
+   }
+  ],
+  "n_feasibility_flips": 0,
+  "verdict": "CONFIRMED_AND_FIXED; no feasibility flip at this grid"
+ },
+ "sealed_witnesses": {
+  "2.8": {
+   "T": 0.15,
+   "f": 2,
+   "lp_d_star": 0.0,
+   "a_seq": [
+    -30.0,
+    -0.0,
+    30.0,
+    -0.0,
+    -0.0,
+    -0.0,
+    -0.0,
+    -0.0,
+    -0.0,
+    -0.0
+   ],
+   "n_dep": 8
+  },
+  "3.2": {
+   "T": 0.25,
+   "f": 5,
+   "lp_d_star": 0.0,
+   "a_seq": [
+    -30.0,
+    -30.0,
+    -13.3333,
+    30.0,
+    30.0,
+    13.3333,
+    -0.0,
+    -0.0,
+    -0.0,
+    -0.0,
+    -0.0,
+    -0.0,
+    -0.0
+   ],
+   "n_dep": 8
+  },
+  "4.0": {
+   "T": 0.4,
+   "f": 7,
+   "lp_d_star": 0.05,
+   "a_seq": [
+    -30.0,
+    -30.0,
+    -30.0,
+    -30.0,
+    10.0,
+    30.0,
+    30.0,
+    30.0,
+    30.0,
+    -20.0,
+    13.3333,
+    30.0,
+    -30.0,
+    -18.3333,
+    30.0
+   ],
+   "n_dep": 8
+  },
+  "5.0": {
+   "T": 0.55,
+   "f": 10,
+   "lp_d_star": 0.02,
+   "a_seq": [
+    -30.0,
+    -30.0,
+    -30.0,
+    -30.0,
+    -30.0,
+    -8.0,
+    30.0,
+    30.0,
+    30.0,
+    30.0,
+    30.0,
+    24.0,
+    -18.0,
+    -12.0,
+    30.0,
+    -30.0,
+    12.0,
+    18.0
+   ],
+   "n_dep": 8
+  }
+ },
+ "confirmatory": [
+  {
+   "rho0": 2.8,
+   "T": 0.15,
+   "f": 2,
+   "lp_d_star": 0.0,
+   "tier": 4,
+   "sup_disp": 0.010986327698258275,
+   "dense_clr": 0.13901366170772256,
+   "v_soft_actual_confirm": 0.9826302729528535,
+   "wilson_lcb_pooled": 0.9682664454585495,
+   "per_seed_v_soft": [
+    1.0,
+    0.9632352941176471,
+    0.9851851851851852
+   ],
+   "across_scramble": {
+    "mean": 0.9828068264342775,
+    "sd": 0.018497387448366688,
+    "n_scrambles": 3,
+    "lcb": 0.9516227692962291
+   },
+   "n_feas_confirm": 403,
+   "certifies_pooled_wilson": true,
+   "certifies_across_scramble": true,
+   "union_composition": {
+    "n_total": 20504,
+    "block_sizes": [
+     20000,
+     72,
+     432
+    ],
+    "stochastic_share_of_union": 0.9754194303550526,
+    "feasible_per_block": [
+     119,
+     4,
+     9
+    ],
+    "n_feasible": 132,
+    "deterministic_share_of_feasible": 0.09848484848484848,
+    "note": "blocks 2.. are deterministic; pooling 3 seeds counts them 3x with identical outcomes, so the pooled Wilson n is inflated and correlated"
+   },
+   "fixed_ray": {
+    "lp_rho_residual_m": {
+     "max_abs": 1.5400782116259393e-07,
+     "at_fire": -8.841758969424518e-08,
+     "rms": 9.247969775450512e-08
+    },
+    "azimuth_drift_deg": {
+     "max": 1.7828510465857036e-06,
+     "at_fire": 1.6592212322287824e-06
+    },
+    "tangential_speed_ms": {
+     "max": 1.1987901297256643e-08
+    },
+    "axial_speed_ms": {
+     "max": 0.0
+    },
+    "controller_character": "radial magnitude = OPEN-LOOP schedule a_seq[t]; radial DIRECTION and tangential damping = feedback on the live observation; therefore neither pure open-loop replay nor a disturbance-robust feedback certificate"
+   },
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "rho0": 3.2,
+   "T": 0.25,
+   "f": 5,
+   "lp_d_star": 0.0,
+   "tier": 4,
+   "sup_disp": 0.038216208269680634,
+   "dense_clr": 0.14511717694636717,
+   "v_soft_actual_confirm": 0.9826302729528535,
+   "wilson_lcb_pooled": 0.9682664454585495,
+   "per_seed_v_soft": [
+    1.0,
+    0.9632352941176471,
+    0.9851851851851852
+   ],
+   "across_scramble": {
+    "mean": 0.9828068264342775,
+    "sd": 0.018497387448366688,
+    "n_scrambles": 3,
+    "lcb": 0.9516227692962291
+   },
+   "n_feas_confirm": 403,
+   "certifies_pooled_wilson": true,
+   "certifies_across_scramble": true,
+   "union_composition": {
+    "n_total": 20504,
+    "block_sizes": [
+     20000,
+     72,
+     432
+    ],
+    "stochastic_share_of_union": 0.9754194303550526,
+    "feasible_per_block": [
+     119,
+     4,
+     9
+    ],
+    "n_feasible": 132,
+    "deterministic_share_of_feasible": 0.09848484848484848,
+    "note": "blocks 2.. are deterministic; pooling 3 seeds counts them 3x with identical outcomes, so the pooled Wilson n is inflated and correlated"
+   },
+   "fixed_ray": {
+    "lp_rho_residual_m": {
+     "max_abs": 1.5400782249486156e-07,
+     "at_fire": -7.782271049805445e-08,
+     "rms": 8.934941536506418e-08
+    },
+    "azimuth_drift_deg": {
+     "max": 2.4187295988311606e-06,
+     "at_fire": 1.1408898234563538e-06
+    },
+    "tangential_speed_ms": {
+     "max": 1.744815249588663e-07
+    },
+    "axial_speed_ms": {
+     "max": 0.0
+    },
+    "controller_character": "radial magnitude = OPEN-LOOP schedule a_seq[t]; radial DIRECTION and tangential damping = feedback on the live observation; therefore neither pure open-loop replay nor a disturbance-robust feedback certificate"
+   },
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "rho0": 4.0,
+   "T": 0.4,
+   "f": 7,
+   "lp_d_star": 0.05,
+   "tier": 4,
+   "sup_disp": 0.05577796446504361,
+   "dense_clr": 0.09570320910662022,
+   "v_soft_actual_confirm": 0.935672514619883,
+   "wilson_lcb_pooled": 0.9184596050605489,
+   "per_seed_v_soft": [
+    0.9247787610619469,
+    0.9493087557603687,
+    0.9336099585062241
+   ],
+   "across_scramble": {
+    "mean": 0.9358991584428464,
+    "sd": 0.012424189600876356,
+    "n_scrambles": 3,
+    "lcb": 0.914953679548102
+   },
+   "n_feas_confirm": 684,
+   "certifies_pooled_wilson": true,
+   "certifies_across_scramble": true,
+   "union_composition": {
+    "n_total": 20504,
+    "block_sizes": [
+     20000,
+     72,
+     432
+    ],
+    "stochastic_share_of_union": 0.9754194303550526,
+    "feasible_per_block": [
+     213,
+     4,
+     9
+    ],
+    "n_feasible": 226,
+    "deterministic_share_of_feasible": 0.05752212389380531,
+    "note": "blocks 2.. are deterministic; pooling 3 seeds counts them 3x with identical outcomes, so the pooled Wilson n is inflated and correlated"
+   },
+   "fixed_ray": {
+    "lp_rho_residual_m": {
+     "max_abs": 1.593048328807356e-07,
+     "at_fire": -5.6632950329316145e-08,
+     "rms": 9.192469707675604e-08
+    },
+    "azimuth_drift_deg": {
+     "max": 1.6928439189884688e-06,
+     "at_fire": 4.152258918860536e-07
+    },
+    "tangential_speed_ms": {
+     "max": 1.3553903463641693e-07
+    },
+    "axial_speed_ms": {
+     "max": 0.0
+    },
+    "controller_character": "radial magnitude = OPEN-LOOP schedule a_seq[t]; radial DIRECTION and tangential damping = feedback on the live observation; therefore neither pure open-loop replay nor a disturbance-robust feedback certificate"
+   },
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  },
+  {
+   "rho0": 5.0,
+   "T": 0.55,
+   "f": 10,
+   "lp_d_star": 0.02,
+   "tier": 4,
+   "sup_disp": 0.025078099516600835,
+   "dense_clr": 0.12782227548396186,
+   "v_soft_actual_confirm": 0.9709443099273608,
+   "wilson_lcb_pooled": 0.9539848491312362,
+   "per_seed_v_soft": [
+    0.9924242424242424,
+    0.9552238805970149,
+    0.9659863945578231
+   ],
+   "across_scramble": {
+    "mean": 0.9712115058596934,
+    "sd": 0.019142702816134977,
+    "n_scrambles": 3,
+    "lcb": 0.9389395355578688
+   },
+   "n_feas_confirm": 413,
+   "certifies_pooled_wilson": true,
+   "certifies_across_scramble": true,
+   "union_composition": {
+    "n_total": 20504,
+    "block_sizes": [
+     20000,
+     72,
+     432
+    ],
+    "stochastic_share_of_union": 0.9754194303550526,
+    "feasible_per_block": [
+     119,
+     4,
+     9
+    ],
+    "n_feasible": 132,
+    "deterministic_share_of_feasible": 0.09848484848484848,
+    "note": "blocks 2.. are deterministic; pooling 3 seeds counts them 3x with identical outcomes, so the pooled Wilson n is inflated and correlated"
+   },
+   "fixed_ray": {
+    "lp_rho_residual_m": {
+     "max_abs": 3.6994646368526674e-07,
+     "at_fire": 2.1266344552017813e-07,
+     "rms": 2.2253793531345199e-07
+    },
+    "azimuth_drift_deg": {
+     "max": 2.6149254221341063e-06,
+     "at_fire": 6.001234944051301e-07
+    },
+    "tangential_speed_ms": {
+     "max": 1.9765698926955886e-07
+    },
+    "axial_speed_ms": {
+     "max": 0.0
+    },
+    "controller_character": "radial magnitude = OPEN-LOOP schedule a_seq[t]; radial DIRECTION and tangential damping = feedback on the live observation; therefore neither pure open-loop replay nor a disturbance-robust feedback certificate"
+   },
+   "labels": [
+    "TIER4_GEOM",
+    "TIER4_DYNAMIC_REMASK",
+    "JUDGE_MODEL_SENSITIVE"
+   ]
+  }
+ ],
+ "T_star_RH_remask_grid": {
+  "2.8": 0.15,
+  "3.2": 0.25,
+  "4.0": 0.4,
+  "5.0": 0.55
+ }
+}
