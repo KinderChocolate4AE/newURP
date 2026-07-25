@@ -1,0 +1,75 @@
+{
+ "meta": {
+  "suite": "c1_invariant_tests",
+  "protocol": "c1-D0-2026-07-25",
+  "strength_tiers": [
+   "SEARCH_CANDIDATE",
+   "NUMERICALLY_VERIFIED_COUNTEREXAMPLE",
+   "INTERVAL_CERTIFIED_COUNTEREXAMPLE"
+  ],
+  "generality_tiers": [
+   "FIXED_CONDITION",
+   "MULTI_RESET",
+   "DISTRIBUTION_LEVEL"
+  ]
+ },
+ "n_pass": 11,
+ "n_total": 11,
+ "results": [
+  {
+   "invariant": "I1 stronger attacker class never raises v_soft",
+   "pass": true,
+   "detail": "v_fixed 1.000000 -> v_union 1.000000"
+  },
+  {
+   "invariant": "I2 K=8 nests K=4 (endpoint identity)",
+   "pass": true,
+   "detail": "endpoint delta 1.777e-15 m"
+  },
+  {
+   "invariant": "I2b K=6 is NOT claimed to nest K=4",
+   "pass": true,
+   "detail": "documented in D2b, no containment claim"
+  },
+  {
+   "invariant": "I3 independent integrator matches endpoint",
+   "pass": true,
+   "detail": "delta 0.000e+00 m"
+  },
+  {
+   "invariant": "I4 diversity-mode seeds differ per witness",
+   "pass": true,
+   "detail": "[232690, 731049, 645939]"
+  },
+  {
+   "invariant": "I5 paired-mode seeds identical across witnesses",
+   "pass": true,
+   "detail": "283007"
+  },
+  {
+   "invariant": "I5b seeds are stable across processes (SHA-256, not hash())",
+   "pass": true,
+   "detail": "re-derived equal"
+  },
+  {
+   "invariant": "I6 every bundle field changes evidence_bundle_hash",
+   "pass": true,
+   "detail": "10/10 fields"
+  },
+  {
+   "invariant": "I6b same attack_policy_hash, different evidence_bundle_hash",
+   "pass": true,
+   "detail": "policy shared, bundle distinct"
+  },
+  {
+   "invariant": "I7 screen failure is not relabelled as collision",
+   "pass": true,
+   "detail": "24 screen-failures examined, 0 mislabelled"
+  },
+  {
+   "invariant": "I8 LP deploy window matches the judge window",
+   "pass": true,
+   "detail": "N_DEP=8, judge n_dep=8"
+  }
+ ]
+}
