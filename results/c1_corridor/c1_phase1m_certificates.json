@@ -1,0 +1,237 @@
+{
+ "meta": {
+  "phase": "1M_certificates_and_registry",
+  "adjudicator": "NUMERICALLY_RESOLVED_CONTINUOUS_MINIMUM_DISTANCE (companion-matrix roots; NOT exact root isolation)",
+  "certificate": "Bernstein convex hull + de Casteljau bisection, outward-rounded",
+  "budget_m": 0.01,
+  "budget_scope": "ADDITIVE GEOMETRIC error on the relative distance only; does NOT cover dynamics/tracking/Hermite-mismatch/cone/admissibility uncertainty channels",
+  "role": "FALSIFIER, not certifier"
+ },
+ "M1_exploit_readjudication": [
+  {
+   "n_raw_claims": 6051,
+   "n_unique": 6048,
+   "n_audited": 12,
+   "n_verified_escape": 12,
+   "n_verified_collision": 0,
+   "n_unresolved": 0,
+   "best_numerically_resolved_margin_m": 0.223629781302507,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN_D0",
+   "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR",
+   "top_escape_acc": [
+    [
+     28.172388401378267,
+     3.171894337875651,
+     7.832955316363896
+    ],
+    [
+     28.172388401378267,
+     3.171894337875651,
+     7.832955316363896
+    ],
+    [
+     28.172388401378267,
+     3.171894337875651,
+     7.832955316363896
+    ],
+    [
+     28.172388401378267,
+     3.171894337875651,
+     7.832955316363896
+    ]
+   ],
+   "tag": "EXPLOIT 3.2/0.35 WS1",
+   "cem_seed": 401320735,
+   "tier": 4
+  },
+  {
+   "n_raw_claims": 7266,
+   "n_unique": 7263,
+   "n_audited": 12,
+   "n_verified_escape": 12,
+   "n_verified_collision": 0,
+   "n_unresolved": 0,
+   "best_numerically_resolved_margin_m": 0.2513427557552612,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN_D0",
+   "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR",
+   "top_escape_acc": [
+    [
+     28.172388401378267,
+     3.171894337875651,
+     7.832955316363896
+    ],
+    [
+     28.172388401378267,
+     3.171894337875651,
+     7.832955316363896
+    ],
+    [
+     28.172388401378267,
+     3.171894337875651,
+     7.832955316363896
+    ],
+    [
+     28.172388401378267,
+     3.171894337875651,
+     7.832955316363896
+    ]
+   ],
+   "tag": "EXPLOIT 3.2/0.40 WS1",
+   "cem_seed": 401320740,
+   "tier": 4
+  },
+  {
+   "n_raw_claims": 16126,
+   "n_unique": 16123,
+   "n_audited": 12,
+   "n_verified_escape": 12,
+   "n_verified_collision": 0,
+   "n_unresolved": 0,
+   "best_numerically_resolved_margin_m": 2.406944431858006,
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN_D0",
+   "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR",
+   "top_escape_acc": [
+    [
+     -2.2141533374475806,
+     -18.072471306911464,
+     -23.84288795131731
+    ],
+    [
+     -3.455994873296164,
+     -17.664715287183597,
+     -24.000290274461985
+    ],
+    [
+     -2.216516206853339,
+     -18.221465952267984,
+     -23.728995647836335
+    ],
+    [
+     -0.22419966499495925,
+     -19.940534563240984,
+     -22.412603950508505
+    ]
+   ],
+   "tag": "EXPLOIT 4.0/0.70 WS2",
+   "cem_seed": 401400771,
+   "tier": 4
+  }
+ ],
+ "M2_interval_certificates": [
+  {
+   "tag": "BASE   2.8/0.30",
+   "numerically_resolved_margin_m": 0.001695455028905446,
+   "certificate": "CERTIFIED_COLLISION_FREE",
+   "bound_d2_minus_r2": 0.008819240716270826,
+   "implied_min_distance_lower_bound_m": 2.601695455028561,
+   "method": "Bernstein convex-hull bound + de Casteljau bisection, outward-rounded"
+  },
+  {
+   "tag": "BASE   5.0/1.00",
+   "numerically_resolved_margin_m": 0.00831914409882284,
+   "certificate": "CERTIFIED_COLLISION_FREE",
+   "bound_d2_minus_r2": 0.043328757470613155,
+   "implied_min_distance_lower_bound_m": 2.6083191440984774,
+   "method": "Bernstein convex-hull bound + de Casteljau bisection, outward-rounded"
+  }
+ ],
+ "M3_escalation_registry": {
+  "D0": {
+   "status": "EXECUTED_AND_FROZEN",
+   "K": 4,
+   "pop": 192,
+   "iters": 14,
+   "restarts": 2,
+   "cert_seeds": [
+    91000101,
+    91000102,
+    91000103
+   ],
+   "replan_seeds": [
+    63000101,
+    63000102
+   ],
+   "n_cert": 20000,
+   "note": "results preserved verbatim; never overwritten"
+  },
+  "D1": {
+   "status": "PRE_REGISTERED_DORMANT",
+   "trigger": "auto-fires ONLY on a controller-scenario with ZERO verified escapes at D0",
+   "invariants": [
+    "controller artifact and all settings sealed BEFORE D0",
+    "no controller re-optimisation inside D1",
+    "verifier, objective and attacker dynamics unchanged from D0",
+    "D0 seeds/artifacts not reused as search state (reference column only)"
+   ],
+   "K": 4,
+   "pop": 192,
+   "iters": 14,
+   "restarts": 16,
+   "replan_seeds": [
+    64000201,
+    64000202,
+    64000203,
+    64000204,
+    64000205,
+    64000206,
+    64000207,
+    64000208,
+    64000209,
+    64000210,
+    64000211,
+    64000212,
+    64000213,
+    64000214,
+    64000215,
+    64000216
+   ],
+   "cert_seeds": [
+    91000101,
+    91000102,
+    91000103
+   ],
+   "n_cert": 20000,
+   "rationale": "restart diversity prioritised over population; counts fixed now so a future survivor cannot retro-tune the stopping point",
+   "outputs": [
+    "SURVIVED_D0_AND_D1",
+    "FALSIFIED_BY_ADVERSARIAL_REPLAN_D1"
+   ]
+  },
+  "D2": {
+   "status": "PRE_REGISTERED_DORMANT",
+   "trigger": "only on a D1 survivor",
+   "note": "ATTACKER CLASS CHANGE, not a budget increase -- separate protocol version",
+   "K": [
+    6,
+    8
+   ],
+   "containment_test_required": "K=4 trajectories must be exactly representable",
+   "additions": [
+    "alternative control basis",
+    "direct collocation",
+    "optimizer diversity"
+   ]
+  },
+  "D3": {
+   "status": "PRE_REGISTERED_DORMANT",
+   "trigger": "only on a D2 survivor",
+   "additions": [
+    "CMA-ES",
+    "gradient refinement",
+    "verified-artifact warm-start perturbation"
+   ]
+  },
+  "D0-MARGIN-STRENGTHENING": {
+   "status": "PRE_REGISTERED_DORMANT",
+   "kind": "NOT survivor escalation",
+   "purpose": "find larger-margin counterexamples for already-falsified scenarios",
+   "note": "cannot change any FALSIFIED verdict; only raises the strength label"
+  },
+  "D0-MODE-DIVERSITY": {
+   "status": "PRE_REGISTERED_DORMANT",
+   "kind": "NOT survivor escalation",
+   "purpose": "enumerate independent escape basins for controller design",
+   "note": "outputs are FIXED_CONDITION_CONTROLLER_DESIGN_DIAGNOSTIC; frequency claims forbidden (single reset, optimizer sampling is not an attacker distribution)"
+  }
+ }
+}
