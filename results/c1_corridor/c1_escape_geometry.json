@@ -1,0 +1,317 @@
+{
+ "meta": {
+  "n_cert": 20000,
+  "seed": 77000001,
+  "note": "diagnostic only; same union + actual remask as c1_phase1e"
+ },
+ "rows": [
+  {
+   "n_feasible": 169,
+   "n_escape": 3,
+   "v_soft_actual": 0.9822485207100592,
+   "limiter_phi_deg": [
+    -157.08,
+    -67.08,
+    22.92,
+    112.92
+   ],
+   "limiter_gap_deg": 90.00000000000001,
+   "escape_axial_m": {
+    "min": 7.189514147902752,
+    "med": 7.281393160100002,
+    "max": 7.342564560980316
+   },
+   "escape_perp_m": {
+    "min": 0.45625026863775064,
+    "med": 0.4843059100039569,
+    "max": 0.50423402059111,
+    "frac_inside_ring": 1.0
+   },
+   "null_all_feasible": {
+    "n": 169,
+    "med": 0.5391403766231462,
+    "mean": 0.5461219682801828,
+    "frac_outer_half": 0.6035502958579881,
+    "hist_5bin": [
+     30,
+     27,
+     32,
+     30,
+     50
+    ]
+   },
+   "escape_dphi_to_nearest_limiter_deg": {
+    "min": 32.3855934114263,
+    "med": 34.246967960576136,
+    "max": 39.38514147114294,
+    "mean": 35.339234281048455
+   },
+   "escape_dphi_normalised": {
+    "med": 0.7610437324572474,
+    "mean": 0.7853163173566324,
+    "frac_outer_half": 1.0
+   },
+   "uniform_reference": {
+    "med": 0.5,
+    "mean": 0.5,
+    "frac_outer_half": 0.5
+   },
+   "skew_vs_null": 0.39644970414201186,
+   "dphi_hist_5bin_0on_limiter_1at_gap": [
+    0,
+    0,
+    0,
+    2,
+    1
+   ],
+   "tag": "ARM_L certified",
+   "rho0": 5.0,
+   "T": 0.55,
+   "arm": "L",
+   "f": 10,
+   "tier": 4,
+   "max_angular_gap_deg_unified": 90.00000000000001
+  },
+  {
+   "n_feasible": 143,
+   "n_escape": 3,
+   "v_soft_actual": 0.9790209790209791,
+   "limiter_phi_deg": [
+    -157.08,
+    -67.08,
+    22.92,
+    112.92
+   ],
+   "limiter_gap_deg": 90.00000000000001,
+   "escape_axial_m": {
+    "min": 7.189514147902752,
+    "med": 7.281393160100002,
+    "max": 7.342564560980316
+   },
+   "escape_perp_m": {
+    "min": 0.45625026863775064,
+    "med": 0.4843059100039569,
+    "max": 0.50423402059111,
+    "frac_inside_ring": 1.0
+   },
+   "null_all_feasible": {
+    "n": 143,
+    "med": 0.5623290751073885,
+    "mean": 0.5551081953547762,
+    "frac_outer_half": 0.6363636363636364,
+    "hist_5bin": [
+     25,
+     19,
+     30,
+     26,
+     43
+    ]
+   },
+   "escape_dphi_to_nearest_limiter_deg": {
+    "min": 32.38559468926605,
+    "med": 34.246966682736364,
+    "max": 39.38514274898269,
+    "mean": 35.33923470699503
+   },
+   "escape_dphi_normalised": {
+    "med": 0.761043704060808,
+    "mean": 0.7853163268221118,
+    "frac_outer_half": 1.0
+   },
+   "uniform_reference": {
+    "med": 0.5,
+    "mean": 0.5,
+    "frac_outer_half": 0.5
+   },
+   "skew_vs_null": 0.36363636363636365,
+   "dphi_hist_5bin_0on_limiter_1at_gap": [
+    0,
+    0,
+    0,
+    2,
+    1
+   ],
+   "tag": "ARM_L certified",
+   "rho0": 3.2,
+   "T": 0.25,
+   "arm": "L",
+   "f": 5,
+   "tier": 4,
+   "max_angular_gap_deg_unified": 90.00000000000001
+  },
+  {
+   "n_feasible": 236,
+   "n_escape": 73,
+   "v_soft_actual": 0.690677966101695,
+   "limiter_phi_deg": [
+    -157.08,
+    -67.08,
+    22.92,
+    112.92
+   ],
+   "limiter_gap_deg": 90.00000000000001,
+   "escape_axial_m": {
+    "min": 0.6561612368855037,
+    "med": 2.674425786601213,
+    "max": 3.8144698927459766
+   },
+   "escape_perp_m": {
+    "min": 0.04578470301773449,
+    "med": 0.22795792740839335,
+    "max": 0.6000000000000001,
+    "frac_inside_ring": 1.0
+   },
+   "null_all_feasible": {
+    "n": 236,
+    "med": 0.535380181147569,
+    "mean": 0.5641853914482825,
+    "frac_outer_half": 0.6186440677966102,
+    "hist_5bin": [
+     31,
+     39,
+     59,
+     37,
+     70
+    ]
+   },
+   "escape_dphi_to_nearest_limiter_deg": {
+    "min": 0.01230800537520441,
+    "med": 27.305571876938185,
+    "max": 44.595214053296125,
+    "mean": 26.976830828944482
+   },
+   "escape_dphi_normalised": {
+    "med": 0.6067904861541819,
+    "mean": 0.5994851295320996,
+    "frac_outer_half": 0.6712328767123288
+   },
+   "uniform_reference": {
+    "med": 0.5,
+    "mean": 0.5,
+    "frac_outer_half": 0.5
+   },
+   "skew_vs_null": 0.0525888089157186,
+   "dphi_hist_5bin_0on_limiter_1at_gap": [
+    6,
+    13,
+    17,
+    10,
+    27
+   ],
+   "tag": "ARM_L rejected",
+   "rho0": 4.0,
+   "T": 0.35,
+   "arm": "L",
+   "f": 7,
+   "tier": 4,
+   "max_angular_gap_deg_unified": 90.00000000000001
+  },
+  {
+   "n_feasible": 85,
+   "n_escape": 11,
+   "v_soft_actual": 0.8705882352941177,
+   "limiter_phi_deg": [
+    -157.08,
+    -67.08,
+    22.92,
+    112.92
+   ],
+   "limiter_gap_deg": 90.00000000000001,
+   "escape_axial_m": {
+    "min": 1.1015647715701213,
+    "med": 1.2000000000017992,
+    "max": 2.5463828103474517
+   },
+   "escape_perp_m": {
+    "min": 0.07918137830334418,
+    "med": 0.6000000000000001,
+    "max": 0.6000000000000001,
+    "frac_inside_ring": 1.0
+   },
+   "null_all_feasible": {
+    "n": 85,
+    "med": 0.5092957775175656,
+    "mean": 0.5656287085469982,
+    "frac_outer_half": 0.6823529411764706,
+    "hist_5bin": [
+     8,
+     12,
+     32,
+     10,
+     23
+    ]
+   },
+   "escape_dphi_to_nearest_limiter_deg": {
+    "min": 22.918309988290453,
+    "med": 22.918309988290453,
+    "max": 42.21799140816439,
+    "mean": 26.728073253708597
+   },
+   "escape_dphi_normalised": {
+    "med": 0.5092957775175656,
+    "mean": 0.5939571834157465,
+    "frac_outer_half": 1.0
+   },
+   "uniform_reference": {
+    "med": 0.5,
+    "mean": 0.5,
+    "frac_outer_half": 0.5
+   },
+   "skew_vs_null": 0.3176470588235294,
+   "dphi_hist_5bin_0on_limiter_1at_gap": [
+    0,
+    0,
+    8,
+    1,
+    2
+   ],
+   "tag": "ARM_L rejected",
+   "rho0": 3.2,
+   "T": 0.2,
+   "arm": "L",
+   "f": 4,
+   "tier": 4,
+   "max_angular_gap_deg_unified": 90.00000000000001
+  },
+  {
+   "n_feasible": 72,
+   "n_escape": 0,
+   "v_soft_actual": 1.0,
+   "limiter_phi_deg": [
+    -157.08,
+    -67.08,
+    22.92,
+    112.92
+   ],
+   "limiter_gap_deg": 90.00000000000001,
+   "note": "no surviving escape",
+   "tag": "baseline",
+   "rho0": 5.0,
+   "T": 1.0,
+   "arm": "P",
+   "f": null,
+   "tier": 4,
+   "max_angular_gap_deg_unified": 90.00000000000001
+  },
+  {
+   "n_feasible": 92,
+   "n_escape": 0,
+   "v_soft_actual": 1.0,
+   "limiter_phi_deg": [
+    -157.08,
+    -67.08,
+    22.92,
+    112.92
+   ],
+   "limiter_gap_deg": 90.00000000000001,
+   "note": "no surviving escape",
+   "tag": "baseline",
+   "rho0": 3.2,
+   "T": 0.5,
+   "arm": "C",
+   "f": null,
+   "tier": 4,
+   "max_angular_gap_deg_unified": 90.00000000000001
+  }
+ ]
+}

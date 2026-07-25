@@ -1,0 +1,105 @@
+{
+ "meta": {
+  "phase": "1H_seal_law",
+  "r_kill": 2.6,
+  "N_LIM": 4,
+  "law": "dphi_max <= 4*arcsin(r_kill/(2*rho))",
+  "cell": {
+   "rho0": 5.0,
+   "T": 0.55,
+   "f": 10,
+   "lp_d_star": 0.020000000000000035,
+   "lp_min_clearance": 0.12999999999999945
+  },
+  "n_cert": 20000,
+  "note": "measurement uses the Arm L hold witness and the E1.5 actual model"
+ },
+ "predicted_dphi_max_allowed_deg": {
+  "2.55": 122.6,
+  "2.60": 120.0,
+  "2.65": 117.51,
+  "3.00": 102.72,
+  "3.20": 95.88,
+  "3.40": 89.92,
+  "4.00": 75.86,
+  "5.00": 60.28
+ },
+ "even_ring_open_above_rho": 3.397063708678579,
+ "measured": [
+  {
+   "dphi_max_deg": 90.0,
+   "tier": 4,
+   "angular_gap_recorded": 90.00000000000001,
+   "v_soft_static": 0.9736842105263158,
+   "v_soft_actual": 0.9739130434782609,
+   "lcb_actual": 0.9586408783115553,
+   "n_feas_actual": 460,
+   "sealed": true
+  },
+  {
+   "dphi_max_deg": 105.0,
+   "tier": 4,
+   "angular_gap_recorded": 104.9999989489655,
+   "v_soft_static": 0.9695431472081218,
+   "v_soft_actual": 0.9632829373650108,
+   "lcb_actual": 0.9460046720239649,
+   "n_feas_actual": 463,
+   "sealed": true
+  },
+  {
+   "dphi_max_deg": 115.0,
+   "tier": 4,
+   "angular_gap_recorded": 114.99999945186516,
+   "v_soft_static": 0.9624060150375939,
+   "v_soft_actual": 0.9532908704883227,
+   "lcb_actual": 0.9345439363840944,
+   "n_feas_actual": 471,
+   "sealed": true
+  },
+  {
+   "dphi_max_deg": 120.0,
+   "tier": 4,
+   "angular_gap_recorded": 119.99999927567413,
+   "v_soft_static": 0.941031941031941,
+   "v_soft_actual": 0.930327868852459,
+   "lcb_actual": 0.9089003171717465,
+   "n_feas_actual": 488,
+   "sealed": true
+  },
+  {
+   "dphi_max_deg": 125.0,
+   "tier": 4,
+   "angular_gap_recorded": 124.99999885730193,
+   "v_soft_static": 0.9268867924528302,
+   "v_soft_actual": 0.9110671936758893,
+   "lcb_actual": 0.888005172055569,
+   "n_feas_actual": 506,
+   "sealed": false
+  },
+  {
+   "dphi_max_deg": 135.0,
+   "tier": 4,
+   "angular_gap_recorded": 135.00000053856107,
+   "v_soft_static": 0.8597938144329897,
+   "v_soft_actual": 0.8327586206896552,
+   "lcb_actual": 0.8057348840594768,
+   "n_feas_actual": 580,
+   "sealed": false
+  },
+  {
+   "dphi_max_deg": 150.0,
+   "tier": 4,
+   "angular_gap_recorded": 150.00000124454908,
+   "v_soft_static": 0.7125748502994012,
+   "v_soft_actual": 0.5273972602739726,
+   "lcb_actual": 0.48810780776157353,
+   "n_feas_actual": 438,
+   "sealed": false
+  }
+ ],
+ "measured_boundary_deg": [
+  120.0,
+  125.0
+ ],
+ "predicted_at_band_top_deg": 117.51116953359634
+}
