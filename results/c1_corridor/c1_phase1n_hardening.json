@@ -1,0 +1,379 @@
+{
+ "meta": {
+  "phase": "1N_hardening",
+  "cert_version": "c1_phase1n_rational_bernstein_v1",
+  "independence_scope": "independent admissibility, independent trajectory re-integration, independent continuous-clearance adjudication, and (from N1) an independent net-cone predicate cross-check; the audit itself ran under the FROZEN net-cone predicate",
+  "m_scenario_definition": "max over sealed verified artifacts of (min_t d(t) - r_kill)",
+  "budget_m": 0.01,
+  "budget_scope": "additive geometric error in relative separation only"
+ },
+ "N1_cone_predicate": {
+  "all_pass": true,
+  "tests": [
+   {
+    "test": "on-axis, mid range",
+    "orig": [
+     true
+    ],
+    "indep": [
+     true
+    ],
+    "expected": true,
+    "pass": true
+   },
+   {
+    "test": "cone surface (perp = R tan th)",
+    "orig": [
+     false
+    ],
+    "indep": [
+     false
+    ],
+    "expected": null,
+    "pass": true
+   },
+   {
+    "test": "just inside cone",
+    "orig": [
+     true
+    ],
+    "indep": [
+     true
+    ],
+    "expected": true,
+    "pass": true
+   },
+   {
+    "test": "just outside cone",
+    "orig": [
+     false
+    ],
+    "indep": [
+     false
+    ],
+    "expected": false,
+    "pass": true
+   },
+   {
+    "test": "range_min boundary",
+    "orig": [
+     true
+    ],
+    "indep": [
+     true
+    ],
+    "expected": null,
+    "pass": true
+   },
+   {
+    "test": "range_max boundary",
+    "orig": [
+     true
+    ],
+    "indep": [
+     true
+    ],
+    "expected": null,
+    "pass": true
+   },
+   {
+    "test": "beyond range_max",
+    "orig": [
+     false
+    ],
+    "indep": [
+     false
+    ],
+    "expected": false,
+    "pass": true
+   },
+   {
+    "test": "behind apex",
+    "orig": [
+     false
+    ],
+    "indep": [
+     false
+    ],
+    "expected": false,
+    "pass": true
+   },
+   {
+    "test": "axis scale invariance (orig)",
+    "pass": true
+   },
+   {
+    "test": "float boundary tolerance (5 pts, 1e-9 m steps)",
+    "orig": [
+     true,
+     true,
+     false,
+     false,
+     false
+    ],
+    "indep": [
+     true,
+     true,
+     false,
+     false,
+     false
+    ],
+    "pass": true
+   },
+   {
+    "test": "randomized parity n=20000",
+    "disagreements": 0,
+    "pass": true
+   }
+  ]
+ },
+ "N2_rational_certificates": [
+  {
+   "tag": "BASE   2.8/0.30",
+   "artifact_sha": "651beb5780870eeb",
+   "numerically_resolved_margin_m": 0.001695455028905446,
+   "certificate": "CERTIFIED_COLLISION_FREE",
+   "g_lower_bound": 0.008819239826419238,
+   "implied_min_distance_lower_bound_m": 2.601695454857547,
+   "implied_margin_lower_bound_m": 0.001695454857546963,
+   "arithmetic": "exact rationals (fractions.Fraction) downstream of sampled positions",
+   "input_interval": {
+    "rel": 1e-13,
+    "abs": 1e-11
+   },
+   "max_subdivision_depth": 0,
+   "verifier_version": "c1_phase1n_rational_bernstein_v1"
+  },
+  {
+   "tag": "BASE   5.0/1.00",
+   "artifact_sha": "651beb5780870eeb",
+   "numerically_resolved_margin_m": 0.00831914409882284,
+   "certificate": "CERTIFIED_COLLISION_FREE",
+   "g_lower_bound": 0.04332875657853386,
+   "implied_min_distance_lower_bound_m": 2.6083191439274707,
+   "implied_margin_lower_bound_m": 0.008319143927470574,
+   "arithmetic": "exact rationals (fractions.Fraction) downstream of sampled positions",
+   "input_interval": {
+    "rel": 1e-13,
+    "abs": 1e-11
+   },
+   "max_subdivision_depth": 0,
+   "verifier_version": "c1_phase1n_rational_bernstein_v1"
+  }
+ ],
+ "N3_strength_aggregation": {
+  "n_scenarios": 12,
+  "n_exceeding_budget": 10,
+  "rows": [
+   {
+    "scenario": "BASE   2.8/0.30",
+    "selected_artifact_sha": "651beb5780870eeb",
+    "m_scenario_m": 0.001695455028905446,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 2
+    },
+    "audited_min_margin_m": 0.001695455028905446,
+    "n_verified_escape": 1,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": false,
+    "strength_label": "FALSIFIED_BY_ADVERSARIAL_REPLAN_IN_NOMINAL_MODEL"
+   },
+   {
+    "scenario": "RH     2.8/0.15",
+    "selected_artifact_sha": "cb222c8100f4d571",
+    "m_scenario_m": 0.05040840054332252,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 1
+    },
+    "audited_min_margin_m": 0.012556271311506606,
+    "n_verified_escape": 6,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": true,
+    "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR"
+   },
+   {
+    "scenario": "RH     3.2/0.25",
+    "selected_artifact_sha": "cb222c8100f4d571",
+    "m_scenario_m": 0.05040840054332252,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 1
+    },
+    "audited_min_margin_m": 0.012556271311506606,
+    "n_verified_escape": 6,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": true,
+    "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR"
+   },
+   {
+    "scenario": "RH     4.0/0.40",
+    "selected_artifact_sha": "87eccbccd3b8cb42",
+    "m_scenario_m": 0.06648410146688155,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 3
+    },
+    "audited_min_margin_m": 0.046737238153729876,
+    "n_verified_escape": 6,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": true,
+    "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR"
+   },
+   {
+    "scenario": "RH     5.0/0.55",
+    "selected_artifact_sha": "0cc23cfd9e23c4e3",
+    "m_scenario_m": 0.04267368535658722,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 0
+    },
+    "audited_min_margin_m": 0.03580028646146083,
+    "n_verified_escape": 6,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": true,
+    "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR"
+   },
+   {
+    "scenario": "MAXCLR 5.0/0.55",
+    "selected_artifact_sha": "7beb30ceb854bfcd",
+    "m_scenario_m": 1.070759450624018,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 1
+    },
+    "audited_min_margin_m": 1.0691582000573896,
+    "n_verified_escape": 6,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": true,
+    "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR"
+   },
+   {
+    "scenario": "MAXCLR 4.0/0.40",
+    "selected_artifact_sha": "543ea387b03cb6c3",
+    "m_scenario_m": 0.9522707833660866,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 2
+    },
+    "audited_min_margin_m": 0.944507162060074,
+    "n_verified_escape": 6,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": true,
+    "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR"
+   },
+   {
+    "scenario": "BASE   3.2/0.50",
+    "selected_artifact_sha": "07d45740f4d8723a",
+    "m_scenario_m": 0.017676015544262125,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 2
+    },
+    "audited_min_margin_m": 0.00598822237068708,
+    "n_verified_escape": 3,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": true,
+    "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR"
+   },
+   {
+    "scenario": "BASE   3.2/0.70",
+    "selected_artifact_sha": "1b3fc1b091e7aeb7",
+    "m_scenario_m": 0.016838442769470774,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 3
+    },
+    "audited_min_margin_m": 0.003554369840370608,
+    "n_verified_escape": 6,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": true,
+    "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR"
+   },
+   {
+    "scenario": "BASE   4.0/0.70",
+    "selected_artifact_sha": "cb222c8100f4d571",
+    "m_scenario_m": 0.023018086531279902,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 1
+    },
+    "audited_min_margin_m": 0.005042410860873758,
+    "n_verified_escape": 6,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": true,
+    "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR"
+   },
+   {
+    "scenario": "BASE   4.0/0.70",
+    "selected_artifact_sha": "651beb5780870eeb",
+    "m_scenario_m": 0.011952275406950541,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 2
+    },
+    "audited_min_margin_m": 0.011952275406950541,
+    "n_verified_escape": 1,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": true,
+    "strength_label": "CLEARANCE_ROBUST_TO_10MM_ADDITIVE_GEOMETRIC_ERROR"
+   },
+   {
+    "scenario": "BASE   5.0/1.00",
+    "selected_artifact_sha": "651beb5780870eeb",
+    "m_scenario_m": 0.00831914409882284,
+    "argmin": {
+     "t0": 0.35,
+     "t1": 0.4,
+     "limiter": 2
+    },
+    "audited_min_margin_m": 0.00831914409882284,
+    "n_verified_escape": 1,
+    "verifier_version": "c1_exact_clearance NUMERICALLY_RESOLVED",
+    "budget_m": 0.01,
+    "exceeds_budget": false,
+    "strength_label": "FALSIFIED_BY_ADVERSARIAL_REPLAN_IN_NOMINAL_MODEL"
+   }
+  ]
+ },
+ "N4_D2_split": {
+  "D2a": {
+   "status": "PRE_REGISTERED_DORMANT",
+   "trigger": "D1 survivor only",
+   "K": 8,
+   "nesting": "NESTED: each K=4 interval halves, so every K=4 trajectory is exactly representable",
+   "containment_test": "MANDATORY -- K=4 artifacts must reproduce bit-for-bit",
+   "role": "the formal D2 escalation"
+  },
+  "D2b": {
+   "status": "PRE_REGISTERED_DORMANT_EXPLORATORY",
+   "K": 6,
+   "nesting": "NOT NESTED: K=6 breakpoints do not align with K=4; exact containment is NOT claimed",
+   "containment_test": "not applicable",
+   "role": "exploratory diagnostic arm only; cannot be used for a survival claim unless re-parameterised on a common fine-grid basis containing K=4"
+  }
+ }
+}
