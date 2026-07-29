@@ -1,0 +1,330 @@
+"""M4 시스템 레인 — 하드킬 방아쇠 · no-kinetic zone · 5분할 결과 (docs/29 v3).
+
+설계 (docs/29 §3, v3)
+--------------------
+**모드 상태기계를 두지 않는다.** 시스템에 실제로 있는 것은:
+
+    limiter    연속 가속 3차원  +  이산 커밋 비트 1개
+    finisher   연속 포인팅 3차원 +  이산 발사 비트 1개
+
+위치 제어는 이미 전부 연속이고, 이산인 것은 되돌릴 수 없는 마지막 방아쇠뿐이다.
+전이 조건을 손으로 짜는 순간 학습시키려던 중재를 스크립트로 되돌리게 되므로,
+모드는 **측정 대상**이지 설계 입력이 아니다.
+
+방아쇠 = **학습 제안 + env 가드 거부권** (네트 fire gate 와 동일한 리포 패턴):
+
+    정책이 커밋 제안 (limiter Box(4) idx 3 > 0.5)      <- 기존 RESERVED 차원
+       ↓
+    env 가드 거부권
+        R_nk 안에서 해소   -> 거부, limiter 미소모     (해소 시점 기준, 사전 확정)
+        기하 조건 불가     -> 실패, limiter 소모
+        기하 ∧ Bernoulli(Pk) -> HARD_KILL
+
+왜 래퍼인가 (docs/29 §6)
+-----------------------
+하드킬은 **종료 규칙**을 바꾸므로 백엔드 프록시로는 부족하다(프록시는 env 가 반환하는
+`terms` 를 못 바꾼다). 그렇다고 `env_m3` 식 서브클래스 + step() 163줄 복사는 하지
+않는다 -- 리포에 복사본이 3개가 된다. 대신 **env 바깥에 래퍼**를 둔다.
+
+    env_sys.py     방아쇠·가드·종료      (이 파일, 래퍼)
+    env.py         물리·viability·FSM     (동결, 무수정)
+    env_adv.py     공격자 주입            (백엔드 프록시)
+
+셋이 서로 다른 경계에서 작동하므로 조합된다.
+
+하드킬 기하 조건 (docs/29 §2.1, 보수적 worst-case)
+------------------------------------------------
+커밋 시점에 동결한다 (네트의 S5 robust judge 가 발사 시점에 동결하는 것과 동일 규약):
+
+    r = p_att - p_lim,  v = v_att - v_lim            (커밋 시점)
+    d_nom = |r + v * tau_kill|
+    기하:  d_nom <= r_kill + 0.5*(a_lim - a_att)*tau_kill^2
+
+`a_lim == a_att` 이면 여유항이 사라져 `d_nom <= r_kill` 로 퇴화한다.
+
+torch-free.
+"""
+from __future__ import annotations
+
+import hashlib
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Sequence
+
+import numpy as np
+
+__all__ = ["SystemSpec", "RewardSpec", "CommitRecord", "ModeSystemEnv",
+           "PARK_POSITION"]
+
+_EPS = 1e-12
+
+# 소진 limiter 주차점. 회랑(x in [0, 24], ring x=8)에서 충분히 멀어 v_shot 기여가 0.
+# 모델링 선택으로 명시한다 (docs/29 §3.2 -- 은닉 금지).
+PARK_POSITION = (0.0, 0.0, 1.0e4)
+
+
+@dataclass(frozen=True)
+class SystemSpec:
+    """M4 방아쇠·구역 파라미터. 전부 선언값이며 sweep 축은 그렇게 표기."""
+    tau_kill: float = 0.1        # s. 선언: tau_deploy(0.4)의 1/4
+    p_kill: float = 1.0          # 선언된 SWEEP 축. Bernoulli(Pk)
+    r_nk: float = 6.0            # m. no-kinetic zone 반경 (자산 중심)
+    a_lim_max: Optional[float] = None   # None -> scenario.limiter.a_max
+    commit_threshold: float = 0.5       # Box(4) idx3 임계 (env fire logit 과 동일 규약)
+    enabled: bool = True         # False -> 동결 env 와 bit-identical (P6)
+    seed_ns: str = "m4_hardkill"
+
+
+@dataclass(frozen=True)
+class RewardSpec:
+    """M4 보상 (docs/29 §15). **`w_kill` 이 유일한 핵심 노브이며 선언된 sweep 축이다.**
+
+    형태:
+        J_M4 = dense_scale * J_env            (기존 조밀 신호: dv_shot + clean - waste - contact)
+             + terminal_scale * TERMINAL      (에피소드 종료 1회)
+             - c_lim * (소모된 limiter 수)
+
+        TERMINAL   NET_CAPTURE   +b_net
+                   HARD_KILL     +b_net*(1 - w_kill)
+                   PENETRATED    -c_pen
+                   TRUNCATED     -c_trunc      <- 지평선에서 미격퇴 = 보상상 실패
+
+    **보상과 지표를 분리한다**: 학습에서는 TRUNCATED 를 미격퇴로 벌하지만, 보고 지표는
+    우측 절단(censored)으로 유지한다(docs/26). 둘을 같게 맞출 이유가 없고, 섞으면
+    "지평선이 짧아서 이긴 것처럼 보이는" 산물이 생긴다.
+
+    순서 불변식 (테스트로 강제): 모든 `w_kill in [0,1]` 에서
+        NET_CAPTURE > HARD_KILL > PENETRATED = TRUNCATED
+    `w_kill=0` 이면 두 성공이 동등 -> 정책은 쉬운 쪽(하드킬)을 고른다.
+    `w_kill=1` 이면 하드킬 보상 0 -> 소모 비용만 남아 비손실만 값어치.
+    **그 사이 어디서 뒤집히는지가 논문의 결과다** -- 값을 하나 골라 튜닝하지 않는다.
+
+    알려진 한계 (docs/29 §15.2): 기존 `coma_D` 는 `v_shot_soft` 차분으로 계산되므로
+    **커밋 차원에는 반대사실 credit 이 없다.** 배치 차원만 COMA 가 덮는다.
+    """
+    b_net: float = 1.0
+    w_kill: float = 0.5          # <- 선언된 SWEEP 축
+    c_pen: float = 1.0
+    c_trunc: float = 1.0
+    c_lim: float = 0.1
+    dense_scale: float = 1.0
+    terminal_scale: float = 10.0
+    enabled: bool = False        # 기본 off -> 기존 보상 그대로 (P6 bit-identical 보존)
+
+    def terminal(self, label: str) -> float:
+        if label == "NET_CAPTURE":
+            return self.b_net
+        if label == "HARD_KILL":
+            return self.b_net * (1.0 - self.w_kill)
+        if label == "PENETRATED":
+            return -self.c_pen
+        if label == "TRUNCATED":
+            return -self.c_trunc
+        return 0.0               # SPENT_FAIL: 의미 감사 전까지 중립 (docs/26)
+
+
+@dataclass
+class CommitRecord:
+    """한 번의 요격 커밋. 판정에 필요한 상태를 커밋 시점에 동결한다."""
+    limiter_index: int
+    commit_step: int
+    resolve_step: int
+    d_nom: float
+    margin: float                 # r_kill + 0.5*(a_lim - a_att)*tau_kill^2
+    geometric_ok: bool
+    resolved: bool = False
+    outcome: str = ""             # KILL | GEOM_FAIL | PK_FAIL | VETO_NO_KINETIC
+    consumed: bool = False
+
+
+class ModeSystemEnv:
+    """동결 env 를 감싸 하드킬 방아쇠와 no-kinetic 가드를 얹는다.
+
+    PettingZoo ParallelEnv 인터페이스를 유지하고, 정의하지 않은 속성은 전부 inner
+    로 위임한다 (limiter_ids / _states / _p / fsm / kill_radius / ...).
+    """
+
+    def __init__(self, inner, layout, scenario, spec: SystemSpec = SystemSpec(),
+                 reward: RewardSpec = RewardSpec()):
+        self.inner = inner
+        self.layout = layout
+        self.sc = scenario
+        self.spec = spec
+        self.reward_spec = reward
+        self.a_lim_max = (spec.a_lim_max if spec.a_lim_max is not None
+                          else float(scenario.limiter.a_max))
+        self.n_kill = max(int(round(spec.tau_kill / float(inner.dt))), 1)
+        self._reset_state()
+
+    # ------------------------------------------------------------------ state
+    def _reset_state(self):
+        self.commits: List[CommitRecord] = []
+        self.retired: set = set()
+        self.pending: Dict[int, CommitRecord] = {}
+        self.hard_kill = False
+        self.veto_events = 0
+        self._step_i = 0
+        self._seed = 0
+
+    def _bern(self, limiter_index: int, step: int) -> bool:
+        """재현 가능한 Bernoulli(Pk). SHA-256 -- 파이썬 hash() 금지."""
+        if self.spec.p_kill >= 1.0:
+            return True
+        if self.spec.p_kill <= 0.0:
+            return False
+        key = f"{self.spec.seed_ns}|{self._seed}|{limiter_index}|{step}"
+        h = hashlib.sha256(key.encode()).digest()
+        u = int.from_bytes(h[:8], "big") / 2 ** 64
+        return u < self.spec.p_kill
+
+    # -------------------------------------------------------------------- API
+    def reset(self, seed=None, options=None):
+        self._reset_state()
+        self._seed = 0 if seed is None else int(seed)
+        return self.inner.reset(seed=seed, options=options)
+
+    def step(self, actions):
+        inner = self.inner
+        spec = self.spec
+        self._step_i += 1
+
+        if not spec.enabled:
+            return inner.step(actions)
+
+        # --- 1. 커밋 제안 수집 (env 는 idx3 을 어차피 무시한다) ---------------
+        lims, fin, att = inner._states()
+        p_att, v_att = inner._p(att), inner._v(att)
+        proposals: List[int] = []
+        for i, lid in enumerate(inner.limiter_ids):
+            if i in self.retired or i in self.pending:
+                continue
+            a = np.asarray(actions.get(lid, np.zeros(4)), float)
+            if len(a) >= 4 and float(a[3]) > spec.commit_threshold:
+                proposals.append(i)
+
+        # --- 2. 커밋 시점에 판정 상태를 동결 (네트 S5 규약과 동일) ------------
+        margin = (inner.kill_radius
+                  + 0.5 * (self.a_lim_max - inner.a_att_max) * spec.tau_kill ** 2)
+        for i in proposals:
+            p_lim, v_lim = inner._p(lims[i]), inner._v(lims[i])
+            rel_p = p_att - p_lim
+            rel_v = v_att - v_lim
+            d_nom = float(np.linalg.norm(rel_p + rel_v * spec.tau_kill))
+            rec = CommitRecord(limiter_index=i, commit_step=self._step_i,
+                               resolve_step=self._step_i + self.n_kill,
+                               d_nom=d_nom, margin=float(margin),
+                               geometric_ok=bool(d_nom <= margin))
+            self.commits.append(rec)
+            self.pending[i] = rec
+
+        # --- 3. 동결 env 를 그대로 한 스텝 -----------------------------------
+        obs, rew, terms, truncs, infos = inner.step(actions)
+
+        # --- 4. 만료 커밋 해소: 가드 -> 기하 -> Pk ---------------------------
+        att2 = inner._states()[2]
+        p_att2 = inner._p(att2)
+        d_asset = float(np.linalg.norm(p_att2 - np.asarray(self.layout.target, float)))
+        resolved_now: List[CommitRecord] = []
+        for i, rec in list(self.pending.items()):
+            if self._step_i < rec.resolve_step:
+                continue
+            rec.resolved = True
+            del self.pending[i]
+            resolved_now.append(rec)
+
+            # 가드 거부권: no-kinetic zone. **해소 시점 기준** (사전 확정),
+            # 거부되면 limiter 는 소모되지 않는다.
+            if d_asset <= spec.r_nk:
+                rec.outcome = "VETO_NO_KINETIC"
+                rec.consumed = False
+                self.veto_events += 1
+                continue
+
+            rec.consumed = True                 # 이하 전부 limiter 소모
+            self.retired.add(i)
+            if not rec.geometric_ok:
+                rec.outcome = "GEOM_FAIL"
+            elif self._bern(i, rec.commit_step):
+                rec.outcome = "KILL"
+                self.hard_kill = True
+            else:
+                rec.outcome = "PK_FAIL"
+
+        # --- 5. 소진 limiter 주차 (다음 스텝부터 v_shot 기여 0) --------------
+        for i in self.retired:
+            try:
+                ag = inner.backend.by_name(inner.limiter_ids[i])
+                ag.p = np.asarray(PARK_POSITION, float).copy()
+                ag.v = np.zeros(3)
+            except Exception:                                  # pragma: no cover
+                pass
+
+        # --- 6. 종료·info 주입 ------------------------------------------------
+        if self.hard_kill:
+            terms = {a: True for a in terms}
+            truncs = {a: False for a in truncs}
+
+        # --- 6b. M4 보상 (docs/29 §15) ---------------------------------------
+        rs = self.reward_spec
+        label = None
+        if rs.enabled:
+            done = any(terms.values()) or any(truncs.values())
+            if done:
+                label = self._outcome_label(terms, truncs, infos)
+            n_consumed = sum(1 for r in self.commits if r.consumed)
+            bonus = (rs.terminal_scale * rs.terminal(label)) if label else 0.0
+            rew = {a: (rs.dense_scale * float(v) + bonus - rs.c_lim * n_consumed)
+                   for a, v in rew.items()}
+        sysinfo = dict(
+            m4_outcome=label,
+            hard_kill=self.hard_kill,
+            n_committed=len(self.commits),
+            n_retired=len(self.retired),
+            n_pending=len(self.pending),
+            veto_events=self.veto_events,
+            d_asset=d_asset,
+            in_no_kinetic_zone=bool(d_asset <= spec.r_nk),
+            resolved=[(r.limiter_index, r.outcome, round(r.d_nom, 4),
+                       round(r.margin, 4)) for r in resolved_now],
+        )
+        for a in infos:
+            infos[a] = {**infos[a], **sysinfo}
+        return obs, rew, terms, truncs, infos
+
+    def _outcome_label(self, terms, truncs, infos):
+        """보상용 결과 라벨. mission_rollout 의 라벨 규칙과 같은 술어를 쓴다."""
+        fi = next(iter(infos.values()), {})
+        if self.hard_kill:
+            return "HARD_KILL"
+        if fi.get("captured"):
+            contacted = any(
+                float(np.linalg.norm(self.inner._p(self.inner._states()[2])
+                                     - self.inner._p(s))) <= self.inner.kill_radius
+                for s in self.inner._states()[0])
+            return "CAPTURE_WITH_CONTACT" if contacted else "NET_CAPTURE"
+        if fi.get("penetrated"):
+            return "PENETRATED"
+        if any(truncs.values()):
+            return "TRUNCATED"
+        return "SPENT_FAIL"
+
+    # ------------------------------------------------------- 위임 + 헬퍼 -----
+    def __getattr__(self, name):
+        return getattr(self.__dict__["inner"], name)
+
+    @property
+    def kill_events(self) -> List[CommitRecord]:
+        return [r for r in self.commits if r.outcome == "KILL"]
+
+    def summary(self) -> dict:
+        out = {k: 0 for k in ("KILL", "GEOM_FAIL", "PK_FAIL", "VETO_NO_KINETIC")}
+        for r in self.commits:
+            if r.outcome:
+                out[r.outcome] += 1
+        out["committed"] = len(self.commits)
+        out["consumed"] = sum(1 for r in self.commits if r.consumed)
+        return out
+
+
+def make_system_env(inner, scenario, layout, spec: SystemSpec = SystemSpec()):
+    """composition helper -- inner 는 이미 만들어진 ShapingParallelEnv."""
+    return ModeSystemEnv(inner, layout, scenario, spec)
