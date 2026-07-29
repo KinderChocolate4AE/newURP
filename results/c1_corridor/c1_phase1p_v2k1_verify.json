@@ -1,0 +1,273 @@
+{
+ "meta": {
+  "script": "c1_phase1p_v2k1_verify",
+  "role": "adversarial verification of A0 counterexamples; changes no controller and no search",
+  "checks": {
+   "V1": "re-adjudicated by the canary's independent replay",
+   "V2": "identical verdict at K=1,2,4,8",
+   "V3": "magnitude interval inward from the shell \u2014 a shell-only escape is a weaker object and is labelled as such",
+   "V4": "hit probability of the legacy uniform-in-volume bank, the quantitative form of 'D1 missed it'"
+  },
+  "distinctness": "A0's top-48 pool collapses to ONE distinct attack per cell; distinct hashes are reported, not pool size"
+ },
+ "all_verified": true,
+ "n_distinct_new_counterexamples": 3,
+ "cells_with_new_counterexample": [
+  "BASE 2.8/0.30 C / RI-SHARED",
+  "RH 2.8/0.15 f=2 / RI-SHARED",
+  "RH 3.2/0.25 f=5 / RI-SHARED"
+ ],
+ "rows": [
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED",
+   "delta_m": 0.135,
+   "bucket": "INDEPENDENT_CELL",
+   "attack_policy_hash": "7f314089c9799715",
+   "acc_k1": [
+    29.429057794767473,
+    -5.398070814001018,
+    2.1889241191202293
+   ],
+   "acc_norm_mps2": 30.000000000000004,
+   "V1_independent_path_escape": true,
+   "V2_class_membership_identical": true,
+   "V2_per_K": {
+    "K1": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.0034835791746732347,
+     "cone_exit_margin_m": 0.0034407421072847276,
+     "recognised_as_escape": true
+    },
+    "K2": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.0034835791746727907,
+     "cone_exit_margin_m": 0.0034407421072847276,
+     "recognised_as_escape": true
+    },
+    "K4": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.0034835791746727907,
+     "cone_exit_margin_m": 0.0034407421072847263,
+     "recognised_as_escape": true
+    },
+    "K8": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.003483579174674567,
+     "cone_exit_margin_m": 0.0034407421072847285,
+     "recognised_as_escape": true
+    }
+   },
+   "V3_magnitude": {
+    "escape_magnitude_interval_mps2": 0.1059999999999981,
+    "lowest_escaping_norm": 29.894000000000005,
+    "contiguous_from_shell": true,
+    "shell_only": false
+   },
+   "V4_direction_tolerance": {
+    "0.50deg": "0/6",
+    "0.20deg": "1/6",
+    "0.10deg": "3/6",
+    "0.05deg": "6/6",
+    "largest_all_directions_deg": 0.05
+   },
+   "V4_legacy_bank_hit_probability": {
+    "solid_angle_fraction": 1.903858752871912e-07,
+    "shell_magnitude_fraction": 0.01056259077837024,
+    "p_single_sample": 2.0109680906404323e-09,
+    "p_at_least_one_per_bank_draw": 4.021855242763994e-05,
+    "p_at_least_once_in_budget": 0.0019286670651553761,
+    "n_bank": 20000,
+    "n_draws": 48
+   }
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED",
+   "delta_m": 0.14,
+   "bucket": "INDEPENDENT_CELL",
+   "attack_policy_hash": "ec371d6b3c514eaf",
+   "acc_k1": [
+    29.43430516393083,
+    5.374079230813502,
+    -2.1773727144276234
+   ],
+   "acc_norm_mps2": 30.000000000000004,
+   "V1_independent_path_escape": true,
+   "V2_class_membership_identical": true,
+   "V2_per_K": {
+    "K1": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.0008896016011612495,
+     "cone_exit_margin_m": 0.0012926831313609347,
+     "recognised_as_escape": true
+    },
+    "K2": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.0008896016011612495,
+     "cone_exit_margin_m": 0.0012926831313609347,
+     "recognised_as_escape": true
+    },
+    "K4": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.0008896016011608054,
+     "cone_exit_margin_m": 0.0012926831313609347,
+     "recognised_as_escape": true
+    },
+    "K8": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.000889601601158585,
+     "cone_exit_margin_m": 0.0012926831313609336,
+     "recognised_as_escape": true
+    }
+   },
+   "V3_magnitude": {
+    "escape_magnitude_interval_mps2": 0.026499999999998636,
+    "lowest_escaping_norm": 29.973500000000005,
+    "contiguous_from_shell": true,
+    "shell_only": false
+   },
+   "V4_direction_tolerance": {
+    "0.50deg": "0/6",
+    "0.20deg": "0/6",
+    "0.10deg": "0/6",
+    "0.05deg": "1/6",
+    "0.02deg": "6/6",
+    "largest_all_directions_deg": 0.02
+   },
+   "V4_legacy_bank_hit_probability": {
+    "solid_angle_fraction": 3.0461741684639776e-08,
+    "shell_magnitude_fraction": 0.002647659855911991,
+    "p_single_sample": 8.065233059958165e-11,
+    "p_at_least_one_per_bank_draw": 1.6130461725216705e-06,
+    "p_at_least_once_in_budget": 7.742328139015431e-05,
+    "n_bank": 20000,
+    "n_draws": 48
+   }
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-GMAX",
+   "delta_m": 0.135,
+   "bucket": "REGRESSION_CANARY",
+   "attack_policy_hash": "3b400a39129300df",
+   "acc_k1": [
+    29.405407635136058,
+    -2.2388631597010256,
+    -5.5054058491282625
+   ],
+   "acc_norm_mps2": 30.000000000000004,
+   "V1_independent_path_escape": true,
+   "V2_class_membership_identical": true,
+   "V2_per_K": {
+    "K1": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.013113095051658252,
+     "cone_exit_margin_m": 0.012999851518443233,
+     "recognised_as_escape": true
+    },
+    "K2": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.013113095051658252,
+     "cone_exit_margin_m": 0.012999851518443233,
+     "recognised_as_escape": true
+    },
+    "K4": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.01311309505165914,
+     "cone_exit_margin_m": 0.012999851518468596,
+     "recognised_as_escape": true
+    },
+    "K8": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.013113095051656032,
+     "cone_exit_margin_m": 0.012999851518443227,
+     "recognised_as_escape": true
+    }
+   },
+   "V3_magnitude": {
+    "escape_magnitude_interval_mps2": 0.1999999999999993,
+    "lowest_escaping_norm": 29.800000000000004,
+    "contiguous_from_shell": true,
+    "shell_only": false
+   },
+   "V4_direction_tolerance": {
+    "0.50deg": "2/6",
+    "0.20deg": "6/6",
+    "largest_all_directions_deg": 0.2
+   },
+   "V4_legacy_bank_hit_probability": {
+    "solid_angle_fraction": 3.046171104803541e-06,
+    "shell_magnitude_fraction": 0.019866962962962944,
+    "p_single_sample": 6.051816851797986e-08,
+    "p_at_least_one_per_bank_draw": 0.0012096312118042851,
+    "p_at_least_once_in_budget": 0.05644200063260307,
+    "n_bank": 20000,
+    "n_draws": 48
+   }
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED",
+   "delta_m": 0.07,
+   "bucket": "INDEPENDENT_CELL",
+   "attack_policy_hash": "877c7ff6ac71539a",
+   "acc_k1": [
+    29.432461225453764,
+    -2.1859765458582174,
+    -5.380681439475709
+   ],
+   "acc_norm_mps2": 29.999999999999996,
+   "V1_independent_path_escape": true,
+   "V2_class_membership_identical": true,
+   "V2_per_K": {
+    "K1": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.0019880092016255624,
+     "cone_exit_margin_m": 0.0020486657909056455,
+     "recognised_as_escape": true
+    },
+    "K2": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.0019880092016251183,
+     "cone_exit_margin_m": 0.002048665790905645,
+     "recognised_as_escape": true
+    },
+    "K4": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.001988009201624674,
+     "cone_exit_margin_m": 0.002048665790905645,
+     "recognised_as_escape": true
+    },
+    "K8": {
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "continuous_kill_margin_m": 0.0019880092016268947,
+     "cone_exit_margin_m": 0.002048665790905646,
+     "recognised_as_escape": true
+    }
+   },
+   "V3_magnitude": {
+    "escape_magnitude_interval_mps2": 0.05999999999999872,
+    "lowest_escaping_norm": 29.939999999999998,
+    "contiguous_from_shell": true,
+    "shell_only": false
+   },
+   "V4_direction_tolerance": {
+    "0.50deg": "0/6",
+    "0.20deg": "0/6",
+    "0.10deg": "2/6",
+    "0.05deg": "6/6",
+    "largest_all_directions_deg": 0.05
+   },
+   "V4_legacy_bank_hit_probability": {
+    "solid_angle_fraction": 1.903858752871912e-07,
+    "shell_magnitude_fraction": 0.005988007999999859,
+    "p_single_sample": 1.1400321443066764e-09,
+    "p_at_least_one_per_bank_draw": 2.2800383675636304e-05,
+    "p_at_least_once_in_budget": 0.0010938322221313301,
+    "n_bank": 20000,
+    "n_draws": 48
+   }
+  }
+ ]
+}

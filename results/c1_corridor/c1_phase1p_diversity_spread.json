@@ -1,0 +1,135 @@
+{
+ "meta": {
+  "script": "c1_phase1p_diversity --spread",
+  "diagnostic_budget": {
+   "role": "D0-MODE-DIVERSITY diagnostic -- NOT a verdict run",
+   "n_bank": 20000,
+   "K": 4,
+   "pop": 192,
+   "iters": 14,
+   "restarts": 2,
+   "reset": 1100,
+   "d0_verdicts_touched": false
+  },
+  "blind_offsets": [
+   0,
+   777000000,
+   123456789,
+   55000000,
+   909090909,
+   314159265
+  ],
+  "div_base_seeds": [
+   7,
+   11,
+   23,
+   101
+  ]
+ },
+ "blind": [
+  {
+   "offset": 0,
+   "n_unique": 11,
+   "policy_collisions": 1,
+   "warm_collisions": 14,
+   "escapes": 10
+  },
+  {
+   "offset": 777000000,
+   "n_unique": 5,
+   "policy_collisions": 28,
+   "warm_collisions": 36,
+   "escapes": 12
+  },
+  {
+   "offset": 123456789,
+   "n_unique": 11,
+   "policy_collisions": 1,
+   "warm_collisions": 21,
+   "escapes": 11
+  },
+  {
+   "offset": 55000000,
+   "n_unique": 10,
+   "policy_collisions": 2,
+   "warm_collisions": 28,
+   "escapes": 10
+  },
+  {
+   "offset": 909090909,
+   "n_unique": 7,
+   "policy_collisions": 11,
+   "warm_collisions": 29,
+   "escapes": 12
+  },
+  {
+   "offset": 314159265,
+   "n_unique": 6,
+   "policy_collisions": 16,
+   "warm_collisions": 28,
+   "escapes": 12
+  }
+ ],
+ "diversity": [
+  {
+   "base_seed": 7,
+   "n_unique": 12,
+   "policy_collisions": 0,
+   "warm_collisions": 0,
+   "escapes": 12
+  },
+  {
+   "base_seed": 11,
+   "n_unique": 12,
+   "policy_collisions": 0,
+   "warm_collisions": 0,
+   "escapes": 12
+  },
+  {
+   "base_seed": 23,
+   "n_unique": 12,
+   "policy_collisions": 0,
+   "warm_collisions": 0,
+   "escapes": 10
+  },
+  {
+   "base_seed": 101,
+   "n_unique": 12,
+   "policy_collisions": 0,
+   "warm_collisions": 0,
+   "escapes": 9
+  }
+ ],
+ "summary": {
+  "blind_policy_collisions": [
+   1,
+   28,
+   1,
+   2,
+   11,
+   16
+  ],
+  "div_policy_collisions": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "blind_escapes": [
+   10,
+   12,
+   11,
+   10,
+   12,
+   12
+  ],
+  "div_escapes": [
+   12,
+   12,
+   10,
+   9
+  ],
+  "separation": "witness-blind collisions range 1-28; decorrelated are 0-0",
+  "escape_rate_note": "escape counts OVERLAP (blind 10-12 vs decorrelated 9-12); decorrelation is a diversity fix, NOT a demonstrated search-efficiency improvement"
+ }
+}

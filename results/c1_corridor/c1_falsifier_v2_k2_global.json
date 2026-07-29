@@ -1,0 +1,721 @@
+{
+ "meta": {
+  "script": "c1_falsifier_v2_k2_global",
+  "role": "global K=2 sweep; the direct test of near-constant dominance that A0..A3 could only suggest",
+  "grid": {
+   "n_dir": 192,
+   "magnitudes_x_a_max": [
+    1.0,
+    0.85,
+    0.7
+   ],
+   "attacks_per_cell": 331776
+  },
+  "comparison": "the constant diagonal is a SUBSET of the same grid, so best_constant and best_global are scored identically",
+  "scope": "K=2 only, single attacker initial condition, single cone geometry. NOT a statement about K>2 or other conditions"
+ },
+ "n_cells_where_refined_constant_branch_wins": 15,
+ "resolution_artefact_warning": "the RAW coarse grid favoured time variation by a median of 27 mm; the sign REVERSED after equal refinement. A coarse grid samples the K=2 family ~576x more densely than the constant diagonal, so raw cross-family comparisons measure sampling density, not the families",
+ "raw_grid_time_variation_gain_mm": {
+  "min": 6.340151072313116,
+  "median": 27.19177506303895,
+  "max": 37.669779656246405
+ },
+ "refined_time_variation_gain_mm": {
+  "min": -25.206617145486618,
+  "median": -22.856218450410637,
+  "max": -3.4152106491912737
+ },
+ "rows": [
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.06269609540767274,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 28.75067857046311,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.029022402962163074,
+    "continuous_kill_margin_m": -0.029022402962163074,
+    "cone_exit_margin_m": -0.027810644011935313,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.029022402962163074,
+   "refined_constant_S_m": 0.006165150474964243,
+   "refined_time_variation_gain_mm": -22.85725248719883,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": false,
+   "refined_constant_authoritative": {
+    "S_auth_m": 0.006165150474964687,
+    "continuous_kill_margin_m": -0.006165150474964687,
+    "cone_exit_margin_m": -0.005826907566519073,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "refined_global_attack": [
+    [
+     29.044443786260878,
+     5.481263744732233,
+     -5.135760207351571
+    ],
+    [
+     29.274103761712862,
+     2.981228969572693,
+     5.842869396062977
+    ]
+   ]
+  },
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.135,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.047593265585637035,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 13.647848748427407,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.01987405087757166,
+    "continuous_kill_margin_m": -0.01987405087757166,
+    "cone_exit_margin_m": -0.018543568928843585,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.01987405087757166,
+   "refined_constant_S_m": -0.003335925657803935,
+   "refined_time_variation_gain_mm": -23.209976535375596,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": true,
+   "refined_constant_authoritative": {
+    "S_auth_m": -0.003335925657803935,
+    "continuous_kill_margin_m": 0.0034372730663858597,
+    "cone_exit_margin_m": 0.003335925657803935,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION_FREE",
+    "is_escape": true
+   },
+   "refined_global_attack": [
+    [
+     29.01733311960603,
+     5.612853121539359,
+     -5.146868801693008
+    ],
+    [
+     29.31330356508072,
+     2.9851005013553467,
+     5.640869533878099
+    ]
+   ]
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.06269607584393233,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 28.750659006722703,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.029022384189400174,
+    "continuous_kill_margin_m": -0.029022384189400174,
+    "cone_exit_margin_m": -0.027810644011935313,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.02902238418940062,
+   "refined_constant_S_m": 0.00616513075052838,
+   "refined_time_variation_gain_mm": -22.857253438872238,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": false,
+   "refined_constant_authoritative": {
+    "S_auth_m": 0.00616513075052838,
+    "continuous_kill_margin_m": -0.00616513075052838,
+    "cone_exit_margin_m": -0.005826907566519073,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "refined_global_attack": [
+    [
+     29.044443786260878,
+     5.481263744732233,
+     -5.135760207351571
+    ],
+    [
+     29.274103761712862,
+     2.981228969572693,
+     5.842869396062977
+    ]
+   ]
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.14,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.05137247827424174,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 17.427061437032112,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.0214868298007862,
+    "continuous_kill_margin_m": -0.0214868298007862,
+    "cone_exit_margin_m": -0.021194479784713206,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.0214868298007862,
+   "refined_constant_S_m": -0.0004419538431847947,
+   "refined_time_variation_gain_mm": -21.928783643970995,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": true,
+   "refined_constant_authoritative": {
+    "S_auth_m": -0.0004419538431839065,
+    "continuous_kill_margin_m": 0.0004419538431839065,
+    "cone_exit_margin_m": 0.001855189926138712,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION_FREE",
+    "is_escape": true
+   },
+   "refined_global_attack": [
+    [
+     29.01733311960603,
+     5.612853121539359,
+     -5.146868801693008
+    ],
+    [
+     29.29968836243679,
+     2.893782253681766,
+     5.757975871116736
+    ]
+   ]
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.135,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.03203149981457232,
+   "best_global_S_proxy_m": 0.0256913487422592,
+   "time_variation_gain_mm": 6.340151072313116,
+   "best_is_constant": false,
+   "best_attack_hash": "32ef8756fd5e9d21",
+   "best_authoritative": {
+    "S_auth_m": -0.009260358070794214,
+    "continuous_kill_margin_m": 0.009755523958564716,
+    "cone_exit_margin_m": 0.009260358070794214,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION_FREE",
+    "is_escape": true
+   },
+   "is_escape": true,
+   "refined_global_S_m": -0.009260358070794214,
+   "refined_constant_S_m": -0.012675568719985488,
+   "refined_time_variation_gain_mm": -3.4152106491912737,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": true,
+   "refined_constant_authoritative": {
+    "S_auth_m": -0.012675568719985488,
+    "continuous_kill_margin_m": 0.0133025760248775,
+    "cone_exit_margin_m": 0.012675568719985488,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION_FREE",
+    "is_escape": true
+   },
+   "refined_global_attack": [
+    [
+     29.050840270840048,
+     -6.858292520562097,
+     3.002083153501916
+    ],
+    [
+     29.961378568209483,
+     -1.2680667417215492,
+     -0.19374999999999876
+    ]
+   ]
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.085,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.06113719190024858,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 27.19177506303895,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.03070520060911841,
+    "continuous_kill_margin_m": -0.03070520060911841,
+    "cone_exit_margin_m": -0.0301567920667452,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.03070520060911841,
+   "refined_constant_S_m": 0.005498583463631794,
+   "refined_time_variation_gain_mm": -25.206617145486618,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": false,
+   "refined_constant_authoritative": {
+    "S_auth_m": 0.005498583463631794,
+    "continuous_kill_margin_m": -0.0048184872312195814,
+    "cone_exit_margin_m": -0.005498583463631794,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "refined_global_attack": [
+    [
+     29.054630431017884,
+     5.410180218596478,
+     -5.153484308628172
+    ],
+    [
+     29.338340973578713,
+     2.8975997768853357,
+     5.555687576801512
+    ]
+   ]
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.07,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.049810672306792814,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 15.865255469583186,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.020337034004323424,
+    "continuous_kill_margin_m": -0.019162776108393675,
+    "cone_exit_margin_m": -0.020337034004323424,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.020337034004323424,
+   "refined_constant_S_m": -0.001855082797519017,
+   "refined_time_variation_gain_mm": -22.19211680184244,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": true,
+   "refined_constant_authoritative": {
+    "S_auth_m": -0.001855082797519017,
+    "continuous_kill_margin_m": 0.0020116348049343813,
+    "cone_exit_margin_m": 0.001855082797519017,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION_FREE",
+    "is_escape": true
+   },
+   "refined_global_attack": [
+    [
+     29.01733311960603,
+     5.612853121539359,
+     -5.146868801693008
+    ],
+    [
+     29.274103798681388,
+     2.9811768072907583,
+     5.842895825504638
+    ]
+   ]
+  },
+  {
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.11,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.06254601045308839,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 28.600593615878758,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.02887034627868701,
+    "continuous_kill_margin_m": -0.02887034627868701,
+    "cone_exit_margin_m": -0.027810644011935313,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.02887034627868701,
+   "refined_constant_S_m": 0.006014127828276372,
+   "refined_time_variation_gain_mm": -22.856218450410637,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": false,
+   "refined_constant_authoritative": {
+    "S_auth_m": 0.006014127828276372,
+    "continuous_kill_margin_m": -0.006014127828276372,
+    "cone_exit_margin_m": -0.005826907566519073,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "refined_global_attack": [
+    [
+     29.044443786260878,
+     5.481263744732233,
+     -5.135760207351571
+    ],
+    [
+     29.274103761712862,
+     2.981228969572693,
+     5.842869396062977
+    ]
+   ]
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.06289437949737131,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 28.948962660161683,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.029223290995886053,
+    "continuous_kill_margin_m": -0.029223290995886053,
+    "cone_exit_margin_m": -0.027810644011935313,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.029223290995886053,
+   "refined_constant_S_m": 0.00652647759440242,
+   "refined_time_variation_gain_mm": -22.696813401483634,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": false,
+   "refined_constant_authoritative": {
+    "S_auth_m": 0.00652647759440242,
+    "continuous_kill_margin_m": -0.005989430817981312,
+    "cone_exit_margin_m": -0.00652647759440242,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "refined_global_attack": [
+    [
+     29.044443786260878,
+     5.481263744732233,
+     -5.135760207351571
+    ],
+    [
+     29.274103761712862,
+     2.981228969572693,
+     5.842869396062977
+    ]
+   ]
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.05534791992486365,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 21.402503087654026,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.026945277212661316,
+    "continuous_kill_margin_m": -0.02590371655317636,
+    "cone_exit_margin_m": -0.026945277212661316,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.026945277212661316,
+   "refined_constant_S_m": 0.0017983382640694252,
+   "refined_time_variation_gain_mm": -25.146938948591888,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": false,
+   "refined_constant_authoritative": {
+    "S_auth_m": 0.0017983382640694252,
+    "continuous_kill_margin_m": -0.0016845214132601427,
+    "cone_exit_margin_m": -0.0017983382640694252,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "refined_global_attack": [
+    [
+     29.054630431017884,
+     5.410180218596478,
+     -5.153484308628172
+    ],
+    [
+     29.320823984526037,
+     3.075689597255932,
+     5.552424188566162
+    ]
+   ]
+  },
+  {
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.145,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.061441211985183486,
+   "best_global_S_proxy_m": 0.02377143232893708,
+   "time_variation_gain_mm": 37.669779656246405,
+   "best_is_constant": false,
+   "best_attack_hash": "928dbb040dcc6d95",
+   "best_authoritative": {
+    "S_auth_m": 0.022653346151582543,
+    "continuous_kill_margin_m": -0.022653346151582543,
+    "cone_exit_margin_m": 0.05081808694694224,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.02006859820185225,
+   "refined_constant_S_m": 0.005498583463631794,
+   "refined_time_variation_gain_mm": -14.570014738220456,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": false,
+   "refined_constant_authoritative": {
+    "S_auth_m": 0.005498583463631794,
+    "continuous_kill_margin_m": -0.005124393454478238,
+    "cone_exit_margin_m": -0.005498583463631794,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "refined_global_attack": [
+    [
+     -21.999480847719248,
+     -2.943267122127532,
+     0.2793833606673213
+    ],
+    [
+     -19.67108418755101,
+     21.669319517522464,
+     -1.8764038981754265
+    ]
+   ]
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.06231880479044927,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 28.37338795323964,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.030709643528779473,
+    "continuous_kill_margin_m": -0.030709643528779473,
+    "cone_exit_margin_m": -0.029467473871614174,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.030709643528779473,
+   "refined_constant_S_m": 0.005826907566519073,
+   "refined_time_variation_gain_mm": -24.882735962260398,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": false,
+   "refined_constant_authoritative": {
+    "S_auth_m": 0.005826907566519073,
+    "continuous_kill_margin_m": -0.005785502984338997,
+    "cone_exit_margin_m": -0.005826907566519073,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "refined_global_attack": [
+    [
+     29.065715475549005,
+     5.378872587805662,
+     -5.123662125724503
+    ],
+    [
+     29.320823773976823,
+     3.0757886816770594,
+     5.552370412811353
+    ]
+   ]
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.05477162370515076,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 20.826206867941135,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.021219531729373742,
+    "continuous_kill_margin_m": -0.021219531729373742,
+    "cone_exit_margin_m": -0.020112134158016864,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.021219531729373742,
+   "refined_constant_S_m": 0.0014655533613829382,
+   "refined_time_variation_gain_mm": -19.753978367990804,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": false,
+   "refined_constant_authoritative": {
+    "S_auth_m": 0.0014655533613829382,
+    "continuous_kill_margin_m": -0.0012822441785540484,
+    "cone_exit_margin_m": -0.0014655533613829382,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "refined_global_attack": [
+    [
+     29.032148721314158,
+     5.615718918887179,
+     -5.059450725874233
+    ],
+    [
+     29.282216578498367,
+     3.0719757468685054,
+     5.754542315472787
+    ]
+   ]
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.095,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.06213482232724621,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 28.18940549003658,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.030523354190903795,
+    "continuous_kill_margin_m": -0.030523354190903795,
+    "cone_exit_margin_m": -0.029467473871614174,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.030523354190903795,
+   "refined_constant_S_m": 0.005822310283532861,
+   "refined_time_variation_gain_mm": -24.701043907370934,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": false,
+   "refined_constant_authoritative": {
+    "S_auth_m": 0.005822310283532417,
+    "continuous_kill_margin_m": -0.005822310283532417,
+    "cone_exit_margin_m": -0.005498583463631794,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "refined_global_attack": [
+    [
+     29.065715475549005,
+     5.378872587805662,
+     -5.123662125724503
+    ],
+    [
+     29.320823773976823,
+     3.0757886816770594,
+     5.552370412811353
+    ]
+   ]
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.085,
+   "n_attacks": 331776,
+   "best_constant_S_proxy_m": 0.05458741072635043,
+   "best_global_S_proxy_m": 0.03394541683720963,
+   "time_variation_gain_mm": 20.6419938891408,
+   "best_is_constant": false,
+   "best_attack_hash": "30b3a2571d376e5b",
+   "best_authoritative": {
+    "S_auth_m": 0.021033011570647187,
+    "continuous_kill_margin_m": -0.021033011570647187,
+    "cone_exit_margin_m": -0.020112134158016864,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "is_escape": false,
+   "refined_global_S_m": 0.021033011570646742,
+   "refined_constant_S_m": 0.0014655533613829382,
+   "refined_time_variation_gain_mm": -19.567458209263805,
+   "refined_best_is_constant": false,
+   "refined_winner": "CONSTANT",
+   "refined_constant_is_escape": false,
+   "refined_constant_authoritative": {
+    "S_auth_m": 0.0014655533613829382,
+    "continuous_kill_margin_m": -0.0010969668496314533,
+    "cone_exit_margin_m": -0.0014655533613829382,
+    "admissible": true,
+    "verdict": "VERIFIED_COLLISION",
+    "is_escape": false
+   },
+   "refined_global_attack": [
+    [
+     29.032148721314158,
+     5.615718918887179,
+     -5.059450725874233
+    ],
+    [
+     29.282216578498367,
+     3.0719757468685054,
+     5.754542315472787
+    ]
+   ]
+  }
+ ]
+}

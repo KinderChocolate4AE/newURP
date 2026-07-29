@@ -1,0 +1,1130 @@
+{
+ "meta": {
+  "script": "c1_phase1p_d0",
+  "protocol": "c1-D0-inward-2026-07-25-v1",
+  "budget": {
+   "stage_id": "D0",
+   "n_bank": 20000,
+   "bank_seeds": [
+    1,
+    2,
+    3,
+    5,
+    8,
+    13
+   ],
+   "restarts": 2,
+   "K": 4,
+   "pop": 192,
+   "iters": 14,
+   "base_seed": 7,
+   "attacker_class": "K4-pwc",
+   "reset_id": 1100,
+   "n_searches_per_cell": 12,
+   "diagnostic_was": "4 bank seeds x 2 restarts = 8 searches"
+  },
+  "labels": {
+   "pre_D0": "DIAGNOSTIC_NULL_CANDIDATES (not 'survived')",
+   "post_D0": [
+    "FALSIFIED_BY_ADVERSARIAL_REPLAN_D0",
+    "SURVIVED_D0"
+   ],
+   "next": "dormant D1 fires automatically on SURVIVED_D0; SURVIVED_D0_AND_D1 -> D2a (K=8 nested)"
+  },
+  "seed_rule": "d0_seed(stage_id, rng_role, scenario_id, reset_id, attacker_class, restart_id, base_seed) -- scenario ALWAYS in, arm NEVER in; one function is the only seed source",
+  "arm_status": {
+   "RI-GMAX": [
+    "SCENARIO_SPECIFIC_PREDICTIVE_INWARD_EXISTENCE_PROBE",
+    "RESERVE_BOUNDARY_CONTROLLER"
+   ],
+   "RI-SHARED": [
+    "SHARED_PREDICTIVE_RADIAL_INWARD_SELECTOR"
+   ]
+  },
+  "nonmonotone_note": "gate validity being an interval in delta does not make defence performance monotone in delta; a SHARED-only survival is an audit trigger, not an automatic bug",
+  "unmodelled": [
+   "tracking noise",
+   "actuator lag",
+   "jerk / acceleration slew",
+   "state-estimation error",
+   "model mismatch"
+  ],
+  "version_history": {
+   "RI-SHARED-v0": {
+    "seed": "witness-blind",
+    "diagnostic": "6/10",
+    "status": "INVALIDATED_FOR_D0_SELECTION"
+   },
+   "RI-SHARED-v1": {
+    "seed": "scenario-aware paired",
+    "diagnostic": "7/10",
+    "status": "SEALED_FOR_D0"
+   }
+  }
+ },
+ "d0_input": {
+  "RI-GMAX": 9,
+  "RI-SHARED": 7,
+  "unique_scenarios": 9,
+  "arm_scenario_evaluations": 16
+ },
+ "per_arm": {
+  "RI-GMAX": {
+   "d0_input": 9,
+   "survived_d0": 9,
+   "falsified_d0": 0,
+   "survivors": [
+    "RH 2.8/0.15 f=2",
+    "RH 3.2/0.25 f=5",
+    "RH 5.0/0.55 f=10",
+    "BASE 2.8/0.30 C",
+    "BASE 3.2/0.50 C",
+    "BASE 3.2/0.70 P",
+    "BASE 4.0/0.70 C",
+    "BASE 4.0/0.70 P",
+    "BASE 5.0/1.00 P"
+   ]
+  },
+  "RI-SHARED": {
+   "d0_input": 7,
+   "survived_d0": 6,
+   "falsified_d0": 1,
+   "survivors": [
+    "RH 2.8/0.15 f=2",
+    "RH 3.2/0.25 f=5",
+    "BASE 2.8/0.30 C",
+    "BASE 3.2/0.70 P",
+    "BASE 4.0/0.70 P",
+    "BASE 5.0/1.00 P"
+   ]
+  }
+ },
+ "paired": [
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "gmax": "SURVIVED_D0",
+   "shared": "SURVIVED_D0",
+   "cell": "both_survived"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "gmax": "SURVIVED_D0",
+   "shared": "SURVIVED_D0",
+   "cell": "both_survived"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "gmax": "SURVIVED_D0",
+   "shared": "SURVIVED_D0",
+   "cell": "both_survived"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "gmax": "SURVIVED_D0",
+   "shared": "SURVIVED_D0",
+   "cell": "both_survived"
+  },
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "gmax": "SURVIVED_D0",
+   "shared": "SURVIVED_D0",
+   "cell": "both_survived"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "gmax": "SURVIVED_D0",
+   "shared": "SURVIVED_D0",
+   "cell": "both_survived"
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "gmax": "SURVIVED_D0",
+   "shared": "FALSIFIED_BY_ADVERSARIAL_REPLAN_D0",
+   "cell": "gmax_only"
+  }
+ ],
+ "cegis_new_attacks": [
+  {
+   "attack_policy_hash": "0fdbaa4cd0dece5e",
+   "acc": [
+    [
+     28.850344424024676,
+     2.0953484696676616,
+     5.442362744153256
+    ],
+    [
+     28.850344424024676,
+     2.0953484696676616,
+     5.442362744153256
+    ],
+    [
+     28.850344424024676,
+     2.0953484696676616,
+     5.442362744153256
+    ],
+    [
+     28.850344424024676,
+     2.0953484696676616,
+     5.442362744153256
+    ]
+   ],
+   "mode": "KILL",
+   "continuous_kill_margin_m": 0.0050925351200104,
+   "cone_exit_margin_m": 0.006889614879982107
+  },
+  {
+   "attack_policy_hash": "c2247457fece1ec1",
+   "acc": [
+    [
+     29.336900626517878,
+     -3.2852894496257457,
+     4.55914990367336
+    ],
+    [
+     28.910158341822314,
+     -5.7857308310852895,
+     -2.468302576864868
+    ],
+    [
+     26.30401158051271,
+     -12.26771721601771,
+     4.077967110468893
+    ],
+    [
+     29.71230908855928,
+     2.9792754038765703,
+     2.881424420961663
+    ]
+   ],
+   "mode": "CONE_LATERAL",
+   "continuous_kill_margin_m": 0.0049561063731147215,
+   "cone_exit_margin_m": 0.00381799368829247
+  }
+ ],
+ "rows": [
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "sealed_artifact_hash": "2c030325e08142af42d76c41",
+   "gate": {
+    "lane_clearance_m": 0.010517491296455628,
+    "lane_reserve_excess_m": 0.0005174912964556275,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 14.49999883735826,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5405022026390958,
+    "achieved_inward_m": 0.14648687311396769,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 14.49999883735826,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.155,
+    "absolute_radial_displacement_m": -0.1464868731139679,
+    "achieved_offset_from_nominal_m": 0.14336178714029102,
+    "terminal_tracking_error_m": 0.011638212859708785,
+    "max_tracking_error_m": 0.1549999999999998,
+    "nominal_radial_drift_m": -0.003125085973676889,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.1549999999999998,
+    "max_tracking_error_m": 0.1549999999999998,
+    "max_tracking_error_after_first_control_step_m": 0.11625000001652852,
+    "terminal_tracking_error_m": 0.011638212859709007,
+    "rms_tracking_error_over_deployment_m": 0.07789215829846569,
+    "settling_time_to_10mm_s": null
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "bd5486797bc59a2f"
+  },
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.135,
+   "sealed_artifact_hash": "665a581d442906d9673be58c",
+   "gate": {
+    "lane_clearance_m": 0.028515232995677042,
+    "lane_reserve_excess_m": 0.01851523299567704,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 16.499998837357463,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5666627582533064,
+    "achieved_inward_m": 0.12798856683955195,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 16.499998837357463,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.135,
+    "absolute_radial_displacement_m": -0.12798856683955195,
+    "achieved_offset_from_nominal_m": 0.12486348086587507,
+    "terminal_tracking_error_m": 0.010136519134125166,
+    "max_tracking_error_m": 0.13500000000000023,
+    "nominal_radial_drift_m": -0.003125085973676889,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.13500000000000023,
+    "max_tracking_error_m": 0.13500000000000023,
+    "max_tracking_error_after_first_control_step_m": 0.10125000001652706,
+    "terminal_tracking_error_m": 0.010136519134125166,
+    "rms_tracking_error_over_deployment_m": 0.06784155723038501,
+    "settling_time_to_10mm_s": null
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "bd5486797bc59a2f"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "sealed_artifact_hash": "3084e5fbdfd85a872cc5ffa8",
+   "gate": {
+    "lane_clearance_m": 0.010517504108321862,
+    "lane_reserve_excess_m": 0.0005175041083218621,
+    "v_soft": 0.9743589743589743,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 17.2083270745512,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5449216347410095,
+    "achieved_inward_m": 0.1766952585157333,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 17.2083270745512,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.155,
+    "absolute_radial_displacement_m": -0.1766952585157331,
+    "achieved_offset_from_nominal_m": 0.1433618627057116,
+    "terminal_tracking_error_m": 0.011638137294288198,
+    "max_tracking_error_m": 0.1549999999999998,
+    "nominal_radial_drift_m": -0.03333339581002148,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.1549999999999998,
+    "max_tracking_error_m": 0.1549999999999998,
+    "max_tracking_error_after_first_control_step_m": 0.11625006351292777,
+    "terminal_tracking_error_m": 0.01163813729428842,
+    "rms_tracking_error_over_deployment_m": 0.07789218323382262,
+    "settling_time_to_10mm_s": null
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "98e3041b90cbeb3c"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.14,
+   "sealed_artifact_hash": "d5770fbda59d98ca8aec7d2c",
+   "gate": {
+    "lane_clearance_m": 0.0240158103827377,
+    "lane_reserve_excess_m": 0.014015810382737701,
+    "v_soft": 0.9743589743589743,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 16.833327074552646,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5645420514516677,
+    "achieved_inward_m": 0.16282152880992085,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 16.833327074552646,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.14,
+    "absolute_radial_displacement_m": -0.16282152880992085,
+    "achieved_offset_from_nominal_m": 0.12948813299989936,
+    "terminal_tracking_error_m": 0.01051186700010076,
+    "max_tracking_error_m": 0.14000000000000012,
+    "nominal_radial_drift_m": -0.03333339581002148,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.14000000000000012,
+    "max_tracking_error_m": 0.14000000000000012,
+    "max_tracking_error_after_first_control_step_m": 0.10500006351292646,
+    "terminal_tracking_error_m": 0.01051186700010076,
+    "rms_tracking_error_over_deployment_m": 0.0703542324327624,
+    "settling_time_to_10mm_s": null
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "98e3041b90cbeb3c"
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.135,
+   "sealed_artifact_hash": "b38b98edf546efd1b33834e6",
+   "gate": {
+    "lane_clearance_m": 0.011018048824287252,
+    "lane_reserve_excess_m": 0.0010180488242872519,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 29.999999999999048,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5511157800109343,
+    "achieved_inward_m": 0.08636485338395872,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 29.999999999999048,
+    "saturation_time_fraction": 0.1,
+    "max_contiguous_saturated_steps": 1,
+    "saturated_during_deployment": true,
+    "grade": "DYNAMICALLY_ADMISSIBLE_AT_ACCELERATION_LIMIT"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.135,
+    "absolute_radial_displacement_m": -0.08636485338395872,
+    "achieved_offset_from_nominal_m": 0.1259899166827858,
+    "terminal_tracking_error_m": 0.00901008331721398,
+    "max_tracking_error_m": 0.13500000000000023,
+    "nominal_radial_drift_m": 0.03962506329882709,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.13500000000000023,
+    "max_tracking_error_m": 0.13500000000000023,
+    "max_tracking_error_after_first_control_step_m": 0.1012499318424247,
+    "terminal_tracking_error_m": 0.00901008331721398,
+    "rms_tracking_error_over_deployment_m": 0.0674777607332629,
+    "settling_time_to_10mm_s": 0.45
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "a64e387da578c6de"
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.115,
+   "sealed_artifact_hash": "c2399febd36527d176e26abf",
+   "gate": {
+    "lane_clearance_m": 0.028645001949290982,
+    "lane_reserve_excess_m": 0.01864500194929098,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 29.99999999999904,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.576044056183629,
+    "achieved_inward_m": 0.0676996922511437,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 29.99999999999904,
+    "saturation_time_fraction": 0.1,
+    "max_contiguous_saturated_steps": 1,
+    "saturated_during_deployment": true,
+    "grade": "DYNAMICALLY_ADMISSIBLE_AT_ACCELERATION_LIMIT"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.115,
+    "absolute_radial_displacement_m": -0.0676996922511437,
+    "achieved_offset_from_nominal_m": 0.10732475554997079,
+    "terminal_tracking_error_m": 0.007675244450029428,
+    "max_tracking_error_m": 0.11500000000000021,
+    "nominal_radial_drift_m": 0.03962506329882709,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.11500000000000021,
+    "max_tracking_error_m": 0.11500000000000021,
+    "max_tracking_error_after_first_control_step_m": 0.08624993184242369,
+    "terminal_tracking_error_m": 0.007675244450029428,
+    "rms_tracking_error_over_deployment_m": 0.057481054597935885,
+    "settling_time_to_10mm_s": 0.45
+   },
+   "d0": {
+    "n_search_candidates": 2,
+    "n_verified_escape": 2,
+    "escapes": [
+     {
+      "attack_policy_hash": "0fdbaa4cd0dece5e",
+      "acc": [
+       [
+        28.850344424024676,
+        2.0953484696676616,
+        5.442362744153256
+       ],
+       [
+        28.850344424024676,
+        2.0953484696676616,
+        5.442362744153256
+       ],
+       [
+        28.850344424024676,
+        2.0953484696676616,
+        5.442362744153256
+       ],
+       [
+        28.850344424024676,
+        2.0953484696676616,
+        5.442362744153256
+       ]
+      ],
+      "mode": "KILL",
+      "continuous_kill_margin_m": 0.0050925351200104,
+      "cone_exit_margin_m": 0.006889614879982107
+     },
+     {
+      "attack_policy_hash": "c2247457fece1ec1",
+      "acc": [
+       [
+        29.336900626517878,
+        -3.2852894496257457,
+        4.55914990367336
+       ],
+       [
+        28.910158341822314,
+        -5.7857308310852895,
+        -2.468302576864868
+       ],
+       [
+        26.30401158051271,
+        -12.26771721601771,
+        4.077967110468893
+       ],
+       [
+        29.71230908855928,
+        2.9792754038765703,
+        2.881424420961663
+       ]
+      ],
+      "mode": "CONE_LATERAL",
+      "continuous_kill_margin_m": 0.0049561063731147215,
+      "cone_exit_margin_m": 0.00381799368829247
+     }
+    ],
+    "occupied_modes": [
+     "KILL",
+     "CONE_LATERAL"
+    ]
+   },
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN_D0",
+   "seed_manifest_sha": "a64e387da578c6de"
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.085,
+   "sealed_artifact_hash": "94aec93e5668ac5bdb8d63b3",
+   "gate": {
+    "lane_clearance_m": 0.012377294571948916,
+    "lane_reserve_excess_m": 0.0023772945719489156,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 6.000973519820166,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5527398487499573,
+    "achieved_inward_m": 0.08472047924095216,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 6.000973519820166,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.085,
+    "absolute_radial_displacement_m": -0.08472047924095238,
+    "achieved_offset_from_nominal_m": 0.0786177608803511,
+    "terminal_tracking_error_m": 0.006382239119648858,
+    "max_tracking_error_m": 0.08499999999999996,
+    "nominal_radial_drift_m": -0.006102718360601278,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.08499999999999996,
+    "max_tracking_error_m": 0.08499999999999996,
+    "max_tracking_error_after_first_control_step_m": 0.06374991454247692,
+    "terminal_tracking_error_m": 0.006382239119648858,
+    "rms_tracking_error_over_deployment_m": 0.0427150206364427,
+    "settling_time_to_10mm_s": 0.4
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "54e6efabf9cbf918"
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.07,
+   "sealed_artifact_hash": "19a023d71cd0d98c14d847b0",
+   "gate": {
+    "lane_clearance_m": 0.0258756008463652,
+    "lane_reserve_excess_m": 0.015875600846365197,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 4.5009735198207315,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5721275315842203,
+    "achieved_inward_m": 0.0708467495351397,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 4.5009735198207315,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.07,
+    "absolute_radial_displacement_m": -0.07084674953513992,
+    "achieved_offset_from_nominal_m": 0.06474403117453864,
+    "terminal_tracking_error_m": 0.005255968825461199,
+    "max_tracking_error_m": 0.06999999999999984,
+    "nominal_radial_drift_m": -0.006102718360601278,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.06999999999999984,
+    "max_tracking_error_m": 0.06999999999999984,
+    "max_tracking_error_after_first_control_step_m": 0.05249991454247516,
+    "terminal_tracking_error_m": 0.005255968825461199,
+    "rms_tracking_error_over_deployment_m": 0.03517706983539124,
+    "settling_time_to_10mm_s": 0.35000000000000003
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "54e6efabf9cbf918"
+  },
+  {
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.11,
+   "sealed_artifact_hash": "35361f3d6e81a3b667393770",
+   "gate": {
+    "lane_clearance_m": 0.010696574543268778,
+    "lane_reserve_excess_m": 0.0006965745432687773,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 15.663976266568929,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5458227051709232,
+    "achieved_inward_m": 0.027878527178690327,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 15.663976266568929,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.11,
+    "absolute_radial_displacement_m": -0.027878527178690105,
+    "achieved_offset_from_nominal_m": 0.10174064167429742,
+    "terminal_tracking_error_m": 0.00825935832570246,
+    "max_tracking_error_m": 0.10999999999999988,
+    "nominal_radial_drift_m": 0.07386211449560731,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.10999999999999988,
+    "max_tracking_error_m": 0.10999999999999988,
+    "max_tracking_error_after_first_control_step_m": 0.0824997978986457,
+    "terminal_tracking_error_m": 0.008259358325702681,
+    "rms_tracking_error_over_deployment_m": 0.05527826464451388,
+    "settling_time_to_10mm_s": 0.45
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "aa1c7728296c1f8f"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "sealed_artifact_hash": "455a48e7c68b718bd9020b1f",
+   "gate": {
+    "lane_clearance_m": 0.010280904467011354,
+    "lane_reserve_excess_m": 0.0002809044670113534,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 8.665927660587512,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5456768412898625,
+    "achieved_inward_m": 0.1307384347084577,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 8.665927660587512,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.1,
+    "absolute_radial_displacement_m": -0.1307384347084577,
+    "achieved_offset_from_nominal_m": 0.09249150456846067,
+    "terminal_tracking_error_m": 0.007508495431539419,
+    "max_tracking_error_m": 0.10000000000000009,
+    "nominal_radial_drift_m": -0.038246930139997026,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.10000000000000009,
+    "max_tracking_error_m": 0.10000000000000009,
+    "max_tracking_error_after_first_control_step_m": 0.07500010548727509,
+    "terminal_tracking_error_m": 0.007508495431539419,
+    "rms_tracking_error_over_deployment_m": 0.050253046081429484,
+    "settling_time_to_10mm_s": 0.45
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "003f23fe9178db54"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "sealed_artifact_hash": "1045febd92a427feb11227f9",
+   "gate": {
+    "lane_clearance_m": 0.01927977531662206,
+    "lane_reserve_excess_m": 0.00927977531662206,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 7.665927660587868,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5587571190969682,
+    "achieved_inward_m": 0.12148928157124894,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 7.665927660587868,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.09,
+    "absolute_radial_displacement_m": -0.12148928157124872,
+    "achieved_offset_from_nominal_m": 0.0832423514312517,
+    "terminal_tracking_error_m": 0.006757648568748165,
+    "max_tracking_error_m": 0.08999999999999986,
+    "nominal_radial_drift_m": -0.038246930139997026,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.08999999999999986,
+    "max_tracking_error_m": 0.08999999999999986,
+    "max_tracking_error_after_first_control_step_m": 0.06750010548727436,
+    "terminal_tracking_error_m": 0.006757648568748387,
+    "rms_tracking_error_over_deployment_m": 0.04522774554739235,
+    "settling_time_to_10mm_s": 0.4
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "003f23fe9178db54"
+  },
+  {
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.145,
+   "sealed_artifact_hash": "027b420befe72f8c4100cdec",
+   "gate": {
+    "lane_clearance_m": 0.012014627117075793,
+    "lane_reserve_excess_m": 0.0020146271170757932,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 29.999999999999325,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5223363257122537,
+    "achieved_inward_m": 0.0843320222849071,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 29.999999999999325,
+    "saturation_time_fraction": 0.4,
+    "max_contiguous_saturated_steps": 4,
+    "saturated_during_deployment": true,
+    "grade": "DYNAMICALLY_ADMISSIBLE_AT_ACCELERATION_LIMIT"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.145,
+    "absolute_radial_displacement_m": -0.08433202228490688,
+    "achieved_offset_from_nominal_m": 0.11570777393322507,
+    "terminal_tracking_error_m": 0.02929222606677495,
+    "max_tracking_error_m": 0.14500000000000002,
+    "nominal_radial_drift_m": 0.031375751648318184,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.14500000000000002,
+    "max_tracking_error_m": 0.14500000000000002,
+    "max_tracking_error_after_first_control_step_m": 0.1449998667006489,
+    "terminal_tracking_error_m": 0.02929222606677495,
+    "rms_tracking_error_over_deployment_m": 0.1110409725820436,
+    "settling_time_to_10mm_s": null
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "2b2dcbe366bc5bf3"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "sealed_artifact_hash": "be2d4d1089db0838e37d2d1a",
+   "gate": {
+    "lane_clearance_m": 0.010967652414596518,
+    "lane_reserve_excess_m": 0.000967652414596518,
+    "v_soft": 0.9534883720930233,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 6.7887771980573985,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5453282824812664,
+    "achieved_inward_m": 0.18628606315927954,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 6.7887771980573985,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.1,
+    "absolute_radial_displacement_m": -0.1862860631592793,
+    "achieved_offset_from_nominal_m": 0.09249154558021133,
+    "terminal_tracking_error_m": 0.007508454419788757,
+    "max_tracking_error_m": 0.10000000000000009,
+    "nominal_radial_drift_m": -0.09379451757906798,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.10000000000000009,
+    "max_tracking_error_m": 0.10000000000000009,
+    "max_tracking_error_after_first_control_step_m": 0.07500019836482918,
+    "terminal_tracking_error_m": 0.007508454419788979,
+    "rms_tracking_error_over_deployment_m": 0.05025305331625072,
+    "settling_time_to_10mm_s": 0.45
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "d5823f0ce4e7624f"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "sealed_artifact_hash": "cea1eeaec40145f7119a651c",
+   "gate": {
+    "lane_clearance_m": 0.01996652326420767,
+    "lane_reserve_excess_m": 0.00996652326420767,
+    "v_soft": 0.9534883720930233,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 5.788777198057745,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5584085602883726,
+    "achieved_inward_m": 0.17703691002207123,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 5.788777198057745,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.09,
+    "absolute_radial_displacement_m": -0.177036910022071,
+    "achieved_offset_from_nominal_m": 0.08324239244300302,
+    "terminal_tracking_error_m": 0.006757607556996836,
+    "max_tracking_error_m": 0.08999999999999986,
+    "nominal_radial_drift_m": -0.09379451757906798,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.08999999999999986,
+    "max_tracking_error_m": 0.08999999999999986,
+    "max_tracking_error_after_first_control_step_m": 0.06750019836482846,
+    "terminal_tracking_error_m": 0.006757607556997058,
+    "rms_tracking_error_over_deployment_m": 0.045227752782218834,
+    "settling_time_to_10mm_s": 0.4
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "d5823f0ce4e7624f"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.095,
+   "sealed_artifact_hash": "27561933440a75dd809b3338",
+   "gate": {
+    "lane_clearance_m": 0.011187161009713176,
+    "lane_reserve_excess_m": 0.0011871610097131755,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 8.018896482224264,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.548384546701782,
+    "achieved_inward_m": 0.1099247518266977,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 8.018896482224264,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.095,
+    "absolute_radial_displacement_m": -0.10992475182669792,
+    "achieved_offset_from_nominal_m": 0.08786691920901957,
+    "terminal_tracking_error_m": 0.007133080790980628,
+    "max_tracking_error_m": 0.0950000000000002,
+    "nominal_radial_drift_m": -0.022057832617678352,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.0950000000000002,
+    "max_tracking_error_m": 0.0950000000000002,
+    "max_tracking_error_after_first_control_step_m": 0.07125010221875794,
+    "terminal_tracking_error_m": 0.007133080790980628,
+    "rms_tracking_error_over_deployment_m": 0.04774036467557259,
+    "settling_time_to_10mm_s": 0.4
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "2a62dd154343b780"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.085,
+   "sealed_artifact_hash": "f1f3e45f6d9eae047e41c8c2",
+   "gate": {
+    "lane_clearance_m": 0.02018603185932477,
+    "lane_reserve_excess_m": 0.010186031859324771,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility": {
+    "POSITION_CONTINUITY_PASS": true,
+    "VELOCITY_CONTINUITY_PASS": true,
+    "ACCELERATION_BOUND_PASS": true,
+    "max_accel_used": 7.018896482224624,
+    "INTER_LIMITER_COLLISION_FREE": true,
+    "min_limiter_separation_m": 3.5614648245088882,
+    "achieved_inward_m": 0.10067559868948939,
+    "DEFENDER_TRAJECTORY_ADMISSIBLE": true
+   },
+   "saturation": {
+    "max_accel": 7.018896482224624,
+    "saturation_time_fraction": 0.0,
+    "max_contiguous_saturated_steps": 0,
+    "saturated_during_deployment": false,
+    "grade": "DYNAMICALLY_ADMISSIBLE_WITH_CONTROL_RESERVE"
+   },
+   "offset_decomposition": {
+    "reference_offset_m": 0.085,
+    "absolute_radial_displacement_m": -0.10067559868948917,
+    "achieved_offset_from_nominal_m": 0.07861776607181081,
+    "terminal_tracking_error_m": 0.006382233928189152,
+    "max_tracking_error_m": 0.08499999999999996,
+    "nominal_radial_drift_m": -0.022057832617678352,
+    "note": "max_tracking_error equals delta because the REFERENCE steps at the firing instant; position and velocity stay continuous but the reference and the commanded acceleration do not"
+   },
+   "tracking": {
+    "initial_reference_jump_m": 0.08499999999999996,
+    "max_tracking_error_m": 0.08499999999999996,
+    "max_tracking_error_after_first_control_step_m": 0.06375010221875677,
+    "terminal_tracking_error_m": 0.006382233928189152,
+    "rms_tracking_error_over_deployment_m": 0.04271506414153676,
+    "settling_time_to_10mm_s": 0.4
+   },
+   "d0": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "occupied_modes": []
+   },
+   "verdict": "SURVIVED_D0",
+   "seed_manifest_sha": "2a62dd154343b780"
+  }
+ ]
+}

@@ -1,0 +1,1110 @@
+{
+ "meta": {
+  "script": "c1_phase1p_fullgate",
+  "step": 5.5,
+  "theta": 0.9,
+  "vshot_reconstruction": {
+   "n": 2000,
+   "seed": 0,
+   "n_segments": 1,
+   "form": "static fire-instant snapshot"
+  },
+  "calibration_band": 0.05263155698776245,
+  "band_floor": 0.02,
+  "band_rationale": "the environment reports v_soft/p_feas for the nominal defender only; counterfactual values must be recomputed, and the residual against the env's own numbers is carried as a band rather than ignored",
+  "classification": [
+   "INVALID_INTERVENTION_ECAP_FAIL",
+   "INVALID_INTERVENTION_ELANE_FAIL",
+   "E_CAP_UNRESOLVED",
+   "VALID_INTERVENTION_REPLAN_FALSIFIED",
+   "VALID_INTERVENTION_NOT_REDISCOVERED"
+  ],
+  "ratified_labels": [
+   "TESTED_STATIC_INTERVENTIONS_INSUFFICIENT_UNDER_CONSTRAINED_REPLAN",
+   "MODE_SUBSTITUTION_NOT_OBSERVED",
+   "TESTED_INTERVENTIONS_FAILED_TO_CLOSE_SOURCE_MODES",
+   "JOINT_FREEDOM_NECESSITY_UNRESOLVED",
+   "ARTIFACT_BLOCK_RATE_NOT_CONTROLLER_EVIDENCE",
+   "FIRE_TIMING_SIGNAL_PROVISIONAL"
+  ],
+  "withheld_labels": [
+   "INTERSECTION_CONSTRAINT_REFUTED",
+   "CURRENT_CONTROL_FREEDOMS_IMPOSSIBLE"
+  ],
+  "protocol": "c1-D0-2026-07-25"
+ },
+ "calibration": [
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "env_v_soft": 1.0,
+   "env_p_feas": 0.010782747529447079,
+   "recon_v_soft": 1.0,
+   "recon_p_feas": 0.010383386581469648,
+   "union_n_total": 2504,
+   "dv": 0.0,
+   "dp": -0.0003993609479774306
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "env_v_soft": 0.9750000238418579,
+   "env_p_feas": 0.015974441543221474,
+   "recon_v_soft": 0.9743589743589743,
+   "recon_p_feas": 0.015575079872204472,
+   "union_n_total": 2504,
+   "dv": -0.0006410494828835711,
+   "dp": -0.0003993616710170015
+  },
+  {
+   "witness": "RH 4.0/0.40 f=7",
+   "env_v_soft": 1.0,
+   "env_p_feas": 0.012380192056298256,
+   "recon_v_soft": 1.0,
+   "recon_p_feas": 0.010383386581469648,
+   "union_n_total": 2504,
+   "dv": 0.0,
+   "dp": -0.001996805474828608
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "env_v_soft": 0.9599999785423279,
+   "env_p_feas": 0.009984025731682777,
+   "recon_v_soft": 1.0,
+   "recon_p_feas": 0.010383386581469648,
+   "union_n_total": 2504,
+   "dv": 0.04000002145767212,
+   "dp": 0.0003993608497868707
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "env_v_soft": 1.0,
+   "env_p_feas": 0.006789137609302998,
+   "recon_v_soft": 1.0,
+   "recon_p_feas": 0.0059904153354632585,
+   "union_n_total": 2504,
+   "dv": 0.0,
+   "dp": -0.000798722273839739
+  },
+  {
+   "witness": "BASE 3.2/0.50 C",
+   "env_v_soft": 1.0,
+   "env_p_feas": 0.003993610385805368,
+   "recon_v_soft": 1.0,
+   "recon_p_feas": 0.0027955271565495207,
+   "union_n_total": 2504,
+   "dv": 0.0,
+   "dp": -0.0011980832292558478
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "env_v_soft": 1.0,
+   "env_p_feas": 0.01158146932721138,
+   "recon_v_soft": 1.0,
+   "recon_p_feas": 0.010383386581469648,
+   "union_n_total": 2504,
+   "dv": 0.0,
+   "dp": -0.0011980827457417319
+  },
+  {
+   "witness": "BASE 4.0/0.70 C",
+   "env_v_soft": 1.0,
+   "env_p_feas": 0.002795527223497629,
+   "recon_v_soft": 1.0,
+   "recon_p_feas": 0.003194888178913738,
+   "union_n_total": 2504,
+   "dv": 0.0,
+   "dp": 0.0003993609554161087
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "env_v_soft": 1.0,
+   "env_p_feas": 0.018370607867836952,
+   "recon_v_soft": 0.9534883720930233,
+   "recon_p_feas": 0.017172523961661343,
+   "union_n_total": 2504,
+   "dv": -0.046511627906976716,
+   "dp": -0.0011980839061756093
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "env_v_soft": 0.9473684430122375,
+   "env_p_feas": 0.007587859407067299,
+   "recon_v_soft": 1.0,
+   "recon_p_feas": 0.009185303514376996,
+   "union_n_total": 2504,
+   "dv": 0.05263155698776245,
+   "dp": 0.0015974441073096975
+  },
+  {
+   "witness": "MAXCLR 5.0/0.55 f=10",
+   "env_v_soft": 0.9599999785423279,
+   "env_p_feas": 0.009984025731682777,
+   "recon_v_soft": 1.0,
+   "recon_p_feas": 0.010383386581469648,
+   "union_n_total": 2504,
+   "dv": 0.04000002145767212,
+   "dp": 0.0003993608497868707
+  },
+  {
+   "witness": "MAXCLR 4.0/0.40 f=7",
+   "env_v_soft": 1.0,
+   "env_p_feas": 0.012380192056298256,
+   "recon_v_soft": 1.0,
+   "recon_p_feas": 0.010383386581469648,
+   "union_n_total": 2504,
+   "dv": 0.0,
+   "dp": -0.001996805474828608
+  }
+ ],
+ "aggregate": {
+  "NONE": {
+   "VALID_INTERVENTION_REPLAN_FALSIFIED": 12
+  },
+  "RING_FREEZE": {
+   "VALID_INTERVENTION_REPLAN_FALSIFIED": 11,
+   "VALID_INTERVENTION_NOT_REDISCOVERED": 1
+  },
+  "CONE_STEER_COVERAGE": {
+   "VALID_INTERVENTION_REPLAN_FALSIFIED": 12
+  },
+  "RING_FREEZE_PLUS_COVERAGE": {
+   "VALID_INTERVENTION_REPLAN_FALSIFIED": 12
+  },
+  "FIRE_SHIFT_PLUS1": {
+   "INVALID_INTERVENTION_ECAP_FAIL": 12
+  }
+ },
+ "rows": [
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "class": "RH",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.14999998940598047,
+     "fire_step_valid": true,
+     "fire_step_used": 2,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.14999998940598047,
+     "fire_step_valid": true,
+     "fire_step_used": 2,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.1227623955840258,
+     "fire_step_valid": true,
+     "fire_step_used": 2,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.1227623955840258,
+     "fire_step_valid": true,
+     "fire_step_used": 2,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 0.2857142857142857,
+     "p_feas_recon": 0.0027955271565495207,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.14687490343230314,
+     "fire_step_valid": false,
+     "fire_step_used": 3,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "class": "RH",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 0.9743589743589743,
+     "p_feas_recon": 0.015575079872204472,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.14999998940598047,
+     "fire_step_valid": true,
+     "fire_step_used": 4,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 0.9743589743589743,
+     "p_feas_recon": 0.015575079872204472,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.18333338521600195,
+     "fire_step_valid": true,
+     "fire_step_used": 4,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 0.9743589743589743,
+     "p_feas_recon": 0.015575079872204472,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.1227623955840258,
+     "fire_step_valid": true,
+     "fire_step_used": 4,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 0.9743589743589743,
+     "p_feas_recon": 0.015575079872204472,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.1560942158578369,
+     "fire_step_valid": true,
+     "fire_step_used": 4,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 0.2857142857142857,
+     "p_feas_recon": 0.0027955271565495207,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.14999998940598047,
+     "fire_step_valid": false,
+     "fire_step_used": 5,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  },
+  {
+   "witness": "RH 4.0/0.40 f=7",
+   "class": "RH",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.10000009207786276,
+     "fire_step_valid": true,
+     "fire_step_used": 7,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.14999998940598047,
+     "fire_step_valid": true,
+     "fire_step_used": 7,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.07276492001870416,
+     "fire_step_valid": true,
+     "fire_step_used": 7,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.1227623955840258,
+     "fire_step_valid": true,
+     "fire_step_used": 7,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.10000009207786276,
+     "fire_step_valid": false,
+     "fire_step_used": 8,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "class": "RH",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.13000001190582067,
+     "fire_step_valid": true,
+     "fire_step_used": 10,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.14999998940598047,
+     "fire_step_valid": true,
+     "fire_step_used": 10,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.10276337762900978,
+     "fire_step_valid": true,
+     "fire_step_used": 10,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.1227623955840258,
+     "fire_step_valid": true,
+     "fire_step_used": 10,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 0.6666666666666666,
+     "p_feas_recon": 0.0011980830670926517,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.13000001190582067,
+     "fire_step_valid": false,
+     "fire_step_used": 11,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "class": "BASE",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0059904153354632585,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.08170859091937777,
+     "fire_step_valid": true,
+     "fire_step_used": 5,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0059904153354632585,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.09688691808371575,
+     "fire_step_valid": true,
+     "fire_step_used": 5,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0059904153354632585,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.05447432413007558,
+     "fire_step_valid": true,
+     "fire_step_used": 5,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0059904153354632585,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.06965190013661493,
+     "fire_step_valid": true,
+     "fire_step_used": 5,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.08170859091937777,
+     "fire_step_valid": false,
+     "fire_step_used": 6,
+     "replan_outcome": "NOT_REDISCOVERED_UNDER_CONSTRAINED_REPLAN_BUDGET",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  },
+  {
+   "witness": "BASE 3.2/0.50 C",
+   "class": "BASE",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0027955271565495207,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.03515380689027792,
+     "fire_step_valid": true,
+     "fire_step_used": 9,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0027955271565495207,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.03515380689027792,
+     "fire_step_valid": true,
+     "fire_step_used": 9,
+     "replan_outcome": "NOT_REDISCOVERED_UNDER_CONSTRAINED_REPLAN_BUDGET",
+     "escape_mode_if_full_gate_valid": [],
+     "classification": "VALID_INTERVENTION_NOT_REDISCOVERED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0027955271565495207,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.007921890509551055,
+     "fire_step_valid": true,
+     "fire_step_used": 9,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0027955271565495207,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.007921890509551055,
+     "fire_step_valid": true,
+     "fire_step_used": 9,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.06277613350685751,
+     "fire_step_valid": false,
+     "fire_step_used": 10,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "class": "BASE",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.10026959168364691,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.13791057308061694,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.07303440709181386,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.11067355850728111,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 0.6666666666666666,
+     "p_feas_recon": 0.0011980830670926517,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.09966364294061991,
+     "fire_step_valid": false,
+     "fire_step_used": 14,
+     "replan_outcome": "NOT_REDISCOVERED_UNDER_CONSTRAINED_REPLAN_BUDGET",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  },
+  {
+   "witness": "BASE 4.0/0.70 C",
+   "class": "BASE",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.003194888178913738,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.07499992381574883,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.003194888178913738,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.07499992381574883,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.003194888178913738,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.04776599149870053,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.003194888178913738,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.04776599149870053,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 0.38461538461538464,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.10637567546406723,
+     "fire_step_valid": false,
+     "fire_step_used": 14,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "class": "BASE",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 0.9534883720930233,
+     "p_feas_recon": 0.017172523961661343,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.10095631050230924,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 0.9534883720930233,
+     "p_feas_recon": 0.017172523961661343,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.19321173323423846,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 0.9534883720930233,
+     "p_feas_recon": 0.017172523961661343,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.07372109181608488,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 0.9534883720930233,
+     "p_feas_recon": 0.017172523961661343,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.16597210371076354,
+     "fire_step_valid": true,
+     "fire_step_used": 13,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 0.3333333333333333,
+     "p_feas_recon": 0.003594249201277955,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.09941721565517048,
+     "fire_step_valid": false,
+     "fire_step_used": 14,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "class": "BASE",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.009185303514376996,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.0965604723613609,
+     "fire_step_valid": true,
+     "fire_step_used": 19,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.009185303514376996,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.11901152705708151,
+     "fire_step_valid": true,
+     "fire_step_used": 19,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.009185303514376996,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.0693254698085326,
+     "fire_step_valid": true,
+     "fire_step_used": 19,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.009185303514376996,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.09177542619555812,
+     "fire_step_valid": true,
+     "fire_step_used": 19,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.0965604723613609,
+     "fire_step_valid": true,
+     "fire_step_used": 20,
+     "replan_outcome": "NOT_REDISCOVERED_UNDER_CONSTRAINED_REPLAN_BUDGET",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  },
+  {
+   "witness": "MAXCLR 5.0/0.55 f=10",
+   "class": "MAXCLR",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.13000005832810313,
+     "fire_step_valid": true,
+     "fire_step_used": 10,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.14999998940598047,
+     "fire_step_valid": true,
+     "fire_step_used": 10,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.10276342500735502,
+     "fire_step_valid": true,
+     "fire_step_used": 10,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.1227623955840258,
+     "fire_step_valid": true,
+     "fire_step_used": 10,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 0.6666666666666666,
+     "p_feas_recon": 0.0011980830670926517,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.13000005832810313,
+     "fire_step_valid": false,
+     "fire_step_used": 11,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  },
+  {
+   "witness": "MAXCLR 4.0/0.40 f=7",
+   "class": "MAXCLR",
+   "arms": {
+    "NONE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.10000009207786276,
+     "fire_step_valid": true,
+     "fire_step_used": 7,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.14999998940598047,
+     "fire_step_valid": true,
+     "fire_step_used": 7,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "CONE_STEER_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.07276492001870416,
+     "fire_step_valid": true,
+     "fire_step_used": 7,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "RING_FREEZE_PLUS_COVERAGE": {
+     "E_cap_after_intervention": "PASS",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.010383386581469648,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.1227623955840258,
+     "fire_step_valid": true,
+     "fire_step_used": 7,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": [
+      "KILL",
+      "CONE_LATERAL"
+     ],
+     "classification": "VALID_INTERVENTION_REPLAN_FALSIFIED"
+    },
+    "FIRE_SHIFT_PLUS1": {
+     "E_cap_after_intervention": "FAIL",
+     "v_soft_recon": 1.0,
+     "p_feas_recon": 0.0,
+     "E_lane_after_intervention": true,
+     "lane_clearance_m": 0.10000009207786276,
+     "fire_step_valid": false,
+     "fire_step_used": 8,
+     "replan_outcome": "REDISCOVERED",
+     "escape_mode_if_full_gate_valid": null,
+     "classification": "INVALID_INTERVENTION_ECAP_FAIL"
+    }
+   }
+  }
+ ]
+}

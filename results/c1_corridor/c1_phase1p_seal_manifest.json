@@ -1,0 +1,1791 @@
+{
+ "meta": {
+  "seal_version": "c1-seal-1P-2026-07-25",
+  "protocol": "c1-D0-2026-07-25",
+  "git_head": "b978f1bd6255a485b19a751caa363ca2021dc3ac",
+  "strengths": {
+   "FILE_CONTENT_SEAL": "sha256 over file bytes; exact, no reconstruction",
+   "FULL_BUNDLE": "all 12 evidence_bundle_hash fields present in storage",
+   "PARTIAL": "hash over the present subset only; missing fields listed"
+  },
+  "not_reconstructed": [
+   "defender_traj",
+   "attacker_traj",
+   "fire_step",
+   "dynamics_sha"
+  ],
+  "note": "D0 result files are summaries. Trajectories were never stored, so no record can reach FULL_BUNDLE without a re-run. A re-run would seal a reconstruction, not the original, so it is not done here. Trajectory storage is a forward requirement from 1P on."
+ },
+ "n_files": 19,
+ "n_sealed": 19,
+ "n_records": 69,
+ "n_full_bundle": 0,
+ "n_partial": 69,
+ "shared_attack_policy_hashes": {
+  "961fcb3bbf8aa8b7": [
+   "c1_phase1m_certificates:M1_exploit_readjudication[0]:EXPLOIT 3.2/0.35 WS1",
+   "c1_phase1m_certificates:M1_exploit_readjudication[1]:EXPLOIT 3.2/0.40 WS1"
+  ]
+ },
+ "files": [
+  {
+   "path": "results/c1_corridor/c1_replan_falsifier.json",
+   "status": "SEALED",
+   "sha256": "433201619ee654e53af31fc82ab4713b3cd48d0aefb20703a662bcd7de44a18c",
+   "bytes": 108586,
+   "kind": "result"
+  },
+  {
+   "path": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "status": "SEALED",
+   "sha256": "4dd54969d903c32d12a005592312d54679f4d1a8a03cefa6d3223bd630ae05c9",
+   "bytes": 75919,
+   "kind": "result"
+  },
+  {
+   "path": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "status": "SEALED",
+   "sha256": "ea3a2c7e79404b0a9cd7f564b59ae465ac95e8ce29978ed7a554d599f4f3dd5f",
+   "bytes": 36205,
+   "kind": "result"
+  },
+  {
+   "path": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "status": "SEALED",
+   "sha256": "7105bd497b2d44af72657a4db72e16d651a63eddf4749f8b95aa6407dce26663",
+   "bytes": 48544,
+   "kind": "result"
+  },
+  {
+   "path": "results/c1_corridor/c1_phase1l_survivor_adjudication.json",
+   "status": "SEALED",
+   "sha256": "3219b830b7185f6bebd56c9b3455f51f671e6f93409ec965d5faf9fa503a61e3",
+   "bytes": 2195,
+   "kind": "result"
+  },
+  {
+   "path": "results/c1_corridor/c1_phase1m_certificates.json",
+   "status": "SEALED",
+   "sha256": "f526e814771495749e7cd4ebe29dbfbb7486c044fb116497dcda2bd8f006474d",
+   "bytes": 6209,
+   "kind": "result"
+  },
+  {
+   "path": "results/c1_corridor/c1_phase1n_hardening.json",
+   "status": "SEALED",
+   "sha256": "e2315cebc398fc0a14e0e62c050c9a36b813553439551f501a12142e14a68db8",
+   "bytes": 9947,
+   "kind": "result"
+  },
+  {
+   "path": "results/c1_corridor/witness_artifacts.tar.gz",
+   "status": "SEALED",
+   "sha256": "e3566f58b56d1ddc246cff15d333dc498f36ee0daf4497bbfc2f2d3e707205b7",
+   "bytes": 11262,
+   "kind": "result",
+   "members": [
+    "witness_artifacts/1B_C_2.8_0.30.json",
+    "witness_artifacts/1B_C_3.2_0.50.json",
+    "witness_artifacts/1B_C_4.0_0.70.json",
+    "witness_artifacts/1B_P_3.2_0.70.json",
+    "witness_artifacts/1B_P_4.0_0.70.json",
+    "witness_artifacts/1B_P_5.0_1.00.json",
+    "witness_artifacts/1C_OWS1_3.2_0.35.json",
+    "witness_artifacts/1C_OWS1_3.2_0.40.json",
+    "witness_artifacts/1C_OWS2_4.0_0.70.json"
+   ]
+  },
+  {
+   "path": "results/c1_corridor/witness_artifacts_1g.tar.gz",
+   "status": "SEALED",
+   "sha256": "9697fb19023ba2f5f208dbb5ce728d0b9bb23647cfbb7700bc442a649f57e5c6",
+   "bytes": 18671,
+   "kind": "result",
+   "members": [
+    "art_1g_hold/1B_C_2.8_0.30.json",
+    "art_1g_hold/1B_C_3.2_0.50.json",
+    "art_1g_hold/1B_C_4.0_0.70.json",
+    "art_1g_hold/1B_P_3.2_0.70.json",
+    "art_1g_hold/1B_P_4.0_0.70.json",
+    "art_1g_hold/1B_P_5.0_1.00.json",
+    "art_1g_hold/ARM_L_LH(f=10)_5.0_0.55.json",
+    "art_1g_hold/ARM_L_LH(f=11)_5.0_0.60.json",
+    "art_1g_hold/ARM_L_LH(f=2)_2.8_0.15.json",
+    "art_1g_hold/ARM_L_LH(f=4)_3.2_0.20.json",
+    "art_1g_hold/ARM_L_LH(f=5)_3.2_0.25.json",
+    "art_1g_hold/ARM_L_LH(f=7)_4.0_0.35.json",
+    "art_1g_hold/ARM_L_LH(f=7)_4.0_0.40.json",
+    "art_1g_maxclr/ARM_L_LM(f=10)_5.0_0.55.json",
+    "art_1g_maxclr/ARM_L_LM(f=11)_5.0_0.60.json",
+    "art_1g_maxclr/ARM_L_LM(f=2)_2.8_0.15.json",
+    "art_1g_maxclr/ARM_L_LM(f=4)_3.2_0.20.json",
+    "art_1g_maxclr/ARM_L_LM(f=5)_3.2_0.25.json",
+    "art_1g_maxclr/ARM_L_LM(f=7)_4.0_0.35.json",
+    "art_1g_maxclr/ARM_L_LM(f=7)_4.0_0.40.json",
+    "art_1g_maxclr/ARM_L_LM(f=9)_5.0_0.50.json"
+   ]
+  },
+  {
+   "path": "shepherd/scripts/c1_replan_falsifier.py",
+   "status": "SEALED",
+   "sha256": "18db252ec4c0fc6d3cae88661839c1cf8a83f56c8cc0a34bcd883e8cd736edf4",
+   "bytes": 15751,
+   "kind": "code"
+  },
+  {
+   "path": "shepherd/scripts/c1_replan_verify.py",
+   "status": "SEALED",
+   "sha256": "2e425544f524708e03fd43236eb9b9ec5088150ee5fe277fb66c453dc07d0d7a",
+   "bytes": 6474,
+   "kind": "code"
+  },
+  {
+   "path": "shepherd/scripts/c1_exact_clearance.py",
+   "status": "SEALED",
+   "sha256": "fc1ea7658f8a4e8068e1ff510fd7a05f806254ad850c11870a5da23b5457c674",
+   "bytes": 6265,
+   "kind": "code"
+  },
+  {
+   "path": "shepherd/scripts/c1_interval_certificate.py",
+   "status": "SEALED",
+   "sha256": "5eec978c3d6a13fdad279cde23938f611e70a0de897f67e810d5342a4b776674",
+   "bytes": 6622,
+   "kind": "code"
+  },
+  {
+   "path": "shepherd/scripts/c1_phase1k_frozen_audit.py",
+   "status": "SEALED",
+   "sha256": "ec49a8a5ef0aebdaa2862155a8a5e29e2af27b71d05b7dc7423fe01e960826cd",
+   "bytes": 12064,
+   "kind": "code"
+  },
+  {
+   "path": "shepherd/scripts/c1_phase1l_exact_adjudication.py",
+   "status": "SEALED",
+   "sha256": "d8724a661ec4fac39e28f258e7d5b5af912b6c9bc2dac4905f3ed7516686e3dd",
+   "bytes": 10239,
+   "kind": "code"
+  },
+  {
+   "path": "shepherd/scripts/c1_phase1m_certificates.py",
+   "status": "SEALED",
+   "sha256": "66969c3f8907fa395830d61685dda444872ed362b92e2c1276f978674a3347ff",
+   "bytes": 13910,
+   "kind": "code"
+  },
+  {
+   "path": "shepherd/scripts/c1_phase1n_hardening.py",
+   "status": "SEALED",
+   "sha256": "a182511fb078b13a844e37377670858550413cfb976a5823720fc8c4a25df3bd",
+   "bytes": 20010,
+   "kind": "code"
+  },
+  {
+   "path": "shepherd/scripts/c1_governance.py",
+   "status": "SEALED",
+   "sha256": "47064a01b81d3d0390ace9d74406265312801a2108844fdeff97693df98767bc",
+   "bytes": 5212,
+   "kind": "code"
+  },
+  {
+   "path": "shepherd/game/viability.py",
+   "status": "SEALED",
+   "sha256": "9d8a2e069e2b0c1c16860fd54d4f96e8eed40ac2cfa238843ef715457933adf6",
+   "bytes": 39368,
+   "kind": "code"
+  }
+ ],
+ "records": [
+  {
+   "record_id": "c1_replan_falsifier:rows[0]:RH  2.8/0.15 f=2",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "4e296ebfb8c1d506357ff711"
+  },
+  {
+   "record_id": "c1_replan_falsifier:rows[1]:RH  3.2/0.25 f=5",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "dc79582cbacdf63f1a10c18c"
+  },
+  {
+   "record_id": "c1_replan_falsifier:rows[2]:RH  4.0/0.40 f=7",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "0304dd02282fec4024c125f3"
+  },
+  {
+   "record_id": "c1_replan_falsifier:rows[3]:RH  5.0/0.55 f=10",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "160e80c42c65083c47c5aa57"
+  },
+  {
+   "record_id": "c1_replan_falsifier:rows[4]:MAXCLR(ctrl) 5.0/0.55",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "eebeeac0a09fd3ea4d9455c0"
+  },
+  {
+   "record_id": "c1_replan_falsifier:rows[5]:MAXCLR(ctrl) 4.0/0.40",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "92bc83b35ff4a1b180ccc831"
+  },
+  {
+   "record_id": "c1_replan_falsifier:rows[6]:BASE 2.8/0.30 C",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "a4743121bbe2207e16bc74a1"
+  },
+  {
+   "record_id": "c1_replan_falsifier:rows[7]:BASE 3.2/0.50 C",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "4d46effdb3502a6cd31f424e"
+  },
+  {
+   "record_id": "c1_replan_falsifier:rows[8]:BASE 3.2/0.70 P",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "336ce4518a5041f820b51794"
+  },
+  {
+   "record_id": "c1_replan_falsifier:rows[9]:BASE 4.0/0.70 C",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "831b8daac74019e61699646c"
+  },
+  {
+   "record_id": "c1_replan_falsifier:rows[10]:BASE 4.0/0.70 P",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "41cfa6386037fecbd97256a2"
+  },
+  {
+   "record_id": "c1_replan_falsifier:rows[11]:BASE 5.0/1.00 P",
+   "source_file": "results/c1_corridor/c1_replan_falsifier.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "45e10ce06660decb7b7aeb01"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[0]:RH  2.8/0.15 f=2",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "305e6a925f8829a6782a7798"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[1]:RH  3.2/0.25 f=5",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "57d2628a506d9238f1a7b150"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[2]:RH  4.0/0.40 f=7",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "0304dd02282fec4024c125f3"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[3]:RH  5.0/0.55 f=10",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "160e80c42c65083c47c5aa57"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[4]:MAXCLR(ctrl) 5.0/0.55",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "eebeeac0a09fd3ea4d9455c0"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[5]:MAXCLR(ctrl) 4.0/0.40",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "92bc83b35ff4a1b180ccc831"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[6]:BASE 2.8/0.30 C",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "a4743121bbe2207e16bc74a1"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[7]:BASE 3.2/0.50 C",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "4d46effdb3502a6cd31f424e"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[8]:BASE 3.2/0.70 P",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "336ce4518a5041f820b51794"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[9]:BASE 4.0/0.70 C",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "c162631184bd2e26aed4cb97"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[10]:BASE 4.0/0.70 P",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "41cfa6386037fecbd97256a2"
+  },
+  {
+   "record_id": "c1_replan_falsifier_lowEffort:rows[11]:BASE 5.0/1.00 P",
+   "source_file": "results/c1_corridor/c1_replan_falsifier_lowEffort.json",
+   "fields_present": [
+    "scenario_id",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "45e10ce06660decb7b7aeb01"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[0]:RH      2.8/0.15",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "0a11efce5d6787a1cd67b770"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[1]:RH      3.2/0.25",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "90ba6b06fe3d6060bd965ec4"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[2]:RH      4.0/0.40",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "fb163edaf55d891fd6ba4633"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[3]:RH      5.0/0.55",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "a7252c2c070c74dac07f231f"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[4]:MAXCLR  5.0/0.55",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "3182e382d30c610d185f71e3"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[5]:MAXCLR  4.0/0.40",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "39c4949790adad8cd30eeb05"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[6]:EXPLOIT 3.2/0.35",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "c1becbc3d655e84c29c8dbd8"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[7]:EXPLOIT 3.2/0.40",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "0e89e297ed286520a58dd398"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[8]:EXPLOIT 4.0/0.70",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "5bad2628998449e0acc78a20"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[9]:BASE    2.8/0.30",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "margin_m",
+    "dynamics_sha"
+   ],
+   "coverage": "4/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "fed2b5498b3dc13be2d7b630"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[10]:BASE    3.2/0.50",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "ebe179a4c9751e41536030d1"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[11]:BASE    3.2/0.70",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "dac8d7c62c29784e866cb889"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[12]:BASE    4.0/0.70",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "48660b99143d7a620b4255dc"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[13]:BASE    4.0/0.70",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "029135558dc9b602152beb6d"
+  },
+  {
+   "record_id": "c1_phase1k_frozen_audit:rows[14]:BASE    5.0/1.00",
+   "source_file": "results/c1_corridor/c1_phase1k_frozen_audit.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "03ed60d2537c0d65c417d629"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[0]:BASE   2.8/0.30",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "dc1330d6c99e1b21369cf28d"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[1]:RH     2.8/0.15",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "f5c0ac35824c96b0a88136f6"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[2]:RH     3.2/0.25",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "e3db3d1a95035f7b7d86b746"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[3]:RH     4.0/0.40",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "b4a120b450849e45ea5c7b79"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[4]:RH     5.0/0.55",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "8aa19746d166fe1eff6d99e4"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[5]:MAXCLR 5.0/0.55",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "2b173ed755f9a58feb11375e"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[6]:MAXCLR 4.0/0.40",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "1ba65ebe633b6aac1e3f2f6c"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[7]:BASE   3.2/0.50",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "8d6ff7c7d725f538bfd3c110"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[8]:BASE   3.2/0.70",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "8b10a978a83c1c8a170a243d"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[9]:BASE   4.0/0.70",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "1461a67e7bfdb2512e149c6b"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[10]:BASE   4.0/0.70",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "0c59a8addd7be5e6bb4800a4"
+  },
+  {
+   "record_id": "c1_phase1l_exact_adjudication:rows[11]:BASE   5.0/1.00",
+   "source_file": "results/c1_corridor/c1_phase1l_exact_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "fa9bce67ec9c4579c58f619d"
+  },
+  {
+   "record_id": "c1_phase1l_survivor_adjudication:rows[0]:BASE   2.8/0.30",
+   "source_file": "results/c1_corridor/c1_phase1l_survivor_adjudication.json",
+   "fields_present": [
+    "margin_m",
+    "reset_id",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "dc1330d6c99e1b21369cf28d"
+  },
+  {
+   "record_id": "c1_phase1m_certificates:M1_exploit_readjudication[0]:EXPLOIT 3.2/0.35 WS1",
+   "source_file": "results/c1_corridor/c1_phase1m_certificates.json",
+   "fields_present": [
+    "attacker_seg_acc",
+    "margin_m",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_traj",
+    "reset_id",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "d12f1f74e3f9b10b87b6a5e8",
+   "attack_policy_hash": "961fcb3bbf8aa8b7"
+  },
+  {
+   "record_id": "c1_phase1m_certificates:M1_exploit_readjudication[1]:EXPLOIT 3.2/0.40 WS1",
+   "source_file": "results/c1_corridor/c1_phase1m_certificates.json",
+   "fields_present": [
+    "attacker_seg_acc",
+    "margin_m",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_traj",
+    "reset_id",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "2b6ec9eec6b673915fc3202b",
+   "attack_policy_hash": "961fcb3bbf8aa8b7"
+  },
+  {
+   "record_id": "c1_phase1m_certificates:M1_exploit_readjudication[2]:EXPLOIT 4.0/0.70 WS2",
+   "source_file": "results/c1_corridor/c1_phase1m_certificates.json",
+   "fields_present": [
+    "attacker_seg_acc",
+    "margin_m",
+    "scenario_id",
+    "seeds",
+    "verdict"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_traj",
+    "reset_id",
+    "fire_step",
+    "verifier_version",
+    "dynamics_sha"
+   ],
+   "coverage": "5/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "fde50615422a4d4e34756816",
+   "attack_policy_hash": "ea4c8d8cc243efaa"
+  },
+  {
+   "record_id": "c1_phase1m_certificates:M2_interval_certificates[0]:BASE   2.8/0.30",
+   "source_file": "results/c1_corridor/c1_phase1m_certificates.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "bb34087bcd4ba367d96887e8"
+  },
+  {
+   "record_id": "c1_phase1m_certificates:M2_interval_certificates[1]:BASE   5.0/1.00",
+   "source_file": "results/c1_corridor/c1_phase1m_certificates.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verifier_version",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "2/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "e2ac7d9e991b8a5bc2f7fdec"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[0]:BASE   2.8/0.30",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "8dbd87cd3213d84cf4f0daa5"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[1]:RH     2.8/0.15",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "821a94f045812e6979ad17c8"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[2]:RH     3.2/0.25",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "a698312c7421c23355b39948"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[3]:RH     4.0/0.40",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "d69129cd1ca21fe23d21d2f6"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[4]:RH     5.0/0.55",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "979fec729592fdc5a255289d"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[5]:MAXCLR 5.0/0.55",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "76015b9eec6d6399af59baec"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[6]:MAXCLR 4.0/0.40",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "0c422fa56d22bd186238079e"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[7]:BASE   3.2/0.50",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "7bdf0379fbbab21a8a1ba22b"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[8]:BASE   3.2/0.70",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "d670854d41c5f566da91ceb0"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[9]:BASE   4.0/0.70",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "4a2dfb3588652bfa8e3d8344"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[10]:BASE   4.0/0.70",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "dff1175031ba0c84dc23f645"
+  },
+  {
+   "record_id": "c1_phase1n_hardening:N3[11]:BASE   5.0/1.00",
+   "source_file": "results/c1_corridor/c1_phase1n_hardening.json",
+   "fields_present": [
+    "margin_m",
+    "scenario_id",
+    "verifier_version"
+   ],
+   "fields_missing": [
+    "config_sha",
+    "defender_traj",
+    "attacker_seg_acc",
+    "attacker_traj",
+    "reset_id",
+    "seeds",
+    "fire_step",
+    "verdict",
+    "dynamics_sha"
+   ],
+   "coverage": "3/12",
+   "seal_strength": "PARTIAL",
+   "partial_bundle_hash": "8e0299ad881ccac359135db8"
+  }
+ ]
+}

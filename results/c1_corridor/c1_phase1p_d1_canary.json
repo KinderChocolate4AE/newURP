@@ -1,0 +1,125 @@
+{
+ "meta": {
+  "script": "c1_phase1p_d1_canary",
+  "role": "MANDATORY positive control before D2a; tunes nothing",
+  "controls": {
+   "C1": "exact replay of stored D0 escapes by the D1 verifier",
+   "C2": "same artifacts as CEM warm start -- pipeline must emit candidates",
+   "C3": "large-margin (metre-scale) escape through the same path",
+   "C4": "objective / threshold / verifier identity hashed, D0 vs D1"
+  },
+  "hold_rule": "any control failing puts the D1 survival result ON HOLD"
+ },
+ "config_parity": {
+  "d0": {
+   "objective_replan_search": "5beda4242bf9a265",
+   "kill_margin": "4451dd05f677af12",
+   "cone_exit_margin": "ff660118c96cb814",
+   "verifier_exact_min_clearance": "6a0d0ccff7eff4b5",
+   "candidate_threshold": "score > 0 (escape) -- literal in replan_search",
+   "attacker_dynamics": "260551fcb12dfe16",
+   "K": 4,
+   "pop": 192,
+   "iters": 14,
+   "n_bank": 20000,
+   "launches": 12
+  },
+  "d1": {
+   "objective_replan_search": "5beda4242bf9a265",
+   "kill_margin": "4451dd05f677af12",
+   "cone_exit_margin": "ff660118c96cb814",
+   "verifier_exact_min_clearance": "6a0d0ccff7eff4b5",
+   "candidate_threshold": "score > 0 (escape) -- literal in replan_search",
+   "attacker_dynamics": "260551fcb12dfe16",
+   "K": 4,
+   "pop": 192,
+   "iters": 14,
+   "n_bank": 20000,
+   "launches": 48
+  },
+  "differing_keys": [
+   "launches"
+  ],
+  "intended_differences": [
+   "launches"
+  ],
+  "parity_ok": true
+ },
+ "C1_pass": true,
+ "C2_pass": true,
+ "C4_pass": true,
+ "verdict": "D1_HARNESS_VALIDATED",
+ "rows": [
+  {
+   "control": "C1/C2 D0 escape",
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-SHARED",
+   "delta_m": 0.115,
+   "attack_policy_hash": "0fdbaa4cd0dece5e",
+   "mode": "KILL",
+   "replay": {
+    "sampled_kill_margin_m": 0.005092535120010844,
+    "cone_exit_margin_m": 0.006889614879982107,
+    "continuous_kill_margin_m": 0.0050925351200104,
+    "verdict": "VERIFIED_COLLISION_FREE",
+    "turn_feasible": true,
+    "recognised_as_escape": true
+   },
+   "warm_start": {
+    "n_candidates": 1,
+    "best_score_m": 0.005092535120010844,
+    "best_kill_margin_m": 0.005092535120010844,
+    "best_cone_exit_margin_m": 0.006889614879982107,
+    "pipeline_emitted_candidates": true
+   }
+  },
+  {
+   "control": "C1/C2 D0 escape",
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-SHARED",
+   "delta_m": 0.115,
+   "attack_policy_hash": "c2247457fece1ec1",
+   "mode": "CONE_LATERAL",
+   "replay": {
+    "sampled_kill_margin_m": 0.0049561063731151656,
+    "cone_exit_margin_m": 0.00381799368829247,
+    "continuous_kill_margin_m": 0.0049561063731147215,
+    "verdict": "VERIFIED_COLLISION_FREE",
+    "turn_feasible": true,
+    "recognised_as_escape": true
+   },
+   "warm_start": {
+    "n_candidates": 1,
+    "best_score_m": 0.00381799368829247,
+    "best_kill_margin_m": 0.0049561063731151656,
+    "best_cone_exit_margin_m": 0.00381799368829247,
+    "pipeline_emitted_candidates": true
+   }
+  },
+  {
+   "control": "C3 large-margin",
+   "witness": "MAXCLR 5.0/0.55 f=10",
+   "arm": "NOMINAL",
+   "delta_m": 0.0,
+   "attack_policy_hash": "d5a3cf56ba994ed3",
+   "mode": "CONE_LATERAL",
+   "recorded_max_binding_margin_m": 1.071708702102166,
+   "rederived_binding_margin_m": 1.071708702102166,
+   "replay": {
+    "sampled_kill_margin_m": 1.0725911817098384,
+    "cone_exit_margin_m": 1.071708702102166,
+    "continuous_kill_margin_m": 1.0724550881282062,
+    "verdict": "VERIFIED_COLLISION_FREE",
+    "turn_feasible": true,
+    "recognised_as_escape": true
+   },
+   "warm_start": {
+    "n_candidates": 2672,
+    "best_score_m": 1.071708702102166,
+    "best_kill_margin_m": 1.0725911817098384,
+    "best_cone_exit_margin_m": 1.071708702102166,
+    "pipeline_emitted_candidates": true
+   }
+  }
+ ]
+}

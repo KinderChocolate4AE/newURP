@@ -1,0 +1,168 @@
+{
+ "meta": {
+  "script": "c1_falsifier_v2_freeze",
+  "role": "the review's 13-item freeze checklist, run as tests",
+  "not_the_campaign_invariant_suite": "c1_invariant_tests (I1-I8, 13/13) is a different list; the two must not be reported as one",
+  "validation_set": {
+   "initial_candidates": 16,
+   "REGRESSION_COUNTEREXAMPLE_SUITE": 5,
+   "CONFIRMATORY_NULL_EVALUATION": 11,
+   "note": "'15 cells' was the set that entered D1 and omits the RI-SHARED / RH 5.0/0.55 cell falsified at D0"
+  }
+ },
+ "falsified_cells": [
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED",
+   "found_at": "A0"
+  },
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED",
+   "found_at": "A0"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED",
+   "found_at": "A0"
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-GMAX",
+   "found_at": "D2a"
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-SHARED",
+   "found_at": "D0"
+  }
+ ],
+ "unresolved_cells": [
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX"
+  },
+  {
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED"
+  },
+  {
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED"
+  },
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX"
+  }
+ ],
+ "n_pass": 13,
+ "items": [
+  {
+   "item": 1,
+   "title": "K1 c K2 c K4 c K8 representation containment",
+   "status": "PASS",
+   "detail": "K1:VERI K2:VERI K4:VERI K8:VERI"
+  },
+  {
+   "item": 2,
+   "title": "previous-stage incumbents preserved into next stage",
+   "status": "PASS",
+   "detail": "bank never shrinks; sizes [24, 25, 26, 48, 49, 50, 72, 73, 74, 96, 97, 98]"
+  },
+  {
+   "item": 3,
+   "title": "cumulative-bank best-S monotonicity A0>=A1>=A2>=A3",
+   "status": "PASS",
+   "detail": "violations 0"
+  },
+  {
+   "item": 4,
+   "title": "independent global temporal starts per stage",
+   "status": "PASS",
+   "detail": "counts {'A0': 0, 'A1': 1216, 'A2': 1472, 'A3': 1984}; beat inherited after equal refinement in 0 stage-cells"
+  },
+  {
+   "item": 5,
+   "title": "multi-scale refinement present",
+   "status": "PASS",
+   "detail": "scales x a_max [0.05, 0.01, 0.002, 0.0004] + per-segment descent"
+  },
+  {
+   "item": 6,
+   "title": "raw-bank best never lost by refinement",
+   "status": "PASS",
+   "detail": "raw 0.006002 -> refined 0.005939"
+  },
+  {
+   "item": 7,
+   "title": "scenario-aware seed namespace",
+   "status": "PASS",
+   "detail": "scenario X != Y -> True"
+  },
+  {
+   "item": 8,
+   "title": "paired arm CRN (arm cannot enter the seed)",
+   "status": "PASS",
+   "detail": "d0_seed params ['stage_id', 'rng_role', 'scenario_id', 'reset_id', 'attacker_class', 'restart_id', 'base_seed', 'protocol']; identical streams across arms True"
+  },
+  {
+   "item": 9,
+   "title": "known counterexample exact replay (regression suite)",
+   "status": "PASS",
+   "detail": "5 / 5 replayed as escapes"
+  },
+  {
+   "item": 10,
+   "title": "proxy/authoritative ranking agreement",
+   "status": "PASS",
+   "detail": "top-5 overlap min 5 over 60 stage-cells"
+  },
+  {
+   "item": 11,
+   "title": "same seed and config -> identical result",
+   "status": "PASS",
+   "detail": "0.005948511090 vs 0.005948511090"
+  },
+  {
+   "item": 12,
+   "title": "hard admissibility (+inf) and closed constraint at ||a||=a_max",
+   "status": "PASS",
+   "detail": "S(1.0001 a_max)=inf  S(a_max)=0.464801"
+  },
+  {
+   "item": 13,
+   "title": "development / confirmatory seed streams disjoint",
+   "status": "PASS",
+   "detail": "stage_id V2- vs V2C- -> True"
+  }
+ ],
+ "freeze_allowed": true
+}

@@ -1,0 +1,382 @@
+{
+ "meta": {
+  "script": "c1_phase1p_d1",
+  "protocol": "c1-D0-inward-2026-07-25-v1",
+  "budget": {
+   "stage_id": "D1",
+   "K": 4,
+   "pop": 192,
+   "iters": 14,
+   "restarts": 16,
+   "n_cert_seeds": 3,
+   "n_bank": 20000,
+   "n_searches_per_cell": 48,
+   "registry_counts": "K 4 / pop 192 / iters 14 / restarts 16 / cert seeds 3 / n_cert 20000",
+   "d0_was": "6 bank seeds x 2 restarts = 12 searches",
+   "seed_deviation": "registry seed CONSTANTS (64000201-16, 91000101-3) are witness-blind and predate C-6; the COUNTS are honoured exactly, the VALUES are derived from the central d0_seed with stage_id='D1'"
+  },
+  "trigger": "auto-fires ONLY on SURVIVED_D0",
+  "invariants_enforced": {
+   "artifact_sealed_before_d0": "sealed artifact_hash re-read from 6A and compared; mismatch aborts the cell",
+   "no_controller_reoptimisation": "delta is READ from the D0 record",
+   "verifier_objective_dynamics_unchanged": "same exact_min_clearance, cone predicate and _seg_paths_turn as D0"
+  },
+  "outputs": [
+   "SURVIVED_D0_AND_D1",
+   "FALSIFIED_BY_ADVERSARIAL_REPLAN_D1"
+  ],
+  "not_a_seal": true
+ },
+ "per_arm": {
+  "RI-GMAX": {
+   "d1_input": 9,
+   "survived_d0_and_d1": 9,
+   "falsified_d1": 0,
+   "survivors": [
+    "RH 2.8/0.15 f=2",
+    "RH 3.2/0.25 f=5",
+    "RH 5.0/0.55 f=10",
+    "BASE 2.8/0.30 C",
+    "BASE 3.2/0.50 C",
+    "BASE 3.2/0.70 P",
+    "BASE 4.0/0.70 C",
+    "BASE 4.0/0.70 P",
+    "BASE 5.0/1.00 P"
+   ],
+   "d2a_eligible": 9
+  },
+  "RI-SHARED": {
+   "d1_input": 6,
+   "survived_d0_and_d1": 6,
+   "falsified_d1": 0,
+   "survivors": [
+    "RH 2.8/0.15 f=2",
+    "RH 3.2/0.25 f=5",
+    "BASE 2.8/0.30 C",
+    "BASE 3.2/0.70 P",
+    "BASE 4.0/0.70 P",
+    "BASE 5.0/1.00 P"
+   ],
+   "d2a_eligible": 6
+  }
+ },
+ "aborted": [],
+ "cegis_new_attacks": [],
+ "rows": [
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "sealed_artifact_hash": "2c030325e08142af42d76c41",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.010517491296455628,
+    "lane_reserve_excess_m": 0.0005174912964556275,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "e6085ab381bca890"
+  },
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.135,
+   "sealed_artifact_hash": "665a581d442906d9673be58c",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.028515232995677042,
+    "lane_reserve_excess_m": 0.01851523299567704,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "e6085ab381bca890"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "sealed_artifact_hash": "3084e5fbdfd85a872cc5ffa8",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.010517504108321862,
+    "lane_reserve_excess_m": 0.0005175041083218621,
+    "v_soft": 0.9743589743589743,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "28ead2d23e0d01da"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.14,
+   "sealed_artifact_hash": "d5770fbda59d98ca8aec7d2c",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.0240158103827377,
+    "lane_reserve_excess_m": 0.014015810382737701,
+    "v_soft": 0.9743589743589743,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "28ead2d23e0d01da"
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.135,
+   "sealed_artifact_hash": "b38b98edf546efd1b33834e6",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.011018048824287252,
+    "lane_reserve_excess_m": 0.0010180488242872519,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "9e5ddee76787fe45"
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.085,
+   "sealed_artifact_hash": "94aec93e5668ac5bdb8d63b3",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.012377294571948916,
+    "lane_reserve_excess_m": 0.0023772945719489156,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "86dafa9e614da5fc"
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.07,
+   "sealed_artifact_hash": "19a023d71cd0d98c14d847b0",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.0258756008463652,
+    "lane_reserve_excess_m": 0.015875600846365197,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "86dafa9e614da5fc"
+  },
+  {
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.11,
+   "sealed_artifact_hash": "35361f3d6e81a3b667393770",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.010696574543268778,
+    "lane_reserve_excess_m": 0.0006965745432687773,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "54bdb62fa2eacea5"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "sealed_artifact_hash": "455a48e7c68b718bd9020b1f",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.010280904467011354,
+    "lane_reserve_excess_m": 0.0002809044670113534,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "cfd1d8a972c09f84"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "sealed_artifact_hash": "1045febd92a427feb11227f9",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.01927977531662206,
+    "lane_reserve_excess_m": 0.00927977531662206,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "cfd1d8a972c09f84"
+  },
+  {
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.145,
+   "sealed_artifact_hash": "027b420befe72f8c4100cdec",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.012014627117075793,
+    "lane_reserve_excess_m": 0.0020146271170757932,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "cc4322b61428dbef"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "sealed_artifact_hash": "be2d4d1089db0838e37d2d1a",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.010967652414596518,
+    "lane_reserve_excess_m": 0.000967652414596518,
+    "v_soft": 0.9534883720930233,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "a6ef8d1807fad502"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "sealed_artifact_hash": "cea1eeaec40145f7119a651c",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.01996652326420767,
+    "lane_reserve_excess_m": 0.00996652326420767,
+    "v_soft": 0.9534883720930233,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "a6ef8d1807fad502"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.095,
+   "sealed_artifact_hash": "27561933440a75dd809b3338",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.011187161009713176,
+    "lane_reserve_excess_m": 0.0011871610097131755,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "03551cb0aa5f72c0"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.085,
+   "sealed_artifact_hash": "f1f3e45f6d9eae047e41c8c2",
+   "artifact_hash_verified": true,
+   "gate": {
+    "lane_clearance_m": 0.02018603185932477,
+    "lane_reserve_excess_m": 0.010186031859324771,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d1": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": []
+   },
+   "verdict": "SURVIVED_D0_AND_D1",
+   "seed_manifest_sha": "03551cb0aa5f72c0"
+  }
+ ]
+}

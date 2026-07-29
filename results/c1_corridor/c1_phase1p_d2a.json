@@ -1,0 +1,4052 @@
+{
+ "meta": {
+  "script": "c1_phase1p_d2a",
+  "budget": {
+   "stage_id": "D2a",
+   "K": 8,
+   "pop": 384,
+   "iters": 14,
+   "n_bank": 20000,
+   "restarts": 16,
+   "n_search_bank_seeds": 3,
+   "n_bank_warm_launches": 48,
+   "n_incumbent_warm_launches": 8,
+   "n_searches_per_cell": 56,
+   "nesting": "NESTED over K=4: tau/8 halves tau/4",
+   "counts_fixed_before_execution": true,
+   "pop_rationale": "the parameter dimension doubles (24 -> 48), so pop doubles from D1's 192",
+   "d1_was": "48 searches/cell at K 4 / pop 192"
+  },
+  "scope_tags": {
+   "ATTACKER_CLASS": "K8_PIECEWISE_CONSTANT_NESTED_OVER_K4",
+   "RESET_SCOPE": "FIXED_RESET_1100",
+   "PROTOCOL": "D2A_NESTED_ESCALATION_V1",
+   "SAMPLE_STRUCTURE": "controller artifacts over 9 UNIQUE scenarios \u2014 not independent samples",
+   "CLASS_SCOPE": "Class A only; Class B (MAXCLR) is a separate recovery track"
+  },
+  "gates": {
+   "d1_canary": "D1_HARNESS_VALIDATED",
+   "d2a_containment": "D2A_CONTAINMENT_VERIFIED"
+  },
+  "trigger": "auto-fires ONLY on SURVIVED_D0_AND_D1",
+  "invariants_enforced": {
+   "artifact_sealed_before_d0": "sealed artifact_hash re-read and compared; mismatch aborts the cell",
+   "no_controller_reoptimisation": "delta READ from the D0 record",
+   "verifier_objective_dynamics_unchanged": "same exact_min_clearance, cone predicate and _seg_paths_turn",
+   "k4_incumbent_embedded": "each cell's K=4 incumbent is embedded and warm-starts a dedicated launch block",
+   "nested_monotonicity_asserted": "best_objective_d2a >= k4_incumbent_objective - 1e-9"
+  },
+  "budget_phrasing": "D2a widens the attacker CLASS (K4 -> K8, nested) and raises launches to 56/cell; K8 contains K4",
+  "not_a_seal": true
+ },
+ "per_arm": {
+  "RI-GMAX": {
+   "d2a_input": 9,
+   "survived": 8,
+   "falsified": 1,
+   "survivors": [
+    "RH 2.8/0.15 f=2",
+    "RH 3.2/0.25 f=5",
+    "BASE 2.8/0.30 C",
+    "BASE 3.2/0.50 C",
+    "BASE 3.2/0.70 P",
+    "BASE 4.0/0.70 C",
+    "BASE 4.0/0.70 P",
+    "BASE 5.0/1.00 P"
+   ],
+   "unique_scenarios": 8
+  },
+  "RI-SHARED": {
+   "d2a_input": 6,
+   "survived": 6,
+   "falsified": 0,
+   "survivors": [
+    "RH 2.8/0.15 f=2",
+    "RH 3.2/0.25 f=5",
+    "BASE 2.8/0.30 C",
+    "BASE 3.2/0.70 P",
+    "BASE 4.0/0.70 P",
+    "BASE 5.0/1.00 P"
+   ],
+   "unique_scenarios": 6
+  }
+ },
+ "aborted": [],
+ "monotonicity_violations": [],
+ "gap_summary_m": {
+  "min": -0.005088208390929161,
+  "median": 0.01232745214770348,
+  "max": 0.019665544818659342
+ },
+ "cegis_new_attacks": [
+  {
+   "attack_policy_hash": "e9600d3132e27f72",
+   "acc": [
+    [
+     29.230188932897555,
+     -2.2507794275389137,
+     -5.505701917156708
+    ],
+    [
+     29.230188932897555,
+     -2.2507794275389137,
+     -5.505701917156708
+    ],
+    [
+     29.230188932897555,
+     -2.2507794275389137,
+     -5.505701917156708
+    ],
+    [
+     29.230188932897555,
+     -2.2507794275389137,
+     -5.505701917156708
+    ],
+    [
+     29.230188932897555,
+     -2.2507794275389137,
+     -5.505701917156708
+    ],
+    [
+     29.230188932897555,
+     -2.2507794275389137,
+     -5.505701917156708
+    ],
+    [
+     29.230188932897555,
+     -2.2507794275389137,
+     -5.505701917156708
+    ],
+    [
+     29.230188932897555,
+     -2.2507794275389137,
+     -5.505701917156708
+    ]
+   ],
+   "mode": "KILL",
+   "continuous_kill_margin_m": 0.005088208390928717,
+   "cone_exit_margin_m": 0.014260855622873013
+  }
+ ],
+ "rows": [
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "sealed_artifact_hash": "2c030325e08142af42d76c41",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "fef4601bea3a4e98",
+   "k8_embedded_incumbent_hash": "f274f84f4b3d8d4e",
+   "k4_incumbent_objective_m": -0.02626494056936446,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.010517491296455628,
+    "lane_reserve_excess_m": 0.0005174912964556275,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.011875770048965784,
+    "gap_to_candidate_threshold_m": 0.011875770048965784,
+    "best_admissibility_margin_mps2": 0.10368087225264233,
+    "best_kill_margin_proxy_m": -0.011875770048965784,
+    "best_cone_escape_proxy_m": -0.011102275291987422,
+    "best_from_block": "bank_warm",
+    "warm_start_bank_best_objective_m": -0.011875770048965784,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.037090472940784824
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05746846936438743
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04619463646510814
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05366750631265064
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0602587848874383
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04095286783010976
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04727293408069223
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03676565319749556
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.059104822547412894
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.029267610086063763
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06560789930565214
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.062039248383700785
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.051456737431635535
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024236552598268624
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06633381613738898
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05416110757251813
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.07324165361299251
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06790315929724455
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05332322897199937
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06146876492833364
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05340647446115021
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05192464928613383
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04911807117956757
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03714295025833254
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.040663229553249636
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06692461431808465
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04269540211716232
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05587810628116531
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.027316722795173387
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.034689220464691944
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05843301765864479
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.046108638135035275
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04561367621257384
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.056214339608845254
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.036412016544225434
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03361167594436874
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06728179235000731
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05194837079847065
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04949130656378964
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.011875770048965784
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04444767000608696
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03104472060744951
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06466671096757488
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04349927555884278
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05833537344356099
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03732381597781398
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02915587929534391
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04253154293832558
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.026264940569363127
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.026264940569363127
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.026264940569363127
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.026264940569363127
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.026264940569363127
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.026264940569363127
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.026264940569363127
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.026264940569363127
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "4b1082708b304df0"
+  },
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.135,
+   "sealed_artifact_hash": "665a581d442906d9673be58c",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "7ef8e2b81ffa70e5",
+   "k8_embedded_incumbent_hash": "33bd7e77139a8ddf",
+   "k4_incumbent_objective_m": -0.019609375318982103,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.028515232995677042,
+    "lane_reserve_excess_m": 0.01851523299567704,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.011102275291987422,
+    "gap_to_candidate_threshold_m": 0.011102275291987422,
+    "best_admissibility_margin_mps2": 0.10368087225264233,
+    "best_kill_margin_proxy_m": 0.0033467651539291765,
+    "best_cone_escape_proxy_m": -0.011102275291987422,
+    "best_from_block": "bank_warm",
+    "warm_start_bank_best_objective_m": -0.011102275291987422,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.021836901378013973
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.042242694730561414
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04619463646510814
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03630572248128772
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05899421326382015
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03420725671326279
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04727293408069223
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03676565319749556
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.043781176424045665
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.029267610086063763
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05242887544460073
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.059895026907317295
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.039235598619452805
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.016361039788252985
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0512113427022185
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03895337251913622
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.055265389947685595
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05251533999358626
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03819057135917214
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0448969662418226
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04532877958994641
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03659253509662941
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.046660012563878576
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03714295025833254
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.033795656811455944
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.032843013904186424
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04269540211716232
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04534908258139758
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02629767905071106
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.028408804052354242
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05251886101956238
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.046108638135035275
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.030380054099624004
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04481042216208305
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02115348446455556
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03361167594436874
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.061133128279228455
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05194837079847065
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03420909263047012
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.011102275291987422
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.043617170002297125
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03104472060744951
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.049425611176759254
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04349927555884278
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04300809748739365
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.022125226680132837
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.01583640159837364
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.039199697472832806
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019609375318985656
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019609375318985656
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019609375318985656
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019609375318985656
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019609375318985656
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019609375318985656
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019609375318985656
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019609375318985656
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "4b1082708b304df0"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "sealed_artifact_hash": "3084e5fbdfd85a872cc5ffa8",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "f03674491cb05e3e",
+   "k8_embedded_incumbent_hash": "a1b0a7d4a623ef00",
+   "k4_incumbent_objective_m": -0.01989939181129463,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.010517504108321862,
+    "lane_reserve_excess_m": 0.0005175041083218621,
+    "v_soft": 0.9743589743589743,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.014534897497038735,
+    "gap_to_candidate_threshold_m": 0.014534897497038735,
+    "best_admissibility_margin_mps2": 0.02871183942616895,
+    "best_kill_margin_proxy_m": -0.014534897497038735,
+    "best_cone_escape_proxy_m": -0.014103206509877775,
+    "best_from_block": "bank_warm",
+    "warm_start_bank_best_objective_m": -0.014534897497038735,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05401891836520134
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05316082143951455
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04399558356734803
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.017531895126199768
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06207307672044254
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04160761645026456
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.050470394195775814
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.050875144079354985
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.07767904063120083
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0329257723203704
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0394427435242255
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04589315332265361
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.036054214961315445
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.050874341837630954
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024732291133626867
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.056211448981735135
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02479028483481116
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04739672917905535
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.060926752147669294
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.07055509870929733
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02373423195862623
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.052039492717169455
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05810485044435595
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.047453502537709635
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.053324560113758315
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03718886556750478
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05206975649417123
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05281513164531226
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.048367636988066565
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03582945645195679
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.041499865251987345
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06588216728262974
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05254620579178315
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.025939792358524283
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04604564883558693
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0385086669980338
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05111105318403464
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.030498101034409864
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04808137335916163
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0290106468853216
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.020717203020712116
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.054597411591908784
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04246486992196363
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.020959387329712253
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.025284481033446188
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04973718238546487
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06042000894167776
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.014534897497038735
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01989939181129463
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01989939181129463
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01989939181129463
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01989939181129463
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01989939181129463
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01989939181129463
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01989939181129463
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01989939181129463
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "5fdf972c9d52b2f8"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.14,
+   "sealed_artifact_hash": "d5770fbda59d98ca8aec7d2c",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "f03674491cb05e3e",
+   "k8_embedded_incumbent_hash": "a1b0a7d4a623ef00",
+   "k4_incumbent_objective_m": -0.008479238574681691,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.0240158103827377,
+    "lane_reserve_excess_m": 0.014015810382737701,
+    "v_soft": 0.9743589743589743,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.008479238574681691,
+    "gap_to_candidate_threshold_m": 0.008479238574681691,
+    "best_admissibility_margin_mps2": 0.19314898655290236,
+    "best_kill_margin_proxy_m": -0.008479238574681691,
+    "best_cone_escape_proxy_m": 0.0044758782102709395,
+    "best_from_block": "incumbent_warm",
+    "warm_start_bank_best_objective_m": -0.009326054791667815,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04252638083309268
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05316082143951455
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04399558356734803
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.017531895126199768
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.051838246285777156
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03015322356391792
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03898646018462282
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.050875144079354985
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06682709612567835
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0329257723203704
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.027896410278368755
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04589315332265361
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024652591369228816
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.039135899605244884
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024732291133626867
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.052630753292337774
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.017652297735231137
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.044373168050820144
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.051406829919657504
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06088572638771472
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0123043650739314
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.040618145774333314
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05810485044435595
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03652500232655858
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05311520923331203
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03246620466709871
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.047544473016536866
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.047711155420811946
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.036886820438720935
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024396532186788722
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03008139062364945
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05436476161357984
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.041174217401021895
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02211462868212209
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.034582220307199485
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0385086669980338
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.047612405114628054
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.01903975385372858
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.036473466760778894
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0290106468853216
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.009326054791667815
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04312405904670147
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.030992457865594236
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.020497727959936974
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.025284481033446188
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0381881276960252
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05287675130162217
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.014103206509877775
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.008479238574681691
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.008479238574681691
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.008479238574681691
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.008479238574681691
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.008479238574681691
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.008479238574681691
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.008479238574681691
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.008479238574681691
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "5fdf972c9d52b2f8"
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.135,
+   "sealed_artifact_hash": "b38b98edf546efd1b33834e6",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "ec33ff7a26db0f2f",
+   "k8_embedded_incumbent_hash": "8534705a1d53d5be",
+   "k4_incumbent_objective_m": -0.0005246454723994987,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.011018048824287252,
+    "lane_reserve_excess_m": 0.0010180488242872519,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 1,
+    "n_verified_escape": 1,
+    "escapes": [
+     {
+      "attack_policy_hash": "e9600d3132e27f72",
+      "acc": [
+       [
+        29.230188932897555,
+        -2.2507794275389137,
+        -5.505701917156708
+       ],
+       [
+        29.230188932897555,
+        -2.2507794275389137,
+        -5.505701917156708
+       ],
+       [
+        29.230188932897555,
+        -2.2507794275389137,
+        -5.505701917156708
+       ],
+       [
+        29.230188932897555,
+        -2.2507794275389137,
+        -5.505701917156708
+       ],
+       [
+        29.230188932897555,
+        -2.2507794275389137,
+        -5.505701917156708
+       ],
+       [
+        29.230188932897555,
+        -2.2507794275389137,
+        -5.505701917156708
+       ],
+       [
+        29.230188932897555,
+        -2.2507794275389137,
+        -5.505701917156708
+       ],
+       [
+        29.230188932897555,
+        -2.2507794275389137,
+        -5.505701917156708
+       ]
+      ],
+      "mode": "KILL",
+      "continuous_kill_margin_m": 0.005088208390928717,
+      "cone_exit_margin_m": 0.014260855622873013
+     }
+    ],
+    "best_search_objective_m": 0.005088208390929161,
+    "gap_to_candidate_threshold_m": -0.005088208390929161,
+    "best_admissibility_margin_mps2": 0.1707742861987427,
+    "best_kill_margin_proxy_m": 0.005088208390929161,
+    "best_cone_escape_proxy_m": 0.014260855622873013,
+    "best_from_block": "bank_warm",
+    "warm_start_bank_best_objective_m": 0.005088208390929161,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.056349673699500225
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03923242192621292
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024364192844240407
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.027094476467955708
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.027505931360915614
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.043888431454614185
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04657575918712853
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03858310780866869
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02752521318249916
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03283983911055666
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.025482457401791277
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04357671647794703
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.018965459346103497
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.031315947953441725
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.01989725149626631
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.028726860001358743
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.004853393278232709
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.042472661459083114
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0173167909343863
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.026710074094274953
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.030959226218759017
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0007850029415776838
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.029506079616045344
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.009864401481666007
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02097233938929799
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03210101445171665
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.035053611975967236
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03420257001209759
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03683839224558749
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.025874133499774292
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0028688436694121354
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02804627944178325
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.048380642791740675
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.036982401226349104
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": 0.005088208390929161
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03578469959863906
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.009922972108253436
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.015107993397529697
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04768467074618844
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.032630151073130165
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.027546951145310146
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.01858120649741224
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.035717517523171316
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02558408008323454
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.031350863128679955
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.015044192924515531
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.012915700581373812
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.011603677558193137
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0005246454723946137
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0005246454723946137
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0005246454723946137
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0005246454723946137
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0005246454723946137
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0005246454723946137
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0005246454723946137
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0005246454723946137
+     }
+    ]
+   },
+   "verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN_D2A",
+   "seed_manifest_sha": "9dc1e023bd80b7bd"
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.085,
+   "sealed_artifact_hash": "94aec93e5668ac5bdb8d63b3",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "d215177d94e9ccc5",
+   "k8_embedded_incumbent_hash": "7e5a5893d53655e9",
+   "k4_incumbent_objective_m": -0.012585283166846949,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.012377294571948916,
+    "lane_reserve_excess_m": 0.0023772945719489156,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.012585283166846957,
+    "gap_to_candidate_threshold_m": 0.012585283166846957,
+    "best_admissibility_margin_mps2": 0.16752192803129162,
+    "best_kill_margin_proxy_m": -0.012344153082979314,
+    "best_cone_escape_proxy_m": -0.012585283166846957,
+    "best_from_block": "incumbent_warm",
+    "warm_start_bank_best_objective_m": -0.018243590371381655,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024572236265095013
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05847535425059025
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05498959958008445
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06166592284746475
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0525318375020718
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.052938472403745426
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.065617842740056
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05002834394771405
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.022382081343687174
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06969219971775553
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04919217229719853
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.057403775435457494
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03149628697877738
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024823779536580215
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.029147792989911547
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04431585614426057
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05249436870197055
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05383759552531231
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0566472297288203
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05447452557756627
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.028601798559464875
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.043487215887793695
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.036958829363384904
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.07561251098985533
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04611100353149061
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03317715581918191
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04129587836501214
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.042367880708174877
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.053654755061623316
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05751865454216207
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05400151698255413
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.051457360360047666
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.018243590371381655
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.029933200529163706
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05101634377002506
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05104711140565368
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.040316539191211476
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.044804270540795166
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03389068251467453
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04932337807184469
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04716797253330629
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05101829491954213
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04914499414384544
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05193021902159822
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06153050328367904
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03755206345236184
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.034662986042678506
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05054046028881927
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.012585283166846957
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.012585283166846957
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.012585283166846957
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.012585283166846957
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.012585283166846957
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.012585283166846957
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.012585283166846957
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.012585283166846957
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "ea82cf623cd39817"
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.07,
+   "sealed_artifact_hash": "19a023d71cd0d98c14d847b0",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "114c1e57a7d89498",
+   "k8_embedded_incumbent_hash": "19e7c3437415b47a",
+   "k4_incumbent_objective_m": -0.012327452147690092,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.0258756008463652,
+    "lane_reserve_excess_m": 0.015875600846365197,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.01232745214770348,
+    "gap_to_candidate_threshold_m": 0.01232745214770348,
+    "best_admissibility_margin_mps2": 0.09372475028431637,
+    "best_kill_margin_proxy_m": -0.011142535083112914,
+    "best_cone_escape_proxy_m": -0.01232745214770348,
+    "best_from_block": "incumbent_warm",
+    "warm_start_bank_best_objective_m": -0.017135324881116798,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024572236265095013
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04704950605341063
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05054446689616965
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05017228909489857
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.040889086926451323
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.052938472403745426
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.053817332281086205
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03184537575990731
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.022382081343687174
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05517001803432109
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04919217229719853
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05086301450034896
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.020055581057455196
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.022517908821014298
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.022030085205118413
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.035175605290662215
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.043396557378331035
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05060205664396827
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.045277811812985735
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04298367875040121
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.017135324881116798
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.032130339365274097
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.025531913639113224
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06417740986684262
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04611100353149061
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03209504022209986
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03630678667511072
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.030996867812684847
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04211340399261987
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.048635935967939685
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05400151698255413
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0454683005069918
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.018243590371381655
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02462416260994871
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04304573164357297
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05001128208070069
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.031379708580212995
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.033424423120837154
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.022488684339236453
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04932337807184469
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.035685376821777304
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03944143508269082
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03979637017690374
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04214797243154822
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.049950453295749764
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.026174907901610034
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.034662986042678506
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04949180432501743
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01232745214770348
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01232745214770348
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01232745214770348
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01232745214770348
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01232745214770348
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01232745214770348
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01232745214770348
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.01232745214770348
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "ea82cf623cd39817"
+  },
+  {
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.11,
+   "sealed_artifact_hash": "35361f3d6e81a3b667393770",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "0a9f66045133a1ad",
+   "k8_embedded_incumbent_hash": "c052c4511253d666",
+   "k4_incumbent_objective_m": -0.019665544818658454,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.010696574543268778,
+    "lane_reserve_excess_m": 0.0006965745432687773,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.019665544818659342,
+    "gap_to_candidate_threshold_m": 0.019665544818659342,
+    "best_admissibility_margin_mps2": 0.04629375149049508,
+    "best_kill_margin_proxy_m": -0.019665544818659342,
+    "best_cone_escape_proxy_m": -0.00868607867086843,
+    "best_from_block": "incumbent_warm",
+    "warm_start_bank_best_objective_m": -0.02383838701994101,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0475517702719266
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06682144619427191
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.055370833219822876
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03631155541992381
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03219906863962807
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03900727125221073
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06684269304345647
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.07492370635614831
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.07701557271472836
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.049396457093277224
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06624243469450064
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.056406397928421725
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.048323547113895075
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.07428479096583547
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.029272953533767243
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04785904446458611
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04117931496323912
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0449292523211985
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04225344245638585
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04943347868241822
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.057789966827543816
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06067573054213282
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05970403872084564
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.07321151580790186
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.042567626185948004
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03411499115495209
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.031247039547741107
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03522658837774342
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024002054418302166
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06036994188629796
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03152838090841792
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06782854375081326
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06243759953056838
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.048481405593983694
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05657254152212757
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0336427510613726
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0470203139850347
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0632744156945253
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05684676995075266
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05127891552296922
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.051743542507532325
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06756313002682157
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05579750919246562
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.046994481668317434
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05399048613054366
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02383838701994101
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.055440561575251124
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04202329521356285
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019665544818659342
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019665544818659342
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019665544818659342
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019665544818659342
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019665544818659342
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019665544818659342
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019665544818659342
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.019665544818659342
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "208b65c54740aa8d"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "sealed_artifact_hash": "455a48e7c68b718bd9020b1f",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "4cbcaeafe18c29c8",
+   "k8_embedded_incumbent_hash": "6cf3631afb125ada",
+   "k4_incumbent_objective_m": -0.015853387531417518,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.010280904467011354,
+    "lane_reserve_excess_m": 0.0002809044670113534,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.01402576617255935,
+    "gap_to_candidate_threshold_m": 0.01402576617255935,
+    "best_admissibility_margin_mps2": 0.10025742522488912,
+    "best_kill_margin_proxy_m": -0.01402576617255935,
+    "best_cone_escape_proxy_m": -0.01383108265003353,
+    "best_from_block": "bank_warm",
+    "warm_start_bank_best_objective_m": -0.01402576617255935,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.039131463790889054
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04566858682168603
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06985810768716583
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03213596018223486
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04675412401255433
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0510389517304124
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04812961301103017
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03571131426771679
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05812572777425684
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.041598929542832064
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04952844917497972
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.018218668401065185
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06513300480977602
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06427009076635848
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.043273413525732884
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05670122889494516
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05254588986996733
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05294221097239493
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03415656196274863
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04080399585435484
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.054767730564505915
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.07519265219266957
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04815249800511756
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06722304117929534
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.01550878640517217
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.016699258410836682
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.039520001345544564
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.01402576617255935
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04329368745816438
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.039590713757925666
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06252143285874645
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.035202299899041556
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06213145236740836
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03947578405855756
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0448297963972033
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02651142961286603
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.059923342209634085
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05535424587482932
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03361693334080851
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0209753003166413
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04580054704991636
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03285022931969461
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04705232344902077
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06317867817819187
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03443690932868959
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0152550353273746
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04680428352274335
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03802130536034953
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.015853387531413077
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.015853387531413077
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.015853387531413077
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.015853387531413077
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.015853387531413077
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.015853387531413077
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.015853387531413077
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.015853387531413077
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "292379e7a02a8f7b"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "sealed_artifact_hash": "1045febd92a427feb11227f9",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "4cbcaeafe18c29c8",
+   "k8_embedded_incumbent_hash": "6cf3631afb125ada",
+   "k4_incumbent_objective_m": -0.008264005683791265,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.01927977531662206,
+    "lane_reserve_excess_m": 0.00927977531662206,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.0076567194711159026,
+    "gap_to_candidate_threshold_m": 0.0076567194711159026,
+    "best_admissibility_margin_mps2": 0.08426984239515889,
+    "best_kill_margin_proxy_m": -0.0076567194711159026,
+    "best_cone_escape_proxy_m": 0.001128727673397369,
+    "best_from_block": "bank_warm",
+    "warm_start_bank_best_objective_m": -0.0076567194711159026,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03145060737021543
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04566858682168603
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06081178894483452
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024466445011229965
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04373527724804793
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.051289894849516404
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.042996268203993715
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.028127613224976145
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05041236122408632
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.033952212761357084
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04952844917497972
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.018218668401065185
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.057563472358315604
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05669596472716476
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04538520257971701
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05670122889494516
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04491084446426985
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04520434513936378
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.026569680795273776
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04080399585435484
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05305408297009073
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06917438081692762
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04190432223487374
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.059652207894879794
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.007917554529711879
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.016699258410836682
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03185946270859086
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.01383108265003353
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04329368745816438
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.031927212447449005
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03929422320117126
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02754939314501792
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05437950587504403
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.031715752188866464
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.040508580449755055
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02651142961286603
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.059923342209634085
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05535424587482932
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.027281209671029816
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.013355973093658324
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04580054704991636
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.025259932790003603
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03938059900957214
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05740900080831385
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02681606758938715
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0076567194711159026
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04807927095154829
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.030399826819179854
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.00826400568378638
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.00826400568378638
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.00826400568378638
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.00826400568378638
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.00826400568378638
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.00826400568378638
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.00826400568378638
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.00826400568378638
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "292379e7a02a8f7b"
+  },
+  {
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.145,
+   "sealed_artifact_hash": "027b420befe72f8c4100cdec",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "1abf7484ea1b906b",
+   "k8_embedded_incumbent_hash": "e163d9b23a26f84a",
+   "k4_incumbent_objective_m": -0.0066548644751383,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.012014627117075793,
+    "lane_reserve_excess_m": 0.0020146271170757932,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.0066548644751383,
+    "gap_to_candidate_threshold_m": 0.0066548644751383,
+    "best_admissibility_margin_mps2": 8.846257060213247e-13,
+    "best_kill_margin_proxy_m": -0.0066548644751383,
+    "best_cone_escape_proxy_m": 0.03754664854260694,
+    "best_from_block": "incumbent_warm",
+    "warm_start_bank_best_objective_m": -0.017054822732726294,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.050347518694588936
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.013732972679490363
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.036520302381587655
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.033174652026342656
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03958391098581293
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06171703183306576
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05328235630917616
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0594457397967102
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0594056262538154
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.01999516663550116
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06010660017769842
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05586687270823365
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0438918516275959
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.051414571722720126
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.051841422506865145
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03166594145804086
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04875935047925806
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0363806354644054
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03160767137962628
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.023045914870120754
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02764651376469418
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04427717210054549
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.036155523049159775
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05982199711807512
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0554301254497247
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03524030410729009
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.036600785854359774
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02794245851140653
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05583100038219202
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.040830905047054084
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0205538706390076
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.037001759764678295
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.017054822732726294
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02931118704842106
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.023875829142731675
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.041750533676219614
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.051372888846336284
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04422486092543552
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.039911601324170314
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.01161415965808077
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04243443087356047
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05979715575851463
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.028016379862249252
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.053097575258989504
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.035642259924422
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.054580876596663996
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03201291346290207
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.029114590521800654
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0066548644751383
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0066548644751383
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0066548644751383
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0066548644751383
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0066548644751383
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0066548644751383
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0066548644751383
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0066548644751383
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "1b7d43749dcf4572"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "sealed_artifact_hash": "be2d4d1089db0838e37d2d1a",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "efa1c2db5a2fc478",
+   "k8_embedded_incumbent_hash": "8c5ee5756028fd20",
+   "k4_incumbent_objective_m": -0.018034887160476742,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.010967652414596518,
+    "lane_reserve_excess_m": 0.000967652414596518,
+    "v_soft": 0.9534883720930233,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.014728029034748236,
+    "gap_to_candidate_threshold_m": 0.014728029034748236,
+    "best_admissibility_margin_mps2": 0.2922043188583814,
+    "best_kill_margin_proxy_m": -0.014728029034748236,
+    "best_cone_escape_proxy_m": -0.014416303883500733,
+    "best_from_block": "bank_warm",
+    "warm_start_bank_best_objective_m": -0.014728029034748236,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05573503005772185
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.054236621662115486
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02180803527086539
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03709611275854686
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06749749303079478
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05567465740677369
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04975653576984085
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04488081569350602
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0408067602918778
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.023996850363899647
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05730500062812727
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04244003309645894
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06034430465702324
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.050337764048545175
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03621287620476732
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.014728029034748236
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.046626457191501075
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0330107549023988
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05912669621855918
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05022262109630882
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0513955322487849
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02233021467288898
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0776167865932925
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03771323858149655
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03330878998633491
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06718171793421279
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.057098892900020286
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03437129749346646
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03910054067358069
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.036600442408552425
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02204000856342736
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04026426948747108
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.050346810614226634
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.025633719305308222
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06606638673315457
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05076203661175205
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04987682610808029
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.029494600152328854
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04922244633244732
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04815482640314528
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03543690276140615
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05286722524264634
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.038263697781895534
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.046345298634457244
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.056965251490513666
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04643643330655722
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.049924460026543827
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04400480574893436
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.018034887160474078
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.018034887160474078
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.018034887160474078
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.018034887160474078
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.018034887160474078
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.018034887160474078
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.018034887160474078
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.018034887160474078
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "fce51530dfc926e8"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "sealed_artifact_hash": "cea1eeaec40145f7119a651c",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "bd9ceb8abbf6f220",
+   "k8_embedded_incumbent_hash": "f3ea12e162b80a0d",
+   "k4_incumbent_objective_m": -0.016151021036670654,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.01996652326420767,
+    "lane_reserve_excess_m": 0.00996652326420767,
+    "v_soft": 0.9534883720930233,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.014223433244925143,
+    "gap_to_candidate_threshold_m": 0.014223433244925143,
+    "best_admissibility_margin_mps2": 0.029168115981367038,
+    "best_kill_margin_proxy_m": -0.014223433244925143,
+    "best_cone_escape_proxy_m": 0.006108667092471639,
+    "best_from_block": "bank_warm",
+    "warm_start_bank_best_objective_m": -0.014223433244925143,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05346703492024396
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.054236621662115486
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.014223433244925143
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03709611275854686
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05976187041794789
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03995517931755499
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0420426893605752
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04488081569350602
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.033153387087693886
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.016412955500346715
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0495513445342981
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.034799008977410395
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06034430465702324
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.042678139480544885
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02855999621767502
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.014416303883500733
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.046626457191501075
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.025418040156369504
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05912669621855918
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04254875937615621
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.044155722945718213
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.018999691651557318
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.07188406617060261
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03771323858149655
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02570923119302737
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06569853763627265
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05117964053588109
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.026776742116962904
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03910054067358069
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.029010736184412522
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.018926631240741922
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03264073047955085
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04269779704405963
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.019548084007997665
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0582794783685161
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04315403400313045
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04987682610808029
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.021898697958336655
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.041588140321104916
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04059583515018339
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03543690276140615
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05286722524264634
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03103938604255353
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03867910225857596
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.056965251490513666
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.038737077834506195
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.048129063175063116
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.040471138798812145
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.016151021036657116
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.016151021036657116
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.016151021036657116
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.016151021036657116
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.016151021036657116
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.016151021036657116
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.016151021036657116
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.016151021036657116
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "fce51530dfc926e8"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.095,
+   "sealed_artifact_hash": "27561933440a75dd809b3338",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "2966c703d97eb430",
+   "k8_embedded_incumbent_hash": "f12fa2c96edd08a6",
+   "k4_incumbent_objective_m": -0.016549804275785895,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.011187161009713176,
+    "lane_reserve_excess_m": 0.0011871610097131755,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.015090862724592393,
+    "gap_to_candidate_threshold_m": 0.015090862724592393,
+    "best_admissibility_margin_mps2": 0.2465065792298624,
+    "best_kill_margin_proxy_m": -0.01124672015800332,
+    "best_cone_escape_proxy_m": -0.015090862724592393,
+    "best_from_block": "bank_warm",
+    "warm_start_bank_best_objective_m": -0.015090862724592393,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.038101619562884985
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04391494491486017
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.035616346179314216
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03938817039364961
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03687016050212
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04240376851946026
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05903388884948102
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.038205216055571256
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05633078107937421
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024121767469592787
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0361110651628449
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05366079178652241
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03727350625005146
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.015090862724592393
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.061429369957005445
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06500201018456941
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.023316147391770237
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03327757965746958
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03203585586513036
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.07196207002524391
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.037099405318624205
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06416322937515836
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04006958999104677
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.040043053404819076
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04240914295205922
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04764610277946435
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.055656155314996056
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.017171890241276966
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.023936808392945874
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02635534850483623
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.039597122183726796
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03795272752064498
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03904571479957241
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03295331618359798
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02447480188590001
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02457923315696231
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05946598163491653
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0414405679963477
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05842487862445234
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04165891550543366
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05752255452356048
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03436614213689859
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06267156421346934
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05210244204765426
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05191475971485415
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0419934869444929
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05773950962565809
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04010015226401187
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0165498042757819
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0165498042757819
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0165498042757819
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0165498042757819
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0165498042757819
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0165498042757819
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0165498042757819
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.0165498042757819
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "c3ff2b60db4af917"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.085,
+   "sealed_artifact_hash": "f1f3e45f6d9eae047e41c8c2",
+   "artifact_hash_verified": true,
+   "k4_incumbent_hash": "2966c703d97eb430",
+   "k8_embedded_incumbent_hash": "f12fa2c96edd08a6",
+   "k4_incumbent_objective_m": -0.009722377751468156,
+   "nested_monotonicity_ok": true,
+   "gate": {
+    "lane_clearance_m": 0.02018603185932477,
+    "lane_reserve_excess_m": 0.010186031859324771,
+    "v_soft": 1.0,
+    "E_cap": "PASS"
+   },
+   "admissibility_still_holds": true,
+   "d2a": {
+    "n_search_candidates": 0,
+    "n_verified_escape": 0,
+    "escapes": [],
+    "best_search_objective_m": -0.00957642688472582,
+    "gap_to_candidate_threshold_m": 0.00957642688472582,
+    "best_admissibility_margin_mps2": 0.052554197480816356,
+    "best_kill_margin_proxy_m": -0.00957642688472582,
+    "best_cone_escape_proxy_m": -0.009493946194618134,
+    "best_from_block": "bank_warm",
+    "warm_start_bank_best_objective_m": -0.00957642688472582,
+    "per_launch_best_objective_m": [
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.038101619562884985
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04391494491486017
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.035616346179314216
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.036212521384822234
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.029250539411358023
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03484289065077295
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.051334239951727145
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03058116334923744
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05633078107937421
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024121767469592787
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02850024577474919
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05366079178652241
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03727350625005146
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.015090862724592393
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.058589008282396104
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05743211946030602
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.01963595753358727
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.02910391129578344
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.024453038617257672
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05699083392763255
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.037099405318624205
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06416322937515836
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.04006958999104677
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03523091327766803
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03826922223808448
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.043764638574395276
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.051795568735537145
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.00957642688472582
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.01629895707347817
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.021093158142482627
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03192126327495215
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03586097487956552
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03904571479957241
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.031976653909593374
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.016865803199016316
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.016980683725209555
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05651672727082868
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.0414405679963477
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05165366288647988
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03408274894422325
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05664674392024427
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.034017430168387416
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.06598624755684401
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05210244204765426
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.046055076063363565
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03438833695561749
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.05773950962565809
+     },
+     {
+      "block": "bank_warm",
+      "best_objective_m": -0.03253276308128328
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.009722377751468165
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.009722377751468165
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.009722377751468165
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.009722377751468165
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.009722377751468165
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.009722377751468165
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.009722377751468165
+     },
+     {
+      "block": "incumbent_warm",
+      "best_objective_m": -0.009722377751468165
+     }
+    ]
+   },
+   "verdict": "SURVIVED_D0_D1_D2A",
+   "seed_manifest_sha": "c3ff2b60db4af917"
+  }
+ ]
+}

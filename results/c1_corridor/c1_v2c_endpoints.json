@@ -1,0 +1,7399 @@
+{
+ "meta": {
+  "script": "c1_v2c_endpoints",
+  "protocol_version": "V2C-PROTOCOL-v2",
+  "protocol_hash": "4791359431c69e5dff74016b0bfefb607a58269b6661491560702679dd559a64",
+  "status": "SEALED_FOR_CONFIRMATORY_EXECUTION",
+  "supersedes": "V2C-PROTOCOL-v1 (no-fire mission classification)",
+  "endpoint_A_rate_semantics": "pair-weighted eligibility rate on the sealed held-out grid; NOT an operational firing probability",
+  "endpoint_B": "conditional post-fire controller result \u2014 steps 5-7, NOT produced here",
+  "conditional_reporting_rule": "post-fire results are conditional on a self-selected eligible subset; in STRESS only a minority of sealed pairs reach the controller at all. Arm-vs-arm comparison WITHIN eligible pairs is fair because eligibility is arm-blind; generalising the eligible subset to all conditions is not",
+  "no_causal_attribution_from_grouped_rates": true
+ },
+ "spec": {
+  "protocol_version": "V2C-PROTOCOL-v2",
+  "version_record": [
+   {
+    "version": "V2C-PROTOCOL-v1",
+    "gap": "every no-fire was labelled a system-level mission failure or nonattempt, without checking what the attacker actually did",
+    "status": "SUPERSEDED_BEFORE_CONTROLLER_EXECUTION",
+    "preserved": "its arm-blind eligibility result is unchanged and re-derived here"
+   },
+   {
+    "version": "V2C-PROTOCOL-v2",
+    "change": "no-fire default label is NO_CAPTURE_ATTEMPT + FIRE_GUARD_COVERAGE_FAILURE; mission outcome split three ways; endpoints A/B/C separated; main effects (OFAT) and interactions (CROSSED) reported apart",
+    "status": "SEALED_FOR_CONFIRMATORY_EXECUTION"
+   }
+  ],
+  "no_fire_labels": {
+   "mechanical": [
+    "NO_CAPTURE_ATTEMPT",
+    "FIRE_GUARD_COVERAGE_FAILURE"
+   ],
+   "architecture_reading": "GUARD_CONTROLLER_INTERFACE_FAILURE",
+   "not_automatic": "NO_CAPTURE_ATTEMPT does NOT by itself imply MISSION_FAILURE"
+  },
+  "mission_classes": [
+   "MISSION_FAILURE_NO_ENGAGEMENT",
+   "MISSION_SUCCESS_WITHOUT_CAPTURE",
+   "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+  ],
+  "coverage_classes": {
+   "ZERO_GUARD_COVERAGE": "0/8 trajectories eligible",
+   "PARTIAL_GUARD_COVERAGE": "1-7/8 eligible",
+   "FULL_GUARD_COVERAGE": "8/8 eligible"
+  },
+  "rate_semantics": "pair-weighted eligibility rate on the sealed held-out grid; NOT an operational firing probability",
+  "class_C": {
+   "name": "PRE_FIRE_GUARD_COVERAGE_FAILURE",
+   "relation": "a third failure class alongside Class A (near-terminal razor gap) and Class B (gross radial displacement)",
+   "not_fixable_by": "the radial-inward controller \u2014 it does not exist before the fire",
+   "future_degrees_of_freedom_NOT_TOUCHED_IN_THIS_CAMPAIGN": [
+    "lateral-aware fire guard",
+    "consistency between cone axis and the firing predicate",
+    "fire timing / coverage redesign",
+    "joint guard + post-fire controller design",
+    "pre-fire shepherding to bring the attacker inside guard coverage"
+   ]
+  },
+  "mission_outcome_source": "225a8c66d790c30d"
+ },
+ "endpoint_A": {
+  "total_pairs": 704,
+  "post_fire_eligible": 307,
+  "no_capture_attempt": 397,
+  "v1_rederivation_match": true,
+  "condition_coverage_classes": {
+   "IN_DISTRIBUTION": {
+    "FULL_GUARD_COVERAGE": 6,
+    "PARTIAL_GUARD_COVERAGE": 43,
+    "ZERO_GUARD_COVERAGE": 1
+   },
+   "STRESS": {
+    "PARTIAL_GUARD_COVERAGE": 18,
+    "ZERO_GUARD_COVERAGE": 18,
+    "FULL_GUARD_COVERAGE": 2
+   }
+  }
+ },
+ "endpoint_C_no_fire_mission": {
+  "overall": {
+   "MISSION_FAILURE_NO_ENGAGEMENT": 279,
+   "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED": 118
+  },
+  "by_set": {
+   "IN_DISTRIBUTION": {
+    "MISSION_FAILURE_NO_ENGAGEMENT": 143,
+    "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED": 23
+   },
+   "STRESS": {
+    "MISSION_FAILURE_NO_ENGAGEMENT": 136,
+    "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED": 95
+   }
+  }
+ },
+ "main_effects_ofat_only": {
+  "cone_axis_deg": {
+   "0.5": [
+    0,
+    8
+   ],
+   "-0.5": [
+    0,
+    8
+   ],
+   "1.0": [
+    0,
+    8
+   ],
+   "3.0": [
+    4,
+    8
+   ],
+   "-3.0": [
+    6,
+    8
+   ],
+   "6.0": [
+    8,
+    8
+   ]
+  },
+  "heading_deg": {
+   "1.0": [
+    2,
+    8
+   ],
+   "-1.0": [
+    4,
+    8
+   ],
+   "2.0": [
+    4,
+    8
+   ],
+   "-2.0": [
+    3,
+    8
+   ],
+   "6.0": [
+    6,
+    8
+   ],
+   "-6.0": [
+    6,
+    8
+   ],
+   "10.0": [
+    7,
+    8
+   ]
+  },
+  "lateral_offset_m": {
+   "0.25": [
+    4,
+    8
+   ],
+   "-0.25": [
+    5,
+    8
+   ],
+   "0.5": [
+    7,
+    8
+   ],
+   "-0.5": [
+    4,
+    8
+   ],
+   "1.5": [
+    8,
+    8
+   ],
+   "-1.5": [
+    8,
+    8
+   ],
+   "3.0": [
+    8,
+    8
+   ]
+  },
+  "reset_seed": {
+   "1101": [
+    0,
+    8
+   ],
+   "1102": [
+    1,
+    8
+   ],
+   "1103": [
+    0,
+    8
+   ],
+   "1201": [
+    0,
+    8
+   ],
+   "1202": [
+    0,
+    8
+   ]
+  },
+  "speed_mps": {
+   "18.0": [
+    1,
+    8
+   ],
+   "22.0": [
+    1,
+    8
+   ],
+   "14.0": [
+    1,
+    8
+   ],
+   "26.0": [
+    3,
+    8
+   ],
+   "30.0": [
+    3,
+    8
+   ]
+  }
+ },
+ "interactions_crossed_only": {
+  "lateral_offset_m x heading_deg": [
+   136,
+   200
+  ],
+  "speed_mps x cone_axis_deg": [
+   53,
+   120
+  ],
+  "reset_seed x lateral_offset_m": [
+   104,
+   144
+  ]
+ },
+ "conditions": [
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "values": {
+    "cone_axis_deg": 0.5
+   },
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "guard_coverage_class": "FULL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "values": {
+    "cone_axis_deg": -0.5
+   },
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "guard_coverage_class": "FULL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0002",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "values": {
+    "cone_axis_deg": 1.0
+   },
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "guard_coverage_class": "FULL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0003",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "values": {
+    "heading_deg": 1.0
+   },
+   "n_post_fire_eligible": 6,
+   "n_no_capture_attempt": 2,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0004",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "values": {
+    "heading_deg": -1.0
+   },
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0005",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "values": {
+    "heading_deg": 2.0
+   },
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0006",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "values": {
+    "heading_deg": -2.0
+   },
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0007",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "values": {
+    "lateral_offset_m": 0.25
+   },
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0008",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "values": {
+    "lateral_offset_m": -0.25
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0009",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "values": {
+    "lateral_offset_m": 0.5
+   },
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0010",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "values": {
+    "lateral_offset_m": -0.5
+   },
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "reset_seed"
+   ],
+   "values": {
+    "reset_seed": 1101
+   },
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "guard_coverage_class": "FULL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "reset_seed"
+   ],
+   "values": {
+    "reset_seed": 1102
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "reset_seed"
+   ],
+   "values": {
+    "reset_seed": 1103
+   },
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "guard_coverage_class": "FULL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "speed_mps"
+   ],
+   "values": {
+    "speed_mps": 18.0
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 10,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "speed_mps"
+   ],
+   "values": {
+    "speed_mps": 22.0
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 12,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0016",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 0.25,
+    "heading_deg": 1.0
+   },
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0017",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 0.25,
+    "heading_deg": -1.0
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0018",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 0.25,
+    "heading_deg": 2.0
+   },
+   "n_post_fire_eligible": 6,
+   "n_no_capture_attempt": 2,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0019",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 0.25,
+    "heading_deg": -2.0
+   },
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0020",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": -0.25,
+    "heading_deg": 1.0
+   },
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": -0.25,
+    "heading_deg": -1.0
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0022",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": -0.25,
+    "heading_deg": 2.0
+   },
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0023",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": -0.25,
+    "heading_deg": -2.0
+   },
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "guard_coverage_class": "FULL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0024",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 0.5,
+    "heading_deg": 1.0
+   },
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0025",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 0.5,
+    "heading_deg": -1.0
+   },
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0026",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 0.5,
+    "heading_deg": 2.0
+   },
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0027",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 0.5,
+    "heading_deg": -2.0
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0028",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": -0.5,
+    "heading_deg": 1.0
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0029",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": -0.5,
+    "heading_deg": -1.0
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0030",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": -0.5,
+    "heading_deg": 2.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0031",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": -0.5,
+    "heading_deg": -2.0
+   },
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 18.0,
+    "cone_axis_deg": 0.5
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 10,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 18.0,
+    "cone_axis_deg": -0.5
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 10,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0034",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 18.0,
+    "cone_axis_deg": 1.0
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 10,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0035",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 22.0,
+    "cone_axis_deg": 0.5
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 12,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 22.0,
+    "cone_axis_deg": -0.5
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0037",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 22.0,
+    "cone_axis_deg": 1.0
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 12,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0038",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1101,
+    "lateral_offset_m": 0.25
+   },
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0039",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1101,
+    "lateral_offset_m": -0.25
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0040",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1101,
+    "lateral_offset_m": 0.5
+   },
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0041",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1101,
+    "lateral_offset_m": -0.5
+   },
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0042",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1102,
+    "lateral_offset_m": 0.25
+   },
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0043",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1102,
+    "lateral_offset_m": -0.25
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0044",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1102,
+    "lateral_offset_m": 0.5
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0045",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1102,
+    "lateral_offset_m": -0.5
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0046",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1103,
+    "lateral_offset_m": 0.25
+   },
+   "n_post_fire_eligible": 6,
+   "n_no_capture_attempt": 2,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0047",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1103,
+    "lateral_offset_m": -0.25
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0048",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1103,
+    "lateral_offset_m": 0.5
+   },
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0049",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1103,
+    "lateral_offset_m": -0.5
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0050",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "values": {
+    "cone_axis_deg": 3.0
+   },
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0051",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "values": {
+    "cone_axis_deg": -3.0
+   },
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0052",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "values": {
+    "cone_axis_deg": 6.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0053",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "values": {
+    "heading_deg": 6.0
+   },
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0054",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "values": {
+    "heading_deg": -6.0
+   },
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0055",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "values": {
+    "heading_deg": 10.0
+   },
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0056",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "values": {
+    "lateral_offset_m": 1.5
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0057",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "values": {
+    "lateral_offset_m": -1.5
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0058",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "values": {
+    "lateral_offset_m": 3.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "reset_seed"
+   ],
+   "values": {
+    "reset_seed": 1201
+   },
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "guard_coverage_class": "FULL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "reset_seed"
+   ],
+   "values": {
+    "reset_seed": 1202
+   },
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "guard_coverage_class": "FULL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "speed_mps"
+   ],
+   "values": {
+    "speed_mps": 14.0
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 6,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 7,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 11,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 21,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0062",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "speed_mps"
+   ],
+   "values": {
+    "speed_mps": 26.0
+   },
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 3,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 8,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 12,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 11,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 18,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0063",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "speed_mps"
+   ],
+   "values": {
+    "speed_mps": 30.0
+   },
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 11,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 10,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 17,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0064",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 1.5,
+    "heading_deg": 6.0
+   },
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0065",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 1.5,
+    "heading_deg": -6.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0066",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 1.5,
+    "heading_deg": 10.0
+   },
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0067",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": -1.5,
+    "heading_deg": 6.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0068",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": -1.5,
+    "heading_deg": -6.0
+   },
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0069",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": -1.5,
+    "heading_deg": 10.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0070",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 3.0,
+    "heading_deg": 6.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0071",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 3.0,
+    "heading_deg": -6.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0072",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "values": {
+    "lateral_offset_m": 3.0,
+    "heading_deg": 10.0
+   },
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 4,
+     "penetrated": false,
+     "safe": true,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0073",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 14.0,
+    "cone_axis_deg": 3.0
+   },
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 7,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 11,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 15,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 21,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0074",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 14.0,
+    "cone_axis_deg": -3.0
+   },
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 6,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 7,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 11,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 15,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 15,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 21,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0075",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 14.0,
+    "cone_axis_deg": 6.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0076",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 26.0,
+    "cone_axis_deg": 3.0
+   },
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 8,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 12,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 18,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0077",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 26.0,
+    "cone_axis_deg": -3.0
+   },
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 4,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 8,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 12,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0078",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 26.0,
+    "cone_axis_deg": 6.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0079",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 30.0,
+    "cone_axis_deg": 3.0
+   },
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 3,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 17,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0080",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 30.0,
+    "cone_axis_deg": -3.0
+   },
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "guard_coverage_class": "PARTIAL_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 2,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 18,
+     "tier": 2,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0081",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "values": {
+    "speed_mps": 30.0,
+    "cone_axis_deg": 6.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0082",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1201,
+    "lateral_offset_m": 1.5
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0083",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1201,
+    "lateral_offset_m": -1.5
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0084",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1201,
+    "lateral_offset_m": 3.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0085",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1202,
+    "lateral_offset_m": 1.5
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0086",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1202,
+    "lateral_offset_m": -1.5
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": true,
+     "safe": false,
+     "mission_outcome": "MISSION_FAILURE_NO_ENGAGEMENT"
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0087",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "values": {
+    "reset_seed": 1202,
+    "lateral_offset_m": 3.0
+   },
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "guard_coverage_class": "ZERO_GUARD_COVERAGE",
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "tier": 0,
+     "penetrated": false,
+     "safe": false,
+     "mission_outcome": "SYSTEM_NONATTEMPT_OUTCOME_UNRESOLVED"
+    }
+   }
+  }
+ ]
+}

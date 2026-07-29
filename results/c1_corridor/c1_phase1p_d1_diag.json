@@ -1,0 +1,704 @@
+{
+ "meta": {
+  "script": "c1_phase1p_d1_diag",
+  "role": "observer only; re-runs D1's own launches and records how far the search got. Changes no controller and no verdict",
+  "scope_tags": {
+   "ATTACKER_CLASS": "K4_PIECEWISE_CONSTANT",
+   "RESET_SCOPE": "FIXED_RESET_1100",
+   "PROTOCOL": "D1_SCENARIO_AWARE_SEED_AMENDMENT_V1",
+   "SAMPLE_STRUCTURE": "15 controller artifacts over 9 UNIQUE scenarios \u2014 not 15 independent samples",
+   "CLASS_SCOPE": "Class A only; Class B (MAXCLR) is a separate recovery track"
+  },
+  "nomenclature": {
+   "cert_seeds -> ": "split into two names",
+   "search_bank_seeds": "seeds reachable_accels for the warm-start bank (rng_role='warm_start')",
+   "replan_bank_seeds": "seeds the CEM replan stream (rng_role='cem')",
+   "executed_module_keys_unchanged": "c1_phase1p_d1.py retains n_cert_seeds / CERT_BANK_IDS as executed"
+  },
+  "version_record": [
+   {
+    "version": "D1-v0",
+    "seeding": "registry literal constants 64000201-16 / 91000101-3, witness-blind (pre-C-6)",
+    "status": "NOT EXECUTED / INVALIDATED",
+    "reason": "witness-blind streams hand every scenario the same attacker; this is the C-6 defect the campaign confirmed twice and hit a third time in replan_at"
+   },
+   {
+    "version": "D1-v1",
+    "seeding": "counts honoured exactly; seed VALUES derived from the central d0_seed with stage_id='D1'",
+    "status": "EXECUTED",
+    "phrasing": "counts-preserving corrective-amended D1"
+   }
+  ],
+  "budget_phrasing": "D1 is 4x D0's SEARCH LAUNCHES within the SAME K4 attacker class \u2014 not a stronger attacker",
+  "determinism_check": "recomputed candidate counts must equal D1's"
+ },
+ "determinism_ok": true,
+ "mismatches": [],
+ "gap_summary_m": {
+  "min": 0.0005246454723994987,
+  "median": 0.015853387531417518,
+  "max": 0.02626494056936446
+ },
+ "rows": [
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     28.94237707718852,
+     5.12106502279305,
+     -1.8871391286500057
+    ],
+    [
+     28.94237707718852,
+     5.12106502279305,
+     -1.8871391286500057
+    ],
+    [
+     28.94237707718852,
+     5.12106502279305,
+     -1.8871391286500057
+    ],
+    [
+     28.94237707718852,
+     5.12106502279305,
+     -1.8871391286500057
+    ]
+   ],
+   "k4_incumbent_hash": "fef4601bea3a4e98",
+   "best_search_objective_m": -0.02626494056936446,
+   "gap_to_candidate_threshold_m": 0.02626494056936446,
+   "best_admissibility_margin_mps2": 0.5475333471587867,
+   "best_kill_margin_proxy_m": -0.02626494056936446,
+   "best_cone_escape_proxy_m": -0.023440106836047494,
+   "warm_start_bank_best_objective_m": -0.02626494056936446,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.02626494056936446,
+    "median": -0.044045029806920516,
+    "min": -0.07236437989208078
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.135,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.115488146689845,
+     5.580327058922456,
+     -2.296543506348154
+    ],
+    [
+     29.115488146689845,
+     5.580327058922456,
+     -2.296543506348154
+    ],
+    [
+     29.115488146689845,
+     5.580327058922456,
+     -2.296543506348154
+    ],
+    [
+     29.115488146689845,
+     5.580327058922456,
+     -2.296543506348154
+    ]
+   ],
+   "k4_incumbent_hash": "7ef8e2b81ffa70e5",
+   "best_search_objective_m": -0.019609375318982103,
+   "gap_to_candidate_threshold_m": 0.019609375318982103,
+   "best_admissibility_margin_mps2": 0.26574681985221105,
+   "best_kill_margin_proxy_m": -0.019609375318982103,
+   "best_cone_escape_proxy_m": 0.021736036138832657,
+   "warm_start_bank_best_objective_m": -0.019609375318982103,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.019609375318982103,
+    "median": -0.037047303197263126,
+    "min": -0.06354077811270553
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.23202257279752,
+     -2.1902357940615533,
+     -5.398156241505085
+    ],
+    [
+     29.23202257279752,
+     -2.1902357940615533,
+     -5.398156241505085
+    ],
+    [
+     29.23202257279752,
+     -2.1902357940615533,
+     -5.398156241505085
+    ],
+    [
+     29.23202257279752,
+     -2.1902357940615533,
+     -5.398156241505085
+    ]
+   ],
+   "k4_incumbent_hash": "f03674491cb05e3e",
+   "best_search_objective_m": -0.01989939181129463,
+   "gap_to_candidate_threshold_m": 0.01989939181129463,
+   "best_admissibility_margin_mps2": 0.19314898655290236,
+   "best_kill_margin_proxy_m": -0.01989939181129463,
+   "best_cone_escape_proxy_m": 0.0044758782102709395,
+   "warm_start_bank_best_objective_m": -0.01989939181129463,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.01989939181129463,
+    "median": -0.04175433065655865,
+    "min": -0.07047305540343446
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.14,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.23202257279752,
+     -2.1902357940615533,
+     -5.398156241505085
+    ],
+    [
+     29.23202257279752,
+     -2.1902357940615533,
+     -5.398156241505085
+    ],
+    [
+     29.23202257279752,
+     -2.1902357940615533,
+     -5.398156241505085
+    ],
+    [
+     29.23202257279752,
+     -2.1902357940615533,
+     -5.398156241505085
+    ]
+   ],
+   "k4_incumbent_hash": "f03674491cb05e3e",
+   "best_search_objective_m": -0.008479238574681691,
+   "gap_to_candidate_threshold_m": 0.008479238574681691,
+   "best_admissibility_margin_mps2": 0.19314898655290236,
+   "best_kill_margin_proxy_m": -0.008479238574681691,
+   "best_cone_escape_proxy_m": 0.0044758782102709395,
+   "warm_start_bank_best_objective_m": -0.008479238574681691,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.008479238574681691,
+    "median": -0.034965209130808556,
+    "min": -0.058704495601980815
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.135,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.330161873097325,
+     -5.36373919850825,
+     2.4341737098284573
+    ],
+    [
+     29.330161873097325,
+     -5.36373919850825,
+     2.4341737098284573
+    ],
+    [
+     29.330161873097325,
+     -5.36373919850825,
+     2.4341737098284573
+    ],
+    [
+     29.330161873097325,
+     -5.36373919850825,
+     2.4341737098284573
+    ]
+   ],
+   "k4_incumbent_hash": "ec33ff7a26db0f2f",
+   "best_search_objective_m": -0.0005246454723994987,
+   "gap_to_candidate_threshold_m": 0.0005246454723994987,
+   "best_admissibility_margin_mps2": 0.08422998916247337,
+   "best_kill_margin_proxy_m": -0.0005246454723994987,
+   "best_cone_escape_proxy_m": 0.009146555131379361,
+   "warm_start_bank_best_objective_m": -0.0005246454723994987,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.0005246454723994987,
+    "median": -0.025100211149623363,
+    "min": -0.054025534116063305
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.085,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.299081699880443,
+     -2.0196972106826543,
+     -5.24036092606086
+    ],
+    [
+     29.299081699880443,
+     -2.0196972106826543,
+     -5.24036092606086
+    ],
+    [
+     29.299081699880443,
+     -2.0196972106826543,
+     -5.24036092606086
+    ],
+    [
+     29.299081699880443,
+     -2.0196972106826543,
+     -5.24036092606086
+    ]
+   ],
+   "k4_incumbent_hash": "d215177d94e9ccc5",
+   "best_search_objective_m": -0.012585283166846949,
+   "gap_to_candidate_threshold_m": 0.012585283166846949,
+   "best_admissibility_margin_mps2": 0.16752192803129162,
+   "best_kill_margin_proxy_m": -0.012344153082981979,
+   "best_cone_escape_proxy_m": -0.012585283166846949,
+   "warm_start_bank_best_objective_m": -0.012585283166846949,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.012585283166846949,
+    "median": -0.04465151174582216,
+    "min": -0.07532584426526201
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.07,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.37271502764402,
+     5.072614305639924,
+     -2.4284759259233364
+    ],
+    [
+     29.37271502764402,
+     5.072614305639924,
+     -2.4284759259233364
+    ],
+    [
+     29.37271502764402,
+     5.072614305639924,
+     -2.4284759259233364
+    ],
+    [
+     29.37271502764402,
+     5.072614305639924,
+     -2.4284759259233364
+    ]
+   ],
+   "k4_incumbent_hash": "114c1e57a7d89498",
+   "best_search_objective_m": -0.012327452147690092,
+   "gap_to_candidate_threshold_m": 0.012327452147690092,
+   "best_admissibility_margin_mps2": 0.09372475028431637,
+   "best_kill_margin_proxy_m": -0.011142535083113803,
+   "best_cone_escape_proxy_m": -0.012327452147690092,
+   "warm_start_bank_best_objective_m": -0.012327452147690092,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.012327452147690092,
+    "median": -0.03686108262984328,
+    "min": -0.06297495053778768
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.11,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.41177787165964,
+     5.346354090674538,
+     -1.8942909985736252
+    ],
+    [
+     29.41177787165964,
+     5.346354090674538,
+     -1.8942909985736252
+    ],
+    [
+     29.41177787165964,
+     5.346354090674538,
+     -1.8942909985736252
+    ],
+    [
+     29.41177787165964,
+     5.346354090674538,
+     -1.8942909985736252
+    ]
+   ],
+   "k4_incumbent_hash": "0a9f66045133a1ad",
+   "best_search_objective_m": -0.019665544818658454,
+   "gap_to_candidate_threshold_m": 0.019665544818658454,
+   "best_admissibility_margin_mps2": 0.04629375149049508,
+   "best_kill_margin_proxy_m": -0.019665544818658454,
+   "best_cone_escape_proxy_m": -0.008686078670868432,
+   "warm_start_bank_best_objective_m": -0.019665544818658454,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.019665544818658454,
+    "median": -0.043181130817145585,
+    "min": -0.062399391443222374
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.391750957346904,
+     5.3936463003826365,
+     -2.2278153802099188
+    ],
+    [
+     29.391750957346904,
+     5.3936463003826365,
+     -2.2278153802099188
+    ],
+    [
+     29.391750957346904,
+     5.3936463003826365,
+     -2.2278153802099188
+    ],
+    [
+     29.391750957346904,
+     5.3936463003826365,
+     -2.2278153802099188
+    ]
+   ],
+   "k4_incumbent_hash": "4cbcaeafe18c29c8",
+   "best_search_objective_m": -0.015853387531417518,
+   "gap_to_candidate_threshold_m": 0.015853387531417518,
+   "best_admissibility_margin_mps2": 0.034526432565197496,
+   "best_kill_margin_proxy_m": -0.015853387531417518,
+   "best_cone_escape_proxy_m": 0.004477302036658982,
+   "warm_start_bank_best_objective_m": -0.015853387531417518,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.015853387531417518,
+    "median": -0.04430755612247181,
+    "min": -0.07687499361176986
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.391750957346904,
+     5.3936463003826365,
+     -2.2278153802099188
+    ],
+    [
+     29.391750957346904,
+     5.3936463003826365,
+     -2.2278153802099188
+    ],
+    [
+     29.391750957346904,
+     5.3936463003826365,
+     -2.2278153802099188
+    ],
+    [
+     29.391750957346904,
+     5.3936463003826365,
+     -2.2278153802099188
+    ]
+   ],
+   "k4_incumbent_hash": "4cbcaeafe18c29c8",
+   "best_search_objective_m": -0.008264005683791265,
+   "gap_to_candidate_threshold_m": 0.008264005683791265,
+   "best_admissibility_margin_mps2": 0.034526432565197496,
+   "best_kill_margin_proxy_m": -0.008264005683791265,
+   "best_cone_escape_proxy_m": 0.004477302036658982,
+   "warm_start_bank_best_objective_m": -0.008264005683791265,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.008264005683791265,
+    "median": -0.038239891513617924,
+    "min": -0.07008835001474134
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.145,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     -28.87985521313293,
+     0.07242127206190097,
+     -0.06211394034976048
+    ],
+    [
+     -29.40816850973157,
+     2.6263411617492065,
+     2.156207601114966
+    ],
+    [
+     -24.082159194301845,
+     -9.107680467957104,
+     -6.72124492752011
+    ],
+    [
+     -14.04430425936183,
+     -17.03824994821001,
+     -20.309001860572565
+    ]
+   ],
+   "k4_incumbent_hash": "1abf7484ea1b906b",
+   "best_search_objective_m": -0.0066548644751383,
+   "gap_to_candidate_threshold_m": 0.0066548644751383,
+   "best_admissibility_margin_mps2": 8.846257060213247e-13,
+   "best_kill_margin_proxy_m": -0.0066548644751383,
+   "best_cone_escape_proxy_m": 0.03754664854260697,
+   "warm_start_bank_best_objective_m": -0.017116595342037577,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.0066548644751383,
+    "median": -0.03772180628314152,
+    "min": -0.05946298276781148
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.23151620751992,
+     1.890859005592351,
+     6.476350239943086
+    ],
+    [
+     29.00619940475015,
+     4.5080292869114915,
+     4.727459174840488
+    ],
+    [
+     28.940192258030486,
+     -0.08621217289123206,
+     3.378431646072446
+    ],
+    [
+     28.312342665266964,
+     -2.2651646537102264,
+     3.714626257984891
+    ]
+   ],
+   "k4_incumbent_hash": "efa1c2db5a2fc478",
+   "best_search_objective_m": -0.018034887160476742,
+   "gap_to_candidate_threshold_m": 0.018034887160476742,
+   "best_admissibility_margin_mps2": 9.912071163853398e-13,
+   "best_kill_margin_proxy_m": -0.018034887160476742,
+   "best_cone_escape_proxy_m": -0.014373070448570608,
+   "warm_start_bank_best_objective_m": -0.019700245076708978,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.018034887160476742,
+    "median": -0.04009330853719623,
+    "min": -0.061852302277693116
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.33323526260654,
+     2.346730781809933,
+     5.055464621769587
+    ],
+    [
+     29.33323526260654,
+     2.346730781809933,
+     5.055464621769587
+    ],
+    [
+     29.33323526260654,
+     2.346730781809933,
+     5.055464621769587
+    ],
+    [
+     29.33323526260654,
+     2.346730781809933,
+     5.055464621769587
+    ]
+   ],
+   "k4_incumbent_hash": "bd9ceb8abbf6f220",
+   "best_search_objective_m": -0.016151021036670654,
+   "gap_to_candidate_threshold_m": 0.016151021036670654,
+   "best_admissibility_margin_mps2": 0.1419431497010848,
+   "best_kill_margin_proxy_m": -0.012091027595252601,
+   "best_cone_escape_proxy_m": -0.016151021036670654,
+   "warm_start_bank_best_objective_m": -0.016151021036670654,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.016151021036670654,
+    "median": -0.03858417939978587,
+    "min": -0.05947390260528396
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.095,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.329401571639224,
+     5.294620568913074,
+     -1.9832173024415125
+    ],
+    [
+     29.329401571639224,
+     5.294620568913074,
+     -1.9832173024415125
+    ],
+    [
+     29.329401571639224,
+     5.294620568913074,
+     -1.9832173024415125
+    ],
+    [
+     29.329401571639224,
+     5.294620568913074,
+     -1.9832173024415125
+    ]
+   ],
+   "k4_incumbent_hash": "2966c703d97eb430",
+   "best_search_objective_m": -0.016549804275785895,
+   "gap_to_candidate_threshold_m": 0.016549804275785895,
+   "best_admissibility_margin_mps2": 0.13061844651057797,
+   "best_kill_margin_proxy_m": -0.016549804275785895,
+   "best_cone_escape_proxy_m": -0.009722377751468156,
+   "warm_start_bank_best_objective_m": -0.016549804275785895,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.016549804275785895,
+    "median": -0.04289354380264858,
+    "min": -0.06582514517873461
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.085,
+   "verdict_recorded": "SURVIVED_D0_AND_D1",
+   "reproduces_d1_candidate_count": true,
+   "n_search_candidates_recomputed": 0,
+   "k4_incumbent_acc": [
+    [
+     29.329401571639224,
+     5.294620568913074,
+     -1.9832173024415125
+    ],
+    [
+     29.329401571639224,
+     5.294620568913074,
+     -1.9832173024415125
+    ],
+    [
+     29.329401571639224,
+     5.294620568913074,
+     -1.9832173024415125
+    ],
+    [
+     29.329401571639224,
+     5.294620568913074,
+     -1.9832173024415125
+    ]
+   ],
+   "k4_incumbent_hash": "2966c703d97eb430",
+   "best_search_objective_m": -0.009722377751468156,
+   "gap_to_candidate_threshold_m": 0.009722377751468156,
+   "best_admissibility_margin_mps2": 0.13061844651057797,
+   "best_kill_margin_proxy_m": -0.008941906479885908,
+   "best_cone_escape_proxy_m": -0.009722377751468156,
+   "warm_start_bank_best_objective_m": -0.009722377751468156,
+   "per_launch_best_objective_m": {
+    "n": 48,
+    "max": -0.009722377751468156,
+    "median": -0.03647190852403917,
+    "min": -0.05868232407579477
+   },
+   "note": "sampled proxies from the search objective; NOT continuous-clearance adjudicated and NOT a verdict"
+  }
+ ]
+}

@@ -1,0 +1,807 @@
+{
+ "meta": {
+  "script": "c1_v2c_rediscovery",
+  "execution_step": 2,
+  "role": "detection-power REGRESSION test on the five cells that shaped v2; not generality evidence",
+  "confirmatory_prefix": "V2C-",
+  "known_counterexamples_seeded": false,
+  "seal_checked": true,
+  "seal_intact": true,
+  "why_stage_loop_reinstantiated": "c1_falsifier_v2.run_cell hard-codes the V2- development prefix and that file is sealed; the search primitives and budget constants are imported unchanged and only the stage loop is re-expressed with V2C- seeds"
+ },
+ "n_cells": 5,
+ "n_rediscovered": 5,
+ "verdict": "V2_DETECTION_REGRESSION_PASS",
+ "rows": [
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED",
+   "delta_m": 0.07,
+   "originally_found_at": "A0",
+   "rediscovered": true,
+   "first_stage": "A0",
+   "best_S_proxy_m": -0.002090129631570292,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "best_S_proxy_m": -0.002026814828168799,
+     "authoritative": {
+      "S_auth_m": -0.002026814828168799,
+      "continuous_kill_margin_m": 0.002026814828168799,
+      "cone_exit_margin_m": 0.0021886356802227063,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "ebc4eb4522f0a652",
+     "acc": [
+      [
+       29.43177538565774,
+       -2.183586040542025,
+       -5.383497290814335
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "best_S_proxy_m": -0.0020380901459269296,
+     "authoritative": {
+      "S_auth_m": -0.0020380901459269296,
+      "continuous_kill_margin_m": 0.0020380901459269296,
+      "cone_exit_margin_m": 0.0021922362932453613,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "26b8c02cbd497a10",
+     "acc": [
+      [
+       29.432110694058537,
+       -2.1836109175578913,
+       -5.383558623569278
+      ],
+      [
+       29.43211069405854,
+       -2.1836109175578917,
+       -5.383558623569279
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "best_S_proxy_m": -0.002090129631570292,
+     "authoritative": {
+      "S_auth_m": -0.002090129631569848,
+      "continuous_kill_margin_m": 0.002090129631569848,
+      "cone_exit_margin_m": 0.002106102153393901,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "a984bdef464f2372",
+     "acc": [
+      [
+       29.432110694058537,
+       -2.1836109175578913,
+       -5.383558623569278
+      ],
+      [
+       29.432110694058537,
+       -2.1836109175578913,
+       -5.383558623569278
+      ],
+      [
+       29.432110694058537,
+       -2.1836109175578913,
+       -5.383558623569278
+      ],
+      [
+       29.435470937377673,
+       -2.1772025844768503,
+       -5.367759271888198
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "best_S_proxy_m": -0.002090129631569404,
+     "authoritative": {
+      "S_auth_m": -0.002090129631569404,
+      "continuous_kill_margin_m": 0.002090129631569404,
+      "cone_exit_margin_m": 0.002106102153380912,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "223e7535e63e7e8e",
+     "acc": [
+      [
+       29.432110694058537,
+       -2.1836109175578913,
+       -5.383558623569278
+      ],
+      [
+       29.432110694058537,
+       -2.1836109175578913,
+       -5.383558623569278
+      ],
+      [
+       29.432110694058537,
+       -2.1836109175578913,
+       -5.383558623569278
+      ],
+      [
+       29.432110694058537,
+       -2.1836109175578913,
+       -5.383558623569278
+      ],
+      [
+       29.432110694058537,
+       -2.1836109175578913,
+       -5.383558623569278
+      ],
+      [
+       29.432110694058537,
+       -2.1836109175578913,
+       -5.383558623569278
+      ],
+      [
+       29.435470937377673,
+       -2.1772025844768503,
+       -5.367759271888198
+      ],
+      [
+       29.435470937377673,
+       -2.1772025844768503,
+       -5.367759271888198
+      ]
+     ],
+     "monotone_vs_previous": true
+    }
+   ]
+  },
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED",
+   "delta_m": 0.135,
+   "originally_found_at": "A0",
+   "rediscovered": true,
+   "first_stage": "A0",
+   "best_S_proxy_m": -0.003481829198231678,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "best_S_proxy_m": -0.0034407421072847276,
+     "authoritative": {
+      "S_auth_m": -0.0034407421072847276,
+      "continuous_kill_margin_m": 0.0034835791746732347,
+      "cone_exit_margin_m": 0.0034407421072847276,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "f85abcae2ad11400",
+     "acc": [
+      [
+       29.429057794767473,
+       -5.398070814001018,
+       2.1889241191202293
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "best_S_proxy_m": -0.0034407421072847276,
+     "authoritative": {
+      "S_auth_m": -0.0034407421072847276,
+      "continuous_kill_margin_m": 0.0034835791746727907,
+      "cone_exit_margin_m": 0.0034407421072847276,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "3942f7eba7f1ceab",
+     "acc": [
+      [
+       29.429057794767473,
+       -5.398070814001018,
+       2.1889241191202293
+      ],
+      [
+       29.429057794767473,
+       -5.398070814001018,
+       2.1889241191202293
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "best_S_proxy_m": -0.0034407421072847263,
+     "authoritative": {
+      "S_auth_m": -0.0034407421072847263,
+      "continuous_kill_margin_m": 0.0034835791746727907,
+      "cone_exit_margin_m": 0.0034407421072847263,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "7f314089c9799715",
+     "acc": [
+      [
+       29.429057794767473,
+       -5.398070814001018,
+       2.1889241191202293
+      ],
+      [
+       29.429057794767473,
+       -5.398070814001018,
+       2.1889241191202293
+      ],
+      [
+       29.429057794767473,
+       -5.398070814001018,
+       2.1889241191202293
+      ],
+      [
+       29.429057794767473,
+       -5.398070814001018,
+       2.1889241191202293
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "best_S_proxy_m": -0.003481829198231678,
+     "authoritative": {
+      "S_auth_m": -0.003481829198231678,
+      "continuous_kill_margin_m": 0.003488474037243172,
+      "cone_exit_margin_m": 0.003481829198231678,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "9bd2c0f96080be5c",
+     "acc": [
+      [
+       29.42905779476747,
+       -5.398070814001017,
+       2.188924119120229
+      ],
+      [
+       29.42905779476747,
+       -5.398070814001017,
+       2.188924119120229
+      ],
+      [
+       29.42905779476747,
+       -5.398070814001017,
+       2.188924119120229
+      ],
+      [
+       29.42905779476747,
+       -5.398070814001017,
+       2.188924119120229
+      ],
+      [
+       29.42905779476747,
+       -5.398070814001017,
+       2.188924119120229
+      ],
+      [
+       29.42905779476747,
+       -5.398070814001017,
+       2.188924119120229
+      ],
+      [
+       29.42905779476747,
+       -5.398070814001017,
+       2.188924119120229
+      ],
+      [
+       29.42248576869556,
+       -5.396865329871181,
+       2.2784151952929284
+      ]
+     ],
+     "monotone_vs_previous": true
+    }
+   ]
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED",
+   "delta_m": 0.14,
+   "originally_found_at": "A0",
+   "rediscovered": true,
+   "first_stage": "A0",
+   "best_S_proxy_m": -0.0011070329900888633,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "best_S_proxy_m": -0.00101359202442719,
+     "authoritative": {
+      "S_auth_m": -0.00101359202442719,
+      "continuous_kill_margin_m": 0.00101359202442719,
+      "cone_exit_margin_m": 0.001068180758476789,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "32b170d4c3410945",
+     "acc": [
+      [
+       29.431126600927605,
+       5.3703706996395955,
+       -2.178504177746063
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "best_S_proxy_m": -0.0011070329900888633,
+     "authoritative": {
+      "S_auth_m": -0.0011070329900888633,
+      "continuous_kill_margin_m": 0.0011358180087315262,
+      "cone_exit_margin_m": 0.0011070329900888633,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "71cdeeacc55302b5",
+     "acc": [
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ],
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "best_S_proxy_m": -0.0011070329900888633,
+     "authoritative": {
+      "S_auth_m": -0.0011070329900888633,
+      "continuous_kill_margin_m": 0.0011358180087315262,
+      "cone_exit_margin_m": 0.0011070329900888633,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "1a557efd4fe45dbe",
+     "acc": [
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ],
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ],
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ],
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "best_S_proxy_m": -0.0011070329900888622,
+     "authoritative": {
+      "S_auth_m": -0.0011070329900888622,
+      "continuous_kill_margin_m": 0.0011358180087288616,
+      "cone_exit_margin_m": 0.0011070329900888622,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "9e854ccd80478e81",
+     "acc": [
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ],
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ],
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ],
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ],
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ],
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ],
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ],
+      [
+       29.43475752202324,
+       5.371033242821483,
+       -2.1787729400290416
+      ]
+     ],
+     "monotone_vs_previous": true
+    }
+   ]
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-GMAX",
+   "delta_m": 0.135,
+   "originally_found_at": "D2a",
+   "rediscovered": true,
+   "first_stage": "A0",
+   "best_S_proxy_m": -0.01316066452110265,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "best_S_proxy_m": -0.013145449047244018,
+     "authoritative": {
+      "S_auth_m": -0.013145449047243574,
+      "continuous_kill_margin_m": 0.013145449047243574,
+      "cone_exit_margin_m": 0.013197975178325454,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "df132f2c0d8e1b74",
+     "acc": [
+      [
+       29.40485406034796,
+       -5.508728970663476,
+       2.2371845166983944
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "best_S_proxy_m": -0.013147329757448034,
+     "authoritative": {
+      "S_auth_m": -0.013147329757448478,
+      "continuous_kill_margin_m": 0.013147329757448478,
+      "cone_exit_margin_m": 0.013198605351620865,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "c0013d3ee6db6974",
+     "acc": [
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ],
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "best_S_proxy_m": -0.013147329757448034,
+     "authoritative": {
+      "S_auth_m": -0.013147329757448478,
+      "continuous_kill_margin_m": 0.013147329757448478,
+      "cone_exit_margin_m": 0.013198605351620865,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "918ce0be4004f475",
+     "acc": [
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ],
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ],
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ],
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "best_S_proxy_m": -0.01316066452110265,
+     "authoritative": {
+      "S_auth_m": -0.013160664521103538,
+      "continuous_kill_margin_m": 0.013160664521103538,
+      "cone_exit_margin_m": 0.013176580840711723,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "b32fd500f4c5342b",
+     "acc": [
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ],
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ],
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ],
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ],
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ],
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ],
+      [
+       29.404910718040274,
+       -5.508739584961049,
+       2.237188827337438
+      ],
+      [
+       29.40843030840303,
+       -5.4925877118312565,
+       2.2306292887080947
+      ]
+     ],
+     "monotone_vs_previous": true
+    }
+   ]
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-SHARED",
+   "delta_m": 0.115,
+   "originally_found_at": "D0",
+   "rediscovered": true,
+   "first_stage": "A0",
+   "best_S_proxy_m": -0.022793801013697115,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "best_S_proxy_m": -0.022705158919263724,
+     "authoritative": {
+      "S_auth_m": -0.022705158919263724,
+      "continuous_kill_margin_m": 0.022705158919263724,
+      "cone_exit_margin_m": 0.022720239546168492,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "0c352e1dc04808ee",
+     "acc": [
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "best_S_proxy_m": -0.02270515891926239,
+     "authoritative": {
+      "S_auth_m": -0.02270515891926239,
+      "continuous_kill_margin_m": 0.02270515891926239,
+      "cone_exit_margin_m": 0.022720239546168485,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "ae0ac246cbbf2e6f",
+     "acc": [
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ],
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "best_S_proxy_m": -0.022793801013697105,
+     "authoritative": {
+      "S_auth_m": -0.022793801013697105,
+      "continuous_kill_margin_m": 0.022813899605216292,
+      "cone_exit_margin_m": 0.022793801013697105,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "38423d67368a1f8d",
+     "acc": [
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ],
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ],
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ],
+      [
+       29.3777417223621,
+       -2.3582432078716393,
+       -5.602408434478212
+      ]
+     ],
+     "monotone_vs_previous": true
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "best_S_proxy_m": -0.022793801013697115,
+     "authoritative": {
+      "S_auth_m": -0.022793801013697115,
+      "continuous_kill_margin_m": 0.022813899605218513,
+      "cone_exit_margin_m": 0.022793801013697115,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "62401c08d3738d9d",
+     "acc": [
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ],
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ],
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ],
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ],
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ],
+      [
+       29.380857566454328,
+       -2.275719584327943,
+       -5.6201698402476925
+      ],
+      [
+       29.3777417223621,
+       -2.3582432078716393,
+       -5.602408434478212
+      ],
+      [
+       29.3777417223621,
+       -2.3582432078716393,
+       -5.602408434478212
+      ]
+     ],
+     "monotone_vs_previous": true
+    }
+   ]
+  }
+ ]
+}

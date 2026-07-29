@@ -1,0 +1,338 @@
+{
+ "meta": {
+  "script": "c1_phase1p_d2a_containment",
+  "role": "MANDATORY gate before D2a; changes no controller",
+  "layers": {
+   "L1": "parameter embedding: repeat(a4,2) reproduces u(t)",
+   "L2": "step-level control BIT parity",
+   "L3": "rollout / verdict parity -- verdict asserted, fp discrepancy reported (bit identity is NOT claimed and is not achievable)",
+   "L4": "known K=4 escapes, embedded, still adjudicated escapes"
+  },
+  "correction_to_d1_readout": "the D1 readout wrote 'K=4 artifact must reproduce bit-for-bit'. Bit identity holds for the CONTROL SIGNAL (L2); the ROLLOUT differs at fp level by construction. The operative test is verdict identity.",
+  "tolerances_m": {
+   "endpoint": 1e-09,
+   "continuous_margin": 1e-06
+  }
+ },
+ "L1_pass": true,
+ "L2_pass": true,
+ "L3_pass": true,
+ "L4_pass": true,
+ "worst_endpoint_difference_m": 7.105427357601002e-15,
+ "worst_continuous_margin_difference_m": 3.552713678800501e-15,
+ "verdict": "D2A_CONTAINMENT_VERIFIED",
+ "rows": [
+  {
+   "source": "D0 verified escape",
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-SHARED",
+   "delta_m": 0.115,
+   "mode": "KILL",
+   "k4_hash": "0fdbaa4cd0dece5e",
+   "k8_hash": "bb080faae0440252",
+   "L1_L2": {
+    "shape_k4": [
+     4,
+     3
+    ],
+    "shape_k8": [
+     8,
+     3
+    ],
+    "L1_embedding_control_identical": true,
+    "L2_control_bit_parity": true,
+    "n_sample_times": 4096,
+    "max_abs_control_difference": 0.0
+   },
+   "L3": {
+    "k4": {
+     "sampled_kill_margin_m": 0.005092535120010844,
+     "cone_exit_margin_m": 0.006889614879982107,
+     "continuous_kill_margin_m": 0.0050925351200104,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "k8": {
+     "sampled_kill_margin_m": 0.005092535120011732,
+     "cone_exit_margin_m": 0.00688961487998211,
+     "continuous_kill_margin_m": 0.005092535120012176,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "endpoint_max_abs_difference_m": 3.552713678800501e-15,
+    "continuous_margin_abs_difference_m": 1.7763568394002505e-15,
+    "sampled_kill_margin_difference_m": -8.881784197001252e-16,
+    "cone_exit_margin_difference_m": -3.469446951953614e-18,
+    "L3_verdict_identical": true,
+    "L3_escape_label_identical": true,
+    "L3_endpoint_within_tol": true,
+    "L3_continuous_margin_within_tol": true,
+    "bit_identity_claimed": false,
+    "why_not_bit_identical": "K=8 composes two half-steps per K=4 step and samples a finer substep grid; equality holds in exact arithmetic, not in IEEE754"
+   },
+   "L4_known_escape_contained": true
+  },
+  {
+   "source": "D0 verified escape",
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-SHARED",
+   "delta_m": 0.115,
+   "mode": "CONE_LATERAL",
+   "k4_hash": "c2247457fece1ec1",
+   "k8_hash": "6062dba179765ef3",
+   "L1_L2": {
+    "shape_k4": [
+     4,
+     3
+    ],
+    "shape_k8": [
+     8,
+     3
+    ],
+    "L1_embedding_control_identical": true,
+    "L2_control_bit_parity": true,
+    "n_sample_times": 4096,
+    "max_abs_control_difference": 0.0
+   },
+   "L3": {
+    "k4": {
+     "sampled_kill_margin_m": 0.0049561063731151656,
+     "cone_exit_margin_m": 0.00381799368829247,
+     "continuous_kill_margin_m": 0.0049561063731147215,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "k8": {
+     "sampled_kill_margin_m": 0.004956106373117386,
+     "cone_exit_margin_m": 0.003817993688292473,
+     "continuous_kill_margin_m": 0.004956106373117386,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "endpoint_max_abs_difference_m": 5.329070518200751e-15,
+    "continuous_margin_abs_difference_m": 2.6645352591003757e-15,
+    "sampled_kill_margin_difference_m": -2.220446049250313e-15,
+    "cone_exit_margin_difference_m": -3.0357660829594124e-18,
+    "L3_verdict_identical": true,
+    "L3_escape_label_identical": true,
+    "L3_endpoint_within_tol": true,
+    "L3_continuous_margin_within_tol": true,
+    "bit_identity_claimed": false,
+    "why_not_bit_identical": "K=8 composes two half-steps per K=4 step and samples a finer substep grid; equality holds in exact arithmetic, not in IEEE754"
+   },
+   "L4_known_escape_contained": true
+  },
+  {
+   "source": "CEGIS attack set (largest-margin)",
+   "witness": "MAXCLR 5.0/0.55 f=10",
+   "arm": "NOMINAL",
+   "delta_m": 0.0,
+   "mode": "REDERIVED",
+   "k4_hash": "d5a3cf56ba994ed3",
+   "k8_hash": "2058388feea17115",
+   "L1_L2": {
+    "shape_k4": [
+     4,
+     3
+    ],
+    "shape_k8": [
+     8,
+     3
+    ],
+    "L1_embedding_control_identical": true,
+    "L2_control_bit_parity": true,
+    "n_sample_times": 4096,
+    "max_abs_control_difference": 0.0
+   },
+   "L3": {
+    "k4": {
+     "sampled_kill_margin_m": 1.0725911817098384,
+     "cone_exit_margin_m": 1.071708702102166,
+     "continuous_kill_margin_m": 1.0724550881282062,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "k8": {
+     "sampled_kill_margin_m": 1.0725107856001252,
+     "cone_exit_margin_m": 1.0717087021021658,
+     "continuous_kill_margin_m": 1.0724550881282053,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "endpoint_max_abs_difference_m": 1.7763568394002505e-15,
+    "continuous_margin_abs_difference_m": 8.881784197001252e-16,
+    "sampled_kill_margin_difference_m": 8.039610971311006e-05,
+    "cone_exit_margin_difference_m": 2.220446049250313e-16,
+    "L3_verdict_identical": true,
+    "L3_escape_label_identical": true,
+    "L3_endpoint_within_tol": true,
+    "L3_continuous_margin_within_tol": true,
+    "bit_identity_claimed": false,
+    "why_not_bit_identical": "K=8 composes two half-steps per K=4 step and samples a finer substep grid; equality holds in exact arithmetic, not in IEEE754"
+   },
+   "L4_known_escape_contained": true
+  },
+  {
+   "source": "CEGIS attack set (tightest-margin)",
+   "witness": "MAXCLR 5.0/0.55 f=10",
+   "arm": "NOMINAL",
+   "delta_m": 0.0,
+   "mode": "REDERIVED",
+   "k4_hash": "a13187705e3eb481",
+   "k8_hash": "d38130ccf49dedc9",
+   "L1_L2": {
+    "shape_k4": [
+     4,
+     3
+    ],
+    "shape_k8": [
+     8,
+     3
+    ],
+    "L1_embedding_control_identical": true,
+    "L2_control_bit_parity": true,
+    "n_sample_times": 4096,
+    "max_abs_control_difference": 0.0
+   },
+   "L3": {
+    "k4": {
+     "sampled_kill_margin_m": 1.4206338232743874,
+     "cone_exit_margin_m": 0.004224606620709257,
+     "continuous_kill_margin_m": 1.4206069628200937,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "k8": {
+     "sampled_kill_margin_m": 1.4206338232743856,
+     "cone_exit_margin_m": 0.004224606620709255,
+     "continuous_kill_margin_m": 1.420606962820092,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "endpoint_max_abs_difference_m": 1.7763568394002505e-15,
+    "continuous_margin_abs_difference_m": 1.7763568394002505e-15,
+    "sampled_kill_margin_difference_m": 1.7763568394002505e-15,
+    "cone_exit_margin_difference_m": 1.734723475976807e-18,
+    "L3_verdict_identical": true,
+    "L3_escape_label_identical": true,
+    "L3_endpoint_within_tol": true,
+    "L3_continuous_margin_within_tol": true,
+    "bit_identity_claimed": false,
+    "why_not_bit_identical": "K=8 composes two half-steps per K=4 step and samples a finer substep grid; equality holds in exact arithmetic, not in IEEE754"
+   },
+   "L4_known_escape_contained": true
+  },
+  {
+   "source": "CEGIS attack set (largest-margin)",
+   "witness": "RH 4.0/0.40 f=7",
+   "arm": "NOMINAL",
+   "delta_m": 0.0,
+   "mode": "REDERIVED",
+   "k4_hash": "5813eef29de3c4e8",
+   "k8_hash": "a3fc2e4e00b51f20",
+   "L1_L2": {
+    "shape_k4": [
+     4,
+     3
+    ],
+    "shape_k8": [
+     8,
+     3
+    ],
+    "L1_embedding_control_identical": true,
+    "L2_control_bit_parity": true,
+    "n_sample_times": 4096,
+    "max_abs_control_difference": 0.0
+   },
+   "L3": {
+    "k4": {
+     "sampled_kill_margin_m": 0.08251526556155886,
+     "cone_exit_margin_m": 0.0802555680036801,
+     "continuous_kill_margin_m": 0.08251526556155886,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "k8": {
+     "sampled_kill_margin_m": 0.08251526556156241,
+     "cone_exit_margin_m": 0.08025556800369116,
+     "continuous_kill_margin_m": 0.08251526556156241,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "endpoint_max_abs_difference_m": 7.105427357601002e-15,
+    "continuous_margin_abs_difference_m": 3.552713678800501e-15,
+    "sampled_kill_margin_difference_m": -3.552713678800501e-15,
+    "cone_exit_margin_difference_m": -1.1060596882828122e-14,
+    "L3_verdict_identical": true,
+    "L3_escape_label_identical": true,
+    "L3_endpoint_within_tol": true,
+    "L3_continuous_margin_within_tol": true,
+    "bit_identity_claimed": false,
+    "why_not_bit_identical": "K=8 composes two half-steps per K=4 step and samples a finer substep grid; equality holds in exact arithmetic, not in IEEE754"
+   },
+   "L4_known_escape_contained": true
+  },
+  {
+   "source": "CEGIS attack set (tightest-margin)",
+   "witness": "RH 4.0/0.40 f=7",
+   "arm": "NOMINAL",
+   "delta_m": 0.0,
+   "mode": "REDERIVED",
+   "k4_hash": "ff82b26ad352f09c",
+   "k8_hash": "10a8fac59b6cc39b",
+   "L1_L2": {
+    "shape_k4": [
+     4,
+     3
+    ],
+    "shape_k8": [
+     8,
+     3
+    ],
+    "L1_embedding_control_identical": true,
+    "L2_control_bit_parity": true,
+    "n_sample_times": 4096,
+    "max_abs_control_difference": 0.0
+   },
+   "L3": {
+    "k4": {
+     "sampled_kill_margin_m": 0.00014449005980710083,
+     "cone_exit_margin_m": 0.04757225289640491,
+     "continuous_kill_margin_m": 0.00014449005980754492,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "k8": {
+     "sampled_kill_margin_m": 0.000144490059807989,
+     "cone_exit_margin_m": 0.0475722528963935,
+     "continuous_kill_margin_m": 0.000144490059807989,
+     "verdict": "VERIFIED_COLLISION_FREE",
+     "turn_feasible": true,
+     "recognised_as_escape": true
+    },
+    "endpoint_max_abs_difference_m": 1.7763568394002505e-15,
+    "continuous_margin_abs_difference_m": 4.440892098500626e-16,
+    "sampled_kill_margin_difference_m": -8.881784197001252e-16,
+    "cone_exit_margin_difference_m": 1.1407541578023483e-14,
+    "L3_verdict_identical": true,
+    "L3_escape_label_identical": true,
+    "L3_endpoint_within_tol": true,
+    "L3_continuous_margin_within_tol": true,
+    "bit_identity_claimed": false,
+    "why_not_bit_identical": "K=8 composes two half-steps per K=4 step and samples a finer substep grid; equality holds in exact arithmetic, not in IEEE754"
+   },
+   "L4_known_escape_contained": true
+  }
+ ]
+}

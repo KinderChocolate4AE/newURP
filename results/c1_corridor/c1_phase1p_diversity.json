@@ -1,0 +1,684 @@
+{
+ "meta": {
+  "script": "c1_phase1p_diversity",
+  "diagnostic_budget": {
+   "role": "D0-MODE-DIVERSITY diagnostic -- NOT a verdict run",
+   "n_bank": 20000,
+   "K": 4,
+   "pop": 192,
+   "iters": 14,
+   "restarts": 2,
+   "reset": 1100,
+   "d0_verdicts_touched": false
+  },
+  "protocol": "c1-D0-2026-07-25",
+  "schemes": [
+   "LEGACY",
+   "RELABEL",
+   "DIVERSITY"
+  ],
+  "relabel_offset": 777000000,
+  "decision_rule": "The pre-registered rule, applied mechanically.",
+  "hypotheses": {
+   "H_C6": "sharing caused by witness-blind RNG streams",
+   "H_ATTRACTOR": "sharing caused by a common saturated box-corner optimum"
+  }
+ },
+ "n_witnesses": 12,
+ "stats": {
+  "LEGACY": {
+   "n_unique_policies": 11,
+   "n_policy_collision_pairs": 1,
+   "shared_policies": {
+    "4a7b80a2d6557ad1": [
+     "RH 2.8/0.15 f=2",
+     "RH 3.2/0.25 f=5"
+    ]
+   },
+   "n_unique_warm_starts": 5,
+   "n_warm_collision_pairs": 14,
+   "shared_warm_starts": {
+    "5073": [
+     "RH 2.8/0.15 f=2",
+     "RH 3.2/0.25 f=5",
+     "BASE 4.0/0.70 C"
+    ],
+    "4640": [
+     "RH 4.0/0.40 f=7",
+     "RH 5.0/0.55 f=10"
+    ],
+    "13887": [
+     "BASE 2.8/0.30 C",
+     "BASE 3.2/0.50 C",
+     "BASE 3.2/0.70 P",
+     "BASE 4.0/0.70 P",
+     "BASE 5.0/1.00 P"
+    ]
+   }
+  },
+  "RELABEL": {
+   "n_unique_policies": 5,
+   "n_policy_collision_pairs": 28,
+   "shared_policies": {
+    "3a612ddc13fe132d": [
+     "RH 2.8/0.15 f=2",
+     "RH 3.2/0.25 f=5",
+     "RH 5.0/0.55 f=10",
+     "BASE 2.8/0.30 C",
+     "BASE 3.2/0.50 C",
+     "BASE 3.2/0.70 P",
+     "BASE 4.0/0.70 C",
+     "BASE 5.0/1.00 P"
+    ]
+   },
+   "n_unique_warm_starts": 4,
+   "n_warm_collision_pairs": 36,
+   "shared_warm_starts": {
+    "4663": [
+     "RH 2.8/0.15 f=2",
+     "RH 3.2/0.25 f=5",
+     "RH 5.0/0.55 f=10",
+     "BASE 2.8/0.30 C",
+     "BASE 3.2/0.50 C",
+     "BASE 3.2/0.70 P",
+     "BASE 4.0/0.70 C",
+     "BASE 4.0/0.70 P",
+     "BASE 5.0/1.00 P"
+    ]
+   }
+  },
+  "DIVERSITY": {
+   "n_unique_policies": 12,
+   "n_policy_collision_pairs": 0,
+   "shared_policies": {},
+   "n_unique_warm_starts": 12,
+   "n_warm_collision_pairs": 0,
+   "shared_warm_starts": {}
+  }
+ },
+ "n_escapes_per_scheme": {
+  "LEGACY": 10,
+  "RELABEL": 12,
+  "DIVERSITY": 12
+ },
+ "decision": "C6_SUPPORTED",
+ "decision_reason": "collisions LEGACY 1 -> RELABEL 28 -> DIVERSITY 0; identity in the stream is what breaks them",
+ "rows": [
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "RH 2.8/0.15 f=2",
+   "attack_policy_hash": "4a7b80a2d6557ad1",
+   "score_m": 0.023112035101447326,
+   "accel_norms": [
+    29.7196,
+    28.0242,
+    26.4885,
+    30.0
+   ],
+   "saturated": false,
+   "warm_start_index": 5073,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "RH 3.2/0.25 f=5",
+   "attack_policy_hash": "4a7b80a2d6557ad1",
+   "score_m": 0.023112035101447326,
+   "accel_norms": [
+    29.7196,
+    28.0242,
+    26.4885,
+    30.0
+   ],
+   "saturated": false,
+   "warm_start_index": 5073,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "RH 4.0/0.40 f=7",
+   "attack_policy_hash": "2361d7b319c283e3",
+   "score_m": 0.03785437696098981,
+   "accel_norms": [
+    29.6584,
+    30.0,
+    26.1918,
+    25.0471
+   ],
+   "saturated": false,
+   "warm_start_index": 4640,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "RH 5.0/0.55 f=10",
+   "attack_policy_hash": "1ea72a9a67d6669c",
+   "score_m": 0.03273894994507139,
+   "accel_norms": [
+    30.0,
+    29.4201,
+    28.887,
+    27.0893
+   ],
+   "saturated": false,
+   "warm_start_index": 4640,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "BASE 2.8/0.30 C",
+   "attack_policy_hash": "662575b742081d1a",
+   "score_m": -0.010727635969164926,
+   "accel_norms": [
+    29.8178,
+    29.9455,
+    27.7396,
+    30.0
+   ],
+   "saturated": false,
+   "warm_start_index": 13887,
+   "is_escape": false,
+   "class": "BASE"
+  },
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "BASE 3.2/0.50 C",
+   "attack_policy_hash": "acba6e92ef8af1ae",
+   "score_m": 0.007778314517576046,
+   "accel_norms": [
+    29.7196,
+    30.0,
+    30.0,
+    30.0
+   ],
+   "saturated": true,
+   "warm_start_index": 13887,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "BASE 3.2/0.70 P",
+   "attack_policy_hash": "f2225ca460698873",
+   "score_m": 0.006282012279698712,
+   "accel_norms": [
+    29.8356,
+    30.0,
+    29.9297,
+    28.6399
+   ],
+   "saturated": false,
+   "warm_start_index": 13887,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "BASE 4.0/0.70 C",
+   "attack_policy_hash": "12d149591348fd79",
+   "score_m": 0.007904074701529757,
+   "accel_norms": [
+    29.0055,
+    29.3321,
+    27.1717,
+    25.9243
+   ],
+   "saturated": false,
+   "warm_start_index": 5073,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "BASE 4.0/0.70 P",
+   "attack_policy_hash": "24a78cae8497b0b9",
+   "score_m": 0.0012595849284608995,
+   "accel_norms": [
+    29.8969,
+    28.172,
+    27.2179,
+    30.0
+   ],
+   "saturated": false,
+   "warm_start_index": 13887,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "BASE 5.0/1.00 P",
+   "attack_policy_hash": "c8505205e3a11ce2",
+   "score_m": -0.0012984983337984701,
+   "accel_norms": [
+    29.9709,
+    27.6046,
+    27.965,
+    30.0
+   ],
+   "saturated": false,
+   "warm_start_index": 13887,
+   "is_escape": false,
+   "class": "BASE"
+  },
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "MAXCLR 5.0/0.55 f=10",
+   "attack_policy_hash": "4bec60a9fc169782",
+   "score_m": 1.069694143787424,
+   "accel_norms": [
+    30.0,
+    30.0,
+    30.0,
+    30.0
+   ],
+   "saturated": true,
+   "warm_start_index": 5692,
+   "is_escape": true,
+   "class": "MAXCLR"
+  },
+  {
+   "scheme": "LEGACY",
+   "scenario_id": "MAXCLR 4.0/0.40 f=7",
+   "attack_policy_hash": "8159bdcd746aa77d",
+   "score_m": 0.9483197830144068,
+   "accel_norms": [
+    29.7467,
+    30.0,
+    30.0,
+    27.7791
+   ],
+   "saturated": false,
+   "warm_start_index": 18873,
+   "is_escape": true,
+   "class": "MAXCLR"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "RH 2.8/0.15 f=2",
+   "attack_policy_hash": "3a612ddc13fe132d",
+   "score_m": 0.05778218221906206,
+   "accel_norms": [
+    29.8814,
+    29.8814,
+    29.8814,
+    29.8814
+   ],
+   "saturated": true,
+   "warm_start_index": 4663,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "RH 3.2/0.25 f=5",
+   "attack_policy_hash": "3a612ddc13fe132d",
+   "score_m": 0.05778218221906206,
+   "accel_norms": [
+    29.8814,
+    29.8814,
+    29.8814,
+    29.8814
+   ],
+   "saturated": true,
+   "warm_start_index": 4663,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "RH 4.0/0.40 f=7",
+   "attack_policy_hash": "4e1b0cf949877811",
+   "score_m": 0.07432317340069483,
+   "accel_norms": [
+    29.6917,
+    29.6917,
+    29.6917,
+    29.6917
+   ],
+   "saturated": false,
+   "warm_start_index": 9093,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "RH 5.0/0.55 f=10",
+   "attack_policy_hash": "3a612ddc13fe132d",
+   "score_m": 0.07329213334443953,
+   "accel_norms": [
+    29.8814,
+    29.8814,
+    29.8814,
+    29.8814
+   ],
+   "saturated": true,
+   "warm_start_index": 4663,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "BASE 2.8/0.30 C",
+   "attack_policy_hash": "3a612ddc13fe132d",
+   "score_m": 0.005760028427349351,
+   "accel_norms": [
+    29.8814,
+    29.8814,
+    29.8814,
+    29.8814
+   ],
+   "saturated": true,
+   "warm_start_index": 4663,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "BASE 3.2/0.50 C",
+   "attack_policy_hash": "3a612ddc13fe132d",
+   "score_m": 0.02343030728598139,
+   "accel_norms": [
+    29.8814,
+    29.8814,
+    29.8814,
+    29.8814
+   ],
+   "saturated": true,
+   "warm_start_index": 4663,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "BASE 3.2/0.70 P",
+   "attack_policy_hash": "3a612ddc13fe132d",
+   "score_m": 0.015432873059546548,
+   "accel_norms": [
+    29.8814,
+    29.8814,
+    29.8814,
+    29.8814
+   ],
+   "saturated": true,
+   "warm_start_index": 4663,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "BASE 4.0/0.70 C",
+   "attack_policy_hash": "3a612ddc13fe132d",
+   "score_m": 0.03046653101236796,
+   "accel_norms": [
+    29.8814,
+    29.8814,
+    29.8814,
+    29.8814
+   ],
+   "saturated": true,
+   "warm_start_index": 4663,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "BASE 4.0/0.70 P",
+   "attack_policy_hash": "862628591a2a417f",
+   "score_m": 0.016839254360502043,
+   "accel_norms": [
+    30.0,
+    29.6034,
+    29.7289,
+    26.7529
+   ],
+   "saturated": false,
+   "warm_start_index": 4663,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "BASE 5.0/1.00 P",
+   "attack_policy_hash": "3a612ddc13fe132d",
+   "score_m": 0.012383100834119531,
+   "accel_norms": [
+    29.8814,
+    29.8814,
+    29.8814,
+    29.8814
+   ],
+   "saturated": true,
+   "warm_start_index": 4663,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "MAXCLR 5.0/0.55 f=10",
+   "attack_policy_hash": "c0182ddffc9384de",
+   "score_m": 1.0694182111544999,
+   "accel_norms": [
+    30.0,
+    29.9096,
+    30.0,
+    29.3227
+   ],
+   "saturated": false,
+   "warm_start_index": 16768,
+   "is_escape": true,
+   "class": "MAXCLR"
+  },
+  {
+   "scheme": "RELABEL",
+   "scenario_id": "MAXCLR 4.0/0.40 f=7",
+   "attack_policy_hash": "ab73fdcd89700cf1",
+   "score_m": 0.9502878966453987,
+   "accel_norms": [
+    29.9893,
+    29.8858,
+    30.0,
+    30.0
+   ],
+   "saturated": true,
+   "warm_start_index": 6306,
+   "is_escape": true,
+   "class": "MAXCLR"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "RH 2.8/0.15 f=2",
+   "attack_policy_hash": "a6bd09dec8fee37c",
+   "score_m": 0.037620840877966355,
+   "accel_norms": [
+    29.5916,
+    29.5916,
+    29.5916,
+    29.5916
+   ],
+   "saturated": false,
+   "warm_start_index": 4374,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "RH 3.2/0.25 f=5",
+   "attack_policy_hash": "09fdb89bfe6340f1",
+   "score_m": 0.050035924412829225,
+   "accel_norms": [
+    29.652,
+    29.652,
+    29.652,
+    29.652
+   ],
+   "saturated": false,
+   "warm_start_index": 7490,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "RH 4.0/0.40 f=7",
+   "attack_policy_hash": "5813eef29de3c4e8",
+   "score_m": 0.0802555680036801,
+   "accel_norms": [
+    29.6158,
+    29.6158,
+    29.6158,
+    29.6158
+   ],
+   "saturated": false,
+   "warm_start_index": 4094,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "RH 5.0/0.55 f=10",
+   "attack_policy_hash": "f073ccc7fe58637c",
+   "score_m": 0.06492432640597419,
+   "accel_norms": [
+    29.9214,
+    29.9214,
+    29.9214,
+    29.9214
+   ],
+   "saturated": true,
+   "warm_start_index": 11829,
+   "is_escape": true,
+   "class": "RH"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "BASE 2.8/0.30 C",
+   "attack_policy_hash": "6af74b1ab29fdc1e",
+   "score_m": 0.008966919206579327,
+   "accel_norms": [
+    29.6212,
+    29.6212,
+    29.6212,
+    29.6212
+   ],
+   "saturated": false,
+   "warm_start_index": 15021,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "BASE 3.2/0.50 C",
+   "attack_policy_hash": "21205fe628bd62dc",
+   "score_m": 0.027519046033926298,
+   "accel_norms": [
+    29.3678,
+    29.3678,
+    29.3678,
+    29.3678
+   ],
+   "saturated": false,
+   "warm_start_index": 2738,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "BASE 3.2/0.70 P",
+   "attack_policy_hash": "a29eda05d551ddee",
+   "score_m": 0.007109858861995555,
+   "accel_norms": [
+    29.4652,
+    29.4652,
+    29.4652,
+    29.4652
+   ],
+   "saturated": false,
+   "warm_start_index": 14333,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "BASE 4.0/0.70 C",
+   "attack_policy_hash": "19a9d5fc00bd37a8",
+   "score_m": 0.01732915857457451,
+   "accel_norms": [
+    29.8913,
+    29.8913,
+    29.8913,
+    29.8913
+   ],
+   "saturated": true,
+   "warm_start_index": 13098,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "BASE 4.0/0.70 P",
+   "attack_policy_hash": "9e4ae9771365511c",
+   "score_m": 0.017582348519539437,
+   "accel_norms": [
+    29.828,
+    29.828,
+    29.828,
+    29.828
+   ],
+   "saturated": true,
+   "warm_start_index": 755,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "BASE 5.0/1.00 P",
+   "attack_policy_hash": "28224911ab99617e",
+   "score_m": 0.006248602176078588,
+   "accel_norms": [
+    29.0082,
+    29.0082,
+    29.0082,
+    29.0082
+   ],
+   "saturated": false,
+   "warm_start_index": 349,
+   "is_escape": true,
+   "class": "BASE"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "MAXCLR 5.0/0.55 f=10",
+   "attack_policy_hash": "d5a3cf56ba994ed3",
+   "score_m": 1.071708702102166,
+   "accel_norms": [
+    30.0,
+    30.0,
+    29.5228,
+    29.1222
+   ],
+   "saturated": false,
+   "warm_start_index": 17422,
+   "is_escape": true,
+   "class": "MAXCLR"
+  },
+  {
+   "scheme": "DIVERSITY",
+   "scenario_id": "MAXCLR 4.0/0.40 f=7",
+   "attack_policy_hash": "03597420231819f0",
+   "score_m": 0.947914681775055,
+   "accel_norms": [
+    29.818,
+    29.1487,
+    30.0,
+    30.0
+   ],
+   "saturated": false,
+   "warm_start_index": 12705,
+   "is_escape": true,
+   "class": "MAXCLR"
+  }
+ ]
+}

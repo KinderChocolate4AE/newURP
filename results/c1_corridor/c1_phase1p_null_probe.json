@@ -1,0 +1,46 @@
+{
+ "target": "BASE 3.2/0.50 C",
+ "arm": "RING_FREEZE",
+ "independent_seeds": [
+  211,
+  307,
+  401,
+  503,
+  601,
+  709
+ ],
+ "rows": [
+  {
+   "base_seed": 211,
+   "n_candidates": 0,
+   "n_verified": 0
+  },
+  {
+   "base_seed": 307,
+   "n_candidates": 0,
+   "n_verified": 0
+  },
+  {
+   "base_seed": 401,
+   "n_candidates": 0,
+   "n_verified": 0
+  },
+  {
+   "base_seed": 503,
+   "n_candidates": 0,
+   "n_verified": 0
+  },
+  {
+   "base_seed": 601,
+   "n_candidates": 0,
+   "n_verified": 0
+  },
+  {
+   "base_seed": 709,
+   "n_candidates": 0,
+   "n_verified": 0
+  }
+ ],
+ "n_verified_total": 0,
+ "note": "NOT a seal; a repeated null at a diagnostic budget"
+}

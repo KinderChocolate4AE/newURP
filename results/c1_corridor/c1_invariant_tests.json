@@ -13,13 +13,23 @@
    "DISTRIBUTION_LEVEL"
   ]
  },
- "n_pass": 11,
- "n_total": 11,
+ "n_pass": 13,
+ "n_total": 13,
  "results": [
   {
-   "invariant": "I1 stronger attacker class never raises v_soft",
+   "invariant": "I1 enlarging the attacker class never shrinks the escape set",
    "pass": true,
-   "detail": "v_fixed 1.000000 -> v_union 1.000000"
+   "detail": "escapes 51 -> 51, shared-member labels identical"
+  },
+  {
+   "invariant": "I1b I1 instance is non-vacuous (escapes and captures both present)",
+   "pass": true,
+   "detail": "cell 4.0/0.40/C  feasible 307 = 256 caught + 51 escapes"
+  },
+  {
+   "invariant": "I1c negative control: corrupted shared label makes I1 fail",
+   "pass": true,
+   "detail": "flipped member 719 -> predicate False as required"
   },
   {
    "invariant": "I2 K=8 nests K=4 (endpoint identity)",
@@ -39,12 +49,12 @@
   {
    "invariant": "I4 diversity-mode seeds differ per witness",
    "pass": true,
-   "detail": "[232690, 731049, 645939]"
+   "detail": "[903012, 146297, 329974]"
   },
   {
    "invariant": "I5 paired-mode seeds identical across witnesses",
    "pass": true,
-   "detail": "283007"
+   "detail": "319902"
   },
   {
    "invariant": "I5b seeds are stable across processes (SHA-256, not hash())",
@@ -64,7 +74,7 @@
   {
    "invariant": "I7 screen failure is not relabelled as collision",
    "pass": true,
-   "detail": "24 screen-failures examined, 0 mislabelled"
+   "detail": "23 screen-failures examined, 0 mislabelled"
   },
   {
    "invariant": "I8 LP deploy window matches the judge window",

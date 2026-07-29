@@ -1,0 +1,2477 @@
+{
+ "meta": {
+  "script": "c1_falsifier_v2",
+  "protocol": "FALSIFIER-v2",
+  "stages": [
+   {
+    "id": "A0",
+    "K": 1
+   },
+   {
+    "id": "A1",
+    "K": 2
+   },
+   {
+    "id": "A2",
+    "K": 4
+   },
+   {
+    "id": "A3",
+    "K": 8
+   }
+  ],
+  "scales_x_a_max": [
+   0.05,
+   0.01,
+   0.002,
+   0.0004
+  ],
+  "n_per_scale": 96,
+  "top_m": 24,
+  "status": "DEVELOPMENT_BUILD \u2014 developed with four known misses in hand; nulls are not strength evidence",
+  "invariants": {
+   "cumulative_bank": "B(A_n) contains B(A_{n-1}) and every verified counterexample known at that point",
+   "incumbent_insertion": "each stage's initial population contains the previous stage's incumbents, embedded by exact segment repetition",
+   "monotonicity": "S*(A0) >= S*(A1) >= S*(A2) >= S*(A3), asserted"
+  },
+  "units": "both terms of S are metres; cone lateral is the small-angle arc-length surrogate (half_angle-theta)*||r||, differing from ||r||*sin(.) by O(dtheta^3)",
+  "confirmation_still_required": [
+   "freeze code, score and budget",
+   "re-execute all cells with NEW search seeds",
+   "known escapes used only as regression canaries",
+   "held-out attacker initial conditions and cone geometry",
+   "only then re-issue controller survival labels"
+  ]
+ },
+ "monotonicity_violations": [],
+ "n_cells_with_escape": 4,
+ "n_cells_with_escape_not_seeded": 0,
+ "median_top5_overlap_by_stage": {
+  "A0": 5,
+  "A1": 5,
+  "A2": 5,
+  "A3": 5
+ },
+ "rows": [
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 0,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157888,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 24,
+     "best_S_proxy_m": 0.006080424303042342,
+     "best_authoritative": {
+      "S_auth_m": 0.006080424303041898,
+      "continuous_kill_margin_m": -0.006080424303041898,
+      "cone_exit_margin_m": -0.005897258892352814,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "c2834a0ca0c1151f",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.006080424303041898,
+      "best_authoritative_S_m": 0.006080424303041898,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.08720261599305806,
+      "refined_inherited_S_m": 0.006080424303042342,
+      "refined_independent_S_m": 0.07858390458146891,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 48,
+     "best_S_proxy_m": 0.006029467121626109,
+     "best_authoritative": {
+      "S_auth_m": 0.006029467121626109,
+      "continuous_kill_margin_m": -0.006029467121626109,
+      "cone_exit_margin_m": -0.005881558722710147,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "1950600008eb47c7",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.006029467121626109,
+      "best_authoritative_S_m": 0.006029467121626109,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": 0.0060294671216252205,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 72,
+     "best_S_proxy_m": 0.005978369533606198,
+     "best_authoritative": {
+      "S_auth_m": 0.005978369533607086,
+      "continuous_kill_margin_m": -0.005978369533607086,
+      "cone_exit_margin_m": -0.005966249209689563,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "dccd4cb73c218925",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005978369533607086,
+      "best_authoritative_S_m": 0.005978369533607086,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": -8.881784197001252e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": 0.00597836953360531,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 96,
+     "best_S_proxy_m": 0.00597836953360531,
+     "best_authoritative": {
+      "S_auth_m": 0.005978369533605754,
+      "continuous_kill_margin_m": -0.005978369533605754,
+      "cone_exit_margin_m": -0.005966249209689565,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "4d2aea4cb930ab02",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005978369533605754,
+      "best_authoritative_S_m": 0.005978369533605754,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": -4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [],
+   "verdict": "NO_ESCAPE_FOUND_BY_V2_DEVELOPMENT_BUILD"
+  },
+  {
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.135,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 1,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157952,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 25,
+     "best_S_proxy_m": -0.0034407421072847276,
+     "best_authoritative": {
+      "S_auth_m": -0.0034407421072847276,
+      "continuous_kill_margin_m": 0.0034835791746732347,
+      "cone_exit_margin_m": 0.0034407421072847276,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "f85abcae2ad11400",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.0034407421072847276,
+      "best_authoritative_S_m": -0.0034407421072847276,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.07340685562437166,
+      "refined_inherited_S_m": -0.0034407421072847276,
+      "refined_independent_S_m": 0.06218453218437636,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 49,
+     "best_S_proxy_m": -0.0034407421072847276,
+     "best_authoritative": {
+      "S_auth_m": -0.0034407421072847276,
+      "continuous_kill_margin_m": 0.0034835791746727907,
+      "cone_exit_margin_m": 0.0034407421072847276,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "3942f7eba7f1ceab",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.0034407421072847276,
+      "best_authoritative_S_m": -0.0034407421072847276,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": -0.0034407421072847263,
+      "refined_independent_S_m": 0.0660405976075471,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 73,
+     "best_S_proxy_m": -0.0034407421072847263,
+     "best_authoritative": {
+      "S_auth_m": -0.0034407421072847263,
+      "continuous_kill_margin_m": 0.0034835791746727907,
+      "cone_exit_margin_m": 0.0034407421072847263,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "7f314089c9799715",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.0034407421072847263,
+      "best_authoritative_S_m": -0.0034407421072847263,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": -0.0034407421072847285,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 97,
+     "best_S_proxy_m": -0.003481829198231678,
+     "best_authoritative": {
+      "S_auth_m": -0.003481829198231678,
+      "continuous_kill_margin_m": 0.003488474037243172,
+      "cone_exit_margin_m": 0.003481829198231678,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "9bd2c0f96080be5c",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.003481829198231678,
+      "best_authoritative_S_m": -0.003481829198231678,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [
+    "A0",
+    "A1",
+    "A2",
+    "A3"
+   ],
+   "verdict": "FALSIFIED_BY_FALSIFIER_V2"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.155,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 0,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157888,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 24,
+     "best_S_proxy_m": 0.006046083317756246,
+     "best_authoritative": {
+      "S_auth_m": 0.006046083317756246,
+      "continuous_kill_margin_m": -0.006046083317756246,
+      "cone_exit_margin_m": -0.005993748045384516,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "0642b81264c0de1d",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.006046083317756246,
+      "best_authoritative_S_m": 0.006046083317756246,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.08720261599305806,
+      "refined_inherited_S_m": 0.006046083317756246,
+      "refined_independent_S_m": 0.07931865528677351,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 48,
+     "best_S_proxy_m": 0.006031035048863043,
+     "best_authoritative": {
+      "S_auth_m": 0.006031035048863043,
+      "continuous_kill_margin_m": -0.006031035048863043,
+      "cone_exit_margin_m": -0.005989113363826828,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "b5ae0e0f501c0da3",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.006031035048863043,
+      "best_authoritative_S_m": 0.006031035048863043,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": 0.006031035048863043,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 72,
+     "best_S_proxy_m": 0.006031035048863043,
+     "best_authoritative": {
+      "S_auth_m": 0.006031035048863043,
+      "continuous_kill_margin_m": -0.006031035048863043,
+      "cone_exit_margin_m": -0.005989113363826828,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "81ae130b1488af78",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.006031035048863043,
+      "best_authoritative_S_m": 0.006031035048863043,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": 0.006031035048863043,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 96,
+     "best_S_proxy_m": 0.00597279317084487,
+     "best_authoritative": {
+      "S_auth_m": 0.00597279317084487,
+      "continuous_kill_margin_m": -0.00597279317084487,
+      "cone_exit_margin_m": -0.005969264290397882,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "4d24b591835378f3",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.00597279317084487,
+      "best_authoritative_S_m": 0.00597279317084487,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [],
+   "verdict": "NO_ESCAPE_FOUND_BY_V2_DEVELOPMENT_BUILD"
+  },
+  {
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.14,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 1,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157952,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 25,
+     "best_S_proxy_m": -0.0010025515655148489,
+     "best_authoritative": {
+      "S_auth_m": -0.0010025515655148489,
+      "continuous_kill_margin_m": 0.0011176510696806474,
+      "cone_exit_margin_m": 0.0010025515655148489,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "2f9441d175e09b72",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.0010025515655148489,
+      "best_authoritative_S_m": -0.0010025515655148489,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.07718393795084832,
+      "refined_inherited_S_m": -0.001002551565514849,
+      "refined_independent_S_m": 0.06700968129943297,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 49,
+     "best_S_proxy_m": -0.0010259176950770934,
+     "best_authoritative": {
+      "S_auth_m": -0.0010259176950770934,
+      "continuous_kill_margin_m": 0.0011911838565255017,
+      "cone_exit_margin_m": 0.0010259176950770934,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "454e79c011adecb7",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.0010259176950770934,
+      "best_authoritative_S_m": -0.0010259176950770934,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": -0.0010259176950641056,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 73,
+     "best_S_proxy_m": -0.0010259176950641056,
+     "best_authoritative": {
+      "S_auth_m": -0.0010259176950641056,
+      "continuous_kill_margin_m": 0.001191183856527278,
+      "cone_exit_margin_m": 0.0010259176950641056,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "701107659fc29d54",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.0010259176950641056,
+      "best_authoritative_S_m": -0.0010259176950641056,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": -0.0010259176950770943,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 97,
+     "best_S_proxy_m": -0.0011063131352964106,
+     "best_authoritative": {
+      "S_auth_m": -0.0011063131352964106,
+      "continuous_kill_margin_m": 0.0011063131352964106,
+      "cone_exit_margin_m": 0.0011272433283806363,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "37b5955c8f68bfd3",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.0011063131352964106,
+      "best_authoritative_S_m": -0.0011063131352964106,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [
+    "A0",
+    "A1",
+    "A2",
+    "A3"
+   ],
+   "verdict": "FALSIFIED_BY_FALSIFIER_V2"
+  },
+  {
+   "witness": "RH 5.0/0.55 f=10",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.135,
+   "d2a_verdict": "FALSIFIED_BY_ADVERSARIAL_REPLAN_D2A",
+   "seeded_with_known_counterexamples": 2,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1158016,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 26,
+     "best_S_proxy_m": -0.013149606222650156,
+     "best_authoritative": {
+      "S_auth_m": -0.0131496062226506,
+      "continuous_kill_margin_m": 0.0131496062226506,
+      "cone_exit_margin_m": 0.013297989109406274,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "0912030ad127b55d",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.0131496062226506,
+      "best_authoritative_S_m": -0.0131496062226506,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.057853597849986116,
+      "refined_inherited_S_m": -0.013149606222650156,
+      "refined_independent_S_m": 0.057853597849986116,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 50,
+     "best_S_proxy_m": -0.013173226250893233,
+     "best_authoritative": {
+      "S_auth_m": -0.013173226250893233,
+      "continuous_kill_margin_m": 0.013173226250893233,
+      "cone_exit_margin_m": 0.013305906150451456,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "61a660aba1ae735b",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.013173226250893233,
+      "best_authoritative_S_m": -0.013173226250893233,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.060702513958438065,
+      "refined_inherited_S_m": -0.013173226250891013,
+      "refined_independent_S_m": 0.060702513958438065,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 74,
+     "best_S_proxy_m": -0.013217788985169121,
+     "best_authoritative": {
+      "S_auth_m": -0.013217788985169121,
+      "continuous_kill_margin_m": 0.013226558701460167,
+      "cone_exit_margin_m": 0.013217788985169121,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "660793d2fbe6e2b9",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.013217788985169121,
+      "best_authoritative_S_m": -0.013217788985169121,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": -0.013217788985181807,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 98,
+     "best_S_proxy_m": -0.013217788985181807,
+     "best_authoritative": {
+      "S_auth_m": -0.013217788985181807,
+      "continuous_kill_margin_m": 0.013226558701462388,
+      "cone_exit_margin_m": 0.013217788985181807,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "0be497d838171380",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.013217788985181807,
+      "best_authoritative_S_m": -0.013217788985181807,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [
+    "A0",
+    "A1",
+    "A2",
+    "A3"
+   ],
+   "verdict": "FALSIFIED_BY_FALSIFIER_V2"
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.085,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 0,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157888,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 24,
+     "best_S_proxy_m": 0.005036972497209025,
+     "best_authoritative": {
+      "S_auth_m": 0.005036972497209025,
+      "continuous_kill_margin_m": -0.005036972497209025,
+      "cone_exit_margin_m": -0.005004284637031749,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "d7ced9b098cd2e23",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005036972497209025,
+      "best_authoritative_S_m": 0.005036972497209025,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.08694293842614309,
+      "refined_inherited_S_m": 0.005036972497209025,
+      "refined_independent_S_m": 0.08694293842614309,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 48,
+     "best_S_proxy_m": 0.005011152465704605,
+     "best_authoritative": {
+      "S_auth_m": 0.005011152465704161,
+      "continuous_kill_margin_m": -0.005011152465704161,
+      "cone_exit_margin_m": -0.00499629728845763,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "994346114e55babc",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005011152465704161,
+      "best_authoritative_S_m": 0.005011152465704161,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": 0.005011152465704605,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 72,
+     "best_S_proxy_m": 0.005011152465704605,
+     "best_authoritative": {
+      "S_auth_m": 0.005011152465704605,
+      "continuous_kill_margin_m": -0.005011152465704605,
+      "cone_exit_margin_m": -0.00499629728845763,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "af8020c5eabcd3a8",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005011152465704605,
+      "best_authoritative_S_m": 0.005011152465704605,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": 0.005011152465706381,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 96,
+     "best_S_proxy_m": 0.005011152465706381,
+     "best_authoritative": {
+      "S_auth_m": 0.005011152465706381,
+      "continuous_kill_margin_m": -0.005011152465706381,
+      "cone_exit_margin_m": -0.004996297288470822,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "b74d2e08aa8261e4",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005011152465706381,
+      "best_authoritative_S_m": 0.005011152465706381,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [],
+   "verdict": "NO_ESCAPE_FOUND_BY_V2_DEVELOPMENT_BUILD"
+  },
+  {
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.07,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 1,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157952,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 25,
+     "best_S_proxy_m": -0.0020165323076866137,
+     "best_authoritative": {
+      "S_auth_m": -0.0020165323076861696,
+      "continuous_kill_margin_m": 0.0020165323076861696,
+      "cone_exit_margin_m": 0.002041850654586927,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "60175d2e18df2fe8",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.0020165323076861696,
+      "best_authoritative_S_m": -0.0020165323076861696,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": -4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.07562300002739963,
+      "refined_inherited_S_m": -0.0020165323076857256,
+      "refined_independent_S_m": 0.07520524619229452,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 49,
+     "best_S_proxy_m": -0.0020288004282025263,
+     "best_authoritative": {
+      "S_auth_m": -0.002028800428202082,
+      "continuous_kill_margin_m": 0.002028800428202082,
+      "cone_exit_margin_m": 0.002045766515898998,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "228bc1363dbf7e8a",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.002028800428202082,
+      "best_authoritative_S_m": -0.002028800428202082,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": -4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": -0.0020288004282025263,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 73,
+     "best_S_proxy_m": -0.0020288004282025263,
+     "best_authoritative": {
+      "S_auth_m": -0.0020288004282029704,
+      "continuous_kill_margin_m": 0.0020288004282029704,
+      "cone_exit_margin_m": 0.002045766515898998,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "656f106ab3697854",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.0020288004282029704,
+      "best_authoritative_S_m": -0.0020288004282029704,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": -0.0020288004281998617,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 97,
+     "best_S_proxy_m": -0.0020288004281998617,
+     "best_authoritative": {
+      "S_auth_m": -0.00202880042820075,
+      "continuous_kill_margin_m": 0.00202880042820075,
+      "cone_exit_margin_m": 0.0020457665158989968,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION_FREE",
+      "is_escape": true
+     },
+     "is_escape": true,
+     "attack_policy_hash": "5d089300f68f0909",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": -0.00202880042820075,
+      "best_authoritative_S_m": -0.00202880042820075,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 8.881784197001252e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [
+    "A0",
+    "A1",
+    "A2",
+    "A3"
+   ],
+   "verdict": "FALSIFIED_BY_FALSIFIER_V2"
+  },
+  {
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.11,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 0,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157888,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 24,
+     "best_S_proxy_m": 0.005981534444221559,
+     "best_authoritative": {
+      "S_auth_m": 0.005981534444222003,
+      "continuous_kill_margin_m": -0.005981534444222003,
+      "cone_exit_margin_m": -0.005947771470756979,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "b24c957116361de7",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005981534444222003,
+      "best_authoritative_S_m": 0.005981534444222003,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": -4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.08720261599305806,
+      "refined_inherited_S_m": 0.005981534444220671,
+      "refined_independent_S_m": 0.08330279660389239,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 48,
+     "best_S_proxy_m": 0.00591625009416421,
+     "best_authoritative": {
+      "S_auth_m": 0.00591625009416421,
+      "continuous_kill_margin_m": -0.005879228827871064,
+      "cone_exit_margin_m": -0.00591625009416421,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "9bc9378998954637",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.00591625009416421,
+      "best_authoritative_S_m": 0.00591625009416421,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": 0.005916250094164212,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 72,
+     "best_S_proxy_m": 0.005916250094164212,
+     "best_authoritative": {
+      "S_auth_m": 0.005916250094164212,
+      "continuous_kill_margin_m": -0.005879228827870175,
+      "cone_exit_margin_m": -0.005916250094164212,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "7b97d4489333330b",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005916250094164212,
+      "best_authoritative_S_m": 0.005916250094164212,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": 0.0059162500941642125,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 96,
+     "best_S_proxy_m": 0.0059162500941642125,
+     "best_authoritative": {
+      "S_auth_m": 0.0059162500941642125,
+      "continuous_kill_margin_m": -0.005879228827869287,
+      "cone_exit_margin_m": -0.0059162500941642125,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "bd2c4adfd3fdaccc",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0059162500941642125,
+      "best_authoritative_S_m": 0.0059162500941642125,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [],
+   "verdict": "NO_ESCAPE_FOUND_BY_V2_DEVELOPMENT_BUILD"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 0,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157888,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 24,
+     "best_S_proxy_m": 0.006152794820980904,
+     "best_authoritative": {
+      "S_auth_m": 0.006152794820980904,
+      "continuous_kill_margin_m": -0.006107630411082976,
+      "cone_exit_margin_m": -0.006152794820980904,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "e86504f1059eef23",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.006152794820980904,
+      "best_authoritative_S_m": 0.006152794820980904,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.08720261599305806,
+      "refined_inherited_S_m": 0.006152794820980904,
+      "refined_independent_S_m": 0.08128797684834854,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 48,
+     "best_S_proxy_m": 0.006149468958156949,
+     "best_authoritative": {
+      "S_auth_m": 0.006149468958156949,
+      "continuous_kill_margin_m": -0.0060968240161627385,
+      "cone_exit_margin_m": -0.006149468958156949,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "58fe223fbb290ebb",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.006149468958156949,
+      "best_authoritative_S_m": 0.006149468958156949,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": 0.006149468958156949,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 72,
+     "best_S_proxy_m": 0.006149468958156949,
+     "best_authoritative": {
+      "S_auth_m": 0.006149468958156949,
+      "continuous_kill_margin_m": -0.0060968240161627385,
+      "cone_exit_margin_m": -0.006149468958156949,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "858ff7ecd6b845f2",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.006149468958156949,
+      "best_authoritative_S_m": 0.006149468958156949,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": 0.006149468958156944,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 96,
+     "best_S_proxy_m": 0.0061115282485973655,
+     "best_authoritative": {
+      "S_auth_m": 0.0061115282485973655,
+      "continuous_kill_margin_m": -0.0060908806861901255,
+      "cone_exit_margin_m": -0.0061115282485973655,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "f232ddb23df639f3",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0061115282485973655,
+      "best_authoritative_S_m": 0.0061115282485973655,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [],
+   "verdict": "NO_ESCAPE_FOUND_BY_V2_DEVELOPMENT_BUILD"
+  },
+  {
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 0,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157888,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 24,
+     "best_S_proxy_m": 0.0014449247666559195,
+     "best_authoritative": {
+      "S_auth_m": 0.0014449247666554754,
+      "continuous_kill_margin_m": -0.0014449247666554754,
+      "cone_exit_margin_m": -0.0013105366039477728,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "21b199c86ab9bcb6",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0014449247666554754,
+      "best_authoritative_S_m": 0.0014449247666554754,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.08115706799335554,
+      "refined_inherited_S_m": 0.0014449247666559195,
+      "refined_independent_S_m": 0.07181620434458624,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 48,
+     "best_S_proxy_m": 0.0014205584838937746,
+     "best_authoritative": {
+      "S_auth_m": 0.0014205584838942187,
+      "continuous_kill_margin_m": -0.0014205584838942187,
+      "cone_exit_margin_m": -0.001302874506658895,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "ae0df6b81cc4dfd7",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0014205584838942187,
+      "best_authoritative_S_m": 0.0014205584838942187,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": -4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": 0.0014205584838937746,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 72,
+     "best_S_proxy_m": 0.001388384005412187,
+     "best_authoritative": {
+      "S_auth_m": 0.001388384005412187,
+      "continuous_kill_margin_m": -0.0013689244788377408,
+      "cone_exit_margin_m": -0.001388384005412187,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "887238c11faab30d",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.001388384005412187,
+      "best_authoritative_S_m": 0.001388384005412187,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": 0.0013883840054121866,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 96,
+     "best_S_proxy_m": 0.0013883840054121866,
+     "best_authoritative": {
+      "S_auth_m": 0.0013883840054121866,
+      "continuous_kill_margin_m": -0.001368924478838629,
+      "cone_exit_margin_m": -0.0013883840054121866,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "9295d97a2c146026",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0013883840054121866,
+      "best_authoritative_S_m": 0.0013883840054121866,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [],
+   "verdict": "NO_ESCAPE_FOUND_BY_V2_DEVELOPMENT_BUILD"
+  },
+  {
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.145,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 0,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157888,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 24,
+     "best_S_proxy_m": 0.005301470382097051,
+     "best_authoritative": {
+      "S_auth_m": 0.005301470382096607,
+      "continuous_kill_margin_m": -0.005301470382096607,
+      "cone_exit_margin_m": -0.005222471939220778,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "874aef566714f10a",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005301470382096607,
+      "best_authoritative_S_m": 0.005301470382096607,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.08288337840870508,
+      "refined_inherited_S_m": 0.005301470382097051,
+      "refined_independent_S_m": 0.016669410617107694,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 48,
+     "best_S_proxy_m": 0.0052611179770258865,
+     "best_authoritative": {
+      "S_auth_m": 0.0052611179770258865,
+      "continuous_kill_margin_m": -0.0052611179770258865,
+      "cone_exit_margin_m": -0.005209999979969346,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "b74e56ee7da8df0b",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0052611179770258865,
+      "best_authoritative_S_m": 0.0052611179770258865,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": 0.005261117977028551,
+      "refined_independent_S_m": 0.04103107380998772,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 72,
+     "best_S_proxy_m": 0.005261117977028551,
+     "best_authoritative": {
+      "S_auth_m": 0.005261117977027219,
+      "continuous_kill_margin_m": -0.005261117977027219,
+      "cone_exit_margin_m": -0.0052099999799693425,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "05984383d422e0b4",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005261117977027219,
+      "best_authoritative_S_m": 0.005261117977027219,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 1.3322676295501878e-15,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": 0.005261117977028551,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 96,
+     "best_S_proxy_m": 0.0052020127196983346,
+     "best_authoritative": {
+      "S_auth_m": 0.0052020127196983346,
+      "continuous_kill_margin_m": -0.0052020127196983346,
+      "cone_exit_margin_m": -0.005190197411488141,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "5e3c4076acb9c5a4",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0052020127196983346,
+      "best_authoritative_S_m": 0.0052020127196983346,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [],
+   "verdict": "NO_ESCAPE_FOUND_BY_V2_DEVELOPMENT_BUILD"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.1,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 0,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157888,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 24,
+     "best_S_proxy_m": 0.005793748649151927,
+     "best_authoritative": {
+      "S_auth_m": 0.005793748649151927,
+      "continuous_kill_margin_m": -0.005773310548300881,
+      "cone_exit_margin_m": -0.005793748649151927,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "cbff964e0d6bca4a",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005793748649151927,
+      "best_authoritative_S_m": 0.005793748649151927,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.08720261599305806,
+      "refined_inherited_S_m": 0.005793748649151927,
+      "refined_independent_S_m": 0.07715054682165423,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 48,
+     "best_S_proxy_m": 0.005793748649151927,
+     "best_authoritative": {
+      "S_auth_m": 0.005793748649151927,
+      "continuous_kill_margin_m": -0.005773310548300881,
+      "cone_exit_margin_m": -0.005793748649151927,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "e139aa7d89f7c7eb",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005793748649151927,
+      "best_authoritative_S_m": 0.005793748649151927,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": 0.005793748649151927,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 72,
+     "best_S_proxy_m": 0.005793748649151927,
+     "best_authoritative": {
+      "S_auth_m": 0.005793748649151927,
+      "continuous_kill_margin_m": -0.0057733105483004366,
+      "cone_exit_margin_m": -0.005793748649151927,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "966c356501b39115",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005793748649151927,
+      "best_authoritative_S_m": 0.005793748649151927,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": 0.005793748649151932,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 96,
+     "best_S_proxy_m": 0.005752616433882661,
+     "best_authoritative": {
+      "S_auth_m": 0.005752616433882661,
+      "continuous_kill_margin_m": -0.005726891821879132,
+      "cone_exit_margin_m": -0.005752616433882661,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "7a30dbdd6e809bb3",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005752616433882661,
+      "best_authoritative_S_m": 0.005752616433882661,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [],
+   "verdict": "NO_ESCAPE_FOUND_BY_V2_DEVELOPMENT_BUILD"
+  },
+  {
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.09,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 0,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157888,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 24,
+     "best_S_proxy_m": 0.0010942422499553572,
+     "best_authoritative": {
+      "S_auth_m": 0.0010942422499553572,
+      "continuous_kill_margin_m": -0.0010942422499553572,
+      "cone_exit_margin_m": -0.0010282562454540791,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "573c3f5bfb711a0f",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0010942422499553572,
+      "best_authoritative_S_m": 0.0010942422499553572,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.08058110799859763,
+      "refined_inherited_S_m": 0.0010942422499553572,
+      "refined_independent_S_m": 0.06834401889530328,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 48,
+     "best_S_proxy_m": 0.0010824027658422608,
+     "best_authoritative": {
+      "S_auth_m": 0.001082402765843149,
+      "continuous_kill_margin_m": -0.001082402765843149,
+      "cone_exit_margin_m": -0.0010245282753851578,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "2cf5080ab7e0b84d",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.001082402765843149,
+      "best_authoritative_S_m": 0.001082402765843149,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": -8.881784197001252e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": 0.001082402765843149,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 72,
+     "best_S_proxy_m": 0.001082402765843149,
+     "best_authoritative": {
+      "S_auth_m": 0.001082402765843149,
+      "continuous_kill_margin_m": -0.001082402765843149,
+      "cone_exit_margin_m": -0.0010245282753851578,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "000e9a36d60623f4",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.001082402765843149,
+      "best_authoritative_S_m": 0.001082402765843149,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": 0.0010824027658444813,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 96,
+     "best_S_proxy_m": 0.0010126750455645706,
+     "best_authoritative": {
+      "S_auth_m": 0.0010126750455645706,
+      "continuous_kill_margin_m": -0.0010126750455645706,
+      "cone_exit_margin_m": -0.000985893168750531,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "65d7346c99b45463",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0010126750455645706,
+      "best_authoritative_S_m": 0.0010126750455645706,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [],
+   "verdict": "NO_ESCAPE_FOUND_BY_V2_DEVELOPMENT_BUILD"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "selected_delta_m": 0.095,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 0,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157888,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 24,
+     "best_S_proxy_m": 0.005720910921770573,
+     "best_authoritative": {
+      "S_auth_m": 0.005720910921770573,
+      "continuous_kill_margin_m": -0.005611399908402426,
+      "cone_exit_margin_m": -0.005720910921770573,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "d3b63a1c944f98b2",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005720910921770573,
+      "best_authoritative_S_m": 0.005720910921770573,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.08720261599305806,
+      "refined_inherited_S_m": 0.005720910921770573,
+      "refined_independent_S_m": 0.0836322390156119,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 48,
+     "best_S_proxy_m": 0.00570920305242399,
+     "best_authoritative": {
+      "S_auth_m": 0.00570920305242399,
+      "continuous_kill_margin_m": -0.005573435093283674,
+      "cone_exit_margin_m": -0.00570920305242399,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "da54bab6d2617859",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.00570920305242399,
+      "best_authoritative_S_m": 0.00570920305242399,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": 0.005709203052423986,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 72,
+     "best_S_proxy_m": 0.005709203052423986,
+     "best_authoritative": {
+      "S_auth_m": 0.005709203052423986,
+      "continuous_kill_margin_m": -0.005573435093286339,
+      "cone_exit_margin_m": -0.005709203052423986,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "052903db59681a2a",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005709203052423986,
+      "best_authoritative_S_m": 0.005709203052423986,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": 0.005709203052423987,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 96,
+     "best_S_proxy_m": 0.005632717799791909,
+     "best_authoritative": {
+      "S_auth_m": 0.005632717799791909,
+      "continuous_kill_margin_m": -0.005632717799791909,
+      "cone_exit_margin_m": -0.00562925385124082,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "ace5ffbc06cb5902",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.005632717799791909,
+      "best_authoritative_S_m": 0.005632717799791909,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [],
+   "verdict": "NO_ESCAPE_FOUND_BY_V2_DEVELOPMENT_BUILD"
+  },
+  {
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED",
+   "selected_delta_m": 0.085,
+   "d2a_verdict": "SURVIVED_D0_D1_D2A",
+   "seeded_with_known_counterexamples": 0,
+   "stages": [
+    {
+     "stage": "A0",
+     "K": 1,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1157888,
+     "independent_start_provenance": {},
+     "n_refine_candidates": 9216,
+     "bank_size_after": 24,
+     "best_S_proxy_m": 0.000939185894402339,
+     "best_authoritative": {
+      "S_auth_m": 0.000939185894402339,
+      "continuous_kill_margin_m": -0.000939185894402339,
+      "cone_exit_margin_m": -0.0008692155325269153,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "35a9ba57558fcc0f",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.000939185894402339,
+      "best_authoritative_S_m": 0.000939185894402339,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A1",
+     "K": 2,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1216,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1216,
+      "raw_best_independent_start_S_m": 0.08039699735912942,
+      "refined_inherited_S_m": 0.000939185894402339,
+      "refined_independent_S_m": 0.07542173726274859,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 48,
+     "best_S_proxy_m": 0.0009231954924371344,
+     "best_authoritative": {
+      "S_auth_m": 0.0009231954924371344,
+      "continuous_kill_margin_m": -0.0009231954924371344,
+      "cone_exit_margin_m": -0.0008641773569239029,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "358dfc859daf2bbf",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0009231954924371344,
+      "best_authoritative_S_m": 0.0009231954924371344,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A2",
+     "K": 4,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1472,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1472,
+      "raw_best_independent_start_S_m": 0.06946637768902768,
+      "refined_inherited_S_m": 0.0009231954924380226,
+      "refined_independent_S_m": 0.06946637768902768,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 72,
+     "best_S_proxy_m": 0.0009231954924380226,
+     "best_authoritative": {
+      "S_auth_m": 0.0009231954924375785,
+      "continuous_kill_margin_m": -0.0009231954924375785,
+      "cone_exit_margin_m": -0.0008641773569369937,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "89eb31db39fb4b8b",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0009231954924375785,
+      "best_authoritative_S_m": 0.0009231954924375785,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 4.440892098500626e-16,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    },
+    {
+     "stage": "A3",
+     "K": 8,
+     "n_bank_entries_not_representable": 0,
+     "n_grid_or_fresh_candidates": 1984,
+     "independent_start_provenance": {
+      "n_independent_temporal_starts": 1984,
+      "raw_best_independent_start_S_m": 0.06072531972344235,
+      "refined_inherited_S_m": 0.0009231954924389107,
+      "refined_independent_S_m": 0.06072531972344235,
+      "independent_beats_inherited_after_refinement": false,
+      "comparison": "refined vs refined; each branch gets its own multi-scale budget"
+     },
+     "n_refine_candidates": 9216,
+     "bank_size_after": 96,
+     "best_S_proxy_m": 0.0009069101090050192,
+     "best_authoritative": {
+      "S_auth_m": 0.0009069101090050192,
+      "continuous_kill_margin_m": -0.0008973957985509706,
+      "cone_exit_margin_m": -0.0009069101090050192,
+      "admissible": true,
+      "verdict": "VERIFIED_COLLISION",
+      "is_escape": false
+     },
+     "is_escape": false,
+     "attack_policy_hash": "af9dd361700d1ae7",
+     "monotone_vs_previous": true,
+     "alignment": {
+      "n_audited": 20,
+      "best_proxy_authoritative_S_m": 0.0009069101090050192,
+      "best_authoritative_S_m": 0.0009069101090050192,
+      "proxy_rank_of_best_authoritative": 1,
+      "authoritative_rank_of_best_proxy": 1,
+      "proxy_minus_authoritative_S_at_best_proxy_m": 0.0,
+      "top1_overlap": 1,
+      "top5_overlap": 5,
+      "top10_overlap": 10
+     }
+    }
+   ],
+   "escape_stages": [],
+   "verdict": "NO_ESCAPE_FOUND_BY_V2_DEVELOPMENT_BUILD"
+  }
+ ]
+}

@@ -1,0 +1,4074 @@
+{
+ "meta": {
+  "script": "c1_v2c_step78",
+  "execution_steps": [
+   7,
+   8
+  ],
+  "seed_prefix": "V2C-",
+  "seal_intact": true,
+  "artifacts_sealed_before_search": true,
+  "permitted_labels": [
+   "CONFIRMATORY_ESCAPE_FOUND",
+   "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "POST_FIRE_LANE_GATE_FAILURE",
+   "POST_FIRE_FULL_GATE_CERTIFICATE"
+  ],
+  "not_issued": [
+   "MISSION_SUCCESS",
+   "CAPTURE_SUCCESS",
+   "PENETRATION_PREVENTED",
+   "END_TO_END_ROBUST"
+  ],
+  "campaign_status": "CLOSED_CERTIFICATE_LEVEL_ONLY",
+  "counting_rule": "'M of N' only alongside the condition layer; trajectories within a condition are not independent, and every condition shares one attacker boundary condition",
+  "scope": "certificate-level. No mission-outcome claim: the eligible branch is truncated at the deploy window"
+ },
+ "n_triples": 280,
+ "n_escape": 132,
+ "by_set_arm": {
+  "IN_DISTRIBUTION": {
+   "RI-SHARED-v1": {
+    "CONFIRMATORY_ESCAPE_FOUND": 66,
+    "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2": 43
+   },
+   "RI-GMAX": {
+    "CONFIRMATORY_ESCAPE_FOUND": 50,
+    "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2": 59
+   }
+  },
+  "STRESS": {
+   "RI-SHARED-v1": {
+    "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2": 18,
+    "CONFIRMATORY_ESCAPE_FOUND": 13
+   },
+   "RI-GMAX": {
+    "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2": 28,
+    "CONFIRMATORY_ESCAPE_FOUND": 3
+   }
+  }
+ },
+ "step56_status_counts": {
+  "RI-SHARED-v1": {
+   "GATE_VALID": 140,
+   "SHARED_CONTROLLER_CONSTRUCTION_OR_GATE_FAILURE": 167
+  },
+  "RI-GMAX": {
+   "GATE_VALID": 140,
+   "NO_CONTROLLER_FOUND_IN_GMAX_SEARCH_CLASS": 167
+  }
+ },
+ "rows": [
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "ba115117b8e613b6",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04755260376196901,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "6c5ba171fa7734c7",
+    "eb6e59f4a49ccefa",
+    "252c00b284dcc79a",
+    "edf5a626c3f31c7e"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "584ec52d5affd66d",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04279992721777932,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "af24f234b4c579f8",
+    "7b37547861794653",
+    "4874b36eaa3e4675",
+    "f1285ec642351e8e"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "f524c52eb20ee8fb",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.047571773018194374,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "d99f5b0b4e04a9a1",
+    "62abc33c6f9a2981",
+    "792ffa409a858996",
+    "afb19be0ee02b9de"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "abcb54cddb709c77",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.042796299859053644,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "f2a1bb6aaf890736",
+    "4c4fb1f85410baff",
+    "681f9322118e9adb",
+    "622c2c1a1c688f42"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.02,
+   "artifact_hash": "bfcd99bf61de3776",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04850275998316356,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "61766829ca2560fa",
+    "8aa1d76d9e0c60c6",
+    "233c92604eb799be",
+    "e4d4b2295974ec56"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.03,
+   "artifact_hash": "59951dfb18e74afc",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.043771856704779934,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "fbb95c193222f1e0",
+    "9ceda8de8eceee87",
+    "053650c5c10c7f45",
+    "ec072dcc8f37c719"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "3e1ded5d224d6ab6",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.045071356377964555,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "b7cac9b0cc90cf88",
+    "512ca11e3056db07",
+    "1c4a289c3766e6f1",
+    "b97f47ae3d9ab31e"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "5588081316bfbc7e",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04262609271237613,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "b1ffcc8eb8ff99ac",
+    "01d796e30ccb5de3",
+    "616c1b215f2351f8",
+    "e6c4b4f2490e9524"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.015,
+   "artifact_hash": "2bc59c507b519592",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06656869846085556,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "055ce419e7cf73c8",
+    "44c85576f7a1ad88",
+    "c24debe025953d0c",
+    "7ea8b4397a1feee2"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.075,
+   "artifact_hash": "5d560e6ca38b5767",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04270716467788064,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "724b6802feddeab5",
+    "0b27eeb0c4d8fa06",
+    "dc825f103c477d5e",
+    "caee17dffa458d70"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "05de7c4888afc92c",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04542007591363877,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "0be7350e8615ae52",
+    "0b268548a0f29da6",
+    "d6282e7cb45e0b8c",
+    "01125a08e299ff09"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "14358b7e2a6560bb",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.043015128641817085,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "39eaf1dafd4fbee0",
+    "3698e30a1791704a",
+    "388674a13b5d0b2f",
+    "8afb6d964dff38b5"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.035,
+   "artifact_hash": "9f708e2892f87ace",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04552494777206295,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "fb8025741bbf7f4f",
+    "5908c8add868dab8",
+    "8008e806b87e4621",
+    "8474f434bb6193ed"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.04,
+   "artifact_hash": "44041e2bf8bcaf24",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04310849383187051,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "49e9c5bed4b1b0bb",
+    "f581b6ed23dbb145",
+    "dec255839256ceda",
+    "812012ff23a481e3"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "b8553f2e50100880",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.047544964451734575,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "25b74c7980d83f84",
+    "4c21e23b38c28f33",
+    "9fef9f8b49b4e60b",
+    "a76236b048d6fb17"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "db023ae08d351adc",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04281494562552002,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "1870699fe1c0002e",
+    "e1e1523326ff0442",
+    "b7d4c3adce6d5442",
+    "e23edd0141b1d552"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "a8528b24754d5741",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04753709283251162,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "50aec8c65a41ecf9",
+    "54889debaae64439",
+    "835518ee877e2cc3",
+    "2a07f114f2f33c05"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "d779ee9cf96b62e3",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04279877481298652,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "19b4b0749169b92c",
+    "a391dedaa936f9d2",
+    "a0779d0259ec626c",
+    "93954ec69dc84ca1"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.02,
+   "artifact_hash": "a52a55f4a474af92",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04855289012383324,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "d083b2e23de52c87",
+    "1d5d9d0208c85a3c",
+    "bd5fa5d07544fb83",
+    "38c838ad971f176b"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.03,
+   "artifact_hash": "cd6b3d2571c88fac",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0437763252165482,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "ea2e4c7f70d20d92",
+    "c287264fb16b9ff0",
+    "e5a53c4d23ea66ff",
+    "5566de6159b201eb"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "3a0ff4fba3289e1b",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.045050274888426715,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "a8e9e9dffa68a1f6",
+    "b1aea81aa96ccb20",
+    "c67f21cb4f5c9bc6",
+    "e8a5f8fae71c294f"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "749fd869e51d3d57",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.042676045288954224,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "fe2a3885de3aa6c4",
+    "4c212325a3032199",
+    "4f73b3ebe576ded7",
+    "ce3cd9bfc2eac0ab"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.015,
+   "artifact_hash": "0663c3d647b9bd0a",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06656225533247305,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "73bb5cfe2d626201",
+    "3ba3a45233c02eef",
+    "9ecaed14d7509540",
+    "11d56fbd3982692a"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.075,
+   "artifact_hash": "2a3d6216f44c84a3",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04270208417241444,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "cfeb7eb2420d7c43",
+    "afa6e0e6a3e840ea",
+    "955b6841e2f3ce26",
+    "24916b1e2d58972e"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "a13adb2320da95a5",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04541324719626177,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "942dc5f091bb514c",
+    "5258cc68b4d142ed",
+    "76698e8af8d623ff",
+    "53df1cae337cc703"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "047adf7b30ce598d",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.043006918676131614,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "945604f1e96797b1",
+    "c797733b0abc2600",
+    "bd6584cd0d08d889",
+    "86256d533ae89ad0"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.035,
+   "artifact_hash": "1e36e27ca0482f38",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0455201720133398,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "4bd7fe8fb047cfba",
+    "d74519ec56577e61",
+    "14ff42308e85c46f",
+    "eab237d4d7bfbe97"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.04,
+   "artifact_hash": "a2a0aa527a68126c",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04316191371368294,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "db6a57c881c6d1df",
+    "0b87fbf09e198b3b",
+    "598c1278785bbaa1",
+    "85d689624422b4b2"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0002",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "c2c88314e4228f23",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.09455255225223752,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "4b65351c72a0d0f8",
+    "de7793152d654b94",
+    "8fc059663954583a",
+    "0fb9a45b0e0e75b1"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0002",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "35c058c5a194e1bb",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0921905155632472,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "63f98e5c04ed221d",
+    "2d2f13df8440f97f",
+    "a3dc4770189bbcf0",
+    "01efd69d5e30aace"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0002",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "0c594e4ca08e6289",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.09453177279863978,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "8f9340e0f8ef65e6",
+    "44f1fcaca68724ef",
+    "ee457da9c9c241c8",
+    "fe68673544792bf3"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0002",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "9b54742e6e54b3c2",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.09218796193563339,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "2e358b04e07de17d",
+    "6386c3b16a9d36d4",
+    "fb27efa24260ac26",
+    "00fbb613fb8c4d2f"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0003",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "41e2de8e2ff420ce",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.013926907362775243,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "6c86e6de06ae0f2f",
+    "5e903ba4ef4f1476",
+    "6a0d7ccb5d82ca57",
+    "65f05a2c089979a3"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0003",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.055,
+   "artifact_hash": "053c0d3774fa42c6",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.007469758684433726,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "a77bcc5b5442b7cc",
+    "a7cd9f68ce13e8cc",
+    "5c931aa0a6f04900",
+    "0bfee81bfd1bb2a8"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0003",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.005,
+   "artifact_hash": "0077faa9a9ed13a9",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.05232138583693885,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "a43cdcc4bb007640",
+    "8623a614a7e9448b",
+    "349b89a9901535f0",
+    "3e67c3ea8bd93d53"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0003",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.005,
+   "artifact_hash": "5bb480fb8f2a7c27",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.05232138583693885,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "a43cdcc4bb007640",
+    "8623a614a7e9448b",
+    "349b89a9901535f0",
+    "3e67c3ea8bd93d53"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0004",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.005,
+   "artifact_hash": "a4ce4f462708a339",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.05233679696656468,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "87225fade755728c",
+    "d5faf92f308d1902",
+    "2662be3bbfd20e02",
+    "ef13590dfe57b116"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0004",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.005,
+   "artifact_hash": "9d1b9fe227332cc8",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.05233679696656468,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "87225fade755728c",
+    "d5faf92f308d1902",
+    "2662be3bbfd20e02",
+    "ef13590dfe57b116"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0005",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.015,
+   "artifact_hash": "c467f4841c9d9f66",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.020674592978625395,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "8b296aa103c31067",
+    "bfceb7df635550ea",
+    "909583ee98034d8b",
+    "942921d8ccc6bb48"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0005",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.02,
+   "artifact_hash": "8acf2ab9d859c7b6",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.01837782346175656,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "bbeb5110d8e497bb",
+    "03d9871271ef86bf",
+    "91448d37e2575a47",
+    "4b6f667e14bbc2f1"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0006",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.015,
+   "artifact_hash": "90f4ec2c3a1268dc",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.019789051320049413,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "8316d76494bb82b9",
+    "57a7c833c333a48a",
+    "9895a1d607e0b757",
+    "3366f3ef6c2b1977"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0006",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.02,
+   "artifact_hash": "3f19b5f842f55b24",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.017333948394119947,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "221fea4cc20e8d46",
+    "3700dd16ca6feba8",
+    "4b0b23ae6d5cca77",
+    "8381775dffc65407"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.135,
+   "artifact_hash": "235891d9f49d957f",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.003481829198231678,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "f85abcae2ad11400",
+    "3942f7eba7f1ceab",
+    "7f314089c9799715",
+    "9bd2c0f96080be5c"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.155,
+   "artifact_hash": "bb352a5610304af3",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.006040091246675855,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.14,
+   "artifact_hash": "7071cd541811e92b",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0011220878515958484,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "4320edb70c989cb0",
+    "60e269fe2f076332",
+    "fc426cc1160c5c51",
+    "1f460a0a62fc6551"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.155,
+   "artifact_hash": "9cb0dde614f93e54",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.006003516132331424,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "760c833ba9221674",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0020850393419230653,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "a6768ac83d383485",
+    "af6b61a8e8c5f554",
+    "4f1ac8c6c05ee256",
+    "8e4f4c924fb436ab"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.085,
+   "artifact_hash": "831cd26b3cb404a6",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005020174891358295,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.025,
+   "artifact_hash": "1bd88bd09cf964b6",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.03439682396798417,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "4a780a970c8075d4",
+    "fc8f71785c203ccf",
+    "9bf9ae5ff83b0834",
+    "bbefd462e1fe01c5"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.11,
+   "artifact_hash": "0f8075ed56b4be74",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005888798927911467,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "67477f3e2ad46340",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.001371890191105063,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "b75db469c17362ba",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.006117240430765669,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.06,
+   "artifact_hash": "25d76d91e7505c41",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.025413116520224932,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "2bd61b08dff16ee3",
+    "bf8acf932d8292e6",
+    "94252040a7596bff",
+    "7eda569f8ce7e6ac"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.145,
+   "artifact_hash": "622b928ae143a9b7",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005195742487351547,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "f65a986634363d70",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.001033418332332392,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "e135754733d09e17",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0057346504195741055,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "614e30420e5b59e0",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0009182638246313393,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "3181fe21301a3b46",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005641943595652066,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.135,
+   "artifact_hash": "3eeb64dfeb5bd5f2",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.003481829198231678,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "f85abcae2ad11400",
+    "3942f7eba7f1ceab",
+    "7f314089c9799715",
+    "9bd2c0f96080be5c"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.155,
+   "artifact_hash": "7c1da5847fda3def",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005980723745719452,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "2da732d6ce857ec6",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.002084602689636455,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "d80ccc5d63e61196",
+    "d21bbc6a8e5b741f",
+    "97652a3c554e9017",
+    "f2580ea9232e56cd"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.085,
+   "artifact_hash": "7b59b6f589aead77",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005017220752625118,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.025,
+   "artifact_hash": "ce3081518bb14151",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.03442953641334978,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "490c874ad6f23a0b",
+    "4f73df614acdb5f8",
+    "11b6c83d5bce18d4",
+    "2334c418108efb97"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.11,
+   "artifact_hash": "3023b3904c135f98",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005921199247606475,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "e48743b603181586",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0013724746315619087,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "0c258abacda78c75",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.006143737362198623,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.06,
+   "artifact_hash": "83132986cf75c3a9",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.02539147669131259,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "6776a2f1716a3a37",
+    "d83d88c7f53f3c0e",
+    "37b2c1d8cd00cde2",
+    "f5789fd5f50833de"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.145,
+   "artifact_hash": "29fc12da25c6858b",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005188470380284027,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "db85cf6ca0d07a86",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.001030315803497425,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "59610ff750fb23a1",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005759647581356763,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "7dd4b7b21215864d",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0009182638246313393,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "50ee2443751d299b",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005626473543168142,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.135,
+   "artifact_hash": "e63fb48b6aa97dd7",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.003481829198231678,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "f85abcae2ad11400",
+    "3942f7eba7f1ceab",
+    "7f314089c9799715",
+    "9bd2c0f96080be5c"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.155,
+   "artifact_hash": "609ca8c85518960c",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0059949016177365455,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.14,
+   "artifact_hash": "1fd5728d36754bf6",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0011249196257487881,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "31eafcf7b208c66c",
+    "276703c12c68a4b5",
+    "c63c42cc73d81fb7",
+    "22cd00796e785626"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.155,
+   "artifact_hash": "8436a2f76c5de309",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005979878988995787,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "1e8ba96fc2063169",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0020665936383236195,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "18efdc4e6d6e7803",
+    "c6e16212588154ce",
+    "877c7ff6ac71539a",
+    "c2e304517599c2ce"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.085,
+   "artifact_hash": "095185eed2d0a873",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005017730551849468,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.025,
+   "artifact_hash": "2259fa240971c10a",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.03442204297642879,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "de5c997c3f99160f",
+    "5aabfef0d3e0dec0",
+    "567cc3e78ca17dc1",
+    "529ec14748bc5ec9"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.11,
+   "artifact_hash": "c719c273e417baaf",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.00589966407967335,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "fa680b71f996ec04",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0013848721329469491,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "93fdb0eb9c68bbe2",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.006171722166098901,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.06,
+   "artifact_hash": "4a7a06a77998cdde",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.02539995343856738,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "c5bccf65da234fc1",
+    "0ef6585df2c552f6",
+    "d3fc47ab206b0aa3",
+    "e44c03060a16d220"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.145,
+   "artifact_hash": "2a4270fbddb99248",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005208677519969821,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "18cd1d00e24d20f7",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0010190316281339243,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "f2a38bce6bac9a97",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005752616433882661,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "8d40968ae03712f5",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0009155092162635272,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "318df602ea7ad403",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005725957259611187,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.135,
+   "artifact_hash": "8f67873dfc02d773",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.05761423746119965,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.15,
+   "artifact_hash": "88c06be10080efe7",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.06952579766500433,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.135,
+   "artifact_hash": "5fd19ef67d76d08a",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.05753106694492782,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.155,
+   "artifact_hash": "bff65d2cf88ece6c",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07351217554574419,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "1cfd1baba80c288a",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07097571903772382,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.085,
+   "artifact_hash": "1e7e5785552efc73",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.08177044633425856,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.05,
+   "artifact_hash": "dc27532ef3c3c38a",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.030349381159630706,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.11,
+   "artifact_hash": "9b2a58b70a92ca2c",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07813066217811127,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "45dd7ff8bb6963f5",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0656049097977287,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "0cdeaf478fe2b2e5",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07359420831382524,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "73469d743c045708",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.06266100711658229,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "10535934385e9d41",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07055829905176214,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "6567ae6e77552eaa",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07153704102087488,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "676dc851840594fa",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07948839114704764,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.135,
+   "artifact_hash": "90bc5f4936c4dd9e",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.05903860170573605,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.155,
+   "artifact_hash": "f4d86b57a119da85",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07582742998075132,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "ff5209af309e8df5",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07197130179497835,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.085,
+   "artifact_hash": "226bb9dce3cd2fc2",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.08550155631864786,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.025,
+   "artifact_hash": "6d60667bcec5d88a",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.012359956381867043,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.11,
+   "artifact_hash": "61e15303a78fe18d",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.08068577711160296,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "5a757d2df5e17d38",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.06909736071229933,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "fe005ad6996d6a9e",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07763462051112935,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "bebc2a8ca29739cc",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07157772099056903,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "0218645b9a816acb",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.08036474615819689,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0016",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.0,
+   "artifact_hash": "89dceba0f37eae1e",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06833110539678744,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "aeb53bc5d33fab92",
+    "8fef012bbbeb0714",
+    "1ff989f46ece9d51",
+    "fa4c3138a082e5fc"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0016",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.0,
+   "artifact_hash": "9c5f071f1bca580f",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06833110539678744,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "aeb53bc5d33fab92",
+    "8fef012bbbeb0714",
+    "1ff989f46ece9d51",
+    "fa4c3138a082e5fc"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0016",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.045,
+   "artifact_hash": "0a99d52fb4543a65",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04471171892176955,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "316d0638d68ff616",
+    "173ca740754b1138",
+    "5fcb838582f6b0a5",
+    "bbb71b0bca65ea8b"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0016",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.12,
+   "artifact_hash": "f970c25b48228bc7",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.01739566499031805,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "d01ca55966ba21b6",
+    "b53a42be30bad189",
+    "11b2918998b9b275",
+    "27bcb88466b60a99"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0016",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.06,
+   "artifact_hash": "3382765c261ee97a",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.008976858303217927,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "5c3fd5df9d485c01",
+    "109014a16bcfb008",
+    "943710a57e374a90",
+    "b64ce61b8babcec1"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0016",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.065,
+   "artifact_hash": "0c32f4f21d566975",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.006526384920159984,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "07006f002df15e18",
+    "30c0b6bee5639839",
+    "d7173434a85259a3",
+    "cbb765bd45c8d263"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0018",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "8bd24346d4ba768a",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.024073296673854383,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0018",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "01052e7a8254deb6",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.030042911241219716,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0018",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.025,
+   "artifact_hash": "8ce161e427de55a6",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.05410451136239036,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "8c9cee582d72d460",
+    "25f8165676026aaa",
+    "b620debeddb70f25",
+    "e6309e31659f0f23"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0018",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.035,
+   "artifact_hash": "a6d4ef541f912bbd",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04927022084817088,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "e29d48268fad3166",
+    "d2f0cf0ffca1c9a0",
+    "1dacb71b618cf7f1",
+    "2aabccfd9879f203"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0018",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.01,
+   "artifact_hash": "cf24ec793f01ebce",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.051322548560484314,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "c05e4e5bde8910db",
+    "991f1a7c83080127",
+    "18e1648a1f836d71",
+    "ea7d5d127a47f456"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0018",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "ece9a70307e12891",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.009664435513883352,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "5def7dd38334cdc2",
+    "91ee5ef5b7bf35d7",
+    "dbb8a2df2e5126b1",
+    "322012d478ab6b2a"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0018",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.02,
+   "artifact_hash": "6c4497b04c4ac241",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.027391972196333478,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "8b848d17f6c7ec41",
+    "0733be21843bbd69",
+    "565a97675c983098",
+    "a31c5e931480046b"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0018",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.025,
+   "artifact_hash": "8ce22ff4d6aeabf6",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.02506867207529906,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "9dd9ef743c150946",
+    "1248c654ac19a40b",
+    "6817056439dc49c2",
+    "4941db230231ec5d"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.045,
+   "artifact_hash": "4839ab1903a3b02a",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.08621010082231564,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "8912b6ce769019e6",
+    "5a7a2e38cf20cda6",
+    "de8dcf7328eebb86",
+    "9f93810187ab8ee0"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.05,
+   "artifact_hash": "5b132f9edbb3b2d8",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.08384625112526534,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "d25ff44bcf3f6494",
+    "28e8f630cdcc6173",
+    "134e774911f66715",
+    "0977a1b5edc43954"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.0,
+   "artifact_hash": "b31b06431781f71a",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06833341632311818,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "ed6765730a023781",
+    "07d261cccf67c8d5",
+    "4838253eaa0809f9",
+    "41204d251afc2897"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.0,
+   "artifact_hash": "9d9549e8c76a4c05",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06833341632311818,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "ed6765730a023781",
+    "07d261cccf67c8d5",
+    "4838253eaa0809f9",
+    "41204d251afc2897"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "34ac3a4224002e6a",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.021765426058061428,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "6753af50a7414854",
+    "0fdae4af99b6306c",
+    "d09c13cee0c5db46",
+    "584568b0f653251b"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.08,
+   "artifact_hash": "18baecefb00e1714",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.01697567981371132,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "68c17eab3129ffbf",
+    "b26acbaa0494d3c0",
+    "ce461ff26dae51a9",
+    "3ee353fea9d4763e"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.045,
+   "artifact_hash": "5575f018d0ba70c5",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04473234067670731,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "e5458c54332a68aa",
+    "3834cf71fff57498",
+    "386316e6bb4e5b26",
+    "23d2b52b46435923"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.12,
+   "artifact_hash": "dacec633a466f8a6",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.017381384833969612,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "4292bea9d98a9191",
+    "a090eadf975f70c4",
+    "acfc3dd0ce05dd50",
+    "a7fc4b40906da7ac"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "e401715ddb7c93bf",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.022098616174158026,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "1fecf6a77be915f7",
+    "faf256dc1cd8ec7c",
+    "c8b25f30c367b427",
+    "3b508836ba1c1c7b"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.08,
+   "artifact_hash": "146115963b3f8261",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.017325010883678393,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "320ed0cc2b3ce7f4",
+    "612e57fb35bc9219",
+    "fe98432c86ba20eb",
+    "07d3a1740055100c"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.06,
+   "artifact_hash": "462f27d1deb898a9",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.00877507018207746,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "b6eb75225206fc46",
+    "d2017a0777038ef8",
+    "3b78ec23052f592f",
+    "9198c8842344fd19"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.065,
+   "artifact_hash": "655ff520b80f81e9",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.006454001216713285,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "c13f5514e12e7d22",
+    "fff61bb68510f15b",
+    "4361eec10843c151",
+    "3a14cdad5b63ce15"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0023",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.055,
+   "artifact_hash": "be1487b7ee4257d8",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.08793119514215375,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "4ca6e3687b4e6b9f",
+    "b02aeccc6cc54e36",
+    "862a739e9558d7d9",
+    "2aa95734408be0f9"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0023",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.06,
+   "artifact_hash": "116ea32ad4652785",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.08553050292042326,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "03ec33f6e00b3435",
+    "f3ae702ab1eddf9b",
+    "21a70e6c513c6abe",
+    "dba9cfa7f210691d"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0023",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "4b79dac1b2283006",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.02270638660061275,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0023",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "abb5fbefdd70637d",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.030018469927536096,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0023",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.025,
+   "artifact_hash": "b3736feb90701dca",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.05408937477162201,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "e85498bf2fd4efb7",
+    "485216aeea5e9a32",
+    "ab3659edc2286006",
+    "c2b6ff04464a2fe1"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0023",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.035,
+   "artifact_hash": "0e4cf69a0fb80e2e",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04926252070697945,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "3f8b92893f239cde",
+    "ebb05c5ddc59edcd",
+    "cb68ac6905511c93",
+    "b66320466bc4473a"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0023",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.01,
+   "artifact_hash": "80cc6c54ce0a550f",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0513435407982783,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "7952d8f3ecd6827c",
+    "92a071f5829b2a03",
+    "d6931579039bef34",
+    "27d2d256a57d48c6"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0023",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "b44e5702a248995f",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.009656050775680214,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "264a846b4f90f4b5",
+    "4a229de427d0e850",
+    "baaf6d799878b6a0",
+    "eb5e017757ea8228"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0024",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.01,
+   "artifact_hash": "a00633b216408858",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06907016220392935,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "209fbd1fd8228451",
+    "1669e6b83eee3758",
+    "3f6e18314db49a40",
+    "270e07b3839a1eb3"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0024",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.01,
+   "artifact_hash": "d3f3428005ff4036",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06907016220392935,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "209fbd1fd8228451",
+    "1669e6b83eee3758",
+    "3f6e18314db49a40",
+    "270e07b3839a1eb3"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0026",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.03,
+   "artifact_hash": "99a2e61e96357dbb",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06438223646958575,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "39731f972471a4fd",
+    "a7467312e5228c70",
+    "53f21a7490122c85",
+    "91e167cec0f7d60f"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0026",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "624bf5cc20cfb6ec",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.03784109860715912,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "14f77654bb377dad",
+    "2242014165a67741",
+    "0f43e1c96a9d97ab",
+    "f6a5b14b519dceaa"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0026",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.035,
+   "artifact_hash": "a8f433265f0297ac",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.015166886488932595,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "2d2d2aebc5dccfea",
+    "b4c7c1d873e17a31",
+    "bbb08a8c9dadc6ce",
+    "4226af690d8deebe"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0026",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.04,
+   "artifact_hash": "5fa19ed15128d260",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.014617429340281873,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "e4dbc5e44873b5f7",
+    "00ef3378b4710a74",
+    "1aa83ebef56fd715",
+    "93d357f4b99d35dd"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0029",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.01,
+   "artifact_hash": "9796ccd524710c54",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06906552704096391,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "ce51e01d5b55b8fe",
+    "f7016555907fec30",
+    "76063bb5a43bfe35",
+    "c91ce4a15fe865ce"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0029",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.01,
+   "artifact_hash": "86328c3a531121c7",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06906552704096391,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "ce51e01d5b55b8fe",
+    "f7016555907fec30",
+    "76063bb5a43bfe35",
+    "c91ce4a15fe865ce"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0031",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.055,
+   "artifact_hash": "5eef389154e19991",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.04216435838841193,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "e60a6e68efd5e861",
+    "bab8c1af9de45180",
+    "1ba816000828ff50",
+    "8d8f01b9a7e935d1"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0031",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.06,
+   "artifact_hash": "72d939a1ef2754a7",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.039621862980149095,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "114879b936be4f8f",
+    "ba1e35c456a1fca9",
+    "902a0ea9673213ac",
+    "2a0a0f66d6e2ef8b"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0031",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.03,
+   "artifact_hash": "92d0f4a7333530c9",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06439564120222441,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "4ac5b9073336827d",
+    "1dd31ed5a86d06c0",
+    "7fa334d520deca4e",
+    "c33f2d76d8d53348"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0031",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "f4f908f59696e0ad",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.03783576571077518,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "9d666d4998df133a",
+    "03b6e340222bf6ac",
+    "cecd89b80744f0a1",
+    "b057a9c0ce78f1e5"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0031",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.035,
+   "artifact_hash": "9a68ae6e0a7fc08e",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.017106145139968554,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "e46db5c8f2efe37c",
+    "455a61555d9b741f",
+    "0aa3adc7192a0271",
+    "15e7363be227220a"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0031",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.04,
+   "artifact_hash": "1b59686d798e62a6",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.014612048059063184,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "bee1cd5de7b58650",
+    "3f522e7e0ec3bd41",
+    "c0161921cbb1b26c",
+    "714ff6c7171cc804"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "9c9f0443b08d6f75",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.01897232941612792,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "17d36c0c1efaa0bf",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.02724891945687924,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "2340ca7779f9b226",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.021971993957206948,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "f267fa6ea51f563e",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.030827942826336052,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.02,
+   "artifact_hash": "296cdc1bc7eafdfe",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.030056328850656122,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.03,
+   "artifact_hash": "bd462867dfb340d3",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03796976984255718,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.0,
+   "artifact_hash": "5e95fa87745bdda2",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.009635330201268388,
+   "first_escape_stage": "A1",
+   "escape_hashes": [
+    "9a5700f76da38de2",
+    "15b1248ad028820b",
+    "88b134ad1dd9f8f7"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.055,
+   "artifact_hash": "647b499628abc204",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.034226997672440085,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "9c0cd4e21990df65",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.02971561969146741,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "22ccaf75a48df383",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03398983561115232,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "fde4157968361072",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.026886792721545483,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "8f8ccdb04fd4a715",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.030868268562421086,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.035,
+   "artifact_hash": "8b8e3204f9910cca",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.031181210365219147,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.04,
+   "artifact_hash": "0638d3b5795b143e",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03522988851080111,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "0c4c9a1d1fc95cc8",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.022409533056593656,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "034455a0429a98aa",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.030202202140449774,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "12230fcaeaa61f6d",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.021761358872977254,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "306730a6581e3caf",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.029715919525677315,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.02,
+   "artifact_hash": "736a22aaad279751",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.029989136082932966,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.03,
+   "artifact_hash": "5bcd441cd18d5a67",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.04090651349504393,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.0,
+   "artifact_hash": "cd32f3beec97d5b4",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.009690549782515934,
+   "first_escape_stage": "A1",
+   "escape_hashes": [
+    "3232a16ef9595c84",
+    "bcad07cf5cac98b9",
+    "014ee8762c0663cc"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.055,
+   "artifact_hash": "fbd06f121ff7a816",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.034743376502772705,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "39586aafa520330e",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03029917875900967,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "caf6e754a94bdeda",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.034020165113139544,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "1d16cb5a5237bfda",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.02726005861583536,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "73092ca69d97eae8",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.030787246275134628,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.035,
+   "artifact_hash": "d1baa60838ae143a",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03264869420459071,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.04,
+   "artifact_hash": "031b1b12c9e10e19",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03516962370470056,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0034",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "57c9275505d346b7",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.016020193016158757,
+   "first_escape_stage": "A1",
+   "escape_hashes": [
+    "5937310b28a875e1",
+    "d1d476e4a2ddbf49",
+    "fe8462cbf764567e"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0034",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.04,
+   "artifact_hash": "cc9d1771632d2070",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.016020193016158757,
+   "first_escape_stage": "A1",
+   "escape_hashes": [
+    "5937310b28a875e1",
+    "d1d476e4a2ddbf49",
+    "fe8462cbf764567e"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0034",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "6ac99daceed98a20",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.01688549861793165,
+   "first_escape_stage": "A1",
+   "escape_hashes": [
+    "248df0001a7e86c4",
+    "e93617c91f0c5c35",
+    "7a9fc9ddfd42ee4e"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0034",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "acd9f7339ca01dbc",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.013235422649044093,
+   "first_escape_stage": "A1",
+   "escape_hashes": [
+    "6bbdfea5df1bb5dc",
+    "17aab4da6fc44ac0",
+    "fd06ab40427103b0"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0035",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "3318c7bc212fb80c",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.022242105149504088,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0035",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "7475f45938effb17",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03037540124620275,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0035",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.02,
+   "artifact_hash": "b2c457f8ce6c1dda",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03293791162302462,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0035",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.03,
+   "artifact_hash": "e71cf6e3997a1315",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.04095163153495962,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0035",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "d6271d92a5d72bfc",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.029570685584369816,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0035",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "1f43d7db2340e425",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03357364065698132,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0035",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.035,
+   "artifact_hash": "6fb9cc2d713ed8b5",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03237478780954506,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0035",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.04,
+   "artifact_hash": "dfce5555a1ce8913",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03608546188785278,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "ddc0bd07b89a3bb6",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.023740494224641306,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "58a78e8d5322fdb9",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.030934510150262717,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.02,
+   "artifact_hash": "a60d64d9fbe53215",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03331060543267572,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.03,
+   "artifact_hash": "bf545544076ebf62",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.04132437445497805,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "5de6d076e664a260",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.029397902312080504,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "459d72c892961650",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03343210837451949,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.015,
+   "artifact_hash": "22424babbe32c33f",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.06568667292694474,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "814e0e20d06d56c8",
+    "f224f074b91c66db",
+    "79211c30f7ba07ac",
+    "cd3717f0843cebb7"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.075,
+   "artifact_hash": "914291245c3ecb2b",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.036042396625849626,
+   "first_escape_stage": "A1",
+   "escape_hashes": [
+    "591c88ae6bec60f3",
+    "369041d63657f2e6",
+    "65d4efefa1e38933"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.035,
+   "artifact_hash": "657b115986ed5924",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03217558359920547,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.04,
+   "artifact_hash": "b2ba3d9fd4428302",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.03617486470022513,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0037",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "4f9a34385b4bce26",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.01797288955821852,
+   "first_escape_stage": "A1",
+   "escape_hashes": [
+    "8b8bcda58cc12c57",
+    "6980c6cca51e448b",
+    "7da21b5ae409a8ca"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0037",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "fce0cc1d8b37e6f1",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.013978224154235885,
+   "first_escape_stage": "A1",
+   "escape_hashes": [
+    "963f44ec56ac0c40",
+    "77fd338f2b36ec69",
+    "1663f2a38ad5e0d6"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0042",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "376fb461c058d2aa",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.07967701762304816,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "8bb93c0bfa4baf4a",
+    "32312a1018924236",
+    "9577ccf2457fd417",
+    "b7c27aa1af327fe4"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0042",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "49b0290c42f60942",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.07736447852243922,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "41d7ca5cb5fc2365",
+    "9c26ff8753fcc2dd",
+    "669b17eaab0c7c11",
+    "70605e9d69eb17a8"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0042",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "2531842937bee78b",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.07962321146293815,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "46daeb4d345a0afe",
+    "6bcb401f90790e9c",
+    "35ab9b4a59fd9144",
+    "0fe026798b979ab9"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0042",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "de0922c1b70ce07f",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.07728875036252315,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "aba6734c5c9cb680",
+    "52df97323c6cf42c",
+    "fe67b94112a7003c",
+    "92e12247a11b3a43"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0046",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.04,
+   "artifact_hash": "407c78a2154213d4",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.07969034665879278,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "3ce3bb0c536d11c5",
+    "0af792981e1f41f9",
+    "223fea353a7ce8b8",
+    "ead714fcf86937d7"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0046",
+   "set": "IN_DISTRIBUTION",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.045,
+   "artifact_hash": "6e6ee3109cd3f235",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.07734777316243457,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "ef7bbffcb3227b62",
+    "3ceabc54a82bc22d",
+    "f232a2116c50ce6a",
+    "7dd45ad66eca32bd"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0055",
+   "set": "STRESS",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "51e21cb770345831",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.06318096773118409,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0055",
+   "set": "STRESS",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.075,
+   "artifact_hash": "9dc0270044834d8e",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.06727823042814451,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.135,
+   "artifact_hash": "41032bf60d5ef079",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0034759699677241506,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "c2e8cd239ffe279c",
+    "e6cc7bfcc68fbc74",
+    "99b5a522ae8e14a5",
+    "38c6942940ba5a35"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.155,
+   "artifact_hash": "42793fe51b4f28e6",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.006048741774368427,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.14,
+   "artifact_hash": "bdecfaeb51e3c14d",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0011117553775839006,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "8980f1a56dbd2e9f",
+    "986e2eddd7c7e859",
+    "1ec5a3cd8ec6f994",
+    "e356c71efa13b683"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.155,
+   "artifact_hash": "f738179dfaff36e1",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005993827893513202,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "34541c4733de7342",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0020745929799045226,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "51f796f13a28e1b5",
+    "90b1af89f6dd0bc4",
+    "48edc2f23b08b5a4",
+    "cdfa2dffd06a35af"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.085,
+   "artifact_hash": "574810033eb951cb",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0050141594311496895,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.025,
+   "artifact_hash": "2d0e3f2409d1a35e",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.03443182301776574,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "3c9e5a018cca55c8",
+    "e0da71552692b657",
+    "6d4095d150a77160",
+    "1792f6aeb1e7bdf6"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.11,
+   "artifact_hash": "2039ff6a6cd01c1e",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005890079049314482,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "5c4a17b97a5695d2",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.001387954062304958,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "cde64f5526d08697",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.006119984486194918,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.06,
+   "artifact_hash": "133b71dc38e8015e",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.02541966251988459,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "fb35481cb85d35b7",
+    "0937dca0ebb4d409",
+    "fc444fecd3d7c7b0",
+    "0af02d2dbbeb26a5"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.145,
+   "artifact_hash": "a795eb61162de10f",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.00521106524376469,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "0dbc56f9d7b795e8",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0010269254754521184,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "96fa4b9a15471309",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005752616433882661,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "8e8f4ccf05d3c267",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0008993192916804765,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "d2a5e613c867f83d",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005652287100171512,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.135,
+   "artifact_hash": "b3d7069ec37f2868",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0034595851512889005,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "4734ad816b61c979",
+    "9f383d8668063790",
+    "a6b858a8ea61f7bf",
+    "c59f5b987f9068ab"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.155,
+   "artifact_hash": "059dbf1755c8a7a6",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005984150072071341,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.14,
+   "artifact_hash": "20107418f95d590a",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.001090677285549156,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "f6371fb53bdf6d17",
+    "fef120299910586e",
+    "3385ed70164f5389",
+    "599e547ec46d77ee"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.155,
+   "artifact_hash": "a232099eec13bf21",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.006014908274408207,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "ec833c6c3418efad",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.002097506636597579,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "2c7c5480ed538efa",
+    "d87c639e3ed6fc4c",
+    "0cc5dc4dc698e33c",
+    "6651675b4f64f597"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.085,
+   "artifact_hash": "5bd0c6605b311c5d",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005008895738721389,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.025,
+   "artifact_hash": "ee94537a4081e3eb",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.034415521555011264,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "b4ad66012dd3fe96",
+    "0ab26591b0e3f0ae",
+    "c5e9b4bf2224d483",
+    "ca6715b42db458ee"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.11,
+   "artifact_hash": "f34b240b16620098",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005905749336212891,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "0804d6459da0057e",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0014056492954803847,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "4ef6041dad2592ce",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.006119148269362938,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.06,
+   "artifact_hash": "23a5d22649f1bdc7",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.025404212729189777,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "563b154b56cb08af",
+    "d5f08742ad12b97d",
+    "ff9b9efa815b2b80",
+    "d4af7012db9d8859"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 4.0/0.70 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.145,
+   "artifact_hash": "862172db268a4690",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005206622942392158,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "df2917e1adcece80",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0010091825328126802,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "f4f20ac1f386ea9f",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005752616433882661,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "2d7f2d8bf5324785",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0009182638246313393,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "6b9946b23cc807ad",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.005640297859422105,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.13,
+   "artifact_hash": "8180ad55fa5a64e8",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.054028116814639926,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "RH 2.8/0.15 f=2",
+   "arm": "RI-GMAX",
+   "delta_m": 0.145,
+   "artifact_hash": "d52bb54d14254229",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0659179765693545,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.135,
+   "artifact_hash": "96518c42a28aec1b",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.057781435195768616,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "RH 3.2/0.25 f=5",
+   "arm": "RI-GMAX",
+   "delta_m": 0.15,
+   "artifact_hash": "556c5c604587fc77",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07016080980998662,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "b4f2318db35fa917",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.06898736820696172,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.09,
+   "artifact_hash": "1666470fa43f6ea0",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.08243316205313933,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "01e07c39799ce64d",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.04561325191061982,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.50 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.105,
+   "artifact_hash": "334c45632a5a3260",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07281798986914056,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "794d4cbcd499707c",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.08287609727470979,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "afb181ba50e68b5b",
+    "4659ccd6cd9f328d",
+    "eb3bde1de3c6518c",
+    "1aeb5802b8b5c8ee"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "8dde298348546146",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.0784239549210059,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "0c2f0db802bfdc52",
+    "9147f504021e9213",
+    "91132beb7b3126a6",
+    "708ad2ad37e91ecd"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "4b7503fedec0cc0b",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.08275311347799334,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "ae5cbaa51bb4e058",
+    "12ac0706168f472c",
+    "c4d6891c49ee546f",
+    "7b22696803cdbe35"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "BASE 4.0/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "85a5dac7b5fbd2d7",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.07829372334745295,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "57742c89e52581d9",
+    "c6de874ce728ab53",
+    "be39eaba1d5c18ab",
+    "bd49334415872e5f"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "7197e21caf85ba71",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07023902221709344,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "d2c0ee36423b0c73",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07809966241474253,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0062",
+   "set": "STRESS",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "b490ec3dedc9a0ac",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.05920992788687718,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "667f7c25fc4325f6",
+    "1c886af7d14f3e8b",
+    "ee97ce9bb9245a00",
+    "6b1656ee1ecc292d"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0062",
+   "set": "STRESS",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.08,
+   "artifact_hash": "4906cfa193dc4354",
+   "verdict": "CONFIRMATORY_ESCAPE_FOUND",
+   "best_S_proxy_m": -0.05466488249284707,
+   "first_escape_stage": "A0",
+   "escape_hashes": [
+    "975f88e9aaf57320",
+    "dafe1429b28f9257",
+    "80765a4caa22d881",
+    "9b05bfda389428ac"
+   ]
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0062",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "591883eda04a0354",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.06872181810755196,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0062",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "5203853449104e63",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0768323399193851,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0062",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "cc39e0b7eb4fef3a",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.06273102109066886,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0062",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "b3efcb1e9e5b95d9",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0676560082744526,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0063",
+   "set": "STRESS",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.07,
+   "artifact_hash": "e69c8607e38d156f",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.07878760295529741,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0063",
+   "set": "STRESS",
+   "witness": "BASE 2.8/0.30 C",
+   "arm": "RI-GMAX",
+   "delta_m": 0.08,
+   "artifact_hash": "ebb2f4c3e00437ec",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.08396714645715164,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0063",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.09,
+   "artifact_hash": "93fe36226067cf86",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.06192185535136474,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0063",
+   "set": "STRESS",
+   "witness": "BASE 3.2/0.70 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.1,
+   "artifact_hash": "c001a18e0822b13c",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.0708104841881716,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0063",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.085,
+   "artifact_hash": "3f0f0ea549d0b9c3",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.06332556501425109,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0063",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.095,
+   "artifact_hash": "ceae2d1639f6fbb6",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.06824683509940731,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0072",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-SHARED-v1",
+   "delta_m": 0.035,
+   "artifact_hash": "78ac3f07beacb7b3",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.028111760234823535,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0072",
+   "set": "STRESS",
+   "witness": "BASE 5.0/1.00 P",
+   "arm": "RI-GMAX",
+   "delta_m": 0.035,
+   "artifact_hash": "a424064e4b2bfe2b",
+   "verdict": "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "best_S_proxy_m": 0.028111760234823535,
+   "first_escape_stage": null,
+   "escape_hashes": []
+  }
+ ]
+}

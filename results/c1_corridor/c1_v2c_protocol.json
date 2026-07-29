@@ -1,0 +1,4872 @@
+{
+ "meta": {
+  "script": "c1_v2c_protocol",
+  "protocol_version": "V2C-PROTOCOL-v1",
+  "protocol_hash": "87f74f7dd96aa0a15a43080da5fbda25fdf9ff42f3d7b7c1b0cb78958d996a89",
+  "status": "SEALED_FOR_CONFIRMATORY_EXECUTION",
+  "amendment_scope": "outcome taxonomy ONLY \u2014 no condition deleted or replaced, no fire-guard change, no controller change, falsifier and held-out seals untouched",
+  "eligibility_is_arm_blind": true,
+  "eligibility_property_test": "same condition + same defender trajectory -> identical eligibility across arms; the predicate takes no arm argument",
+  "results_not_in_hash": "the protocol hash covers the taxonomy only; eligibility results below are an execution artifact, not part of the seal"
+ },
+ "spec": {
+  "protocol_version": "V2C-PROTOCOL-v1",
+  "version_record": [
+   {
+    "version": "V2C-PROTOCOL-v0",
+    "gap": "no-fire outcome not explicitly classified",
+    "status": "SUPERSEDED_BEFORE_FULL_CONFIRMATORY_EXECUTION",
+    "note": "no confirmatory result was produced under v0; the amendment is pre-execution, not a post-hoc reclassification"
+   },
+   {
+    "version": "V2C-PROTOCOL-v1",
+    "change": "universal arm-blind no-fire classification; system-level and post-fire endpoints separated; gate failures made outcomes",
+    "status": "SEALED_FOR_CONFIRMATORY_EXECUTION"
+   }
+  ],
+  "heldout_spec_version": "HELDOUT-EXTERNAL-v1-2026-07-26",
+  "trajectory_outcomes": [
+   "NO_CAPTURE_ATTEMPT",
+   "FULL_GATE_FAILURE",
+   "CONFIRMATORY_ESCAPE_FOUND",
+   "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+   "UNRESOLVED_OR_ABORT"
+  ],
+  "no_fire_dual_endpoint": {
+   "post_fire": {
+    "label": "NOT_ELIGIBLE_FOR_POST_FIRE_CONTROLLER_EVALUATION",
+    "reason": "NO_CAPTURE_ATTEMPT_UNDER_FROZEN_FIRE_GUARD",
+    "rule": "excluded from the post-fire denominator, but the count is stated on every table"
+   },
+   "system": {
+    "label": "NO_CAPTURE_ATTEMPT",
+    "class": "SYSTEM_LEVEL_MISSION_FAILURE_OR_NONATTEMPT",
+    "rule": "RETAINED in the system-level denominator; removing it would drop the hardest conditions and bias the campaign"
+   },
+   "attribution": "GUARD_CONTROLLER_INTERFACE_FAILURE \u2014 not a radial-controller failure, and not a system success"
+  },
+  "cone_axis_decomposition": [
+   "GUARD_COVERAGE_EFFECT",
+   "POST_FIRE_CONTROLLER_ROBUSTNESS"
+  ],
+  "gate_failure_classes": {
+   "RI-SHARED-v1": "SHARED_CONTROLLER_CONSTRUCTION_OR_GATE_FAILURE",
+   "RI-GMAX": "NO_CONTROLLER_FOUND_IN_GMAX_SEARCH_CLASS"
+  },
+  "gmax_information_rule": {
+   "allowed": [
+    "defender dynamics",
+    "E_cap",
+    "E_lane",
+    "admissibility",
+    "pre-registered lane reserve"
+   ],
+   "banned": [
+    "falsifier score",
+    "escape occurrence",
+    "adversarial margin",
+    "A0-A3 candidate results"
+   ],
+   "objective": "delta = argmax delta subject to full-gate and admissibility",
+   "forbidden_objective": "delta = argmax delta that survives falsification",
+   "sequencing": "delta and defender artifact sealed BEFORE that condition's falsifier runs"
+  },
+  "reporting": {
+   "condition_level": [
+    "condition_id",
+    "set",
+    "varied axes",
+    "n_no_fire of n_trajectories",
+    "n_controller_construction_or_gate_failure",
+    "n_trajectories_with_verified_escape",
+    "no_escape_across_all_eligible_trajectories"
+   ],
+   "trajectory_level": [
+    "NO_CAPTURE_ATTEMPT",
+    "FULL_GATE_FAILURE",
+    "CONFIRMATORY_ESCAPE_FOUND",
+    "NO_ESCAPE_FOUND_UNDER_FROZEN_FALSIFIER_V2",
+    "UNRESOLVED_OR_ABORT"
+   ],
+   "arm_level": {
+    "RI-SHARED-v1": "frozen shared-controller confirmatory result",
+    "RI-GMAX": "scenario-conditioned existence-reference result"
+   },
+   "counting_rule": "'M of N' is permitted ONLY alongside the external-condition layer. 704 (condition, trajectory) pairs are NOT 704 independent samples"
+  },
+  "execution_order": [
+   "1  known counterexample 5x exact replay",
+   "2  known counterexample 5x fresh-search rediscovery (falsifier regression; NOT external-generality evidence)",
+   "3  the 11 unresolved cells, fresh-seed confirmatory evaluation",
+   "4  arm-blind fire eligibility over the whole held-out set",
+   "5  RI-SHARED-v1 applied unchanged, full-gate adjudication",
+   "6  RI-GMAX synthesised per condition, GATE-ONLY, then sealed",
+   "7  frozen falsifier v2 on eligible AND gate-valid artifacts",
+   "8  report IN_DISTRIBUTION and STRESS separately, in the condition hierarchy"
+  ],
+  "eligibility_predicate_source": "7b526e37ccbcc8a0"
+ },
+ "eligibility_summary": {
+  "total_pairs": 704,
+  "post_fire_eligible": 307,
+  "no_capture_attempt": 397,
+  "by_set": {
+   "IN_DISTRIBUTION": {
+    "pairs": 400,
+    "eligible": 234,
+    "no_fire": 166
+   },
+   "STRESS": {
+    "pairs": 304,
+    "eligible": 73,
+    "no_fire": 231
+   }
+  },
+  "no_fire_by_varied_axis": {
+   "cone_axis_deg": {
+    "pairs": 168,
+    "no_fire": 71
+   },
+   "heading_deg": {
+    "pairs": 256,
+    "no_fire": 168
+   },
+   "lateral_offset_m": {
+    "pairs": 400,
+    "no_fire": 284
+   },
+   "reset_seed": {
+    "pairs": 184,
+    "no_fire": 105
+   },
+   "speed_mps": {
+    "pairs": 160,
+    "no_fire": 62
+   }
+  }
+ },
+ "conditions": [
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0000",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0001",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0002",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0003",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 6,
+   "n_no_capture_attempt": 2,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0004",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0005",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0006",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0007",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0008",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0009",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0010",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0011",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "reset_seed"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0012",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "reset_seed"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0013",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "reset_seed"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0014",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "speed_mps"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 10,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0015",
+   "set": "IN_DISTRIBUTION",
+   "kind": "OFAT",
+   "varied": [
+    "speed_mps"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 12,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0016",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0017",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0018",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 6,
+   "n_no_capture_attempt": 2,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0019",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0020",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0021",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0022",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0023",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0024",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0025",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0026",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0027",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0028",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0029",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0030",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0031",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0032",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 10,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0033",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 10,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0034",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 10,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0035",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 12,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0036",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0037",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 12,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0038",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0039",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0040",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0041",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0042",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0043",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0044",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0045",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0046",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 6,
+   "n_no_capture_attempt": 2,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0047",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0048",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0049",
+   "set": "IN_DISTRIBUTION",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0050",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0051",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 20,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0052",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0053",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0054",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 3,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0055",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0056",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0057",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0058",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0059",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "reset_seed"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0060",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "reset_seed"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 8,
+   "n_no_capture_attempt": 0,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 5,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 13,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0061",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "speed_mps"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 6,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 7,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 11,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 14,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 21,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0062",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "speed_mps"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 3,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 8,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 12,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 11,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 18,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0063",
+   "set": "STRESS",
+   "kind": "OFAT",
+   "varied": [
+    "speed_mps"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 11,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 10,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 17,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0064",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0065",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0066",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 9,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0067",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0068",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0069",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0070",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0071",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0072",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "lateral_offset_m",
+    "heading_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 1,
+   "n_no_capture_attempt": 7,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0073",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 5,
+   "n_no_capture_attempt": 3,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 7,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 11,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 15,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 21,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0074",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 7,
+   "n_no_capture_attempt": 1,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": true,
+     "fire_step": 6,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 7,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 11,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": true,
+     "fire_step": 15,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": true,
+     "fire_step": 15,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 21,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0075",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0076",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 8,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 12,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 18,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0077",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 4,
+   "n_no_capture_attempt": 4,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 4,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 8,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": true,
+     "fire_step": 12,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 19,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0078",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0079",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 3,
+   "n_no_capture_attempt": 5,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 3,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": true,
+     "fire_step": 6,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 17,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0080",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 2,
+   "n_no_capture_attempt": 6,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": true,
+     "fire_step": 2,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": true,
+     "fire_step": 18,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0081",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "speed_mps",
+    "cone_axis_deg"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0082",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0083",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0084",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0085",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0086",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  },
+  {
+   "condition_id": "HELDOUT-EXTERNAL-v1-2026-07-26-0087",
+   "set": "STRESS",
+   "kind": "CROSSED",
+   "varied": [
+    "reset_seed",
+    "lateral_offset_m"
+   ],
+   "n_trajectories": 8,
+   "n_post_fire_eligible": 0,
+   "n_no_capture_attempt": 8,
+   "per_trajectory": {
+    "RH 2.8/0.15 f=2": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "RH 3.2/0.25 f=5": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 2.8/0.30 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.50 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 3.2/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 C": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 4.0/0.70 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    },
+    "BASE 5.0/1.00 P": {
+     "eligible": false,
+     "fire_step": null,
+     "error": null
+    }
+   }
+  }
+ ]
+}

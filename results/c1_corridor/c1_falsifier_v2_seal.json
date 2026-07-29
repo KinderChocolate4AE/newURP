@@ -1,0 +1,94 @@
+{
+ "meta": {
+  "script": "c1_falsifier_v2_seal",
+  "FALSIFIER_V2_CODE_FREEZE": "SEALED",
+  "CONFIRMATORY_EVALUATION_FREEZE": "INCOMPLETE",
+  "why_separate": "the code can be frozen now; the confirmatory protocol cannot, because the held-out external conditions are not yet generated and sealed",
+  "verify": "python3 -m shepherd.scripts.c1_falsifier_v2_seal --verify"
+ },
+ "seal_version": "FALSIFIER-v2-code-freeze-2026-07-26",
+ "files": {
+  "shepherd/scripts/c1_falsifier_v2.py": "1f176f1f11db6ce9a20465a88e0de11953fecd4d9d5cb64ddae648b4b15206e5",
+  "shepherd/scripts/c1_phase1p_falsifier_v2_k1.py": "b5844382f42362066c8d0587257966edfd27b9ed3f8c858045df68c95936709c",
+  "shepherd/scripts/c1_falsifier_v2_k2_global.py": "b452bb70e8e66c7732772fce8797117b8b3264d922909c83505099cc2bfe1288",
+  "shepherd/scripts/c1_falsifier_v2_freeze.py": "6587521e99c2af0748b3818307e9112deb7fd97216dbfbd6dd6f45945e7f14b7",
+  "shepherd/scripts/c1_phase1p_v2k1_verify.py": "948ef884ec4c62cf4309b223ddc6885c3c09cdff769db3f014cd74b43d3be9f2",
+  "shepherd/scripts/c1_replan_falsifier.py": "18db252ec4c0fc6d3cae88661839c1cf8a83f56c8cc0a34bcd883e8cd736edf4",
+  "shepherd/scripts/c1_exact_clearance.py": "fc1ea7658f8a4e8068e1ff510fd7a05f806254ad850c11870a5da23b5457c674",
+  "shepherd/scripts/c1_phase1p_d0.py": "7b0e777dd6a06787a43aa777f7bc45e6759ef1f946af04d4872714d542c127c9",
+  "shepherd/game/viability.py": "9d8a2e069e2b0c1c16860fd54d4f96e8eed40ac2cfa238843ef715457933adf6"
+ },
+ "budget": {
+  "stages": [
+   {
+    "id": "A0",
+    "K": 1
+   },
+   {
+    "id": "A1",
+    "K": 2
+   },
+   {
+    "id": "A2",
+    "K": 4
+   },
+   {
+    "id": "A3",
+    "K": 8
+   }
+  ],
+  "scales_x_a_max": [
+   0.05,
+   0.01,
+   0.002,
+   0.0004
+  ],
+  "n_per_scale": 96,
+  "top_m": 24,
+  "align_k": 20,
+  "n_global_dirs": 64,
+  "A0": {
+   "chunk": 16384,
+   "deterministic": true,
+   "layer": "A0_K1_CONSTANT_ACCELERATION",
+   "mag_scan": 33,
+   "n_dir": 8192,
+   "n_mag": 64,
+   "protocol": "FALSIFIER-v2",
+   "refine_rounds": 4,
+   "tangent_grid": 5,
+   "tangent_radii_deg": [
+    2.0,
+    0.5,
+    0.125,
+    0.03
+   ],
+   "top_m": 48,
+   "verify_band_m": 0.002
+  },
+  "K2_global": {
+   "n_dir": 192,
+   "magnitudes_x_a_max": [
+    1.0,
+    0.85,
+    0.7
+   ]
+  }
+ },
+ "score": {
+  "s_proxy": "eff364c83006d5bf",
+  "s_auth": "45dd9a4dc55bd778",
+  "embed": "33ab1f43d7f2e83e",
+  "temporal_starts": "c9073e7129f21589",
+  "refine": "5195d2d129b22792",
+  "segment_descent": "6f9a089d50592340",
+  "k1_search": "e52529212626678a"
+ },
+ "seeds": {
+  "d0_seed": "8886e8498af1937a",
+  "development_stage_prefix": "V2-",
+  "confirmatory_stage_prefix": "V2C-",
+  "rule": "scenario_id ALWAYS in; arm NEVER in (paired CRN); stage_id separates development from confirmatory streams"
+ },
+ "seal_hash": "b3e1fc3fc676772fcf643584ce320e2bb36ffa0f33b48e54d511b8ea7546dec2"
+}

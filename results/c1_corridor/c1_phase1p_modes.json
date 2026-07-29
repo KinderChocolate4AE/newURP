@@ -1,0 +1,860 @@
+{
+ "meta": {
+  "script": "c1_phase1p_modes",
+  "input": "decorrelated (derive_seed mode='diversity') artifacts ONLY",
+  "why": "witness-blind artifacts would measure the shared warm-start pool, not the system's mode structure (see 1P step 1)",
+  "partition": "definitional (binding constraint x cone component); no k, no fitted centroids",
+  "modes": {
+   "KILL": "limiter proximity binds -> ring-motion mode",
+   "CONE_LATERAL": "exits through the cone wall -> angular/pointing mode",
+   "CONE_AXIAL": "exits beyond the range band -> range/fire-timing mode"
+  },
+  "forbidden": "NO FREQUENCY CLAIMS -- artifact counts reflect search budget and CEM basin geometry, not population rates. Counts are search-effort bookkeeping only.",
+  "diagnostic_budget": {
+   "role": "D0-MODE-DIVERSITY diagnostic -- NOT a verdict run",
+   "n_bank": 20000,
+   "K": 4,
+   "pop": 192,
+   "iters": 14,
+   "restarts": 2,
+   "reset": 1100,
+   "d0_verdicts_touched": false
+  },
+  "base_seeds": [
+   7,
+   11,
+   23,
+   101
+  ],
+  "protocol": "c1-D0-2026-07-25"
+ },
+ "n_witnesses_with_escapes": 12,
+ "system_mode_occupancy": {
+  "KILL": "OBSERVED",
+  "CONE_LATERAL": "OBSERVED",
+  "CONE_AXIAL": "NOT_OBSERVED"
+ },
+ "n_witnesses_observing_mode": {
+  "KILL": 12,
+  "CONE_LATERAL": 12,
+  "CONE_AXIAL": 0
+ },
+ "tightest_per_mode": {
+  "KILL": {
+   "binding_margin_m": 1.0813650599406088e-05,
+   "scenario_id": "RH 5.0/0.55 f=10"
+  },
+  "CONE_LATERAL": {
+   "binding_margin_m": 1.7827743686364515e-05,
+   "scenario_id": "BASE 3.2/0.50 C"
+  },
+  "CONE_AXIAL": null
+ },
+ "implication_for_step6": "2 distinct modes observed -- a controller closing only one of them cannot seal, so step 6 must target the intersection",
+ "rows": [
+  {
+   "scenario_id": "RH 2.8/0.15 f=2",
+   "n_escapes_total": 174,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 97,
+     "binding_margin_m": {
+      "min": 0.00016606255160400707,
+      "max": 0.039393048822585985
+     },
+     "half_angle_deg": {
+      "min": 3.6176456998387634,
+      "max": 4.620030604395815
+     },
+     "axial_m": {
+      "min": 7.113624290269877,
+      "max": 7.304831734561769
+     },
+     "tightest": {
+      "attack_policy_hash": "abf73dbebe0caff4",
+      "binding_margin_m": 0.00016606255160400707,
+      "kill_margin_m": 0.00016606255160400707,
+      "cone_exit_margin_m": 0.05819271714478456,
+      "lateral_m": 0.05819271714478456,
+      "axial_m": -7.2051191767976315,
+      "half_angle_deg": 4.060483484909622,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 77,
+     "binding_margin_m": {
+      "min": 0.0003424325421851176,
+      "max": 0.040063418340237356
+     },
+     "half_angle_deg": {
+      "min": 3.6016116222483427,
+      "max": 3.913556327735699
+     },
+     "axial_m": {
+      "min": 7.129050373813409,
+      "max": 7.318499833310889
+     },
+     "tightest": {
+      "attack_policy_hash": "9e9f80a5f8d5899f",
+      "binding_margin_m": 0.0003424325421851176,
+      "kill_margin_m": 0.0036206962349836225,
+      "cone_exit_margin_m": 0.0003424325421851176,
+      "lateral_m": 0.0003424325421851176,
+      "axial_m": -7.19771874469333,
+      "half_angle_deg": 3.6016116222483427,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "RH"
+  },
+  {
+   "scenario_id": "RH 3.2/0.25 f=5",
+   "n_escapes_total": 105,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 69,
+     "binding_margin_m": {
+      "min": 0.000932143219215753,
+      "max": 0.055239331917596335
+     },
+     "half_angle_deg": {
+      "min": 3.641349946056755,
+      "max": 4.506842947582409
+     },
+     "axial_m": {
+      "min": 7.119837479638034,
+      "max": 7.339110707765842
+     },
+     "tightest": {
+      "attack_policy_hash": "bd4b3f748ea3f454",
+      "binding_margin_m": 0.000932143219215753,
+      "kill_margin_m": 0.000932143219215753,
+      "cone_exit_margin_m": 0.01410311103424122,
+      "lateral_m": 0.01410311103424122,
+      "axial_m": -7.147105007611756,
+      "half_angle_deg": 3.711713584352971,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 36,
+     "binding_margin_m": {
+      "min": 0.0008018371092059654,
+      "max": 0.03873411145007179
+     },
+     "half_angle_deg": {
+      "min": 3.6052805588148185,
+      "max": 3.902488504024998
+     },
+     "axial_m": {
+      "min": 7.135863659695548,
+      "max": 7.293065121111805
+     },
+     "tightest": {
+      "attack_policy_hash": "22e0435aa57006d0",
+      "binding_margin_m": 0.0008018371092059654,
+      "kill_margin_m": 0.012383652442848003,
+      "cone_exit_margin_m": 0.0008018371092059654,
+      "lateral_m": 0.0008018371092059654,
+      "axial_m": -7.176088813490837,
+      "half_angle_deg": 3.6052805588148185,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "RH"
+  },
+  {
+   "scenario_id": "RH 4.0/0.40 f=7",
+   "n_escapes_total": 511,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 306,
+     "binding_margin_m": {
+      "min": 6.30725149459721e-05,
+      "max": 0.06368396358248818
+     },
+     "half_angle_deg": {
+      "min": 3.6383399826111384,
+      "max": 4.700476015271624
+     },
+     "axial_m": {
+      "min": 7.009756949838597,
+      "max": 7.334596997226673
+     },
+     "tightest": {
+      "attack_policy_hash": "2851d8588f79ff69",
+      "binding_margin_m": 6.30725149459721e-05,
+      "kill_margin_m": 6.30725149459721e-05,
+      "cone_exit_margin_m": 0.09566860127915845,
+      "lateral_m": 0.09566860127915845,
+      "axial_m": -7.1411882606249675,
+      "half_angle_deg": 4.364241846819924,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 205,
+     "binding_margin_m": {
+      "min": 0.0002103757576562958,
+      "max": 0.0802555680036801
+     },
+     "half_angle_deg": {
+      "min": 3.6005719235002775,
+      "max": 4.226488967424101
+     },
+     "axial_m": {
+      "min": 7.014208185357349,
+      "max": 7.3162354948721156
+     },
+     "tightest": {
+      "attack_policy_hash": "5a8661a0c177b08f",
+      "binding_margin_m": 0.0002103757576562958,
+      "kill_margin_m": 0.048036092182234924,
+      "cone_exit_margin_m": 0.0002103757576562958,
+      "lateral_m": 0.0002103757576562958,
+      "axial_m": -7.157332692403991,
+      "half_angle_deg": 3.6005719235002775,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "RH"
+  },
+  {
+   "scenario_id": "RH 5.0/0.55 f=10",
+   "n_escapes_total": 278,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 169,
+     "binding_margin_m": {
+      "min": 1.0813650599406088e-05,
+      "max": 0.054269272138442126
+     },
+     "half_angle_deg": {
+      "min": 3.627864640884798,
+      "max": 4.451262915623211
+     },
+     "axial_m": {
+      "min": 7.076348576962239,
+      "max": 7.331283109331349
+     },
+     "tightest": {
+      "attack_policy_hash": "cf24dc62e5300675",
+      "binding_margin_m": 1.0813650599406088e-05,
+      "kill_margin_m": 1.0813650599406088e-05,
+      "cone_exit_margin_m": 0.01163121882797328,
+      "lateral_m": 0.01163121882797328,
+      "axial_m": -7.165607087164574,
+      "half_angle_deg": 3.691700718727678,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 109,
+     "binding_margin_m": {
+      "min": 3.95603319235681e-05,
+      "max": 0.06492432640597419
+     },
+     "half_angle_deg": {
+      "min": 3.599205917176831,
+      "max": 4.1047249062891975
+     },
+     "axial_m": {
+      "min": 7.097104107483706,
+      "max": 7.33511336198739
+     },
+     "tightest": {
+      "attack_policy_hash": "46ab0b6b6bbd6b60",
+      "binding_margin_m": 3.95603319235681e-05,
+      "kill_margin_m": 0.009561659413089174,
+      "cone_exit_margin_m": 3.95603319235681e-05,
+      "lateral_m": 3.95603319235681e-05,
+      "axial_m": -7.186817052379443,
+      "half_angle_deg": 3.599205917176831,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "RH"
+  },
+  {
+   "scenario_id": "BASE 2.8/0.30 C",
+   "n_escapes_total": 3,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 2,
+     "binding_margin_m": {
+      "min": 0.008966919206579327,
+      "max": 0.010667581832507711
+     },
+     "half_angle_deg": {
+      "min": 3.9646354732923323,
+      "max": 4.052866988291161
+     },
+     "axial_m": {
+      "min": 7.314831984120771,
+      "max": 7.33084458158577
+     },
+     "tightest": {
+      "attack_policy_hash": "6af74b1ab29fdc1e",
+      "binding_margin_m": 0.008966919206579327,
+      "kill_margin_m": 0.008966919206579327,
+      "cone_exit_margin_m": 0.04680582073527007,
+      "lateral_m": 0.04680582073527007,
+      "axial_m": -7.314831984120771,
+      "half_angle_deg": 3.9646354732923323,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 1,
+     "binding_margin_m": {
+      "min": 0.001603936926635735,
+      "max": 0.001603936926635735
+     },
+     "half_angle_deg": {
+      "min": 3.6115373270503635,
+      "max": 3.6115373270503635
+     },
+     "axial_m": {
+      "min": 7.25249344789235,
+      "max": 7.25249344789235
+     },
+     "tightest": {
+      "attack_policy_hash": "b2774885396cfa55",
+      "binding_margin_m": 0.001603936926635735,
+      "kill_margin_m": 0.00626878963653521,
+      "cone_exit_margin_m": 0.001603936926635735,
+      "lateral_m": 0.001603936926635735,
+      "axial_m": -7.25249344789235,
+      "half_angle_deg": 3.6115373270503635,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "BASE"
+  },
+  {
+   "scenario_id": "BASE 3.2/0.50 C",
+   "n_escapes_total": 79,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 53,
+     "binding_margin_m": {
+      "min": 0.00027759792250448,
+      "max": 0.027519046033926298
+     },
+     "half_angle_deg": {
+      "min": 3.628282355464804,
+      "max": 4.102231474648066
+     },
+     "axial_m": {
+      "min": 7.213809734402925,
+      "max": 7.309121123927881
+     },
+     "tightest": {
+      "attack_policy_hash": "a6e91e673e8530fe",
+      "binding_margin_m": 0.00027759792250448,
+      "kill_margin_m": 0.00027759792250448,
+      "cone_exit_margin_m": 0.0384854033412039,
+      "lateral_m": 0.0384854033412039,
+      "axial_m": -7.253028941299436,
+      "half_angle_deg": 3.902204310835592,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 26,
+     "binding_margin_m": {
+      "min": 1.7827743686364515e-05,
+      "max": 0.011186400354712337
+     },
+     "half_angle_deg": {
+      "min": 3.5990323140234066,
+      "max": 3.6868652418224377
+     },
+     "axial_m": {
+      "min": 7.209527620230464,
+      "max": 7.325277631226847
+     },
+     "tightest": {
+      "attack_policy_hash": "70ec120db6430073",
+      "binding_margin_m": 1.7827743686364515e-05,
+      "kill_margin_m": 0.010249137319771062,
+      "cone_exit_margin_m": 1.7827743686364515e-05,
+      "lateral_m": 1.7827743686364515e-05,
+      "axial_m": -7.221703723237768,
+      "half_angle_deg": 3.5990323140234066,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "BASE"
+  },
+  {
+   "scenario_id": "BASE 3.2/0.70 P",
+   "n_escapes_total": 9,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 7,
+     "binding_margin_m": {
+      "min": 0.00036588156298433816,
+      "max": 0.025086083227781053
+     },
+     "half_angle_deg": {
+      "min": 3.6898911625905915,
+      "max": 4.278515107564886
+     },
+     "axial_m": {
+      "min": 7.228805172107391,
+      "max": 7.327046830245845
+     },
+     "tightest": {
+      "attack_policy_hash": "40d35c39b4f53115",
+      "binding_margin_m": 0.00036588156298433816,
+      "kill_margin_m": 0.00036588156298433816,
+      "cone_exit_margin_m": 0.011700691589518865,
+      "lateral_m": 0.011700691589518865,
+      "axial_m": -7.228805172107391,
+      "half_angle_deg": 3.691438856175708,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 2,
+     "binding_margin_m": {
+      "min": 0.0023257726820947212,
+      "max": 0.009650968359523586
+     },
+     "half_angle_deg": {
+      "min": 3.6172844023102453,
+      "max": 3.674938467104482
+     },
+     "axial_m": {
+      "min": 7.230449459736774,
+      "max": 7.256307748406376
+     },
+     "tightest": {
+      "attack_policy_hash": "8db83e1838910327",
+      "binding_margin_m": 0.0023257726820947212,
+      "kill_margin_m": 0.0048512633348147816,
+      "cone_exit_margin_m": 0.0023257726820947212,
+      "lateral_m": 0.0023257726820947212,
+      "axial_m": -7.230449459736774,
+      "half_angle_deg": 3.6172844023102453,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "BASE"
+  },
+  {
+   "scenario_id": "BASE 4.0/0.70 C",
+   "n_escapes_total": 15,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 13,
+     "binding_margin_m": {
+      "min": 0.0017069770386384242,
+      "max": 0.02686995948651205
+     },
+     "half_angle_deg": {
+      "min": 3.622303538831542,
+      "max": 4.075600519959801
+     },
+     "axial_m": {
+      "min": 7.198482757922197,
+      "max": 7.333516882769732
+     },
+     "tightest": {
+      "attack_policy_hash": "4573d41b8549051f",
+      "binding_margin_m": 0.0017069770386384242,
+      "kill_margin_m": 0.0017069770386384242,
+      "cone_exit_margin_m": 0.02757833725620888,
+      "lateral_m": 0.02757833725620888,
+      "axial_m": -7.212863705600553,
+      "half_angle_deg": 3.8174751185661653,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 2,
+     "binding_margin_m": {
+      "min": 0.0021492045449682425,
+      "max": 0.00963236796356107
+     },
+     "half_angle_deg": {
+      "min": 3.6156748475209315,
+      "max": 3.6751906435311485
+     },
+     "axial_m": {
+      "min": 7.218384059297215,
+      "max": 7.322298628808206
+     },
+     "tightest": {
+      "attack_policy_hash": "b613707e10cf5d58",
+      "binding_margin_m": 0.0021492045449682425,
+      "kill_margin_m": 0.050671699019764205,
+      "cone_exit_margin_m": 0.0021492045449682425,
+      "lateral_m": 0.0021492045449682425,
+      "axial_m": -7.322298628808206,
+      "half_angle_deg": 3.6156748475209315,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "BASE"
+  },
+  {
+   "scenario_id": "BASE 4.0/0.70 P",
+   "n_escapes_total": 8,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 6,
+     "binding_margin_m": {
+      "min": 0.0001417965956647116,
+      "max": 0.017582348519539437
+     },
+     "half_angle_deg": {
+      "min": 3.655157836155756,
+      "max": 4.103771605520669
+     },
+     "axial_m": {
+      "min": 7.231373718294793,
+      "max": 7.327603257449334
+     },
+     "tightest": {
+      "attack_policy_hash": "e4a8e96b69194353",
+      "binding_margin_m": 0.0001417965956647116,
+      "kill_margin_m": 0.0001417965956647116,
+      "cone_exit_margin_m": 0.026875823497254602,
+      "lateral_m": 0.026875823497254602,
+      "axial_m": -7.243559179155744,
+      "half_angle_deg": 3.8110059593887406,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 2,
+     "binding_margin_m": {
+      "min": 0.0018153656817745476,
+      "max": 0.011042220094840205
+     },
+     "half_angle_deg": {
+      "min": 3.6132447978447413,
+      "max": 3.6847909650174357
+     },
+     "axial_m": {
+      "min": 7.232031868876702,
+      "max": 7.350012300241289
+     },
+     "tightest": {
+      "attack_policy_hash": "04262d4de12cf1e7",
+      "binding_margin_m": 0.0018153656817745476,
+      "kill_margin_m": 0.004079324800658313,
+      "cone_exit_margin_m": 0.0018153656817745476,
+      "lateral_m": 0.0018153656817745476,
+      "axial_m": -7.232031868876702,
+      "half_angle_deg": 3.6132447978447413,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "BASE"
+  },
+  {
+   "scenario_id": "BASE 5.0/1.00 P",
+   "n_escapes_total": 7,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 2,
+     "binding_margin_m": {
+      "min": 0.00506531267741428,
+      "max": 0.006248602176078588
+     },
+     "half_angle_deg": {
+      "min": 3.6970489736109324,
+      "max": 3.848377143661508
+     },
+     "axial_m": {
+      "min": 7.244197456059456,
+      "max": 7.268561480188181
+     },
+     "tightest": {
+      "attack_policy_hash": "2285c63507f172db",
+      "binding_margin_m": 0.00506531267741428,
+      "kill_margin_m": 0.00506531267741428,
+      "cone_exit_margin_m": 0.012436474934100248,
+      "lateral_m": 0.012436474934100248,
+      "axial_m": -7.244197456059456,
+      "half_angle_deg": 3.6970489736109324,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 5,
+     "binding_margin_m": {
+      "min": 0.002200095020098587,
+      "max": 0.014090856387425282
+     },
+     "half_angle_deg": {
+      "min": 3.6162302684768948,
+      "max": 3.7089596451600024
+     },
+     "axial_m": {
+      "min": 7.255569189426664,
+      "max": 7.349209796337928
+     },
+     "tightest": {
+      "attack_policy_hash": "26f8c835478ee340",
+      "binding_margin_m": 0.002200095020098587,
+      "kill_margin_m": 0.00849586602704866,
+      "cone_exit_margin_m": 0.002200095020098587,
+      "lateral_m": 0.002200095020098587,
+      "axial_m": -7.255569189426664,
+      "half_angle_deg": 3.6162302684768948,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "BASE"
+  },
+  {
+   "scenario_id": "MAXCLR 5.0/0.55 f=10",
+   "n_escapes_total": 21357,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 12947,
+     "binding_margin_m": {
+      "min": 0.011783103428361752,
+      "max": 1.0712441004487738
+     },
+     "half_angle_deg": {
+      "min": 9.625242697764449,
+      "max": 24.254116334933865
+     },
+     "axial_m": {
+      "min": 3.695854452297779,
+      "max": 6.892084275304908
+     },
+     "tightest": {
+      "attack_policy_hash": "eaa6429b71f0d1d2",
+      "binding_margin_m": 0.011783103428361752,
+      "kill_margin_m": 0.011783103428361752,
+      "cone_exit_margin_m": 1.5665208625825096,
+      "lateral_m": 1.5665208625825096,
+      "axial_m": -5.4876663612942185,
+      "half_angle_deg": 19.05816606010176,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 8410,
+     "binding_margin_m": {
+      "min": 0.002234509643870712,
+      "max": 1.071708702102166
+     },
+     "half_angle_deg": {
+      "min": 3.6179424307259667,
+      "max": 12.418552448557557
+     },
+     "axial_m": {
+      "min": 4.434109703149504,
+      "max": 7.276005682630561
+     },
+     "tightest": {
+      "attack_policy_hash": "fbcf80e04d8d362b",
+      "binding_margin_m": 0.002234509643870712,
+      "kill_margin_m": 1.5189900968798429,
+      "cone_exit_margin_m": 0.002234509643870712,
+      "lateral_m": 0.002234509643870712,
+      "axial_m": -6.706783681513269,
+      "half_angle_deg": 3.6179424307259667,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "MAXCLR"
+  },
+  {
+   "scenario_id": "MAXCLR 4.0/0.40 f=7",
+   "n_escapes_total": 21231,
+   "theta_net_deg": 3.5988911506654837,
+   "range_band_m": [
+    0.0,
+    29.847
+   ],
+   "modes": {
+    "KILL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 13060,
+     "binding_margin_m": {
+      "min": 0.004332483906412055,
+      "max": 0.951570239696911
+     },
+     "half_angle_deg": {
+      "min": 8.770925585788024,
+      "max": 22.34054524426989
+     },
+     "axial_m": {
+      "min": 3.93391999133147,
+      "max": 6.9789161650993154
+     },
+     "tightest": {
+      "attack_policy_hash": "43eb349942660d4f",
+      "binding_margin_m": 0.004332483906412055,
+      "kill_margin_m": 0.004332483906412055,
+      "cone_exit_margin_m": 1.4851958361323137,
+      "lateral_m": 1.4851958361323137,
+      "axial_m": -6.007665192179805,
+      "half_angle_deg": 17.134678803838934,
+      "saturated": false
+     }
+    },
+    "CONE_LATERAL": {
+     "occupancy": "OBSERVED",
+     "n_artifacts_search_bookkeeping_only": 8171,
+     "binding_margin_m": {
+      "min": 0.0008921097259189913,
+      "max": 0.9476139705723361
+     },
+     "half_angle_deg": {
+      "min": 3.6069742713704773,
+      "max": 11.337177395051949
+     },
+     "axial_m": {
+      "min": 4.0826326235780455,
+      "max": 7.309838593471576
+     },
+     "tightest": {
+      "attack_policy_hash": "ad59e58b25178c91",
+      "binding_margin_m": 0.0008921097259189913,
+      "kill_margin_m": 1.0717818447531635,
+      "cone_exit_margin_m": 0.0008921097259189913,
+      "lateral_m": 0.0008921097259189913,
+      "axial_m": -6.311036408638248,
+      "half_angle_deg": 3.6069742713704773,
+      "saturated": false
+     }
+    },
+    "CONE_AXIAL": {
+     "occupancy": "NOT_OBSERVED"
+    }
+   },
+   "class": "MAXCLR"
+  }
+ ]
+}

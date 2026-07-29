@@ -1,0 +1,35 @@
+{
+ "gap_percentiles_m": {
+  "1": 0.0009261720226371484,
+  "5": 0.0045599075124065245,
+  "25": 0.025882682773848087,
+  "50": 0.07009297656738689,
+  "75": 0.19995522792224285,
+  "95": 0.6916312556451653
+ },
+ "frac_gap_lt_1e-4": 0.0012106814080453205,
+ "frac_gap_lt_1e-3": 0.01112456312675606,
+ "n_witnesses": 12,
+ "budget_m": 0.01,
+ "witness_occupancy_all": {
+  "KILL": 12,
+  "CONE_LATERAL": 12,
+  "CONE_AXIAL": 0
+ },
+ "witness_occupancy_above_budget": {
+  "KILL": 11,
+  "CONE_LATERAL": 9,
+  "CONE_AXIAL": 0
+ },
+ "artifacts_all": {
+  "KILL": 26731,
+  "CONE_LATERAL": 17046,
+  "CONE_AXIAL": 0
+ },
+ "artifacts_above_budget": {
+  "KILL": 26355,
+  "CONE_LATERAL": 16793,
+  "CONE_AXIAL": 0
+ },
+ "note": "artifact counts are search-effort bookkeeping, NOT frequencies"
+}
