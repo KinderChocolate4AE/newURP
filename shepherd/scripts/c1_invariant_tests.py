@@ -6,6 +6,7 @@ padding, ambiguous artifact identity).  Each of those would have been caught by 
 of the invariants below.  These run BEFORE any headline experiment from now on.
 
   I1  a STRONGER attacker class never improves defender viability
+  I1b the I1 INSTANCE is non-vacuous -- v_fixed is strictly below the ceiling
   I2  a NESTED attacker class exactly replays the previous class's artifacts
   I3  the same artifact yields the same endpoint under an INDEPENDENT integrator
   I4  diversity-mode seeds actually differ per witness
@@ -13,6 +14,22 @@ of the invariants below.  These run BEFORE any headline experiment from now on.
   I6  changing ONE field of the evidence bundle changes the bundle hash
   I7  a SUFFICIENT-screen failure is never converted into a collision label
   I8  the LP deploy window matches the judge's E_lane window exactly
+
+Phase 1P step 0a
+----------------
+The Phase 1O run of this suite used the cell (rho0 2.8, tl 0.30, arm C), where
+v_fixed = v_union = 1.000: every feasible sampled attacker path was caught, so
+`v_union <= v_fixed` held only because both sides sat at the ceiling.  A
+monotonicity bug could not have been detected there.  The instance is now
+(rho0 4.0, tl 0.40, arm C) at n = 20000, selected by the pre-registered rule in
+`c1_phase1p_i1_instance.py` (largest uncaught-but-feasible count among cells with
+0.02 < v_fixed < 0.98).  Measured there: v_fixed 0.834-0.843 with 46-54 uncaught
+feasible samples across seeds 11/12/13, so the inequality now has room to fail.
+
+I1b is the structural half of the fix.  The Phase 1O defect was not "wrong cell"
+-- it was that a vacuous instance passed silently.  I1b makes that condition
+self-reporting: if the instance ever saturates again, the suite says so instead
+of returning a green tick.
 """
 from __future__ import annotations
 import json, pathlib
@@ -33,6 +50,12 @@ from shepherd.game import viability as V
 
 RESULTS = []
 
+# ---- I1 instance (Phase 1P step 0a).  Changing these three lines changes what
+# ---- I1 is actually testing, so they are named, not inlined.
+I1_RHO0, I1_TL, I1_ARM = 4.0, 0.40, "C"
+I1_N = 20000                 # 4000 saturated by chance on neighbouring cells
+I1_CEILING = 1.0 - 1e-9      # v_fixed at/above this => the instance is vacuous
+
 
 def check(name, ok, detail=""):
     RESULTS.append({"invariant": name, "pass": bool(ok), "detail": detail})
@@ -44,8 +67,8 @@ def _ctx():
     env_cfg, m3, _t = _load("configs/m3a_a3e_p1.yaml")
     pe = ProbeEnv(env_cfg, m3); E = pe.ad.env
     _override(E, PRIMARY["r_kill"], PRIMARY["r_net_dir"]); fin = make_finisher_fn(THETA)
-    w = log_ctrl(make_contract())
-    rec = rollout_unified(pe, make_spawn(2.8, 0.30 * V_CLOSE), w, fin,
+    w = log_ctrl(make_contract())          # I1_ARM == "C"
+    rec = rollout_unified(pe, make_spawn(I1_RHO0, I1_TL * V_CLOSE), w, fin,
                           r_lane=PRIMARY["r_net_dir"], r_body=R_BODY + M_SAFETY)
     t = rec["_t_ref"]; o = np.asarray(rec["_obs"][t], float)
     P = np.asarray(rec["_lim"][t:], float); Vp = np.asarray(rec["_vel"][t:], float)
@@ -62,22 +85,74 @@ def main():
     p_att = o[ATT_P0:ATT_P0 + 3]; v_att = o[ATT_P0 + 3:ATT_P0 + 6]
     rng = np.random.default_rng(4242)
 
-    # ---- I1 : stronger attacker class never improves defender viability
-    u = V.build_reachable_union(p_att, v_att, tau=tau, a_att_max=E.a_att_max, n=4000,
-                                n_segments=max(int(E.n_segments), 2), seed=11, **kw)
-    m0 = np.concatenate([_mask_moving(pb, L, E.kill_radius, tau) for pb in u.path_blocks])
-    feas0 = m0 & u.turn_feasible; caught0 = np.asarray(u.caught, bool)
-    v0 = (caught0 & feas0).sum() / max(feas0.sum(), 1)
-    extra = rng.normal(0, E.a_att_max * 0.6, size=(300, 4, 3))
-    nn = np.linalg.norm(extra, axis=2, keepdims=True)
-    extra = np.where(nn > E.a_att_max, extra * (E.a_att_max / (nn + 1e-12)), extra)
-    ep, tf, pts = V._seg_paths_turn(p_att, v_att, extra, tau=tau, attacker_turn_limited=False,
-                                    omega_att_max=None, e_att=None, n_t=24)
-    f2 = _mask_moving(pts, L, E.kill_radius, tau) & tf
-    c2 = V._caught_se3_cone(ep, **cone)
-    v1 = ((caught0 & feas0).sum() + (c2 & f2).sum()) / max(feas0.sum() + f2.sum(), 1)
-    check("I1 stronger attacker class never raises v_soft", v1 <= v0 + 1e-12,
-          "v_fixed %.6f -> v_union %.6f" % (v0, v1))
+    # ---- I1 : ESCAPE-SET monotonicity under attacker-class enlargement.
+    #
+    # The Phase 1O form of I1 compared the POOLED CATCH RATIO
+    #     v = caught / feasible   over (fixed block) vs (fixed block + extra block)
+    # and asserted v_union <= v_fixed.  That statistic is NOT monotone: pooling two
+    # blocks with different catch rates moves the ratio toward the easier block
+    # (Simpson).  Phase 1O only passed because its instance sat at v = 1.000, where
+    # the ratio physically cannot rise.  On the non-vacuous 0a instance it fails
+    # immediately -- +0.0025 from an extra block of 5 feasible samples, all caught.
+    # That is arithmetic, not a defender improvement.
+    #
+    # It is also the very error class this campaign already ruled out: the frozen
+    # D0 protocol records `v_soft_replan_is_verdict_input: False` precisely because
+    # a ratio whose denominator is the arbitrary search budget carries no verdict.
+    # I1 was then built on exactly such a ratio.
+    #
+    # Restated on quantities that ARE monotone under S_fixed subset of S_union:
+    #   (a) shared members must receive IDENTICAL labels through the enlarged
+    #       evaluation  -- this is the bug an enlarged class can actually introduce;
+    #   (b) the ESCAPE SET may not shrink: |escapes(S_union)| >= |escapes(S_fixed)|.
+    # Both classes are pushed through ONE code path: the Block-1 single-segment
+    # accels are lifted to K=4 constant segments, which I2's nesting property
+    # guarantees leaves endpoints unchanged.
+    def _eval_class(A):
+        ep_, tf_, pts_ = V._seg_paths_turn(p_att, v_att, A, tau=tau,
+                                           attacker_turn_limited=False,
+                                           omega_att_max=None, e_att=None, n_t=24)
+        feas_ = _mask_moving(pts_, L, E.kill_radius, tau) & tf_
+        return feas_, V._caught_se3_cone(ep_, **cone)
+
+    A1 = V.reachable_accels(E.a_att_max, I1_N, 11)                  # Block 1, (n,3)
+    A_fix = np.repeat(A1[:, None, :], 4, axis=1)                    # -> (n,4,3), same endpoints
+    A_ext = rng.normal(0, E.a_att_max * 0.6, size=(300, 4, 3))      # genuinely richer: K=4 varying
+    nn = np.linalg.norm(A_ext, axis=2, keepdims=True)
+    A_ext = np.where(nn > E.a_att_max, A_ext * (E.a_att_max / (nn + 1e-12)), A_ext)
+    A_uni = np.concatenate([A_fix, A_ext], axis=0)
+
+    f_fix, c_fix = _eval_class(A_fix)
+    f_uni, c_uni = _eval_class(A_uni)
+    n0 = len(A_fix)
+    labels_agree = bool((f_fix == f_uni[:n0]).all() and (c_fix == c_uni[:n0]).all())
+    esc_fix = int((f_fix & ~c_fix).sum())
+    esc_uni = int((f_uni & ~c_uni).sum())
+    n_feas0 = int(f_fix.sum())
+    check("I1 enlarging the attacker class never shrinks the escape set",
+          labels_agree and esc_uni >= esc_fix,
+          "escapes %d -> %d, shared-member labels %s"
+          % (esc_fix, esc_uni, "identical" if labels_agree else "DIVERGED"))
+
+    # I1b : the instance must have room to fail in BOTH directions -- the fixed
+    #       class needs escapes AND captures.  A saturated cell (esc_fix == 0) is
+    #       exactly the Phase 1O defect, so it is now an explicit check rather than
+    #       a silent green tick.
+    check("I1b I1 instance is non-vacuous (escapes and captures both present)",
+          0 < esc_fix < n_feas0,
+          "cell %.1f/%.2f/%s  feasible %d = %d caught + %d escapes"
+          % (I1_RHO0, I1_TL, I1_ARM, n_feas0, n_feas0 - esc_fix, esc_fix))
+
+    # I1c : NEGATIVE CONTROL -- a test that has never failed is not known to be able
+    #       to fail.  Corrupt one shared member's label and confirm I1's predicate
+    #       flips to False.  (Phase 1O's I1 would have passed this cell regardless.)
+    c_bad = c_uni.copy()
+    idx = int(np.flatnonzero(f_fix & ~c_fix)[0])          # a shared escape member
+    c_bad[idx] = True                                      # pretend the union caught it
+    would_fail = not (bool((c_fix == c_bad[:n0]).all())
+                      and int((f_uni & ~c_bad).sum()) >= esc_fix)
+    check("I1c negative control: corrupted shared label makes I1 fail", would_fail,
+          "flipped member %d -> predicate False as required" % idx)
 
     # ---- I2 : nested class (K=8) exactly replays a K=4 artifact
     a4 = rng.normal(0, 12.0, size=(1, 4, 3))
@@ -98,7 +173,7 @@ def main():
     check("I3 independent integrator matches endpoint", r3 < 1e-9, "delta %.3e m" % r3)
 
     # ---- I4 / I5 : seed namespace behaviour
-    kwseed = dict(base_seed=7, scenario_id="BASE-2.8-0.30", reset_id=1100,
+    kwseed = dict(base_seed=7, scenario_id="BASE-4.0-0.40", reset_id=1100,
                   attacker_class="K4-pwc", restart_id=0)
     dv = [G.derive_seed(witness_id=w, mode="diversity", **kwseed) for w in ("wA", "wB", "wC")]
     pr = [G.derive_seed(witness_id=w, mode="paired", **kwseed) for w in ("wA", "wB", "wC")]
@@ -108,7 +183,7 @@ def main():
           G.derive_seed(witness_id="wA", mode="diversity", **kwseed) == dv[0], "re-derived equal")
 
     # ---- I6 : one field change must change the bundle hash
-    base = dict(scenario_id="BASE-2.8-0.30", config_sha="cfg0", defender_traj=rec["_lim"],
+    base = dict(scenario_id="BASE-4.0-0.40", config_sha="cfg0", defender_traj=rec["_lim"],
                 attacker_seg_acc=a4[0], attacker_traj=e4[0], reset_id=1100,
                 seeds={"cert": 91000101, "replan": 63000101}, fire_step=rec["fire_step"],
                 verifier_version="v1", verdict="FALSIFIED", margin_m=0.00170,
