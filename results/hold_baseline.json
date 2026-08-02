@@ -1,0 +1,32 @@
+{
+  "n": 500,
+  "limiter_mode": "hold",
+  "attacker": "A2/jink0.6",
+  "neutralized_rate": 0.182,
+  "nondestructive_frac": 1.0,
+  "counts": {
+    "NET_CAPTURE": 91,
+    "CAPTURE_WITH_CONTACT": 0,
+    "HARD_KILL": 0,
+    "PENETRATED": 377,
+    "SPENT_FAIL": 32,
+    "TRUNCATED": 0
+  },
+  "by_regime": {
+    "SHAPING_NEEDED": {
+      "n": 297,
+      "k": 0,
+      "neutralized_rate": 0.0,
+      "wilson_lo": 0.0,
+      "wilson_hi": 0.012769047509544676
+    },
+    "FREE_CAPTURE": {
+      "n": 203,
+      "k": 91,
+      "neutralized_rate": 0.4482758620689655,
+      "wilson_lo": 0.381455698538253,
+      "wilson_hi": 0.5170172666323724
+    }
+  },
+  "_note": "비손실 비율은 hold 와 비교하지 않는다 -- 스크립트 기준선은 구조적으로 하드킬을 못 해 자명하게 1.00 이다 (docs/47 §4.3)."
+}
