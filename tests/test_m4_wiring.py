@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from collections import Counter
 
+import pathlib
+
 import numpy as np
 import pytest
 
@@ -236,3 +238,71 @@ def test_p40e_scale_smoke_runs_the_same_baseline_as_run_episode():
 
     orig(acts)
     assert all(float(v[3]) == 0.0 for v in acts.values())
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# P46 / P47 — 2026-08-03 파일럿에서 드러난 평가 경로 결함
+# ─────────────────────────────────────────────────────────────────────────
+def _runner(seed=0, steps=1024):
+    import yaml
+
+    from shepherd.scripts.train_m4 import (M4Runner, build_parser_defaults,
+                                           build_specs)
+    d = build_parser_defaults()
+    cfg = yaml.safe_load(open(pathlib.Path(d.config)))
+    cfg["loop"]["total_env_steps"] = steps
+    return M4Runner(cfg, seed, "cpu", **build_specs(d))
+
+
+@pytest.mark.torch
+def test_p46_policy_actions_match_the_env_action_boxes():
+    """★ 정책이 내는 행동이 env Box 모양과 **정확히** 같아야 한다.
+
+    2026-08-03: 안 같았다. 정책 출력은 LIVE 차원(limiter 3 / finisher 4)이고 env Box 는
+    4 / 5 인데, 학습 롤아웃만 `adapter.step` 에서 패딩하고(adapter.py:90) 평가 경로
+    `run_episode(policy=...)` 는 안 했다. finisher 의 발사 비트가 env idx4 대신
+    idx3(예약 slew)으로 들어가 **발사가 env 에 한 번도 닿지 않았다.**
+
+    증상은 조용했다 -- 예외가 아니라 `무력화 0.000 / 침투 1.000 / SPENT_FAIL 0` 이라
+    "학습이 안 됐다"로 읽혔다. 파일럿 3런 15시간이 그렇게 갔다. 이 한 줄이면 잡혔다.
+    """
+    from shepherd.m4_env import build_m4_env
+    from shepherd.train.adapter import ShepherdAdapter
+
+    r = _runner()
+    st = build_m4_env(r.eval_seed0, 0, **r._m4)
+    r._adapter = ShepherdAdapter(st.env)
+
+    acts = r.policy_fn()(st.env.reset(seed=0)[0][r._adapter.limiter_ids[0]], {})
+    assert set(acts) == set(r._adapter.limiter_ids) | {r._adapter.finisher_id}
+    for aid, a in acts.items():
+        want = st.env.action_space(aid).shape
+        assert np.asarray(a).shape == want, f"{aid}: {np.asarray(a).shape} != {want}"
+
+    # env 가 실제로 받아 주는가 (모양만 맞고 범위가 틀리면 여기서 걸린다)
+    acts[st.env.adversary_id] = np.zeros(3, np.float32)
+    st.env.step(acts)
+
+
+@pytest.mark.torch
+def test_p47_evaluation_is_sampled_but_reproducible():
+    """평가는 표본추출이되 시드 고정으로 재현돼야 한다 (docs/47 평가 프로토콜).
+
+    `deterministic=True` 는 이진 행동을 `probs > 0.5` 로 자른다. 발사·커밋은 에피소드당
+    한 번 하는 행동이라 올바른 정책일수록 스텝당 확률이 낮고, 그 문턱은 그런 정책을
+    **구조적으로** 버린다 (파일럿 s1 이 p=0.0002 를 배웠고 한 발도 못 쐈다).
+    표본추출로 바꾸되 재현성은 `torch.manual_seed(eval_seed0)` 로 지킨다.
+    """
+    import inspect
+
+    from shepherd.scripts.train_m4 import M4Runner
+
+    src = inspect.getsource(M4Runner.evaluate)
+    assert "torch.manual_seed(self.eval_seed0)" in src, "평가 시드 고정이 빠졌다"
+    assert M4Runner.policy_fn.__defaults__ == (False,), \
+        "policy_fn 기본이 결정론으로 되돌아갔다"
+
+    r = _runner()
+    a = r.evaluate(6)
+    b = r.evaluate(6)
+    assert a["counts"] == b["counts"], "같은 시드인데 평가가 재현되지 않는다"

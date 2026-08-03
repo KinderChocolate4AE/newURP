@@ -35,6 +35,7 @@ from shepherd.env_sys import RewardSpec, SystemSpec
 from shepherd.m4_config import (M4_OVERRIDES, TAU_DECOMPOSITION, THREAT_BRACKET,
                                 m4_config)
 from shepherd.m4_env import build_m4_env, mission_eval, regime_of
+from shepherd.train.make_env import pad_env_action
 from shepherd.scripts.curve_sweep import BANDS, summarize_bands
 from shepherd.spawn_rand import SpawnSpec
 from shepherd.train.adapter import ShepherdAdapter
@@ -155,26 +156,77 @@ class M4Runner(MAPPORunner):
         return out
 
     # ------------------------------------------------------------------ 평가 ---
-    def policy_fn(self):
-        """`mission_rollout.run_episode(policy=...)` 규약의 콜러블."""
-        lim_fn, fin_fn = self.learned_bundle()
+    def _bundle(self, deterministic: bool):
+        """`learned_bundle` 의 M4 판 -- 표본추출/결정론을 고를 수 있다.
+
+        부모(`train_mappo.learned_bundle`)는 `deterministic=True` 로 고정돼 있다.
+        M4 는 **표본추출**로 평가한다 -- 아래 `evaluate` 의 설명 참조.
+        """
+        dev = self.tr.device
+
+        def lim_fn(obs, flags):
+            nobs = self.norm.normalize(obs)
+            t = torch.as_tensor(limiter_inputs(nobs, self.n), device=dev)
+            raw, _ = self.tr.lim_actor.act(t, deterministic=deterministic)
+            return (np.clip(raw.cpu().numpy(), -1.0, 1.0)
+                    * self.lim_scale).astype(np.float32)
+
+        def fin_fn(obs, flags):
+            nobs = self.norm.normalize(obs)
+            t = torch.as_tensor(nobs[None, :], device=dev)
+            raw, _ = self.tr.fin_actor.act(t, deterministic=deterministic)
+            raw = raw[0].cpu().numpy()
+            axis = np.clip(raw[:3], -1.0, 1.0) * self.fin_axis_scale
+            return np.concatenate([axis, raw[3:]]).astype(np.float32)
+
+        return lim_fn, fin_fn
+
+    def policy_fn(self, deterministic: bool = False):
+        """`mission_rollout.run_episode(policy=...)` 규약의 콜러블.
+
+        ★ 2026-08-03 결함 1 수정 -- **`pad_env_action` 을 여기서 건다.**
+        정책 출력은 LIVE 차원(limiter 3, finisher 4)이고 env Box 는 각각 4·5 다.
+        학습 롤아웃은 `adapter.step` 이 패딩을 걸지만(adapter.py:90) 평가 경로인
+        `run_episode(policy=...)` 는 안 걸었다. 그 결과 finisher 의 발사 비트가
+        env idx4(진짜 자리) 대신 idx3(예약 slew)으로 들어가 **발사가 env 에 한 번도
+        닿지 않았다.** 파일럿 3런의 최종 평가가 전부 `무력화 0.000 / 침투 1.000 /
+        SPENT_FAIL 0` 이었던 이유이고, 패딩을 걸자 같은 체크포인트가 0.110 이 됐다.
+        P46 이 이 줄을 지킨다.
+        """
+        lim_fn, fin_fn = self._bundle(deterministic)
         ids = None
 
         def policy(obs, flags):
             nonlocal ids
             if ids is None:
+                # 갓 복원한 러너는 `_adapter` 가 None 이다 (`restore` 가 비운다).
+                # 롤아웃 없이 평가만 하는 경우가 있으므로 여기서 게으르게 만든다.
+                if self._adapter is None:
+                    self._adapter = ShepherdAdapter(
+                        build_m4_env(self.eval_seed0, 0, **self._m4).env)
                 ids = (self._adapter.limiter_ids, self._adapter.finisher_id)
             lim = lim_fn(obs, flags)
             acts = {lid: np.asarray(lim[i], np.float32)
                     for i, lid in enumerate(ids[0])}
             acts[ids[1]] = np.asarray(fin_fn(obs, flags), np.float32)
-            return acts
+            return {aid: pad_env_action(aid, a) for aid, a in acts.items()}
         return policy
 
     def evaluate(self, episodes: int,
                  records: Optional[list] = None) -> dict:     # 부모 시그니처 유지
-        # records 를 주면 판마다 위협 draw 를 담는다 -- BAND_AIM 집계용 (docs/47 §4.4).
-        # 기본 None 이므로 곡선용 저비용 평가는 종전과 bit-identical.
+        """★ 2026-08-03 평가 프로토콜 선언 -- **고정 시드 표본추출**. 결과 보기 전.
+
+        종전에는 `deterministic=True` 였고, 그건 이진 행동을 `probs > 0.5` 로 잘랐다
+        (mappo.py:177). 발사·커밋은 **에피소드당 한 번** 하는 행동이라 올바른 정책일수록
+        스텝당 확률이 낮다 -- 0.5 문턱은 그런 정책을 구조적으로 버린다. 실제로 파일럿
+        s1 은 p = 0.0002 를 배웠고 결정론 평가는 한 발도 안 쐈다.
+
+        그래서 **학습과 같은 분포(표본추출)** 로 평가하되, `torch.manual_seed` 를
+        평가마다 고정해 재현성을 지킨다. 판정식(docs/47 §4.3)은 바꾸지 않는다 --
+        무엇을 성공으로 세는지가 아니라 정책을 어떻게 행동으로 바꾸는지의 문제다.
+        P47 이 재현성을 지킨다.
+        """
+        torch.manual_seed(self.eval_seed0)
         return mission_eval(self.eval_seed0, episodes, policy=self.policy_fn(),
                             records=records, **self._m4)
 
