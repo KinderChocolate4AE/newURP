@@ -1,0 +1,88 @@
+{
+  "n": 300,
+  "limiter_mode": "intercept",
+  "baseline_commit": true,
+  "attacker": "A2/jink0.6",
+  "neutralized_rate": 0.24,
+  "nondestructive_frac": 0.6111111111111112,
+  "counts": {
+    "NET_CAPTURE": 44,
+    "CAPTURE_WITH_CONTACT": 0,
+    "HARD_KILL": 28,
+    "PENETRATED": 209,
+    "SPENT_FAIL": 19,
+    "TRUNCATED": 0
+  },
+  "by_regime": {
+    "SHAPING_NEEDED": {
+      "n": 182,
+      "k": 15,
+      "neutralized_rate": 0.08241758241758242,
+      "wilson_lo": 0.05058051290498218,
+      "wilson_hi": 0.13151803004130316
+    },
+    "FREE_CAPTURE": {
+      "n": 118,
+      "k": 57,
+      "neutralized_rate": 0.4830508474576271,
+      "wilson_lo": 0.3948535340573345,
+      "wilson_hi": 0.5723169181292485
+    }
+  },
+  "bands": {
+    "EASY": {
+      "n": 54,
+      "net_capture": {
+        "k": 44,
+        "p": 0.8148148148148148,
+        "lo": 0.6916379770862061,
+        "hi": 0.8961742549405703
+      },
+      "neutralized": {
+        "k": 46,
+        "p": 0.8518518518518519,
+        "lo": 0.733996325347515,
+        "hi": 0.9229702869177059
+      },
+      "nondestructive_frac": 0.9565217391304348
+    },
+    "BAND_AIM": {
+      "n": 64,
+      "net_capture": {
+        "k": 0,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.056626022971156334
+      },
+      "neutralized": {
+        "k": 11,
+        "p": 0.171875,
+        "lo": 0.0987764126731623,
+        "hi": 0.2821344149016591
+      },
+      "nondestructive_frac": 0.0
+    },
+    "SHAPING_NEEDED": {
+      "n": 182,
+      "net_capture": {
+        "k": 0,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.020671367444102935
+      },
+      "neutralized": {
+        "k": 15,
+        "p": 0.08241758241758242,
+        "lo": 0.05058006237117389,
+        "hi": 0.1315191016480769
+      },
+      "nondestructive_frac": 0.0
+    },
+    "_bounds": {
+      "psi_med_deg": 4.26,
+      "band_aim_lo": 25.753772736458263,
+      "band_aim_hi": 39.333333333333336
+    }
+  },
+  "_note": "비손실 비율은 hold 와 비교하지 않는다 -- 스크립트 기준선은 구조적으로 하드킬을 못 해 자명하게 1.00 이다 (docs/47 §4.3)."
+}

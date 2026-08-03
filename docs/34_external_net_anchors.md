@@ -226,14 +226,19 @@ arXiv:2607.05939 (독립 논문) 기준선 명칭 -> "FRPN"
 
 ## 8. 인용 지위 (verify-before-cite)
 
+> **2026-08-03 보강 — 제목을 여기 적어 둔다.** 이 표에 권호만 있고 **제목이 없었기
+> 때문에**, 중간보고 부록 참고문헌을 만들 때 Xu·Pliska·Rothe 세 편의 제목을 **지어냈다**
+> (verify-before-cite 위반). Hyunjun 이 [1] 을 잡아냈고, 나머지 둘은 그 김에 확인했다.
+> **권호·DOI 만 적어 두는 것으로는 부족하다 — 인용에 쓸 문자열을 그대로 적어 둔다.**
+
 | 문헌 | 서지 확인 | 인용 가능? |
 |---|---|---|
-| Xu, Peng, Wu. Drones **9(3):190**, 2025-03-04, doi:10.3390/drones9030190 | **완전 확인** | **가능** |
-| Pliska et al. arXiv:2405.13542 (RA-L 2024) | 본문 확인 | **가능** (RA-L 권호는 Human-lane 확인 필요) |
-| Gavin & Bronz. arXiv:2607.05939 | 제목·저자·소속 확인 | **가능** (preprint 로 명시) |
+| Xu, R.; Peng, Q.; Wu, H. *"Optimization Design of Flexible Net Capture System for Low, Slow, and Small Unmanned Aerial Vehicles Based on Improved Multi-Objective Wolf Pack Algorithm."* Drones **2025, 9(3), 190**, doi:10.3390/drones9030190 | **완전 확인 (제목 포함, 08-03)** | **가능** |
+| Pliska, M.; Vrba, M.; Báča, T.; Saska, M. *"Towards Safe Mid-Air Drone Interception: Strategies for Tracking & Capture."* IEEE RA-L **2024, 9(10), 8810–8817**, arXiv:2405.13542 | **완전 확인 (제목·권호, 08-03)** — 권호는 arXiv journal-ref 기준 | **가능** |
+| Rothe, J.; Kessler, N.; Henriquez Wehr, M.; Hohbach, A.; Strohmeier, M.; Montenegro, S. *"Autonomous Drone-on-Drone Interception Using an Integrated LiDAR–Vision Detection System for High-Precision Capture."* Drones **2026, 10(6), 420**, doi:10.3390/drones10060420 | **완전 확인 (제목·저자, 08-03)** | **가능** |
+| Gavin & Bronz. *"Intercepting an Agile Target with Net-Carrying Drones using Competitive Multi-Agent Reinforcement Learning."* arXiv:2607.05939 | 제목·저자·소속 확인 | **가능** (preprint 로 명시) |
 | Gavin, Lacroix, Bronz. arXiv:2603.16279 | 제목·저자 확인 | **가능** (preprint 로 명시) |
 | UAV Hunter. Drones 8(10):573, 2024 | 확인 | 가능 |
-| Drones 10(6):420, 2026 | 확인 | 가능 |
 | arXiv:2503.06578 | 확인 | 가능 (preprint) |
 | IEEE 10684392 | **문헌 실재만 확인**, 저자·수치 미확보 | **인용 금지 유지** |
 | JGCD "Collision Cone-Based Net Capture" | 제목·저널만 | **미열람, 인용 금지** |

@@ -35,6 +35,7 @@ from shepherd.env_sys import RewardSpec, SystemSpec
 from shepherd.m4_config import (M4_OVERRIDES, TAU_DECOMPOSITION, THREAT_BRACKET,
                                 m4_config)
 from shepherd.m4_env import build_m4_env, mission_eval, regime_of
+from shepherd.scripts.curve_sweep import BANDS, summarize_bands
 from shepherd.spawn_rand import SpawnSpec
 from shepherd.train.adapter import ShepherdAdapter
 from shepherd.train.ippo import limiter_inputs
@@ -170,14 +171,49 @@ class M4Runner(MAPPORunner):
             return acts
         return policy
 
-    def evaluate(self, episodes: int) -> dict:                # 부모 시그니처 유지
+    def evaluate(self, episodes: int,
+                 records: Optional[list] = None) -> dict:     # 부모 시그니처 유지
+        # records 를 주면 판마다 위협 draw 를 담는다 -- BAND_AIM 집계용 (docs/47 §4.4).
+        # 기본 None 이므로 곡선용 저비용 평가는 종전과 bit-identical.
         return mission_eval(self.eval_seed0, episodes, policy=self.policy_fn(),
-                            **self._m4)
+                            records=records, **self._m4)
 
     def save(self, out_dir: pathlib.Path, tag: str = "latest") -> None:
         super().save(out_dir, tag)
         (out_dir / f"threat_log_{tag}.json").write_text(
             json.dumps(self._threat_log[-2000:]))
+
+    # ------------------------------------------------------------ 재개 ---
+    def restore(self, out_dir: pathlib.Path, tag: str = "latest") -> int:
+        """체크포인트에서 이어서 학습한다. 완료 스텝 수를 돌려준다.
+
+        WHY: 1 런이 ~24 시간이고 스윕이 40~50 런이다. 무재개로 돌리면 죽은 런은
+        통째로 날아간다 (3일짜리 서버 작업의 단일 실패점). `MAPPOTrainer.load` 는
+        이미 있었고 학습기만 그것을 안 쓰고 있었다.
+
+        **재개는 비트 동일 재현이 아니다** -- 롤아웃 RNG 스트림이 이어지지 않는다.
+        그래서 재개된 런은 `summary.json` 에 `resumed_from` 을 남겨 결과 해석 시
+        구분할 수 있게 한다. 판정 지표(최종 평가)는 정책만 보므로 영향이 없다.
+        """
+        ck = out_dir / f"ckpt_mappo_{tag}.pt"
+        st = out_dir / f"run_state_{tag}.json"
+        if not (ck.exists() and st.exists()):
+            return 0
+        self.tr = MAPPOTrainer.load(str(ck), map_location=self.tr.cfg.device)
+        nz = out_dir / f"obs_norm_{tag}.json"
+        if nz.exists():
+            self.norm.load_state_dict(json.loads(nz.read_text()))
+        rs = json.loads(st.read_text())
+        self.env_steps = int(rs.get("env_steps", 0))
+        self._ep_idx = int(rs.get("episodes", 0))
+        tl = out_dir / f"threat_log_{tag}.json"
+        if tl.exists():
+            try:
+                self._threat_log = json.loads(tl.read_text())
+            except Exception:                                  # pragma: no cover
+                pass
+        self._adapter, self._obs = None, None                  # 다음 롤아웃에서 재조립
+        return self.env_steps
 
 
 # ------------------------------------------------------------------- CLI ---
@@ -189,7 +225,9 @@ def build_specs(args) -> Dict[str, object]:
         system=SystemSpec(tau_kill=_or(args.tau_kill, dflt.tau_kill),
                           p_kill=_or(args.p_kill, dflt.p_kill),
                           r_nk=_or(args.r_nk, dflt.r_nk), enabled=True),
-        reward=RewardSpec(w_kill=args.w_kill, terminal_scale=args.terminal_scale,
+        reward=RewardSpec(w_kill=args.w_kill,
+                          terminal_scale=_or(args.terminal_scale,
+                                             RewardSpec().terminal_scale),
                           enabled=True),
         attacker=AttackerSpec(level=args.attacker, lam_gain=lam[0], lam_range=lam[1],
                               jink_amp=args.jink_amp, seed=args.seed,
@@ -222,10 +260,10 @@ def _add_args(ap):
     ap.add_argument("--r-nk", type=float, default=None)
     ap.add_argument("--tau-kill", type=float, default=None,
                     help=f"선언값 {SystemSpec().tau_kill} (sweep 축 {{0.15, 0.20}})")
-    ap.add_argument("--terminal-scale", type=float, default=1.0,
-                    help="[E] 스케일 스모크 실측(2026-07-29): sum|dense| 평균 1.00, "
-                         "|TERMINAL| 최대 1.0 -> 같은 자릿수는 1.0 (기존 기본 10 은 "
-                         "종말항을 10배 과대평가). scale_smoke.py 참조")
+    ap.add_argument("--terminal-scale", type=float, default=None,
+                    help=f"선언값 {RewardSpec().terminal_scale} (env_sys.RewardSpec). "
+                         "[E] 스케일 스모크 실측(2026-07-29): sum|dense| 평균 1.00, "
+                         "|TERMINAL| 최대 1.0 -> 같은 자릿수. scale_smoke.py 참조")
     ap.add_argument("--attacker", default="A2", choices=["A1", "A2", "A3"])
     ap.add_argument("--lam", default="LAM_REF", choices=list(LAMBDA_PRESETS))
     ap.add_argument("--jink-amp", type=float, default=0.6)
@@ -233,6 +271,10 @@ def _add_args(ap):
                     help="★ 적형성 게이트 미통과 조건. 진단용 (docs/40 §8.2)")
     ap.add_argument("--no-threat-obs", action="store_true",
                     help="regime-blind ablation (§6 대조군)")
+    ap.add_argument("--resume", action="store_true",
+                    help="출력 디렉터리에 체크포인트가 있으면 이어서 학습한다. "
+                         "스윕(40~50런 x 24h)에서 죽은 런을 통째로 잃지 않기 위한 것. "
+                         "재개된 런은 summary.json 의 resumed_from 으로 표시된다.")
     return ap
 
 
@@ -283,7 +325,24 @@ def main(argv=None) -> None:
         out_dir.mkdir(parents=True, exist_ok=True)
         n_upd = max(1, int(run_cfg["loop"]["total_env_steps"]) // runner.rollout_env_steps)
         curve = []
-        for upd in range(1, n_upd + 1):
+        resumed_from = 0
+        upd0 = 0
+        if args.resume:
+            resumed_from = runner.restore(out_dir)
+            if resumed_from:
+                upd0 = min(resumed_from // runner.rollout_env_steps, n_upd)
+                cf = out_dir / "mission_curve.json"
+                if cf.exists():
+                    try:
+                        curve = json.loads(cf.read_text())
+                    except Exception:                          # pragma: no cover
+                        curve = []
+                print(f"[seed {s}] 재개: step={resumed_from} (upd {upd0}/{n_upd})")
+            else:
+                print(f"[seed {s}] 재개할 체크포인트 없음 -- 처음부터")
+        if upd0 >= n_upd:
+            print(f"[seed {s}] 이미 완료됨 (upd {upd0}/{n_upd}) -- 최종 평가만 수행")
+        for upd in range(upd0 + 1, n_upd + 1):
             runner.collect_rollout()
             stats = runner.update()
             if upd % eval_every == 0 or upd == n_upd:
@@ -302,19 +361,31 @@ def main(argv=None) -> None:
                 (out_dir / "mission_curve.json").write_text(json.dumps(curve, indent=2))
         runner.save(out_dir, tag="final")
         # ★ 판정용 최종 평가는 곡선용과 **분리**한다 (docs/47 §4.3).
-        final_eval = runner.evaluate(int(args.final_eval_episodes))
+        final_recs: list = []
+        final_eval = runner.evaluate(int(args.final_eval_episodes),
+                                     records=final_recs)
+        # ★ 세 칸 집계 (docs/47 §4.4). **결과를 보기 전에 선언된 보고 축**이고
+        #   1차 판정식에는 들어가지 않는다. 여기서 같이 안 뽑으면 스윕이 끝난 뒤
+        #   다시 돌려야 하고, 그러면 결과를 본 뒤 축을 만드는 모양이 된다.
+        final_bands = summarize_bands(final_recs)
         print(f"[seed {s}] 최종평가 n={args.final_eval_episodes} "
               f"무력화 {final_eval['neutralized_rate']:.3f} "
               f"| shape " + ", ".join(
                   f"{k}={v['neutralized_rate']:.3f}(n={v['n']})"
                   for k, v in sorted(final_eval.get("by_regime", {}).items())))
+        print("[seed %d] 밴드 " % s + "  ".join(
+            f"{b}: 네트 {final_bands[b]['net_capture']['p']:.3f} / "
+            f"무력화 {final_bands[b]['neutralized']['p']:.3f} (n={final_bands[b]['n']})"
+            for b in BANDS))
         (out_dir / "summary.json").write_text(json.dumps({
             "seed": s, "w_kill": args.w_kill, "attacker": args.attacker,
             "threat_randomized": not args.no_threat_randomization,
             "threat_obs": not args.no_threat_obs,
             "final": curve[-1] if curve else None,
             "final_eval_episodes": int(args.final_eval_episodes),
-            "final_eval": final_eval}, indent=2))
+            "resumed_from": int(resumed_from),
+            "final_eval": final_eval,
+            "final_eval_bands": final_bands}, indent=2))
 
 
 if __name__ == "__main__":

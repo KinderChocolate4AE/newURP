@@ -1,197 +1,206 @@
-# M4 재학습 런북 — 서버 실행용
+# M4 학습 런북 — 서버 실행용
 
-**2026-07-27 · 실행 = Hyunjun (샌드박스 SSH 불가) · 준비 = Claude**
-**전제**: `docs/29` v4 (M4 설계·보상) · `docs/30` (로드맵) · `docs/31` (파라미터 작성지)
+**개정 2026-08-03** · 실행 = Hyunjun (샌드박스 SSH 불가) · 준비 = Claude
+**전제**: `docs/40` (운용점 선언) · `docs/45` (두 경계) · `docs/46` (채널 분리) · `docs/47` (게이트·스윕·판정식)
 
-> **왜 재학습인가**: 기존 체크포인트는 **커밋 비트(limiter Box(4) idx 3)가 무효이던 시점**에 학습된 것이라 모드 중재를 할 수 없다. `docs/30 §3` — **§6(학습 결과)은 재학습 없이 성립하지 않는다.** 이것이 남은 일정의 유일한 병목이고, 그 앞 작업은 전부 로컬에서 끝난다.
-
----
-
-## 0. 순서 요약
-
-```
-[A] git 경계        C-1 종료 산출물 / M4 신규 를 두 덩어리로 분리 커밋   (Windows 네이티브)
-[B] .git 락 청소     stale lock ~100개 삭제                              (Windows 네이티브)
-[C] 서버 준비        pull → REQUIRED_COMMIT 확인 → venv → 스모크         (서버)
-[D] 학습 스크립트     train_m4.py 배선  ← **남은 코드 항목**              (로컬, 다음 블록)
-[E] 스케일 스모크     조밀항 vs 종말항 누적 기여 실측                     (로컬)
-[F] sweep 실행       w_kill × tau 도메인 랜덤화                          (서버)
-[G] 임무 지표 평가    mission_rollout 로 arm 비교                        (로컬/서버)
-```
-
-**[A]~[C] 는 지금 실행 가능하고, [D] 가 남은 코드 작업이다.**
+> **2026-07-27 판에서 무엇이 바뀌었나.** 그 판의 [A] git 경계 · [B] 락 청소 ·
+> [D] 학습 스크립트 배선 · [E] 스케일 스모크는 **전부 끝났다**. 남은 것은 서버에서
+> 도는 부분뿐이고, 그 사이에 판정식이 세 번 정정됐다(정정 5·6·7). 이 문서는
+> **지금 그대로 복사해서 붙이면 도는** 절차만 남긴다.
 
 ---
 
-## [A] git 경계 — 두 덩어리 커밋
+## 0. 순서
 
-`docs/30`: 신규 7파일 + C-1 미커밋 169건이 섞여 있다. **한 커밋에 넣으면 bisect 가 망가진다.**
-
-### A-1. 신규 M4 파일 (이번 캠페인)
-
-```bash
-cd /c/Users/Teemo/Desktop/ANDES/URP/newURP     # Git Bash 기준. PowerShell 이면 cd 만 교체
-
-git add shepherd/agents/attacker_ladder.py \
-        shepherd/env_adv.py \
-        shepherd/env_sys.py \
-        shepherd/scripts/mission_rollout.py \
-        shepherd/scripts/rho_v_band.py \
-        shepherd/scripts/oracle_capture.py \
-        tests/test_attacker_ladder.py \
-        tests/test_mode_system.py \
-        docs/26_marl_paper_plan_2026-07-27.md \
-        docs/27_attacker_ladder_design.md \
-        docs/28_framing_revision_nondestructive.md \
-        docs/29_m4_mode_system_design.md \
-        docs/30_paper_roadmap.md \
-        docs/31_parameter_decision_sheet.md \
-        docs/32_m4_retrain_runbook.md
-
-git status --short          # <-- 위 목록만 스테이징됐는지 눈으로 확인
-git commit -m "feat(m4): 모드 전환 방어 시스템 — 공격자 사다리 A1-A3 · 하드킬 방아쇠 · no-kinetic zone · M4 보상
-
-- attacker_ladder: A1 위임 + A2(jink/편대 라우팅) + A3(발사 유도, fair/privileged) + lambda 1급화
-- env_adv: 백엔드 프록시로 공격자 주입 (frozen env.py 무수정, bit-identical 보장)
-- env_sys: 하드킬 방아쇠 + no-kinetic zone + M4 보상 (env 래퍼)
-- mission_rollout: 임무 5분할 라벨 + 에피소드 접촉 집합 + 2층 지표
-- rho_v_band / oracle_capture: 능력비 밴드 · tau 축 도달가능성 상한
-- docs 26-32: 프레이밍 개정 · 설계 · 로드맵 · 파라미터 작성지 · 런북
-- tests: P1~P18 (29 passed, 1 skipped)
-- 동결 파일(env.py / env_m3.py / adversary.py / params.py / falsifier / held-out) 무변경"
+```
+[1] 서버 준비        pull -> venv -> 스모크                        ~10 분
+[2] 기저선 2개       hold n=500 · intercept n=300                  ~35 분  (리포에 이미 있으면 건너뜀)
+[3] 파일럿 3런       신호가 붙는지 본다. **여기서 멈출 수 있다**    1런 실측 x 3
+[4] 본 스윕 50런     w_kill 5 x seed 5 x threat_obs 2              [3]에서 잰 시간 x 50 / jobs
+[5] 집계·판정        사전 등록된 판정식 그대로                      ~1 분
 ```
 
-### A-2. C-1 종료 산출물 (별도 커밋)
-
-```bash
-git add shepherd/scripts/c1_*.py docs/2[3-5]_c1_*.md docs/c1_*.md
-git status --short
-git commit -m "docs(c1): certificate 캠페인 종료 산출물 — falsifier v2 · held-out · V2C"
-git add -A -- results/ docs/09_learning_plan_log.md     # 남은 산출물
-git commit -m "chore(c1): 캠페인 결과 파일 및 로그"
-```
-
-> **`2026URP` 루트에서 `git add -A` 절대 금지** (기존 규율). 위처럼 **경로를 명시**해서만 쓴다.
-
-### A-3. push
-
-```bash
-git reset          # Windows 에서 push 전 필수 (마운트 index 잔여 상태 정리)
-git push origin feat/l2-mappo-train
-git rev-parse HEAD          # <-- REQUIRED_COMMIT 로 기록
-```
+**[3] 을 건너뛰지 않는다.** 신호가 안 붙는 상태로 50런을 태우면 나오는 것은 "협력이
+안 된다"가 아니라 **"학습이 안 됐다"** 이고, 그건 논문에 못 쓴다 (docs/47 §4.3).
 
 ---
 
-## [B] .git 락 청소 (Windows 네이티브)
-
-마운트에서는 `rm` 이 안 되어 과거 세션 잔재가 **~100개** 쌓여 있다.
-
-```powershell
-cd C:\Users\Teemo\Desktop\ANDES\URP\newURP\.git
-Remove-Item HEAD.lock.* , index.lock.* -Force
-Get-ChildItem *.lock*        # 비어 있어야 정상
-```
-
----
-
-## [C] 서버 준비
+## [1] 서버 준비
 
 ```bash
 ssh <서버>
 cd <리포>
-git fetch && git checkout feat/l2-mappo-train && git pull
-git rev-parse HEAD            # [A-3] 의 REQUIRED_COMMIT 과 일치 확인 -- 다르면 중단
+git fetch && git checkout <브랜치> && git pull
+git rev-parse HEAD                      # 로컬 커밋과 일치 확인 -- 다르면 중단
 
 source .venv-l2/bin/activate
 export TMPDIR=/data/hjhong/tmp
-pip install -e .              # 신규 의존성 없음 (torch-free 파일들)
+pip install -e .                        # 신규 의존성 없음
 
-# 스모크 (torch 불필요, 2분 내)
-python -m pytest tests/test_attacker_ladder.py tests/test_mode_system.py -q
-#   기대: 29 passed, 1 skipped
-python -m shepherd.scripts.rho_v_band --pk 1.0 | tail -5
+# ★ 코어가 적으면 BLAS 스레드 경합으로 5배 느려진다 (실측). 반드시 켠다.
+export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
+
+python -m pytest -q                     # 스모크 -- 기대: 452 passed, 2 skipped
+python -m shepherd.m4_config            # 운용점 표
 ```
 
-**`-m` invocation 필수** (기존 규율 — 직접 경로 실행 시 import 깨짐).
+**`-m` 실행 필수.** 파일 경로로 직접 부르면 import 가 깨진다.
 
----
-
-## [D] 학습 스크립트 배선 — **남은 코드 항목**
-
-`shepherd/scripts/train_m4.py` 를 `train_mappo.py` 기반으로 만든다. 필요한 변경은 **네 군데뿐**이다.
-
-```python
-# 1) 환경 생성: 래퍼 두 겹을 씌운다
-from shepherd.env_sys import ModeSystemEnv, SystemSpec, RewardSpec
-from shepherd.env_adv import attach_attacker
-from shepherd.agents.attacker_ladder import AttackerSpec, make_attacker, derive_phase
-
-inner, scn, lay = make_train_env(cfg)                       # 기존 composition root
-env = ModeSystemEnv(inner, lay, scn,
-                    SystemSpec(tau_kill=..., p_kill=..., r_nk=...),
-                    RewardSpec(w_kill=W, enabled=True))     # <-- 보상 ON
-attach_attacker(env.inner, make_attacker(ATTACKER_SPEC),
-                phase=derive_phase(seed, episode))          # 에피소드마다 위상 갱신
-
-# 2) 행동 공간: 변경 없음. limiter Box(4) idx 3 이 곧 커밋 비트다 (docs/29 §3.1)
-
-# 3) tau 도메인 랜덤화 (docs/29 §15.5): attacker_rand 의 딥카피 패턴을 그대로 확장
-cfg_ep = copy.deepcopy(cfg)
-cfg_ep["physics"]["tau_deploy"] = float(rng.uniform(*TAU_RANGE))
-#    -> 에피소드마다 env 재구성. 기존 build_attacker_env 와 같은 방식
-
-# 4) 관측: tau 를 정책이 볼 수 있어야 한다
-#    tau 가 에피소드마다 바뀌는데 관측에 없으면 정책이 regime 을 구분할 수 없다.
-#    frozen env.py 의 obs 는 못 바꾸므로 ModeSystemEnv 에서 concat 하거나,
-#    tau 를 고정한 채 별도 런으로 나눈다. **둘 중 하나를 선언하고 고정할 것.**
-```
-
-> **④ 가 유일한 설계 미결이다.** tau 를 관측에 넣지 않으면 정책이 regime blind 가 되어
-> "평균적으로 무난한" 해로 수렴하고, 그러면 §6 의 *"모드 중재를 tau 의 함수로 배운다"*
-> 주장이 성립하지 않는다. **관측 확장 쪽을 권장**한다(래퍼에서 obs 뒤에 tau 1차원 추가).
-
----
-
-## [E] 스케일 스모크 (학습 전 필수, docs/29 §15.3)
-
-조밀항은 스텝당 `O(0.1~1)` × ~24 스텝, 종말항은 1회다. **그대로면 종말 신호가 묻힌다.**
+`python -m shepherd.m4_config` 출력에서 이 네 줄을 눈으로 확인한다:
 
 ```
-한 에피소드에서 sum(dense) 와 terminal_scale*TERMINAL 의 절대값을 각각 출력해
-같은 자릿수인지 확인한다. 아니면 terminal_scale 을 조정하되,
-**결과를 보기 전에** 조정하고 그 값을 기록한다.
+physics.tau_deploy   0.3         physics.net_radius   1.77
+physics.kill_radius  0.75        attitude.omega_max   2.0
 ```
 
 ---
 
-## [F] sweep 구성
+## [2] 기저선 — 학습이 이겨야 할 상대
 
-| 축 | 값 | 성격 |
+```bash
+python -m shepherd.scripts.sweep_m4 --baseline  500 --baseline-out  $PWD/results/hold_baseline.json
+python -m shepherd.scripts.sweep_m4 --reference 300 --reference-out $PWD/results/intercept_baseline.json
+```
+
+**절대경로로 쓴다.** 상대경로로 떼어 놓고 돌리다가 다 계산해 놓고 저장 줄에서
+`FileNotFoundError` 로 n=300 을 통째로 날린 적이 있다.
+
+| 기저선 | 무엇 | 왜 두 개인가 |
 |---|---|---|
-| `w_kill` | 0.0 / 0.25 / 0.5 / 0.75 / 1.0 | **선언된 sweep 축** — 뒤집히는 지점이 결과 |
-| `tau_deploy` | 에피소드마다 `U[0.15, 0.40]` | 도메인 랜덤화 (docs/31 T1 근거 확정 전) |
-| 공격자 | A2 (학습) / A3-fair (평가) | 학습은 A2, 평가는 A3 로 일반화 확인 |
-| seed | 5 | paired 비교 (`derive_seed`) |
-| 알고리즘 | MAPPO / MAPPO+COMA | C2 의 credit-assignment 축 |
+| `hold` (n=500) | 무개입 | **1차 판정식의 상대.** SHAPING_NEEDED 에서 0/297 |
+| `intercept` (n=300) | 최강 손튜닝 (요격 + 커밋) | 2차 참조. "hold 는 이겼는데 손튜닝은 못 이겼다"를 구분하려고 |
 
-`5 (w_kill) × 5 (seed) × 2 (알고리즘) = 50 런`. 기존 L2 런 예산을 그대로 쓰면 된다.
-**GPU 1장 원칙 유지**(워크로드 CPU-bound).
+리포에 이미 두 파일이 있으면 다시 안 재도 된다. 단 `bands` 키가 없는 구판이면 다시
+재야 한다 — `jq 'has("bands")' results/hold_baseline.json` 가 `true` 여야 한다.
+
+> ★ `intercept` 참조는 반드시 `--reference` 로 잰다. 커밋 비트는 limiter 행동
+> 벡터(idx 3)에 실려 있어서 `limiter_mode="hold" + baseline_commit=True` 는 **hold 와
+> 완전히 같은 결과**를 낸다 (정정 8, docs/45 §9.6). 300판을 헛돌린 적이 있다.
 
 ---
 
-## [G] 검증 게이트 (결과 보기 전 고정)
+## [3] 파일럿 3런 — **여기가 진짜 게이트다**
+
+```bash
+mkdir -p $PWD/results/m4_pilot
+for s in 0 1 2; do
+  setsid nohup python -m shepherd.scripts.train_m4 \
+    --seed $s --w-kill 0.5 --output $PWD/results/m4_pilot/s$s \
+    > $PWD/results/m4_pilot/s$s.log 2>&1 < /dev/null &
+done
+```
+
+`setsid nohup ... < /dev/null &` 로 띄운다. 그냥 `&` 로 띄우면 로그아웃할 때 죽는다.
+**파일 존재만 보고 "진행 중"이라고 판단하지 않는다** — 로그 마지막 줄을 본다.
+
+### 무엇을 보는가
 
 ```
-G-1  P6 재확인    커밋 비트 0 인 정책은 동결 env 와 bit-identical
-G-2  스케일       조밀/종말 기여가 같은 자릿수
-G-3  퇴화 검사    w_kill=1 에서도 정책이 "차라리 뚫리게 두는" 해로 가지 않는지
-                 (P13 이 보상 순서를 보장하지만 학습 결과도 확인)
-G-4  2층 지표     1차 침투 저지율 · 2차 비손실 비율을 **둘 다** 보고
-G-5  라벨         SEARCH_CANDIDATE / FIXED_CONDITION 유지. 승격은 A3 + 다중 조건 후
+[seed 0] upd 120/488 ... | free_cap 0.62 shape_cap 0.00 shape_hk 0.04
+[seed 0] 밴드 EASY: 네트 0.83 / 무력화 0.83 (n=61)  BAND_AIM: 네트 0.01 / 무력화 0.12 (n=58) ...
 ```
 
-**사전 등록(docs/29 §5) 재확인**: 전 `w_kill` 에서 항상-하드킬로 수렴하면 그것이 결과다. 인위적으로 너프하지 않는다.
+`signal_audit` 실측: 무작위 탐색은 SHAPING_NEEDED 에서 성공을 **0/23** 회 찾았고,
+목적 있는 요격은 **15/182** 를 찾았다. 즉 이건 구조적 0 이 아니라 **희소 탐색 문제**다.
+`shape_hk` 가 0 에서 올라오는지가 그 질문의 답이다.
+
+### 진행/중단 — 지금 선언한다 (결과 보기 전)
+
+| 파일럿 결과 | 다음 |
+|---|---|
+| 3런 중 하나라도 `shape_hk > 0` 또는 `BAND_AIM 무력화 > 0` | **[4] 진행** |
+| 3런 전부 둘 다 정확히 0 | **[4] 중단.** 탐색을 먼저 고친다 (하드킬 커리큘럼 / 요격 시연 warm-start). 태워도 나오는 건 "학습 실패"뿐이다 |
+
+> 이건 **계산 자원 게이트이지 판정 게이트가 아니다.** 1차 판정식(docs/47 §4.3)은
+> 손대지 않는다. 여기서 정하는 건 "50런을 태울 가치가 있는가" 하나뿐이다.
+
+### 시간 재기
+
+```bash
+tail -n 2 results/m4_pilot/s0.log                 # 진행 확인
+python - <<'PY'
+import json, pathlib
+for f in sorted(pathlib.Path("results/m4_pilot").rglob("summary.json")):
+    d = json.loads(f.read_text()); b = d["final_eval_bands"]
+    print(f.parent.name,
+          "overall", round(d["final_eval"]["neutralized_rate"], 3),
+          "| BAND_AIM 무력화", round(b["BAND_AIM"]["neutralized"]["p"], 3),
+          f'(n={b["BAND_AIM"]["n"]})')
+PY
+```
+
+1런 벽시계를 `T` 라 하면 **[4] 의 벽시계 = T × 50 / jobs**. 여기서 정한다.
+
+---
+
+## [4] 본 스윕 — 50런
+
+```bash
+python -m shepherd.scripts.sweep_m4 --dry-run                        # 명령 50개 눈으로 확인
+python -m shepherd.scripts.sweep_m4 --run --jobs 4 --root $PWD/results/m4_sweep
+```
+
+축 = `w_kill {0, 0.25, 0.5, 0.75, 1.0}` × `seed {0..4}` × `threat_obs {on, off}` = **50 런**.
+
+`--jobs` 는 코어 수 / 2 를 넘기지 않는다 (각 런이 이미 벡터 연산을 돈다).
+
+**`SWEEP_AXES`(omega_max · kill_radius · tau_kill)는 여기서 같이 돌리지 않는다.**
+1차 스윕이 끝난 뒤 **승자 설정 하나에 대해서만** 돌린다 — 강건성 확인이지 탐색이 아니다.
+같이 돌리면 50 → 900 런이 되고, 그건 "좋은 값 찾기"가 되어 선언 규율을 깬다.
+
+### 런이 죽었을 때
+
+```bash
+python -m shepherd.scripts.train_m4 --seed 3 --w-kill 0.75 \
+  --output $PWD/results/m4_sweep/w0.75_s3_obs1 --resume
+```
+
+`--resume` 은 체크포인트에서 이어 간다. 재개된 런은 `summary.json` 의 `resumed_from`
+으로 표시되므로 집계에서 구분된다. **죽은 런을 조용히 빼지 않는다** — 빼면 생존
+편향이다. 살리거나, 실패로 세거나 둘 중 하나.
+
+---
+
+## [5] 집계와 판정
+
+```bash
+python -m shepherd.scripts.sweep_m4 --aggregate $PWD/results/m4_sweep \
+  | tee results/m4_sweep/aggregate.json
+```
+
+### 1차 판정 — 사전 등록 (docs/47 §4.3). **고치지 않는다**
+
+`SHAPING_NEEDED` 영역의 무력화율이 `hold` 기저의 Wilson 상한을 넘는 런의 수.
+
+| 출력 | 뜻 |
+|---|---|
+| `순이득 없음` | hold 를 넘은 런이 0 — 신청서 §4.7 폴백 (v) 로 보고 |
+| `부분 순이득` | hold 는 넘었으나 intercept 참조는 하나도 못 넘음 |
+| `순이득 있음` | 둘 다 넘음 |
+
+### 2차 — 같이 보고한다
+
+* **비손실 비율의 `w_kill` 단조성.** hold 와 비교하지 않는다 — 스크립트 기준선은
+  구조적으로 하드킬을 못 해 자명하게 1.00 이다.
+* **`threat_obs` ablation.** regime 을 못 보는 정책이 얼마나 손해 보는가.
+* **`BAND_AIM`** (`a*(ψ)=25.8 ≤ a < a*=39.3`). 손튜닝 네트 포획 **1.0 %** (3/518) vs
+  물리 요격 **15.5 %** (35/226). 개선 여지가 사전 실측으로 확인된 유일한 구간이다.
+  **보고 전용이고 1차 판정식에 들어가지 않는다** (docs/47 §4.4). 경계값은
+  `curve_sweep.PSI_MED_DEG` / `band_of()` 에 못 박혀 있고 P44h·P44i 가 지킨다.
+
+---
+
+## 절대 하지 말 것
+
+| | 왜 |
+|---|---|
+| 결과를 본 뒤 판정식·표본 수·축을 바꾸기 | 소급 변경. 사전 등록 전체가 무효가 된다 |
+| 봉인 파일 수정 (`env.py`, `env_m3.py`, `adversary.py`, `params.py`, `configs/m2_l2_train.yaml`) | 동결 계약 |
+| 공격자 파라미터 튜닝 | Anti-exploitation rule 2. 공격자는 선언·동결이고 최적화 대상이 아니다 |
+| `2026URP` 루트에서 `git add -A` | 무관한 169건이 딸려 들어간다 |
+| 샌드박스 mount 에서 `git` 실행 | Windows 네이티브 git 에서만 |
+| 안 좋은 런 빼고 집계 | 생존 편향 |
+| CLI 기본값으로 선언값 덮어쓰기 | 정정 6 이 그거였다. `--tau-kill` 등은 주지 말고 선언값을 쓴다 |
 
 ---
 
@@ -199,6 +208,21 @@ G-5  라벨         SEARCH_CANDIDATE / FIXED_CONDITION 유지. 승격은 A3 + �
 
 | | |
 |---|---|
-| **커밋 차원 학습 실패** | `coma_D` 가 커밋 차원을 못 덮는다(docs/29 §15.2). `J1 learned-fire` 재현 위험. 폴백(규칙 기반 커밋 가드 + 학습은 배치만)은 사전 등록됨 |
-| **tau 관측 미결** | [D]-④. 정하지 않고 돌리면 §6 주장이 성립하지 않는다 |
-| **A3 효과 미측정** | 현 운용점에서 베이팅이 `v_shot_soft` 를 못 움직인다(A2 0.447 vs A3 0.424). 발사 결정이 marginal 한 regime 에서만 의미가 있고, 그건 **학습된 finisher** 가 생겨야 나타난다. 튜닝하지 않고 그대로 둔다 |
+| **희소 탐색** | SHAPING_NEEDED 에서 무작위 탐색이 성공을 못 찾는다(0/23). [3] 이 이걸 본다. 구조적 0 은 아니다 — 목적 있는 요격은 15/182 를 찾았다 |
+| **커밋 차원 학습 실패** | `coma_D` 가 커밋 차원을 못 덮을 수 있다 (docs/29 §15.2). 폴백(규칙 기반 커밋 가드 + 배치만 학습)은 사전 등록됨 |
+| **`omega_max` 민감도** | 네트가 기체 고정이라는 축소자세 가정 아래 값이다. 짐벌이면 두 번째 경계가 오른쪽으로 움직인다. `SWEEP_AXES` 에 올려 두었고 1차 스윕 뒤에 확인한다 (docs/45 §5) |
+| **A3 효과 미측정** | 현 운용점에서 베이팅이 `v_shot_soft` 를 못 움직인다. **학습된 finisher** 가 생겨야 나타나는 효과라 지금은 그대로 둔다 |
+
+---
+
+## 부록 — 로컬에서 이미 잰 것 (서버에서 다시 안 재도 됨)
+
+| 산출물 | 파일 · 스크립트 | 무엇 |
+|---|---|---|
+| hold 기저선 | `results/hold_baseline.json` | n=500. SHAPING 0/297 |
+| intercept 참조 | `results/intercept_baseline.json` | n=300. SHAPING 하드킬 15/182 |
+| 포획 확률 곡선 | `results/curve_hold.json` · `curve_intercept.json` | n=1500 / 1200. 두 경계 검증 (docs/45 §9) |
+| 겨냥각 ψ | `shepherd.scripts.slew_audit` | 중앙값 4.26° → `a*(ψ) = 25.8` |
+| 채널 분리 | `shepherd.scripts.channel_split` | ring 이 v⊥ 를 0.44 → 7.27 m/s 로 키운다 |
+| 학습 신호 | `shepherd.scripts.signal_audit` | 무작위 탐색 수익 std 가 종말항의 0.32 % |
+| 곡선 그림 | `docs/ppt/fig8.py` | 경계 2개 · Wilson 띠. `NEWURP_ROOT` 로 경로 지정 가능 |

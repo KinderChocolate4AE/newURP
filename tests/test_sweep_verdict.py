@@ -86,3 +86,104 @@ def test_p42d_empty_root_is_not_a_pass(tmp_path):
     r = aggregate(str(tmp_path), baseline=BASE)
     assert r.get("n") == 0
     assert r.get("verdict") is None
+
+
+REF = {"n": 300, "limiter_mode": "intercept", "nondestructive_frac": 0.611,
+       "by_regime": {SHAPE: {"n": 182, "k": 15, "neutralized_rate": 15 / 182,
+                             "wilson_lo": 0.0506, "wilson_hi": 0.1315}}}
+
+
+def test_p43_partial_gain_is_named(tmp_path):
+    """hold 는 넘었지만 최선의 손튜닝은 못 넘으면 '부분 순이득' 으로 구분해야 한다.
+
+    hold(0/297) 만 넘는 것은 약한 기준이다. 그것만 보고 '협력의 순이득 있음' 으로
+    적으면 최선의 손튜닝에 진 결과를 승리로 읽게 된다.
+    """
+    _summary(tmp_path, "a", w_kill=0.5, seed=0, obs=True, shape_n=183, shape_rate=9 / 183)
+    r = aggregate(str(tmp_path), baseline=BASE, reference=REF)
+    assert r["runs_beating_baseline"] == 1
+    assert r["runs_beating_reference"] == 0
+    assert "부분 순이득" in r["verdict"]
+
+
+def test_p43b_full_gain_requires_beating_reference(tmp_path):
+    """참조까지 넘으면 '순이득 있음'."""
+    _summary(tmp_path, "b", w_kill=0.5, seed=0, obs=True, shape_n=183, shape_rate=40 / 183)
+    r = aggregate(str(tmp_path), baseline=BASE, reference=REF)
+    assert r["runs_beating_reference"] == 1
+    assert "순이득 있음" in r["verdict"]
+
+
+def test_p43c_reference_is_optional(tmp_path):
+    """참조가 없어도 1차 판정은 그대로 동작한다."""
+    _summary(tmp_path, "c", w_kill=0.5, seed=0, obs=True, shape_n=183, shape_rate=9 / 183)
+    r = aggregate(str(tmp_path), baseline=BASE)
+    assert r["runs_beating_baseline"] == 1
+    assert "순이득 있음" in r["verdict"]
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# P45: BAND_AIM 배선 (docs/47 §4.4)
+#
+# 축을 문서에만 선언하고 코드에 안 꽂으면 정정 6(선언 그림자)이 재발한다.
+# 스윕이 끝난 뒤에 다시 뽑으면 **결과를 본 뒤 축을 만든 모양**이 되므로,
+# 판정용 최종 평가와 같은 호출에서 나와야 한다.
+# ─────────────────────────────────────────────────────────────────────────
+def _summary_with_bands(tmp, name, *, w_kill, seed, aim_neut, aim_cap, aim_n=110):
+    d = tmp / name
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "summary.json").write_text(json.dumps({
+        "seed": seed, "w_kill": w_kill, "attacker": "A2",
+        "threat_randomized": True, "threat_obs": True,
+        "final_eval_episodes": 300,
+        "final_eval": {"n": 300, "neutralized_rate": 0.2, "nondestructive_frac": 1.0,
+                       "by_regime": {SHAPE: {"n": 183, "neutralized_rate": 0.0}}},
+        "final_eval_bands": {
+            "EASY": {"n": 60, "net_capture": {"k": 50, "p": 0.83},
+                     "neutralized": {"k": 50, "p": 0.83}},
+            "BAND_AIM": {"n": aim_n, "net_capture": {"k": 1, "p": aim_cap},
+                         "neutralized": {"k": 2, "p": aim_neut}},
+            SHAPE: {"n": 130, "net_capture": {"k": 0, "p": 0.0},
+                    "neutralized": {"k": 0, "p": 0.0}},
+        }}))
+    return d
+
+
+def test_p45_aggregate_reports_band_aim(tmp_path):
+    """세 칸 집계가 summary.json 에서 그대로 올라와야 한다."""
+    from shepherd.scripts.sweep_m4 import BAND, aggregate
+
+    for i, (nz, cp) in enumerate([(0.10, 0.05), (0.20, 0.09), (0.30, 0.13)]):
+        _summary_with_bands(tmp_path, f"r{i}", w_kill=0.5, seed=i,
+                            aim_neut=nz, aim_cap=cp)
+    out = aggregate(str(tmp_path), baseline=dict(BASE))
+
+    assert BAND == "BAND_AIM"
+    a = out["band_aim"]
+    assert a["n_runs"] == 3
+    assert a["run_neutralized_med"] == pytest.approx(0.20)
+    assert a["run_net_capture_med"] == pytest.approx(0.09)
+    assert "1차 판정식" in a["_note"]
+
+
+def test_p45b_band_aim_never_enters_the_primary_verdict(tmp_path):
+    """★ BAND_AIM 이 아무리 좋아도 1차 판정은 안 바뀐다 (사전 등록 보호)."""
+    from shepherd.scripts.sweep_m4 import aggregate
+
+    for i in range(3):
+        _summary_with_bands(tmp_path, f"r{i}", w_kill=0.5, seed=i,
+                            aim_neut=0.99, aim_cap=0.99)
+    out = aggregate(str(tmp_path), baseline=dict(BASE))
+    assert out["runs_beating_baseline"] == 0
+    assert "순이득 없음" in out["verdict"]
+
+
+def test_p45c_old_runs_without_bands_do_not_crash(tmp_path):
+    """구버전 summary.json(밴드 없음)이 섞여도 집계가 죽지 않는다."""
+    from shepherd.scripts.sweep_m4 import aggregate
+
+    _summary(tmp_path, "old", w_kill=0.5, seed=0, obs=True,
+             shape_n=183, shape_rate=0.0)
+    out = aggregate(str(tmp_path), baseline=dict(BASE))
+    assert out["band_aim"]["n_runs"] == 0
+    assert "구버전" in out["band_aim"]["_note"]
