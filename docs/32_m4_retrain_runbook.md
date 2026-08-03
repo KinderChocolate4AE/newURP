@@ -117,8 +117,44 @@ python -m shepherd.scripts.sweep_m4 --reference 300 --reference-out $PWD/results
 | `hold` (n=500) | 무개입 | **1차 판정식의 상대.** SHAPING_NEEDED 에서 0/297 |
 | `intercept` (n=300) | 최강 손튜닝 (요격 + 커밋) | 2차 참조. "hold 는 이겼는데 손튜닝은 못 이겼다"를 구분하려고 |
 
-리포에 이미 두 파일이 있으면 다시 안 재도 된다. 단 `bands` 키가 없는 구판이면 다시
-재야 한다 — `jq 'has("bands")' results/hold_baseline.json` 가 `true` 여야 한다.
+리포에 이미 두 파일이 있으면 **다시 안 재도 된다.** 단 `bands` 키가 없는 구판이면
+다시 재야 한다 (`jq` 는 없을 수 있으므로 파이썬으로):
+
+```bash
+python - <<'PY'
+import json
+for f in ("results/hold_baseline.json", "results/intercept_baseline.json"):
+    d = json.load(open(f))
+    print(f, "| n=", d["n"], "| mode=", d["limiter_mode"],
+          "| commit=", d.get("baseline_commit"), "| bands=", "bands" in d)
+PY
+```
+
+둘 다 `bands= True` 면 이 절은 건너뛴다.
+
+### ★ 대신 결정론 대조를 한다 (2분)
+
+동결 수치는 **다른 기계에서** 잰 것이고, 사전 등록된 문턱값이 전부 그 파일에서 나온다.
+이 기계가 같은 숫자를 내는지는 한 번 확인해야 한다. `results/curve_hold.json` 의 앞
+50판이 `hold_baseline` 과 **같은 draw** 이므로 대조가 성립한다.
+
+```bash
+python -m shepherd.scripts.curve_sweep --mode hold --episodes 50 --out /tmp/det.json >/dev/null
+python - <<'PY'
+import json
+new = json.load(open("/tmp/det.json"))["records"]
+ref = json.load(open("results/curve_hold.json"))["records"][:len(new)]
+bad  = [(a["episode"], a["label"], b["label"])
+        for a, b in zip(new, ref) if a["label"] != b["label"]]
+same = all(abs(a["a_att"] - b["a_att"]) < 1e-12 for a, b in zip(new, ref))
+print(f"라벨 불일치 {len(bad)}/{len(new)}   위협 draw 일치 {same}")
+print("OK -- 동결 수치가 이 기계에서 재현된다" if not bad and same else bad[:5])
+PY
+```
+
+* **OK** → 동결본 그대로 쓰고 [3] 으로.
+* **불일치** → 그것 자체가 결과다. 이 기계에서 기저선 2개를 다시 재고(위 명령),
+  문서에 **"기저선은 서버 기준"** 이라고 못 박는다. 넘어가면 판정 전체가 흔들린다.
 
 > ★ `intercept` 참조는 반드시 `--reference` 로 잰다. 커밋 비트는 limiter 행동
 > 벡터(idx 3)에 실려 있어서 `limiter_mode="hold" + baseline_commit=True` 는 **hold 와
