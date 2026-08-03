@@ -15,6 +15,14 @@ Phase-1 PPO core's flat-array world without modifying either side:
   - env.state() exposed each step for the 2C central critic.
 
 2B plugs role policies into collect_episode(); nothing here depends on torch.
+
+2026-08-03 결함 2 -- `live_dims` 프로파일
+----------------------------------------
+어댑터는 이제 행동 프로파일을 주입받는다 (`ShepherdAdapter(env, live_dims=...)`).
+기본은 `LIVE_DIMS` 라서 M2/M3 호출부는 **bit-identical**. M4 만
+`M4_LIVE_DIMS` 를 넘겨 limiter idx 3(커밋 비트)을 live 로 만든다.
+어댑터가 프로파일을 들고 있어야 `action_bounds` 와 `step` 의 패딩이 한 곳에서
+일치한다 -- 결함 1·2 는 둘 다 "소비자 한 곳이 안 따라왔다" 였다.
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
@@ -23,8 +31,9 @@ from typing import Callable, Dict, List, Optional
 import numpy as np
 
 from shepherd.env import ShapingParallelEnv
-from shepherd.train.action_dims import role_of          # noqa: F401  (재수출: tests/test_adapter_smoke)
-from shepherd.train.make_env import live_action_dim, pad_env_action, LIVE_DIMS
+from shepherd.train.action_dims import DimsMap, role_of  # noqa: F401  (재수출: tests/test_adapter_smoke)
+from shepherd.train.make_env import (M4_LIVE_DIMS, live_action_dim,   # noqa: F401
+                                     pad_env_action, LIVE_DIMS)
 
 SHARED_FLAG_KEYS = ("fire_event", "wasted_fire", "fsm_state", "k_remaining",
                     "v_shot_soft", "v_shot_worst", "p_feasible", "boxed_in",
@@ -48,8 +57,10 @@ class StepResult:
 class ShepherdAdapter:
     """Flat-array view of the frozen ParallelEnv for role-based trainers."""
 
-    def __init__(self, env: ShapingParallelEnv):
+    def __init__(self, env: ShapingParallelEnv,
+                 live_dims: Optional[DimsMap] = None):
         self.env = env
+        self.live_dims: DimsMap = LIVE_DIMS if live_dims is None else live_dims
         self.agent_ids: List[str] = list(env.possible_agents)
         self.limiter_ids = [a for a in self.agent_ids if role_of(a) == "limiter"]
         self.finisher_id = next(a for a in self.agent_ids if role_of(a) == "finisher")
@@ -60,13 +71,13 @@ class ShepherdAdapter:
         self._bounds = {}
         for a in self.agent_ids:
             space = env.action_space(a)
-            _, live_idx = LIVE_DIMS[role_of(a)]
+            _, live_idx = self.live_dims[role_of(a)]
             self._bounds[a] = (space.low[list(live_idx)].astype(np.float64),
                                space.high[list(live_idx)].astype(np.float64))
 
     # ------------------------------------------------------------------ api
     def live_dim(self, agent_id: str) -> int:
-        return live_action_dim(agent_id)
+        return live_action_dim(agent_id, self.live_dims)
 
     def action_bounds(self, agent_id: str):
         """(low, high) arrays for the LIVE dims of this agent."""
@@ -79,8 +90,10 @@ class ShepherdAdapter:
 
     def step(self, live_actions: Dict[str, np.ndarray]) -> StepResult:
         acts = dict(live_actions)
-        acts.setdefault(self.adversary_id, np.zeros(3, np.float32))  # env-scripted
-        env_actions = {aid: pad_env_action(aid, a) for aid, a in acts.items()}
+        acts.setdefault(self.adversary_id,                           # env-scripted
+                        np.zeros(self.live_dim(self.adversary_id), np.float32))
+        env_actions = {aid: pad_env_action(aid, a, self.live_dims)
+                       for aid, a in acts.items()}
         obs, rewards, terms, truncs, infos = self.env.step(env_actions)
         self._check_obs(obs)
         terminated = any(terms.values())
@@ -106,7 +119,11 @@ class ShepherdAdapter:
 
 def random_policy(rng: np.random.Generator, fire_prob: float = 0.0) -> Callable:
     """Uniform live-dim policy within the env action bounds; finisher fire is a
-    Bernoulli(fire_prob) mapped to {0, 1} (env decodes fire > 0.5)."""
+    Bernoulli(fire_prob) mapped to {0, 1} (env decodes fire > 0.5).
+
+    주의(M4 프로파일): limiter 커밋 비트의 Box 범위는 [0, 1] 이므로 균등 표집은
+    스텝마다 Bernoulli(0.5) 커밋 제안과 같다. 랜덤 baseline 으로는 타당하지만
+    "아무것도 안 하는 기준선"이 아니다 -- 대조군에는 hold/scripted 를 쓸 것."""
     def policy(agent_id: str, obs: np.ndarray, adapter: ShepherdAdapter):
         low, high = adapter.action_bounds(agent_id)
         act = rng.uniform(low, high).astype(np.float32)

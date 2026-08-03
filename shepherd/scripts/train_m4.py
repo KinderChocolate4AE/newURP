@@ -3,8 +3,19 @@
 환경 조립은 **torch-free** `shepherd/m4_env.py` 에 있다. 이 파일은 학습기와 CLI 뿐이다.
 `MAPPORunner` 를 상속해 재사용한다 (복사 금지 -- 드리프트 방지).
 
-행동 공간은 **변경 없다** -- limiter Box(4) idx 3 이 곧 커밋 비트다(docs/29 §3.1).
+env 행동 공간은 **변경 없다** -- limiter Box(4) idx 3 이 곧 커밋 비트다(docs/29 §3.1).
 동결 env 는 그 차원을 무시하고 `ModeSystemEnv` 가 읽는다.
+
+★ 2026-08-03 결함 2 -- 정책의 live 차원은 변경된다
+--------------------------------------------------
+env Box 는 그대로지만 **정책이 그 idx 3 에 값을 넣을 수 있어야** 커밋이 성립한다.
+`action_dims.LIVE_DIMS` 는 M4 이전 상태로 limiter live = (0,1,2) 였고, 그래서
+`pad_env_action` 이 커밋 자리에 0 을 넣고 있었다 -- 정책에게 하드킬이라는 행동이
+아예 없었다(파일럿 3런 `shape_hk = 0` 의 진짜 이유. 탐색 실패가 아니다).
+M4 만 `M4_LIVE_DIMS` 프로파일을 써서 limiter live = (0,1,2,3) 으로 돌리고,
+학습기는 `cfg.limiter_commit=True` 로 limiter actor 를 MixedActor(연속 3 +
+Bernoulli 1) 로 만든다. M2/M3 는 두 기본값을 안 건드리므로 bit-identical.
+P48 이 지킨다.
 
 왜 위협 랜덤화가 필수인가 (docs/40 §8.2)
 ----------------------------------------
@@ -35,7 +46,7 @@ from shepherd.env_sys import RewardSpec, SystemSpec
 from shepherd.m4_config import (M4_OVERRIDES, TAU_DECOMPOSITION, THREAT_BRACKET,
                                 m4_config)
 from shepherd.m4_env import build_m4_env, mission_eval, regime_of
-from shepherd.train.make_env import pad_env_action
+from shepherd.train.make_env import M4_LIVE_DIMS, pad_env_action
 from shepherd.scripts.curve_sweep import BANDS, summarize_bands
 from shepherd.spawn_rand import SpawnSpec
 from shepherd.train.adapter import ShepherdAdapter
@@ -70,13 +81,23 @@ class M4Runner(MAPPORunner):
         self.seed = int(seed)
 
         st = build_m4_env(seed, 0, **self._m4)              # <-- M4 스택으로 dim 산출
-        ad = ShepherdAdapter(st.env)
+        ad = ShepherdAdapter(st.env, M4_LIVE_DIMS)         # 커밋 비트 live (결함 2)
         self.n = len(ad.limiter_ids)
         self.obs_dim = ad.obs_dim
         lim_low, lim_high = ad.action_bounds(ad.limiter_ids[0])
         fin_low, fin_high = ad.action_bounds(ad.finisher_id)
-        if not (np.allclose(lim_low, -lim_high) and np.allclose(fin_low[:3], -fin_high[:3])):
+        # ★ 대칭성은 **연속 차원에만** 요구한다. 이산 비트(limiter 커밋 idx 3,
+        #   finisher 발사 idx 4)의 Box 는 [0, 1] 이라 -high 와 같을 수 없다.
+        #   종전 코드는 limiter 전체에 대칭성을 요구했고, 커밋 차원이 live 로
+        #   들어오는 순간 여기서 걸린다 (배선 없이 프로파일만 바꾸면 죽는 지점).
+        if not (np.allclose(lim_low[:3], -lim_high[:3])
+                and np.allclose(fin_low[:3], -fin_high[:3])):
             raise ValueError("action Boxes are expected symmetric for [-1,1] scaling")
+        if not (np.isclose(lim_low[3], 0.0) and np.isclose(lim_high[3], 1.0)):
+            raise ValueError(f"커밋 비트 Box 가 [0,1] 이 아니다: "
+                             f"[{lim_low[3]}, {lim_high[3]}] -- env.py 와 어긋났다")
+        # lim_scale = [a_max, a_max, a_max, 1.0]. 커밋 비트는 Bernoulli {0,1} 이
+        # 그대로 통과해 env 의 commit_threshold=0.5 와 맞물린다.
         self.lim_scale = lim_high.astype(np.float32)
         self.fin_axis_scale = fin_high[:3].astype(np.float32)
 
@@ -84,9 +105,15 @@ class M4Runner(MAPPORunner):
         cfg = MAPPOConfig.from_dict({**run_cfg["mappo"], "seed": seed,
                                      "device": device,
                                      "rollout_steps": self.rollout_env_steps,
-                                     "total_timesteps": int(loop["total_env_steps"])})
+                                     "total_timesteps": int(loop["total_env_steps"]),
+                                     # 결함 2 (a): M4 기본은 커밋 live.
+                                     # config 로 끄면 docs/29 §15.2 폴백 (b) 의
+                                     # 대조군(= 커밋을 정책 손에서 뗀 팔)이 된다.
+                                     "limiter_commit": bool(
+                                         run_cfg["mappo"].get("limiter_commit", True))})
         self.tr = MAPPOTrainer(self.obs_dim, self.n, cfg)
-        self.buf = MAPPORollout(self.rollout_env_steps, self.obs_dim, self.n)
+        self.buf = MAPPORollout(self.rollout_env_steps, self.obs_dim, self.n,
+                                lim_dim=self.tr.lim_dim)
 
         self.rand_cfg = None                    # 위협 랜덤화는 m4_config 가 담당
         self.rand_rng = np.random.default_rng(seed * 9973 + 17)
@@ -105,7 +132,7 @@ class M4Runner(MAPPORunner):
     # --------------------------------------------------------------- 에피소드 ---
     def _begin_episode(self) -> None:
         st = build_m4_env(self.seed, self._ep_idx, **self._m4)
-        self._adapter = ShepherdAdapter(st.env)
+        self._adapter = ShepherdAdapter(st.env, M4_LIVE_DIMS)
         obs_d, _ = self._adapter.reset(seed=self.base_seed + self._ep_idx)
         self._obs = obs_d[self._adapter.limiter_ids[0]]
         self._ep = {"ret": 0.0, "headline": 0.0, "limiter_loss": 0.0,
@@ -168,8 +195,12 @@ class M4Runner(MAPPORunner):
             nobs = self.norm.normalize(obs)
             t = torch.as_tensor(limiter_inputs(nobs, self.n), device=dev)
             raw, _ = self.tr.lim_actor.act(t, deterministic=deterministic)
-            return (np.clip(raw.cpu().numpy(), -1.0, 1.0)
-                    * self.lim_scale).astype(np.float32)
+            raw = raw.cpu().numpy()
+            # 연속 3 차원만 클립. 커밋 비트(idx 3)는 {0,1} 표본이라 그대로 통과시킨다
+            # -- 클립하면 값 자체는 안 변하지만 규약이 finisher 와 갈라진다.
+            act = raw.copy()
+            act[:, :3] = np.clip(raw[:, :3], -1.0, 1.0)
+            return (act * self.lim_scale).astype(np.float32)
 
         def fin_fn(obs, flags):
             nobs = self.norm.normalize(obs)
@@ -203,13 +234,17 @@ class M4Runner(MAPPORunner):
                 # 롤아웃 없이 평가만 하는 경우가 있으므로 여기서 게으르게 만든다.
                 if self._adapter is None:
                     self._adapter = ShepherdAdapter(
-                        build_m4_env(self.eval_seed0, 0, **self._m4).env)
+                        build_m4_env(self.eval_seed0, 0, **self._m4).env,
+                        M4_LIVE_DIMS)
                 ids = (self._adapter.limiter_ids, self._adapter.finisher_id)
             lim = lim_fn(obs, flags)
             acts = {lid: np.asarray(lim[i], np.float32)
                     for i, lid in enumerate(ids[0])}
             acts[ids[1]] = np.asarray(fin_fn(obs, flags), np.float32)
-            return {aid: pad_env_action(aid, a) for aid, a in acts.items()}
+            # ★ 패딩은 어댑터와 **같은 프로파일**로 걸어야 한다. 기본 프로파일로
+            #   걸면 커밋 비트가 다시 0 으로 덮여 결함 2 가 그대로 재발한다.
+            return {aid: pad_env_action(aid, a, self._adapter.live_dims)
+                    for aid, a in acts.items()}
         return policy
 
     def evaluate(self, episodes: int,
@@ -252,6 +287,13 @@ class M4Runner(MAPPORunner):
         if not (ck.exists() and st.exists()):
             return 0
         self.tr = MAPPOTrainer.load(str(ck), map_location=self.tr.cfg.device)
+        # ★ 결함 2 이전 체크포인트(limiter_commit 없음 -> lim_dim 3)를 커밋 배선된
+        #   러너에 이어 붙이면 조용히 틀린 폭을 학습한다. 조용히 넘기지 않는다.
+        if self.tr.lim_dim != self.buf.lim_dim:
+            raise ValueError(
+                f"체크포인트 lim_dim={self.tr.lim_dim} != 러너 {self.buf.lim_dim}. "
+                f"결함 2 배선 이전 체크포인트로 보인다 -- 재개하지 말고 처음부터 돌릴 것 "
+                f"(results/m4_pilot 의 파일럿 산출물은 전후 대조용으로 보존)")
         nz = out_dir / f"obs_norm_{tag}.json"
         if nz.exists():
             self.norm.load_state_dict(json.loads(nz.read_text()))
@@ -408,7 +450,10 @@ def main(argv=None) -> None:
                       f"비손실 {ev['nondestructive_frac']:.2f} "
                       f"| free_cap {reg.get('regime/free/captured', float('nan')):.2f} "
                       f"shape_cap {reg.get('regime/shape/captured', float('nan')):.2f} "
-                      f"shape_hk {reg.get('regime/shape/hard_kill', float('nan')):.2f}")
+                      f"shape_hk {reg.get('regime/shape/hard_kill', float('nan')):.2f} "
+                      # ★ 결함 2 이후 추가. 커밋을 실제로 몇 번 제안하는가 --
+                      #   0.00/1.00 으로 굳으면 확률 붕괴(퇴화)이지 "학습 안 됨" 이 아니다.
+                      f"| commit {stats.get('limiter/commit_rate', float('nan')):.3f}")
                 runner.save(out_dir)
                 (out_dir / "mission_curve.json").write_text(json.dumps(curve, indent=2))
         runner.save(out_dir, tag="final")

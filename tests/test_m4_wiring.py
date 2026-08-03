@@ -267,11 +267,15 @@ def test_p46_policy_actions_match_the_env_action_boxes():
     "학습이 안 됐다"로 읽혔다. 파일럿 3런 15시간이 그렇게 갔다. 이 한 줄이면 잡혔다.
     """
     from shepherd.m4_env import build_m4_env
+    from shepherd.train.action_dims import M4_LIVE_DIMS
     from shepherd.train.adapter import ShepherdAdapter
 
     r = _runner()
     st = build_m4_env(r.eval_seed0, 0, **r._m4)
-    r._adapter = ShepherdAdapter(st.env)
+    # 어댑터는 M4 프로파일이어야 한다 (결함 2). 기본 프로파일을 심으면 정책이 내는
+    # 4 차원 limiter 행동과 패딩 기대치(3)가 갈라져 여기서 즉시 걸린다 -- 그 자체가
+    # 이 배선의 방어선이다. P48 이 프로파일 정합을 따로 못박는다.
+    r._adapter = ShepherdAdapter(st.env, M4_LIVE_DIMS)
 
     acts = r.policy_fn()(st.env.reset(seed=0)[0][r._adapter.limiter_ids[0]], {})
     assert set(acts) == set(r._adapter.limiter_ids) | {r._adapter.finisher_id}
@@ -306,3 +310,130 @@ def test_p47_evaluation_is_sampled_but_reproducible():
     a = r.evaluate(6)
     b = r.evaluate(6)
     assert a["counts"] == b["counts"], "같은 시드인데 평가가 재현되지 않는다"
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# P48 — 2026-08-03 결함 2: 커밋 비트가 정책 손에 있는가
+#
+# 결함 1(P46)과 같은 부류의 네 번째 사례다: **미사용으로 문서화된 슬롯을 새 기능이
+# 재사용했는데 소비자 한 곳이 안 따라왔다.** docs/29 §3.1 은 limiter Box(4) idx 3 을
+# 커밋 비트로 선언했지만 `action_dims.LIVE_DIMS` 는 M4 이전 주석 그대로 그 자리를
+# RESERVED 로 두고 있었고, `pad_env_action` 이 거기에 0 을 넣었다. 결과:
+# **정책은 커밋을 켤 수단이 없었다** -- 학습 중에도, 평가에서도.
+#
+# 이것이 스윕의 주축을 죽인다. `w_kill` 은 종말 보상에만 들어가고
+# (HARD_KILL = b_net·(1−w_kill)) 하드킬이 불가능하면 도달 불가능한 결과의 보상만
+# 바꾼다 -- 5×5×2 스윕에서 `w_kill` 축 전체가 불활성이고 2차 지표는 자명하게 1.00.
+# 파일럿 3런의 `shape_hk = 0` 은 탐색 실패가 아니라 이것이다.
+#
+# 그래서 문서가 아니라 테스트로 못 박는다.
+# ─────────────────────────────────────────────────────────────────────────
+def test_p48a_commit_bit_survives_padding_and_reaches_the_env():
+    """★ 정책이 켠 커밋 비트가 env 의 방아쇠까지 **살아서** 도착해야 한다.
+
+    torch 없이 검증한다 -- 배선의 핵심은 액터가 아니라 프로파일과 패딩이다.
+    기본 프로파일로 같은 행동을 보내면 커밋이 **사라진다**는 것도 같이 확인한다
+    (그게 결함 2 의 정확한 형태이므로, 대조 없이 통과하면 의미가 없다).
+    """
+    from shepherd.train.action_dims import (LIVE_DIMS, M4_LIVE_DIMS,
+                                            pad_env_action)
+    from shepherd.train.adapter import ShepherdAdapter
+
+    st = build_m4_env(0, 0, **KW)
+    env = st.env
+    assert env.spec.enabled, "M4 방아쇠가 꺼져 있으면 이 테스트는 무의미하다"
+
+    ad = ShepherdAdapter(env, M4_LIVE_DIMS)
+    assert ad.live_dim(ad.limiter_ids[0]) == 4, "M4 프로파일에서 limiter live = 4"
+
+    # 커밋 비트만 1, 나머지 0. 어댑터 패딩을 거쳐 env 로 들어간다.
+    ad.reset(seed=0)
+    live = {lid: np.array([0., 0., 0., 1.], np.float32) for lid in ad.limiter_ids}
+    live[ad.finisher_id] = np.zeros(4, np.float32)
+    ad.step(live)
+    assert len(env.commits) == len(ad.limiter_ids), \
+        f"커밋 제안이 env 에 도착하지 않았다 (commits={len(env.commits)})"
+
+    # 대조: 기본 프로파일은 idx 3 을 0 으로 덮는다 = 결함 2 의 형태
+    st2 = build_m4_env(0, 0, **KW)
+    ad2 = ShepherdAdapter(st2.env)                    # 기본 프로파일
+    assert ad2.live_dim(ad2.limiter_ids[0]) == 3
+    ad2.reset(seed=0)
+    ad2.step({**{lid: np.zeros(3, np.float32) for lid in ad2.limiter_ids},
+              ad2.finisher_id: np.zeros(4, np.float32)})
+    assert len(st2.env.commits) == 0, \
+        "기본 프로파일에서 커밋이 걸렸다 -- 대조가 성립하지 않는다"
+
+    # 그리고 패딩 자체의 대수적 형태
+    a = np.array([1., 2., 3., 1.], np.float32)
+    assert pad_env_action("limiter_0", a, M4_LIVE_DIMS)[3] == 1.0
+    assert pad_env_action("limiter_0", a[:3], LIVE_DIMS)[3] == 0.0
+
+
+def test_p48b_default_profile_is_untouched():
+    """M2/M3 는 이 변경에 **닿지 않아야** 한다 (LIVE_DIMS 는 전역이다)."""
+    from shepherd.train.action_dims import LIVE_DIMS, M4_LIVE_DIMS, live_action_dim
+
+    assert LIVE_DIMS["limiter"] == (4, (0, 1, 2)), "기본 프로파일이 오염됐다"
+    assert M4_LIVE_DIMS["limiter"] == (4, (0, 1, 2, 3))
+    # 나머지 역할은 두 프로파일에서 동일해야 한다 (role_of 가 기본 맵으로 검증한다)
+    assert set(LIVE_DIMS) == set(M4_LIVE_DIMS)
+    for role in ("finisher", "adversary"):
+        assert LIVE_DIMS[role] == M4_LIVE_DIMS[role]
+    # dims 인자를 안 주면 기존 동작 그대로
+    assert live_action_dim("limiter_0") == 3
+    assert live_action_dim("limiter_0", M4_LIVE_DIMS) == 4
+
+
+@pytest.mark.torch
+def test_p48c_trainer_actor_matches_the_profile():
+    """액터 구조 · 버퍼 폭 · 스케일이 한 몸으로 움직여야 한다.
+
+    폭이 갈라지면 조용히 틀린 차원을 학습하게 되므로 **큰 소리로** 죽어야 한다.
+    """
+    import torch
+
+    from shepherd.train.mappo import (GaussianActor, MAPPOConfig, MAPPORollout,
+                                      MAPPOTrainer, MixedActor)
+
+    # 기본(M2/M3): Gaussian 3 차원
+    base = MAPPOTrainer(8, 2, MAPPOConfig(hidden_sizes=(8, 8)))
+    assert isinstance(base.lim_actor, GaussianActor) and base.lim_dim == 3
+    assert MAPPOConfig().limiter_commit is False, "기본이 커밋 ON 으로 뒤집혔다"
+
+    # M4: Mixed(연속 3 + Bernoulli 1)
+    m4 = MAPPOTrainer(8, 2, MAPPOConfig(hidden_sizes=(8, 8), limiter_commit=True))
+    assert isinstance(m4.lim_actor, MixedActor) and m4.lim_dim == 4
+    raw, logp = m4.lim_actor.act(torch.zeros(2, 8 + 2))
+    assert raw.shape == (2, 4) and logp.shape == (2,)
+    assert set(np.unique(raw[:, 3].numpy())) <= {0.0, 1.0}, "커밋 비트가 {0,1} 이 아니다"
+
+    # 폭 불일치는 조용히 지나가지 않는다
+    bad = MAPPORollout(4, 8, 2, lim_dim=3)
+    bad._i = bad.size
+    with pytest.raises(ValueError, match="lim_dim"):
+        m4.update(bad)
+
+
+@pytest.mark.torch
+def test_p48d_m4_runner_is_wired_end_to_end():
+    """러너 조립 -> 롤아웃 -> 갱신까지 커밋 차원이 한 폭으로 흐르는가."""
+    from shepherd.train.action_dims import M4_LIVE_DIMS
+
+    r = _runner(steps=256)
+    assert r.tr.cfg.limiter_commit is True, "M4 기본은 커밋 live 다"
+    assert r.tr.lim_dim == 4 == r.buf.lim_dim
+    assert r.lim_scale.shape == (4,) and np.isclose(r.lim_scale[3], 1.0), \
+        "커밋 비트 스케일은 1.0 이어야 env 의 commit_threshold=0.5 와 맞물린다"
+
+    r.collect_rollout()
+    assert r._adapter.live_dims is M4_LIVE_DIMS, "롤아웃 어댑터가 기본 프로파일이다"
+    assert r.buf.lim_raw.shape[-1] == 4
+    # 커밋 비트는 클립되지 않고 {0,1} 그대로 저장돼야 한다 (finisher 발사와 같은 규약)
+    bits = r.buf.lim_raw[..., 3]
+    assert set(np.unique(bits)) <= {0.0, 1.0}
+    assert np.allclose(r.buf.lim_clip[..., 3], bits)
+
+    stats = r.update()
+    assert "limiter/commit_rate" in stats, "커밋 진단 지표가 빠졌다"
+    assert 0.0 <= stats["limiter/commit_rate"] <= 1.0

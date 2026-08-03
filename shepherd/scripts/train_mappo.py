@@ -81,7 +81,8 @@ class MAPPORunner:
                                      "rollout_steps": self.rollout_env_steps,
                                      "total_timesteps": total})
         self.tr = MAPPOTrainer(self.obs_dim, self.n, cfg)
-        self.buf = MAPPORollout(self.rollout_env_steps, self.obs_dim, self.n)
+        self.buf = MAPPORollout(self.rollout_env_steps, self.obs_dim, self.n,
+                                lim_dim=self.tr.lim_dim)
 
         self.rand_cfg = run_cfg.get("randomize")
         self.rand_rng = np.random.default_rng(seed * 9973 + 17)
@@ -145,7 +146,11 @@ class MAPPORunner:
             raw_l_t, logp_l = self.tr.lim_actor.act(
                 torch.as_tensor(x_l, device=device))
             raw_l = raw_l_t.cpu().numpy()
-            clip_l = np.clip(raw_l, -1.0, 1.0)
+            # 연속 차원만 클립한다. M4 커밋 비트(idx 3)는 Bernoulli 표본 {0,1} 이라
+            # finisher 의 발사 비트와 같은 규약으로 raw 를 그대로 흘려보낸다.
+            # lim_dim == 3 이면 이 두 줄은 기존 np.clip(raw_l, -1, 1) 과 동일하다.
+            clip_l = raw_l.copy()
+            clip_l[:, :3] = np.clip(raw_l[:, :3], -1.0, 1.0)
 
             raw_f_t, logp_f = self.tr.fin_actor.act(
                 torch.as_tensor(nobs[None, :], device=device))
@@ -226,8 +231,10 @@ class MAPPORunner:
             nobs = self.norm.normalize(obs)
             t = torch.as_tensor(limiter_inputs(nobs, self.n), device=device)
             raw, _ = self.tr.lim_actor.act(t, deterministic=True)
-            return (np.clip(raw.cpu().numpy(), -1.0, 1.0)
-                    * self.lim_scale).astype(np.float32)
+            raw = raw.cpu().numpy()
+            act = raw.copy()                      # 커밋 비트는 클립하지 않는다
+            act[:, :3] = np.clip(raw[:, :3], -1.0, 1.0)   # lim_dim==3 이면 기존과 동일
+            return (act * self.lim_scale).astype(np.float32)
 
         def finisher_fn(obs, flags):
             nobs = self.norm.normalize(obs)

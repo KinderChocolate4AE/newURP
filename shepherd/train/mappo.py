@@ -105,6 +105,17 @@ class MAPPOConfig:
     coma_gamma: float = 0.99
     coma_lam: float = 0.95
 
+    # ★ 2026-08-03 결함 2 -- M4 커밋 비트. limiter 행동에 이산 차원 하나를 붙인다
+    #   (Box(4) idx 3, docs/29 SS3.1). True 면 limiter actor 가 GaussianActor 대신
+    #   MixedActor(cont=3 + Bernoulli 1) 가 되고 lim 행동 폭이 3 -> 4 가 된다.
+    #   **기본은 False** -- M2/M3 는 이 플래그를 건드리지 않는 한 bit-identical 이고,
+    #   플래그가 없는 옛 체크포인트는 dataclass 기본값으로 False 를 받아 그대로 로드된다.
+    #   주의(선언, 튜닝 아님): 커밋 헤드는 이산이라 `ent_coef_limiter` 가 0 이면
+    #   finisher 발사에서 관측된 확률 붕괴(p=0.0002 / p=0.9999)와 같은 퇴화가
+    #   limiter 에서도 일어날 수 있다. 기본값은 바꾸지 않았다 -- 바꾸려면 config 로
+    #   선언하고 그 사실을 결과와 함께 보고할 것.
+    limiter_commit: bool = False
+
     seed: int = 0
     device: str = "cpu"
 
@@ -206,11 +217,14 @@ class MAPPORollout:
     """Fixed-size on-policy buffer: ONE row per env step (shared obs/reward/
     value), with per-limiter and finisher action/log-prob blocks."""
 
-    def __init__(self, size: int, obs_dim: int, n_limiters: int) -> None:
+    def __init__(self, size: int, obs_dim: int, n_limiters: int,
+                 lim_dim: int = 3) -> None:
         self.size, self.obs_dim, self.n = size, obs_dim, n_limiters
+        # lim_dim: 3 = accel only (기본) / 4 = accel + 커밋 비트 (M4, cfg.limiter_commit)
+        self.lim_dim = int(lim_dim)
         self.obs = np.zeros((size, obs_dim), np.float32)
-        self.lim_raw = np.zeros((size, n_limiters, 3), np.float32)
-        self.lim_clip = np.zeros((size, n_limiters, 3), np.float32)
+        self.lim_raw = np.zeros((size, n_limiters, self.lim_dim), np.float32)
+        self.lim_clip = np.zeros((size, n_limiters, self.lim_dim), np.float32)
         self.lim_logp = np.zeros((size, n_limiters), np.float32)
         self.fin_raw = np.zeros((size, 4), np.float32)
         self.fin_clip = np.zeros((size, 4), np.float32)
@@ -261,8 +275,15 @@ class MAPPOTrainer:
         self.obs_dim = obs_dim
         self.n = int(n_limiters)
         self.device = torch.device(cfg.device)
-        self.lim_actor = GaussianActor(obs_dim + self.n, 3, cfg.hidden_sizes,
-                                       cfg.init_log_std, cfg.ortho_init).to(self.device)
+        # ★ 결함 2: 커밋 비트가 켜지면 limiter 도 finisher 와 같은 구조(연속 3 +
+        #   Bernoulli 1)가 된다. 새 클래스가 필요 없다 -- MixedActor 가 이미 그것이다.
+        self.lim_dim = 4 if cfg.limiter_commit else 3
+        if cfg.limiter_commit:
+            self.lim_actor = MixedActor(obs_dim + self.n, 3, cfg.hidden_sizes,
+                                        cfg.init_log_std, cfg.ortho_init).to(self.device)
+        else:
+            self.lim_actor = GaussianActor(obs_dim + self.n, 3, cfg.hidden_sizes,
+                                           cfg.init_log_std, cfg.ortho_init).to(self.device)
         self.fin_actor = MixedActor(obs_dim, 3, cfg.hidden_sizes,
                                     cfg.init_log_std, cfg.ortho_init).to(self.device)
         self.critic = CentralCritic(obs_dim, cfg.hidden_sizes,
@@ -303,6 +324,11 @@ class MAPPOTrainer:
         cfg = self.cfg
         if not buf.full:
             raise ValueError(f"MAPPORollout not full: {buf._i}/{buf.size}")
+        if buf.lim_dim != self.lim_dim:
+            # 결함 2 부류(= 슬롯을 재사용했는데 소비자 한 곳이 안 따라옴)의 재발 방지:
+            # 버퍼 폭과 액터 폭이 갈라지면 조용히 틀린 차원을 학습하게 된다.
+            raise ValueError(f"rollout lim_dim {buf.lim_dim} != trainer {self.lim_dim} "
+                             f"(cfg.limiter_commit={self.cfg.limiter_commit})")
         T, N = buf.size, self.n
 
         adv_np, ret_np = compute_gae(buf.rewards, buf.values, buf.next_values,
@@ -319,7 +345,7 @@ class MAPPOTrainer:
         dev = self.device
         obs = torch.as_tensor(buf.obs, device=dev)
         lim_in = torch.as_tensor(self._lim_inputs_flat(buf.obs), device=dev)
-        lim_raw = torch.as_tensor(buf.lim_raw.reshape(T * N, 3), device=dev)
+        lim_raw = torch.as_tensor(buf.lim_raw.reshape(T * N, self.lim_dim), device=dev)
         lim_old = torch.as_tensor(buf.lim_logp.reshape(T * N), device=dev)
         fin_raw = torch.as_tensor(buf.fin_raw, device=dev)
         fin_old = torch.as_tensor(buf.fin_logp, device=dev)
@@ -417,6 +443,11 @@ class MAPPOTrainer:
             "finisher/log_std": float(self.fin_actor.log_std.mean().item()),
             "epochs_ran": float(epochs_ran),
             **coma_stats,
+            # ★ 결함 2 진단용. 롤아웃에서 커밋을 실제로 몇 번 제안했는가.
+            #   0.000 이나 1.000 으로 굳으면 finisher 발사와 같은 확률 붕괴다 --
+            #   그때는 결과를 "학습이 안 됐다"가 아니라 **퇴화**로 읽어야 한다.
+            **({"limiter/commit_rate": float(buf.lim_raw[..., 3].mean())}
+               if self.lim_dim > 3 else {}),
         }
 
     # --------------------------------------------------------- checkpoint ---
