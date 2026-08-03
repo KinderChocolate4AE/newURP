@@ -42,12 +42,20 @@ $tmp = Join-Path $env:TEMP "newurp_clean"
 Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue
 git clone --quiet . $tmp              # **커밋된 것만** 복제된다
 Push-Location $tmp
-python -c "import shepherd.m4_env, shepherd.scripts.curve_sweep, shepherd.scripts.sweep_m4, shepherd.scripts.train_m4, shepherd.scripts.op_gate, shepherd.scripts.scale_smoke; print('clean checkout imports OK')"
+python scripts/check_checkout.py
 Pop-Location
 ```
 
-`clean checkout imports OK` 가 안 뜨면 그 모듈이 미추적이다. **이게 뜨기 전에는
-push 하지 않는다.**
+`clean checkout imports OK` 가 뜨기 전에는 **push 하지 않는다.**
+
+이 검사가 하는 일과 안 하는 일:
+
+* **torch 를 요구하지 않는다.** 묻는 것은 "파일이 커밋됐는가"이지 "환경이 준비됐는가"가
+  아니다 (환경은 [1] 이 본다). 섞으면 venv 밖에서 못 쓰는 검사가 된다.
+* import 가 **성공해도** 나온 `__file__` 이 이 트리 안인지 확인한다. `pip install -e`
+  의 editable 파인더가 `shepherd.__path__` 를 원본 저장소까지 넓혀 놓아서, clone 한
+  트리에 파일이 **없어도** 원본 사본이 잡혀 조용히 통과한다 (실측 확인). 이 확인이
+  없으면 검사가 아무것도 못 잡는다.
 
 ---
 
