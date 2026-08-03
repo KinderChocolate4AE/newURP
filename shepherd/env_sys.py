@@ -65,7 +65,13 @@ PARK_POSITION = (0.0, 0.0, 1.0e4)
 @dataclass(frozen=True)
 class SystemSpec:
     """M4 방아쇠·구역 파라미터. 전부 선언값이며 sweep 축은 그렇게 표기."""
-    tau_kill: float = 0.1        # s. 선언: tau_deploy(0.4)의 1/4
+    tau_kill: float = 0.15       # s. 2026-07-29 재선언 (docs/42): 기존 근거
+                                 # "tau_deploy(0.4)의 1/4" 은 tau=0.30 이 되며 고아가 됐다.
+                                 # tau 분해의 sense(0.10)+decide(0.05)=0.15 는 **같은
+                                 # 센싱 사슬**이므로 하드킬 효과기에도 적용된다 -> 하한 0.15.
+                                 # dt 격자 위(3틱). 하드킬을 약화시키는 불리한 방향.
+                                 # {0.15, 0.20} 은 선언된 sweep 축 -- 2차 지표(비손실 비율)가
+                                 # tau_kill 의 산물이 아님을 보이기 위해 필요하다.
     p_kill: float = 1.0          # 선언된 SWEEP 축. Bernoulli(Pk)
     r_nk: float = 6.0            # m. no-kinetic zone 반경 (자산 중심)
     a_lim_max: Optional[float] = None   # None -> scenario.limiter.a_max
@@ -107,7 +113,17 @@ class RewardSpec:
     c_trunc: float = 1.0
     c_lim: float = 0.1
     dense_scale: float = 1.0
-    terminal_scale: float = 10.0
+    terminal_scale: float = 1.0   # 2026-08-01 재선언. 기존 10.0 은 [E] 스케일 스모크
+                                  # (docs/41) 이전 값이고, 그 실측이 sum|dense| 평균 1.00
+                                  # (|TERMINAL| 최대 1.0) 을 보여 **같은 자릿수**임을
+                                  # 확인했다 -> 10 은 종말항을 10배 과대평가한다.
+                                  # 선언은 docs/41 에서 이미 났고 CLI 기본값만 1.0 으로
+                                  # 고쳐져 있었다. 즉 선언값이 두 군데로 갈라져 있었고
+                                  # (dataclass 10.0 / CLI 1.0) RewardSpec() 을 직접 만드는
+                                  # 모든 호출부가 낡은 값을 받고 있었다. 선언은 여기 하나뿐.
+                                  # P40c 가 CLI 와의 일치를 강제한다.
+                                  # 2026-08-03: 리팩터 중 10.0 으로 되돌아간 적이 있다
+                                  # (P40c 가 잡음). **이 줄은 손대지 않는다.**
     enabled: bool = False        # 기본 off -> 기존 보상 그대로 (P6 bit-identical 보존)
 
     def terminal(self, label: str) -> float:

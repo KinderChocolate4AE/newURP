@@ -17,7 +17,7 @@ from typing import Dict, Iterable, Optional, Tuple
 
 import numpy as np
 
-__all__ = ["LIVE_DIMS", "live_action_dim", "pad_env_action", "pad_env_actions"]
+__all__ = ["LIVE_DIMS", "role_of", "live_action_dim", "pad_env_action", "pad_env_actions"]
 
 # role -> (env action dim, LIVE indices). Complement = RESERVED (env ignores; pad 0).
 LIVE_DIMS: Dict[str, Tuple[int, Tuple[int, ...]]] = {
@@ -27,7 +27,8 @@ LIVE_DIMS: Dict[str, Tuple[int, Tuple[int, ...]]] = {
 }
 
 
-def _role(agent_id: str) -> str:
+def role_of(agent_id: str) -> str:
+    """'limiter_2' -> 'limiter'. LIVE_DIMS 의 키가 곧 유효한 역할 집합이다."""
     role = agent_id.rsplit("_", 1)[0]
     if role not in LIVE_DIMS:
         raise KeyError(f"unknown agent id '{agent_id}' (role '{role}')")
@@ -36,7 +37,7 @@ def _role(agent_id: str) -> str:
 
 def live_action_dim(agent_id: str) -> int:
     """Policy output dim for this agent (reserved dims excluded)."""
-    return len(LIVE_DIMS[_role(agent_id)][1])
+    return len(LIVE_DIMS[role_of(agent_id)][1])
 
 
 def pad_env_action(agent_id: str, live_action) -> np.ndarray:
@@ -44,7 +45,7 @@ def pad_env_action(agent_id: str, live_action) -> np.ndarray:
 
     finisher example: live (ax, ay, az, fire) -> env (ax, ay, az, 0.0, fire).
     """
-    env_dim, live_idx = LIVE_DIMS[_role(agent_id)]
+    env_dim, live_idx = LIVE_DIMS[role_of(agent_id)]
     la = np.asarray(live_action, np.float32).reshape(-1)
     if la.shape[0] != len(live_idx):
         raise ValueError(f"{agent_id}: expected live dim {len(live_idx)}, got {la.shape[0]}")

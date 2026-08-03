@@ -21,6 +21,7 @@ from typing import Sequence, Tuple
 import numpy as np
 
 from shepherd.game import viability as V
+from shepherd.stats import wilson
 from shepherd.train.spawn_bank import APEX, N_F
 
 # frozen constants (configs/m2_l2_train.yaml)
@@ -67,21 +68,11 @@ def phi_value(obs: np.ndarray, *, seeds: Sequence[int] = PHI_SEEDS_TRAIN,
     return float(ms.mean() - beta * ms.std())
 
 
-def _wilson(k: int, n: int, z: float, upper: bool) -> float:
-    if n <= 0:
-        return 1.0 if upper else 0.0
-    p = k / n
-    d = 1.0 + z * z / n
-    c = p + z * z / (2 * n)
-    h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
-    return float(min(1.0, (c + h) / d)) if upper else float(max(0.0, (c - h) / d))
-
-
 def wilson_lcb(k: int, n: int, z: float = 1.645) -> float:
     """One-sided 95% lower confidence bound (advance gate, docs/17 SS2)."""
-    return _wilson(int(k), int(n), float(z), upper=False)
+    return wilson(int(k), int(n), float(z))[0]
 
 
 def wilson_ucb(k: int, n: int, z: float = 1.645) -> float:
     """One-sided 95% upper confidence bound (backoff gate)."""
-    return _wilson(int(k), int(n), float(z), upper=True)
+    return wilson(int(k), int(n), float(z))[1]

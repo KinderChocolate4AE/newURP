@@ -16,7 +16,9 @@ Parameters live in four different places today:
 This registry is the SINGLE PLACE to (a) SEE every parameter with its value, units,
 provenance and consumer, and (b) MANIPULATE every parameter that is actually
 wireable without violating the freeze discipline (docs/09 SS0: shepherd/env.py,
-docs/03, configs/m2_l2_train.yaml, shepherd/game/exchange.py are FROZEN, diff 0).
+docs/03, configs/m2_l2_train.yaml are FROZEN, diff 0.  [2026-08-03] shepherd/game/
+exchange.py was also on this list; it is now DELETED (dead code, no importers) and so
+is no longer a freeze target).
 
     from shepherd.params import as_config
     from shepherd.train.make_env import make_train_env

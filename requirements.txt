@@ -5,6 +5,5 @@ pettingzoo      # M2 multi-agent shaping env (commit 4)
 pytest          # gate runs (commits 2, 4)
 torch          # 6-DOF MARL (run in lab venv)
 gymnasium
-supersuit       # PettingZoo ParallelEnv vectorization (L2 training, Phase 4)
 wandb           # training logging (return/loss/entropy/KL + dv_shot/capture)
 # 6-DOF sim backend TBD (WarSim SE3 / Isaac Lab / PX4-ROS2-Gazebo) - see shepherd/sim/README.md

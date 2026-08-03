@@ -23,20 +23,13 @@ from typing import Callable, Dict, List, Optional
 import numpy as np
 
 from shepherd.env import ShapingParallelEnv
+from shepherd.train.action_dims import role_of          # noqa: F401  (재수출: tests/test_adapter_smoke)
 from shepherd.train.make_env import live_action_dim, pad_env_action, LIVE_DIMS
 
-ROLES = ("limiter", "finisher", "adversary")
 SHARED_FLAG_KEYS = ("fire_event", "wasted_fire", "fsm_state", "k_remaining",
                     "v_shot_soft", "v_shot_worst", "p_feasible", "boxed_in",
                     "threshold_crossed", "clean_net_threshold_crossed",
                     "captured", "penetrated", "limiter_loss")
-
-
-def role_of(agent_id: str) -> str:
-    role = agent_id.rsplit("_", 1)[0]
-    if role not in ROLES:
-        raise KeyError(f"unknown agent id '{agent_id}'")
-    return role
 
 
 @dataclass

@@ -49,23 +49,13 @@ from shepherd.scripts.c1_corridor_probe import (ProbeEnv, _load, make_finisher_f
 from shepherd.scripts.c1_a1_connectivity import _override
 from shepherd.scripts.c1_phase1d import rollout_unified, log_ctrl, seq_ctrl
 from shepherd.game import viability as V
+from shepherd.stats import Z_ONE_SIDED_95, wilson
 
 EPS_DISP = 0.10                    # allowed sup-displacement over tau, as a fraction of r_kill
 N_T = 24                           # viability substeps per segment
 N_CERT = 20000                     # certification-grade MC sample count
 CERT_SEEDS = (77_000_001, 77_000_002, 77_000_003)
-Z_ONE_SIDED_95 = 1.645
 SUBSTEPS = 8                       # clearance substeps per env dt
-
-
-# ---------------------------------------------------------------- statistics
-def wilson(k, n, z=Z_ONE_SIDED_95):
-    """(lower, upper) Wilson score interval for a binomial proportion."""
-    if n <= 0: return (0.0, 1.0)
-    p = k / n; d = 1.0 + z * z / n
-    c = (p + z * z / (2 * n)) / d
-    h = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
-    return (float(max(0.0, c - h)), float(min(1.0, c + h)))
 
 
 # ---------------------------------------------------------------- trajectory interpolation
@@ -138,8 +128,8 @@ def judge_models(pe, rec, *, n_cert=N_CERT, seeds=CERT_SEEDS):
             acc[m]["pf"].append(k_f / u.n_total)
     out = {}
     for m, a in acc.items():
-        vs_lo, vs_hi = wilson(a["caught"], a["feas"])
-        pf_lo, pf_hi = wilson(a["feas"], a["total"])
+        vs_lo, vs_hi = wilson(a["caught"], a["feas"], Z_ONE_SIDED_95)
+        pf_lo, pf_hi = wilson(a["feas"], a["total"], Z_ONE_SIDED_95)
         out[m] = {"v_soft": (a["caught"] / a["feas"] if a["feas"] else None),
                   "v_soft_lcb": vs_lo, "v_soft_ucb": vs_hi,
                   "n_feasible": a["feas"], "n_total": a["total"],
