@@ -30,6 +30,7 @@ from shepherd.scripts.train_m4 import (M4Runner, build_parser_defaults,
                                        build_specs)
 from shepherd.train.adapter import ShepherdAdapter
 from shepherd.train.ippo import limiter_inputs
+from shepherd.train.make_env import pad_env_action
 
 
 def main(argv=None):
@@ -94,7 +95,7 @@ def main(argv=None):
 
     ids = None
 
-    def make_policy(det):
+    def make_policy(det, pad=False):
         lim_fn, fin_fn = bundle(det)
 
         def policy(obs, flags):
@@ -104,19 +105,28 @@ def main(argv=None):
             lim = lim_fn(obs, flags)
             acts = {lid: np.asarray(lim[i], np.float32) for i, lid in enumerate(ids[0])}
             acts[ids[1]] = np.asarray(fin_fn(obs, flags), np.float32)
+            if pad:
+                # ★ 학습 롤아웃은 adapter.step 이 pad_env_action 을 건다 (adapter.py:90).
+                #   평가 경로(run_episode(policy=...))는 안 건다. finisher live 는 4차원
+                #   (axis3+fire)인데 env Box 는 5차원이고 fire 자리는 idx4 다. 패딩 없이
+                #   넣으면 fire 가 idx3(예약 slew)으로 가서 **발사가 env 에 안 닿는다**.
+                acts = {aid: pad_env_action(aid, a) for aid, a in acts.items()}
             return acts
         return policy
 
-    for det, name in ((True, "결정론 (현행 평가)"), (False, "표본추출 (학습과 동일)")):
+    for det, pad, name in ((True, False, "결정론 · 패딩 없음 (현행)"),
+                           (False, False, "표본추출 · 패딩 없음"),
+                           (True, True, "결정론 · 패딩 적용 ★"),
+                           (False, True, "표본추출 · 패딩 적용 ★")):
         ids = None
-        r = mission_eval(runner.eval_seed0, a.episodes, policy=make_policy(det),
+        r = mission_eval(runner.eval_seed0, a.episodes, policy=make_policy(det, pad),
                          **runner._m4)
         c = r["counts"]
-        print(f"{name:22s}  무력화 {r['neutralized_rate']:.3f}  "
+        print(f"{name:26s}  무력화 {r['neutralized_rate']:.3f}  "
               f"침투 {r['penetrated_rate']:.3f}  "
               f"| NET {c['NET_CAPTURE']} HARD {c['HARD_KILL']} "
               f"SPENT {c['SPENT_FAIL']} PEN {c['PENETRATED']}")
-    print("\n표본추출 쪽이 크게 높으면 -> 평가 하네스 문제이지 학습 실패가 아니다.")
+    print("\n★ 행이 크게 높으면 -> 평가 경로에 패딩이 빠진 것. 학습 실패가 아니다.")
     return 0
 
 
