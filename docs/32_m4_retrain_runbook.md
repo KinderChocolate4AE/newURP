@@ -13,6 +13,7 @@
 ## 0. 순서
 
 ```
+[0] 사전 확인        깨끗한 체크아웃이 import 되는가 (로컬)         ~1 분
 [1] 서버 준비        pull -> venv -> 스모크                        ~10 분
 [2] 기저선 2개       hold n=500 · intercept n=300                  ~35 분  (리포에 이미 있으면 건너뜀)
 [3] 파일럿 3런       신호가 붙는지 본다. **여기서 멈출 수 있다**    1런 실측 x 3
@@ -22,6 +23,31 @@
 
 **[3] 을 건너뛰지 않는다.** 신호가 안 붙는 상태로 50런을 태우면 나오는 것은 "협력이
 안 된다"가 아니라 **"학습이 안 됐다"** 이고, 그건 논문에 못 쓴다 (docs/47 §4.3).
+
+---
+
+## [0] 서버에 올리기 전 — **깨끗한 체크아웃이 import 되는가** (로컬)
+
+명시적 `git add` 규율의 부작용으로 **커밋 안 된 파일이 쌓인다.** 2026-08-03 에
+`shepherd/spawn_rand.py` · `obs_threat.py` 가 미추적인 채로 남아 있었는데, 커밋된
+`m4_env` · `curve_sweep` · `sweep_m4` · `train_m4` 가 전부 그걸 import 한다 — 즉
+푸시된 저장소는 **clone 하면 import 조차 안 되는 상태**였다. 서버에 올라간 뒤에
+알면 왕복 한 번을 버린다.
+
+```powershell
+Set-Location "C:\Users\Teemo\Desktop\ANDES\URP\newURP"
+git status --short                    # ?? 가 남아 있으면 먼저 처리
+
+$tmp = Join-Path $env:TEMP "newurp_clean"
+Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue
+git clone --quiet . $tmp              # **커밋된 것만** 복제된다
+Push-Location $tmp
+python -c "import shepherd.m4_env, shepherd.scripts.curve_sweep, shepherd.scripts.sweep_m4, shepherd.scripts.train_m4, shepherd.scripts.op_gate, shepherd.scripts.scale_smoke; print('clean checkout imports OK')"
+Pop-Location
+```
+
+`clean checkout imports OK` 가 안 뜨면 그 모듈이 미추적이다. **이게 뜨기 전에는
+push 하지 않는다.**
 
 ---
 
@@ -40,11 +66,24 @@ pip install -e .                        # 신규 의존성 없음
 # ★ 코어가 적으면 BLAS 스레드 경합으로 5배 느려진다 (실측). 반드시 켠다.
 export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 
-python -m pytest -q                     # 스모크 -- 기대: 452 passed, 2 skipped
+python -m pytest -q                     # 스모크
 python -m shepherd.m4_config            # 운용점 표
 ```
 
 **`-m` 실행 필수.** 파일 경로로 직접 부르면 import 가 깨진다.
+
+### 스모크 결과 읽는 법
+
+| 마지막 줄 | 뜻 |
+|---|---|
+| `452 passed, 2 skipped` | **정상.** 이 상태에서만 다음으로 넘어간다 |
+| `412 passed, 42 skipped` | **venv 를 안 켰다.** torch 가 없어 torch 표시 항목이 건너뛰어졌다. `source .venv-l2/bin/activate` 후 다시 |
+| `... 28 failed` + `_Base` / `Sequential` / `as_tensor` 류 `TypeError` | 같은 원인(torch 없음)인데 `tests/conftest.py` 가 없는 구버전이다. pull 먼저 |
+
+세 번째 줄이 왜 저렇게 보이는지: `tests/test_a3e.py` 가 torch-free 경로를 재려고
+**가짜 torch** 를 `sys.modules` 에 심는다. torch 가 진짜면 무해하지만, 없으면 그 뒤의
+모든 torch 테스트가 가짜를 받아 알아볼 수 없는 형태로 깨진다. `tests/conftest.py` 가
+그걸 감지해 깨끗한 skip 으로 바꾼다. **torch 버전 문제가 아니다.**
 
 `python -m shepherd.m4_config` 출력에서 이 네 줄을 눈으로 확인한다:
 

@@ -136,6 +136,27 @@ def _limiter_v_max(env, scn):
         return float(getattr(scn.limiter, "v_max", 80.0))
 
 
+def _zero_commit(acts):
+    """★ Box(4) idx3 을 0 으로 눌러 커밋을 막는다.
+
+    `params.py` 는 `scripted.limiter_pressure = 1.0` 을 *"RESERVED -- env
+    receives-and-ignores"* 로 문서화했다. 동결 env 에서는 참이었지만 **M4 가 그
+    차원을 커밋 비트로 재사용한다**(docs/29 §3.1, 임계 0.5). 그래서 스크립트
+    베이스라인을 그대로 M4 스택에 넣으면 **1스텝째에 전 limiter 가 하드킬을
+    커밋**해 버린다(실측: n_committed=4). 그러면 baseline 의 조향은 의미가 없어지고
+    hold/ring/intercept 가 구분되지 않는다.
+
+    베이스라인의 기본값은 **커밋 안 함**이다 -- 공짜 하드킬을 주지 않는 보수적 쪽.
+    하드킬 baseline 이 필요하면 `baseline_commit=True` 로 명시적으로 켠다.
+    """
+    for k, v in list(acts.items()):
+        a = np.asarray(v, np.float32).copy()
+        if a.shape[-1] >= 4:
+            a[3] = 0.0
+            acts[k] = a
+    return acts
+
+
 def _limiter_actions(env, scn, lay, mode, lims, p_att, v_att):
     if mode == "hold":
         return {lid: hold_position_limiter() for lid in env.limiter_ids}
@@ -160,7 +181,8 @@ def _limiter_actions(env, scn, lay, mode, lims, p_att, v_att):
 
 def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
                 fire_mode: str = "clean", max_steps: Optional[int] = None,
-                attacker_name: str = "") -> MissionResult:
+                attacker_name: str = "", policy=None,
+                baseline_commit: bool = False) -> MissionResult:
     """한 에피소드. env.step / env termination 을 그대로 호출한다 (술어 복제 금지).
 
     fire_mode:
@@ -168,8 +190,14 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
       "x_fire" lay.x_fire 위치 트리거 (레거시 데모 baseline 과 동일)
       "never"  발사 안 함 (무개입 상한 확인용)
     FSM 의 fire gate(R2) 가 최종 판정하므로 어느 쪽이든 제안일 뿐이다.
+
+    policy: 주면 limiter/finisher 행동을 이 콜러블이 정한다 (학습 정책 평가용).
+      signature: policy(obs, flags) -> {agent_id: action}. limiter_mode/fire_mode
+      는 무시된다. **주지 않으면 기존 경로와 bit-identical** 이다.
     """
-    env.reset(seed=seed)
+    obs_d, _ = env.reset(seed=seed)
+    obs = obs_d[env.limiter_ids[0]] if policy is not None else None
+    flags: dict = {}
     horizon = int(lay.episode_len if max_steps is None else max_steps)
 
     contact: set = set()
@@ -195,22 +223,30 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
 
         min_dist = min(min_dist, float(np.linalg.norm(p_att - target)))
 
-        acts = _limiter_actions(env, scn, lay, limiter_mode, lims, p_att, v_att)
-        if fire_mode == "clean":
-            trig = prev_clean
-        elif fire_mode == "x_fire":
-            trig = bool(p_att[0] <= lay.x_fire)
-        elif fire_mode == "never":
-            trig = False
+        if policy is not None:
+            # 학습 정책 평가 경로. limiter_mode / fire_mode 는 무시된다.
+            acts = dict(policy(obs, flags))
         else:
-            raise ValueError(f"unknown fire_mode {fire_mode!r}")
-        acts[env.finisher_id] = scripted_finisher(
-            p_fin, p_att, v_att, tau=env.tau_deploy, clean_threshold_crossed=trig)
+            acts = _limiter_actions(env, scn, lay, limiter_mode, lims, p_att, v_att)
+            if not baseline_commit:
+                _zero_commit(acts)          # idx3 = 커밋 비트 (M4). 기본 OFF
+            if fire_mode == "clean":
+                trig = prev_clean
+            elif fire_mode == "x_fire":
+                trig = bool(p_att[0] <= lay.x_fire)
+            elif fire_mode == "never":
+                trig = False
+            else:
+                raise ValueError(f"unknown fire_mode {fire_mode!r}")
+            acts[env.finisher_id] = scripted_finisher(
+                p_fin, p_att, v_att, tau=env.tau_deploy, clean_threshold_crossed=trig)
         acts[env.adversary_id] = np.zeros(3, np.float32)   # env-scripted; 무시됨
 
-        _, _, term, trunc, info = env.step(acts)
+        obs_next, _, term, trunc, info = env.step(acts)
         steps = t + 1
         fi = info[env.finisher_id]
+        if policy is not None:
+            obs, flags = obs_next[env.limiter_ids[0]], fi
 
         loss_sum += float(fi.get("limiter_loss", 0.0))
         # A3-privileged 채널: 직전 스텝 v_shot_soft 를 공격자에게 흘린다(1스텝 지연).

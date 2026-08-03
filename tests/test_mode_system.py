@@ -16,6 +16,9 @@ import pytest
 
 from shepherd.agents.baselines import (hold_position_limiter, scripted_finisher,
                                        scripted_shaping_limiter)
+# NOTE(2026-07-29, docs/42): 아래 기제 검정들은 SystemSpec(tau_kill=0.1) 을
+# 명시 고정한다. 선언값은 0.15 로 올라갔지만(같은 센싱 사슬 적용) 이 테스트들은
+# **방아쇠 기제**를 보는 것이므로 기하가 성립하는 픽스처가 필요하다.
 from shepherd.env_sys import ModeSystemEnv, SystemSpec, PARK_POSITION
 from shepherd.params import as_config
 from shepherd.scripts.mission_rollout import run_episode
@@ -83,8 +86,8 @@ def test_p6_frozen_equivalence_bit_identical(spec, commit):
 def test_p7_pk_zero_is_pure_loss():
     """Pk=0 이면 하드킬은 결코 성공하지 않고 limiter 는 소모된다."""
     inner, scn, lay = make_train_env(as_config(SLOW_LIMITER))
-    env = ModeSystemEnv(inner, lay, scn, SystemSpec(p_kill=0.0))
-    r = run_episode(env, scn, lay, seed=0, limiter_mode="intercept", fire_mode="never")
+    env = ModeSystemEnv(inner, lay, scn, SystemSpec(p_kill=0.0, tau_kill=0.1))
+    r = run_episode(env, scn, lay, seed=0, limiter_mode="intercept", fire_mode="never", baseline_commit=True)
     s = env.summary()
     assert r.label != "HARD_KILL", f"Pk=0 인데 하드킬 성공: {r.label}"
     assert s["KILL"] == 0, s
@@ -96,8 +99,8 @@ def test_p7_pk_zero_is_pure_loss():
 def test_p8_pk_one_geometric_must_kill():
     """Pk=1 이고 기하 조건을 만족한 커밋이 있으면 반드시 HARD_KILL."""
     inner, scn, lay = make_train_env(as_config(SLOW_LIMITER))
-    env = ModeSystemEnv(inner, lay, scn, SystemSpec(p_kill=1.0))
-    r = run_episode(env, scn, lay, seed=0, limiter_mode="intercept", fire_mode="never")
+    env = ModeSystemEnv(inner, lay, scn, SystemSpec(p_kill=1.0, tau_kill=0.1))
+    r = run_episode(env, scn, lay, seed=0, limiter_mode="intercept", fire_mode="never", baseline_commit=True)
     geo_ok = [c for c in env.commits if c.geometric_ok and c.outcome != "VETO_NO_KINETIC"]
     assert geo_ok, "기하 충족 커밋이 없어 검정 불가"
     assert r.label == "HARD_KILL", f"Pk=1 · 기하충족인데 {r.label}; {env.summary()}"
@@ -108,8 +111,8 @@ def test_p8_pk_one_geometric_must_kill():
 def test_p9_retired_limiter_does_not_shape():
     """소진 limiter 는 주차되어 이후 v_shot 에 기여하지 않는다."""
     inner, scn, lay = make_train_env(as_config(SLOW_LIMITER))
-    env = ModeSystemEnv(inner, lay, scn, SystemSpec(p_kill=0.0))   # 전부 실패·소진
-    run_episode(env, scn, lay, seed=0, limiter_mode="intercept", fire_mode="never")
+    env = ModeSystemEnv(inner, lay, scn, SystemSpec(p_kill=0.0, tau_kill=0.1))   # 전부 실패·소진
+    run_episode(env, scn, lay, seed=0, limiter_mode="intercept", fire_mode="never", baseline_commit=True)
     assert env.retired, "소진된 limiter 가 없어 검정 불가"
     park = np.asarray(PARK_POSITION, float)
     for i in env.retired:
@@ -124,8 +127,8 @@ def test_p11_no_hard_kill_inside_no_kinetic_zone():
     """R_nk 안에서 해소된 커밋은 거부되고 limiter 도 소모되지 않는다."""
     inner, scn, lay = make_train_env(as_config(SLOW_LIMITER))
     # R_nk 를 크게 잡아 전 구간을 no-kinetic 으로 만든다 -> 하드킬이 원천 봉쇄돼야
-    env = ModeSystemEnv(inner, lay, scn, SystemSpec(p_kill=1.0, r_nk=100.0))
-    r = run_episode(env, scn, lay, seed=0, limiter_mode="intercept", fire_mode="never")
+    env = ModeSystemEnv(inner, lay, scn, SystemSpec(p_kill=1.0, r_nk=100.0, tau_kill=0.1))
+    r = run_episode(env, scn, lay, seed=0, limiter_mode="intercept", fire_mode="never", baseline_commit=True)
     s = env.summary()
     assert r.label != "HARD_KILL", f"R_nk 안인데 하드킬 발생: {s}"
     assert s["KILL"] == 0, s
@@ -138,9 +141,9 @@ def test_p11_zone_boundary_reported(capsys):
     rows = []
     for r_nk in (0.0, 3.0, 6.0, 9.0, 12.0):
         inner, scn, lay = make_train_env(as_config(SLOW_LIMITER))
-        env = ModeSystemEnv(inner, lay, scn, SystemSpec(p_kill=1.0, r_nk=r_nk))
+        env = ModeSystemEnv(inner, lay, scn, SystemSpec(p_kill=1.0, r_nk=r_nk, tau_kill=0.1))
         res = run_episode(env, scn, lay, seed=0, limiter_mode="intercept",
-                          fire_mode="never")
+                          fire_mode="never", baseline_commit=True)
         rows.append((r_nk, res.label, env.summary()))
     with capsys.disabled():
         print("\n[P11 보고] R_nk 스윕 (intercept arm, Pk=1)")
