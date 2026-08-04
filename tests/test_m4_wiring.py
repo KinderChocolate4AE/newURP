@@ -437,3 +437,128 @@ def test_p48d_m4_runner_is_wired_end_to_end():
     stats = r.update()
     assert "limiter/commit_rate" in stats, "커밋 진단 지표가 빠졌다"
     assert 0.0 <= stats["limiter/commit_rate"] <= 1.0
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# P49 / P50 / P51 — 2026-08-03 검증상태 보고의 P2·P3·P5 수정
+#
+# 세 결함은 전부 **커밋 비트를 배선하기 전에는 잠들어 있던** 것이다
+# (`retired` 가 항상 비었고 `n_consumed ≡ 0` 이었다). 커밋이 가능해진 순간
+# 동시에 깨어났고, 학습 정책이 정적 기준선보다 나빠진 시점과 일치한다.
+# 다시 잠들 수 없게 테스트로 못 박는다.
+# ─────────────────────────────────────────────────────────────────────────
+def test_p51_park_position_is_finite_and_inert():
+    """★ 주차점은 (a) v_shot 에 영향이 0 이어야 하고 (b) 관측 정규화를 죽이면 안 된다.
+
+    2026-08-03: `PARK_POSITION = (0,0,1e4)` 이 관측에 그대로 실려(env.py:203-213)
+    `RunningNorm` 을 오염시켰다 — 롤아웃 256 스텝만에 limiter pz 채널 std 4330,
+    **살아있는 limiter 의 면외 좌표가 정상 채널 대비 517배 압축**. 링 배치가
+    (8,±5,0),(8,0,±5) 이므로 편대 기하의 절반이 지워진다. 망각 없는 누적이라 회복 불가.
+
+    (a) 는 물리 계약, (b) 는 학습 계약이다. 둘 다 지켜야 한다.
+    """
+    from shepherd.env_sys import PARK_POSITION
+
+    park = np.asarray(PARK_POSITION, float)
+    # (b) 링 반경(5 m) 대비 지나치게 크면 정규화가 죽는다. 100 m 를 상한으로 못 박는다.
+    assert np.all(np.isfinite(park)) and np.linalg.norm(park) < 100.0, \
+        f"주차점이 관측 정규화를 죽일 크기다: {PARK_POSITION}"
+
+    # (a) 주차 위치를 바꿔도 v_shot 이 **비트 동일**해야 한다 (기여 0 의 조작적 정의)
+    st = build_m4_env(0, 0, **KW)
+    env = st.env
+    env.reset(seed=0)
+    acts = {a: np.zeros(env.action_space(a).shape, np.float32) for a in env.agents}
+    far = np.array([0.0, 0.0, 1.0e4])
+    checked = 0
+    for t in range(25):
+        lims, fin, att = env._states()
+        p, v = env._p(att), env._v(att)
+        a = env._vshot(p, v, [park] * 4, fin, seed=t)
+        b = env._vshot(p, v, [far] * 4, fin, seed=t)
+        assert a.v_shot_soft == b.v_shot_soft and a.boxed_in == b.boxed_in, \
+            f"주차점이 v_shot 에 영향을 준다 (t={t}): {a.v_shot_soft} != {b.v_shot_soft}"
+        checked += 1
+        o = env.step(acts)
+        if any(o[2].values()) or any(o[3].values()):
+            break
+    assert checked >= 5
+
+
+def test_p50_c_lim_is_charged_once_per_consumed_limiter():
+    """★ `c_lim` 은 소모 **1회당 1번**이지 매 스텝이 아니다.
+
+    2026-08-03: `env_sys.py` 의 `rew` 재작성이 매 스텝 실행되는데 `n_consumed` 가
+    에피소드 누적이라, t 스텝에 소모하면 남은 (T−t) 스텝 내내 −c_lim 이 붙었다.
+    실측 누적 벌점 평균 7.51~9.42 (선언 의도 0.40, |종말항| 최대 1.0) — 소모 벌점
+    하나가 나머지 전 학습 신호의 7~17배였다. docstring §15 는 처음부터 1회 부과였다.
+
+    검정: 같은 행동열을 M4 보상 on/off 두 env 에 흘려 보상차 합계를 잰다.
+    합계 == terminal(label) − c_lim × (소모 개수) 여야 한다.
+    """
+    from shepherd.env_sys import RewardSpec
+    from shepherd.train.action_dims import M4_LIVE_DIMS
+    from shepherd.train.adapter import ShepherdAdapter
+
+    rs = RewardSpec(w_kill=0.5, enabled=True)
+    rng = np.random.default_rng(0)
+    for ep in range(3):
+        on = build_m4_env(0, ep, **KW)
+        off = build_m4_env(0, ep, **{**KW, "reward": RewardSpec(w_kill=0.5, enabled=False)})
+        a1 = ShepherdAdapter(on.env, M4_LIVE_DIMS); a1.reset(seed=ep)
+        a2 = ShepherdAdapter(off.env, M4_LIVE_DIMS); a2.reset(seed=ep)
+        lo, hi = a1.action_bounds(a1.limiter_ids[0])
+        total, steps = 0.0, 0
+        while on.env.agents and steps < 200:
+            live = {}
+            for lid in a1.limiter_ids:
+                acc = rng.uniform(lo[:3], hi[:3]).astype(np.float32)
+                live[lid] = np.concatenate(
+                    [acc, [1.0 if rng.uniform() < 0.5 else 0.0]]).astype(np.float32)
+            live[a1.finisher_id] = np.concatenate(
+                [rng.uniform(-1, 1, 3), [0.0]]).astype(np.float32)
+            r1, r2 = a1.step(live), a2.step(live)
+            total += r1.rewards[a1.finisher_id] - r2.rewards[a2.finisher_id]
+            steps += 1
+            if r1.done or r2.done:
+                break
+        n_consumed = sum(1 for c in on.env.commits if c.consumed)
+        label = on.env._outcome_label({"x": True}, {"x": False},
+                                      {on.env.finisher_id: {}}) if False else None
+        # 종말항은 라벨에 따라 {+1, +0.5, −1, 0} 중 하나 -> 총합에서 c_lim 몫만 분리해 본다
+        expected_c_lim = rs.c_lim * n_consumed
+        assert n_consumed > 0, "이 테스트는 소모가 일어나는 조건을 전제한다"
+        # 총합 = terminal ± c_lim 몫. |총합| 이 (|terminal|max + expected) 를 넘으면
+        # 매 스텝 부과가 되살아난 것이다.
+        assert abs(total) <= 1.0 + expected_c_lim + 1e-6, (
+            f"ep{ep}: c_lim 이 매 스텝 부과되고 있다 "
+            f"(보상차 {total:.3f}, 상한 {1.0 + expected_c_lim:.3f}, 소모 {n_consumed})")
+
+
+@pytest.mark.torch
+def test_p49_action_scale_tracks_the_episode_authority():
+    """★ 행동 스케일이 **이 에피소드의** `a_lim` 을 따라가야 한다.
+
+    2026-08-03: `lim_scale` 이 에피소드 0 의 draw 로 동결돼 있었다. `a_lim = 0.35·a_att`,
+    `a_att ~ U[11,78]` 이라 실제 권한이 3.86~27.28 로 바뀌는데 스케일은 고정 —
+    41.5% 에피소드 과다명령 / 44.3% 과소명령, 그리고 **시드마다 동결값이 달라
+    시드가 복제가 아니게 된다**(실효 권한 100/72/48%).
+
+    두 경로를 다 본다: 학습(`_begin_episode`)과 평가(`_lim_scale_for` 역변환).
+    """
+    r = _runner()
+    seen = set()
+    for _ in range(6):
+        r._begin_episode()
+        want = r._adapter.action_bounds(r._adapter.limiter_ids[0])[1]
+        assert np.allclose(r.lim_scale, want), \
+            f"학습 경로 스케일이 에피소드 권한과 다르다: {r.lim_scale} != {want}"
+        seen.add(round(float(r.lim_scale[0]), 6))
+        # 평가 경로: 관측의 위협 특징 역변환이 같은 값을 내야 한다
+        obs = r._adapter.reset(seed=0)[0][r._adapter.limiter_ids[0]]
+        got = r._lim_scale_for(obs)
+        assert np.allclose(got[:3], want[:3], rtol=1e-4), \
+            f"평가 경로 역변환이 어긋난다: {got[:3]} != {want[:3]}"
+        assert got[3] == want[3] == 1.0
+        r._ep_idx += 1
+    assert len(seen) >= 3, f"에피소드마다 권한이 바뀌어야 한다 (관측된 값 {seen})"

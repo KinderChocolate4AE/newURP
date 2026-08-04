@@ -59,7 +59,22 @@ _EPS = 1e-12
 
 # 소진 limiter 주차점. 회랑(x in [0, 24], ring x=8)에서 충분히 멀어 v_shot 기여가 0.
 # 모델링 선택으로 명시한다 (docs/29 §3.2 -- 은닉 금지).
-PARK_POSITION = (0.0, 0.0, 1.0e4)
+#
+# ★ 2026-08-03 P2 수정 — 1.0e4 -> 60.0.
+# 주차 좌표는 **관측에 그대로 실린다**(env.py:203-213) 그리고 학습기의 RunningNorm 이
+# 매 스텝 그것으로 갱신된다(train_mappo.py:143). z=1e4 로 두면 롤아웃 256 스텝만에
+# limiter pz 채널이 mean 7500 / std 4330 이 되어 **살아있는 limiter 의 면외 좌표가
+# 정상 채널 대비 517배 압축**된다 — 링 배치가 (8,±5,0),(8,0,±5) 이므로 편대 기하의
+# 절반이 지워진다. RunningNorm 은 망각 없는 누적이라 회복 불가이고, 단 1판만 주차해도
+# 100배 압축된다. (커밋이 불가능하던 시절에는 `retired` 가 항상 비어 잠들어 있던 결함.)
+#
+# 60.0 을 고른 근거 (튜닝 아님 -- 두 부등식이 동시에 성립하는 자릿수):
+#   ① v_shot 기여 0: 공격자 궤적은 회랑 x∈[0,26]·|yz|≲6 안에 있고 도달집합 반경은
+#      최대 ½·a_att_max·tau^2 = ½·78·0.3^2 = 3.51 m. 어떤 궤적점과도 50 m 이상
+#      떨어지므로 no-go 반경 kill_radius(0.75)에 절대 닿지 않는다. 콘 range_max 8.22 밖.
+#   ② 정규화 생존: 링 반경 5 m 의 12배 -- live 변동이 압축되지 않는다.
+# P2 테스트가 ①(주차 전후 v_shot 동일)을 강제한다.
+PARK_POSITION = (0.0, 0.0, 60.0)
 
 
 @dataclass(frozen=True)
@@ -174,6 +189,13 @@ class ModeSystemEnv:
     # ------------------------------------------------------------------ state
     def _reset_state(self):
         self.commits: List[CommitRecord] = []
+        # ★ 2026-08-03 P3 수정 — 이미 벌점을 매긴 소모 개수.
+        #   `rew` 재작성은 **매 스텝** 실행되는데 `n_consumed` 는 에피소드 누적이라,
+        #   limiter 를 t 스텝에 소모하면 남은 (T−t) 스텝 내내 −c_lim 이 계속 붙었다.
+        #   실측 누적 벌점 평균 7.51~9.42 (선언 의도 0.40, |종말항| 최대 1.0)
+        #   = 소모 벌점 하나가 나머지 전 학습 신호의 7~17배.
+        #   docstring §15 는 처음부터 **1회 부과** 형태였다 -- 구현을 선언에 맞춘다.
+        self._charged: int = 0
         self.retired: set = set()
         self.pending: Dict[int, CommitRecord] = {}
         self.hard_kill = False
@@ -287,8 +309,12 @@ class ModeSystemEnv:
             if done:
                 label = self._outcome_label(terms, truncs, infos)
             n_consumed = sum(1 for r in self.commits if r.consumed)
+            # ★ P3: **이번 스텝에 새로 소모된 개수**에만 부과한다 (증분).
+            #   에피소드 전체 합 = c_lim × (총 소모 개수) 로 docstring §15 와 일치.
+            new_consumed = n_consumed - self._charged
+            self._charged = n_consumed
             bonus = (rs.terminal_scale * rs.terminal(label)) if label else 0.0
-            rew = {a: (rs.dense_scale * float(v) + bonus - rs.c_lim * n_consumed)
+            rew = {a: (rs.dense_scale * float(v) + bonus - rs.c_lim * new_consumed)
                    for a, v in rew.items()}
         sysinfo = dict(
             m4_outcome=label,

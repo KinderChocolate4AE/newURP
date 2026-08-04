@@ -118,8 +118,20 @@ def test_p9_retired_limiter_does_not_shape():
     for i in env.retired:
         p = env._p(env._states()[0][i])
         assert np.allclose(p, park), f"limiter {i} 미주차: {p}"
-    # 주차 거리가 회랑 규모(<= ~30 m)를 압도해야 shaping 기여가 0 이다
-    assert float(np.linalg.norm(park)) > 1e3
+    # ★ 2026-08-03 정정 — 종전에는 `norm(park) > 1e3` 이라는 **대리 지표**를 봤다.
+    #   그건 "기여가 0" 의 대리일 뿐이고, 실제로는 그 크기 자체가 **다른 계약을 깼다**:
+    #   주차 좌표가 관측에 실려(env.py:203-213) RunningNorm 을 오염시켜 살아있는
+    #   limiter 의 면외 좌표를 517배 압축했다(P51 참조). 즉 이 assert 는 코드보다
+    #   먼저 틀려 있었다 -- 크기를 요구할 근거가 없고, 요구해야 할 것은 **성질**이다.
+    #   그래서 대리 지표를 버리고 성질을 직접 본다: 주차점을 훨씬 먼 곳으로 바꿔도
+    #   v_shot 이 비트 동일해야 한다(= 기여 0 의 조작적 정의). 크기 상한은 P51 이 본다.
+    lims, fin, att = env._states()
+    p_att, v_att = env._p(att), env._v(att)
+    far = np.array([0.0, 0.0, 1.0e4])
+    a = env.inner._vshot(p_att, v_att, [park] * len(lims), fin, seed=0)
+    b = env.inner._vshot(p_att, v_att, [far] * len(lims), fin, seed=0)
+    assert a.v_shot_soft == b.v_shot_soft and a.boxed_in == b.boxed_in, \
+        f"주차점이 v_shot 에 기여한다: {a.v_shot_soft} != {b.v_shot_soft}"
 
 
 # ------------------------------------------------------------------ P11 ---
