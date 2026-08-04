@@ -48,11 +48,13 @@ from shepherd.agents.baselines import (hold_position_limiter, scripted_finisher,
                                        scripted_shaping_limiter)
 
 __all__ = ["MissionResult", "run_episode", "run_batch", "summarize",
-           "intercept_limiter", "intercept_lead_time", "LABELS", "LIMITER_MODES"]
+           "intercept_limiter", "intercept_lead_time", "scripted_role_actions",
+           "LABELS", "LIMITER_MODES", "ROLES"]
 
 LABELS = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL",
           "PENETRATED", "SPENT_FAIL", "TRUNCATED")
 LIMITER_MODES = ("hold", "ring", "intercept")
+ROLES = ("limiter", "finisher")
 
 
 @dataclass
@@ -179,10 +181,49 @@ def _limiter_actions(env, scn, lay, mode, lims, p_att, v_att):
     raise ValueError(f"unknown limiter mode {mode!r}; allowed: {LIMITER_MODES}")
 
 
+def scripted_role_actions(env, scn, lay, *, roles: Sequence[str] = ROLES,
+                          limiter_mode: str = "hold", fire_mode: str = "clean",
+                          prev_clean: bool = False, baseline_commit: bool = False,
+                          states=None) -> Dict[str, np.ndarray]:
+    """스크립트 역할의 **env Box** 행동. `roles` 에 든 역할만 낸다.
+
+    WHY 한 곳에만 두는가 (docs/48 §3)
+    ---------------------------------
+    역할 분리 실험은 "한쪽만 스크립트로 고정한 팔"을 만든다. 그 팔의 스크립트
+    역할이 기준선(`hold`)의 같은 역할과 **비트 단위로 같은 규칙**이어야 격차의
+    귀속이 성립한다. 규칙을 두 군데 두면 갈라지고, 갈라지면 LS-SS 차이가
+    "학습의 기여"가 아니라 "두 구현의 차이"가 된다. 그래서 기준선 경로와
+    동결 경로가 **이 함수 하나**를 공유한다 (P52 가 동치를 강제한다).
+
+    `states` 는 호출부가 이미 뽑아 둔 `env._states()` 를 재사용하기 위한 것이다
+    (같은 스텝에서 두 번 뽑으면 값은 같지만 낭비다).
+    """
+    lims, fin, att = env._states() if states is None else states
+    p_att, v_att, p_fin = env._p(att), env._v(att), env._p(fin)
+    acts: Dict[str, np.ndarray] = {}
+    if "limiter" in roles:
+        acts.update(_limiter_actions(env, scn, lay, limiter_mode, lims, p_att, v_att))
+        if not baseline_commit:
+            _zero_commit(acts)              # idx3 = 커밋 비트 (M4). 기본 OFF
+    if "finisher" in roles:
+        if fire_mode == "clean":
+            trig = bool(prev_clean)
+        elif fire_mode == "x_fire":
+            trig = bool(p_att[0] <= lay.x_fire)
+        elif fire_mode == "never":
+            trig = False
+        else:
+            raise ValueError(f"unknown fire_mode {fire_mode!r}")
+        acts[env.finisher_id] = scripted_finisher(
+            p_fin, p_att, v_att, tau=env.tau_deploy, clean_threshold_crossed=trig)
+    return acts
+
+
 def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
                 fire_mode: str = "clean", max_steps: Optional[int] = None,
                 attacker_name: str = "", policy=None,
-                baseline_commit: bool = False) -> MissionResult:
+                baseline_commit: bool = False,
+                scripted_roles: Sequence[str] = ()) -> MissionResult:
     """한 에피소드. env.step / env termination 을 그대로 호출한다 (술어 복제 금지).
 
     fire_mode:
@@ -194,6 +235,11 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
     policy: 주면 limiter/finisher 행동을 이 콜러블이 정한다 (학습 정책 평가용).
       signature: policy(obs, flags) -> {agent_id: action}. limiter_mode/fire_mode
       는 무시된다. **주지 않으면 기존 경로와 bit-identical** 이다.
+
+    scripted_roles: 역할 분리(docs/48). 여기 든 역할은 `policy` 가 무엇을 내든
+      **스크립트로 덮어쓴다** -- 그 역할에 한해 `limiter_mode` / `fire_mode` 가
+      다시 유효해진다. 기본 `()` 이면 기존 경로와 bit-identical.
+      정책의 그 역할 출력은 계산은 되지만 env 에 닿지 않는다.
     """
     obs_d, _ = env.reset(seed=seed)
     obs = obs_d[env.limiter_ids[0]] if policy is not None else None
@@ -213,7 +259,7 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
 
     for t in range(horizon):
         lims, fin, att = env._states()
-        p_att, v_att, p_fin = env._p(att), env._v(att), env._p(fin)
+        p_att = env._p(att)          # v_att / p_fin 은 scripted_role_actions 안에서 뽑는다
 
         # --- 접촉 집계: env L353 과 동일 술어 · 동일(이동 전) 상태 -------------
         for i, s in enumerate(lims):
@@ -226,20 +272,16 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
         if policy is not None:
             # 학습 정책 평가 경로. limiter_mode / fire_mode 는 무시된다.
             acts = dict(policy(obs, flags))
+            if scripted_roles:              # 역할 분리 (docs/48): 해당 역할만 덮어쓴다
+                acts.update(scripted_role_actions(
+                    env, scn, lay, roles=scripted_roles, limiter_mode=limiter_mode,
+                    fire_mode=fire_mode, prev_clean=prev_clean,
+                    baseline_commit=baseline_commit, states=(lims, fin, att)))
         else:
-            acts = _limiter_actions(env, scn, lay, limiter_mode, lims, p_att, v_att)
-            if not baseline_commit:
-                _zero_commit(acts)          # idx3 = 커밋 비트 (M4). 기본 OFF
-            if fire_mode == "clean":
-                trig = prev_clean
-            elif fire_mode == "x_fire":
-                trig = bool(p_att[0] <= lay.x_fire)
-            elif fire_mode == "never":
-                trig = False
-            else:
-                raise ValueError(f"unknown fire_mode {fire_mode!r}")
-            acts[env.finisher_id] = scripted_finisher(
-                p_fin, p_att, v_att, tau=env.tau_deploy, clean_threshold_crossed=trig)
+            acts = scripted_role_actions(
+                env, scn, lay, roles=ROLES, limiter_mode=limiter_mode,
+                fire_mode=fire_mode, prev_clean=prev_clean,
+                baseline_commit=baseline_commit, states=(lims, fin, att))
         acts[env.adversary_id] = np.zeros(3, np.float32)   # env-scripted; 무시됨
 
         obs_next, _, term, trunc, info = env.step(acts)

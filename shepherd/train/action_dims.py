@@ -35,7 +35,7 @@ from typing import Dict, Iterable, Mapping, Optional, Tuple
 import numpy as np
 
 __all__ = ["LIVE_DIMS", "M4_LIVE_DIMS", "role_of", "live_action_dim",
-           "pad_env_action", "pad_env_actions"]
+           "pad_env_action", "pad_env_actions", "unpad_env_action"]
 
 DimsMap = Mapping[str, Tuple[int, Tuple[int, ...]]]
 
@@ -89,6 +89,26 @@ def pad_env_action(agent_id: str, live_action,
     out = np.zeros(env_dim, np.float32)
     out[list(live_idx)] = la
     return out
+
+
+def unpad_env_action(agent_id: str, env_action,
+                     dims: Optional[DimsMap] = None) -> np.ndarray:
+    """`pad_env_action` 의 역 — env Box 행동에서 LIVE 차원만 뽑는다.
+
+    역할 분리(docs/48)에서 필요하다: 스크립트 역할은 **env Box** 를 내는데
+    (`baselines.scripted_finisher` -> Box(5)), 학습 롤아웃의 `adapter.step` 은
+    **LIVE** 차원을 받아 스스로 패딩한다. 두 규약을 잇는 유일한 지점이 여기다.
+
+    RESERVED 차원의 값은 **버린다** -- env 가 무시하는 자리이기 때문이다
+    (`scripted_finisher` 는 그 자리에 1.0 을 넣지만 동결 env 는 읽지 않는다).
+    따라서 `pad(unpad(x)) == x` 는 RESERVED 가 0 일 때만 성립하고,
+    `unpad(pad(a)) == a` 는 항상 성립한다. P50 이 이 비대칭을 못박는다.
+    """
+    env_dim, live_idx = _dims(dims)[role_of(agent_id)]
+    ea = np.asarray(env_action, np.float32).reshape(-1)
+    if ea.shape[0] != env_dim:
+        raise ValueError(f"{agent_id}: expected env dim {env_dim}, got {ea.shape[0]}")
+    return ea[list(live_idx)].astype(np.float32)
 
 
 def pad_env_actions(live_actions: Dict[str, np.ndarray],

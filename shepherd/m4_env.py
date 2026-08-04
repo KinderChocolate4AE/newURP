@@ -20,7 +20,7 @@ torch-free.
 from __future__ import annotations
 
 import copy
-from typing import Callable, Dict, Optional
+from typing import Callable, Dict, Optional, Sequence
 
 import numpy as np
 
@@ -89,12 +89,16 @@ def mission_eval(seed0: int, episodes: int, *,
                  limiter_mode: str = "hold", fire_mode: str = "clean",
                  randomize_threat: bool = True, threat_obs: bool = True,
                  baseline_commit: bool = False,
-                 records: Optional[list] = None) -> dict:
+                 records: Optional[list] = None,
+                 scripted_roles: Sequence[str] = ()) -> dict:
     """2층 임무 지표 (docs/29 §4) — regime 별로 쪼개서 낸다.
 
     **`interdiction_rate = 1 - PENETRATED` 를 그대로 쓰지 않는다.**
     그 정의는 SPENT_FAIL(탄 소진·미무력화)과 TRUNCATED(우측 절단)를 성공으로
     세므로 부풀려진다 (docs/40 §8.2 각주). 여기서는 분해해서 보고한다.
+
+    `scripted_roles` 는 역할 분리(docs/48)용 -- `policy` 가 있어도 그 역할만
+    스크립트로 덮어쓴다. 기본 `()` 이면 기존 호출부와 bit-identical.
     """
     from shepherd.scripts.mission_rollout import LABELS, run_episode
 
@@ -106,7 +110,8 @@ def mission_eval(seed0: int, episodes: int, *,
                           randomize_threat=randomize_threat, threat_obs=threat_obs)
         r = run_episode(st.env, st.scn, st.lay, seed=seed0 + ep,
                         limiter_mode=limiter_mode, fire_mode=fire_mode,
-                        policy=policy, baseline_commit=baseline_commit)
+                        policy=policy, baseline_commit=baseline_commit,
+                        scripted_roles=scripted_roles)
         counts[r.label] += 1
         reg = regime_of(st.threat["a_att"], st.threat["tau"], st.threat["net_radius"])
         by_regime.setdefault(reg, {lab: 0 for lab in LABELS})[r.label] += 1

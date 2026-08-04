@@ -43,10 +43,12 @@ import torch
 
 from shepherd.agents.attacker_ladder import AttackerSpec, LAMBDA_PRESETS
 from shepherd.env_sys import RewardSpec, SystemSpec
-from shepherd.m4_config import (M4_OVERRIDES, TAU_DECOMPOSITION, THREAT_BRACKET,
-                                m4_config)
+from shepherd.m4_config import (CAPABILITY_RATIOS, M4_OVERRIDES, TAU_DECOMPOSITION,
+                                THREAT_BRACKET, m4_config)
 from shepherd.m4_env import build_m4_env, mission_eval, regime_of
-from shepherd.train.make_env import M4_LIVE_DIMS, pad_env_action
+from shepherd.scripts.mission_rollout import scripted_role_actions
+from shepherd.train.make_env import (M4_LIVE_DIMS, pad_env_action,
+                                     unpad_env_action)
 from shepherd.scripts.curve_sweep import BANDS, summarize_bands
 from shepherd.spawn_rand import SpawnSpec
 from shepherd.train.adapter import ShepherdAdapter
@@ -56,7 +58,26 @@ from shepherd.train.obs_norm import RunningNorm
 from shepherd.scripts.train_mappo import MAPPORunner
 from shepherd.scripts.train_ippo import seed_everything
 
-__all__ = ["M4Runner", "build_specs", "main"]
+__all__ = ["M4Runner", "build_specs", "main", "ARMS", "arm_of"]
+
+# ── 역할 분리 팔 (docs/48 §2) ────────────────────────────────────────────────
+#   limiter x finisher 의 2x2. SS 는 학습이 없으므로 여기 없다 -- 그 칸은
+#   `sweep_m4.measure_baseline("hold")` 가 이미 n=500 으로 재 둔 기저선이다.
+ARMS = {
+    ("learned", "learned"):  "LL",   # 둘 다 학습 (= 파일럿 구성)
+    ("learned", "scripted"): "LS",   # 학습 편대 + 해석적 발사 규칙
+    ("hold",    "learned"):  "SL",   # 무개입 편대 + 학습 발사
+}
+
+
+def arm_of(limiter_policy: str, finisher_policy: str) -> str:
+    key = (limiter_policy, finisher_policy)
+    if key not in ARMS:
+        raise ValueError(
+            f"학습 팔이 아니다: limiter={limiter_policy} finisher={finisher_policy}. "
+            f"둘 다 스크립트인 칸(SS)은 손튜닝 기준선이므로 "
+            f"`python -m shepherd.scripts.sweep_m4 --baseline 500` 으로 잰다")
+    return ARMS[key]
 
 
 class M4Runner(MAPPORunner):
@@ -71,10 +92,25 @@ class M4Runner(MAPPORunner):
     def __init__(self, run_cfg: dict, seed: int, device: str, *,
                  system: SystemSpec, reward: RewardSpec, attacker: AttackerSpec,
                  spawn: SpawnSpec, randomize_threat: bool = True,
-                 threat_obs: bool = True):
+                 threat_obs: bool = True,
+                 limiter_policy: str = "learned",
+                 finisher_policy: str = "learned"):
         self._m4 = dict(system=system, reward=reward, attacker=attacker,
                         spawn=spawn, randomize_threat=randomize_threat,
                         threat_obs=threat_obs)
+        # ── 역할 분리 (docs/48). 기본은 (learned, learned) = 기존 경로 ──────────
+        self.arm = arm_of(limiter_policy, finisher_policy)
+        self.limiter_policy = limiter_policy
+        self.finisher_policy = finisher_policy
+        self.frozen_roles = tuple(
+            r for r, p in (("limiter", limiter_policy), ("finisher", finisher_policy))
+            if p != "learned")
+        # 동결된 역할이 따를 스크립트. `hold` / `clean` 은 기저선과 **같은** 규칙이고
+        # 그래야 LS-SS · SL-SS 가 학습의 기여로 읽힌다 (docs/48 §3).
+        self.limiter_mode = "hold" if limiter_policy == "hold" else "hold"
+        self.fire_mode = "clean"
+        self._prev_clean = False
+        self._scn = self._lay = None
         self.env_cfg = m4_config()
         loop = run_cfg["loop"]
         self.rollout_env_steps = int(loop["rollout_env_steps"])
@@ -98,6 +134,15 @@ class M4Runner(MAPPORunner):
                              f"[{lim_low[3]}, {lim_high[3]}] -- env.py 와 어긋났다")
         # lim_scale = [a_max, a_max, a_max, 1.0]. 커밋 비트는 Bernoulli {0,1} 이
         # 그대로 통과해 env 의 commit_threshold=0.5 와 맞물린다.
+        #
+        # ★ 2026-08-03 P5 수정 — 이 값은 **에피소드 0 의 draw** 다. 그대로 두면 안 된다.
+        #   `a_lim_max = 0.35 × a_att` 이고 `a_att ~ U[11, 78]` 이라 실제 권한이 매
+        #   에피소드 3.86 ~ 27.28 로 바뀐다(m4_config.CAPABILITY_RATIOS). 동결하면
+        #   실측 41.5% 에피소드에서 과다명령(백엔드 노름 클램프 -> radial gradient 소실),
+        #   44.3% 에서 과소명령(권한의 중앙 72% 만 사용)이 된다. 더 나쁜 것은
+        #   **시드마다 동결값이 달라 시드가 복제가 아니게 된다**(실효 권한 100/72/48%).
+        #   `_begin_episode` 가 매 에피소드 갱신한다(아래). 여기 값은 첫 롤아웃 전
+        #   부트스트랩일 뿐이다.
         self.lim_scale = lim_high.astype(np.float32)
         self.fin_axis_scale = fin_high[:3].astype(np.float32)
 
@@ -110,7 +155,10 @@ class M4Runner(MAPPORunner):
                                      # config 로 끄면 docs/29 §15.2 폴백 (b) 의
                                      # 대조군(= 커밋을 정책 손에서 뗀 팔)이 된다.
                                      "limiter_commit": bool(
-                                         run_cfg["mappo"].get("limiter_commit", True))})
+                                         run_cfg["mappo"].get("limiter_commit", True)),
+                                     # docs/48: 동결 역할의 액터는 학습에서 뺀다
+                                     "freeze_limiter": "limiter" in self.frozen_roles,
+                                     "freeze_finisher": "finisher" in self.frozen_roles})
         self.tr = MAPPOTrainer(self.obs_dim, self.n, cfg)
         self.buf = MAPPORollout(self.rollout_env_steps, self.obs_dim, self.n,
                                 lim_dim=self.tr.lim_dim)
@@ -133,6 +181,9 @@ class M4Runner(MAPPORunner):
     def _begin_episode(self) -> None:
         st = build_m4_env(self.seed, self._ep_idx, **self._m4)
         self._adapter = ShepherdAdapter(st.env, M4_LIVE_DIMS)
+        # ★ P5: 이 에피소드의 실제 권한으로 행동 스케일을 갱신한다 (a_lim = 0.35·a_att).
+        self.lim_scale = self._adapter.action_bounds(
+            self._adapter.limiter_ids[0])[1].astype(np.float32)
         obs_d, _ = self._adapter.reset(seed=self.base_seed + self._ep_idx)
         self._obs = obs_d[self._adapter.limiter_ids[0]]
         self._ep = {"ret": 0.0, "headline": 0.0, "limiter_loss": 0.0,
@@ -140,6 +191,30 @@ class M4Runner(MAPPORunner):
                     "clean": 0.0}
         self._ep_params = st.threat
         self._ep_env = st.env
+        self._scn, self._lay = st.scn, st.lay
+        self._prev_clean = False            # 발사 트리거는 **직전 스텝**의 플래그다
+
+    # ------------------------------------------------------- 역할 동결 훅 ---
+    def _override_live(self, live, ad):
+        """동결된 역할의 행동을 스크립트로 갈아끼운다 (docs/48 §3).
+
+        스크립트는 **env Box** 를 내고 `adapter.step` 은 **LIVE** 차원을 받는다.
+        그래서 `unpad_env_action` 으로 되돌린다 -- 이 변환을 여기 말고 다른 데서
+        하면 프로파일(M4_LIVE_DIMS)이 갈라져 결함 2 가 재발한다. P51 이 지킨다.
+        """
+        if not self.frozen_roles:
+            return live
+        env_acts = scripted_role_actions(
+            ad.env, self._scn, self._lay, roles=self.frozen_roles,
+            limiter_mode=self.limiter_mode, fire_mode=self.fire_mode,
+            prev_clean=self._prev_clean, baseline_commit=False)
+        out = dict(live)
+        for aid, a in env_acts.items():
+            out[aid] = unpad_env_action(aid, a, ad.live_dims)
+        return out
+
+    def _observe_step(self, r) -> None:
+        self._prev_clean = bool(r.flags.get("clean_net_threshold_crossed", False))
 
     def _finish_episode(self, r) -> None:
         super()._finish_episode(r)
@@ -183,6 +258,30 @@ class M4Runner(MAPPORunner):
         return out
 
     # ------------------------------------------------------------------ 평가 ---
+    def _lim_scale_for(self, obs) -> np.ndarray:
+        """★ P5 (평가 경로) — 이 에피소드의 실제 `a_lim` 으로 행동 스케일을 만든다.
+
+        `mission_eval` 은 에피소드마다 env 를 새로 만들지만(`m4_env.py`) 정책 콜러블은
+        env 를 못 본다. 대신 **관측에 이미 실려 있는 위협 특징**을 선언된 브래킷으로
+        역변환한다 (`obs_threat.threat_features` 의 역):
+
+            x = 2·(a_att − lo)/(hi − lo) − 1   ->   a_att = lo + (x + 1)·(hi − lo)/2
+            a_lim = CAPABILITY_RATIOS["physics.a_lim_max"] × a_att
+
+        브래킷·비율은 `m4_config` 에서 **import** 한다 (P40: 선언 그림자 금지).
+        위협 관측이 꺼져 있으면(`--no-threat-obs`) 역변환 근거가 없으므로 현재
+        `lim_scale` 을 그대로 쓴다 -- 그 팔은 regime-blind ablation 이고 판정용이 아니다.
+        P49 가 이 역변환이 env 의 실제 action Box 와 일치함을 강제한다.
+        """
+        if not self._m4.get("threat_obs", True):
+            return self.lim_scale
+        lo, hi = THREAT_BRACKET["physics.a_att_max"]
+        a_att = lo + (float(np.asarray(obs).reshape(-1)[-2]) + 1.0) * (hi - lo) / 2.0
+        a_lim = CAPABILITY_RATIOS["physics.a_lim_max"][1] * a_att
+        s = np.array(self.lim_scale, np.float32, copy=True)
+        s[:3] = np.float32(a_lim)
+        return s
+
     def _bundle(self, deterministic: bool):
         """`learned_bundle` 의 M4 판 -- 표본추출/결정론을 고를 수 있다.
 
@@ -192,6 +291,7 @@ class M4Runner(MAPPORunner):
         dev = self.tr.device
 
         def lim_fn(obs, flags):
+            scale = self._lim_scale_for(obs)                # ★ P5 (아래 설명)
             nobs = self.norm.normalize(obs)
             t = torch.as_tensor(limiter_inputs(nobs, self.n), device=dev)
             raw, _ = self.tr.lim_actor.act(t, deterministic=deterministic)
@@ -200,7 +300,7 @@ class M4Runner(MAPPORunner):
             # -- 클립하면 값 자체는 안 변하지만 규약이 finisher 와 갈라진다.
             act = raw.copy()
             act[:, :3] = np.clip(raw[:, :3], -1.0, 1.0)
-            return (act * self.lim_scale).astype(np.float32)
+            return (act * scale).astype(np.float32)
 
         def fin_fn(obs, flags):
             nobs = self.norm.normalize(obs)
@@ -263,7 +363,9 @@ class M4Runner(MAPPORunner):
         """
         torch.manual_seed(self.eval_seed0)
         return mission_eval(self.eval_seed0, episodes, policy=self.policy_fn(),
-                            records=records, **self._m4)
+                            records=records, limiter_mode=self.limiter_mode,
+                            fire_mode=self.fire_mode,
+                            scripted_roles=self.frozen_roles, **self._m4)
 
     def save(self, out_dir: pathlib.Path, tag: str = "latest") -> None:
         super().save(out_dir, tag)
@@ -365,6 +467,13 @@ def _add_args(ap):
                     help="★ 적형성 게이트 미통과 조건. 진단용 (docs/40 §8.2)")
     ap.add_argument("--no-threat-obs", action="store_true",
                     help="regime-blind ablation (§6 대조군)")
+    # ★ 역할 분리 (docs/48). 기본 (learned, learned) 은 기존 경로와 동일하다.
+    ap.add_argument("--limiter-policy", default="learned", choices=["learned", "hold"],
+                    help="hold = 편대를 무개입으로 동결. 기저선과 **같은** 규칙")
+    ap.add_argument("--finisher-policy", default="learned",
+                    choices=["learned", "scripted"],
+                    help="scripted = 해석적 발사 규칙(clean 임계 교차)으로 동결. "
+                         "기저선 hold 의 finisher 와 같은 규칙")
     ap.add_argument("--resume", action="store_true",
                     help="출력 디렉터리에 체크포인트가 있으면 이어서 학습한다. "
                          "스윕(40~50런 x 24h)에서 죽은 런을 통째로 잃지 않기 위한 것. "
@@ -403,6 +512,8 @@ def main(argv=None) -> None:
     print(f"[M4] w_kill={args.w_kill} 공격자={args.attacker}/{args.lam} "
           f"위협랜덤화={'OFF' if args.no_threat_randomization else 'ON'} "
           f"위협관측={'OFF' if args.no_threat_obs else 'ON'}")
+    print(f"[M4] 역할 팔 = {arm_of(args.limiter_policy, args.finisher_policy)} "
+          f"(limiter={args.limiter_policy}, finisher={args.finisher_policy})")
 
     specs = build_specs(args)
     seeds = args.seeds if args.seeds is not None else [args.seed]
@@ -414,7 +525,9 @@ def main(argv=None) -> None:
         seed_everything(s)
         runner = M4Runner(run_cfg, s, args.device,
                           randomize_threat=not args.no_threat_randomization,
-                          threat_obs=not args.no_threat_obs, **specs)
+                          threat_obs=not args.no_threat_obs,
+                          limiter_policy=args.limiter_policy,
+                          finisher_policy=args.finisher_policy, **specs)
         out_dir = out_root / f"seed{s}"
         out_dir.mkdir(parents=True, exist_ok=True)
         n_upd = max(1, int(run_cfg["loop"]["total_env_steps"]) // runner.rollout_env_steps)
@@ -476,6 +589,10 @@ def main(argv=None) -> None:
             for b in BANDS))
         (out_dir / "summary.json").write_text(json.dumps({
             "seed": s, "w_kill": args.w_kill, "attacker": args.attacker,
+            # ★ 역할 분리 팔 (docs/48). 집계기가 이 세 키로 2x2 를 복원한다.
+            "arm": runner.arm,
+            "limiter_policy": args.limiter_policy,
+            "finisher_policy": args.finisher_policy,
             "threat_randomized": not args.no_threat_randomization,
             "threat_obs": not args.no_threat_obs,
             "final": curve[-1] if curve else None,

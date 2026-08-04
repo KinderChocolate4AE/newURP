@@ -24,10 +24,13 @@ advantage normalization (gae.py), target-KL epoch early stop, set_lr hook.
 """
 from __future__ import annotations
 
+import contextlib
 import itertools
 import pathlib
 from dataclasses import asdict, dataclass
 from typing import Optional
+
+_nullctx = contextlib.nullcontext
 
 import numpy as np
 import torch
@@ -115,6 +118,16 @@ class MAPPOConfig:
     #   limiter 에서도 일어날 수 있다. 기본값은 바꾸지 않았다 -- 바꾸려면 config 로
     #   선언하고 그 사실을 결과와 함께 보고할 것.
     limiter_commit: bool = False
+
+    # ★ 2026-08-04 역할 분리 (docs/48) -- 한 역할을 스크립트로 **동결**한 팔.
+    #   동결된 역할의 행동은 env 에 닿지 않으므로 그 액터를 학습시키면 안 된다.
+    #   그냥 두면 두 경로로 오염된다: (1) `clip_grad_norm_` 이 전역 노름이라
+    #   동결 액터의 grad 가 살아있는 액터의 스텝 크기를 줄인다, (2) `target_kl`
+    #   조기중단이 두 KL 의 max 라 동결 액터가 살아있는 액터의 epoch 을 끊는다.
+    #   그래서 동결 역할은 `torch.no_grad()` 로 진단만 내고 손실에서 뺀다.
+    #   **기본은 둘 다 False** -- 기존 경로는 bit-identical (P55).
+    freeze_limiter: bool = False
+    freeze_finisher: bool = False
 
     seed: int = 0
     device: str = "cpu"
@@ -375,6 +388,14 @@ class MAPPOTrainer:
 
         logs = {k: [] for k in ("pg_l", "pg_f", "vf", "ent_l", "ent_f", "kl_l",
                                 "kl_f", "clip_l", "clip_f", "gnorm")}
+        # 역할 동결 (docs/48). c_* 는 손실 계수이고, 동결 역할의 forward 는
+        # no_grad 로 돌려 그래프 자체를 안 만든다 -- 0 을 곱하는 것만으로는
+        # grad 텐서(0)가 생겨 Adam 의 모멘텀이 파라미터를 움직인다.
+        frz_l, frz_f = bool(cfg.freeze_limiter), bool(cfg.freeze_finisher)
+        if frz_l and frz_f:
+            raise ValueError("두 역할을 모두 동결하면 학습할 것이 남지 않는다 "
+                             "-- 그 팔은 손튜닝 기준선(measure_baseline)이다")
+        c_l, c_f = (0.0 if frz_l else 1.0), (0.0 if frz_f else 1.0)
         idx = np.arange(T)
         epochs_ran = 0
         for _ in range(cfg.epochs):
@@ -386,20 +407,23 @@ class MAPPOTrainer:
                 mb_t = torch.as_tensor(mb, device=dev)
                 rows_t = torch.as_tensor(rows, device=dev)
 
-                lp_l, ent_l = self.lim_actor.evaluate(lim_in[rows_t], lim_raw[rows_t])
-                ratio_l = torch.exp(lp_l - lim_old[rows_t])
-                pg_l = _pg(ratio_l, adv_lim[rows_t])
+                with torch.no_grad() if frz_l else _nullctx():
+                    lp_l, ent_l = self.lim_actor.evaluate(lim_in[rows_t],
+                                                          lim_raw[rows_t])
+                    ratio_l = torch.exp(lp_l - lim_old[rows_t])
+                    pg_l = _pg(ratio_l, adv_lim[rows_t])
 
-                lp_f, ent_f = self.fin_actor.evaluate(obs[mb_t], fin_raw[mb_t])
-                ratio_f = torch.exp(lp_f - fin_old[mb_t])
-                pg_f = _pg(ratio_f, adv[mb_t])
+                with torch.no_grad() if frz_f else _nullctx():
+                    lp_f, ent_f = self.fin_actor.evaluate(obs[mb_t], fin_raw[mb_t])
+                    ratio_f = torch.exp(lp_f - fin_old[mb_t])
+                    pg_f = _pg(ratio_f, adv[mb_t])
 
                 v_pred = self.critic(obs[mb_t])           # normalized space
                 vf = ((v_pred - targets[mb_t]) ** 2).mean()
 
-                loss = (pg_l + pg_f + cfg.vf_coef * vf
-                        - cfg.ent_coef_limiter * ent_l.mean()
-                        - cfg.ent_coef_finisher * ent_f.mean())
+                loss = (c_l * pg_l + c_f * pg_f + cfg.vf_coef * vf
+                        - c_l * cfg.ent_coef_limiter * ent_l.mean()
+                        - c_f * cfg.ent_coef_finisher * ent_f.mean())
 
                 self.optimizer.zero_grad()
                 loss.backward()
@@ -422,8 +446,11 @@ class MAPPOTrainer:
                 ep_kl_f.append(float(kl_f.item()))
 
             epochs_ran += 1
-            if cfg.target_kl is not None and max(
-                    float(np.mean(ep_kl_l)), float(np.mean(ep_kl_f))) > cfg.target_kl:
+            # ★ 동결된 역할의 KL 은 조기중단 판단에서 뺀다 -- 그 액터는 업데이트되지
+            #   않으므로 KL 이 0 이지만, 반대로 갱신되는 쪽을 끊어서는 안 된다.
+            live_kl = ([float(np.mean(ep_kl_l))] if not frz_l else []) + \
+                      ([float(np.mean(ep_kl_f))] if not frz_f else [])
+            if cfg.target_kl is not None and live_kl and max(live_kl) > cfg.target_kl:
                 break
 
         return {
@@ -442,12 +469,19 @@ class MAPPOTrainer:
             "limiter/log_std": float(self.lim_actor.log_std.mean().item()),
             "finisher/log_std": float(self.fin_actor.log_std.mean().item()),
             "epochs_ran": float(epochs_ran),
+            # 역할 동결 표식 (docs/48). 지표를 읽는 쪽이 "이 팔에서 저 액터의
+            # entropy/KL 은 학습 신호가 아니라 상수"임을 알아야 한다.
+            "freeze/limiter": float(frz_l),
+            "freeze/finisher": float(frz_f),
             **coma_stats,
             # ★ 결함 2 진단용. 롤아웃에서 커밋을 실제로 몇 번 제안했는가.
             #   0.000 이나 1.000 으로 굳으면 finisher 발사와 같은 확률 붕괴다 --
             #   그때는 결과를 "학습이 안 됐다"가 아니라 **퇴화**로 읽어야 한다.
-            **({"limiter/commit_rate": float(buf.lim_raw[..., 3].mean())}
-               if self.lim_dim > 3 else {}),
+            # ★ limiter 가 동결된 팔에서는 이 값이 **제안**이지 실제로 일어난 일이
+            #   아니다 (행동은 스크립트가 덮어썼다). 같은 키로 내면 표에서
+            #   구분되지 않으므로 이름을 바꾼다.
+            **({("limiter/commit_rate_proposed" if frz_l else "limiter/commit_rate"):
+                float(buf.lim_raw[..., 3].mean())} if self.lim_dim > 3 else {}),
         }
 
     # --------------------------------------------------------- checkpoint ---

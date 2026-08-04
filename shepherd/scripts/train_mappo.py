@@ -127,6 +127,18 @@ class MAPPORunner:
             del self.ep_records[:-500]
         self._ep_idx += 1
 
+    # -------------------------------------------------------- 역할 동결 훅 ---
+    #   역할 분리 실험(docs/48)이 학습 롤아웃에서 한 역할을 스크립트로 고정할 수
+    #   있게 하는 자리다. 여기에 두는 이유는 `collect_rollout` 을 자식이 복사하지
+    #   않게 하기 위해서다 -- 이 리포에서 반복된 사고는 전부 "같은 규칙이 두 곳에
+    #   있고 한쪽만 갱신됐다" 였다. 기본 구현은 **항등/no-op** 이므로 2B/2C/M2/M3
+    #   경로는 bit-identical (P56).
+    def _override_live(self, live: Dict[str, np.ndarray], ad: ShepherdAdapter):
+        return live
+
+    def _observe_step(self, r) -> None:
+        return None
+
     # ------------------------------------------------------------- rollout ---
     def collect_rollout(self) -> None:
         if self._adapter is None:
@@ -165,7 +177,9 @@ class MAPPORunner:
             live[ad.finisher_id] = np.concatenate(
                 [clip_f[:3] * self.fin_axis_scale, clip_f[3:]]).astype(np.float32)
 
+            live = self._override_live(live, ad)     # 역할 동결 훅 (기본 항등)
             r = ad.step(live)
+            self._observe_step(r)                    # 스텝 관찰 훅 (기본 no-op)
             next_obs = r.obs[ad.limiter_ids[0]]
             if r.terminated:
                 next_value = 0.0

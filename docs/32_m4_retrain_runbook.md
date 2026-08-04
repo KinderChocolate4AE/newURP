@@ -309,3 +309,34 @@ python -m shepherd.scripts.sweep_m4 --aggregate $PWD/results/m4_sweep \
 | 채널 분리 | `shepherd.scripts.channel_split` | ring 이 v⊥ 를 0.44 → 7.27 m/s 로 키운다 |
 | 학습 신호 | `shepherd.scripts.signal_audit` | 무작위 탐색 수익 std 가 종말항의 0.32 % |
 | 곡선 그림 | `docs/ppt/fig8.py` | 경계 2개 · Wilson 띠. `NEWURP_ROOT` 로 경로 지정 가능 |
+
+
+---
+
+## [3.5] 역할 분리 2×2 — 50런 스윕보다 **먼저** (2026-08-04, docs/48)
+
+파일럿이 게이트 STOP 이었고, 그 결과는 원인을 역할에 귀속시키지 못한다
+(`hold` 가 무개입이 아니라 해석적 발사 규칙이라서다 — docs/47 §7.2, docs/48 §1).
+귀속 없이 50런을 태우면 같은 해석 불능에 다시 걸린다. 그래서 순서를 바꾼다.
+
+```bash
+# 기저선이 이미 있으면 0) 은 건너뛴다 (부록 표 참조)
+python -m shepherd.scripts.roles_split --dry-run            # 명령 9개
+python -m shepherd.scripts.roles_split --run --jobs 9       # 3 팔 x 3 시드, 500k
+python -m shepherd.scripts.roles_split --aggregate results/m4_roles
+```
+
+| 팔 | `--limiter-policy` | `--finisher-policy` | 읽는 것 |
+|---|---|---|---|
+| LL | `learned` | `learned` | 결합 (= 파일럿 구성, 결함 수정 후 재측정) |
+| LS | `learned` | `scripted` | 편대 학습의 단독 기여 |
+| SL | `hold` | `learned` | 발사 학습의 단독 기여 |
+| SS | — | — | **안 돌린다.** `results/hold_baseline.json` (n=500) |
+
+비용: 파일럿과 동일(500k×9). 같은 기계 순차 ≈ 15시간, 9 병렬 ≈ 1.7시간.
+`--resume` 살아 있다. 판정식은 `--aggregate` 출력에 **함께 실려** 나오므로
+사후 변경이 눈에 띈다. 상세는 `docs/48`.
+
+**멈춤 조건**: 집계의 `tests` 가 전부 `passed: false` 면 그것이 결과다 —
+역할 분리로도 회수되지 않는다는 뜻이고, 그때는 스윕이 아니라 학습 문제
+(발사 헤드 확률 붕괴 · PBRS) 로 간다.

@@ -28,13 +28,14 @@ import numpy as np
 
 from shepherd.train.action_dims import (LIVE_DIMS, M4_LIVE_DIMS,      # noqa: F401
                                         live_action_dim,
-                                        pad_env_action, pad_env_actions)
+                                        pad_env_action, pad_env_actions,
+                                        unpad_env_action)
 from shepherd.game.roles import ScenarioSpec
 from shepherd.env import ShapingParallelEnv, Layout
 from shepherd.sim.analytic import AnalyticBackend, AgentKin, KinematicLimits  # composition root
 
 __all__ = ["LIVE_DIMS", "M4_LIVE_DIMS", "live_action_dim", "pad_env_action",
-           "pad_env_actions", "make_train_env"]
+           "pad_env_actions", "unpad_env_action", "make_train_env"]
 
 
 def _req(d, key: str, where: str):
