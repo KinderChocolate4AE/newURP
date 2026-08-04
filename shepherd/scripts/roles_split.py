@@ -20,9 +20,13 @@
 
 사용
 ----
+    export NTFY_TOPIC=<토픽>          # 선택. 없으면 알림만 꺼진다
     python -m shepherd.scripts.roles_split --dry-run
-    python -m shepherd.scripts.roles_split --run --jobs 3
+    python -m shepherd.scripts.roles_split --run --jobs 10
     python -m shepherd.scripts.roles_split --aggregate results/m4_roles
+
+런당 stdout 은 `<root>/<팔>_s<시드>/train.log` 로 간다 (15 런이 부모 하나로
+섞이면 못 읽는다). 알림은 START · 런 완료 · 실패 · **판정 요약**을 보낸다.
 
 `SS` 는 여기서 돌리지 않는다 -- 학습이 없으므로 `results/hold_baseline.json`
 (n=500) 을 그대로 쓴다. 같은 파일을 스윕도 쓰므로 두 실험의 기준선이 동일하다.
@@ -37,12 +41,17 @@ import json
 import pathlib
 import subprocess
 import sys
+import time
 from typing import Dict, List, Optional
 
+from shepherd.notify import ntfy, ntfy_enabled
 from shepherd.scripts.sweep_m4 import BAND, SHAPE
 from shepherd.stats import wilson
 
-__all__ = ["ARM_SPECS", "SEEDS", "W_KILL", "plan", "aggregate", "verdict_rules"]
+__all__ = ["ARM_SPECS", "SEEDS", "W_KILL", "plan", "aggregate", "verdict_rules",
+           "run_pool", "summarize_for_push"]
+
+NTFY_TITLE = "roles"        # 폰 알림 제목. m3a 런과 섞이지 않게 구분한다.
 
 # ── 선언: 축과 팔 (결과 보기 전에 고정) ─────────────────────────────────────
 #   w_kill 은 스윕 축이 아니라 **고정**이다. 여기서 묻는 것은 "어느 역할이
@@ -101,6 +110,95 @@ def verdict_rules() -> dict:
         "null_case": ("세 팔 모두 기저를 못 넘으면 그것이 결과다: 어느 역할을 "
                       "학습시켜도 무개입+해석적 발사를 못 넘는다 (신청서 §4.7 폴백 (v))"),
     }
+
+
+# ── 실행 ────────────────────────────────────────────────────────────────────
+def run_pool(cmds: List[tuple], jobs: int, poll_s: float = 5.0) -> List[str]:
+    """런을 `jobs` 개까지만 동시에 돌린다. 완료될 때마다 진행을 알린다.
+
+    `sweep_m4` 의 루프를 그대로 쓰지 않는 이유가 둘 있다:
+
+    1. 그 루프는 프로세스를 **먼저 띄우고** 슬롯을 세므로 순간적으로 `jobs+1`
+       개가 돈다. 공용 서버에서 코어 예산을 정해 놓고 돌릴 때 그 1 개가 약속을
+       깬다. 여기서는 슬롯이 빌 때까지 **띄우지 않는다**.
+    2. 15 런의 stdout 이 부모 하나로 섞이면 로그가 못 읽는 상태가 된다.
+       런마다 `<out>/train.log` 로 가른다.
+
+    돌려주는 것은 실패한 런 이름 목록이다 (rc != 0).
+    """
+    pending, running = list(cmds), {}
+    failed: List[str] = []
+    total, done = len(cmds), 0
+    logs = {}
+    try:
+        while pending or running:
+            while pending and len(running) < jobs:
+                name, c = pending.pop(0)
+                out_dir = pathlib.Path(_out_of(c))
+                out_dir.mkdir(parents=True, exist_ok=True)
+                fh = open(out_dir / "train.log", "w", encoding="utf-8")
+                p = subprocess.Popen(c, stdout=fh, stderr=subprocess.STDOUT)
+                running[p], logs[p] = name, fh
+                print(f"[roles] start {name}  ({len(running)}/{jobs} 슬롯)",
+                      flush=True)
+            time.sleep(poll_s)
+            for p in [p for p in running if p.poll() is not None]:
+                name = running.pop(p)
+                logs.pop(p).close()
+                done += 1
+                if p.returncode != 0:
+                    failed.append(name)
+                    print(f"[roles] ★ FAIL {name} rc={p.returncode} "
+                          f"({done}/{total})", file=sys.stderr, flush=True)
+                    ntfy(f"★ FAIL {name} (rc={p.returncode}) — {done}/{total}",
+                         title=NTFY_TITLE, priority="high")
+                else:
+                    print(f"[roles] done {name}  ({done}/{total})", flush=True)
+                    ntfy(f"{name} 완료 — {done}/{total}", title=NTFY_TITLE)
+    except KeyboardInterrupt:                                # pragma: no cover
+        for p in running:
+            p.terminate()
+        ntfy(f"역할분리 중단됨 (완료 {done}/{total})", title=NTFY_TITLE,
+             priority="high")
+        raise
+    finally:
+        for fh in logs.values():
+            fh.close()
+    return failed
+
+
+def _out_of(cmd: List[str]) -> str:
+    return cmd[cmd.index("--output") + 1]
+
+
+def summarize_for_push(verdict: dict, failed: List[str]) -> str:
+    """폰에서 한 눈에 읽히는 요약. **판정 문장을 그대로 싣는다.**
+
+    9시간 뒤에 오는 알림이 "끝났다" 뿐이면 결국 ssh 로 다시 들어가야 한다.
+    판정과 팔별 수치까지 실어야 알림이 알림 값을 한다.
+    """
+    lines = []
+    if failed:
+        lines.append(f"★ 실패 {len(failed)}런: {', '.join(failed)}")
+    arms = verdict.get("arms") or {}
+    b = (verdict.get("baseline_SS") or {}).get("shape_wilson_hi")
+    if b is not None:
+        lines.append(f"SS 기저 상한 {b:.4f}")
+    for a in ("LL", "LS", "SL"):
+        v = arms.get(a)
+        if not v:
+            continue
+        lines.append(f"{a}: {v['shape_k']}/{v['shape_n']} "
+                     f"lo={v['shape_wilson_lo']:.4f} "
+                     f"({'통과' if v.get('beats_baseline_pooled') else '미달'}"
+                     f", 시드 {v.get('seeds_beating_baseline', 0)}/{v['n_runs']})")
+    t = verdict.get("tests") or {}
+    if t:
+        lines.append(" ".join(
+            f"{k}={'O' if v.get('passed') else 'X'}" for k, v in t.items()))
+    if verdict.get("verdict"):
+        lines.append(str(verdict["verdict"]))
+    return "\n".join(lines) or "역할분리 DONE (집계 없음)"
 
 
 # ── 집계 ────────────────────────────────────────────────────────────────────
@@ -310,18 +408,21 @@ def main(argv=None):
         print(f"\n# 집계:  python -m shepherd.scripts.roles_split --aggregate {a.root}")
         return
 
-    running = []
-    for name, c in cmds:
-        running.append((name, subprocess.Popen(c)))
-        while len([p for _, p in running if p.poll() is None]) >= max(a.jobs, 1):
-            for _, p in running:
-                if p.poll() is None:
-                    p.wait(); break
-    for name, p in running:
-        if p.wait() != 0:
-            print(f"[FAIL] {name}", file=sys.stderr)
-    print(json.dumps(aggregate(a.root, a.baseline_out, a.reference_out),
-                     indent=2, ensure_ascii=False))
+    jobs = max(a.jobs, 1)
+    print(f"[roles] {len(cmds)} 런 시작 · jobs={jobs} · "
+          f"알림 {'ON' if ntfy_enabled() else 'OFF (NTFY_TOPIC 미설정)'}")
+    ntfy(f"역할분리 START — {len(cmds)}런 (팔 {len(a.arms)} x 시드 {len(a.seeds)}), "
+         f"jobs={jobs}", title=NTFY_TITLE)
+
+    failed = run_pool(cmds, jobs)
+    verdict = aggregate(a.root, a.baseline_out, a.reference_out)
+    print(json.dumps(verdict, indent=2, ensure_ascii=False))
+
+    ntfy(summarize_for_push(verdict, failed), title=NTFY_TITLE,
+         priority=("high" if failed else None))
+    if failed:
+        print(f"[roles] 실패 {len(failed)}런: {', '.join(failed)}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

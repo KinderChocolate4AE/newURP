@@ -11,6 +11,7 @@ docs/47 §7.4 가 적은 대로 이 리포에서 반복된 사고는 전부 *"�
 from __future__ import annotations
 
 import json
+import subprocess
 
 import numpy as np
 import pytest
@@ -418,6 +419,134 @@ def test_p59d_declared_seed_axis_is_five(tmp_path):
     cmds = plan("results/m4_roles")
     assert len(cmds) == len(ARM_SPECS) * len(SEEDS) == 15
     assert {n.split("_s")[1] for n, _ in cmds} == {"0", "1", "2", "3", "4"}
+
+
+# ── P61~P62: 실행 풀 + 알림 (9시간짜리를 무인으로 돌리는 장치) ──────────────
+def test_p61_pool_never_exceeds_jobs_and_splits_logs(tmp_path, monkeypatch):
+    """★ 슬롯을 넘겨 띄우지 않는다. `sweep_m4` 루프는 순간 `jobs+1` 이 된다.
+
+    공용 서버에서 '코어 10개만 쓴다' 고 약속하고 도는 작업이라, 이 1개가
+    약속을 깬다. 동시에 런별 로그가 갈리는지도 같이 본다.
+    """
+    from shepherd.scripts.roles_split import run_pool
+
+    peak = {"n": 0}
+    real_popen = subprocess.Popen
+    live = []
+
+    class _P:
+        def __init__(self, cmd, stdout=None, stderr=None):
+            self.returncode = None
+            self._left = 2                      # 두 번 poll 하면 끝난다
+            live.append(self)
+            peak["n"] = max(peak["n"], len(live))
+
+        def poll(self):
+            self._left -= 1
+            if self._left <= 0:
+                self.returncode = 0
+                if self in live:
+                    live.remove(self)
+                return 0
+            return None
+
+        def terminate(self):                    # pragma: no cover
+            pass
+
+    monkeypatch.setattr(subprocess, "Popen", _P)
+    cmds = [(f"r{i}", ["x", "--output", str(tmp_path / f"r{i}")]) for i in range(9)]
+    failed = run_pool(cmds, jobs=3, poll_s=0.0)
+
+    assert failed == []
+    assert peak["n"] <= 3, f"동시 실행이 {peak['n']} 까지 갔다 (jobs=3)"
+    for i in range(9):
+        assert (tmp_path / f"r{i}" / "train.log").exists()
+    assert subprocess.Popen is _P and real_popen is not _P     # monkeypatch 확인
+
+
+def test_p61b_pool_reports_failures_without_stopping(tmp_path, monkeypatch):
+    """한 런이 죽어도 나머지는 끝까지 돈다. 실패 목록으로 돌아온다."""
+    from shepherd.scripts.roles_split import run_pool
+
+    class _P:
+        def __init__(self, cmd, stdout=None, stderr=None):
+            self._bad = cmd[-1].endswith("r1")
+            self.returncode = None
+            self._left = 1
+
+        def poll(self):
+            self._left -= 1
+            if self._left <= 0:
+                self.returncode = 3 if self._bad else 0
+                return self.returncode
+            return None
+
+        def terminate(self):                    # pragma: no cover
+            pass
+
+    monkeypatch.setattr(subprocess, "Popen", _P)
+    cmds = [(f"r{i}", ["x", "--output", str(tmp_path / f"r{i}")]) for i in range(4)]
+    assert run_pool(cmds, jobs=2, poll_s=0.0) == ["r1"]
+
+
+def test_p62_ntfy_is_a_noop_without_topic_and_never_raises(monkeypatch):
+    """알림이 학습을 죽이면 안 된다 -- 토픽 없으면 no-op, 있어도 예외를 삼킨다."""
+    import urllib.request
+
+    from shepherd.notify import ntfy, ntfy_enabled
+
+    monkeypatch.delenv("NTFY_TOPIC", raising=False)
+    assert ntfy_enabled() is False
+
+    def _boom(*a, **k):                         # pragma: no cover - 호출되면 실패
+        raise AssertionError("토픽이 없는데 네트워크를 건드렸다")
+    monkeypatch.setattr(urllib.request, "urlopen", _boom)
+    ntfy("nothing happens")                     # no-op 이어야 한다
+
+    monkeypatch.setenv("NTFY_TOPIC", "t")
+    assert ntfy_enabled() is True
+
+    def _fail(*a, **k):
+        raise OSError("network down")
+    monkeypatch.setattr(urllib.request, "urlopen", _fail)
+    ntfy("서버가 죽어도 여기서 예외가 나오면 안 된다")     # 삼켜야 한다
+
+
+def test_p62b_train_m3a_ntfy_delegates_to_the_single_definition(monkeypatch):
+    """`train_m3a.ntfy` 는 복사본이 아니라 `shepherd.notify` 를 부른다."""
+    import shepherd.notify as notify_mod
+    import shepherd.scripts.train_m3a as m3a
+
+    seen = []
+    monkeypatch.setattr(notify_mod, "ntfy",
+                        lambda msg, title="shepherd", priority=None:
+                        seen.append((msg, title)))
+    monkeypatch.setattr(m3a, "_ntfy", notify_mod.ntfy)
+    m3a.ntfy("hello")
+    assert seen == [("hello", "m3a")]
+
+
+def test_p62c_push_summary_carries_the_verdict(tmp_path):
+    """알림 본문에 **판정과 팔별 수치**가 실린다 (끝났다는 말만 오면 쓸모없다)."""
+    from shepherd.scripts.roles_split import summarize_for_push
+
+    root = tmp_path / "runs"
+    for s in range(5):
+        _write_run(root, "LS", s, 30, 183)
+        _write_run(root, "SL", s, 0, 183)
+        _write_run(root, "LL", s, 0, 183)
+    base = tmp_path / "hold_baseline.json"
+    _write_baseline(base)
+    v = aggregate(str(root), str(base), str(tmp_path / "missing.json"))
+
+    msg = summarize_for_push(v, [])
+    assert "LS: 150/915" in msg
+    assert "H_lim=O" in msg and "H_fin=X" in msg
+    assert v["verdict"] in msg
+    assert "★ 실패" not in msg
+
+    msg2 = summarize_for_push(v, ["LL_s3"])
+    assert msg2.startswith("★ 실패 1런: LL_s3")
 
 
 def test_p60_null_case_is_the_reported_result(tmp_path):

@@ -56,6 +56,7 @@ import torch
 import yaml
 
 from shepherd.env_m3 import M3Params
+from shepherd.notify import ntfy as _ntfy
 from shepherd.train.attacker_rand import sample_attacker_params
 from shepherd.train.ippo import limiter_inputs
 from shepherd.train.make_env_m3 import (Curriculum, M3Adapter,
@@ -71,18 +72,11 @@ from shepherd.scripts.train_ippo import (hold_bundle, make_scripted_ctx,
 
 
 # ------------------------------------------------------------------ ntfy ---
+# 구현은 `shepherd/notify.py` 한 곳에 있다 (2026-08-04, docs/48 §3.1 한 곳 원칙).
+# 호출부는 그대로 `ntfy("...")` 다 -- 제목만 여기서 고정한다.
 def ntfy(msg: str) -> None:
     """Best-effort push (docs/11 SS3 'ntfy hook'). No-op unless NTFY_TOPIC set."""
-    topic = os.environ.get("NTFY_TOPIC", "").strip()
-    if not topic:
-        return
-    try:
-        req = urllib.request.Request(f"https://ntfy.sh/{topic}",
-                                     data=msg.encode("utf-8"),
-                                     headers={"Title": "m3a"}, method="POST")
-        urllib.request.urlopen(req, timeout=3)
-    except Exception:
-        pass                                        # never fail training on push
+    _ntfy(msg, title="m3a")
 
 
 # ------------------------------------------------------------ eval bundle ---

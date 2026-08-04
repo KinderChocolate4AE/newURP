@@ -321,10 +321,17 @@ python -m shepherd.scripts.sweep_m4 --aggregate $PWD/results/m4_sweep \
 
 ```bash
 # 기저선이 이미 있으면 0) 은 건너뛴다 (부록 표 참조)
-python -m shepherd.scripts.roles_split --dry-run            # 명령 9개
+export NTFY_TOPIC=<토픽>                                    # 없으면 알림만 꺼진다
+python -m shepherd.scripts.roles_split --dry-run            # "# 15 런" 이어야 한다
+tmux new -s roles                                           # 9시간짜리다. 반드시
 python -m shepherd.scripts.roles_split --run --jobs 10      # 3 팔 x 5 시드 = 15런, 500k
 python -m shepherd.scripts.roles_split --aggregate results/m4_roles
 ```
+
+런당 stdout 은 `results/m4_roles/<팔>_s<시드>/train.log` 로 간다 — 15 런이 부모
+하나로 섞이면 못 읽는다. `NTFY_TOPIC` 을 주면 START · 런 완료 · 실패 · **판정
+요약**이 폰으로 온다 (마지막 알림에 팔별 k/n 과 H_lim/H_fin/H_syn 이 실린다).
+알림은 best-effort 다 — ntfy.sh 가 죽어도 학습은 안 죽는다 (`shepherd/notify.py`).
 
 | 팔 | `--limiter-policy` | `--finisher-policy` | 읽는 것 |
 |---|---|---|---|

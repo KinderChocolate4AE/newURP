@@ -142,7 +142,9 @@ forward 를 `torch.no_grad()` 로 돌려 **그래프 자체를 안 만든다**. 
 | P56 | 부모 훅이 항등/no-op |
 | P57 | 두 역할 동시 동결 거부 (CLI·학습기 양쪽) |
 | P58 | `ARMS` 키 집합 == CLI 2×2 − SS |
-| P59 / P59b | 판정이 선언 규칙 그대로. 한 시드가 끈 통과는 '풀링 의존' 으로 표기 |
+| P59 / P59b / P59c / P59d | 판정이 선언 규칙 그대로. '강함' 은 시드 **과반**(상수 아님). 선언 시드 축 = 5 |
+| P61 / P61b | 실행 풀이 `jobs` 를 **넘겨 띄우지 않는다**(sweep_m4 루프는 순간 `jobs+1`). 런별 로그 분리. 한 런이 죽어도 나머지는 완주 |
+| P62 / P62b / P62c | 알림은 토픽 없으면 no-op, 네트워크가 죽어도 예외를 안 낸다. `train_m3a` 가 사본이 아니라 단일 정의를 부른다. 푸시 본문에 판정이 실린다 |
 | P60 / P60b | null case 도 판정으로 나온다. **기저선이 없으면 판정하지 않는다** |
 
 P52 에는 **음성 대조**가 붙어 있다. 같은 쓰레기 정책을 동결 없이 넣으면 결과가
@@ -162,7 +164,8 @@ P52 에는 **음성 대조**가 붙어 있다. 같은 쓰레기 정책을 동결
 | `shepherd/scripts/train_mappo.py` | 훅 `_override_live` / `_observe_step` (기본 항등·no-op) |
 | `shepherd/scripts/train_m4.py` | `--limiter-policy` / `--finisher-policy`, `ARMS`, summary 에 팔 기록 |
 | `shepherd/scripts/roles_split.py` | 신규 — 2×2 실행기 + 귀속 집계기 |
-| `tests/test_role_split.py` | 신규 — P50~P60 |
+| `tests/test_role_split.py` | 신규 — P50~P62 |
+| `shepherd/notify.py` | 신규 — ntfy 훅을 한 곳으로 (`train_m3a` 의 사본 제거) |
 
 ---
 
@@ -239,6 +242,7 @@ python -m shepherd.scripts.sweep_m4 --reference 300         # results/intercept_
 python -m shepherd.scripts.roles_split --dry-run
 
 # 2) 서버에서 실행 (15런은 서로 독립. OMP_NUM_THREADS=1 필수)
+export NTFY_TOPIC=<토픽>          # 선택 -- START·런 완료·실패·판정 요약 푸시
 python -m shepherd.scripts.roles_split --run --jobs 10
 
 # 3) 집계 (판정식이 출력에 함께 실린다)
