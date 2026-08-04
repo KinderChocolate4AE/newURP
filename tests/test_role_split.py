@@ -386,6 +386,40 @@ def test_p59b_pooling_dependent_verdict_is_labelled(tmp_path):
     assert "풀링 의존" in out["verdict"]
 
 
+def test_p59c_strong_threshold_is_a_majority_not_a_constant(tmp_path):
+    """'강함' 기준은 시드 수에서 나온 **과반**이다 (5시드에서 2/5 는 다수가 아니다).
+
+    상수 2 로 하드코딩돼 있으면 시드를 3 -> 5 로 늘렸을 때 기준이 조용히
+    느슨해진다. 사전등록(docs/48 §4)이 '과반' 이라고 적힌 이유이고, 여기가
+    그 문장이 코드와 붙어 있는 지점이다.
+    """
+    base = tmp_path / "hold_baseline.json"
+    _write_baseline(base)
+
+    def _strong_for(n_beat, n_seeds):
+        root = tmp_path / f"runs_{n_beat}_{n_seeds}"
+        for s in range(n_seeds):
+            _write_run(root, "LS", s, 30 if s < n_beat else 0, 183)
+        out = aggregate(str(root), str(base), str(tmp_path / "missing.json"))
+        t = out["tests"]["H_lim"]
+        assert out["arms"]["LS"]["n_runs"] == n_seeds
+        return t["passed"], t["strong"]
+
+    assert _strong_for(2, 3) == (True, True)      # 3시드: 과반 = 2
+    assert _strong_for(1, 3) == (True, False)
+    assert _strong_for(3, 5) == (True, True)      # 5시드: 과반 = 3
+    assert _strong_for(2, 5) == (True, False)     # 2/5 는 '풀링 의존'
+
+
+def test_p59d_declared_seed_axis_is_five(tmp_path):
+    """선언된 시드 축(docs/48 §2)과 실행기의 기본값이 같아야 한다."""
+    from shepherd.scripts.roles_split import SEEDS, plan
+    assert SEEDS == (0, 1, 2, 3, 4)
+    cmds = plan("results/m4_roles")
+    assert len(cmds) == len(ARM_SPECS) * len(SEEDS) == 15
+    assert {n.split("_s")[1] for n, _ in cmds} == {"0", "1", "2", "3", "4"}
+
+
 def test_p60_null_case_is_the_reported_result(tmp_path):
     """세 팔 모두 못 넘으면 그것이 결과다 -- '결과 없음' 이 아니라 판정이 나와야 한다."""
     root = tmp_path / "runs"

@@ -322,7 +322,7 @@ python -m shepherd.scripts.sweep_m4 --aggregate $PWD/results/m4_sweep \
 ```bash
 # 기저선이 이미 있으면 0) 은 건너뛴다 (부록 표 참조)
 python -m shepherd.scripts.roles_split --dry-run            # 명령 9개
-python -m shepherd.scripts.roles_split --run --jobs 9       # 3 팔 x 3 시드, 500k
+python -m shepherd.scripts.roles_split --run --jobs 10      # 3 팔 x 5 시드 = 15런, 500k
 python -m shepherd.scripts.roles_split --aggregate results/m4_roles
 ```
 
@@ -333,8 +333,9 @@ python -m shepherd.scripts.roles_split --aggregate results/m4_roles
 | SL | `hold` | `learned` | 발사 학습의 단독 기여 |
 | SS | — | — | **안 돌린다.** `results/hold_baseline.json` (n=500) |
 
-비용: 파일럿과 동일(500k×9). 같은 기계 순차 ≈ 15시간, 9 병렬 ≈ 1.7시간.
-`--resume` 살아 있다. 판정식은 `--aggregate` 출력에 **함께 실려** 나오므로
+비용: 1런 4~5시간(파일럿 실측, 단일 스레드) × 15런 = 68 코어시간.
+`--jobs 10` 이면 **약 9시간**(10런 → 4.5h, 남은 5런 → 4.5h). 물리코어 24 중
+10만 쓴다. `--resume` 살아 있다. 판정식은 `--aggregate` 출력에 **함께 실려** 나오므로
 사후 변경이 눈에 띈다. 상세는 `docs/48`.
 
 **멈춤 조건**: 집계의 `tests` 가 전부 `passed: false` 면 그것이 결과다 —

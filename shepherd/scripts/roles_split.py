@@ -49,7 +49,7 @@ __all__ = ["ARM_SPECS", "SEEDS", "W_KILL", "plan", "aggregate", "verdict_rules"]
 #   격차를 만드는가" 이지 "어떤 보상 가중치가 좋은가" 가 아니다. 파일럿과 같은
 #   0.5 로 둬서 파일럿(결함 위에서 돌긴 했지만)과 구성이 비교 가능하게 한다.
 W_KILL = 0.5
-SEEDS = (0, 1, 2)
+SEEDS = (0, 1, 2, 3, 4)
 ARM_SPECS = {                       # arm -> (limiter_policy, finisher_policy)
     "LL": ("learned", "learned"),
     "LS": ("learned", "scripted"),
@@ -92,8 +92,8 @@ def verdict_rules() -> dict:
         "H_fin": "SL 의 Wilson 하한 > SS 의 Wilson 상한  -> 발사 학습의 단독 순이득",
         "H_syn": "LL 의 Wilson 하한 > max(LS 상한, SL 상한) -> 결합 상승작용",
         "pooling": ("1차 판정은 시드 풀링 Wilson 으로 한다. 풀링은 시드 분산을 0 으로 "
-                    "가정하므로, 3시드 중 2시드 이상이 개별로도 기저를 넘을 때만 "
-                    "'강한' 판정으로 적는다 (아니면 '풀링 의존')"),
+                    "가정하므로, **시드 과반**이 개별로도 기저를 넘을 때만 '강한' "
+                    "판정으로 적는다 (5시드 -> 3, 3시드 -> 2). 아니면 '풀링 의존'"),
         "attribution": ("귀속은 차분으로 보고하되 유의성 주장은 하지 않는다: "
                         "lim=LS-SS, fin=SL-SS, syn=LL-LS-SL+SS"),
         "secondary": ("전체 무력화율 · 비손실 비율 · BAND_AIM 은 **보고만** 한다. "
@@ -210,11 +210,16 @@ def aggregate(root: str, baseline_path: str = "results/hold_baseline.json",
         return arms[a]["shape_wilson_hi"] if a in arms else None
 
     def _strong(a):
-        """풀링만이 아니라 시드 다수도 넘었는가."""
+        """풀링만이 아니라 **시드 과반**도 넘었는가.
+
+        시드 수에 따라 자동으로 간다 (3시드 -> 2, 5시드 -> 3). 하드코딩하면
+        시드를 늘렸을 때 기준이 조용히 느슨해진다 -- 5시드에서 2/5 는 다수가
+        아니다."""
         if a not in arms:
             return None
+        need = (arms[a]["n_runs"] + 1) // 2
         return bool(arms[a]["beats_baseline_pooled"]
-                    and arms[a]["seeds_beating_baseline"] >= 2)
+                    and arms[a]["seeds_beating_baseline"] >= need)
 
     tests = {
         "H_lim": {"arm": "LS", "passed": (None if "LS" not in arms
