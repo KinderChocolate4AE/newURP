@@ -139,6 +139,10 @@ class MAPPORunner:
     def _observe_step(self, r) -> None:
         return None
 
+    def _bc_target(self, ad: ShepherdAdapter):
+        """조준 BC 라벨 (docs/49). 기본 None -> 버퍼에 아무것도 안 쓴다."""
+        return None
+
     # ------------------------------------------------------------- rollout ---
     def collect_rollout(self) -> None:
         if self._adapter is None:
@@ -178,6 +182,10 @@ class MAPPORunner:
                 [clip_f[:3] * self.fin_axis_scale, clip_f[3:]]).astype(np.float32)
 
             live = self._override_live(live, ad)     # 역할 동결 훅 (기본 항등)
+            # ★ 라벨은 **스텝 전** 상태에서 (obs 와 같은 시점). 스텝 뒤에 뽑으면
+            #   한 칸 밀려서 조용히 틀린 것을 가르치게 된다.
+            bc_t = self._bc_target(ad)
+            bc_kw = {} if bc_t is None else {"bc_target": bc_t}
             r = ad.step(live)
             self._observe_step(r)                    # 스텝 관찰 훅 (기본 no-op)
             next_obs = r.obs[ad.limiter_ids[0]]
@@ -190,7 +198,9 @@ class MAPPORunner:
                 self.buf.coma_D[prev_row] = np.array(
                     [r.coma_D[lid] for lid in ad.limiter_ids], np.float32)
             prev_row = self.buf._i
-            self.buf.add(obs=nobs, lim_raw=raw_l, lim_clip=clip_l,
+            # 조준 BC 라벨은 **행동을 내기 전 상태**에서 뽑아야 nobs 와 짝이 맞는다.
+            # `_bc_target` 을 ad.step 앞에서 부른 이유가 그것이다 (아래 bc_kw).
+            self.buf.add(**bc_kw, obs=nobs, lim_raw=raw_l, lim_clip=clip_l,
                          lim_logp=logp_l.cpu().numpy(),
                          fin_raw=raw_f, fin_clip=clip_f,
                          fin_logp=float(logp_f[0].item()),

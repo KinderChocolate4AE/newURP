@@ -48,8 +48,8 @@ from shepherd.notify import ntfy, ntfy_enabled
 from shepherd.scripts.sweep_m4 import BAND, SHAPE
 from shepherd.stats import wilson
 
-__all__ = ["ARM_SPECS", "SEEDS", "W_KILL", "plan", "aggregate", "verdict_rules",
-           "run_pool", "summarize_for_push"]
+__all__ = ["ARM_SPECS", "DEFAULT_ARMS", "SEEDS", "W_KILL", "plan", "aggregate",
+           "verdict_rules", "run_pool", "summarize_for_push"]
 
 NTFY_TITLE = "roles"        # 폰 알림 제목. m3a 런과 섞이지 않게 구분한다.
 
@@ -59,11 +59,15 @@ NTFY_TITLE = "roles"        # 폰 알림 제목. m3a 런과 섞이지 않게 구
 #   0.5 로 둬서 파일럿(결함 위에서 돌긴 했지만)과 구성이 비교 가능하게 한다.
 W_KILL = 0.5
 SEEDS = (0, 1, 2, 3, 4)
-ARM_SPECS = {                       # arm -> (limiter_policy, finisher_policy)
-    "LL": ("learned", "learned"),
-    "LS": ("learned", "scripted"),
-    "SL": ("hold", "learned"),
+ARM_SPECS = {          # arm -> (limiter_policy, finisher_policy, aim_bc)
+    "LL": ("learned", "learned", "none"),
+    "LS": ("learned", "scripted", "none"),
+    "SL": ("hold", "learned", "none"),
+    # docs/49 -- 조준 BC. 기존 SL 5런이 이 두 팔의 대조군이다 (다시 안 돌린다).
+    "SL-BCw": ("hold", "learned", "warm"),
+    "SL-BCa": ("hold", "learned", "aux"),
 }
+DEFAULT_ARMS = ("LL", "LS", "SL")      # docs/48 의 2x2. docs/49 는 --arms 로 고른다
 
 
 def tag(arm: str, seed: int) -> str:
@@ -73,14 +77,15 @@ def tag(arm: str, seed: int) -> str:
 def plan(root: str, total_steps: Optional[int] = None,
          eval_eps: Optional[int] = None,
          final_eval_eps: Optional[int] = None,
-         seeds=SEEDS, arms=tuple(ARM_SPECS)) -> List[tuple]:
+         seeds=SEEDS, arms=DEFAULT_ARMS) -> List[tuple]:
     cmds = []
     for arm, s in itertools.product(arms, seeds):
-        lim, fin = ARM_SPECS[arm]
+        lim, fin, aim = ARM_SPECS[arm]
         out = str(pathlib.Path(root) / tag(arm, s))
         c = [sys.executable, "-m", "shepherd.scripts.train_m4",
              "--w-kill", str(W_KILL), "--seed", str(s), "--output", out,
-             "--limiter-policy", lim, "--finisher-policy", fin]
+             "--limiter-policy", lim, "--finisher-policy", fin,
+             "--aim-bc", aim]
         if total_steps is not None:
             c += ["--total-env-steps", str(total_steps)]
         if eval_eps is not None:
@@ -184,7 +189,7 @@ def summarize_for_push(verdict: dict, failed: List[str]) -> str:
     b = (verdict.get("baseline_SS") or {}).get("shape_wilson_hi")
     if b is not None:
         lines.append(f"SS 기저 상한 {b:.4f}")
-    for a in ("LL", "LS", "SL"):
+    for a in ("LL", "LS", "SL", "SL-BCw", "SL-BCa"):
         v = arms.get(a)
         if not v:
             continue
@@ -382,8 +387,9 @@ def main(argv=None):
     ap.add_argument("--eval-episodes", type=int, default=None)
     ap.add_argument("--final-eval-episodes", type=int, default=None)
     ap.add_argument("--seeds", type=int, nargs="+", default=list(SEEDS))
-    ap.add_argument("--arms", nargs="+", default=list(ARM_SPECS),
-                    choices=list(ARM_SPECS))
+    ap.add_argument("--arms", nargs="+", default=list(DEFAULT_ARMS),
+                    choices=list(ARM_SPECS),
+                    help="docs/48 기본 2x2 = LL LS SL. docs/49 는 SL-BCw SL-BCa")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--run", action="store_true")
     ap.add_argument("--jobs", type=int, default=1)

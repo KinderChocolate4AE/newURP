@@ -414,11 +414,17 @@ def test_p59c_strong_threshold_is_a_majority_not_a_constant(tmp_path):
 
 def test_p59d_declared_seed_axis_is_five(tmp_path):
     """선언된 시드 축(docs/48 §2)과 실행기의 기본값이 같아야 한다."""
-    from shepherd.scripts.roles_split import SEEDS, plan
+    from shepherd.scripts.roles_split import DEFAULT_ARMS, SEEDS, plan
     assert SEEDS == (0, 1, 2, 3, 4)
+    # 기본 팔은 docs/48 의 2x2 뿐이다 -- docs/49 팔(SL-BCw/BCa)은 --arms 로 고른다.
+    # 기본에 섞이면 "역할 분리 15런"의 정의가 조용히 바뀐다.
+    assert DEFAULT_ARMS == ("LL", "LS", "SL")
     cmds = plan("results/m4_roles")
-    assert len(cmds) == len(ARM_SPECS) * len(SEEDS) == 15
+    assert len(cmds) == len(DEFAULT_ARMS) * len(SEEDS) == 15
     assert {n.split("_s")[1] for n, _ in cmds} == {"0", "1", "2", "3", "4"}
+    bc = plan("results/m4_roles", arms=("SL-BCw", "SL-BCa"))
+    assert len(bc) == 10
+    assert all("--aim-bc" in c for _, c in bc)
 
 
 # ── P61~P62: 실행 풀 + 알림 (9시간짜리를 무인으로 돌리는 장치) ──────────────
@@ -577,7 +583,16 @@ def test_p58_arm_table_matches_cli_choices():
     """`ARMS` 의 키 집합이 CLI choices 의 2x2 에서 SS 만 뺀 것과 정확히 같다."""
     from shepherd.scripts.train_m4 import build_parser_defaults
     d = build_parser_defaults()
-    assert (d.limiter_policy, d.finisher_policy) == ("learned", "learned")
-    full = {(l, f) for l in ("learned", "hold") for f in ("learned", "scripted")}
-    assert set(ARMS) == full - {("hold", "scripted")}
+    assert (d.limiter_policy, d.finisher_policy, d.aim_bc) == \
+        ("learned", "learned", "none")
+    # docs/48 의 2x2 (aim_bc=none) 에서 SS 칸만 빠져 있어야 한다
+    base = {k for k in ARMS if k[2] == "none"}
+    full = {(l, f, "none") for l in ("learned", "hold")
+            for f in ("learned", "scripted")}
+    assert base == full - {("hold", "scripted", "none")}
     assert arm_of("learned", "learned") == "LL"
+    # docs/49 의 조준 BC 팔은 **발사가 학습일 때만** 존재한다
+    assert {ARMS[k] for k in ARMS if k[2] != "none"} == {"SL-BCw", "SL-BCa"}
+    assert all(k[1] == "learned" for k in ARMS if k[2] != "none")
+    with pytest.raises(ValueError):
+        arm_of("learned", "scripted", "warm")      # 스크립트 발사 + BC 는 무의미

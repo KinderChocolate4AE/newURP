@@ -52,31 +52,44 @@ from shepherd.train.make_env import (M4_LIVE_DIMS, pad_env_action,
 from shepherd.scripts.curve_sweep import BANDS, summarize_bands
 from shepherd.spawn_rand import SpawnSpec
 from shepherd.train.adapter import ShepherdAdapter
+from shepherd.train.bc_aim import (AIM_BC_MODES, collect_bc_dataset,
+                                   teacher_axis, warmup_aim)
 from shepherd.train.ippo import limiter_inputs
 from shepherd.train.mappo import MAPPOConfig, MAPPORollout, MAPPOTrainer
 from shepherd.train.obs_norm import RunningNorm
 from shepherd.scripts.train_mappo import MAPPORunner
 from shepherd.scripts.train_ippo import seed_everything
 
-__all__ = ["M4Runner", "build_specs", "main", "ARMS", "arm_of"]
+__all__ = ["M4Runner", "build_specs", "main", "ARMS", "arm_of",
+           "BC_LAMBDA", "BC_WARM_EPISODES", "BC_WARM_STEPS"]
+
+# ── docs/49 §2.2 선언 (튜닝 축이 아니다. 스윕하지 않는다) ────────────────────
+BC_LAMBDA = 0.1            # aux 팔의 보조손실 계수, 감쇠 없음
+BC_WARM_EPISODES = 120     # warm 팔이 교사 궤적을 모으는 판수
+BC_WARM_STEPS = 400        # warm 팔의 지도학습 스텝
 
 # ── 역할 분리 팔 (docs/48 §2) ────────────────────────────────────────────────
 #   limiter x finisher 의 2x2. SS 는 학습이 없으므로 여기 없다 -- 그 칸은
 #   `sweep_m4.measure_baseline("hold")` 가 이미 n=500 으로 재 둔 기저선이다.
+#   세 번째 축은 조준 BC (docs/49): none / warm(사전 워밍업) / aux(보조손실 상시).
 ARMS = {
-    ("learned", "learned"):  "LL",   # 둘 다 학습 (= 파일럿 구성)
-    ("learned", "scripted"): "LS",   # 학습 편대 + 해석적 발사 규칙
-    ("hold",    "learned"):  "SL",   # 무개입 편대 + 학습 발사
+    ("learned", "learned",  "none"): "LL",   # 둘 다 학습 (= 파일럿 구성)
+    ("learned", "scripted", "none"): "LS",   # 학습 편대 + 해석적 발사 규칙
+    ("hold",    "learned",  "none"): "SL",   # 무개입 편대 + 학습 발사
+    ("hold",    "learned",  "warm"): "SL-BCw",   # + 조준 BC 워밍업 (docs/49)
+    ("hold",    "learned",  "aux"):  "SL-BCa",   # + 조준 BC 보조손실
 }
 
 
-def arm_of(limiter_policy: str, finisher_policy: str) -> str:
-    key = (limiter_policy, finisher_policy)
+def arm_of(limiter_policy: str, finisher_policy: str,
+           aim_bc: str = "none") -> str:
+    key = (limiter_policy, finisher_policy, aim_bc)
     if key not in ARMS:
         raise ValueError(
-            f"학습 팔이 아니다: limiter={limiter_policy} finisher={finisher_policy}. "
-            f"둘 다 스크립트인 칸(SS)은 손튜닝 기준선이므로 "
-            f"`python -m shepherd.scripts.sweep_m4 --baseline 500` 으로 잰다")
+            f"학습 팔이 아니다: limiter={limiter_policy} finisher={finisher_policy} "
+            f"aim_bc={aim_bc}. 둘 다 스크립트인 칸(SS)은 손튜닝 기준선이므로 "
+            f"`python -m shepherd.scripts.sweep_m4 --baseline 500` 으로 잰다. "
+            f"조준 BC 는 발사가 학습일 때만 의미가 있다 (docs/49 §2)")
     return ARMS[key]
 
 
@@ -94,12 +107,14 @@ class M4Runner(MAPPORunner):
                  spawn: SpawnSpec, randomize_threat: bool = True,
                  threat_obs: bool = True,
                  limiter_policy: str = "learned",
-                 finisher_policy: str = "learned"):
+                 finisher_policy: str = "learned",
+                 aim_bc: str = "none"):
         self._m4 = dict(system=system, reward=reward, attacker=attacker,
                         spawn=spawn, randomize_threat=randomize_threat,
                         threat_obs=threat_obs)
-        # ── 역할 분리 (docs/48). 기본은 (learned, learned) = 기존 경로 ──────────
-        self.arm = arm_of(limiter_policy, finisher_policy)
+        # ── 역할 분리 (docs/48) + 조준 BC (docs/49) ─────────────────────────────
+        self.arm = arm_of(limiter_policy, finisher_policy, aim_bc)
+        self.aim_bc = aim_bc
         self.limiter_policy = limiter_policy
         self.finisher_policy = finisher_policy
         self.frozen_roles = tuple(
@@ -158,10 +173,14 @@ class M4Runner(MAPPORunner):
                                          run_cfg["mappo"].get("limiter_commit", True)),
                                      # docs/48: 동결 역할의 액터는 학습에서 뺀다
                                      "freeze_limiter": "limiter" in self.frozen_roles,
-                                     "freeze_finisher": "finisher" in self.frozen_roles})
+                                     "freeze_finisher": "finisher" in self.frozen_roles,
+                                     # docs/49 §2.2 선언: aux 는 lambda 0.1 고정
+                                     "bc_lambda": (BC_LAMBDA if aim_bc == "aux"
+                                                   else 0.0)})
         self.tr = MAPPOTrainer(self.obs_dim, self.n, cfg)
         self.buf = MAPPORollout(self.rollout_env_steps, self.obs_dim, self.n,
-                                lim_dim=self.tr.lim_dim)
+                                lim_dim=self.tr.lim_dim,
+                                bc_dim=(3 if aim_bc == "aux" else 0))
 
         self.rand_cfg = None                    # 위협 랜덤화는 m4_config 가 담당
         self.rand_rng = np.random.default_rng(seed * 9973 + 17)
@@ -215,6 +234,14 @@ class M4Runner(MAPPORunner):
 
     def _observe_step(self, r) -> None:
         self._prev_clean = bool(r.flags.get("clean_net_threshold_crossed", False))
+
+    def _bc_target(self, ad):
+        """조준 BC 라벨 (docs/49). `aux` 팔에서만 낸다.
+
+        정책 자신이 만든 상태에서 교사 축을 뽑으므로 분포 이동이 없다 --
+        `warm` 팔(교사 궤적에서 사전 학습)과의 차이가 정확히 이것이다.
+        """
+        return teacher_axis(ad.env) if self.aim_bc == "aux" else None
 
     def _finish_episode(self, r) -> None:
         super()._finish_episode(r)
@@ -474,6 +501,10 @@ def _add_args(ap):
                     choices=["learned", "scripted"],
                     help="scripted = 해석적 발사 규칙(clean 임계 교차)으로 동결. "
                          "기저선 hold 의 finisher 와 같은 규칙")
+    # ★ 조준 BC (docs/49). 기본 none 은 기존 경로와 동일하다.
+    ap.add_argument("--aim-bc", default="none", choices=list(AIM_BC_MODES),
+                    help="warm = 교사 궤적에서 조준 헤드를 먼저 지도학습한 뒤 RL. "
+                         "aux = 학습 내내 cosine 보조손실(lambda 고정). docs/49 §2")
     ap.add_argument("--resume", action="store_true",
                     help="출력 디렉터리에 체크포인트가 있으면 이어서 학습한다. "
                          "스윕(40~50런 x 24h)에서 죽은 런을 통째로 잃지 않기 위한 것. "
@@ -512,8 +543,9 @@ def main(argv=None) -> None:
     print(f"[M4] w_kill={args.w_kill} 공격자={args.attacker}/{args.lam} "
           f"위협랜덤화={'OFF' if args.no_threat_randomization else 'ON'} "
           f"위협관측={'OFF' if args.no_threat_obs else 'ON'}")
-    print(f"[M4] 역할 팔 = {arm_of(args.limiter_policy, args.finisher_policy)} "
-          f"(limiter={args.limiter_policy}, finisher={args.finisher_policy})")
+    print(f"[M4] 역할 팔 = {arm_of(args.limiter_policy, args.finisher_policy, args.aim_bc)} "
+          f"(limiter={args.limiter_policy}, finisher={args.finisher_policy}, "
+          f"aim_bc={args.aim_bc})")
 
     specs = build_specs(args)
     seeds = args.seeds if args.seeds is not None else [args.seed]
@@ -527,9 +559,23 @@ def main(argv=None) -> None:
                           randomize_threat=not args.no_threat_randomization,
                           threat_obs=not args.no_threat_obs,
                           limiter_policy=args.limiter_policy,
-                          finisher_policy=args.finisher_policy, **specs)
+                          finisher_policy=args.finisher_policy,
+                          aim_bc=args.aim_bc, **specs)
         out_dir = out_root / f"seed{s}"
         out_dir.mkdir(parents=True, exist_ok=True)
+        # ★ 조준 BC 워밍업 (docs/49 §2.2). RL 첫 스텝 **전**에 한 번만.
+        #   조준 헤드만 움직인다 -- 발사 헤드·크리틱은 그대로다 (P66).
+        bc_warm = None
+        if args.aim_bc == "warm":
+            ds = collect_bc_dataset(BC_WARM_EPISODES, seed0=s)
+            for x in ds["X"]:
+                runner.norm.normalize(x, update=True)   # 학습기와 같은 정규화
+            bc_warm = warmup_aim(runner.tr.fin_actor, runner.norm,
+                                 ds["X"], ds["Y"], steps=BC_WARM_STEPS,
+                                 seed=s, device=args.device)
+            print(f"[seed {s}] 조준 BC 워밍업: 코사인 {bc_warm['train_cosine']:.4f} "
+                  f"(각오차 {bc_warm['train_angle_deg']:.2f}도, "
+                  f"n={bc_warm['n_samples']})")
         n_upd = max(1, int(run_cfg["loop"]["total_env_steps"]) // runner.rollout_env_steps)
         curve = []
         resumed_from = 0
@@ -593,6 +639,8 @@ def main(argv=None) -> None:
             "arm": runner.arm,
             "limiter_policy": args.limiter_policy,
             "finisher_policy": args.finisher_policy,
+            "aim_bc": args.aim_bc,
+            "bc_warmup": bc_warm,
             "threat_randomized": not args.no_threat_randomization,
             "threat_obs": not args.no_threat_obs,
             "final": curve[-1] if curve else None,

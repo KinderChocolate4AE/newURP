@@ -37,6 +37,7 @@ import torch
 import torch.nn as nn
 from torch.distributions import Bernoulli, Normal
 
+from shepherd.train.bc_aim import bc_cosine_loss
 from shepherd.train.gae import compute_gae, normalize_advantages
 from shepherd.train.ppo import _mlp
 from shepherd.train.value_norm import ValueNorm
@@ -128,6 +129,12 @@ class MAPPOConfig:
     #   **기본은 둘 다 False** -- 기존 경로는 bit-identical (P55).
     freeze_limiter: bool = False
     freeze_finisher: bool = False
+
+    # ★ 2026-08-05 조준 BC (docs/49). > 0 이면 finisher 조준 헤드에 교사 축을
+    #   향하는 cosine 보조손실을 건다. 라벨은 롤아웃이 `buf.bc_target` 으로
+    #   같이 실어 보낸다 (정책 자신의 상태 분포 -> 분포 이동 없음).
+    #   **기본 0.0** -- 그때는 이 배선 이전과 파라미터까지 동일하다 (P65).
+    bc_lambda: float = 0.0
 
     seed: int = 0
     device: str = "cpu"
@@ -231,8 +238,13 @@ class MAPPORollout:
     value), with per-limiter and finisher action/log-prob blocks."""
 
     def __init__(self, size: int, obs_dim: int, n_limiters: int,
-                 lim_dim: int = 3) -> None:
+                 lim_dim: int = 3, bc_dim: int = 0) -> None:
         self.size, self.obs_dim, self.n = size, obs_dim, n_limiters
+        # 조준 BC 라벨 (docs/49). bc_dim=0 이면 배열 자체를 안 만든다 -- 기존
+        # 호출부는 메모리도 동작도 그대로다.
+        self.bc_dim = int(bc_dim)
+        self.bc_target = (np.zeros((size, self.bc_dim), np.float32)
+                          if self.bc_dim else None)
         # lim_dim: 3 = accel only (기본) / 4 = accel + 커밋 비트 (M4, cfg.limiter_commit)
         self.lim_dim = int(lim_dim)
         self.obs = np.zeros((size, obs_dim), np.float32)
@@ -387,7 +399,7 @@ class MAPPOTrainer:
             return -torch.min(s1, s2).mean()
 
         logs = {k: [] for k in ("pg_l", "pg_f", "vf", "ent_l", "ent_f", "kl_l",
-                                "kl_f", "clip_l", "clip_f", "gnorm")}
+                                "kl_f", "clip_l", "clip_f", "gnorm", "bc")}
         # 역할 동결 (docs/48). c_* 는 손실 계수이고, 동결 역할의 forward 는
         # no_grad 로 돌려 그래프 자체를 안 만든다 -- 0 을 곱하는 것만으로는
         # grad 텐서(0)가 생겨 Adam 의 모멘텀이 파라미터를 움직인다.
@@ -396,6 +408,16 @@ class MAPPOTrainer:
             raise ValueError("두 역할을 모두 동결하면 학습할 것이 남지 않는다 "
                              "-- 그 팔은 손튜닝 기준선(measure_baseline)이다")
         c_l, c_f = (0.0 if frz_l else 1.0), (0.0 if frz_f else 1.0)
+        # 조준 BC (docs/49 §5). 라벨이 없는데 lambda 만 켜면 조용히 아무것도
+        # 안 하게 되므로 -- 그게 정확히 "결함" 부류다 -- 여기서 막는다.
+        bc_l = float(cfg.bc_lambda)
+        if bc_l > 0.0:
+            if getattr(buf, "bc_target", None) is None:
+                raise ValueError("bc_lambda > 0 인데 rollout 에 bc_target 이 없다 "
+                                 "(MAPPORollout(bc_dim=3) 으로 만들 것)")
+            if frz_f:
+                raise ValueError("finisher 를 동결한 채로 조준 BC 를 걸 수 없다")
+            bc_tgt = torch.as_tensor(buf.bc_target, device=dev)
         idx = np.arange(T)
         epochs_ran = 0
         for _ in range(cfg.epochs):
@@ -424,6 +446,11 @@ class MAPPOTrainer:
                 loss = (c_l * pg_l + c_f * pg_f + cfg.vf_coef * vf
                         - c_l * cfg.ent_coef_limiter * ent_l.mean()
                         - c_f * cfg.ent_coef_finisher * ent_f.mean())
+                if bc_l > 0.0:
+                    bc = bc_cosine_loss(self.fin_actor.mean(obs[mb_t]),
+                                        bc_tgt[mb_t])
+                    loss = loss + bc_l * bc
+                    logs["bc"].append(float(bc.item()))
 
                 self.optimizer.zero_grad()
                 loss.backward()
@@ -473,6 +500,9 @@ class MAPPOTrainer:
             # entropy/KL 은 학습 신호가 아니라 상수"임을 알아야 한다.
             "freeze/limiter": float(frz_l),
             "freeze/finisher": float(frz_f),
+            # 조준 BC. cosine 손실이므로 0 에 가까울수록 교사와 같은 방향이다.
+            **({"finisher/bc_cosine_loss": float(np.mean(logs["bc"])),
+                "finisher/bc_lambda": bc_l} if bc_l > 0.0 else {}),
             **coma_stats,
             # ★ 결함 2 진단용. 롤아웃에서 커밋을 실제로 몇 번 제안했는가.
             #   0.000 이나 1.000 으로 굳으면 finisher 발사와 같은 확률 붕괴다 --
