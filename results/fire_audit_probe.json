@@ -1,0 +1,28 @@
+{
+  "probe": {
+    "n_steps": 3894,
+    "n_episodes": 140,
+    "base_rate": 0.03133025166923472,
+    "n_pos": 122,
+    "theta_fire": 0.9,
+    "split": {
+      "train_ep": 84,
+      "test_ep": 56
+    },
+    "control_vshot_auc": 1.0,
+    "obs_vshot_dim_auc": 1.0,
+    "single_threshold": {
+      "accuracy": 1.0,
+      "recall": 1.0,
+      "precision": 1.0,
+      "_note": "틀리는 쪽은 boxed_in -- 그건 관측에 없다"
+    },
+    "obs_linear_auc": 0.9997332567301379,
+    "obs_mlp_auc": 0.9988919894944189,
+    "boxed_in_cost": {
+      "threshold_crossed_steps": 123,
+      "of_which_boxed": 0,
+      "frac_boxed": 0.0
+    }
+  }
+}
