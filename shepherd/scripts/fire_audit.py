@@ -266,23 +266,125 @@ def policy_audit(ckpt_dir: str, episodes: int = 60, seed0: int = 0,
     }
 
 
+def aim_audit(ckpt_dir: str, episodes: int = 60, seed0: int = 0) -> dict:
+    """★ 조준축 진단 — `--policy` 가 **못 보는** 절반 (docs/48 §11).
+
+    `policy_audit` 은 스크립트가 굴리는 궤적 위에서 정책의 발사 **확률만** 본다.
+    즉 그동안 env 에 들어간 조준축은 계속 스크립트의 것이었다. 그런데 finisher
+    는 발사 비트만 내는 게 아니라 **조준축 3차원**도 낸다. 그리고 `v_shot_soft`
+    는 그 축에 의존한다 -- 축이 나쁘면 **게이트가 아예 덜 열린다.**
+
+    그래서 같은 시드·같은 편대(hold)로 두 궤적을 나란히 굴린다:
+
+        A  스크립트 조준   (기준)
+        B  학습 조준       (발사 비트는 양쪽 다 0 으로 강제)
+
+    발사를 끄는 이유는 두 궤적을 끝까지 같은 길이로 비교하기 위해서다 -- 한쪽만
+    쏘면 거기서 끝나 버려 그 뒤의 게이트 개폐를 못 본다.
+
+    읽는 법: B 의 게이트 개방률이 A 보다 크게 낮으면 결손은 발사 타이밍이 아니라
+    **조준**이다.
+    """
+    import torch
+
+    from shepherd.train.mappo import MAPPOTrainer
+    from shepherd.train.obs_norm import RunningNorm
+
+    d = pathlib.Path(ckpt_dir)
+    ck = d / "ckpt_mappo_final.pt"
+    if not ck.exists():
+        ck = d / "ckpt_mappo_latest.pt"
+    tr = MAPPOTrainer.load(str(ck), map_location="cpu")
+    norm = RunningNorm(tr.obs_dim)
+    nz = d / "obs_norm_final.json"
+    if not nz.exists():
+        nz = d / "obs_norm_latest.json"
+    if nz.exists():
+        norm.load_state_dict(json.loads(nz.read_text()))
+
+    kw = dict(system=SystemSpec(enabled=True),
+              reward=RewardSpec(w_kill=0.5, enabled=True),
+              attacker=AttackerSpec(level="A2", jink_amp=0.6, seed=0),
+              spawn=SpawnSpec())
+
+    def _roll(learned_axis: bool) -> Tuple[np.ndarray, List[float]]:
+        vs, ep_max = [], []
+        for ep in range(episodes):
+            st = build_m4_env(seed0, ep, **kw)
+            env, scn, lay = st.env, st.scn, st.lay
+            obs_d, _ = env.reset(seed=seed0 + ep)
+            fid = env.finisher_id
+            hi = np.asarray(env.action_space(fid).high, np.float32)[:3]
+            best = 0.0
+            for _ in range(int(lay.episode_len)):
+                acts = scripted_role_actions(env, scn, lay, limiter_mode="hold",
+                                             fire_mode="never")
+                if learned_axis:
+                    o = np.asarray(obs_d[fid], np.float32)
+                    with torch.no_grad():
+                        t = torch.as_tensor(norm.normalize(o)[None, :])
+                        raw = tr.fin_actor.mean(t)[0].numpy()
+                    axis = np.clip(raw[:3], -1.0, 1.0) * hi
+                    a = np.zeros(5, np.float32)
+                    a[:3] = axis                     # 발사 비트(idx4) = 0 고정
+                    acts[fid] = a
+                acts[env.adversary_id] = np.zeros(3, np.float32)
+                obs_d, _, term, trunc, info = env.step(acts)
+                v = float(info[fid]["v_shot_soft"])
+                vs.append(v)
+                best = max(best, v)
+                if (term and term.get(fid)) or (trunc and trunc.get(fid)):
+                    break
+            ep_max.append(best)
+        return np.asarray(vs, float), ep_max
+
+    th = float(build_m4_env(seed0, 0, **kw).env.theta_fire)
+    out = {"ckpt": str(ck), "theta_fire": th, "episodes": episodes}
+    for name, learned in (("scripted_aim", False), ("learned_aim", True)):
+        v, em = _roll(learned)
+        em = np.asarray(em, float)
+        out[name] = {
+            "n_steps": int(len(v)),
+            "gate_open_rate": float((v >= th).mean()),
+            "episodes_with_any_open": float((em >= th).mean()),
+            "v_shot_mean": float(v.mean()),
+            "v_shot_p90": float(np.percentile(v, 90)),
+            "ep_max_mean": float(em.mean()),
+        }
+    a, b = out["scripted_aim"], out["learned_aim"]
+    out["delta"] = {
+        "gate_open_rate": b["gate_open_rate"] - a["gate_open_rate"],
+        "episodes_with_any_open": (b["episodes_with_any_open"]
+                                   - a["episodes_with_any_open"]),
+        "ep_max_mean": b["ep_max_mean"] - a["ep_max_mean"],
+    }
+    out["_read"] = ("learned_aim 의 게이트 개방률이 뚜렷이 낮으면 결손은 발사 "
+                    "타이밍이 아니라 **조준**이다. 비슷하면 조준은 무죄다.")
+    return out
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="발사 정책 진단 (docs/48 §9)")
     ap.add_argument("--probe", action="store_true",
                     help="관측 -> 교차 지도학습 상한 (체크포인트 불필요)")
     ap.add_argument("--policy", default=None,
                     help="체크포인트 디렉터리 (예: results/m4_roles/SL_s0/seed0)")
+    ap.add_argument("--aim", default=None,
+                    help="조준축 진단. 같은 디렉터리를 준다 -- 학습 조준 vs "
+                         "스크립트 조준의 게이트 개방률을 비교한다")
     ap.add_argument("--episodes", type=int, default=120)
     ap.add_argument("--seed0", type=int, default=0)
     ap.add_argument("--out", default=None)
     a = ap.parse_args(argv)
 
     res = {}
-    if a.probe or not a.policy:
+    if a.probe or not (a.policy or a.aim):
         data = collect_fire_dataset(a.episodes, a.seed0)
         res["probe"] = probe(data)
     if a.policy:
         res["policy"] = policy_audit(a.policy, min(a.episodes, 60), a.seed0)
+    if a.aim:
+        res["aim"] = aim_audit(a.aim, min(a.episodes, 60), a.seed0)
     print(json.dumps(res, indent=2, ensure_ascii=False))
     if a.out:
         p = pathlib.Path(a.out)

@@ -96,6 +96,36 @@ def test_p63c_probe_positive_control_and_threshold():
     assert 0.0 < r["base_rate"] < 0.5
 
 
+@pytest.mark.torch
+def test_p63e_aim_audit_compares_like_with_like(tmp_path):
+    """조준 진단의 두 팔은 **같은 궤적 길이**여야 한다.
+
+    발사를 끈 상태에서 finisher 의 조준축은 동역학을 바꾸지 않는다 (자세만
+    바뀌고 종료는 침투/절단으로 결정된다). 길이가 갈리면 두 팔이 다른 판을
+    비교하고 있다는 뜻이라 게이트 개방률 비교가 성립하지 않는다.
+    """
+    torch = pytest.importorskip("torch")
+    from shepherd.scripts.fire_audit import aim_audit
+    from shepherd.train.mappo import MAPPOConfig, MAPPOTrainer
+
+    st = build_m4_env(0, 0, **KW)
+    obs_dim = st.env.observation_space(st.env.possible_agents[0]).shape[0]
+    torch.manual_seed(0)
+    tr = MAPPOTrainer(obs_dim, st.env.N,
+                      MAPPOConfig.from_dict({"hidden_sizes": (16, 16),
+                                             "limiter_commit": True,
+                                             "device": "cpu"}))
+    tr.save(tmp_path / "ckpt_mappo_final.pt")
+
+    r = aim_audit(str(tmp_path), episodes=3, seed0=0)
+    a, b = r["scripted_aim"], r["learned_aim"]
+    assert a["n_steps"] == b["n_steps"] > 0        # 같은 판을 비교하는가
+    assert 0.0 <= a["gate_open_rate"] <= 1.0
+    assert set(r["delta"]) == {"gate_open_rate", "episodes_with_any_open",
+                               "ep_max_mean"}
+    assert r["theta_fire"] > 0
+
+
 def test_p63d_collect_labels_match_the_env_predicate():
     """수집기의 라벨이 env 의 술어와 같다 (술어 복제 금지 -- info 를 그대로 쓴다)."""
     d = collect_fire_dataset(episodes=12, seed0=0)
