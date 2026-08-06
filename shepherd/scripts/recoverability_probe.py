@@ -293,9 +293,14 @@ def plan_cem(src: _Driver, ep: int, s0: int, a_max: float) -> PlanResult:
 
 
 # ------------------------------------------------------------------ arms ----
-def run_arm(ep: int, arm: str, t_star: int) -> dict:
-    """arm ∈ T0-INT | T0-ORC | TP-INT | TP-ORC. 최종 판정 = full env replay."""
-    s0 = (t_star + 1) if arm.startswith("T0") else (t_star - 5)
+def run_arm(ep: int, arm: str, t_star: int, s0: Optional[int] = None) -> dict:
+    """arm ∈ *-INT | *-ORC. s0 미지정 시 2×2 규약 (T0=t*+1 / TP=t*−5).
+
+    docs/57 §3 sweep 은 s0 를 직접 지정해 같은 경로를 재사용한다 (공식 복제
+    금지). 최종 판정 = full env replay 라벨.
+    """
+    if s0 is None:
+        s0 = (t_star + 1) if arm.startswith("T0") else (t_star - 5)
     out = dict(episode=ep, arm=arm, s0=s0, t_star=t_star)
 
     plan = None
@@ -376,11 +381,61 @@ def run_probe(episodes: Sequence[int] = MISS_EPISODES) -> dict:
     return {"meta": meta, "records": rows}
 
 
+def run_sweep(episodes: Sequence[int] = MISS_EPISODES) -> dict:
+    """docs/57 §3 — 발사 후 latest-start sweep (ORC 만, §7.1 budget 불변).
+
+    grid = {t_fire+1, t_fire+4, t*−5, t*−2, t*+1} (판별 dedup·정렬).
+    성공 = final env replay 라벨 HARD_KILL (P11 로 NK-밖 무력화와 동치).
+    """
+    meta = {"contract": "docs/57 §3 (커밋 d15f01a)", "Pk": 1.0,
+            "controller": "ORC only", "budget_per_point": POP * ITERS * len(SOLVER_SEEDS)}
+    rows: List[dict] = []
+    for ep in episodes:
+        base = replay_baseline(ep)
+        t_star, t_fire = base.handoff_step, base.fire_step
+        assert t_star is not None and t_fire is not None
+        grid = sorted({t_fire + 1, t_fire + 4, t_star - 5, t_star - 2, t_star + 1})
+        rec = dict(episode=ep, t_fire=t_fire, t_star=t_star, grid=grid)
+        rows.append({"arm": "BASE", **rec})
+        latest = None
+        for s0 in grid:
+            r = run_arm(ep, "SW-ORC", t_star, s0=s0)
+            r["fire_relative"] = s0 - t_fire
+            rows.append(r)
+            if r["label"] == "HARD_KILL":
+                latest = max(latest, s0) if latest is not None else s0
+        rows.append({"arm": "VERDICT", "episode": ep,
+                     "latest_recoverable_start": latest})
+    return {"meta": meta, "records": rows}
+
+
 def main() -> None:
-    ap = argparse.ArgumentParser(description="recoverability 2×2 probe (docs/56)")
+    ap = argparse.ArgumentParser(description="recoverability probe (docs/56·57)")
     ap.add_argument("--episodes", type=int, nargs="*", default=list(MISS_EPISODES))
+    ap.add_argument("--sweep", action="store_true",
+                    help="docs/57 발사 후 latest-start sweep 실행")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
+    if a.sweep:
+        r = run_sweep(tuple(a.episodes))
+        for x in r["records"]:
+            if x["arm"] == "BASE":
+                print(f"ep{x['episode']:>3}: fire@{x['t_fire']} t*={x['t_star']} "
+                      f"grid={x['grid']}")
+            elif x["arm"] == "VERDICT":
+                print(f"ep{x['episode']:>3}: latest_recoverable_start = "
+                      f"{x['latest_recoverable_start']}")
+            else:
+                print(f"   s0={x['s0']:>3} (fire{x['fire_relative']:+d}) "
+                      f"{x['label']:>11} {x['bucket']:>26} "
+                      f"nosol={x.get('no_solution_within_budget')}")
+        if a.out:
+            p = pathlib.Path(a.out)
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text(json.dumps(r, indent=2, ensure_ascii=False),
+                         encoding="utf-8")
+            print(f"  -> {a.out}")
+        return
     r = run_probe(tuple(a.episodes))
     print(f"{'ep':>4} {'arm':>7} {'s0':>4} {'label':>12} {'bucket':>26} "
           f"{'miss?':>6} {'kill@':>6} {'nosol':>6}")
