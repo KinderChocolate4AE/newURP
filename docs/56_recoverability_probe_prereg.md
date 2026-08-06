@@ -210,14 +210,74 @@ P83f  budget 소진·L1 후보 없음 -> NO_SOLUTION_WITHIN_BUDGET 플래그
 P83g  분류는 proxy 점수가 아니라 final env 라벨만 사용 (API 분리)
 ```
 
+## 9. ★ 2×2 결과 (2026-08-07 — `results/recoverability_probe.json`)
+
+실행 메타: clean HEAD `d8b9e3e` (tree clean, patch 없음) · §7.1 상수 그대로 ·
+Pk=1 · P83 자기검사 8/8 green 후 실행.
+
+### 9.1 라벨 (final env replay)
+
+```
+28/28 (7판 × 4 arm) 전부 PENETRATED
+NO_SOLUTION_WITHIN_BUDGET: ORC 14/14 (L1 무력화 후보가 384 rollouts 안에 없음)
+EARLY_PREP_NET_CAPTURE: 0 -- 구조적 도달 불가 확정 (fire < t*−5 가 7/7 실측,
+  §7.1 의 사전 예측대로. 성공/실패 어느 쪽으로도 세지 않음)
+```
+
+**해석표 적용 (§6, 결과 전 고정분)**: "모든 arm 실패" 행 →
+**저장된 7개 상태·현재 budget 에서 recoverability 증거가 없다.**
+물리적 불가능이라고 쓰지 않는다.
+
+### 9.2 기전 분해 (§5 선언 기록 지표 내)
+
+| arm | 접촉 도달 | min_swept 범위 | kill |
+|---|---:|---|---:|
+| T0-INT | 0/7 | [1.070, 1.655] | 0 |
+| T0-ORC | 2/7 | [0.464, 1.493] | 0 |
+| TP-INT | 0/7 | [0.857, 1.480] | 0 |
+| TP-ORC | 5/7 | [0.227, 1.107] | 0 |
+
+```
+contact event 총 11건 -- 전부 VETO_NO_KINETIC (11/11).
+접촉 시점이 모두 자산 6 m (r_nk) 안. limiter 소모 0 (veto 는 미소모 계약).
+```
+
+**구속 제약은 kinematics 가 아니라 no-kinetic zone 계약이다**: privileged
+planner 는 5/7 판에서 실제 접촉에 도달했으나, 이 7개 상태에서 도달 가능한
+접촉 창은 (현재 budget 기준) **전부 NK zone 안**이었다 — "접촉이 불가능"이
+아니라 **"허용된 접촉이 불가능"** (reachable-contact ∩ {d_asset > 6 m} = ∅,
+평가된 budget 한정).
+
+부수 관측 (성공으로 세지 않음): 도달성 수준에서는 controller 격차(ORC ≻ INT:
+INT 는 0/14 접촉)와 시점 격차(TP ≻ T0: 5/7 vs 2/7) **둘 다 실재**한다.
+둘 다 라벨을 바꾸지 못했다 — veto 가 상위 구속이므로.
+
+### 9.3 증거 범위 (허용 문장)
+
+> 평가된 7개 miss 상태·선언된 budget(CEM 384/arm·K=4 구간)·Pk=1 에서, 어떤
+> arm 도 침투를 막지 못했다. privileged planner 는 5/7 에서 접촉에 도달했으나
+> 11건의 접촉 전부가 no-kinetic zone 안에서 발생해 계약상 거부됐다. 이는
+> 해당 상태들의 물리적 회복 불가능 인증이 아니며 (오류 13 동형 — solver
+> budget 한정), NK zone 밖 접촉 창의 부재도 이 budget 안에서의 관측이다.
+
+### 9.4 다음 질문 후보 (별도 사전등록 대상 — 이 세션에서 실행하지 않음)
+
+```
+(i)   r_nk 민감도: NK zone 이 구속 제약으로 실측된 첫 사례 -- r_nk 를 선언
+      sweep 축으로 올릴지 (docs/29 의 r_nk=6.0 은 선언값)
+(ii)  더 이른 개입: T−5 로는 부족했다. fire 이전 개입 = T−5 switch arm
+      (§1, 별도 사전등록) 또는 shaping 단계 자체의 문제로 환원
+(iii) 3-way (docs/54 §4): miss 상태가 아니라 에피소드 전 구간의 frontier
+```
+
 ## 8. 실행 전 체크리스트
 
 ```
 [x] 전체 회귀 476/0 + legacy baseline (hold n=500) 비트 동일 (2026-08-06)
 [x] worktree 혼재 스냅샷 (artifacts/pre_oracle_worktree_2026-08-06.patch)
-[ ] clean worktree (0450c74 기준) 생성 -- 권장 경로
-[ ] privileged controller 구현 + §7.1 상수 선언 + 자격 자기검사
-[ ] T−5 가 발사 후 구간인지 7판 실측
-[ ] 2×2 실행 → §6 해석표 + §6.1 3분법으로만 판독
-[ ] (그 뒤) T−5 switch 별도 사전등록
+[x] clean HEAD 에서 실행 (유산 4커밋으로 tree 정리 -> 19edc58 계열, patch 불요)
+[x] privileged controller 구현 + §7.1 상수 선언(6fcafa4) + P83 8/8 (d8b9e3e)
+[x] T−5 가 발사 후 구간인지 7판 실측 (fire < t*−5 전판, §9.1)
+[x] 2×2 실행 → §6 해석표 + §6.1 로 판독 (§9)
+[ ] (그 뒤) T−5 switch / r_nk 민감도 / 3-way -- 별도 사전등록 (§9.4)
 ```

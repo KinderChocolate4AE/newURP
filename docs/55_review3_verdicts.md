@@ -51,11 +51,12 @@
 1. [x] 전체 회귀 476 passed / 0 failed + legacy baseline (hold n=500,
        R1 이전 참조 대비) **BIT-IDENTICAL** (2026-08-06, 반경 키 추가 뒤)
 2. [x] 2×2 의 early-prep 의미·closed-loop 재실행 계약 사전등록 = docs/56
-3. miss 7판 deterministic-lethality recoverability probe (2×2)
-     ★ "miss−5" = fallback 선행 준비(T−5 prep)이지 조기 handoff 아님.
-       완전 전환(T−5 switch)은 별도 arm·별도 사전등록
-     ★ 고정 궤적 재생 금지 -- CRN 재실행 + branch 후 closed-loop
+3. [x] miss 7판 recoverability probe (2×2) -- 2026-08-07, docs/56 §9:
+       28/28 침투·NO_SOLUTION 14/14. 기전 = 접촉 11건 전부 NK veto
+       (**구속 제약 = no-kinetic zone 계약**, kinematics 아님). 도달성
+       수준에선 ORC≻INT·TP≻T0 둘 다 실재하나 라벨 불변
 4. 결과에 따라 조기 시점 / controller 강도 / state selection 분해
+     -> §9.4 로 구체화: r_nk 민감도 · fire 이전 개입(T−5 switch) · 3-way
 5. oracle / scripted / RL frontier 비교 (docs/54 §4)
 6. limiter MARL 이 frontier 를 실제로 이동시키는지 재평가
 ```
