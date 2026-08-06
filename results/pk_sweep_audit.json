@@ -1,0 +1,1927 @@
+{
+  "0.0": {
+    "n_runs": 17,
+    "neutralized": 0.0,
+    "penetrated": 1.0,
+    "events_resolved": 38,
+    "event_kill_freq": 0.0,
+    "mean_events_per_ep": 2.24,
+    "veto_total": 0,
+    "records": [
+      {
+        "episode": 3,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 12,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 15,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 3,
+        "pk_fail": 3,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 17,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 4,
+        "pk_fail": 4,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 18,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 4,
+        "pk_fail": 4,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 19,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 29,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 4,
+        "pk_fail": 4,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 30,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 3,
+        "pk_fail": 3,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 34,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 3,
+        "pk_fail": 3,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 41,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 42,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 44,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 47,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 4,
+        "pk_fail": 4,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 49,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 51,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 52,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 57,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      }
+    ]
+  },
+  "0.25": {
+    "n_runs": 51,
+    "neutralized": 0.373,
+    "penetrated": 0.627,
+    "events_resolved": 95,
+    "event_kill_freq": 0.2,
+    "mean_events_per_ep": 1.86,
+    "veto_total": 0,
+    "records": [
+      {
+        "episode": 3,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 12,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 15,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 3,
+        "pk_fail": 3,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 17,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 4,
+        "pk_fail": 4,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 18,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 19,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 29,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 30,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 34,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 3,
+        "pk_fail": 3,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 41,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 42,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 44,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 47,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 49,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 51,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 52,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 57,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 3,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 12,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 15,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 3,
+        "pk_fail": 3,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 17,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 4,
+        "pk_fail": 4,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 18,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 19,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 29,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 4,
+        "pk_fail": 4,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 30,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 3,
+        "pk_fail": 3,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 34,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 41,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 42,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 44,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 47,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 4,
+        "pk_fail": 4,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 49,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 51,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 52,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 57,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 3,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 12,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 15,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 3,
+        "pk_fail": 2,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 17,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 3,
+        "pk_fail": 2,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 18,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 3,
+        "pk_fail": 2,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 19,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 29,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 4,
+        "pk_fail": 4,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 30,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 34,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 3,
+        "pk_fail": 2,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 41,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 42,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 44,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 47,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 3,
+        "pk_fail": 2,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 49,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 51,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 52,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 57,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      }
+    ]
+  },
+  "0.5": {
+    "n_runs": 51,
+    "neutralized": 0.608,
+    "penetrated": 0.392,
+    "events_resolved": 77,
+    "event_kill_freq": 0.403,
+    "mean_events_per_ep": 1.51,
+    "veto_total": 0,
+    "records": [
+      {
+        "episode": 3,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 12,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 15,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 3,
+        "pk_fail": 3,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 17,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 18,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 19,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 29,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 30,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 34,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 3,
+        "pk_fail": 3,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 41,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 42,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 44,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 47,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 49,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 51,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 52,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 57,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 3,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 12,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 15,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 17,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 18,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 19,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 29,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 4,
+        "pk_fail": 4,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 30,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 34,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 41,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 42,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 44,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 47,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 49,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 51,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 52,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 57,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 3,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 12,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 15,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 17,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 3,
+        "pk_fail": 2,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 18,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 3,
+        "pk_fail": 2,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 19,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 29,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 30,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 34,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 3,
+        "pk_fail": 2,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 41,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 42,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 44,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 47,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 3,
+        "pk_fail": 2,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 49,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 51,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 52,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 57,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      }
+    ]
+  },
+  "0.75": {
+    "n_runs": 51,
+    "neutralized": 0.882,
+    "penetrated": 0.118,
+    "events_resolved": 64,
+    "event_kill_freq": 0.703,
+    "mean_events_per_ep": 1.25,
+    "veto_total": 0,
+    "records": [
+      {
+        "episode": 3,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 12,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 15,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 17,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 18,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 19,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 29,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 30,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 34,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 41,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 42,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 44,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 47,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 49,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 51,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 52,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 57,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 3,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 12,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 15,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 17,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 18,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 19,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 29,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 30,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 34,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 41,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 2,
+        "pk_fail": 2,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 42,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 44,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 47,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 49,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 51,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 52,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 57,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 1
+      },
+      {
+        "episode": 3,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 12,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 15,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 17,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 3,
+        "pk_fail": 2,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 18,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 19,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 29,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 30,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 34,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 3,
+        "pk_fail": 2,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 41,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 42,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 44,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 47,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 2,
+        "pk_fail": 1,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 49,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 51,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 52,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 2
+      },
+      {
+        "episode": 57,
+        "penetrated": true,
+        "hard_kill": false,
+        "contact_events": 1,
+        "pk_fail": 1,
+        "kills": 0,
+        "veto_events": 0,
+        "bern_seed": 2
+      }
+    ]
+  },
+  "1.0": {
+    "n_runs": 17,
+    "neutralized": 1.0,
+    "penetrated": 0.0,
+    "events_resolved": 17,
+    "event_kill_freq": 1.0,
+    "mean_events_per_ep": 1.0,
+    "veto_total": 0,
+    "records": [
+      {
+        "episode": 3,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 12,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 15,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 17,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 18,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 19,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 29,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 30,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 34,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 41,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 42,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 44,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 47,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 49,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 51,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 52,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      },
+      {
+        "episode": 57,
+        "penetrated": false,
+        "hard_kill": true,
+        "contact_events": 1,
+        "pk_fail": 0,
+        "kills": 1,
+        "veto_events": 0,
+        "bern_seed": 0
+      }
+    ]
+  }
+}

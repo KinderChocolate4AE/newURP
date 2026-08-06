@@ -46,13 +46,15 @@ def _kw(system: SystemSpec | None = None):
                 spawn=SpawnSpec())
 
 
-def _run(ep: int, arm: str, seed0: int = 0, limiter_mode: str = "intercept") -> dict:
+def _run(ep: int, arm: str, seed0: int = 0, limiter_mode: str = "intercept",
+         system: SystemSpec | None = None) -> dict:
     """boxed_in 첫 발생 시점에서 분기. 그 전까지는 모든 arm 이 동일하다."""
     from shepherd.scripts.mission_rollout import scripted_role_actions
 
-    sys_spec = (SystemSpec(enabled=True, contact_resolver=True,
-                           miss_terminates=False) if arm == "F" else None)
-    st = build_m4_env(seed0, ep, **_kw(sys_spec))
+    if system is None:
+        system = (SystemSpec(enabled=True, contact_resolver=True,
+                             miss_terminates=False) if arm == "F" else None)
+    st = build_m4_env(seed0, ep, **_kw(system))
     env, scn, lay = st.env, st.scn, st.lay
     env.reset(seed=seed0 + ep)
     fid = env.finisher_id
@@ -126,6 +128,7 @@ def _run(ep: int, arm: str, seed0: int = 0, limiter_mode: str = "intercept") -> 
         out["veto_events"] = int(se.veto_events)
         out["contact_events"] = int(s["contact_events"])
         out["pk_fail"] = int(s["PK_FAIL"])
+        out["kills"] = int(s["KILL"])
     if arm == "F":                        # V3: 실 계약의 handoff provenance
         se = _sysenv(env)
         out["net_spent"] = bool(se.net_spent)

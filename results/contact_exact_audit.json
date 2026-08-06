@@ -1,0 +1,198 @@
+{
+  "r_contact": 0.75,
+  "model_check_pass": false,
+  "max_model_err": 0.10721493787843313,
+  "n_kill": 17,
+  "chord_false_positive": [
+    19
+  ],
+  "events": [
+    {
+      "episode": 3,
+      "step": 14,
+      "limiter": 0,
+      "outcome": "KILL",
+      "d_chord": 0.7481,
+      "d_exact": 0.7481,
+      "d_endpoints": 0.7481,
+      "a_rel_norm": 77.69,
+      "model_err": 0.09711638965886638
+    },
+    {
+      "episode": 12,
+      "step": 17,
+      "limiter": 0,
+      "outcome": "KILL",
+      "d_chord": 0.55,
+      "d_exact": 0.5133,
+      "d_endpoints": 0.5508,
+      "a_rel_norm": 51.34,
+      "model_err": 0.06417202888362317
+    },
+    {
+      "episode": 15,
+      "step": 19,
+      "limiter": 2,
+      "outcome": "KILL",
+      "d_chord": 0.6926,
+      "d_exact": 0.6846,
+      "d_endpoints": 0.6993,
+      "a_rel_norm": 40.72,
+      "model_err": 0.05090348935758785
+    },
+    {
+      "episode": 17,
+      "step": 22,
+      "limiter": 0,
+      "outcome": "KILL",
+      "d_chord": 0.3908,
+      "d_exact": 0.3678,
+      "d_endpoints": 0.4158,
+      "a_rel_norm": 69.71,
+      "model_err": 0.08714031959416897
+    },
+    {
+      "episode": 18,
+      "step": 19,
+      "limiter": 0,
+      "outcome": "KILL",
+      "d_chord": 0.5794,
+      "d_exact": 0.6483,
+      "d_endpoints": 0.5794,
+      "a_rel_norm": 59.93,
+      "model_err": 0.07490993095265772
+    },
+    {
+      "episode": 19,
+      "step": 19,
+      "limiter": 2,
+      "outcome": "KILL",
+      "d_chord": 0.7305,
+      "d_exact": 0.7576,
+      "d_endpoints": 0.7967,
+      "a_rel_norm": 78.03,
+      "model_err": 0.0975316869026887
+    },
+    {
+      "episode": 29,
+      "step": 23,
+      "limiter": 2,
+      "outcome": "KILL",
+      "d_chord": 0.3876,
+      "d_exact": 0.464,
+      "d_endpoints": 0.4032,
+      "a_rel_norm": 70.36,
+      "model_err": 0.08795129477060887
+    },
+    {
+      "episode": 30,
+      "step": 20,
+      "limiter": 0,
+      "outcome": "KILL",
+      "d_chord": 0.3276,
+      "d_exact": 0.3819,
+      "d_endpoints": 0.3599,
+      "a_rel_norm": 48.78,
+      "model_err": 0.06097185140524495
+    },
+    {
+      "episode": 34,
+      "step": 18,
+      "limiter": 0,
+      "outcome": "KILL",
+      "d_chord": 0.7305,
+      "d_exact": 0.7421,
+      "d_endpoints": 0.7517,
+      "a_rel_norm": 69.46,
+      "model_err": 0.08682692967916568
+    },
+    {
+      "episode": 41,
+      "step": 18,
+      "limiter": 0,
+      "outcome": "KILL",
+      "d_chord": 0.3662,
+      "d_exact": 0.3719,
+      "d_endpoints": 0.6037,
+      "a_rel_norm": 60.13,
+      "model_err": 0.07516148240643995
+    },
+    {
+      "episode": 42,
+      "step": 17,
+      "limiter": 2,
+      "outcome": "KILL",
+      "d_chord": 0.6384,
+      "d_exact": 0.6542,
+      "d_endpoints": 0.7005,
+      "a_rel_norm": 78.13,
+      "model_err": 0.09766617368113877
+    },
+    {
+      "episode": 44,
+      "step": 13,
+      "limiter": 2,
+      "outcome": "KILL",
+      "d_chord": 0.7049,
+      "d_exact": 0.7049,
+      "d_endpoints": 0.7049,
+      "a_rel_norm": 75.33,
+      "model_err": 0.09416272809947043
+    },
+    {
+      "episode": 47,
+      "step": 19,
+      "limiter": 0,
+      "outcome": "KILL",
+      "d_chord": 0.7366,
+      "d_exact": 0.7157,
+      "d_endpoints": 0.7442,
+      "a_rel_norm": 79.58,
+      "model_err": 0.0994787693188589
+    },
+    {
+      "episode": 49,
+      "step": 15,
+      "limiter": 0,
+      "outcome": "KILL",
+      "d_chord": 0.3106,
+      "d_exact": 0.2501,
+      "d_endpoints": 0.6085,
+      "a_rel_norm": 85.77,
+      "model_err": 0.10721493787843313
+    },
+    {
+      "episode": 51,
+      "step": 20,
+      "limiter": 1,
+      "outcome": "KILL",
+      "d_chord": 0.3972,
+      "d_exact": 0.4073,
+      "d_endpoints": 0.3972,
+      "a_rel_norm": 34.7,
+      "model_err": 0.04336940486096383
+    },
+    {
+      "episode": 52,
+      "step": 16,
+      "limiter": 2,
+      "outcome": "KILL",
+      "d_chord": 0.056,
+      "d_exact": 0.092,
+      "d_endpoints": 0.4066,
+      "a_rel_norm": 51.79,
+      "model_err": 0.06473217180840779
+    },
+    {
+      "episode": 57,
+      "step": 12,
+      "limiter": 1,
+      "outcome": "KILL",
+      "d_chord": 0.4292,
+      "d_exact": 0.3635,
+      "d_endpoints": 0.7812,
+      "a_rel_norm": 70.69,
+      "model_err": 0.08836584649394941
+    }
+  ]
+}

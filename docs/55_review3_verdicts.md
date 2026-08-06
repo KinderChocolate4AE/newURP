@@ -33,8 +33,11 @@
 ## 3. 액션 큐 (리뷰어 우선순위, 미착수분)
 
 ```
-[ ] (A) 실 step 궤적 기준 contact detector 검증        <- §3.2 사전등록 완료
-[ ] (B) contact Pk sweep                               <- §3.2 사전등록 완료
+[x] (A) 실 궤적 검증 (docs/54 §3.2) -- 적분기 = semi-implicit Euler 확정,
+      chord = 이산 map 의 정확한 임베딩, 0.033 상한 논법 철회,
+      16/17 두 보간 강건 · ep19 경계 모호 (철회 조건 3건 미달)
+[x] (B) Pk sweep (docs/54 §3.2) -- 이항 sanity 전 구간 PASS, 재시도 효과
+      +0.12~0.13, frontier 는 Pk 보다 완만히 저하. lethality 모형 부재 불변
 [ ] r_shape / r_commit / r_contact 의미 분리 점검
       (r_contact 필드는 분리돼 있음. r_shape(viability) vs r_commit(margin 식)
        vs r_contact 가 전부 kill_radius=0.75 를 공유 -- 값 분리 필요성 판단)
