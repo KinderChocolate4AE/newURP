@@ -52,6 +52,8 @@ from typing import Dict, List, Optional, Sequence
 
 import numpy as np
 
+from shepherd.game.finisher_fsm import FinisherState
+
 __all__ = ["SystemSpec", "RewardSpec", "CommitRecord", "ModeSystemEnv",
            "PARK_POSITION"]
 
@@ -95,6 +97,9 @@ class SystemSpec:
     # R1 접촉 event resolver (docs/54 §1). 기본 off -> 기존 경로와 bit-identical (P78).
     contact_resolver: bool = False
     r_contact: Optional[float] = None   # None -> inner.kill_radius (이름만 분리, 새 값 없음)
+    # R2 net-miss handoff (docs/54 §1). 기본 True = 현행(miss -> SPENT_FAIL 종료).
+    # False 면 spent-fail 종료만 억제하고 에피소드가 계속된다 (FALLBACK).
+    miss_terminates: bool = True
     seed_ns: str = "m4_hardkill"
 
 
@@ -222,6 +227,8 @@ class ModeSystemEnv:
         self.pending: Dict[int, CommitRecord] = {}
         self.hard_kill = False
         self.veto_events = 0
+        self.net_spent = False            # R2: net miss 후 FALLBACK 진입 여부
+        self.net_spent_step: Optional[int] = None
         self._step_i = 0
         self._seed = 0
 
@@ -278,6 +285,25 @@ class ModeSystemEnv:
 
         # --- 3. 동결 env 를 그대로 한 스텝 -----------------------------------
         obs, rew, terms, truncs, infos = inner.step(actions)
+
+        # --- 3b. net-miss handoff (R2, docs/54 §1) -- 기본 off ---------------
+        # spent-fail 종료(= 종료 ∧ ¬captured ∧ ¬penetrated ∧ fsm SPENT)만 억제.
+        # captured / penetrated / hard_kill 종료는 절대 억제하지 않는다.
+        # inner 는 spent_fail 이 지속돼 매 스텝 재종료를 시도하므로 net_spent
+        # 동안 매번 억제하고, 자체 절단이 막히므로 지평선 절단은 래퍼가 낸다.
+        handoff_now = False
+        if not spec.miss_terminates and any(terms.values()):
+            fi = next(iter(infos.values()), {})
+            if (not fi.get("captured") and not fi.get("penetrated")
+                    and inner.fsm.state is FinisherState.SPENT):
+                if not self.net_spent:
+                    self.net_spent = True
+                    self.net_spent_step = self._step_i
+                    handoff_now = True
+                terms = {a: False for a in terms}
+                inner.agents = list(inner.possible_agents)
+                if self._step_i >= int(self.layout.episode_len):
+                    truncs = {a: True for a in truncs}   # 동결 env 와 같은 지평선
 
         # --- 4. 만료 커밋 해소: 가드 -> 기하 -> Pk ---------------------------
         lims2, _, att2 = inner._states()
@@ -361,6 +387,8 @@ class ModeSystemEnv:
                        round(r.margin, 4)) for r in resolved_now],
             contacts=[(r.limiter_index, r.outcome, round(r.d_nom, 4))
                       for r in contact_events],
+            net_spent=self.net_spent,           # R2 provenance ("net spent before failure")
+            net_miss_handoff=handoff_now,       # 전이 스텝에만 True. terminal 집계 금지
         )
         for a in infos:
             infos[a] = {**infos[a], **sysinfo}
