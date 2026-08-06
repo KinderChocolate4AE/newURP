@@ -99,13 +99,64 @@ budget·horizon 등 상수는 구현 시 **실행 전에** 이 문서에 추가 
 | 전 arm 실패 | **해당 7개 상태에서** recoverability 결손 증거 강화 (일반화 금지) |
 | 일부만 성공 | 상태별 recoverability 이질적 — 단일 "mode change 가능/불가능" 결론 금지 |
 
-## 7. 실행 전 체크리스트
+## 6.1 결과 라벨 3분법 (합산 금지)
 
 ```
-[ ] 전체 회귀 + legacy baseline (hold n=500) 비트 동일 재확인
-      (반경 키 추가 뒤 — 직렬화·config 경로 회귀 방지)
-[ ] privileged controller 구현 + 자격 요건 자기검사 + budget 상수 선언
+EARLY_PREP_NET_CAPTURE      조기 준비가 애초에 net miss 를 없앰 (net 기하 변화)
+POST_MISS_NEUTRALIZATION    miss 후 폴백이 살림 (contact / commit hard-kill)
+PENETRATED                  실패
+```
+
+"조기 준비가 fallback 을 살렸다" 와 "조기 준비가 miss 자체를 없앴다" 는 다른
+주장이다 — 절대 한 칸에 합치지 않는다. 이번 probe 의 지위는 **"저장된 7개
+miss 상태에서 deterministic lethality 를 가정한 recoverability 반증 실험"**
+이며 성공률 추정·일반 mode-handoff 성능 평가가 아니다.
+
+## 6.2 목적함수 계약 — proxy 와 최종 판정 분리
+
+optimizer 내부 proxy 를 "접촉 거리 최소화" 하나로 두지 않는다 (자산 반대편
+꼬리 추격도 좋은 해로 평가되는 결함). **최종 성공 판정은 반드시 실제 env
+replay 의 terminal 라벨** (`NET_CAPTURE / CONTACT_NEUTRALIZATION /
+COMMIT_HARD_KILL / PENETRATED`) 로 하고, proxy 점수는 후보 선택에만 쓴다.
+
+## 7. ★ 실행 환경 격리 게이트 (리뷰 3 후속 — 재현성 최대 위험)
+
+**이번 세션(2026-08-06)의 모든 감사·회귀는 dirty tree 위에서 실행됐다**:
+HEAD `0450c74` + 이전 세션 미커밋 변경 8파일 (+282/−16, `env.py`·`viability.py`
+포함). patch 는 세션 내내 불변이었으므로 세션 내 비교(P78 pre/post 등)는
+유효하다. 스냅샷 = `artifacts/pre_oracle_worktree_2026-08-06.patch`
+(sha256 `f402b0c4…d163e6fb`, meta 동봉).
+
+2×2 실행은 다음 중 하나로만 한다:
+
+```
+권장   0450c74 에서 clean branch/worktree 생성 -> oracle 구현 -> 2×2 실행
+차선   혼재 유지 시, 실행 직전에 git rev-parse HEAD · status · diff --stat ·
+       diff > patch 를 다시 뜨고, 결과 JSON 에 다음을 필수 기록:
+       HEAD commit · dirty 여부 · patch sha256 · config · solver seed ·
+       budget 상수
+```
+
+## 7.1 privileged controller 실행 전 게이트 — 수치로 고정할 것
+
+아래가 **이 문서에 수치로 추가 선언되기 전에는 2×2 를 실행하지 않는다**:
+
+```
+horizon (tick) · optimizer 반복/평가 횟수 · 후보 수(population) ·
+solver seed 수 · deterministic evaluation budget (wall-clock 금지) ·
+목적함수와 lexicographic priority · 성공 판정 (env replay 라벨) ·
+NO_SOLUTION_WITHIN_BUDGET 판정 · controller 가 접근하는 privileged 정보 목록 ·
+attacker 가 개입 후 closed-loop 로 재반응한다는 조건
+```
+
+## 8. 실행 전 체크리스트
+
+```
+[x] 전체 회귀 476/0 + legacy baseline (hold n=500) 비트 동일 (2026-08-06)
+[x] worktree 혼재 스냅샷 (artifacts/pre_oracle_worktree_2026-08-06.patch)
+[ ] clean worktree (0450c74 기준) 생성 -- 권장 경로
+[ ] privileged controller 구현 + §7.1 상수 선언 + 자격 자기검사
 [ ] T−5 가 발사 후 구간인지 7판 실측
-[ ] 2×2 실행 → §6 해석표로만 판독
+[ ] 2×2 실행 → §6 해석표 + §6.1 3분법으로만 판독
 [ ] (그 뒤) T−5 switch 별도 사전등록
 ```

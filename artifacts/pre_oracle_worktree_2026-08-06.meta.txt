@@ -1,0 +1,18 @@
+HEAD: 0450c74d1a0a6cfd0e5f916ce01ee9109bc310c6
+date: 2026-08-06
+dirty files:
+ M docs/48_role_separation.md
+ M docs/49_aim_bootstrap.md
+ M shepherd/agents/baselines.py
+ M shepherd/env.py
+ M shepherd/game/roles.py
+ M shepherd/game/viability.py
+ M shepherd/m4_env.py
+ M shepherd/scripts/mission_rollout.py
+
+diff stat:
+ shepherd/m4_env.py                  |  17 +++++-
+ shepherd/scripts/mission_rollout.py |  12 +++-
+ 8 files changed, 282 insertions(+), 16 deletions(-)
+
+patch sha256: f402b0c41e87d3f25b387495eef031ff79e687abe37bf5e377bec45fd163e6fb

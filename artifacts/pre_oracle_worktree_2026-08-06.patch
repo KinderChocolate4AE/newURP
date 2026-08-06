@@ -1,0 +1,471 @@
+diff --git a/docs/48_role_separation.md b/docs/48_role_separation.md
+index 401ee66..d5e4ee3 100644
+--- a/docs/48_role_separation.md
++++ b/docs/48_role_separation.md
+@@ -333,11 +333,42 @@ LL - SS = -0.110
+ 가법 예측 LL = 0.141  실제 0.072   ->  상호작용 LL-LS-SL+SS = -0.069
+ ```
+ 
+-`LL` 만 비손실 0.80 인 것이 기전을 보여준다. 300판 중 약 21판 무력화 중 4판이
+-하드킬인데 SHAPING 은 0 이므로, 그 하드킬은 전부 **네트로 잡을 수 있었던 구간**
+-에서 나왔다. 발사가 망가지자 정책이 하드킬을 대체 경로로 쓴 것이고, 그건 이
+-논문의 스파인(비손실 격추)을 정면으로 깬다. `LS` 의 비손실이 1.00 인 것과
+-대조된다 — 같은 limiter 행동공간인데 발사가 멀쩡하면 하드킬을 안 쓴다.
++### ★ 정정 9 (2026-08-05) — 위 문단은 **틀렸다**. 하드킬은 0 이다
++
++원래 여기 이렇게 적혀 있었다:
++
++> `LL` 만 비손실 0.80 인 것이 기전을 보여준다. 300판 중 약 21판 무력화 중 4판이
++> 하드킬 ... 정책이 하드킬을 대체 경로로 쓴 것이고, 그건 논문의 스파인을
++> 정면으로 깬다.
++
++**전부 오독이다.** 시드별로 열어 보면:
++
++| 시드 | 무력화 | 비손실 |
++|---|---:|---:|
++| s0 | 0.1033 (31/300) | 1.00 |
++| s1 | 0.0600 (18/300) | 1.00 |
++| s2 | 0.0767 (23/300) | 1.00 |
++| **s3** | **0.0000 (0/300)** | **0.00** |
++| s4 | 0.1200 (36/300) | 1.00 |
++
++`nondestructive_frac = k / max(k + HARD_KILL, 1)` 이다. s3 는 무력화가 **0** 이라
++`k = 0`, `HARD_KILL = 0` 이고, 분모 가드 때문에 `0/1 = 0` 이 나온다. 즉 0.80 은
++**하드킬 비율이 아니라 0/0 퇴화값의 평균**이다.
++
++```
++[정정]  LL 은 하드킬을 한 번도 하지 않았다. 5 시드 중 4 시드가 비손실 1.00,
++        1 시드가 아무것도 잡지 못했다 (그래서 퇴화값 0).
++[정정]  "발사가 망가지면 정책이 하드킬로 도피한다" 는 서술을 **철회한다.**
++        이 데이터에 하드킬은 없다.
++[남는것] LL 이 압도적으로 나쁘다는 것 (0.072) 과 시드 하나가 완전히 붕괴한다는
++        것 (0/300). 후자는 하드킬이 아니라 **학습 실패**의 신호다.
++```
++
++**왜 놓쳤나.** 평균 0.80 을 보고 하드킬 판수를 역산했다. 시드별 값을 안 열었고,
++0/0 가드를 고려하지 않았다. 집계값에서 원인을 역산할 때는 분모가 0 이 될 수
++있는지부터 봐야 한다 -- `nondestructive_frac` 처럼 비율의 비율인 지표는 특히.
++
++이 오류는 docs/50 §1.3 과 docs/48 §12.1 로도 퍼졌고 거기서도 정정했다.
+ 
+ BAND_AIM 은 SL 이 hold 의 2배지만 **유의하지 않다** (n≈315 에서 Wilson
+ [0.009, 0.041] vs hold [0.003, 0.030], 크게 겹침). intercept 의 0.172 와는
+@@ -497,8 +528,9 @@ LL (학습 편대)             0.23x               0.40x  (0.072)
+ 게이트를 여는 빈도**로 그대로 설명된다. 발사 타이밍이 아니라 **쏠 기회 자체를
+ 정책이 못 만든다.**
+ 
+-`LL` 의 비손실 0.80 (§8.3)도 여기서 설명된다 -- 조준이 가장 망가져 발사 기회가
+-거의 없으니(0.23x) 하드킬이 유일하게 남은 성공 경로가 된다.
++~~`LL` 의 비손실 0.80 도 여기서 설명된다 -- 하드킬이 유일하게 남은 성공 경로가
++된다.~~ **철회 (정정 9).** 하드킬은 0 이었다. 남는 사실은 `LL` 의 발사 기회가
++0.23x 로 가장 적고 성적도 가장 나쁘다는 순서 일치뿐이다.
+ 
+ ### 12.2 한계 — 어느 줄을 믿을 것인가
+ 
+diff --git a/docs/49_aim_bootstrap.md b/docs/49_aim_bootstrap.md
+index bcbe74d..2feb91f 100644
+--- a/docs/49_aim_bootstrap.md
++++ b/docs/49_aim_bootstrap.md
+@@ -230,7 +230,116 @@ RL 이 계속 갱신하므로, BC 로 맞춘 함수가 **밀린 입력**에서 
+ 
+ ---
+ 
+-## 8. 다음
++## 8. 결과 (2026-08-05, 10 런 x 500k 완주)
++
++### 8.1 ★ 1차 판정 — 세 팔 모두 미달
++
++게이트 개방률, 5 시드 풀링 n=8450. 통과선 0.035 (하한 > SL 상한 0.0298).
++
++| 팔 | 평균 | 풀링 Wilson | 판정 |
++|---|---:|---|---|
++| SL (대조) | 0.0262 | [0.0230, 0.0298] | 기준 |
++| **SL-BCw** | **0.0247** | [0.0216, 0.0283] | 미달 (SL 보다 **낮다**) |
++| **SL-BCa** | **0.0303** | [0.0268, 0.0342] | 미달 (하한 0.0268) |
++| 스크립트 | 0.0430 | — | 천장 |
++
++`H_bc` 미통과, `H_rec` 미통과.
++
++### 8.2 두 팔의 의미가 다르다
++
++**`SL-BCw` 는 완전 실패다.**
++
++```
++시드별 차이  [0, +0.0025, -0.0043, +0.0031, -0.0085]   평균 -0.0014
++SL 상한 초과 시드 0/5
++```
++
++워밍업 직후 게이트가 0.0441 (스크립트의 97 %) 이었는데 500k 뒤 0.0247 이다.
++**사전등록 §2.1 이 적어 둔 위험 그대로**고 배선 스모크(§7)가 2048 스텝에서
++이미 예고했다. 유지 항 없는 워밍업은 살아남지 못한다.
++
++**`SL-BCa` 는 방향이 맞지만 부족하다.**
++
++```
++시드별 차이  [+0.0067, +0.0025, -0.0019, +0.0097, +0.0036]   평균 +0.0041
++양의 시드 4/5   t(4)=+2.10 (p≈0.10)   부호검정 p=0.375
++SL 상한 초과 시드 3/5   <- 풀링 규율의 '시드 과반' 은 만족
++★ 격차의 24.5 % 회복 (0.0262 -> 0.0303, 천장 0.0430). 통과선까지 0.0047 부족
++```
++
++BC 보조손실은 조준을 **실제로 끌어올린다**. λ=0.1 고정으로는 격차의 1/4 이다.
++
++### 8.3 ★ 매개가 붙었다 — docs/50 §3 위험 3 해소
++
++docs/50 은 *"개방률 -> 성적"* 이 관측 3 점의 순서 일치일 뿐인 **가정**이라고
++적었다. 이번 런이 그 가정을 직접 친다 -- 두 팔이 SL 과 **조준만** 다르고
++편대·보상·시드가 전부 같기 때문이다.
++
++| 팔 | 게이트 회수율 | 전체 무력화 회수율 | 시드 부호일치 | r |
++|---|---:|---:|---:|---:|
++| SL-BCa | **+24.5 %** | **+20.6 %** | 4/5 | +0.66 |
++| SL-BCw | **−8.6 %** | **−10.3 %** | 4/5 | +0.91 |
++
++(회수율 = SL -> SS 격차 중 메운 비율. 전체 무력화 SS 0.182 / SL 0.137.)
++
++**두 방향 모두 게이트와 성적이 같은 부호·비슷한 크기로 움직인다.** 특히
++`BCw` 가 강하다 -- 게이트가 **내려간** 개입에서 성적도 내려갔고 시드 상관이
+++0.91 이다. 한 방향만 봤으면 우연일 수 있는데 반대 방향도 같이 움직였다.
++
++**한계**: 시드 5 개라 유의성은 주장하지 않는다. 회수율 일치(24.5 vs 20.6)도
++점추정 비교다. 그러나 *"조준이 성적을 만든다"* 는 문장을 이제 **가정이 아니라
++관측**으로 적을 수 있다.
++
++### 8.4 SHAPING 은 왜 전 팔 0 인가 — 1차 지표의 판별력 문제
++
++`docs/48` 의 1차 지표(SHAPING 무력화율)는 다섯 팔 전부 0/861 이다. 그런데
++**기저선 SS 자신도 0/297** 이다 (2026-08-05 이동성 실험 셀 1 에서 재확인).
++
++```
++SS(해석적)  0/297      <- 손튜닝 천장
++LL/LS/SL/BCw/BCa  0/861 씩
++```
++
++즉 **이 운용점의 SHAPING 구간은 천장을 포함해 아무도 못 잡는다.** docs/48
++§8.2 가 기록한 "H_fin 검정 불가" 결함의 더 넓은 버전이다 -- 그때는 SL 만
++구조적 0 이라고 봤는데 실제로는 그 칸 전체가 0 이다.
++
++따라서 집계의 *"어느 역할을 학습시켜도 SS 를 못 넘었다"* 는 정보가 없다.
++넘을 대상이 0 이다. **다음 실험은 1차 지표를 판별력 있는 칸으로 옮겨야 한다**
++(전체 무력화율 또는 BAND_AIM -- SS 0.010 대 SL 0.020 으로 분산이 있다).
++
++### 8.5 2차 (보고 전용)
++
++| 팔 | 전체 무력화 | 비손실 | BAND_AIM |
++|---|---:|---:|---:|
++| SS (기저) | 0.182 | 1.00 | 0.0103 |
++| LS | 0.187 | 1.00 | 0.0032 |
++| **SL-BCa** | **0.146** | 1.00 | 0.0169 |
++| SL | 0.137 | 1.00 | 0.0201 |
++| SL-BCw | 0.132 | 1.00 | 0.0102 |
++| LL | 0.072 | (0.80) | 0.0000 |
++| (참조) 스크립트 요격 | 0.240 | — | 0.1719 |
++
++**LL 의 비손실 0.80 은 하드킬이 아니다** -- 시드 3 이 무력화 0/300 이라
++`0/max(0,1) = 0` 이 평균에 섞인 것이다. docs/48 정정 9 에서 철회했다.
++
++### 8.6 판정 요약
++
++```
++[확립]  BC 보조손실(BCa)은 조준을 끌어올린다. 격차의 24.5 %, 5시드 중 4시드 양
++[확립]  워밍업만(BCw)은 500k 를 못 버틴다. 사전등록 §2.1 의 예측대로
++[확립]  ★ 게이트 개방률과 성적이 같이 움직인다 (양방향, 시드 부호일치 4/5)
++[미달]  선언한 통과선 0.035 에 못 미친다 (BCa 0.0303, 하한 0.0268)
++[무효]  SHAPING 1차 지표는 판별력이 없다 -- SS 도 0
++```
++
++**§3.4 의 null case 는 아니다.** "조준은 지도학습으로도 회복되지 않는다" 가
++아니라 "**λ 고정 보조손실로는 1/4 만 회복된다**" 이다. 유지 항의 세기가 다음
++설계 축이고, 그건 §7 이 결과 전에 예측으로 적어 둔 것과 같다.
++
++---
++
++## 9. 다음
+ 
+ ```
+ [x] 사전 게이트 -- 교사 축이 관측의 함수인가 (§1.1, 선형 코사인 0.9984)
+diff --git a/shepherd/agents/baselines.py b/shepherd/agents/baselines.py
+index d236569..8f825c3 100644
+--- a/shepherd/agents/baselines.py
++++ b/shepherd/agents/baselines.py
+@@ -38,6 +38,40 @@ def hold_position_limiter():
+     """u_L^0: no acceleration, hold heading. The fixed baseline action (Box(4))."""
+     return np.zeros(4, dtype=np.float32)            # accel(3)=0, pressure(1)=0
+ 
++# ── 제4병목 계측용 단순 컨트롤러 (docs/20 §6 · docs/21) ─────────────────────
++#   왜 여기 있나: "정책이 zero 만 이기고 이 선 아래면 학습 가능성 증거이지
++#   RL-필요성 증거가 아니다" -- 논문 클레임 트리에 **정책 vs 단순 컨트롤러
++#   비교 보고가 의무**로 등재돼 있다 (docs/20 §6 제4병목, docs/21 sealed 진단 arm).
++#   2026-07-19 구 캠페인 실측: brake+guard .858 ≒ lam20+guard .858 > learned .775.
++#
++#   정의는 `train/pfc.py` 의 것을 **그대로** 옮긴다 (docs/48 §3.1 한 곳 원칙과
++#   같은 이유 -- 두 벌이 되면 비교가 "두 구현의 차이" 가 된다). 다만 `pfc` 는
++#   구 환경 상수(A_MAX=30.0, 63차원 관측)에 묶여 있어 import 하지 않고, 식만
++#   옮기고 상한은 **호출부의 `a_max`** 를 받는다.
++#
++#   ★ 구 캠페인의 절대 수치(.858 등)는 다른 환경(A-3d/A-3e, a_max=30.0)에서
++#   난 것이다. M4 에서 같은 값이 나올 이유가 없다. 여기서 재는 것은 **순서**
++#   (단순 컨트롤러 대 학습) 이지 수치 재현이 아니다.
++LAM_GAIN = 20.0                 # lam20 의 감쇠 이득. 구 캠페인 선언값 그대로
++
++
++def brake_limiter(v_self, a_max: float):
++    """`a = -a_max * unit(v)`. 자기 속도 반대로 **최대 감속**. 관측 전용."""
++    v = np.asarray(v_self, float)
++    n = float(np.linalg.norm(v))
++    a = (-a_max * v / n) if n > 1e-6 else np.zeros(3)
++    return np.concatenate([a, [0.0]]).astype(np.float32)
++
++
++def lambda_brake_limiter(v_self, a_max: float, lam: float = LAM_GAIN):
++    """`a = clip(-lam * v, a_max)`. 비례 감쇠. 관측 전용."""
++    a = -float(lam) * np.asarray(v_self, float)
++    n = float(np.linalg.norm(a))
++    if n > a_max and n > 0.0:
++        a = a * (a_max / n)
++    return np.concatenate([a, [0.0]]).astype(np.float32)
++
++
+ 
+ def ring_slot(i, n_limiters, center, approach_dir, r_ring):
+     """Slot for limiter i on the escape ring: a circle of radius r_ring in the
+diff --git a/shepherd/env.py b/shepherd/env.py
+index 1b46e54..03c11c6 100644
+--- a/shepherd/env.py
++++ b/shepherd/env.py
+@@ -34,6 +34,7 @@ from shepherd.game.finisher_fsm import FinisherFSM, FinisherState, CommitMeta, s
+ from shepherd.game import viability as V
+ from shepherd.sim.interface import EnvBackend
+ from shepherd.agents.adversary import scripted_adversary_action
++from shepherd.agents.mobile_finisher import mobile_finisher_accel
+ 
+ _EPS = 1e-12
+ _PHASES = [FinisherState.LOADED, FinisherState.DEPLOYING,
+@@ -329,7 +330,13 @@ class ShapingParallelEnv(ParallelEnv):
+             a_cmd = la[:3]
+             bk_action[lid] = {"a": a_cmd, "e_cmd": _unit(a_cmd, self._e(lims[i]) if i < len(lims) else (1, 0, 0))}
+         axis = _unit(fin_act[:3], self._e(fin)) if len(fin_act) >= 3 else self._e(fin)
+-        bk_action[self.finisher_id] = {"a": np.zeros(3), "e_cmd": axis}
++        # ★ 병진 (docs/51). `FinisherSpec.a_max = 0.0` 이 기본이고 그때
++        #   `mobile_finisher_accel` 은 정확히 zeros(3) 을 낸다 -- 즉 이 줄이
++        #   바뀌기 전과 **비트 동일**하다 (P69). 0 이 아닐 때만 움직인다.
++        a_fin = mobile_finisher_accel(
++            p_fin, self._v(fin), p_att, v_att,
++            tau=self.tau_deploy, a_max=getattr(self.sc.finisher, "a_max", 0.0))
++        bk_action[self.finisher_id] = {"a": a_fin, "e_cmd": axis}
+         committed = self.fsm.state in (FinisherState.DEPLOYING, FinisherState.LOCKED)
+         adv = scripted_adversary_action(
+             p_att, v_att, target=self.layout.target,
+diff --git a/shepherd/game/roles.py b/shepherd/game/roles.py
+index eed1f1c..0a6adee 100644
+--- a/shepherd/game/roles.py
++++ b/shepherd/game/roles.py
+@@ -37,6 +37,10 @@ class FinisherSpec:
+     net_radius: float           # net capture radius [m]
+     omega_max: float            # net-axis slew-rate limit [rad/s] (R3 parameter)
+     e_net: tuple[float, float, float] = (1.0, 0.0, 0.0)   # initial net-pointing axis
++    # ★ 2026-08-05 이동성 요인 실험 (docs/51). 0.0 = 위치 고정 = 지금까지의
++    #   모든 결과가 난 조건. 기본값 0 이 회귀 방어다 -- 이 필드를 모르는
++    #   호출부는 전부 고정 포획기를 그대로 받는다 (P69).
++    a_max: float = 0.0          # 병진 가속 상한 [m/s^2]. 0 이면 병진 없음
+ 
+ 
+ @dataclass(frozen=True)
+diff --git a/shepherd/game/viability.py b/shepherd/game/viability.py
+index de31dce..ea42e8b 100644
+--- a/shepherd/game/viability.py
++++ b/shepherd/game/viability.py
+@@ -377,7 +377,8 @@ def _caught_mask(endpoints, judge, *, net_center, net_radius,
+ 
+ 
+ def _segments_endpoints_feasible(x0, v0, seg_accels, *, tau, limiters, kill_radius,
+-                                 attacker_turn_limited, omega_att_max, e_att, n_t=24):
++                                 attacker_turn_limited, omega_att_max, e_att, n_t=24,
++                                 return_paths=False):
+     """Integrate piecewise-constant controls and return (endpoints, feasible).
+ 
+     - Trajectory: K segments of length h=tau/K; within each, exact constant-accel
+@@ -430,6 +431,10 @@ def _segments_endpoints_feasible(x0, v0, seg_accels, *, tau, limiters, kill_radi
+             pts = np.concatenate(seg_pts, axis=1)               # (n, K*n_t, 3)
+             d = np.linalg.norm(pts[:, :, None, :] - L[None, None, :, :], axis=3)
+             feasible_lim = ~(d <= kill_radius).any(axis=(1, 2))
++    if return_paths:
++        # ★ hit 판정에 **실제로 쓴 점 그대로** 돌려준다 (재보간·형변환 없음).
++        #   docs/52 §8.0 -- 공식을 복제하지 않고 같은 코드 경로를 노출한다.
++        return endpoints, feasible_lim & feasible_turn, np.concatenate(seg_pts, axis=1)
+     return endpoints, feasible_lim & feasible_turn
+ 
+ 
+@@ -455,11 +460,45 @@ def _assemble(feasible, caught, n_total, judge, seed):
+     )
+ 
+ 
++@dataclass(frozen=True)
++class UnionTrace:
++    """`_union_sets` 의 표본별 중간 산출물 (docs/52 §8.0 trace API).
++
++    **정렬 계약** -- 진단 코드가 의존해도 되는 것:
++
++        paths[k] / endpoints[k] / feasible[k] / caught[k] / block_id[k] 는 같은 표본
++        Block 1 (단일구간 uniform-in-ball) 이 항상 **prefix**
++        paths[k, path_len[k] - 1] == endpoints[k]
++        paths 는 **hit 판정에 실제로 쓴 점 그대로** (재보간·float32 변환 없음)
++
++    블록마다 시간 격자 길이가 다르다 (Block 1 = n_t, extreme = K*n_t). 임의로
++    맞춰 재보간하면 판정과 갈라지므로 **패딩 + `path_len`** 으로 노출한다.
++    패딩 구간은 마지막 유효점 반복이라 거리 최소화에 영향이 없다.
++    """
++    endpoints: np.ndarray
++    feasible: np.ndarray
++    caught: np.ndarray
++    paths: np.ndarray            # (n, max_pts, 3)
++    path_len: np.ndarray         # (n,)
++    block_id: np.ndarray         # (n,) 0 = Block 1 (legacy single-segment)
++
++    @staticmethod
++    def build(endpoints, feasible, caught, path_blocks, block_ids):
++        m = max(b.shape[1] for b in path_blocks)
++        P = np.concatenate([np.concatenate(
++            [b, np.repeat(b[:, -1:, :], m - b.shape[1], axis=1)], axis=1)
++            if b.shape[1] < m else b for b in path_blocks], axis=0)
++        ln = np.concatenate([np.full(len(b), b.shape[1], np.int32)
++                             for b in path_blocks])
++        return UnionTrace(endpoints, feasible, caught, P, ln,
++                          np.concatenate(block_ids))
++
++
+ def _union_sets(x_att, v_att, *, tau, a_att_max, judge,
+                 net_center, net_radius, net_apex, n_F, theta_net,
+                 range_min, range_max, limiters, kill_radius,
+                 attacker_turn_limited, omega_att_max, e_att,
+-                n, n_segments, seed, n_dir=32):
++                n, n_segments, seed, n_dir=32, return_paths=False):
+     """Build the conservative UNION reachable set as (endpoints, feasible, caught).
+ 
+     Block 1 is the VERBATIM single-segment uniform-in-ball reachable set (same math
+@@ -487,18 +526,33 @@ def _union_sets(x_att, v_att, *, tau, a_att_max, judge,
+         feas1 = feas1 & _feasible_turn(accels1, heading, omega_att_max, tau)
+     end_blocks = [end1]
+     feas_blocks = [feas1]
++    # Block 1 의 경로 = `_feasible_limiter` 가 쓰는 그 포물선 (같은 n_t)
++    path_blocks = ([x_att[None, None, :]
++                    + v_att[None, None, :] * np.linspace(0.0, tau, 24)[None, :, None]
++                    + 0.5 * accels1[:, None, :]
++                    * (np.linspace(0.0, tau, 24) ** 2)[None, :, None]]
++                   if return_paths else None)
++    block_ids = [np.zeros(len(end1), np.int8)] if return_paths else None
++    _blk = [1]
+ 
+     dirs = _extreme_dirs(n_dir=n_dir, seed=seed, e_att=heading)
+ 
+     def _add(seg_accels):
+         if len(seg_accels) == 0:
++            if return_paths:
++                _blk[0] += 1
+             return
+-        ep, fe = _segments_endpoints_feasible(
++        out = _segments_endpoints_feasible(
+             x_att, v_att, seg_accels, tau=tau, limiters=limiters, kill_radius=kill_radius,
+             attacker_turn_limited=attacker_turn_limited, omega_att_max=omega_att_max,
+-            e_att=e_att)
++            e_att=e_att, return_paths=return_paths)
++        ep, fe = out[0], out[1]
+         end_blocks.append(ep)
+         feas_blocks.append(fe)
++        if return_paths:
++            path_blocks.append(out[2])
++            block_ids.append(np.full(len(ep), _blk[0], np.int8))
++            _blk[0] += 1
+ 
+     _add(_boundary_accels(a_att_max, dirs))                  # boundary spheres (K=1)
+     _add(_bangbang_segments(a_att_max, dirs, n_segments))    # doglegs
+@@ -511,6 +565,9 @@ def _union_sets(x_att, v_att, *, tau, a_att_max, judge,
+     caught = _caught_mask(endpoints, judge, net_center=net_center, net_radius=net_radius,
+                           net_apex=net_apex, n_F=n_F, theta_net=theta_net,
+                           range_min=range_min, range_max=range_max)
++    if return_paths:
++        return endpoints, feasible, caught, UnionTrace.build(
++            endpoints, feasible, caught, path_blocks, block_ids)
+     return endpoints, feasible, caught
+ 
+ 
+diff --git a/shepherd/m4_env.py b/shepherd/m4_env.py
+index 472baf7..701c690 100644
+--- a/shepherd/m4_env.py
++++ b/shepherd/m4_env.py
+@@ -90,7 +90,9 @@ def mission_eval(seed0: int, episodes: int, *,
+                  randomize_threat: bool = True, threat_obs: bool = True,
+                  baseline_commit: bool = False,
+                  records: Optional[list] = None,
+-                 scripted_roles: Sequence[str] = ()) -> dict:
++                 scripted_roles: Sequence[str] = (),
++                 mobility: float = 0.0,
++                 omega_max: float | None = None) -> dict:
+     """2층 임무 지표 (docs/29 §4) — regime 별로 쪼개서 낸다.
+ 
+     **`interdiction_rate = 1 - PENETRATED` 를 그대로 쓰지 않는다.**
+@@ -99,7 +101,16 @@ def mission_eval(seed0: int, episodes: int, *,
+ 
+     `scripted_roles` 는 역할 분리(docs/48)용 -- `policy` 가 있어도 그 역할만
+     스크립트로 덮어쓴다. 기본 `()` 이면 기존 호출부와 bit-identical.
++
++    `mobility` 는 이동성 요인 실험(docs/51)용 포획기 병진 가속 상한이다.
++    **기본 0.0 = 고정** -> 지금까지의 모든 결과가 난 조건이고 bit-identical.
++    0 이 아니면 `apply_mobility` 가 명령·백엔드 클램프를 **함께** 푼다.
++    `omega_max` 는 조준 슬루 상한 override 다 (기본 None = 건드리지 않음).
++
++    초기조건과 공격자 난수는 `mobility`·`omega_max` 와 무관하게 `(seed0, ep)` 로만
++    정해지므로 이 인자만 바꾼 호출들은 전부 **paired CRN** 이다 (P73).
+     """
++    from shepherd.agents.mobile_finisher import apply_mobility, apply_slew_limit
+     from shepherd.scripts.mission_rollout import LABELS, run_episode
+ 
+     counts = {lab: 0 for lab in LABELS}
+@@ -108,6 +119,10 @@ def mission_eval(seed0: int, episodes: int, *,
+         st = build_m4_env(seed0, ep, system=system, reward=reward,
+                           attacker=attacker, spawn=spawn,
+                           randomize_threat=randomize_threat, threat_obs=threat_obs)
++        if mobility > 0.0:
++            apply_mobility(st.env, a_max=mobility)
++        if omega_max is not None:                  # 무한 슬루 반사실 (docs/51 §9)
++            apply_slew_limit(st.env, omega_max)
+         r = run_episode(st.env, st.scn, st.lay, seed=seed0 + ep,
+                         limiter_mode=limiter_mode, fire_mode=fire_mode,
+                         policy=policy, baseline_commit=baseline_commit,
+diff --git a/shepherd/scripts/mission_rollout.py b/shepherd/scripts/mission_rollout.py
+index d23b5cc..ab489e0 100644
+--- a/shepherd/scripts/mission_rollout.py
++++ b/shepherd/scripts/mission_rollout.py
+@@ -44,7 +44,8 @@ from typing import Dict, List, Optional, Sequence
+ 
+ import numpy as np
+ 
+-from shepherd.agents.baselines import (hold_position_limiter, scripted_finisher,
++from shepherd.agents.baselines import (brake_limiter, hold_position_limiter,
++                                       lambda_brake_limiter, scripted_finisher,
+                                        scripted_shaping_limiter)
+ 
+ __all__ = ["MissionResult", "run_episode", "run_batch", "summarize",
+@@ -53,7 +54,7 @@ __all__ = ["MissionResult", "run_episode", "run_batch", "summarize",
+ 
+ LABELS = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL",
+           "PENETRATED", "SPENT_FAIL", "TRUNCATED")
+-LIMITER_MODES = ("hold", "ring", "intercept")
++LIMITER_MODES = ("hold", "ring", "intercept", "brake", "lam20")
+ ROLES = ("limiter", "finisher")
+ 
+ 
+@@ -172,6 +173,13 @@ def _limiter_actions(env, scn, lay, mode, lims, p_att, v_att):
+                     tau_kill=tau_k, a_max=scn.limiter.a_max, margin=margin,
+                     v_max=_limiter_v_max(env, scn))
+                 for i, lid in enumerate(env.limiter_ids)}
++    # ★ 제4병목 계측 arm (docs/20 §6). 관측 전용 단순 컨트롤러 -- 학습이
++    #   이것들을 못 넘으면 "RL 이 필요하다" 를 주장할 수 없다.
++    if mode in ("brake", "lam20"):
++        a_max = scn.limiter.a_max
++        fn = brake_limiter if mode == "brake" else lambda_brake_limiter
++        return {lid: fn(env._v(lims[i]), a_max)
++                for i, lid in enumerate(env.limiter_ids)}
+     if mode == "ring":
+         return {lid: scripted_shaping_limiter(
+                     i, env.N, env._p(lims[i]), env._v(lims[i]), p_att, v_att,

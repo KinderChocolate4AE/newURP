@@ -60,6 +60,23 @@
 6. limiter MARL 이 frontier 를 실제로 이동시키는지 재평가
 ```
 
+## 3.1 커밋 대장 (리뷰 3 사이클, 사전등록 시점 증명용 — **6건**)
+
+```
+9216fd1  docs: 리뷰 3 반영 + (A)(B) 사전등록     ★ (A) 결과와 같은 커밋 -- §(A)
+                                                  '3건 기준' 강등의 근거
+548281d  audit: 반증 (A)(B) 결과
+0e1a887  docs: 후속 문구 정정
+1e19ecf  feat: 반경 3종 설정 키 분리
+f889c66  docs: 2×2 recoverability probe 사전등록  <- (2×2 결과 이전 커밋 = 증명 가능)
+0450c74  docs: 확정 큐 1·2 마감
+```
+
+**실행 환경 주기**: 위 커밋들의 감사·회귀는 전부 dirty tree (HEAD+이전 세션
+미커밋 8파일) 위에서 실행됐다. patch 스냅샷 =
+`artifacts/pre_oracle_worktree_2026-08-06.patch` (docs/56 §7). 2×2 는 clean
+worktree 권장.
+
 ## 4. 거시 프레임 (리뷰어 종합 — 채택)
 
 - 기존 환경의 질문 = "완전 robust-clean 상태를 만들 수 있는가" (인증 문제).
