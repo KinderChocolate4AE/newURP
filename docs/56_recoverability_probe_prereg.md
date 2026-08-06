@@ -103,7 +103,11 @@ budget·horizon 등 상수는 구현 시 **실행 전에** 이 문서에 추가 
 
 ```
 EARLY_PREP_NET_CAPTURE      조기 준비가 애초에 net miss 를 없앰 (net 기하 변화)
-POST_MISS_NEUTRALIZATION    miss 후 폴백이 살림 (contact / commit hard-kill)
+POST_MISS_NEUTRALIZATION    miss 후 폴백이 살림 (contact / commit hard-kill,
+                            net_spent=True 에서만)
+PRE_MISS_NEUTRALIZATION     (2026-08-06b 추가 선언, 실행 전) T−5 prep 구간에서
+                            net 해소 **전에** 접촉 무력화가 난 경우 -- miss 가
+                            발생하지 않았으므로 "miss 후 폴백" 과 합산 금지
 PENETRATED                  실패
 ```
 
@@ -184,6 +188,15 @@ fire step < t*−5 로 실측되면 `EARLY_PREP_NET_CAPTURE` 는 이 env 계약�
 **구조적으로 도달 불가**다 — 그 경우 해당 칸은 "관측 0 = 검정 불가(계약상
 불가능)" 로 보고하고, 성공/실패 어느 쪽으로도 세지 않는다. fire step 은
 판별로 실측해 기록한다.
+
+**★ 구조 사실 (P83e 첫 실행이 발견, 2×2 이전 기록)**: env 는
+`repel_margin=1.0` 하드코딩(env.py:346) → 공격자의 limiter 반발 발동 반경 =
+`1.0 × kill_radius = 0.75 m` = **접촉 반경과 동일**. 따라서 이 env 계약에서
+공격자 궤적은 접촉 반경 밖 limiter 위치에 의존하지 않는다 (V3b 의
+hold/intercept 궤적 동일의 구조적 원인). closed-loop 재계산은 매 스텝
+수행되며(§2 준수), 이 사실은 probe 해석에 반영한다: **회복 문제가 사실상
+"준-개루프 공격자 궤적에 대한 추격 도달성"으로 축소**되고, 접촉 직전 1스텝의
+반발만이 회피로 작동한다.
 
 ## 7.2 자격 자기검사 (P83 계열 — 실패 시 2×2 실행 금지)
 
