@@ -123,22 +123,26 @@ kinetic 창을 찾지 못했다. → **질문은 pre-fire mode scheduling 로 �
 접촉 도달 24/35 point · engagement event 42건 -- 전부 VETO_NO_KINETIC (42/42)
 ```
 
-- 발사 직후(fire+1)부터 개입해도 도달 가능한 모든 engagement 는 NK 안이다 —
-  2×2 의 "NK veto = 관측된 최상위 공통 구속" 이 발사 후 regime 전체로 확장
-  (동일 한정: 7판·budget).
-- 접촉 도달은 s0 에 **비단조** (fire+6 최고 7/7, fire+9 급락 2/7) — §3.4
-  선언대로 단조 결론 금지. 상태별 이질성 실재.
-- 종합하면 이 7판에서는 **발사 시점에 이미 kinetic 창이 닫혀 있었다는 가설**
-  이 강화된다 (인증 아님) — miss 가 나는 판일수록 공격자가 이미 종말 구간
-  이라는 selection 과 정합.
+- 발사 직후(fire+1)부터 개입해도 **현 planner 가 찾은** 모든 engagement 는
+  NK 안이다 (동일 한정: 7판·budget).
+- ~~접촉 도달 비단조 = 상태별 이질성~~ **철회 (리뷰 4)**: 시작 상태·horizon·
+  CEM seed 분산(3)·구간 경계가 교락 — 동일 point 반복 없이 귀속 불가.
+- ~~"발사 시점에 이미 창이 닫혀 있었다" 가설 강화~~ **철회 (리뷰 4 §2 기각)**:
+  이 결과는 planner 표현력·proxy 정렬·budget 한계와 **구분되지 않는다.**
+  특히 구 proxy 의 tie-break(L4 전역 min 거리)는 "NK 밖에서 교전하라"는 유도
+  신호가 없어 탐색을 NK 안 접촉 basin 으로 끌었을 수 있다 — 42/42 NK-안
+  결과는 "밖에 해가 없다"와 "목적함수가 안으로 유도했다" 양쪽과 일치한다.
 
-### 4.3 허용 문장 (보고서용)
+### 4.3 허용 문장 (보고서용 — 리뷰 4 확정 표현으로 교체)
 
-> 평가된 7개 net-miss 상태에서, 발사 직후부터 miss 확인 후까지의 어느 시점에
-> privileged planner (선언 budget) 를 투입해도 no-kinetic zone 밖 무력화는
-> 발견되지 않았다 (42건의 engagement 전부 zone 안, 42/42 veto). 따라서 후행
-> handoff 문제는 이 표본에서 사실상 **발사 전 mode scheduling 문제**로
-> 환원된다. 이는 budget 한정 관측이며 물리적 불가능 인증이 아니다.
+> 가장 이른 post-fire 시작점을 포함한 현재 CEM sweep 에서도 NK 밖
+> neutralization 을 찾지 못했고, 발견된 engagement 는 모두 NK 안이었다.
+> 이는 fire 시점의 safe fallback recoverability 가 낮다는 가설을 강화하지만,
+> planner 표현력·proxy 정렬·search budget 의 한계와 구분되지 않았다.
+> Post-fire recoverability 는 확인되지 않았으며, pre-fire mode scheduling 이
+> 다음 후보 설명이다.
+
+("환원됐다" 는 쓰지 않는다 — pre-fire 개입을 실행한 적이 없다. 리뷰 4 §3 기각.)
 
 ### 4.4 다음 (별도 사전등록)
 
