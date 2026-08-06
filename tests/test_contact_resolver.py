@@ -163,3 +163,37 @@ def test_p80_veto_not_consumed_then_reevaluated():
     ev2 = env._resolve_contacts(np.zeros(3), [np.zeros(3)], np.zeros(3),
                                 [np.zeros(3)], d_asset=1e9)     # zone 밖 -> 해소
     assert ev2[0].outcome == "KILL" and env.hard_kill
+
+
+# ------------------------------------------- 반경 3종 키 분리 (리뷰 3) ---
+def test_radius_keys_default_to_kill_radius():
+    """r_commit/r_contact 기본 None -> 기존 kill_radius 와 동일 값 (배선만 분리)."""
+    env, scn, lay = _wrapped(SystemSpec(enabled=True), SLOW_LIMITER)
+    res = run_episode(env, scn, lay, seed=0, limiter_mode="intercept",
+                      fire_mode="never", baseline_commit=True)
+    kr = float(env.inner.kill_radius)
+    margin_expect = kr + 0.5 * (env.a_lim_max - env.inner.a_att_max) * env.spec.tau_kill ** 2
+    assert env.commits, "커밋이 없어 검정 불가"
+    assert env.commits[0].margin == pytest.approx(margin_expect)
+
+
+def test_radius_keys_independent():
+    """r_commit 은 커밋 margin 만, r_contact 은 접촉 판정만 움직인다."""
+    env, _, _ = _wrapped(SystemSpec(enabled=True, contact_resolver=True,
+                                    p_kill=1.0, r_contact=0.3))
+    env.reset(seed=0)
+    at = np.array([0.5, 0.0, 0.0])           # 0.75 안 / 0.3 밖
+    assert env._resolve_contacts(at, [np.zeros(3)], at, [np.zeros(3)], 1e9) == []
+    at2 = np.array([0.25, 0.0, 0.0])         # 0.3 안
+    ev = env._resolve_contacts(at2, [np.zeros(3)], at2, [np.zeros(3)], 1e9)
+    assert len(ev) == 1 and ev[0].margin == pytest.approx(0.3)
+    # r_shape (viability) 는 두 키와 무관 -- 동결 env 소관
+    env2, scn2, lay2 = _wrapped(SystemSpec(enabled=True, r_commit=2.0,
+                                           r_contact=0.1), SLOW_LIMITER)
+    env3, _, _ = _wrapped(SystemSpec(enabled=True), SLOW_LIMITER)
+    env2.reset(seed=0); env3.reset(seed=0)
+    lims, fin, att = env2._states()
+    a = env2._vshot(env2._p(att), env2._v(att), [env2._p(l) for l in lims], fin, seed=0)
+    lims3, fin3, att3 = env3._states()
+    b = env3._vshot(env3._p(att3), env3._v(att3), [env3._p(l) for l in lims3], fin3, seed=0)
+    assert a.v_shot_soft == b.v_shot_soft and a.boxed_in == b.boxed_in

@@ -96,7 +96,15 @@ class SystemSpec:
     enabled: bool = True         # False -> 동결 env 와 bit-identical (P6)
     # R1 접촉 event resolver (docs/54 §1). 기본 off -> 기존 경로와 bit-identical (P78).
     contact_resolver: bool = False
-    r_contact: Optional[float] = None   # None -> inner.kill_radius (이름만 분리, 새 값 없음)
+    # ★ 반경 3종 의미 분리 (리뷰 3 -- 값이 아니라 설정 키를 먼저 분리한다):
+    #     r_shape    viability surrogate 의 escape suppression 반경
+    #                = scenario.limiter.kill_radius (동결 env 소관, 여기 키 없음)
+    #     r_commit   예측 커밋 기하의 허용 반경 (margin 식의 기저)
+    #     r_contact  실제 접촉 event 반경
+    #   둘 다 None -> inner.kill_radius (전부 0.75, 기존과 bit-identical).
+    #   수치 calibration 은 별도 실험 후 -- 지금은 배선 분리만.
+    r_commit: Optional[float] = None
+    r_contact: Optional[float] = None
     # R2 net-miss handoff (docs/54 §1). 기본 True = 현행(miss -> SPENT_FAIL 종료).
     # False 면 spent-fail 종료만 억제하고 에피소드가 계속된다 (FALLBACK).
     miss_terminates: bool = True
@@ -269,7 +277,9 @@ class ModeSystemEnv:
                 proposals.append(i)
 
         # --- 2. 커밋 시점에 판정 상태를 동결 (네트 S5 규약과 동일) ------------
-        margin = (inner.kill_radius
+        r_commit = (float(spec.r_commit) if spec.r_commit is not None
+                    else float(inner.kill_radius))
+        margin = (r_commit
                   + 0.5 * (self.a_lim_max - inner.a_att_max) * spec.tau_kill ** 2)
         for i in proposals:
             p_lim, v_lim = inner._p(lims[i]), inner._v(lims[i])
