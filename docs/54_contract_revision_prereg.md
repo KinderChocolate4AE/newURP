@@ -175,11 +175,20 @@ intercept  SPENT_FAIL종료 0 · net_spent 7 · miss후 무력화 0/7 (전부 �
   공격자 간격 ~8–11 m, 공격자 궤적은 두 팔에서 동일(limiter 가 repel 반경
   1 m 밖 — 영향 0), intercept 폴백은 침투 시점까지 10.9→6.8 m 이 최선.
   즉 **꼬리 추격 기하** (docs/29 §12.2 "꼬리 추격 불가·선도 차단 가능" 정합).
-- **증거 범위를 정확히**: R2 의 국면 전환 기제는 P81 + (ii) 로 검증됐다.
-  "miss 후 폴백 무력화" 는 **평가된 scripted intercept 폴백·발견된 7 miss 판**
-  에서 0 이다. 이것이 폴백 국면의 물리 한계인지는 **미판정** — miss 시점
-  상태에서의 요격 가능성 상한은 §4 의 oracle 3-way 없이 말하지 않는다.
-  (miss 가 나는 판일수록 공격자가 이미 지나친 기하라는 selection 도 있다.)
+- **증거 범위를 정확히 (리뷰 3 §5 반영 — "전술 난이도 신호" 표현 철회)**:
+  R2 의 국면 전환 기제는 P81 + (ii) 로 검증됐다. 허용되는 문장은 이것뿐이다:
+
+  > handoff transition 은 구현됐으나, 평가된 miss 7건에서 현재 scripted
+  > controller 는 neutralization 을 만들지 못했다. 원인이 (i) miss-conditioned
+  > state selection (미스가 나는 판 = 이미 불리한 조건부 분포) (ii) scripted
+  > 폴백의 straw man 가능성 (두 arm 이 공격자 전이에 인과효과 0 = 실질 동일
+  > 처치) (iii) 늦은 handoff 시점 (net 완전 실패 후에만 폴백 시작)
+  > (iv) n=7 표본 (v) contact model/resolver 의미론 미검증 중 무엇인지는
+  > **미판정**이다.
+
+  판정 도구 = 2×2 counterfactual replay (handoff 시점 {miss, miss−5tick} ×
+  controller {intercept, privileged MPC/oracle}) + recoverability curve.
+  §4 의 3-way 로 이관하되, 이 replay 가 그보다 싸고 먼저다.
 
 ### R3 — robust-clean 인증과 임무 성공의 분리
 
@@ -263,15 +272,80 @@ kill event 의 `d_nom` 분포 = 0.056~0.748. 선분 근사 오차 상한
 근사에 강건하다. (역방향 오차도 동일 한계로 존재: 이산 격자 계약이므로
 `d_cont >= d_sampled − 0.033` 까지만 주장한다, 오류 9 규율.)
 
-**판정: 방향 재현 인정** (사전등록의 "차이가 두 축으로 설명되면" 조항).
+**판정 (2026-08-06 외부 리뷰 3 반영, 두 줄로 분리 보고한다)**:
+
+```
+V2 primary numerical replication      FAIL   (대역 ±0.15 밖)
+V2 preregistered mechanistic attribution  PASS   (swept 축 사건 단위 귀속)
+```
+
 C1 0.941 침투 → C2R 0.000, 무력화 0 → 1.000 -- resolver 부재가 병목이라는
-docs/53 §4.5b 의 인과 방향이 실 구현에서 재현됐고, 초과분(+0.294)은 swept 가
-endpoint 상위집합(같은 event 는 같거나 이른 스텝에 검출 + 통과 5판 추가)이라는
-**선언된 차이 축**으로 전량 귀속된다. 대역·판정식은 사후 변경하지 않는다.
+docs/53 §4.5b 의 인과 방향은 유지되고, 초과분은 swept 가 endpoint 상위집합
+(같은 event 는 같거나 이른 스텝에 검출 + 통과 5판 추가)이라는 **선언된 차이
+축**으로 귀속된다. 대역·판정식은 사후 변경하지 않으며, "V2 통과" 라는 표현은
+쓰지 않는다.
+
+**contingency (리뷰 3 §2 요구)**: 무력화 +5 vs 침투 −4 의 잔여 1판 = **ep44**,
+프로토타입에서 무력화도 침투도 아닌 무결말(지평선)이었다. 즉
+`+5 무력화 = −4 침투 −1 무결말`, 누수 없음. swept-only 5판의 C2 결말 =
+침투 4 (ep19·42·47·57) + 무결말 1 (ep44).
+
+**잔여 caveat (리뷰 3)**: "같은 event ±1 스텝" 은 완전한 사건 동치가 아니다 --
+1 tick 차이가 다른 terminal 과의 우선순위를 바꿀 수 있는 사례는 이 17판에선
+관측되지 않았으나 일반 보장은 없다. 무력화 1.000 은 **`Pk=1` contact-event
+semantics check** 이지 성능 추정치가 아니다 (Pk sweep = §3.2).
 
 **남는 것**: 프로토타입의 0.706/0.235 는 endpoint 검출의 산물이었다 -- 실 계약
 (swept) 아래 boxed 상태의 실측 무력화는 이보다 높다. 이 수치를 boxed 상태
 일반의 포획확률로 읽지 않는다 (17 판·intercept arm·A2 단일 공격자·Pk=1).
+
+### 3.2 리뷰 3 반증 실험 사전등록 (2026-08-06, ★ 결과 보기 전)
+
+**(A) 실 궤적 접촉 검증** — chord 는 근사다. 17 kill event 스텝에서 backend 의
+실제 step 내부 상대 궤적 최소거리를 직접 계산한다.
+
+- 재구성: `a_rel = (v_rel(t+1) − v_rel(t)) / dt` (구분 상수 가속 가정),
+  `r(s) = r0 + v_rel(t)·s + ½·a_rel·s²`, `s ∈ [0, dt]` 를 밀집 표본으로 최소화.
+- **모형 자기검사를 먼저 통과해야 한다**: `|r(dt) − r1| < 1e−6` (재구성이
+  backend 적분과 일치하는가). 불일치면 결과를 쓰지 않고 적분 방식을 먼저 밝힌다.
+- 판정: 각 kill 의 실 최소거리 `d_exact` 보고. `d_exact > r_contact` 인 event
+  수 = **chord false positive 수**. 사전 기대 = 경계 여유 < 0.033 인 2건(ep19·
+  ep47)만 위험. **3건 이상이면 "15/17 강건" 주장을 철회**하고 swept 귀속을
+  재작성한다. 판정식은 결과 후 불변경.
+
+**(A) 결과 (2026-08-06 — `results/contact_exact_audit.json`)**:
+
+- 모형 자기검사 1차 **FAIL** 2회 -- 둘 다 사전등록 경로대로 원인을 먼저 밝혔다:
+  ① 주차(stage 5)가 event 직후 소진 limiter 를 PARK 로 옮겨 post 상태가 오염
+  (스냅샷을 resolver 호출 시점으로 이동해 해소) ② 잔여 오차 max 0.107 ≈
+  ½·a_rel·dt² = **backend 적분기가 semi-implicit Euler** (`analytic.py:123-129`,
+  `v_new = v + a·dt` → `p += v_new·dt`)라서 등가속 이차 재구성과 끝점이 원리적
+  으로 불일치.
+- **적분기 확정의 귀결**: backend 의 step 변위는 `v_new` 선형 -- **chord 가
+  이 이산 map 의 정확한(끝점 오차 0) 선형 임베딩**이고, 이차 재구성은 "물리적
+  평활화" 대안이다. 표본 간 거동은 미정의(오류 9)이므로 어느 쪽도 "참 궤적"
+  이 아니며, 둘의 차이(실측 최대 ±0.076)가 보간 모호성의 크기다.
+- 이차 평활화 기준 `d_exact > 0.75` = **ep19 단 1건** (chord 0.731 / quadratic
+  0.758 -- 경계 ±0.01 애매). ep47 은 잔존(0.716). 사전등록 철회 조건(3건 이상)
+  **미달** → 판정: **16/17 kill 이 두 보간 모두에서 접촉으로 강건**, ep19 는
+  경계-모호로 재분류 (종전 "2/17 위험" 중 1건 해소·1건 유지).
+- chord 오차 상한 0.033 논법은 **철회한다** -- 그 유도는 "정확한 이차 궤적의
+  끝점" 가정에 의존하는데 적분기가 그 가정을 만족하지 않는다 (리뷰 3 §3 의
+  조건 1 위반 확인). 대체 근거 = 위의 두-보간 직접 비교.
+
+**(B) Pk sweep** — `Pk=1` 무력화 1.000 을 semantics check 에서 곡선의 한 점으로.
+
+- boxed 17판 × `Pk ∈ {0, 0.25, 0.5, 0.75, 1.0}` × Bernoulli seed 3종
+  (`seed_ns` 변경으로 독립 draw). F-arm 설정(실 계약 두 플래그 on).
+- 기록: episode 무력화·침투 · **event 수준** (episode 당 contact event 수,
+  event 당 kill 빈도) · limiter 소모 · veto.
+- 판정 (성능 대역 없음): (i) event 당 kill 빈도가 Pk 의 이항 CI95 안 (구현
+  sanity) (ii) episode 무력화·침투 vs Pk 곡선 보고 -- **재시도 기회**(첫 접촉
+  실패 후 추가 contact event)가 곡선을 Pk 보다 위로 올리는지가 관심 축.
+- contact-specific lethality 모형이 없다는 한계는 그대로다: 이 sweep 은
+  "Pk 가 얼마든 계약이 일관되게 작동한다" 와 frontier 의 Pk 민감도를 줄 뿐,
+  실제 관통 접촉의 Pk 값을 정하지 않는다 (리뷰 3 §4 기각 유지).
+- 판정식은 결과 후 불변경.
 
 ---
 
