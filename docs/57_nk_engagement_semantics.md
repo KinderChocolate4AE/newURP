@@ -90,3 +90,62 @@ Pk         1 (deterministic lethality upper-bound probe 지위 유지)
 물리적 불가능·"창이 없다" 단정 금지 (budget 한정, 오류 13 동형).
 
 ### 3.5 판정식은 결과 후 불변경.
+
+---
+
+## 4. ★ sweep 결과 (2026-08-07 — `results/latest_start_sweep.json`)
+
+실행 메타: clean HEAD (sweep 배선 커밋 후) · §7.1 budget 그대로 · Pk=1 ·
+per-point 384 rollouts × 35 point ≈ 5.5 h.
+
+### 4.1 판정 (§3.4 해석표)
+
+```
+35/35 point 전부 PENETRATED · NO_SOLUTION_WITHIN_BUDGET 35/35
+latest_recoverable_start = None (7판 전부)
+```
+
+**"전 grid 실패" 행 적용**: 발사 후 개입으로는 이 7판·이 budget 에서 NK-밖
+kinetic 창을 찾지 못했다. → **질문은 pre-fire mode scheduling 로 승격**
+(별도 사전등록 대상). 물리적 불가능·"창이 없다" 단정은 하지 않는다.
+
+### 4.2 기전 (선언 기록 지표 내)
+
+| fire+k | 접촉 도달 | min_swept 중앙 |
+|---:|---:|---:|
+| +1 | 5/7 | 0.521 |
+| +3 | 5/7 | 0.413 |
+| +4 | 5/7 | 0.592 |
+| +6 | **7/7** | 0.271 |
+| +9 | 2/7 | 0.957 |
+
+```
+접촉 도달 24/35 point · engagement event 42건 -- 전부 VETO_NO_KINETIC (42/42)
+```
+
+- 발사 직후(fire+1)부터 개입해도 도달 가능한 모든 engagement 는 NK 안이다 —
+  2×2 의 "NK veto = 관측된 최상위 공통 구속" 이 발사 후 regime 전체로 확장
+  (동일 한정: 7판·budget).
+- 접촉 도달은 s0 에 **비단조** (fire+6 최고 7/7, fire+9 급락 2/7) — §3.4
+  선언대로 단조 결론 금지. 상태별 이질성 실재.
+- 종합하면 이 7판에서는 **발사 시점에 이미 kinetic 창이 닫혀 있었다는 가설**
+  이 강화된다 (인증 아님) — miss 가 나는 판일수록 공격자가 이미 종말 구간
+  이라는 selection 과 정합.
+
+### 4.3 허용 문장 (보고서용)
+
+> 평가된 7개 net-miss 상태에서, 발사 직후부터 miss 확인 후까지의 어느 시점에
+> privileged planner (선언 budget) 를 투입해도 no-kinetic zone 밖 무력화는
+> 발견되지 않았다 (42건의 engagement 전부 zone 안, 42/42 veto). 따라서 후행
+> handoff 문제는 이 표본에서 사실상 **발사 전 mode scheduling 문제**로
+> 환원된다. 이는 budget 한정 관측이며 물리적 불가능 인증이 아니다.
+
+### 4.4 다음 (별도 사전등록)
+
+```
+(i)  pre-fire mode scheduling probe -- full-fidelity rollout 필요 (경량 클론
+     동치가 발사 전 미성립, §3.2). "언제부터 fallback-ready 기하를 준비해야
+     NK-밖 창이 열리는가" 를 발사 전 축으로. = 사실상 3-way 의 첫 arm
+(ii) r_nk 민감도 (계약 민감도 분석으로만 -- 성능 구제 금지, 리뷰 4 규율)
+(iii) frontier 보고 시 attacker-limiter coupling 한계 명시 (docs/56 §9.2b)
+```

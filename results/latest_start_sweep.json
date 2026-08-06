@@ -1,0 +1,1525 @@
+{
+  "meta": {
+    "contract": "docs/57 §3 (커밋 d15f01a)",
+    "Pk": 1.0,
+    "controller": "ORC only",
+    "budget_per_point": 384
+  },
+  "records": [
+    {
+      "arm": "BASE",
+      "episode": 2,
+      "t_fire": 12,
+      "t_star": 20,
+      "grid": [
+        13,
+        15,
+        16,
+        18,
+        21
+      ]
+    },
+    {
+      "episode": 2,
+      "arm": "SW-ORC",
+      "s0": 13,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.6783190773561928
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 52,
+      "min_swept_after": 0.678,
+      "d_asset_final": 0.833,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          50,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        3.029,
+        7.99,
+        15.2,
+        16.375
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 1
+    },
+    {
+      "episode": 2,
+      "arm": "SW-ORC",
+      "s0": 15,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.3315888421009607
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 52,
+      "min_swept_after": 0.332,
+      "d_asset_final": 0.946,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          50,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          0,
+          51,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        1.915,
+        7.404,
+        14.815,
+        15.932
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 3
+    },
+    {
+      "episode": 2,
+      "arm": "SW-ORC",
+      "s0": 16,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.522401953643662
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 52,
+      "min_swept_after": 0.522,
+      "d_asset_final": 0.868,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          51,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          0,
+          52,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        1.274,
+        6.972,
+        14.162,
+        15.203
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 4
+    },
+    {
+      "episode": 2,
+      "arm": "SW-ORC",
+      "s0": 18,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.19200297012903575
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 52,
+      "min_swept_after": 0.192,
+      "d_asset_final": 0.833,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          52,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        0.306,
+        6.637,
+        13.693,
+        14.835
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 6
+    },
+    {
+      "episode": 2,
+      "arm": "SW-ORC",
+      "s0": 21,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -1.2660521952050117
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 52,
+      "min_swept_after": 1.266,
+      "d_asset_final": 0.833,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        5.153,
+        11.142,
+        1.266,
+        10.539
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 9
+    },
+    {
+      "arm": "VERDICT",
+      "episode": 2,
+      "latest_recoverable_start": null
+    },
+    {
+      "arm": "BASE",
+      "episode": 26,
+      "t_fire": 12,
+      "t_star": 20,
+      "grid": [
+        13,
+        15,
+        16,
+        18,
+        21
+      ]
+    },
+    {
+      "episode": 26,
+      "arm": "SW-ORC",
+      "s0": 13,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.22004894565880345
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 56,
+      "min_swept_after": 0.22,
+      "d_asset_final": 0.697,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          3,
+          55,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          3,
+          56,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        9.787,
+        6.265,
+        8.768,
+        0.602
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 1
+    },
+    {
+      "episode": 26,
+      "arm": "SW-ORC",
+      "s0": 15,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.41290090006795444
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 56,
+      "min_swept_after": 0.413,
+      "d_asset_final": 0.673,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          3,
+          56,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        9.571,
+        5.52,
+        7.697,
+        0.413
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 3
+    },
+    {
+      "episode": 26,
+      "arm": "SW-ORC",
+      "s0": 16,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.7699708419020648
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 56,
+      "min_swept_after": 0.77,
+      "d_asset_final": 0.673,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        9.525,
+        5.272,
+        7.097,
+        0.77
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 4
+    },
+    {
+      "episode": 26,
+      "arm": "SW-ORC",
+      "s0": 18,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.31157660500507295
+      ],
+      "rollouts": 384,
+      "plan_kind": "policy",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 56,
+      "min_swept_after": 0.312,
+      "d_asset_final": 0.847,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          2,
+          52,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          2,
+          53,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        6.491,
+        5.712,
+        5.682,
+        5.722
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 6
+    },
+    {
+      "episode": 26,
+      "arm": "SW-ORC",
+      "s0": 21,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.7794984960615229
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 56,
+      "min_swept_after": 0.779,
+      "d_asset_final": 0.673,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        15.06,
+        2.153,
+        5.999,
+        18.689
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 9
+    },
+    {
+      "arm": "VERDICT",
+      "episode": 26,
+      "latest_recoverable_start": null
+    },
+    {
+      "arm": "BASE",
+      "episode": 35,
+      "t_fire": 15,
+      "t_star": 23,
+      "grid": [
+        16,
+        18,
+        19,
+        21,
+        24
+      ]
+    },
+    {
+      "episode": 35,
+      "arm": "SW-ORC",
+      "s0": 16,
+      "t_star": 23,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.9497946376846523
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 15,
+      "handoff_step": 23,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 51,
+      "min_swept_after": 0.95,
+      "d_asset_final": 0.891,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        9.124,
+        1.047,
+        14.632,
+        14.532
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 1
+    },
+    {
+      "episode": 35,
+      "arm": "SW-ORC",
+      "s0": 18,
+      "t_star": 23,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -1.1069084563491052
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 15,
+      "handoff_step": 23,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 51,
+      "min_swept_after": 1.107,
+      "d_asset_final": 0.891,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        9.155,
+        1.107,
+        13.395,
+        13.807
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 3
+    },
+    {
+      "episode": 35,
+      "arm": "SW-ORC",
+      "s0": 19,
+      "t_star": 23,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.9424278080474893
+      ],
+      "rollouts": 384,
+      "plan_kind": "policy",
+      "label": "PENETRATED",
+      "fire_step": 15,
+      "handoff_step": 23,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 51,
+      "min_swept_after": 0.942,
+      "d_asset_final": 0.891,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        3.169,
+        2.061,
+        1.601,
+        2.286
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 4
+    },
+    {
+      "episode": 35,
+      "arm": "SW-ORC",
+      "s0": 21,
+      "t_star": 23,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.03989242026864088
+      ],
+      "rollouts": 384,
+      "plan_kind": "policy",
+      "label": "PENETRATED",
+      "fire_step": 15,
+      "handoff_step": 23,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 51,
+      "min_swept_after": 0.04,
+      "d_asset_final": 0.913,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          2,
+          49,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          2,
+          50,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          2,
+          51,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        2.841,
+        1.606,
+        1.293,
+        1.597
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 6
+    },
+    {
+      "episode": 35,
+      "arm": "SW-ORC",
+      "s0": 24,
+      "t_star": 23,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -1.4928203559506863
+      ],
+      "rollouts": 384,
+      "plan_kind": "policy",
+      "label": "PENETRATED",
+      "fire_step": 15,
+      "handoff_step": 23,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 51,
+      "min_swept_after": 1.493,
+      "d_asset_final": 0.891,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        2.146,
+        1.817,
+        1.54,
+        1.531
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 9
+    },
+    {
+      "arm": "VERDICT",
+      "episode": 35,
+      "latest_recoverable_start": null
+    },
+    {
+      "arm": "BASE",
+      "episode": 46,
+      "t_fire": 14,
+      "t_star": 22,
+      "grid": [
+        15,
+        17,
+        18,
+        20,
+        23
+      ]
+    },
+    {
+      "episode": 46,
+      "arm": "SW-ORC",
+      "s0": 15,
+      "t_star": 22,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.5206710102304929
+      ],
+      "rollouts": 384,
+      "plan_kind": "policy",
+      "label": "PENETRATED",
+      "fire_step": 14,
+      "handoff_step": 22,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 55,
+      "min_swept_after": 0.521,
+      "d_asset_final": 0.889,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          50,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          0,
+          51,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        5.791,
+        4.837,
+        4.58,
+        4.856
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 1
+    },
+    {
+      "episode": 46,
+      "arm": "SW-ORC",
+      "s0": 17,
+      "t_star": 22,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.7544335872195906
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 14,
+      "handoff_step": 22,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 55,
+      "min_swept_after": 0.754,
+      "d_asset_final": 0.906,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        16.02,
+        19.901,
+        0.754,
+        16.509
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 3
+    },
+    {
+      "episode": 46,
+      "arm": "SW-ORC",
+      "s0": 18,
+      "t_star": 22,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.6162654779338472
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 14,
+      "handoff_step": 22,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 55,
+      "min_swept_after": 0.616,
+      "d_asset_final": 0.938,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          2,
+          52,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          2,
+          53,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        10.802,
+        15.853,
+        3.419,
+        9.574
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 4
+    },
+    {
+      "episode": 46,
+      "arm": "SW-ORC",
+      "s0": 20,
+      "t_star": 22,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.223559207868883
+      ],
+      "rollouts": 384,
+      "plan_kind": "policy",
+      "label": "PENETRATED",
+      "fire_step": 14,
+      "handoff_step": 22,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 55,
+      "min_swept_after": 0.224,
+      "d_asset_final": 0.974,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          2,
+          52,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          2,
+          53,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          2,
+          54,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        3.616,
+        2.886,
+        3.019,
+        2.983
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 6
+    },
+    {
+      "episode": 46,
+      "arm": "SW-ORC",
+      "s0": 23,
+      "t_star": 22,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -1.1908690279178813
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 14,
+      "handoff_step": 22,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 55,
+      "min_swept_after": 1.191,
+      "d_asset_final": 0.906,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        12.982,
+        13.341,
+        1.191,
+        12.08
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 9
+    },
+    {
+      "arm": "VERDICT",
+      "episode": 46,
+      "latest_recoverable_start": null
+    },
+    {
+      "arm": "BASE",
+      "episode": 76,
+      "t_fire": 12,
+      "t_star": 20,
+      "grid": [
+        13,
+        15,
+        16,
+        18,
+        21
+      ]
+    },
+    {
+      "episode": 76,
+      "arm": "SW-ORC",
+      "s0": 13,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.13299129697290538
+      ],
+      "rollouts": 384,
+      "plan_kind": "policy",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 51,
+      "min_swept_after": 0.133,
+      "d_asset_final": 0.713,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          47,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          0,
+          48,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        5.203,
+        4.507,
+        4.203,
+        4.394
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 1
+    },
+    {
+      "episode": 76,
+      "arm": "SW-ORC",
+      "s0": 15,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.22710604842420137
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 51,
+      "min_swept_after": 0.227,
+      "d_asset_final": 0.691,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          49,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          0,
+          50,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        2.339,
+        8.321,
+        10.456,
+        5.675
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 3
+    },
+    {
+      "episode": 76,
+      "arm": "SW-ORC",
+      "s0": 16,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.3284165794594352
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 51,
+      "min_swept_after": 0.328,
+      "d_asset_final": 0.666,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          49,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          0,
+          50,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          0,
+          51,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        1.551,
+        8.356,
+        10.33,
+        5.842
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 4
+    },
+    {
+      "episode": 76,
+      "arm": "SW-ORC",
+      "s0": 18,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.27317400068661946
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 51,
+      "min_swept_after": 0.273,
+      "d_asset_final": 0.625,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          51,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        0.356,
+        7.675,
+        9.633,
+        6.82
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 6
+    },
+    {
+      "episode": 76,
+      "arm": "SW-ORC",
+      "s0": 21,
+      "t_star": 20,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.9570681513767001
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 12,
+      "handoff_step": 20,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 51,
+      "min_swept_after": 0.957,
+      "d_asset_final": 0.625,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        10.227,
+        0.957,
+        10.639,
+        13.496
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 9
+    },
+    {
+      "arm": "VERDICT",
+      "episode": 76,
+      "latest_recoverable_start": null
+    },
+    {
+      "arm": "BASE",
+      "episode": 95,
+      "t_fire": 7,
+      "t_star": 15,
+      "grid": [
+        8,
+        10,
+        11,
+        13,
+        16
+      ]
+    },
+    {
+      "episode": 95,
+      "arm": "SW-ORC",
+      "s0": 8,
+      "t_star": 15,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.8017256841581065
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 7,
+      "handoff_step": 15,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 57,
+      "min_swept_after": 0.802,
+      "d_asset_final": 0.496,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        1.153,
+        9.457,
+        2.15,
+        20.877
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 1
+    },
+    {
+      "episode": 95,
+      "arm": "SW-ORC",
+      "s0": 10,
+      "t_star": 15,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.6729496330199622
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 7,
+      "handoff_step": 15,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 57,
+      "min_swept_after": 0.673,
+      "d_asset_final": 0.496,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          57,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        0.779,
+        9.395,
+        1.871,
+        20.812
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 3
+    },
+    {
+      "episode": 95,
+      "arm": "SW-ORC",
+      "s0": 11,
+      "t_star": 15,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.5915111575005841
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 7,
+      "handoff_step": 15,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 57,
+      "min_swept_after": 0.592,
+      "d_asset_final": 0.496,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          3,
+          57,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        10.321,
+        17.721,
+        12.327,
+        0.905
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 4
+    },
+    {
+      "episode": 95,
+      "arm": "SW-ORC",
+      "s0": 13,
+      "t_star": 15,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.2711470514764972
+      ],
+      "rollouts": 384,
+      "plan_kind": "policy",
+      "label": "PENETRATED",
+      "fire_step": 7,
+      "handoff_step": 15,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 57,
+      "min_swept_after": 0.271,
+      "d_asset_final": 0.52,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          2,
+          51,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          2,
+          52,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        10.396,
+        9.738,
+        9.682,
+        9.82
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 6
+    },
+    {
+      "episode": 95,
+      "arm": "SW-ORC",
+      "s0": 16,
+      "t_star": 15,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.5668932235599099
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 7,
+      "handoff_step": 15,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 57,
+      "min_swept_after": 0.567,
+      "d_asset_final": 0.689,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          1,
+          54,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          1,
+          55,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        15.514,
+        4.165,
+        20.572,
+        19.913
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 9
+    },
+    {
+      "arm": "VERDICT",
+      "episode": 95,
+      "latest_recoverable_start": null
+    },
+    {
+      "arm": "BASE",
+      "episode": 98,
+      "t_fire": 13,
+      "t_star": 21,
+      "grid": [
+        14,
+        16,
+        17,
+        19,
+        22
+      ]
+    },
+    {
+      "episode": 98,
+      "arm": "SW-ORC",
+      "s0": 14,
+      "t_star": 21,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.14852725405249845
+      ],
+      "rollouts": 384,
+      "plan_kind": "policy",
+      "label": "PENETRATED",
+      "fire_step": 13,
+      "handoff_step": 21,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 56,
+      "min_swept_after": 0.149,
+      "d_asset_final": 0.473,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          50,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          0,
+          51,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        7.401,
+        6.241,
+        5.466,
+        6.296
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 1
+    },
+    {
+      "episode": 98,
+      "arm": "SW-ORC",
+      "s0": 16,
+      "t_star": 21,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.23781074659287188
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 13,
+      "handoff_step": 21,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 56,
+      "min_swept_after": 0.238,
+      "d_asset_final": 0.499,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          55,
+          "VETO_NO_KINETIC"
+        ],
+        [
+          0,
+          56,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        0.524,
+        11.507,
+        15.221,
+        5.483
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 3
+    },
+    {
+      "episode": 98,
+      "arm": "SW-ORC",
+      "s0": 17,
+      "t_star": 21,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.237457849161416
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 13,
+      "handoff_step": 21,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 56,
+      "min_swept_after": 0.237,
+      "d_asset_final": 0.468,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          56,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        0.339,
+        11.333,
+        14.883,
+        5.057
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 4
+    },
+    {
+      "episode": 98,
+      "arm": "SW-ORC",
+      "s0": 19,
+      "t_star": 21,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.2827971925797705
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 13,
+      "handoff_step": 21,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 56,
+      "min_swept_after": 0.283,
+      "d_asset_final": 0.468,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          0,
+          56,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        0.283,
+        10.871,
+        14.138,
+        4.48
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 6
+    },
+    {
+      "episode": 98,
+      "arm": "SW-ORC",
+      "s0": 22,
+      "t_star": 21,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -81.0,
+        -0.4638201506076924
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 13,
+      "handoff_step": 21,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 56,
+      "min_swept_after": 0.464,
+      "d_asset_final": 0.468,
+      "limiter_consumed": 0,
+      "contact_order": [
+        [
+          3,
+          56,
+          "VETO_NO_KINETIC"
+        ]
+      ],
+      "lim_min_dist": [
+        16.58,
+        15.472,
+        13.338,
+        0.524
+      ],
+      "bucket": "PENETRATED",
+      "fire_relative": 9
+    },
+    {
+      "arm": "VERDICT",
+      "episode": 98,
+      "latest_recoverable_start": null
+    }
+  ]
+}
