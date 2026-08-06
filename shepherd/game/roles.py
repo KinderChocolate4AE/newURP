@@ -37,6 +37,10 @@ class FinisherSpec:
     net_radius: float           # net capture radius [m]
     omega_max: float            # net-axis slew-rate limit [rad/s] (R3 parameter)
     e_net: tuple[float, float, float] = (1.0, 0.0, 0.0)   # initial net-pointing axis
+    # ★ 2026-08-05 이동성 요인 실험 (docs/51). 0.0 = 위치 고정 = 지금까지의
+    #   모든 결과가 난 조건. 기본값 0 이 회귀 방어다 -- 이 필드를 모르는
+    #   호출부는 전부 고정 포획기를 그대로 받는다 (P69).
+    a_max: float = 0.0          # 병진 가속 상한 [m/s^2]. 0 이면 병진 없음
 
 
 @dataclass(frozen=True)

@@ -34,6 +34,7 @@ from shepherd.game.finisher_fsm import FinisherFSM, FinisherState, CommitMeta, s
 from shepherd.game import viability as V
 from shepherd.sim.interface import EnvBackend
 from shepherd.agents.adversary import scripted_adversary_action
+from shepherd.agents.mobile_finisher import mobile_finisher_accel
 
 _EPS = 1e-12
 _PHASES = [FinisherState.LOADED, FinisherState.DEPLOYING,
@@ -329,7 +330,13 @@ class ShapingParallelEnv(ParallelEnv):
             a_cmd = la[:3]
             bk_action[lid] = {"a": a_cmd, "e_cmd": _unit(a_cmd, self._e(lims[i]) if i < len(lims) else (1, 0, 0))}
         axis = _unit(fin_act[:3], self._e(fin)) if len(fin_act) >= 3 else self._e(fin)
-        bk_action[self.finisher_id] = {"a": np.zeros(3), "e_cmd": axis}
+        # ★ 병진 (docs/51). `FinisherSpec.a_max = 0.0` 이 기본이고 그때
+        #   `mobile_finisher_accel` 은 정확히 zeros(3) 을 낸다 -- 즉 이 줄이
+        #   바뀌기 전과 **비트 동일**하다 (P69). 0 이 아닐 때만 움직인다.
+        a_fin = mobile_finisher_accel(
+            p_fin, self._v(fin), p_att, v_att,
+            tau=self.tau_deploy, a_max=getattr(self.sc.finisher, "a_max", 0.0))
+        bk_action[self.finisher_id] = {"a": a_fin, "e_cmd": axis}
         committed = self.fsm.state in (FinisherState.DEPLOYING, FinisherState.LOCKED)
         adv = scripted_adversary_action(
             p_att, v_att, target=self.layout.target,

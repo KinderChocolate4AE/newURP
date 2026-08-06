@@ -90,7 +90,9 @@ def mission_eval(seed0: int, episodes: int, *,
                  randomize_threat: bool = True, threat_obs: bool = True,
                  baseline_commit: bool = False,
                  records: Optional[list] = None,
-                 scripted_roles: Sequence[str] = ()) -> dict:
+                 scripted_roles: Sequence[str] = (),
+                 mobility: float = 0.0,
+                 omega_max: float | None = None) -> dict:
     """2층 임무 지표 (docs/29 §4) — regime 별로 쪼개서 낸다.
 
     **`interdiction_rate = 1 - PENETRATED` 를 그대로 쓰지 않는다.**
@@ -99,7 +101,16 @@ def mission_eval(seed0: int, episodes: int, *,
 
     `scripted_roles` 는 역할 분리(docs/48)용 -- `policy` 가 있어도 그 역할만
     스크립트로 덮어쓴다. 기본 `()` 이면 기존 호출부와 bit-identical.
+
+    `mobility` 는 이동성 요인 실험(docs/51)용 포획기 병진 가속 상한이다.
+    **기본 0.0 = 고정** -> 지금까지의 모든 결과가 난 조건이고 bit-identical.
+    0 이 아니면 `apply_mobility` 가 명령·백엔드 클램프를 **함께** 푼다.
+    `omega_max` 는 조준 슬루 상한 override 다 (기본 None = 건드리지 않음).
+
+    초기조건과 공격자 난수는 `mobility`·`omega_max` 와 무관하게 `(seed0, ep)` 로만
+    정해지므로 이 인자만 바꾼 호출들은 전부 **paired CRN** 이다 (P73).
     """
+    from shepherd.agents.mobile_finisher import apply_mobility, apply_slew_limit
     from shepherd.scripts.mission_rollout import LABELS, run_episode
 
     counts = {lab: 0 for lab in LABELS}
@@ -108,6 +119,10 @@ def mission_eval(seed0: int, episodes: int, *,
         st = build_m4_env(seed0, ep, system=system, reward=reward,
                           attacker=attacker, spawn=spawn,
                           randomize_threat=randomize_threat, threat_obs=threat_obs)
+        if mobility > 0.0:
+            apply_mobility(st.env, a_max=mobility)
+        if omega_max is not None:                  # 무한 슬루 반사실 (docs/51 §9)
+            apply_slew_limit(st.env, omega_max)
         r = run_episode(st.env, st.scn, st.lay, seed=seed0 + ep,
                         limiter_mode=limiter_mode, fire_mode=fire_mode,
                         policy=policy, baseline_commit=baseline_commit,
