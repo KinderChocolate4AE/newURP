@@ -92,6 +92,9 @@ class SystemSpec:
     a_lim_max: Optional[float] = None   # None -> scenario.limiter.a_max
     commit_threshold: float = 0.5       # Box(4) idx3 임계 (env fire logit 과 동일 규약)
     enabled: bool = True         # False -> 동결 env 와 bit-identical (P6)
+    # R1 접촉 event resolver (docs/54 §1). 기본 off -> 기존 경로와 bit-identical (P78).
+    contact_resolver: bool = False
+    r_contact: Optional[float] = None   # None -> inner.kill_radius (이름만 분리, 새 값 없음)
     seed_ns: str = "m4_hardkill"
 
 
@@ -155,7 +158,12 @@ class RewardSpec:
 
 @dataclass
 class CommitRecord:
-    """한 번의 요격 커밋. 판정에 필요한 상태를 커밋 시점에 동결한다."""
+    """한 번의 요격 커밋. 판정에 필요한 상태를 커밋 시점에 동결한다.
+
+    R1(docs/54 §1) 이후 접촉 event 도 이 record 를 재사용한다 -- `source` 가
+    provenance("commit" | "contact")이고, 접촉은 d_nom=d_min · margin=r_contact ·
+    geometric_ok=True(접촉 자체가 기하) · 즉시 해소로 채운다. 라벨 어휘는 공유.
+    """
     limiter_index: int
     commit_step: int
     resolve_step: int
@@ -165,6 +173,20 @@ class CommitRecord:
     resolved: bool = False
     outcome: str = ""             # KILL | GEOM_FAIL | PK_FAIL | VETO_NO_KINETIC
     consumed: bool = False
+    source: str = "commit"        # "commit" | "contact" (R1 provenance, docs/54)
+
+
+def _seg_min_dist(r0, r1) -> float:
+    """상대 위치 선분 r0->r1 과 원점 사이 최소거리 (swept contact, docs/54 §1).
+
+    endpoint 만 검사하면 한 스텝 안의 kill_radius 통과를 놓친다. 백엔드 적분은
+    등가속(곡선)이므로 선분은 **근사**다 -- 이산 격자 계약과 같은 지위 (오류 9).
+    """
+    r0 = np.asarray(r0, float)
+    d = np.asarray(r1, float) - r0
+    dd = float(d @ d)
+    t = 0.0 if dd < _EPS else float(np.clip(-(r0 @ d) / dd, 0.0, 1.0))
+    return float(np.linalg.norm(r0 + t * d))
 
 
 class ModeSystemEnv:
@@ -258,7 +280,7 @@ class ModeSystemEnv:
         obs, rew, terms, truncs, infos = inner.step(actions)
 
         # --- 4. 만료 커밋 해소: 가드 -> 기하 -> Pk ---------------------------
-        att2 = inner._states()[2]
+        lims2, _, att2 = inner._states()
         p_att2 = inner._p(att2)
         d_asset = float(np.linalg.norm(p_att2 - np.asarray(self.layout.target, float)))
         resolved_now: List[CommitRecord] = []
@@ -286,6 +308,16 @@ class ModeSystemEnv:
                 self.hard_kill = True
             else:
                 rec.outcome = "PK_FAIL"
+
+        # --- 4b. 접촉 event resolver (R1, docs/54 §1) -- 기본 off ------------
+        # 커밋 해소가 먼저다: pending limiter 는 접촉 검사에서 제외 (커밋은 바로
+        # 그 접촉의 예측이므로 이중 소모 금지). 라벨 신설 없음 -- KILL 이면 기존
+        # hard_kill 경로 그대로 HARD_KILL.
+        contact_events: List[CommitRecord] = []
+        if spec.contact_resolver:
+            contact_events = self._resolve_contacts(
+                p_att, [inner._p(s) for s in lims],
+                p_att2, [inner._p(s) for s in lims2], d_asset)
 
         # --- 5. 소진 limiter 주차 (다음 스텝부터 v_shot 기여 0) --------------
         for i in self.retired:
@@ -327,10 +359,53 @@ class ModeSystemEnv:
             in_no_kinetic_zone=bool(d_asset <= spec.r_nk),
             resolved=[(r.limiter_index, r.outcome, round(r.d_nom, 4),
                        round(r.margin, 4)) for r in resolved_now],
+            contacts=[(r.limiter_index, r.outcome, round(r.d_nom, 4))
+                      for r in contact_events],
         )
         for a in infos:
             infos[a] = {**infos[a], **sysinfo}
         return obs, rew, terms, truncs, infos
+
+    def _resolve_contacts(self, p_att_pre, lims_pre, p_att_post, lims_post,
+                          d_asset: float) -> List[CommitRecord]:
+        """R1 접촉 event resolver (docs/54 §1). 이번 스텝의 contact records 반환.
+
+        해소 사슬은 커밋 경로와 동일: NK veto(미소모, 재접촉 시 재평가) ->
+        소모·retire -> Bernoulli(Pk). 즉시 해소 (tau_kill 지연 없음 -- 지연은
+        예측 요격의 sense+decide 모형이고 접촉은 이미 일어난 사건이다).
+        KILL 1회 후 잔여 접촉 미평가 (terminal success 1회).
+        """
+        spec = self.spec
+        r_contact = (float(spec.r_contact) if spec.r_contact is not None
+                     else float(self.inner.kill_radius))
+        events: List[CommitRecord] = []
+        for i in range(len(lims_pre)):
+            if self.hard_kill:
+                break
+            if i in self.retired or i in self.pending:
+                continue
+            d_min = _seg_min_dist(np.asarray(p_att_pre, float) - np.asarray(lims_pre[i], float),
+                                  np.asarray(p_att_post, float) - np.asarray(lims_post[i], float))
+            if d_min > r_contact:
+                continue
+            rec = CommitRecord(limiter_index=i, commit_step=self._step_i,
+                               resolve_step=self._step_i, d_nom=d_min,
+                               margin=r_contact, geometric_ok=True,
+                               resolved=True, source="contact")
+            self.commits.append(rec)
+            events.append(rec)
+            if d_asset <= spec.r_nk:            # 커밋과 같은 거부권 (해소 시점 기준)
+                rec.outcome = "VETO_NO_KINETIC"
+                self.veto_events += 1
+                continue
+            rec.consumed = True
+            self.retired.add(i)
+            if self._bern(i, self._step_i):
+                rec.outcome = "KILL"
+                self.hard_kill = True
+            else:
+                rec.outcome = "PK_FAIL"
+        return events
 
     def _outcome_label(self, terms, truncs, infos):
         """보상용 결과 라벨. mission_rollout 의 라벨 규칙과 같은 술어를 쓴다."""
@@ -362,8 +437,9 @@ class ModeSystemEnv:
         for r in self.commits:
             if r.outcome:
                 out[r.outcome] += 1
-        out["committed"] = len(self.commits)
+        out["committed"] = sum(1 for r in self.commits if r.source == "commit")
         out["consumed"] = sum(1 for r in self.commits if r.consumed)
+        out["contact_events"] = sum(1 for r in self.commits if r.source == "contact")
         return out
 
 
