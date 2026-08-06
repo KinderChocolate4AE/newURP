@@ -242,15 +242,27 @@ contact event 총 11건 -- 전부 VETO_NO_KINETIC (11/11).
 접촉 시점이 모두 자산 6 m (r_nk) 안. limiter 소모 0 (veto 는 미소모 계약).
 ```
 
-**구속 제약은 kinematics 가 아니라 no-kinetic zone 계약이다**: privileged
-planner 는 5/7 판에서 실제 접촉에 도달했으나, 이 7개 상태에서 도달 가능한
-접촉 창은 (현재 budget 기준) **전부 NK zone 안**이었다 — "접촉이 불가능"이
-아니라 **"허용된 접촉이 불가능"** (reachable-contact ∩ {d_asset > 6 m} = ∅,
-평가된 budget 한정).
+**관측된 최상위 공통 구속 = no-kinetic veto** (2026-08-07 리뷰 정정 반영 —
+과대 표현 제한): controller 강도와 준비 시점은 contact reachability 를 각각
+개선했지만, **현재 표본(7판)·현재 budget 에서 발견된 모든 contact 는 NK zone
+안에서 발생해 veto 됐다.** "kinematics 가 병목이 아니다" 로 일반화하지 않는다
+— 접촉 미도달 판(TP-ORC 2/7·T0-ORC 5/7)에서는 기동성·탐색 budget 이 여전히
+병목일 수 있다. "허용된 접촉이 불가능하다" 도 쓰지 않는다 — 정확히는 **"해당
+7개 상태·현재 budget 에서 NK 밖 contact 를 찾지 못했다"** 다.
 
 부수 관측 (성공으로 세지 않음): 도달성 수준에서는 controller 격차(ORC ≻ INT:
 INT 는 0/14 접촉)와 시점 격차(TP ≻ T0: 5/7 vs 2/7) **둘 다 실재**한다.
 둘 다 라벨을 바꾸지 못했다 — veto 가 상위 구속이므로.
+
+### 9.2b ★ attacker–limiter coupling 한계 (frontier 보고 의무 명시)
+
+P83e 의 구조 사실(반발 반경 = 접촉 반경)의 귀결: **attacker–limiter coupling
+은 contact/repulsion 반경(0.75 m)에서야 시작된다.** 따라서 (i) 이 probe 의
+접촉 도달성은 실제 회피형 공격자보다 낙관적일 수 있고 (ii) 협력 shepherding
+이 접촉 전 공격자 반응을 유도하는 채널이 현 모델에 없으며 (iii) closed-loop
+oracle 이라도 이 국면의 공격자는 사실상 open-loop 에 가깝다. **향후 모든
+frontier 결과에 이 한계를 명시한다.** (지금 공격자 모델을 바꾸지는 않는다 —
+모델링 축으로 등재만.)
 
 ### 9.3 증거 범위 (허용 문장)
 

@@ -408,6 +408,12 @@ class ModeSystemEnv:
                           d_asset: float) -> List[CommitRecord]:
         """R1 접촉 event resolver (docs/54 §1). 이번 스텝의 contact records 반환.
 
+        ★ 의미 (docs/57 감사 판정 B): 이 event 는 물리 충돌이 아니라 **근접
+        kinetic engagement opportunity** 다 — kill_radius 는 폭발형 카미카제
+        요격의 실행 반경(roles.py:26)이고 backend 에 충돌 물리는 없다. NK veto
+        = 기폭 보류 (docs/29 §13 파괴적 요격 금지). 그래서 veto 시 미소모가
+        인과적으로 맞다. "contact" 명칭 정정(→engagement)은 별도 chore.
+
         해소 사슬은 커밋 경로와 동일: NK veto(미소모, 재접촉 시 재평가) ->
         소모·retire -> Bernoulli(Pk). 즉시 해소 (tau_kill 지연 없음 -- 지연은
         예측 요격의 sense+decide 모형이고 접촉은 이미 일어난 사건이다).
