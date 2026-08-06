@@ -160,6 +160,27 @@ F   침투 0.000 · 하드킬/무력화 1.000 · 종료 스텝 17   (C2R 과 ±0
   (iv) hold 팔의 net_spent 판 결말 분해(침투/절단) 보고 — 무력화 요구 안 함
 - **결과를 본 뒤 이 판정식을 바꾸지 않는다.**
 
+#### V3b 결과 (2026-08-06 — `results/handoff_audit.json`, n=100×2)
+
+```
+hold       SPENT_FAIL종료 0 · net_spent 7 · miss후 무력화 0/7 (전부 침투)
+intercept  SPENT_FAIL종료 0 · net_spent 7 · miss후 무력화 0/7 (전부 침투)
+           (전체: NET_CAPTURE 16 · HARD_KILL 35 · PENETRATED 49)
+```
+
+- (i) ✓ (ii) ✓ — **국면 전환은 작동한다**: miss 7판이 즉시 종료 대신
+  30여 스텝을 더 진행했고 SPENT_FAIL 종료는 0이다.
+- (iv) hold miss판 7/7 침투 (예측대로 — 폴백 효과기 없음).
+- **(iii) ✗ — miss 후 폴백 무력화 0/7.** 기전 (ep2 추적): miss 시점 limiter-
+  공격자 간격 ~8–11 m, 공격자 궤적은 두 팔에서 동일(limiter 가 repel 반경
+  1 m 밖 — 영향 0), intercept 폴백은 침투 시점까지 10.9→6.8 m 이 최선.
+  즉 **꼬리 추격 기하** (docs/29 §12.2 "꼬리 추격 불가·선도 차단 가능" 정합).
+- **증거 범위를 정확히**: R2 의 국면 전환 기제는 P81 + (ii) 로 검증됐다.
+  "miss 후 폴백 무력화" 는 **평가된 scripted intercept 폴백·발견된 7 miss 판**
+  에서 0 이다. 이것이 폴백 국면의 물리 한계인지는 **미판정** — miss 시점
+  상태에서의 요격 가능성 상한은 §4 의 oracle 3-way 없이 말하지 않는다.
+  (miss 가 나는 판일수록 공격자가 이미 지나친 기하라는 selection 도 있다.)
+
 ### R3 — robust-clean 인증과 임무 성공의 분리
 
 ```
@@ -305,7 +326,12 @@ P82  R1·R2 조합에서 종료 조건이 침투·절단·무력화 셋뿐이다
       P78 hold n=500: 변경 전/후 JSON **비트 동일** (NET_CAPTURE 0.182
       = docs/48 SS 재현 anchor 포함))
 [x] V2 검증 (§3.1 -- 대역 밖, swept 축으로 전량 귀속, 방향 재현 인정)
-[ ] R2 배선 + P81~P82
+[x] R2 배선 + P81~P82 (2026-08-06. miss_terminates 기본 True=현행,
+      tests/test_net_miss_handoff.py 4건 + 전체 회귀 474 passed / 0 failed)
+[x] V3 (F arm: (a)(c)·2차 충족, (b) boxed 표본 검정 불가 -- miss 미발생)
+[x] V3b (§1 R2 세부: (i)(ii)(iv) 충족 -- 국면 전환 작동. (iii) 0/7 --
+      scripted 폴백 무력화 미실증, 꼬리 추격 기하. oracle 3-way 로 이관)
 [ ] R3·R4 (지표 분리·frontier 집계)
-[ ] 3-way 비교 (§4)
+[ ] 3-way 비교 (§4) -- ★ 첫 질문 후보: miss 시점 상태에서 폴백 요격의
+      도달 가능 상한 (V3b (iii) 의 미판정을 정면으로 묻는다)
 ```

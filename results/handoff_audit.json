@@ -1,0 +1,1633 @@
+{
+  "hold": {
+    "n": 100,
+    "labels": {
+      "NET_CAPTURE": 16,
+      "PENETRATED": 84
+    },
+    "spent_fail_terminal": 0,
+    "net_spent": 7,
+    "spent_then_neutralized": 0,
+    "spent_outcomes": {
+      "PENETRATED": 7
+    },
+    "records": [
+      {
+        "episode": 0,
+        "label": "PENETRATED",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 1,
+        "label": "NET_CAPTURE",
+        "steps": 15,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 2,
+        "label": "PENETRATED",
+        "steps": 52,
+        "net_spent": true,
+        "handoff_step": 21,
+        "contact_kills": 0
+      },
+      {
+        "episode": 3,
+        "label": "PENETRATED",
+        "steps": 27,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 4,
+        "label": "NET_CAPTURE",
+        "steps": 23,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 5,
+        "label": "PENETRATED",
+        "steps": 20,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 6,
+        "label": "PENETRATED",
+        "steps": 23,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 7,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 8,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 9,
+        "label": "PENETRATED",
+        "steps": 33,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 10,
+        "label": "NET_CAPTURE",
+        "steps": 20,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 11,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 12,
+        "label": "PENETRATED",
+        "steps": 36,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 13,
+        "label": "PENETRATED",
+        "steps": 23,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 14,
+        "label": "PENETRATED",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 15,
+        "label": "PENETRATED",
+        "steps": 41,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 16,
+        "label": "NET_CAPTURE",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 17,
+        "label": "PENETRATED",
+        "steps": 55,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 18,
+        "label": "PENETRATED",
+        "steps": 43,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 19,
+        "label": "PENETRATED",
+        "steps": 36,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 20,
+        "label": "PENETRATED",
+        "steps": 24,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 21,
+        "label": "PENETRATED",
+        "steps": 20,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 22,
+        "label": "PENETRATED",
+        "steps": 30,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 23,
+        "label": "NET_CAPTURE",
+        "steps": 25,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 24,
+        "label": "NET_CAPTURE",
+        "steps": 33,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 25,
+        "label": "PENETRATED",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 26,
+        "label": "PENETRATED",
+        "steps": 56,
+        "net_spent": true,
+        "handoff_step": 21,
+        "contact_kills": 0
+      },
+      {
+        "episode": 27,
+        "label": "PENETRATED",
+        "steps": 24,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 28,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 29,
+        "label": "PENETRATED",
+        "steps": 60,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 30,
+        "label": "PENETRATED",
+        "steps": 40,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 31,
+        "label": "NET_CAPTURE",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 32,
+        "label": "PENETRATED",
+        "steps": 23,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 33,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 34,
+        "label": "PENETRATED",
+        "steps": 37,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 35,
+        "label": "PENETRATED",
+        "steps": 51,
+        "net_spent": true,
+        "handoff_step": 24,
+        "contact_kills": 0
+      },
+      {
+        "episode": 36,
+        "label": "PENETRATED",
+        "steps": 26,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 37,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 38,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 39,
+        "label": "NET_CAPTURE",
+        "steps": 24,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 40,
+        "label": "NET_CAPTURE",
+        "steps": 26,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 41,
+        "label": "PENETRATED",
+        "steps": 35,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 42,
+        "label": "PENETRATED",
+        "steps": 34,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 43,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 44,
+        "label": "PENETRATED",
+        "steps": 22,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 45,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 46,
+        "label": "PENETRATED",
+        "steps": 55,
+        "net_spent": true,
+        "handoff_step": 23,
+        "contact_kills": 0
+      },
+      {
+        "episode": 47,
+        "label": "PENETRATED",
+        "steps": 42,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 48,
+        "label": "PENETRATED",
+        "steps": 22,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 49,
+        "label": "PENETRATED",
+        "steps": 28,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 50,
+        "label": "NET_CAPTURE",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 51,
+        "label": "PENETRATED",
+        "steps": 50,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 52,
+        "label": "PENETRATED",
+        "steps": 32,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 53,
+        "label": "NET_CAPTURE",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 54,
+        "label": "PENETRATED",
+        "steps": 22,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 55,
+        "label": "PENETRATED",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 56,
+        "label": "NET_CAPTURE",
+        "steps": 14,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 57,
+        "label": "PENETRATED",
+        "steps": 24,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 58,
+        "label": "NET_CAPTURE",
+        "steps": 20,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 59,
+        "label": "PENETRATED",
+        "steps": 31,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 60,
+        "label": "PENETRATED",
+        "steps": 44,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 61,
+        "label": "PENETRATED",
+        "steps": 25,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 62,
+        "label": "PENETRATED",
+        "steps": 50,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 63,
+        "label": "PENETRATED",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 64,
+        "label": "PENETRATED",
+        "steps": 43,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 65,
+        "label": "PENETRATED",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 66,
+        "label": "PENETRATED",
+        "steps": 22,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 67,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 68,
+        "label": "PENETRATED",
+        "steps": 46,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 69,
+        "label": "PENETRATED",
+        "steps": 25,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 70,
+        "label": "NET_CAPTURE",
+        "steps": 23,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 71,
+        "label": "PENETRATED",
+        "steps": 24,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 72,
+        "label": "PENETRATED",
+        "steps": 37,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 73,
+        "label": "PENETRATED",
+        "steps": 26,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 74,
+        "label": "PENETRATED",
+        "steps": 36,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 75,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 76,
+        "label": "PENETRATED",
+        "steps": 51,
+        "net_spent": true,
+        "handoff_step": 21,
+        "contact_kills": 0
+      },
+      {
+        "episode": 77,
+        "label": "PENETRATED",
+        "steps": 24,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 78,
+        "label": "PENETRATED",
+        "steps": 26,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 79,
+        "label": "PENETRATED",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 80,
+        "label": "PENETRATED",
+        "steps": 31,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 81,
+        "label": "NET_CAPTURE",
+        "steps": 26,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 82,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 83,
+        "label": "NET_CAPTURE",
+        "steps": 20,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 84,
+        "label": "PENETRATED",
+        "steps": 31,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 85,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 86,
+        "label": "PENETRATED",
+        "steps": 37,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 87,
+        "label": "PENETRATED",
+        "steps": 18,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 88,
+        "label": "PENETRATED",
+        "steps": 30,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 89,
+        "label": "PENETRATED",
+        "steps": 27,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 90,
+        "label": "PENETRATED",
+        "steps": 51,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 91,
+        "label": "PENETRATED",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 92,
+        "label": "PENETRATED",
+        "steps": 25,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 93,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 94,
+        "label": "PENETRATED",
+        "steps": 60,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 95,
+        "label": "PENETRATED",
+        "steps": 57,
+        "net_spent": true,
+        "handoff_step": 16,
+        "contact_kills": 0
+      },
+      {
+        "episode": 96,
+        "label": "PENETRATED",
+        "steps": 56,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 97,
+        "label": "PENETRATED",
+        "steps": 50,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 98,
+        "label": "PENETRATED",
+        "steps": 56,
+        "net_spent": true,
+        "handoff_step": 22,
+        "contact_kills": 0
+      },
+      {
+        "episode": 99,
+        "label": "PENETRATED",
+        "steps": 33,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      }
+    ]
+  },
+  "intercept": {
+    "n": 100,
+    "labels": {
+      "HARD_KILL": 35,
+      "NET_CAPTURE": 16,
+      "PENETRATED": 49
+    },
+    "spent_fail_terminal": 0,
+    "net_spent": 7,
+    "spent_then_neutralized": 0,
+    "spent_outcomes": {
+      "PENETRATED": 7
+    },
+    "records": [
+      {
+        "episode": 0,
+        "label": "PENETRATED",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 1,
+        "label": "NET_CAPTURE",
+        "steps": 15,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 2,
+        "label": "PENETRATED",
+        "steps": 52,
+        "net_spent": true,
+        "handoff_step": 21,
+        "contact_kills": 0
+      },
+      {
+        "episode": 3,
+        "label": "HARD_KILL",
+        "steps": 13,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 4,
+        "label": "NET_CAPTURE",
+        "steps": 23,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 5,
+        "label": "PENETRATED",
+        "steps": 20,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 6,
+        "label": "PENETRATED",
+        "steps": 23,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 7,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 8,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 9,
+        "label": "HARD_KILL",
+        "steps": 18,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 10,
+        "label": "NET_CAPTURE",
+        "steps": 20,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 11,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 12,
+        "label": "HARD_KILL",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 13,
+        "label": "HARD_KILL",
+        "steps": 14,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 14,
+        "label": "PENETRATED",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 15,
+        "label": "HARD_KILL",
+        "steps": 18,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 16,
+        "label": "NET_CAPTURE",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 17,
+        "label": "HARD_KILL",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 18,
+        "label": "HARD_KILL",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 19,
+        "label": "HARD_KILL",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 20,
+        "label": "PENETRATED",
+        "steps": 24,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 21,
+        "label": "PENETRATED",
+        "steps": 20,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 22,
+        "label": "PENETRATED",
+        "steps": 30,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 23,
+        "label": "NET_CAPTURE",
+        "steps": 25,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 24,
+        "label": "NET_CAPTURE",
+        "steps": 33,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 25,
+        "label": "PENETRATED",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 26,
+        "label": "PENETRATED",
+        "steps": 56,
+        "net_spent": true,
+        "handoff_step": 21,
+        "contact_kills": 0
+      },
+      {
+        "episode": 27,
+        "label": "PENETRATED",
+        "steps": 24,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 28,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 29,
+        "label": "HARD_KILL",
+        "steps": 23,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 30,
+        "label": "HARD_KILL",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 31,
+        "label": "NET_CAPTURE",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 32,
+        "label": "PENETRATED",
+        "steps": 23,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 33,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 34,
+        "label": "HARD_KILL",
+        "steps": 18,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 35,
+        "label": "PENETRATED",
+        "steps": 51,
+        "net_spent": true,
+        "handoff_step": 24,
+        "contact_kills": 0
+      },
+      {
+        "episode": 36,
+        "label": "PENETRATED",
+        "steps": 26,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 37,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 38,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 39,
+        "label": "NET_CAPTURE",
+        "steps": 24,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 40,
+        "label": "NET_CAPTURE",
+        "steps": 26,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 41,
+        "label": "HARD_KILL",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 42,
+        "label": "HARD_KILL",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 43,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 44,
+        "label": "HARD_KILL",
+        "steps": 12,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 45,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 46,
+        "label": "PENETRATED",
+        "steps": 55,
+        "net_spent": true,
+        "handoff_step": 23,
+        "contact_kills": 0
+      },
+      {
+        "episode": 47,
+        "label": "HARD_KILL",
+        "steps": 18,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 48,
+        "label": "PENETRATED",
+        "steps": 22,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 49,
+        "label": "HARD_KILL",
+        "steps": 15,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 50,
+        "label": "NET_CAPTURE",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 51,
+        "label": "HARD_KILL",
+        "steps": 20,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 52,
+        "label": "HARD_KILL",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 53,
+        "label": "NET_CAPTURE",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 54,
+        "label": "PENETRATED",
+        "steps": 22,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 55,
+        "label": "PENETRATED",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 56,
+        "label": "NET_CAPTURE",
+        "steps": 14,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 57,
+        "label": "HARD_KILL",
+        "steps": 12,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 58,
+        "label": "NET_CAPTURE",
+        "steps": 20,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 59,
+        "label": "HARD_KILL",
+        "steps": 15,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 60,
+        "label": "HARD_KILL",
+        "steps": 18,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 61,
+        "label": "PENETRATED",
+        "steps": 25,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 62,
+        "label": "HARD_KILL",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 63,
+        "label": "PENETRATED",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 64,
+        "label": "HARD_KILL",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 65,
+        "label": "PENETRATED",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 66,
+        "label": "PENETRATED",
+        "steps": 22,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 67,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 68,
+        "label": "HARD_KILL",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 69,
+        "label": "HARD_KILL",
+        "steps": 13,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 70,
+        "label": "NET_CAPTURE",
+        "steps": 23,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 71,
+        "label": "PENETRATED",
+        "steps": 24,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 72,
+        "label": "PENETRATED",
+        "steps": 37,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 73,
+        "label": "PENETRATED",
+        "steps": 26,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 74,
+        "label": "HARD_KILL",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 75,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 76,
+        "label": "PENETRATED",
+        "steps": 51,
+        "net_spent": true,
+        "handoff_step": 21,
+        "contact_kills": 0
+      },
+      {
+        "episode": 77,
+        "label": "PENETRATED",
+        "steps": 24,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 78,
+        "label": "PENETRATED",
+        "steps": 26,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 79,
+        "label": "PENETRATED",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 80,
+        "label": "HARD_KILL",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 81,
+        "label": "NET_CAPTURE",
+        "steps": 26,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 82,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 83,
+        "label": "NET_CAPTURE",
+        "steps": 20,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 84,
+        "label": "HARD_KILL",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 85,
+        "label": "PENETRATED",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 86,
+        "label": "HARD_KILL",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 87,
+        "label": "PENETRATED",
+        "steps": 18,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 88,
+        "label": "PENETRATED",
+        "steps": 30,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 89,
+        "label": "PENETRATED",
+        "steps": 27,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 90,
+        "label": "HARD_KILL",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 91,
+        "label": "PENETRATED",
+        "steps": 19,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 92,
+        "label": "HARD_KILL",
+        "steps": 12,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 93,
+        "label": "PENETRATED",
+        "steps": 17,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 0
+      },
+      {
+        "episode": 94,
+        "label": "HARD_KILL",
+        "steps": 25,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 95,
+        "label": "PENETRATED",
+        "steps": 57,
+        "net_spent": true,
+        "handoff_step": 16,
+        "contact_kills": 0
+      },
+      {
+        "episode": 96,
+        "label": "HARD_KILL",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 97,
+        "label": "HARD_KILL",
+        "steps": 21,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      },
+      {
+        "episode": 98,
+        "label": "PENETRATED",
+        "steps": 56,
+        "net_spent": true,
+        "handoff_step": 22,
+        "contact_kills": 0
+      },
+      {
+        "episode": 99,
+        "label": "HARD_KILL",
+        "steps": 16,
+        "net_spent": false,
+        "handoff_step": null,
+        "contact_kills": 1
+      }
+    ]
+  }
+}
