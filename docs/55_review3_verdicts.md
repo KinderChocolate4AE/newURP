@@ -48,8 +48,9 @@
 **확정 큐 (리뷰 3 최종, 2026-08-06)**:
 
 ```
-1. 전체 회귀 + legacy baseline (hold n=500) 비트 동일 확인   <- 반경 키 추가 뒤
-2. 2×2 의 early-prep 의미·closed-loop 재실행 계약 사전등록   <- docs/56 완료
+1. [x] 전체 회귀 476 passed / 0 failed + legacy baseline (hold n=500,
+       R1 이전 참조 대비) **BIT-IDENTICAL** (2026-08-06, 반경 키 추가 뒤)
+2. [x] 2×2 의 early-prep 의미·closed-loop 재실행 계약 사전등록 = docs/56
 3. miss 7판 deterministic-lethality recoverability probe (2×2)
      ★ "miss−5" = fallback 선행 준비(T−5 prep)이지 조기 handoff 아님.
        완전 전환(T−5 switch)은 별도 arm·별도 사전등록
