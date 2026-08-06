@@ -131,12 +131,13 @@ def test_p83f_no_solution_flag():
     s0 = base.handoff_step + 1
     src = drive_to(EP, s0)
     # 미니 budget + 무력화 불가능하게 a_max=0 (모든 후보 = hold 동형)
-    old = (rp.POP, rp.ITERS, rp.ELITE, rp.SOLVER_SEEDS)
-    rp.POP, rp.ITERS, rp.ELITE, rp.SOLVER_SEEDS = 4, 1, 2, (0,)
+    # seeds 는 시그니처 명시 인자 (module global 패치는 def 시점 기본값에 무효)
+    old = (rp.POP, rp.ITERS, rp.ELITE)
+    rp.POP, rp.ITERS, rp.ELITE = 4, 1, 2
     try:
-        pr = rp.plan_cem(src, EP, s0, a_max=0.0)
+        pr = rp.plan_cem(src, EP, s0, a_max=0.0, seeds=(0,))
     finally:
-        rp.POP, rp.ITERS, rp.ELITE, rp.SOLVER_SEEDS = old
+        rp.POP, rp.ITERS, rp.ELITE = old
     assert pr.no_solution is True
     assert pr.rollouts == 4
 
