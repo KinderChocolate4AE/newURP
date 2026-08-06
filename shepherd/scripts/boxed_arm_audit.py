@@ -9,6 +9,8 @@ C1/C2  격리된 counterfactual -- **본선 환경 변경이 아니다**
     C2  C1 + 접촉 resolver (인라인 프로토타입: endpoint·즉시 무력화)
     C2R C1 + **실 R1 resolver** (env_sys, swept + NK veto + Pk) -- V2 검증
         (docs/54 §3 V2. 수락대역·차이 축은 결과 전 docs/54 §1 에 고정)
+    F   **실 계약 그대로** (contact_resolver=True ∧ miss_terminates=False,
+        스크립트 종료억제·spec 스왑 없음) -- V3 검증 (docs/54 §1 R2 세부)
 
 C1 과 C2 를 섞지 않는다 -- 섞으면 handoff 효과와 resolver 효과가 안 갈린다.
 torch-free.
@@ -26,7 +28,7 @@ from shepherd.spawn_rand import SpawnSpec
 
 __all__ = ["arm_audit"]
 
-ARMS = ("A", "B", "C1", "C2", "C2R")
+ARMS = ("A", "B", "C1", "C2", "C2R", "F")
 
 
 def _sysenv(env) -> ModeSystemEnv:
@@ -37,8 +39,8 @@ def _sysenv(env) -> ModeSystemEnv:
     return e
 
 
-def _kw():
-    return dict(system=SystemSpec(enabled=True),
+def _kw(system: SystemSpec | None = None):
+    return dict(system=system or SystemSpec(enabled=True),
                 reward=RewardSpec(w_kill=0.5, enabled=True),
                 attacker=AttackerSpec(level="A2", jink_amp=0.6, seed=0),
                 spawn=SpawnSpec())
@@ -48,7 +50,9 @@ def _run(ep: int, arm: str, seed0: int = 0, limiter_mode: str = "intercept") -> 
     """boxed_in 첫 발생 시점에서 분기. 그 전까지는 모든 arm 이 동일하다."""
     from shepherd.scripts.mission_rollout import scripted_role_actions
 
-    st = build_m4_env(seed0, ep, **_kw())
+    sys_spec = (SystemSpec(enabled=True, contact_resolver=True,
+                           miss_terminates=False) if arm == "F" else None)
+    st = build_m4_env(seed0, ep, **_kw(sys_spec))
     env, scn, lay = st.env, st.scn, st.lay
     env.reset(seed=seed0 + ep)
     fid = env.finisher_id
@@ -76,7 +80,7 @@ def _run(ep: int, arm: str, seed0: int = 0, limiter_mode: str = "intercept") -> 
         acts = scripted_role_actions(env, scn, lay, limiter_mode=limiter_mode,
                                      fire_mode="never")
         # 분기: 발사 비트만 조작. limiter 제어는 전 arm 동일
-        if branched and arm in ("B", "C1", "C2", "C2R") and not out["fired"]:
+        if branched and arm in ("B", "C1", "C2", "C2R", "F") and not out["fired"]:
             a = np.asarray(acts[fid], np.float32).copy()
             if len(a) >= 5:
                 a[4] = 1.0
@@ -116,12 +120,18 @@ def _run(ep: int, arm: str, seed0: int = 0, limiter_mode: str = "intercept") -> 
     out["min_dist_after"] = (None if not np.isfinite(out["min_dist_after"])
                              else round(float(out["min_dist_after"]), 3))
     out["hard_kill"] = bool(getattr(env, "hard_kill", False))
-    if arm == "C2R":                      # 수락대역 이탈 시 분해용 (docs/54 §1)
+    if arm in ("C2R", "F"):               # 수락대역 이탈 시 분해용 (docs/54 §1)
         se = _sysenv(env)
         s = se.summary()
         out["veto_events"] = int(se.veto_events)
         out["contact_events"] = int(s["contact_events"])
         out["pk_fail"] = int(s["PK_FAIL"])
+    if arm == "F":                        # V3: 실 계약의 handoff provenance
+        se = _sysenv(env)
+        out["net_spent"] = bool(se.net_spent)
+        out["handoff_step"] = se.net_spent_step
+        if out["hard_kill"]:
+            out["neutralized_by"] = "env_contact_resolver"
     return out
 
 
@@ -132,7 +142,7 @@ def arm_audit(n: int = 60, seed0: int = 0) -> dict:
         if a["boxed_step"] is None:
             continue
         recs.append(a)
-        for arm in ("B", "C1", "C2", "C2R"):
+        for arm in ("B", "C1", "C2", "C2R", "F"):
             recs.append(_run(ep, arm, seed0))
         if sum(1 for r in recs if r["arm"] == "A") >= 20:
             break
@@ -155,6 +165,12 @@ def arm_audit(n: int = 60, seed0: int = 0) -> dict:
                                  if any(r["terminated_step"] is not None for r in g)
                                  else None),
         }
+        if arm == "F":                       # V3 판정용 (docs/54 §1 R2 세부)
+            by[arm]["net_spent_frac"] = round(float(np.mean(
+                [bool(r.get("net_spent")) for r in g])), 3)
+            by[arm]["spent_then_neutralized_frac"] = round(float(np.mean(
+                [bool(r.get("net_spent")) and r.get("neutralized_by") is not None
+                 for r in g])), 3)
     return {"contract": "A/B 현행 무수정 · C1/C2 격리 counterfactual (docs/53 §4.5)",
             "by_arm": by, "records": recs}
 

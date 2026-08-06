@@ -130,6 +130,36 @@ NET_MISS     -> FALLBACK_MODE (에피소드 계속) -> R1 접촉 / 커밋 하드
   스캐폴드만 다르므로 크게 어긋나면 억제 구현 결함을 의심한다.
 - **결과를 본 뒤 이 판정식을 바꾸지 않는다.**
 
+#### V3 결과 (2026-08-06, boxed 17 판 — `results/boxed_arm_audit_v3.json`)
+
+```
+F   침투 0.000 · 하드킬/무력화 1.000 · 종료 스텝 17   (C2R 과 ±0.15 내 -- 2차 충족)
+    net_spent_frac 0.000  ★ miss 가 한 판도 발생하지 않았다
+```
+
+- (a) 공허 충족 (miss 0건) · (c) 충족 · 2차 충족.
+- **(b) 는 이 표본에서 검정 불가.** boxed regime 에선 접촉 kill 이 net 해소
+  (tau_deploy+tau_lock, 수 스텝)보다 항상 먼저 나서 net 이 SPENT 에 도달하지
+  못한다 — 처치(miss→handoff)가 활성화되지 않는 arm 이다 (오류 2 자기 인지).
+  P81 이 handoff **기제**를 단위 수준에서 강제하지만, env-faithful 한
+  "miss 후 폴백 무력화" e2e 표본은 아직 없다.
+
+#### V3b 사전등록 (2026-08-06, ★ 결과 보기 전 — miss 가 실재하는 표본에서 (b) 재검정)
+
+- **도구**: `handoff_audit` — V2/V3 감사와 동일 스택(`_kw`: A2 jink 0.6 ·
+  SpawnSpec · 위협 랜덤화) + `fire_mode="clean"` (hold/clean 기준선은 n=500 에서
+  SPENT_FAIL 32/500 = miss 가 실재하는 유일한 확인 표본), n=100, seed0=0.
+- **arm** (전부 `contact_resolver=True ∧ miss_terminates=False`):
+  - `hold`      폴백 효과기 없음 (hold limiter 는 접촉·커밋 불가) → miss 후
+                침투/절단 예측. handoff 가 **국면 전환**으로 작동하는지만 본다.
+  - `intercept` 폴백 효과기 있음 (추격 → 접촉) → miss 후 무력화 표본 기대.
+- **판정 (성능 대역 없음 — 기술 검증)**:
+  (i) SPENT_FAIL 종료 라벨 0건
+  (ii) `net_spent=True` 판 ≥ 1 (아니면 이 표본도 검정 불가로 기록)
+  (iii) intercept 팔에서 `net_spent ∧ 무력화` ≥ 1 판 → **(b) 실증**
+  (iv) hold 팔의 net_spent 판 결말 분해(침투/절단) 보고 — 무력화 요구 안 함
+- **결과를 본 뒤 이 판정식을 바꾸지 않는다.**
+
 ### R3 — robust-clean 인증과 임무 성공의 분리
 
 ```
