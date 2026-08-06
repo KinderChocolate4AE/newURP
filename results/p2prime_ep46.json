@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "contract": "docs/58 §4 (커밋 500172e)",
+    "Pk": 1.0,
+    "s0": "t_fire+1",
+    "solver_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "proxy": "nk_aware",
+    "budget_per_ep": 1280
+  },
+  "records": [
+    {
+      "episode": 46,
+      "arm": "P2-ORC",
+      "s0": 15,
+      "t_star": 22,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -2.733419880772056,
+        0.5476402646889067,
+        55.0
+      ],
+      "rollouts": 1280,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 14,
+      "handoff_step": 22,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 55,
+      "min_swept_after": 2.733,
+      "min_out_swept": 2.733,
+      "margin_at_best": 0.548,
+      "d_asset_final": 0.906,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        8.846,
+        20.755,
+        10.802,
+        20.823
+      ],
+      "bucket": "PENETRATED",
+      "t_fire": 14
+    }
+  ]
+}

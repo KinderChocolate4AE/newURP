@@ -68,10 +68,33 @@ final       full-fidelity env replay 라벨만 (변경 없음)
 
 판정식은 결과 후 불변경.
 
+### 4.1 ★ P2′ 결과 (2026-08-07 — `results/p2prime_ep*.json`, 7 병렬 샤드)
+
+```
+7/7 PENETRATED · NO_SOLUTION_WITHIN_BUDGET 7/7 · NK-밖 engagement 0건
+NK-밖 최근접 swept (판별): 0.958 / 1.345 / 2.195 / 2.733 / 2.742 / 3.117 / 3.600
+  -- 전부 요격 반경 0.75 초과 (최소 1.28배)
+margin_at_best 0.355 ~ 1.323 m -- 최근접 NK-밖 접근이 전부 zone 경계 직전
+```
+
+**판정 = 사전등록 (b) 분기**: planner adequacy 반증 1축 통과. 탐색 신호가
+**오직 NK-밖 근접만** 보상하고 seed 10·budget 3.3× 에서도 NK-밖 접근이 요격
+반경에 도달하지 못했다 — 리뷰 4 의 "proxy 가 NK-안 basin 으로 유도했다"는
+대안 설명은 이 표본에서 **반증**됐다.
+
+기전 관찰 (기록 지표 내): 구 proxy 의 전역 최근접(0.227~)이 전부 NK-안,
+NK-aware 최근접(0.958~)이 전부 경계 직전 — **요격 기하의 성립 시점이 NK 경계
+통과와 사실상 일치**한다. 이는 "fire 시점의 safe recoverability 낮음" 가설과
+정합하나, 잔여 대안(open-loop K=4 표현력·replan 부재)이 남아 있어 인증이
+아니다. 허용 문장은 docs/57 §4.3 유지 + 아래 추가:
+
+> NK-aware 목적함수·seed 10 에서도 NK-밖 접근은 요격 반경의 1.3배 이상
+> 밖에 머물렀다 (7판·open-loop CEM budget 한정).
+
 ## 5. 확정 큐 (리뷰 4 순서 — 3-way 는 뒤로)
 
 ```
-1. [ ] P2′ NK-aware 재반증 (§4)
+1. [x] P2′ NK-aware 재반증 (§4.1 -- (b) 분기: proxy-정렬 대안 반증, NK-밖 최근접 ≥ 0.958)
 2. [ ] pre-fire full-env counterfactual 1 arm (t_fire−5, ★ fire 시각·miss
        여부·v_shot·attacker 전부 closed-loop 재계산 -- fire 동결 금지.
        라벨 {NET_CAPTURE, OUTSIDE_NK_NEUTRALIZATION, INSIDE_NK_VETO,
