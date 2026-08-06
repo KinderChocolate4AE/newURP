@@ -97,6 +97,39 @@ NET_MISS     -> FALLBACK_MODE (에피소드 계속) -> R1 접촉 / 커밋 하드
 
 `SPENT_FAIL` 은 **라벨로 유지**하되 종료 조건에서 뺀다. 종료는 침투·절단·무력화.
 
+#### R2 세부 계약 (2026-08-06, 구현 전 추가 선언 — R1 V2 통과 후)
+
+- **`SystemSpec.miss_terminates` 기본 `True`** (§2 선언 그대로) = 현행 동작.
+  `False` 일 때만 아래가 활성화된다. env.py 는 동결 유지 — 종료 규칙 변경은
+  래퍼(ModeSystemEnv)의 관할이다 (docs/29 §6 의 래퍼 존재 이유와 동일).
+- **억제 판별**: inner 종료 ∧ `captured=False` ∧ `penetrated=False` ∧
+  `fsm.state is SPENT` ⇒ spent-fail 종료 (env.py:356 의 유일한 잔여 원인).
+  이때만 `terms` 를 전부 False 로 억제하고 `inner.agents` 를 복구한다.
+  captured / penetrated / hard_kill 종료는 **절대 억제하지 않는다**.
+- **절단 복구**: 억제 후 inner 는 `terminated_flag` 가 계속 True 라 자체 절단을
+  내지 못한다 → 래퍼가 `_step_i >= episode_len` 에서 `truncs=True` 를 낸다.
+  (동결 env 의 절단 의미와 동일 술어·동일 지평선.)
+- **fire no-op**: FSM 의 SPENT 는 흡수 상태고 fire 는 이미 no-op
+  (`finisher_fsm.py:113`) — 새 배선 없음, P81 이 성질만 검증.
+- **provenance**: 억제 발생 시 `net_spent=True` + 전이 스텝에만
+  `net_miss_handoff=True` 를 info 로 기록. **`NET_MISS_HANDOFF` 는 terminal
+  집계 대상이 아니다.** `SPENT_FAIL` 라벨은 이 경로에선 더 이상 종료 라벨로
+  나오지 않는다 (분석은 `net_spent` 로 "net spent before failure" 를 복원).
+- **보상**: 억제된 스텝은 `done=False` 라 종말항이 붙지 않는다. 최종 실 종료
+  (침투·절단·무력화)의 라벨로만 종말항이 1회 붙는다 — `SPENT_FAIL` 종말값이
+  0 이었으므로 (docs/26 중립 선언) 기존 대역과 충돌 없음.
+- **P81/P82 실현**: P81 = 강제 miss 픽스처에서 (기본값: miss 스텝 종료·라벨
+  SPENT_FAIL) vs (`miss_terminates=False`: 에피소드 계속, `net_spent=True`,
+  `wasted_fire=1`, fsm SPENT 유지, 최종 라벨 ∈ {PENETRATED, TRUNCATED,
+  HARD_KILL}). P82 = R1+R2 동시 on 에서 종료 라벨이 침투·절단·무력화(포획
+  포함)뿐임을 seed 스윕으로 확인.
+- **V3 실현·판정 (결과 보기 전 고정)**: boxed 감사에 **F arm** (= 스크립트
+  종료억제 **없이** `miss_terminates=False ∧ contact_resolver=True` 실 플래그만)
+  추가. 판정: (a) miss 후 즉시 종료 0건 (b) 폴백 무력화 발생 (c) SPENT_FAIL
+  종료 0건. 2차 기대: C2R (1.000 / 0.000) 과 ±0.15 — C2R 과 F 는 같은 물리에
+  스캐폴드만 다르므로 크게 어긋나면 억제 구현 결함을 의심한다.
+- **결과를 본 뒤 이 판정식을 바꾸지 않는다.**
+
 ### R3 — robust-clean 인증과 임무 성공의 분리
 
 ```
