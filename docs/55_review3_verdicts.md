@@ -41,15 +41,22 @@
       PASS, 중간 Pk 에서 재시도 효과 +0.12~0.13 관측(상수 아님, Pk=1 포화).
       재시도 = 전부 서로 다른 limiter (PK_FAIL 은 소모, 동일 limiter 재시도는
       veto 후에만). physical lethality calibration 아님
-[ ] r_shape / r_commit / r_contact **설정 키 분리 (지금)** -- 값은 전부 0.75
-      유지, 기본 동작 비트 동일 테스트. 수치 calibration 은 이후 별도
-[ ] 2×2 counterfactual replay: handoff {miss, miss-5tick} ×
-      controller {intercept, privileged MPC/oracle} + recoverability curve.
-      **Pk=1 로 돌린다** = "deterministic lethality 아래의 recoverability
-      upper-bound probe" 로 명시 (lethality 질문 아님·기하 질문)
-[ ] oracle / scripted / RL 3-way frontier (docs/54 §4)
-[ ] 편대 MARL 재평가: robust-clean 발생률 단일 지표가 아니라
-      frontier 이동량으로 (LS≈SS 재해석의 후속)
+[x] r_shape / r_commit / r_contact 설정 키 분리 -- 값 전부 0.75 유지,
+      독립성 테스트 포함 (1e19ecf). 수치 calibration 은 이후 별도
+```
+
+**확정 큐 (리뷰 3 최종, 2026-08-06)**:
+
+```
+1. 전체 회귀 + legacy baseline (hold n=500) 비트 동일 확인   <- 반경 키 추가 뒤
+2. 2×2 의 early-prep 의미·closed-loop 재실행 계약 사전등록   <- docs/56 완료
+3. miss 7판 deterministic-lethality recoverability probe (2×2)
+     ★ "miss−5" = fallback 선행 준비(T−5 prep)이지 조기 handoff 아님.
+       완전 전환(T−5 switch)은 별도 arm·별도 사전등록
+     ★ 고정 궤적 재생 금지 -- CRN 재실행 + branch 후 closed-loop
+4. 결과에 따라 조기 시점 / controller 강도 / state selection 분해
+5. oracle / scripted / RL frontier 비교 (docs/54 §4)
+6. limiter MARL 이 frontier 를 실제로 이동시키는지 재평가
 ```
 
 ## 4. 거시 프레임 (리뷰어 종합 — 채택)
