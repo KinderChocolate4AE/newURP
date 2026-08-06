@@ -44,7 +44,8 @@ from typing import Dict, List, Optional, Sequence
 
 import numpy as np
 
-from shepherd.agents.baselines import (hold_position_limiter, scripted_finisher,
+from shepherd.agents.baselines import (brake_limiter, hold_position_limiter,
+                                       lambda_brake_limiter, scripted_finisher,
                                        scripted_shaping_limiter)
 
 __all__ = ["MissionResult", "run_episode", "run_batch", "summarize",
@@ -53,7 +54,7 @@ __all__ = ["MissionResult", "run_episode", "run_batch", "summarize",
 
 LABELS = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL",
           "PENETRATED", "SPENT_FAIL", "TRUNCATED")
-LIMITER_MODES = ("hold", "ring", "intercept")
+LIMITER_MODES = ("hold", "ring", "intercept", "brake", "lam20")
 ROLES = ("limiter", "finisher")
 
 
@@ -171,6 +172,13 @@ def _limiter_actions(env, scn, lay, mode, lims, p_att, v_att):
                     i, env._p(lims[i]), env._v(lims[i]), p_att, v_att,
                     tau_kill=tau_k, a_max=scn.limiter.a_max, margin=margin,
                     v_max=_limiter_v_max(env, scn))
+                for i, lid in enumerate(env.limiter_ids)}
+    # ★ 제4병목 계측 arm (docs/20 §6). 관측 전용 단순 컨트롤러 -- 학습이
+    #   이것들을 못 넘으면 "RL 이 필요하다" 를 주장할 수 없다.
+    if mode in ("brake", "lam20"):
+        a_max = scn.limiter.a_max
+        fn = brake_limiter if mode == "brake" else lambda_brake_limiter
+        return {lid: fn(env._v(lims[i]), a_max)
                 for i, lid in enumerate(env.limiter_ids)}
     if mode == "ring":
         return {lid: scripted_shaping_limiter(

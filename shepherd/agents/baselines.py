@@ -38,6 +38,40 @@ def hold_position_limiter():
     """u_L^0: no acceleration, hold heading. The fixed baseline action (Box(4))."""
     return np.zeros(4, dtype=np.float32)            # accel(3)=0, pressure(1)=0
 
+# ── 제4병목 계측용 단순 컨트롤러 (docs/20 §6 · docs/21) ─────────────────────
+#   왜 여기 있나: "정책이 zero 만 이기고 이 선 아래면 학습 가능성 증거이지
+#   RL-필요성 증거가 아니다" -- 논문 클레임 트리에 **정책 vs 단순 컨트롤러
+#   비교 보고가 의무**로 등재돼 있다 (docs/20 §6 제4병목, docs/21 sealed 진단 arm).
+#   2026-07-19 구 캠페인 실측: brake+guard .858 ≒ lam20+guard .858 > learned .775.
+#
+#   정의는 `train/pfc.py` 의 것을 **그대로** 옮긴다 (docs/48 §3.1 한 곳 원칙과
+#   같은 이유 -- 두 벌이 되면 비교가 "두 구현의 차이" 가 된다). 다만 `pfc` 는
+#   구 환경 상수(A_MAX=30.0, 63차원 관측)에 묶여 있어 import 하지 않고, 식만
+#   옮기고 상한은 **호출부의 `a_max`** 를 받는다.
+#
+#   ★ 구 캠페인의 절대 수치(.858 등)는 다른 환경(A-3d/A-3e, a_max=30.0)에서
+#   난 것이다. M4 에서 같은 값이 나올 이유가 없다. 여기서 재는 것은 **순서**
+#   (단순 컨트롤러 대 학습) 이지 수치 재현이 아니다.
+LAM_GAIN = 20.0                 # lam20 의 감쇠 이득. 구 캠페인 선언값 그대로
+
+
+def brake_limiter(v_self, a_max: float):
+    """`a = -a_max * unit(v)`. 자기 속도 반대로 **최대 감속**. 관측 전용."""
+    v = np.asarray(v_self, float)
+    n = float(np.linalg.norm(v))
+    a = (-a_max * v / n) if n > 1e-6 else np.zeros(3)
+    return np.concatenate([a, [0.0]]).astype(np.float32)
+
+
+def lambda_brake_limiter(v_self, a_max: float, lam: float = LAM_GAIN):
+    """`a = clip(-lam * v, a_max)`. 비례 감쇠. 관측 전용."""
+    a = -float(lam) * np.asarray(v_self, float)
+    n = float(np.linalg.norm(a))
+    if n > a_max and n > 0.0:
+        a = a * (a_max / n)
+    return np.concatenate([a, [0.0]]).astype(np.float32)
+
+
 
 def ring_slot(i, n_limiters, center, approach_dir, r_ring):
     """Slot for limiter i on the escape ring: a circle of radius r_ring in the
