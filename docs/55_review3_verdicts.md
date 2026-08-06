@@ -34,15 +34,19 @@
 
 ```
 [x] (A) 실 궤적 검증 (docs/54 §3.2) -- 적분기 = semi-implicit Euler 확정,
-      chord = 이산 map 의 정확한 임베딩, 0.033 상한 논법 철회,
-      16/17 두 보간 강건 · ep19 경계 모호 (철회 조건 3건 미달)
-[x] (B) Pk sweep (docs/54 §3.2) -- 이항 sanity 전 구간 PASS, 재시도 효과
-      +0.12~0.13, frontier 는 Pk 보다 완만히 저하. lethality 모형 부재 불변
-[ ] r_shape / r_commit / r_contact 의미 분리 점검
-      (r_contact 필드는 분리돼 있음. r_shape(viability) vs r_commit(margin 식)
-       vs r_contact 가 전부 kill_radius=0.75 를 공유 -- 값 분리 필요성 판단)
+      0.033 상한 논법 철회. 두 interpolation 규약 간 판정 불일치 1/17(ep19),
+      16/17 은 두 규약 판정 일치 (연속 물리 접촉 인증 아님).
+      "3건 철회 기준"은 커밋 시각으로 사전등록 증명 불가 -> 민감도 결과로 강등
+[x] (B) Pk sweep = resolver sanity + 임무 민감도 분석 -- 이항 sanity 전 구간
+      PASS, 중간 Pk 에서 재시도 효과 +0.12~0.13 관측(상수 아님, Pk=1 포화).
+      재시도 = 전부 서로 다른 limiter (PK_FAIL 은 소모, 동일 limiter 재시도는
+      veto 후에만). physical lethality calibration 아님
+[ ] r_shape / r_commit / r_contact **설정 키 분리 (지금)** -- 값은 전부 0.75
+      유지, 기본 동작 비트 동일 테스트. 수치 calibration 은 이후 별도
 [ ] 2×2 counterfactual replay: handoff {miss, miss-5tick} ×
-      controller {intercept, privileged MPC/oracle} + recoverability curve
+      controller {intercept, privileged MPC/oracle} + recoverability curve.
+      **Pk=1 로 돌린다** = "deterministic lethality 아래의 recoverability
+      upper-bound probe" 로 명시 (lethality 질문 아님·기하 질문)
 [ ] oracle / scripted / RL 3-way frontier (docs/54 §4)
 [ ] 편대 MARL 재평가: robust-clean 발생률 단일 지표가 아니라
       frontier 이동량으로 (LS≈SS 재해석의 후속)
