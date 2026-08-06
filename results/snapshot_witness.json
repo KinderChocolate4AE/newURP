@@ -1,0 +1,107 @@
+{
+  "contracts": [
+    "A: B/G 는 limiter 적용 전 union 에서",
+    "B: 네 limiter 전부 위치 배정 (safe parking 포함)",
+    "C: 후보는 union path 에서",
+    "D: good 보호는 hard constraint"
+  ],
+  "status_limit": "witness 미발견 != 불가능 (docs/52 §8.2)",
+  "n": 2,
+  "witness": 2,
+  "median_uncovered_on_fail": null,
+  "median_n_bad_on_fail": null,
+  "records": [
+    {
+      "episode": 9,
+      "found": true,
+      "fire_step": 21,
+      "protected_good_id": 42,
+      "n_bad": 2150,
+      "n_good": 354,
+      "n_bad_uncovered": 0,
+      "limiter_positions": [
+        [
+          5.5159031679497845,
+          -1.0210026874750286,
+          -2.4097870198791984
+        ],
+        [
+          6.5231908209207115,
+          -0.010108956935180713,
+          -1.8112522311651194
+        ],
+        [
+          6.259755277615823,
+          -1.1415473136761334,
+          -2.240438760838396
+        ],
+        [
+          4.844180305910383,
+          -0.13468981111596168,
+          -3.4367553151478387
+        ]
+      ],
+      "reachable_slack": [
+        1.5438518529268581,
+        1.5191333980430581,
+        3.699534059564332,
+        4.964300207828257
+      ],
+      "exact_boxed_in": false,
+      "exact_v_worst": 1.0,
+      "exact_v_soft": 1.0,
+      "exact_n_feasible": 1,
+      "theta_fire": 0.9,
+      "initialization": "beam(colored set cover)",
+      "optimizer_seed": 0,
+      "tried": 15,
+      "regime": "SHAPING_NEEDED"
+    },
+    {
+      "episode": 30,
+      "found": true,
+      "fire_step": 21,
+      "protected_good_id": 55,
+      "n_bad": 919,
+      "n_good": 1585,
+      "n_bad_uncovered": 0,
+      "limiter_positions": [
+        [
+          9.390306266362696,
+          -0.41092960144092167,
+          -2.400431875781417
+        ],
+        [
+          9.33188162320969,
+          0.19157919613559932,
+          -1.6272009268283811
+        ],
+        [
+          9.333000835307507,
+          -0.45246385332150413,
+          -2.1537454073191404
+        ],
+        [
+          9.428105510906837,
+          -1.028356613997765,
+          -1.9434340187137256
+        ]
+      ],
+      "reachable_slack": [
+        1.6160278449151138,
+        0.9341598526533099,
+        2.4912427248943736,
+        4.169604234500895
+      ],
+      "exact_boxed_in": false,
+      "exact_v_worst": 1.0,
+      "exact_v_soft": 1.0,
+      "exact_n_feasible": 26,
+      "theta_fire": 0.9,
+      "initialization": "beam(colored set cover)",
+      "optimizer_seed": 0,
+      "tried": 12,
+      "regime": "SHAPING_NEEDED"
+    }
+  ]
+}

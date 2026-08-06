@@ -1,0 +1,986 @@
+{
+  "contracts": [
+    "A: B/G 는 limiter 적용 전 union 에서",
+    "B: 네 limiter 전부 위치 배정 (safe parking 포함)",
+    "C: 후보는 union path 에서",
+    "D: good 보호는 hard constraint"
+  ],
+  "status_limit": "witness 미발견 != 불가능 (docs/52 §8.2)",
+  "n": 19,
+  "witness": 8,
+  "median_uncovered_on_fail": 6.0,
+  "median_n_bad_on_fail": 2455.0,
+  "records": [
+    {
+      "episode": 3,
+      "found": false,
+      "label": "NO_WITNESS_WITHIN_BUDGET",
+      "best": {
+        "fire_step": 14,
+        "protected_good_id": 21,
+        "n_bad": 2153,
+        "n_bad_search": 400,
+        "n_bad_uncovered": 3,
+        "limiter_positions": [
+          [
+            8.815700887951476,
+            0.7532917084147025,
+            2.0367276994746732
+          ],
+          [
+            9.390693467852186,
+            0.4284912438401768,
+            0.5989935632206678
+          ],
+          [
+            9.70731807592707,
+            0.8849982197840314,
+            1.1350953481066086
+          ],
+          [
+            9.437587534629309,
+            1.0417942787747536,
+            0.9736577797470467
+          ]
+        ],
+        "reachable_slack": [
+          1.4519254445237806,
+          1.596547956391877,
+          8.881784197001252e-16,
+          0.0
+        ]
+      },
+      "tried": 28,
+      "n_witness": 0,
+      "regime": "SHAPING_NEEDED"
+    },
+    {
+      "episode": 6,
+      "found": false,
+      "label": "NO_WITNESS_WITHIN_BUDGET",
+      "best": {
+        "fire_step": 16,
+        "protected_good_id": 0,
+        "n_bad": 2498,
+        "n_bad_search": 400,
+        "n_bad_uncovered": 43,
+        "limiter_positions": [
+          [
+            5.165757961615432,
+            0.7523434510076452,
+            -0.2522159092868727
+          ],
+          [
+            5.351827235917321,
+            0.1591287395908484,
+            0.6295325180195785
+          ],
+          [
+            5.140259300614568,
+            -0.7747215290934149,
+            -0.3286821120979789
+          ],
+          [
+            4.921613945707214,
+            -0.08461019814145662,
+            -0.9188840533075373
+          ]
+        ],
+        "reachable_slack": [
+          0.0,
+          8.881784197001252e-16,
+          0.0,
+          0.0
+        ]
+      },
+      "tried": 24,
+      "n_witness": 0,
+      "regime": "SHAPING_NEEDED"
+    },
+    {
+      "episode": 8,
+      "found": false,
+      "label": "NO_WITNESS_WITHIN_BUDGET",
+      "best": {
+        "fire_step": 10,
+        "protected_good_id": 0,
+        "n_bad": 2481,
+        "n_bad_search": 400,
+        "n_bad_uncovered": 255,
+        "limiter_positions": [
+          [
+            6.505593090757201,
+            2.641414637036856,
+            0.3348114031739767
+          ],
+          [
+            6.095674950084849,
+            -0.6887762266155614,
+            3.048741684351655
+          ],
+          [
+            7.361710267286365,
+            -2.4017998697923115,
+            0.8661511998335163
+          ],
+          [
+            7.071390663458365,
+            -0.5024955847983563,
+            -2.3935736174183257
+          ]
+        ],
+        "reachable_slack": [
+          4.440892098500626e-16,
+          0.0,
+          0.0,
+          4.440892098500626e-16
+        ]
+      },
+      "tried": 20,
+      "n_witness": 0,
+      "regime": "SHAPING_NEEDED"
+    },
+    {
+      "episode": 9,
+      "found": true,
+      "fire_step": 26,
+      "protected_good_id": 1,
+      "n_bad": 2497,
+      "n_good": 7,
+      "n_bad_uncovered": 0,
+      "limiter_positions": [
+        [
+          2.398880347546341,
+          0.3587096532217722,
+          -0.19945946387971153
+        ],
+        [
+          2.919429171470336,
+          -0.25776225141454656,
+          0.3784679329646637
+        ],
+        [
+          1.9122995139566004,
+          -0.5336250123126615,
+          -0.3356222799066513
+        ],
+        [
+          2.800015537314343,
+          -1.034907158570961,
+          0.11624129158365681
+        ]
+      ],
+      "reachable_slack": [
+        4.835542526876436,
+        5.23955325685358,
+        4.5546258513095035,
+        4.744528274704428
+      ],
+      "exact_boxed_in": false,
+      "exact_v_worst": 1.0,
+      "exact_v_soft": 1.0,
+      "exact_n_feasible": 1,
+      "theta_fire": 0.9,
+      "initialization": "beam(colored set cover)",
+      "optimizer_seed": 0,
+      "tried": 29,
+      "regime": "SHAPING_NEEDED",
+      "m_bad": 0.011878735027830545,
+      "m_good": 0.02389063745867981,
+      "m_sel": 0.011878735027830545,
+      "n_surviving_good": 1,
+      "label": "EXACT_WITNESS_FOUND",
+      "n_witness": 2,
+      "m_sel_all": [
+        0.0119,
+        0.0119
+      ]
+    },
+    {
+      "episode": 12,
+      "found": true,
+      "fire_step": 18,
+      "protected_good_id": 72,
+      "n_bad": 1685,
+      "n_good": 819,
+      "n_bad_uncovered": 0,
+      "limiter_positions": [
+        [
+          9.932580060987167,
+          -1.0908112491139341,
+          -1.177302657853483
+        ],
+        [
+          9.309074246066432,
+          -0.5231780414370912,
+          -1.9419930072747449
+        ],
+        [
+          8.688225956553541,
+          0.8608282620750916,
+          -1.0947359281226259
+        ],
+        [
+          8.20471255089066,
+          -2.4219794646151422,
+          -1.9757448911158217
+        ]
+      ],
+      "reachable_slack": [
+        0.7720243846098809,
+        0.18594123918329775,
+        1.2678469120819473,
+        3.389680948712728
+      ],
+      "exact_boxed_in": false,
+      "exact_v_worst": 1.0,
+      "exact_v_soft": 1.0,
+      "exact_n_feasible": 2,
+      "theta_fire": 0.9,
+      "initialization": "beam(colored set cover)",
+      "optimizer_seed": 0,
+      "tried": 18,
+      "regime": "SHAPING_NEEDED",
+      "m_bad": 0.027341600738531535,
+      "m_good": 0.015679626587398188,
+      "m_sel": 0.015679626587398188,
+      "n_surviving_good": 2,
+      "label": "EXACT_WITNESS_FOUND",
+      "n_witness": 1,
+      "m_sel_all": [
+        0.0157
+      ]
+    },
+    {
+      "episode": 13,
+      "found": false,
+      "label": "NO_WITNESS_WITHIN_BUDGET",
+      "best": {
+        "fire_step": 12,
+        "protected_good_id": 0,
+        "n_bad": 2240,
+        "n_bad_search": 400,
+        "n_bad_uncovered": 5,
+        "limiter_positions": [
+          [
+            8.988670986246685,
+            0.6703751985212341,
+            -0.5110209391086964
+          ],
+          [
+            9.60789402568247,
+            0.23569555549371776,
+            0.8354606439452752
+          ],
+          [
+            8.721997428715845,
+            -0.5968392468123325,
+            -0.2741509353423584
+          ],
+          [
+            9.687740459163516,
+            0.014343250965831864,
+            -0.860484321265611
+          ]
+        ],
+        "reachable_slack": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "tried": 24,
+      "n_witness": 0,
+      "regime": "SHAPING_NEEDED"
+    },
+    {
+      "episode": 14,
+      "found": false,
+      "label": "NO_WITNESS_WITHIN_BUDGET",
+      "best": {
+        "fire_step": 12,
+        "protected_good_id": 0,
+        "n_bad": 2490,
+        "n_bad_search": 400,
+        "n_bad_uncovered": 15,
+        "limiter_positions": [
+          [
+            5.852542601370855,
+            0.6873245053541694,
+            -0.5697935435930921
+          ],
+          [
+            4.74004148243901,
+            -0.4855281933310805,
+            1.440176869473949
+          ],
+          [
+            5.9103230253745345,
+            -0.8039048921897488,
+            -0.8273784897854899
+          ],
+          [
+            4.548425949278636,
+            0.4017791922702821,
+            -1.614646556648534
+          ]
+        ],
+        "reachable_slack": [
+          0.0,
+          0.0,
+          0.09123397584827053,
+          8.881784197001252e-16
+        ]
+      },
+      "tried": 24,
+      "n_witness": 0,
+      "regime": "SHAPING_NEEDED"
+    },
+    {
+      "episode": 15,
+      "found": true,
+      "fire_step": 22,
+      "protected_good_id": 72,
+      "n_bad": 949,
+      "n_good": 1555,
+      "n_bad_uncovered": 0,
+      "limiter_positions": [
+        [
+          9.118552645063573,
+          -2.2744840302977045,
+          -0.4956979557618957
+        ],
+        [
+          9.279754892522854,
+          -2.731208170096279,
+          -0.5345392602423932
+        ],
+        [
+          8.755434858242985,
+          -1.4711400371582593,
+          -1.571505095890079
+        ],
+        [
+          7.662978928633566,
+          -1.3383542163502644,
+          1.233385716291338
+        ]
+      ],
+      "reachable_slack": [
+        0.8504504452821946,
+        1.9240558988812744,
+        4.290966915393597,
+        1.8427565122704967
+      ],
+      "exact_boxed_in": false,
+      "exact_v_worst": 1.0,
+      "exact_v_soft": 1.0,
+      "exact_n_feasible": 5,
+      "theta_fire": 0.9,
+      "initialization": "beam(colored set cover)",
+      "optimizer_seed": 0,
+      "tried": 16,
+      "regime": "SHAPING_NEEDED",
+      "m_bad": 0.014810770183155686,
+      "m_good": 0.01770959513488013,
+      "m_sel": 0.014810770183155686,
+      "n_surviving_good": 5,
+      "label": "EXACT_WITNESS_FOUND",
+      "n_witness": 6,
+      "m_sel_all": [
+        0.0148,
+        0.0121,
+        0.0121,
+        0.0121,
+        0.0109,
+        0.0024
+      ]
+    },
+    {
+      "episode": 17,
+      "found": true,
+      "fire_step": 32,
+      "protected_good_id": 71,
+      "n_bad": 1992,
+      "n_good": 512,
+      "n_bad_uncovered": 0,
+      "limiter_positions": [
+        [
+          9.132645323221189,
+          0.7744675432895929,
+          -0.5752226697042917
+        ],
+        [
+          8.85515957969226,
+          -0.11755299966552876,
+          -0.10674399832413055
+        ],
+        [
+          9.08588924424008,
+          1.2753657719377656,
+          0.3498865334108044
+        ],
+        [
+          8.769246530033396,
+          0.7741471213532544,
+          0.4334252990901251
+        ]
+      ],
+      "reachable_slack": [
+        8.038402285960164,
+        7.271574539242744,
+        6.072530986404247,
+        6.908813914930096
+      ],
+      "exact_boxed_in": false,
+      "exact_v_worst": 1.0,
+      "exact_v_soft": 1.0,
+      "exact_n_feasible": 5,
+      "theta_fire": 0.9,
+      "initialization": "beam(colored set cover)",
+      "optimizer_seed": 0,
+      "tried": 26,
+      "regime": "SHAPING_NEEDED",
+      "m_bad": 0.0040708411357196495,
+      "m_good": 0.041138689808103424,
+      "m_sel": 0.0040708411357196495,
+      "n_surviving_good": 5,
+      "label": "EXACT_WITNESS_FOUND",
+      "n_witness": 1,
+      "m_sel_all": [
+        0.0041
+      ]
+    },
+    {
+      "episode": 18,
+      "found": true,
+      "fire_step": 24,
+      "protected_good_id": 40,
+      "n_bad": 1640,
+      "n_good": 864,
+      "n_bad_uncovered": 0,
+      "limiter_positions": [
+        [
+          9.252194807561214,
+          -0.30667357965440156,
+          0.055017797889392206
+        ],
+        [
+          8.885997318449032,
+          0.2602515843749198,
+          -0.45256495711606226
+        ],
+        [
+          8.730823026067705,
+          0.4426639191019959,
+          -0.41404265850881367
+        ],
+        [
+          8.528805223331554,
+          -0.5021589372018422,
+          0.5867647686828971
+        ]
+      ],
+      "reachable_slack": [
+        4.483948359068436,
+        4.406429315747394,
+        4.429538453964629,
+        4.302477824021194
+      ],
+      "exact_boxed_in": false,
+      "exact_v_worst": 1.0,
+      "exact_v_soft": 1.0,
+      "exact_n_feasible": 5,
+      "theta_fire": 0.9,
+      "initialization": "beam(colored set cover)",
+      "optimizer_seed": 0,
+      "tried": 20,
+      "regime": "SHAPING_NEEDED",
+      "m_bad": 0.02439801720177881,
+      "m_good": 0.02296964583913641,
+      "m_sel": 0.02296964583913641,
+      "n_surviving_good": 5,
+      "label": "EXACT_WITNESS_FOUND",
+      "n_witness": 1,
+      "m_sel_all": [
+        0.023
+      ]
+    },
+    {
+      "episode": 19,
+      "found": false,
+      "label": "NO_WITNESS_WITHIN_BUDGET",
+      "best": {
+        "fire_step": 20,
+        "protected_good_id": 51,
+        "n_bad": 2181,
+        "n_bad_search": 400,
+        "n_bad_uncovered": 0,
+        "limiter_positions": [
+          [
+            8.27999818398214,
+            2.5110655818456857,
+            -0.9270277577337817
+          ],
+          [
+            8.357820990643964,
+            2.74690226052131,
+            -1.7047300728063246
+          ],
+          [
+            7.792245215458072,
+            3.4697827839042827,
+            -2.544662482461813
+          ],
+          [
+            3.89196839513498,
+            1.5775801071815978,
+            -4.044792117298355
+          ]
+        ],
+        "reachable_slack": [
+          7.286255309603643,
+          2.702502300821158,
+          1.110718636849212,
+          5.453932600129289
+        ],
+        "replay_failed": {
+          "episode": 19,
+          "found": false,
+          "fire_step": 20,
+          "protected_good_id": 4,
+          "n_bad": 2181,
+          "n_good": 323,
+          "n_bad_uncovered": 0,
+          "limiter_positions": [
+            [
+              8.612374437292393,
+              2.4018195976100114,
+              -2.124369277281372
+            ],
+            [
+              7.980019520328699,
+              3.347316495577501,
+              -1.7113693464366113
+            ],
+            [
+              8.580812393474812,
+              2.2047684187030736,
+              -1.2796230480014819
+            ],
+            [
+              7.295702289335441,
+              3.287227261494003,
+              -0.90629745163815
+            ]
+          ],
+          "reachable_slack": [
+            6.545420306118965,
+            2.4571162053635165,
+            2.6164074114406093,
+            4.659745965789143
+          ],
+          "exact_boxed_in": false,
+          "exact_v_worst": 0.0,
+          "exact_v_soft": 0.6428571428571429,
+          "exact_n_feasible": 28,
+          "theta_fire": 0.9,
+          "initialization": "beam(colored set cover)",
+          "optimizer_seed": 0,
+          "tried": 24,
+          "regime": "SHAPING_NEEDED"
+        }
+      },
+      "tried": 42,
+      "n_witness": 0,
+      "regime": "SHAPING_NEEDED"
+    },
+    {
+      "episode": 20,
+      "found": false,
+      "label": "NO_WITNESS_WITHIN_BUDGET",
+      "best": {
+        "fire_step": 16,
+        "protected_good_id": 12,
+        "n_bad": 2455,
+        "n_bad_search": 400,
+        "n_bad_uncovered": 8,
+        "limiter_positions": [
+          [
+            4.905702241657774,
+            -0.7518595024912695,
+            0.611635220121266
+          ],
+          [
+            6.349852085809751,
+            -1.1508615663041348,
+            0.4455767460071217
+          ],
+          [
+            5.703351033243317,
+            -0.43681241375232993,
+            -0.5082290483036949
+          ],
+          [
+            4.209379229867401,
+            0.11677147307358951,
+            0.3525902697936072
+          ]
+        ],
+        "reachable_slack": [
+          0.0,
+          1.5809486759718103,
+          1.4261606275181746,
+          0.0
+        ]
+      },
+      "tried": 23,
+      "n_witness": 0,
+      "regime": "SHAPING_NEEDED"
+    },
+    {
+      "episode": 22,
+      "found": false,
+      "label": "NO_WITNESS_WITHIN_BUDGET",
+      "best": {
+        "fire_step": 18,
+        "protected_good_id": 122,
+        "n_bad": 2046,
+        "n_bad_search": 400,
+        "n_bad_uncovered": 1,
+        "limiter_positions": [
+          [
+            7.533331184843514,
+            1.1751226224199556,
+            -1.9735057813516528
+          ],
+          [
+            7.406517865738887,
+            0.22007224091789152,
+            -1.533660114296965
+          ],
+          [
+            5.651764798003583,
+            1.2501294606935858,
+            -0.07634367500118341
+          ],
+          [
+            5.856107834468201,
+            0.7145736461249563,
+            0.19356345212920623
+          ]
+        ],
+        "reachable_slack": [
+          2.34791143892799,
+          0.1128875692841147,
+          8.881784197001252e-16,
+          1.0132166914781031
+        ]
+      },
+      "tried": 24,
+      "n_witness": 0,
+      "regime": "SHAPING_NEEDED"
+    },
+    {
+      "episode": 25,
+      "found": false,
+      "label": "NO_WITNESS_WITHIN_BUDGET",
+      "best": {
+        "fire_step": 14,
+        "protected_good_id": 3,
+        "n_bad": 2489,
+        "n_bad_search": 400,
+        "n_bad_uncovered": 6,
+        "limiter_positions": [
+          [
+            5.371239443298569,
+            0.5591082927936091,
+            0.7479735094495493
+          ],
+          [
+            4.182346119206474,
+            -0.029358297737438265,
+            1.448095929327756
+          ],
+          [
+            4.7960478315596085,
+            -0.9216198403178106,
+            0.5411759103090078
+          ],
+          [
+            4.988599157545632,
+            -0.09212872959882233,
+            -0.743905210913459
+          ]
+        ],
+        "reachable_slack": [
+          -8.881784197001252e-16,
+          8.881784197001252e-16,
+          -1.7763568394002505e-15,
+          0.0
+        ]
+      },
+      "tried": 24,
+      "n_witness": 0,
+      "regime": "SHAPING_NEEDED"
+    },
+    {
+      "episode": 27,
+      "found": false,
+      "label": "NO_WITNESS_WITHIN_BUDGET",
+      "best": {
+        "fire_step": 16,
+        "protected_good_id": 0,
+        "n_bad": 2467,
+        "n_bad_search": 400,
+        "n_bad_uncovered": 21,
+        "limiter_positions": [
+          [
+            5.236092281618421,
+            0.6398753599192357,
+            0.18676669612416752
+          ],
+          [
+            4.9945856185325415,
+            -0.5935510083781952,
+            0.840680807190723
+          ],
+          [
+            5.000951087695251,
+            -0.7968574008920095,
+            0.15508857055643835
+          ],
+          [
+            6.033797056602091,
+            -0.07076336618916533,
+            -0.22362134217472374
+          ]
+        ],
+        "reachable_slack": [
+          -8.881784197001252e-16,
+          -8.881784197001252e-16,
+          0.0,
+          0.0
+        ]
+      },
+      "tried": 24,
+      "n_witness": 0,
+      "regime": "SHAPING_NEEDED"
+    },
+    {
+      "episode": 29,
+      "found": true,
+      "fire_step": 48,
+      "protected_good_id": 31,
+      "n_bad": 2457,
+      "n_good": 47,
+      "n_bad_uncovered": 0,
+      "limiter_positions": [
+        [
+          3.744278119582158,
+          -1.1152683893977817,
+          0.12393016265892512
+        ],
+        [
+          4.272398966468815,
+          -1.977508275876835,
+          -0.26193187396825346
+        ],
+        [
+          3.9029582880154097,
+          -0.958251328438015,
+          -0.6734088501875799
+        ],
+        [
+          4.2144490206821725,
+          -1.4497816349413373,
+          -0.47809070797827036
+        ]
+      ],
+      "reachable_slack": [
+        10.56653993121786,
+        11.273032848222787,
+        12.223527369343731,
+        11.945033442591223
+      ],
+      "exact_boxed_in": false,
+      "exact_v_worst": 1.0,
+      "exact_v_soft": 1.0,
+      "exact_n_feasible": 1,
+      "theta_fire": 0.9,
+      "initialization": "beam(colored set cover)",
+      "optimizer_seed": 0,
+      "tried": 49,
+      "regime": "SHAPING_NEEDED",
+      "m_bad": 0.030013660412175125,
+      "m_good": 0.0131026161574882,
+      "m_sel": 0.0131026161574882,
+      "n_surviving_good": 1,
+      "label": "EXACT_WITNESS_FOUND",
+      "n_witness": 2,
+      "m_sel_all": [
+        0.0131,
+        0.002
+      ]
+    },
+    {
+      "episode": 30,
+      "found": true,
+      "fire_step": 24,
+      "protected_good_id": 98,
+      "n_bad": 1612,
+      "n_good": 892,
+      "n_bad_uncovered": 0,
+      "limiter_positions": [
+        [
+          8.041203363068977,
+          -1.3311792084287941,
+          -1.6823557733314018
+        ],
+        [
+          7.836425162464679,
+          -0.7652351843301356,
+          -1.3088982845307353
+        ],
+        [
+          6.98576839475013,
+          0.04170277879845519,
+          -2.417548576807072
+        ],
+        [
+          5.856917469018331,
+          -0.31613246377750015,
+          -0.44146812347681363
+        ]
+      ],
+      "reachable_slack": [
+        2.9993158502248356,
+        3.1930917173375235,
+        3.8677320365799526,
+        4.503260827681955
+      ],
+      "exact_boxed_in": false,
+      "exact_v_worst": 1.0,
+      "exact_v_soft": 1.0,
+      "exact_n_feasible": 4,
+      "theta_fire": 0.9,
+      "initialization": "beam(colored set cover)",
+      "optimizer_seed": 0,
+      "tried": 19,
+      "regime": "SHAPING_NEEDED",
+      "m_bad": 0.008619825931078795,
+      "m_good": 0.04277688918946643,
+      "m_sel": 0.008619825931078795,
+      "n_surviving_good": 4,
+      "label": "EXACT_WITNESS_FOUND",
+      "n_witness": 3,
+      "m_sel_all": [
+        0.0086,
+        0.007,
+        0.0052
+      ]
+    },
+    {
+      "episode": 34,
+      "found": true,
+      "fire_step": 24,
+      "protected_good_id": 60,
+      "n_bad": 2268,
+      "n_good": 236,
+      "n_bad_uncovered": 0,
+      "limiter_positions": [
+        [
+          6.67838570415503,
+          0.7484422225074808,
+          1.2961694846718954
+        ],
+        [
+          5.705064596079946,
+          0.9291046681231345,
+          1.9872205519603938
+        ],
+        [
+          5.600052108746925,
+          1.8299124726559843,
+          1.7860805120772474
+        ],
+        [
+          4.097576130555503,
+          4.008060395235574,
+          0.494310180897416
+        ]
+      ],
+      "reachable_slack": [
+        6.363560051361922,
+        7.101044672597246,
+        3.5442592550604184,
+        3.1596589119440646
+      ],
+      "exact_boxed_in": false,
+      "exact_v_worst": 1.0,
+      "exact_v_soft": 1.0,
+      "exact_n_feasible": 2,
+      "theta_fire": 0.9,
+      "initialization": "beam(colored set cover)",
+      "optimizer_seed": 0,
+      "tried": 27,
+      "regime": "SHAPING_NEEDED",
+      "m_bad": 0.022660473168458095,
+      "m_good": 0.03510859908906716,
+      "m_sel": 0.022660473168458095,
+      "n_surviving_good": 2,
+      "label": "EXACT_WITNESS_FOUND",
+      "n_witness": 4,
+      "m_sel_all": [
+        0.0227,
+        0.0227,
+        0.0105,
+        0.0103
+      ]
+    },
+    {
+      "episode": 36,
+      "found": false,
+      "label": "NO_WITNESS_WITHIN_BUDGET",
+      "best": {
+        "fire_step": 16,
+        "protected_good_id": 2,
+        "n_bad": 2228,
+        "n_bad_search": 400,
+        "n_bad_uncovered": 5,
+        "limiter_positions": [
+          [
+            6.184535625080507,
+            0.7385616046792389,
+            0.901148121813319
+          ],
+          [
+            5.670912009934272,
+            -0.2813488554553747,
+            1.1799388112873879
+          ],
+          [
+            5.961164789432532,
+            -0.7540685917122207,
+            0.2881900265955578
+          ],
+          [
+            5.41310781569124,
+            0.2179449286420387,
+            -1.0594004433329003
+          ]
+        ],
+        "reachable_slack": [
+          0.0,
+          0.23594922521371853,
+          0.0,
+          8.881784197001252e-16
+        ]
+      },
+      "tried": 24,
+      "n_witness": 0,
+      "regime": "SHAPING_NEEDED"
+    }
+  ]
+}

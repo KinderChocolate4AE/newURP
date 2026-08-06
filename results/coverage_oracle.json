@@ -1,0 +1,595 @@
+{
+  "objective": "성형 = 봉쇄가 아니라 압축. 원뿔 밖 탈출(bad)만 막고 원뿔 안 탈출(good)은 하나 이상 남긴다. 전부 막으면 boxed_in 이 되어 포획이 아니다 (viability R4 SPLIT)",
+  "necessary_condition": "N_good >= 1  AND  모든 bad 표본이 어떤 limiter 의 도달가능집합 + kill_radius 안",
+  "not_certified": "4 기로 실제 덮을 수 있는지(집합덮개) / 시간 일관 궤적 / 반응형 A2 하 유지 -- 전부 미검증 (단계 2b~4)",
+  "by_regime": {
+    "ALL": {
+      "n": 40,
+      "with_good_sample": 40,
+      "coverage_possible": 28,
+      "frac": 0.7,
+      "median_bad_unreach": 0.0,
+      "median_bad": 1312.0
+    },
+    "SHAPING_NEEDED": {
+      "n": 23,
+      "with_good_sample": 23,
+      "coverage_possible": 19,
+      "frac": 0.8260869565217391,
+      "median_bad_unreach": 0.0,
+      "median_bad": 1544.0
+    },
+    "FREE_CAPTURE": {
+      "n": 17,
+      "with_good_sample": 17,
+      "coverage_possible": 9,
+      "frac": 0.5294117647058824,
+      "median_bad_unreach": 0.0,
+      "median_bad": 436.0
+    }
+  },
+  "records": [
+    {
+      "episode": 0,
+      "steps": 19,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 6,
+        "n_good": 1115,
+        "n_bad": 885,
+        "n_bad_unreach": 885,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 1,
+      "steps": 18,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 4,
+        "n_good": 1237,
+        "n_bad": 763,
+        "n_bad_unreach": 763,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 2,
+      "steps": 26,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 16,
+        "n_good": 474,
+        "n_bad": 1526,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 3,
+      "steps": 27,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 12,
+        "n_good": 345,
+        "n_bad": 1655,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 4,
+      "steps": 31,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 20,
+        "n_good": 1755,
+        "n_bad": 245,
+        "n_bad_unreach": 245,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 5,
+      "steps": 20,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 6,
+        "n_good": 1584,
+        "n_bad": 416,
+        "n_bad_unreach": 416,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 6,
+      "steps": 23,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 14,
+        "n_good": 82,
+        "n_bad": 1918,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 7,
+      "steps": 17,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 6,
+        "n_good": 1147,
+        "n_bad": 853,
+        "n_bad_unreach": 853,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 8,
+      "steps": 17,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 10,
+        "n_good": 15,
+        "n_bad": 1985,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 9,
+      "steps": 33,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 16,
+        "n_good": 1152,
+        "n_bad": 848,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 10,
+      "steps": 25,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 10,
+        "n_good": 2000,
+        "n_bad": 0,
+        "n_bad_unreach": 0,
+        "feasible_now": true,
+        "note": "이미 전부 원뿔 안"
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 11,
+      "steps": 17,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 6,
+        "n_good": 763,
+        "n_bad": 1237,
+        "n_bad_unreach": 1237,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 12,
+      "steps": 36,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 16,
+        "n_good": 646,
+        "n_bad": 1354,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 13,
+      "steps": 23,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 12,
+        "n_good": 217,
+        "n_bad": 1783,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 14,
+      "steps": 19,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 10,
+        "n_good": 78,
+        "n_bad": 1922,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 15,
+      "steps": 41,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 18,
+        "n_good": 618,
+        "n_bad": 1382,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 16,
+      "steps": 24,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 12,
+        "n_good": 1701,
+        "n_bad": 299,
+        "n_bad_unreach": 299,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 17,
+      "steps": 55,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 20,
+        "n_good": 64,
+        "n_bad": 1936,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 18,
+      "steps": 43,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 18,
+        "n_good": 456,
+        "n_bad": 1544,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 19,
+      "steps": 36,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 14,
+        "n_good": 242,
+        "n_bad": 1758,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 20,
+      "steps": 24,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 12,
+        "n_good": 502,
+        "n_bad": 1498,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 21,
+      "steps": 20,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 8,
+        "n_good": 1315,
+        "n_bad": 685,
+        "n_bad_unreach": 620,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 22,
+      "steps": 30,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 16,
+        "n_good": 730,
+        "n_bad": 1270,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 23,
+      "steps": 34,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 20,
+        "n_good": 1802,
+        "n_bad": 198,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 24,
+      "steps": 45,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 32,
+        "n_good": 1764,
+        "n_bad": 236,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 25,
+      "steps": 21,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 12,
+        "n_good": 82,
+        "n_bad": 1918,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 26,
+      "steps": 26,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 16,
+        "n_good": 564,
+        "n_bad": 1436,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 27,
+      "steps": 24,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 14,
+        "n_good": 184,
+        "n_bad": 1816,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 28,
+      "steps": 16,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 4,
+        "n_good": 581,
+        "n_bad": 1419,
+        "n_bad_unreach": 1322,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 29,
+      "steps": 60,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 24,
+        "n_good": 12,
+        "n_bad": 1988,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 30,
+      "steps": 40,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 18,
+        "n_good": 887,
+        "n_bad": 1113,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 31,
+      "steps": 19,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 6,
+        "n_good": 2000,
+        "n_bad": 0,
+        "n_bad_unreach": 0,
+        "feasible_now": true,
+        "note": "이미 전부 원뿔 안"
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 32,
+      "steps": 23,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 16,
+        "n_good": 2,
+        "n_bad": 1998,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 33,
+      "steps": 16,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 4,
+        "n_good": 1108,
+        "n_bad": 892,
+        "n_bad_unreach": 892,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 34,
+      "steps": 37,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 14,
+        "n_good": 417,
+        "n_bad": 1583,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 35,
+      "steps": 32,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 16,
+        "n_good": 1705,
+        "n_bad": 295,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 36,
+      "steps": 26,
+      "regime": "SHAPING_NEEDED",
+      "n_samples": 2000,
+      "best": {
+        "t": 14,
+        "n_good": 597,
+        "n_bad": 1403,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 37,
+      "steps": 17,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 6,
+        "n_good": 1555,
+        "n_bad": 445,
+        "n_bad_unreach": 445,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 38,
+      "steps": 16,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 4,
+        "n_good": 1564,
+        "n_bad": 436,
+        "n_bad_unreach": 436,
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 39,
+      "steps": 31,
+      "regime": "FREE_CAPTURE",
+      "n_samples": 2000,
+      "best": {
+        "t": 20,
+        "n_good": 960,
+        "n_bad": 1040,
+        "n_bad_unreach": 0,
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    }
+  ]
+}

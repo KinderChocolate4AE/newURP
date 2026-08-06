@@ -1,0 +1,1433 @@
+{
+  "objective": "성형 = 봉쇄가 아니라 압축. 원뿔 밖 탈출(bad)만 막고 원뿔 안 탈출(good)은 하나 이상 남긴다. 전부 막으면 boxed_in 이 되어 포획이 아니다 (viability R4 SPLIT)",
+  "necessary_condition": "N_good >= 1  AND  모든 bad 표본이 어떤 limiter 의 도달가능집합 + kill_radius 안",
+  "not_certified": "4 기로 실제 덮을 수 있는지(집합덮개) / 시간 일관 궤적 / 반응형 A2 하 유지 -- 전부 미검증 (단계 2b~4)",
+  "by_regime": {
+    "ALL": {
+      "n": 40,
+      "with_good_sample": 40,
+      "coverage_possible": 27,
+      "frac": 0.675,
+      "median_bad_unreach": 0.0,
+      "median_bad": 1719.0
+    },
+    "SHAPING_NEEDED": {
+      "n": 23,
+      "with_good_sample": 23,
+      "coverage_possible": 19,
+      "frac": 0.8260869565217391,
+      "median_bad_unreach": 0.0,
+      "median_bad": 1952.0
+    },
+    "FREE_CAPTURE": {
+      "n": 17,
+      "with_good_sample": 17,
+      "coverage_possible": 8,
+      "frac": 0.47058823529411764,
+      "median_bad_unreach": 107.0,
+      "median_bad": 559.0
+    }
+  },
+  "records": [
+    {
+      "episode": 0,
+      "steps": 19,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 6,
+        "n_good": 1353,
+        "n_bad": 1151,
+        "n_bad_unreach": 1151,
+        "unreach_block1": 885,
+        "by_block": {
+          "single": {
+            "n_bad": 885,
+            "coverable": 0,
+            "unreachable": 885,
+            "worst_slack": 4.052124713995539
+          },
+          "boundary": {
+            "n_bad": 58,
+            "coverable": 0,
+            "unreachable": 58,
+            "worst_slack": 4.012018494188821
+          },
+          "dogleg": {
+            "n_bad": 208,
+            "coverable": 0,
+            "unreachable": 208,
+            "worst_slack": 4.042505891993431
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 1,
+      "steps": 18,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 4,
+        "n_good": 1519,
+        "n_bad": 985,
+        "n_bad_unreach": 985,
+        "unreach_block1": 763,
+        "by_block": {
+          "single": {
+            "n_bad": 763,
+            "coverable": 0,
+            "unreachable": 763,
+            "worst_slack": 4.244195907136693
+          },
+          "boundary": {
+            "n_bad": 35,
+            "coverable": 0,
+            "unreachable": 35,
+            "worst_slack": 4.228532805209402
+          },
+          "dogleg": {
+            "n_bad": 187,
+            "coverable": 0,
+            "unreachable": 187,
+            "worst_slack": 4.212805545671803
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 2,
+      "steps": 26,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 16,
+        "n_good": 568,
+        "n_bad": 1936,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1526,
+            "coverable": 1526,
+            "unreachable": 0,
+            "worst_slack": -0.20485104981057933
+          },
+          "boundary": {
+            "n_bad": 64,
+            "coverable": 64,
+            "unreachable": 0,
+            "worst_slack": -0.20434008941056891
+          },
+          "dogleg": {
+            "n_bad": 346,
+            "coverable": 346,
+            "unreachable": 0,
+            "worst_slack": -0.20486342530074264
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 3,
+      "steps": 27,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 12,
+        "n_good": 408,
+        "n_bad": 2096,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1655,
+            "coverable": 1655,
+            "unreachable": 0,
+            "worst_slack": -0.35149742212457813
+          },
+          "boundary": {
+            "n_bad": 70,
+            "coverable": 70,
+            "unreachable": 0,
+            "worst_slack": -0.3808263272618335
+          },
+          "dogleg": {
+            "n_bad": 371,
+            "coverable": 371,
+            "unreachable": 0,
+            "worst_slack": -0.370788875476852
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 4,
+      "steps": 31,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 20,
+        "n_good": 2193,
+        "n_bad": 311,
+        "n_bad_unreach": 311,
+        "unreach_block1": 245,
+        "by_block": {
+          "single": {
+            "n_bad": 245,
+            "coverable": 0,
+            "unreachable": 245,
+            "worst_slack": 0.4785910320404463
+          },
+          "boundary": {
+            "n_bad": 18,
+            "coverable": 0,
+            "unreachable": 18,
+            "worst_slack": 0.4785910320404463
+          },
+          "dogleg": {
+            "n_bad": 48,
+            "coverable": 0,
+            "unreachable": 48,
+            "worst_slack": 0.4785910320404463
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 5,
+      "steps": 20,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 6,
+        "n_good": 1945,
+        "n_bad": 559,
+        "n_bad_unreach": 559,
+        "unreach_block1": 416,
+        "by_block": {
+          "single": {
+            "n_bad": 416,
+            "coverable": 0,
+            "unreachable": 416,
+            "worst_slack": 4.383774570496477
+          },
+          "boundary": {
+            "n_bad": 38,
+            "coverable": 0,
+            "unreachable": 38,
+            "worst_slack": 4.280413428979371
+          },
+          "dogleg": {
+            "n_bad": 105,
+            "coverable": 0,
+            "unreachable": 105,
+            "worst_slack": 4.25352366949677
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 6,
+      "steps": 23,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 14,
+        "n_good": 99,
+        "n_bad": 2405,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1918,
+            "coverable": 1918,
+            "unreachable": 0,
+            "worst_slack": -0.11056160131610193
+          },
+          "boundary": {
+            "n_bad": 71,
+            "coverable": 71,
+            "unreachable": 0,
+            "worst_slack": -0.11056160131610193
+          },
+          "dogleg": {
+            "n_bad": 416,
+            "coverable": 416,
+            "unreachable": 0,
+            "worst_slack": -0.11056160131610193
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 7,
+      "steps": 17,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 6,
+        "n_good": 1414,
+        "n_bad": 1090,
+        "n_bad_unreach": 1090,
+        "unreach_block1": 853,
+        "by_block": {
+          "single": {
+            "n_bad": 853,
+            "coverable": 0,
+            "unreachable": 853,
+            "worst_slack": 3.4632358368855165
+          },
+          "boundary": {
+            "n_bad": 49,
+            "coverable": 0,
+            "unreachable": 49,
+            "worst_slack": 3.4115910192352352
+          },
+          "dogleg": {
+            "n_bad": 188,
+            "coverable": 0,
+            "unreachable": 188,
+            "worst_slack": 3.2977766392451215
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 8,
+      "steps": 17,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 10,
+        "n_good": 23,
+        "n_bad": 2481,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1985,
+            "coverable": 1985,
+            "unreachable": 0,
+            "worst_slack": -0.10500403559032057
+          },
+          "boundary": {
+            "n_bad": 72,
+            "coverable": 72,
+            "unreachable": 0,
+            "worst_slack": -0.1046628314312783
+          },
+          "dogleg": {
+            "n_bad": 424,
+            "coverable": 424,
+            "unreachable": 0,
+            "worst_slack": -0.10789092266255373
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 9,
+      "steps": 33,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 16,
+        "n_good": 1403,
+        "n_bad": 1101,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 848,
+            "coverable": 848,
+            "unreachable": 0,
+            "worst_slack": -1.625994206155248
+          },
+          "boundary": {
+            "n_bad": 55,
+            "coverable": 55,
+            "unreachable": 0,
+            "worst_slack": -1.6590603357536677
+          },
+          "dogleg": {
+            "n_bad": 198,
+            "coverable": 198,
+            "unreachable": 0,
+            "worst_slack": -1.6468229779602863
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 10,
+      "steps": 25,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 14,
+        "n_good": 1815,
+        "n_bad": 689,
+        "n_bad_unreach": 689,
+        "unreach_block1": 533,
+        "by_block": {
+          "single": {
+            "n_bad": 533,
+            "coverable": 0,
+            "unreachable": 533,
+            "worst_slack": 2.468598869913891
+          },
+          "boundary": {
+            "n_bad": 40,
+            "coverable": 0,
+            "unreachable": 40,
+            "worst_slack": 2.4642772983057633
+          },
+          "dogleg": {
+            "n_bad": 116,
+            "coverable": 0,
+            "unreachable": 116,
+            "worst_slack": 2.4751718151679016
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 11,
+      "steps": 17,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 6,
+        "n_good": 933,
+        "n_bad": 1571,
+        "n_bad_unreach": 1571,
+        "unreach_block1": 1237,
+        "by_block": {
+          "single": {
+            "n_bad": 1237,
+            "coverable": 0,
+            "unreachable": 1237,
+            "worst_slack": 3.7943885940216173
+          },
+          "boundary": {
+            "n_bad": 63,
+            "coverable": 0,
+            "unreachable": 63,
+            "worst_slack": 3.6117958128201852
+          },
+          "dogleg": {
+            "n_bad": 271,
+            "coverable": 0,
+            "unreachable": 271,
+            "worst_slack": 3.559962262776624
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 12,
+      "steps": 36,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 16,
+        "n_good": 783,
+        "n_bad": 1721,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1354,
+            "coverable": 1354,
+            "unreachable": 0,
+            "worst_slack": -1.6210581766999086
+          },
+          "boundary": {
+            "n_bad": 67,
+            "coverable": 67,
+            "unreachable": 0,
+            "worst_slack": -1.686648548990842
+          },
+          "dogleg": {
+            "n_bad": 300,
+            "coverable": 300,
+            "unreachable": 0,
+            "worst_slack": -1.6316594192671001
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 13,
+      "steps": 23,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 12,
+        "n_good": 264,
+        "n_bad": 2240,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1783,
+            "coverable": 1783,
+            "unreachable": 0,
+            "worst_slack": -0.30973848272118865
+          },
+          "boundary": {
+            "n_bad": 68,
+            "coverable": 68,
+            "unreachable": 0,
+            "worst_slack": -0.29768156543575497
+          },
+          "dogleg": {
+            "n_bad": 389,
+            "coverable": 389,
+            "unreachable": 0,
+            "worst_slack": -0.35030337729088235
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 14,
+      "steps": 19,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 10,
+        "n_good": 97,
+        "n_bad": 2407,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1922,
+            "coverable": 1922,
+            "unreachable": 0,
+            "worst_slack": -0.828684926547635
+          },
+          "boundary": {
+            "n_bad": 70,
+            "coverable": 70,
+            "unreachable": 0,
+            "worst_slack": -0.826249250038912
+          },
+          "dogleg": {
+            "n_bad": 415,
+            "coverable": 415,
+            "unreachable": 0,
+            "worst_slack": -0.831240307902954
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 15,
+      "steps": 41,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 18,
+        "n_good": 787,
+        "n_bad": 1717,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1382,
+            "coverable": 1382,
+            "unreachable": 0,
+            "worst_slack": -1.440303742874816
+          },
+          "boundary": {
+            "n_bad": 49,
+            "coverable": 49,
+            "unreachable": 0,
+            "worst_slack": -1.5341466649411064
+          },
+          "dogleg": {
+            "n_bad": 286,
+            "coverable": 286,
+            "unreachable": 0,
+            "worst_slack": -1.4293881192341384
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 16,
+      "steps": 24,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 12,
+        "n_good": 2109,
+        "n_bad": 395,
+        "n_bad_unreach": 395,
+        "unreach_block1": 299,
+        "by_block": {
+          "single": {
+            "n_bad": 299,
+            "coverable": 0,
+            "unreachable": 299,
+            "worst_slack": 2.2753973647122283
+          },
+          "boundary": {
+            "n_bad": 25,
+            "coverable": 0,
+            "unreachable": 25,
+            "worst_slack": 2.247443114376437
+          },
+          "dogleg": {
+            "n_bad": 71,
+            "coverable": 0,
+            "unreachable": 71,
+            "worst_slack": 2.2409370311216037
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 17,
+      "steps": 55,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 22,
+        "n_good": 208,
+        "n_bad": 2296,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1845,
+            "coverable": 1845,
+            "unreachable": 0,
+            "worst_slack": -1.879097902267132
+          },
+          "boundary": {
+            "n_bad": 64,
+            "coverable": 64,
+            "unreachable": 0,
+            "worst_slack": -1.8776843621459376
+          },
+          "dogleg": {
+            "n_bad": 387,
+            "coverable": 387,
+            "unreachable": 0,
+            "worst_slack": -1.8783107246444164
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 18,
+      "steps": 43,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 18,
+        "n_good": 552,
+        "n_bad": 1952,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1544,
+            "coverable": 1544,
+            "unreachable": 0,
+            "worst_slack": -1.2183484711703079
+          },
+          "boundary": {
+            "n_bad": 61,
+            "coverable": 61,
+            "unreachable": 0,
+            "worst_slack": -1.2153449087290094
+          },
+          "dogleg": {
+            "n_bad": 347,
+            "coverable": 347,
+            "unreachable": 0,
+            "worst_slack": -1.2316032928255023
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 19,
+      "steps": 36,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 14,
+        "n_good": 280,
+        "n_bad": 2224,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1758,
+            "coverable": 1758,
+            "unreachable": 0,
+            "worst_slack": -0.5974512139626906
+          },
+          "boundary": {
+            "n_bad": 69,
+            "coverable": 69,
+            "unreachable": 0,
+            "worst_slack": -0.5988754036121318
+          },
+          "dogleg": {
+            "n_bad": 397,
+            "coverable": 397,
+            "unreachable": 0,
+            "worst_slack": -0.5988754036121318
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 20,
+      "steps": 24,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 12,
+        "n_good": 592,
+        "n_bad": 1912,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1498,
+            "coverable": 1498,
+            "unreachable": 0,
+            "worst_slack": -0.27886050943865603
+          },
+          "boundary": {
+            "n_bad": 65,
+            "coverable": 65,
+            "unreachable": 0,
+            "worst_slack": -0.26633830642526
+          },
+          "dogleg": {
+            "n_bad": 349,
+            "coverable": 349,
+            "unreachable": 0,
+            "worst_slack": -0.2555334771352924
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 21,
+      "steps": 20,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 14,
+        "n_good": 1,
+        "n_bad": 2503,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 2000,
+            "coverable": 2000,
+            "unreachable": 0,
+            "worst_slack": -0.07180540540127112
+          },
+          "boundary": {
+            "n_bad": 71,
+            "coverable": 71,
+            "unreachable": 0,
+            "worst_slack": -0.07180540540127112
+          },
+          "dogleg": {
+            "n_bad": 432,
+            "coverable": 432,
+            "unreachable": 0,
+            "worst_slack": -0.07180540540127112
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 22,
+      "steps": 30,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 16,
+        "n_good": 874,
+        "n_bad": 1630,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1270,
+            "coverable": 1270,
+            "unreachable": 0,
+            "worst_slack": -1.6955748053890556
+          },
+          "boundary": {
+            "n_bad": 61,
+            "coverable": 61,
+            "unreachable": 0,
+            "worst_slack": -1.7199037097920833
+          },
+          "dogleg": {
+            "n_bad": 299,
+            "coverable": 299,
+            "unreachable": 0,
+            "worst_slack": -1.7049992843849795
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 23,
+      "steps": 34,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 20,
+        "n_good": 2245,
+        "n_bad": 259,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 198,
+            "coverable": 198,
+            "unreachable": 0,
+            "worst_slack": -0.4970520785831454
+          },
+          "boundary": {
+            "n_bad": 20,
+            "coverable": 20,
+            "unreachable": 0,
+            "worst_slack": -0.468297028529987
+          },
+          "dogleg": {
+            "n_bad": 41,
+            "coverable": 41,
+            "unreachable": 0,
+            "worst_slack": -0.4683876140525052
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 24,
+      "steps": 45,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 32,
+        "n_good": 2190,
+        "n_bad": 314,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 236,
+            "coverable": 236,
+            "unreachable": 0,
+            "worst_slack": -3.4117178285756675
+          },
+          "boundary": {
+            "n_bad": 24,
+            "coverable": 24,
+            "unreachable": 0,
+            "worst_slack": -3.4117178285756675
+          },
+          "dogleg": {
+            "n_bad": 54,
+            "coverable": 54,
+            "unreachable": 0,
+            "worst_slack": -3.4117178285756675
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 25,
+      "steps": 21,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 12,
+        "n_good": 105,
+        "n_bad": 2399,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1918,
+            "coverable": 1918,
+            "unreachable": 0,
+            "worst_slack": -0.1297145694577524
+          },
+          "boundary": {
+            "n_bad": 70,
+            "coverable": 70,
+            "unreachable": 0,
+            "worst_slack": -0.12575049559141993
+          },
+          "dogleg": {
+            "n_bad": 411,
+            "coverable": 411,
+            "unreachable": 0,
+            "worst_slack": -0.1257888465079362
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 26,
+      "steps": 26,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 16,
+        "n_good": 686,
+        "n_bad": 1818,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1436,
+            "coverable": 1436,
+            "unreachable": 0,
+            "worst_slack": -0.27060582465224003
+          },
+          "boundary": {
+            "n_bad": 63,
+            "coverable": 63,
+            "unreachable": 0,
+            "worst_slack": -0.2703855632869008
+          },
+          "dogleg": {
+            "n_bad": 319,
+            "coverable": 319,
+            "unreachable": 0,
+            "worst_slack": -0.2731944096595398
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 27,
+      "steps": 24,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 14,
+        "n_good": 216,
+        "n_bad": 2288,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1816,
+            "coverable": 1816,
+            "unreachable": 0,
+            "worst_slack": -1.134011931543124
+          },
+          "boundary": {
+            "n_bad": 69,
+            "coverable": 69,
+            "unreachable": 0,
+            "worst_slack": -1.1339834761903154
+          },
+          "dogleg": {
+            "n_bad": 403,
+            "coverable": 403,
+            "unreachable": 0,
+            "worst_slack": -1.1343935748865204
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 28,
+      "steps": 16,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 4,
+        "n_good": 704,
+        "n_bad": 1800,
+        "n_bad_unreach": 1675,
+        "unreach_block1": 1322,
+        "by_block": {
+          "single": {
+            "n_bad": 1419,
+            "coverable": 97,
+            "unreachable": 1322,
+            "worst_slack": 3.274518245770687
+          },
+          "boundary": {
+            "n_bad": 68,
+            "coverable": 4,
+            "unreachable": 64,
+            "worst_slack": 3.231074564744708
+          },
+          "dogleg": {
+            "n_bad": 313,
+            "coverable": 24,
+            "unreachable": 289,
+            "worst_slack": 3.2228327045533427
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 29,
+      "steps": 60,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 24,
+        "n_good": 21,
+        "n_bad": 2483,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1988,
+            "coverable": 1988,
+            "unreachable": 0,
+            "worst_slack": -2.259168003803679
+          },
+          "boundary": {
+            "n_bad": 68,
+            "coverable": 68,
+            "unreachable": 0,
+            "worst_slack": -2.249445045358647
+          },
+          "dogleg": {
+            "n_bad": 427,
+            "coverable": 427,
+            "unreachable": 0,
+            "worst_slack": -2.249445045358649
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 30,
+      "steps": 40,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 18,
+        "n_good": 1081,
+        "n_bad": 1423,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1113,
+            "coverable": 1113,
+            "unreachable": 0,
+            "worst_slack": -1.3943920548117612
+          },
+          "boundary": {
+            "n_bad": 51,
+            "coverable": 51,
+            "unreachable": 0,
+            "worst_slack": -1.422727458675861
+          },
+          "dogleg": {
+            "n_bad": 259,
+            "coverable": 259,
+            "unreachable": 0,
+            "worst_slack": -1.4272738574926667
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 31,
+      "steps": 19,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 8,
+        "n_good": 2397,
+        "n_bad": 107,
+        "n_bad_unreach": 107,
+        "unreach_block1": 83,
+        "by_block": {
+          "single": {
+            "n_bad": 83,
+            "coverable": 0,
+            "unreachable": 83,
+            "worst_slack": 3.437622586303002
+          },
+          "boundary": {
+            "n_bad": 12,
+            "coverable": 0,
+            "unreachable": 12,
+            "worst_slack": 3.3810965996582008
+          },
+          "dogleg": {
+            "n_bad": 12,
+            "coverable": 0,
+            "unreachable": 12,
+            "worst_slack": 3.3127572153104543
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 32,
+      "steps": 23,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 16,
+        "n_good": 2,
+        "n_bad": 2502,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1998,
+            "coverable": 1998,
+            "unreachable": 0,
+            "worst_slack": -0.48510198605497745
+          },
+          "boundary": {
+            "n_bad": 72,
+            "coverable": 72,
+            "unreachable": 0,
+            "worst_slack": -0.48510198605497745
+          },
+          "dogleg": {
+            "n_bad": 432,
+            "coverable": 432,
+            "unreachable": 0,
+            "worst_slack": -0.48510198605497745
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 33,
+      "steps": 16,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 4,
+        "n_good": 1353,
+        "n_bad": 1151,
+        "n_bad_unreach": 1151,
+        "unreach_block1": 892,
+        "by_block": {
+          "single": {
+            "n_bad": 892,
+            "coverable": 0,
+            "unreachable": 892,
+            "worst_slack": 4.016172971922289
+          },
+          "boundary": {
+            "n_bad": 55,
+            "coverable": 0,
+            "unreachable": 55,
+            "worst_slack": 3.883211046046312
+          },
+          "dogleg": {
+            "n_bad": 204,
+            "coverable": 0,
+            "unreachable": 204,
+            "worst_slack": 4.000134482990052
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 34,
+      "steps": 37,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 14,
+        "n_good": 511,
+        "n_bad": 1993,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1583,
+            "coverable": 1583,
+            "unreachable": 0,
+            "worst_slack": -0.06914761736282138
+          },
+          "boundary": {
+            "n_bad": 65,
+            "coverable": 65,
+            "unreachable": 0,
+            "worst_slack": -0.05839409953947072
+          },
+          "dogleg": {
+            "n_bad": 345,
+            "coverable": 345,
+            "unreachable": 0,
+            "worst_slack": -0.05867452200090817
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 35,
+      "steps": 32,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 16,
+        "n_good": 2124,
+        "n_bad": 380,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 295,
+            "coverable": 295,
+            "unreachable": 0,
+            "worst_slack": -0.30498489097546155
+          },
+          "boundary": {
+            "n_bad": 24,
+            "coverable": 24,
+            "unreachable": 0,
+            "worst_slack": -0.07133503041852718
+          },
+          "dogleg": {
+            "n_bad": 61,
+            "coverable": 61,
+            "unreachable": 0,
+            "worst_slack": -0.07266581295971397
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 36,
+      "steps": 26,
+      "regime": "SHAPING_NEEDED",
+      "n_segments": 4,
+      "best": {
+        "t": 14,
+        "n_good": 719,
+        "n_bad": 1785,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1403,
+            "coverable": 1403,
+            "unreachable": 0,
+            "worst_slack": -0.6454674648031746
+          },
+          "boundary": {
+            "n_bad": 62,
+            "coverable": 62,
+            "unreachable": 0,
+            "worst_slack": -0.6455191462596108
+          },
+          "dogleg": {
+            "n_bad": 320,
+            "coverable": 320,
+            "unreachable": 0,
+            "worst_slack": -0.6455191462596108
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    },
+    {
+      "episode": 37,
+      "steps": 17,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 6,
+        "n_good": 1947,
+        "n_bad": 557,
+        "n_bad_unreach": 557,
+        "unreach_block1": 445,
+        "by_block": {
+          "single": {
+            "n_bad": 445,
+            "coverable": 0,
+            "unreachable": 445,
+            "worst_slack": 3.042366203556038
+          },
+          "boundary": {
+            "n_bad": 28,
+            "coverable": 0,
+            "unreachable": 28,
+            "worst_slack": 2.73254180705543
+          },
+          "dogleg": {
+            "n_bad": 84,
+            "coverable": 0,
+            "unreachable": 84,
+            "worst_slack": 2.9434921745170257
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 38,
+      "steps": 16,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 4,
+        "n_good": 1948,
+        "n_bad": 556,
+        "n_bad_unreach": 556,
+        "unreach_block1": 436,
+        "by_block": {
+          "single": {
+            "n_bad": 436,
+            "coverable": 0,
+            "unreachable": 436,
+            "worst_slack": 4.255446152007921
+          },
+          "boundary": {
+            "n_bad": 32,
+            "coverable": 0,
+            "unreachable": 32,
+            "worst_slack": 4.195476238407143
+          },
+          "dogleg": {
+            "n_bad": 88,
+            "coverable": 0,
+            "unreachable": 88,
+            "worst_slack": 4.1040909540847546
+          }
+        },
+        "feasible_now": false
+      },
+      "any_feasible_t": false
+    },
+    {
+      "episode": 39,
+      "steps": 31,
+      "regime": "FREE_CAPTURE",
+      "n_segments": 4,
+      "best": {
+        "t": 20,
+        "n_good": 1167,
+        "n_bad": 1337,
+        "n_bad_unreach": 0,
+        "unreach_block1": 0,
+        "by_block": {
+          "single": {
+            "n_bad": 1040,
+            "coverable": 1040,
+            "unreachable": 0,
+            "worst_slack": -0.5796300487842814
+          },
+          "boundary": {
+            "n_bad": 57,
+            "coverable": 57,
+            "unreachable": 0,
+            "worst_slack": -0.5798711696282237
+          },
+          "dogleg": {
+            "n_bad": 240,
+            "coverable": 240,
+            "unreachable": 0,
+            "worst_slack": -0.5814549733148895
+          }
+        },
+        "feasible_now": true
+      },
+      "any_feasible_t": true
+    }
+  ]
+}

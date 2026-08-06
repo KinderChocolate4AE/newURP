@@ -1,0 +1,122 @@
+[
+  {
+    "episode": 9,
+    "fire_step": 21,
+    "n_bad": 2150,
+    "n_good": 354,
+    "n_surviving_good": 1,
+    "m_bad": 0.016607490361268185,
+    "m_good": 0.014240244408729175,
+    "reach_slack": [
+      1.5438518529268581,
+      1.5191333980430581,
+      3.699534059564332,
+      4.964300207828257
+    ],
+    "base": {
+      "class": "clean",
+      "n_feasible": 1,
+      "v_worst": 1.0,
+      "v_soft": 1.0
+    },
+    "perturbation": {
+      "0.01": {
+        "clean": 1.0,
+        "uncovered_bad": 0.0,
+        "boxed_in": 0.0
+      },
+      "0.05": {
+        "clean": 0.43,
+        "uncovered_bad": 0.30333333333333334,
+        "boxed_in": 0.26666666666666666
+      },
+      "0.10": {
+        "clean": 0.2866666666666667,
+        "uncovered_bad": 0.4066666666666667,
+        "boxed_in": 0.30666666666666664
+      },
+      "0.25": {
+        "clean": 0.07333333333333333,
+        "uncovered_bad": 0.64,
+        "boxed_in": 0.2866666666666667
+      }
+    },
+    "fire_step_shift": {
+      "-1": {
+        "class": "uncovered_bad",
+        "n_feasible": 378,
+        "v_worst": 0.0
+      },
+      "0": {
+        "class": "clean",
+        "n_feasible": 1,
+        "v_worst": 1.0
+      },
+      "1": {
+        "class": "boxed_in",
+        "n_feasible": 0,
+        "v_worst": 1.0
+      }
+    }
+  },
+  {
+    "episode": 30,
+    "fire_step": 21,
+    "n_bad": 919,
+    "n_good": 1585,
+    "n_surviving_good": 26,
+    "m_bad": 0.019449001213631134,
+    "m_good": 0.05219812400899604,
+    "reach_slack": [
+      1.6160278449151138,
+      0.9341598526533099,
+      2.4912427248943736,
+      4.169604234500895
+    ],
+    "base": {
+      "class": "clean",
+      "n_feasible": 26,
+      "v_worst": 1.0,
+      "v_soft": 1.0
+    },
+    "perturbation": {
+      "0.01": {
+        "clean": 1.0,
+        "uncovered_bad": 0.0,
+        "boxed_in": 0.0
+      },
+      "0.05": {
+        "clean": 0.78,
+        "uncovered_bad": 0.22,
+        "boxed_in": 0.0
+      },
+      "0.10": {
+        "clean": 0.5233333333333333,
+        "uncovered_bad": 0.34,
+        "boxed_in": 0.13666666666666666
+      },
+      "0.25": {
+        "clean": 0.18,
+        "uncovered_bad": 0.5133333333333333,
+        "boxed_in": 0.30666666666666664
+      }
+    },
+    "fire_step_shift": {
+      "-1": {
+        "class": "uncovered_bad",
+        "n_feasible": 774,
+        "v_worst": 0.0
+      },
+      "0": {
+        "class": "clean",
+        "n_feasible": 26,
+        "v_worst": 1.0
+      },
+      "1": {
+        "class": "boxed_in",
+        "n_feasible": 0,
+        "v_worst": 1.0
+      }
+    }
+  }
+]

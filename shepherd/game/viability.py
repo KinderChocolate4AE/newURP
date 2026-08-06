@@ -377,7 +377,8 @@ def _caught_mask(endpoints, judge, *, net_center, net_radius,
 
 
 def _segments_endpoints_feasible(x0, v0, seg_accels, *, tau, limiters, kill_radius,
-                                 attacker_turn_limited, omega_att_max, e_att, n_t=24):
+                                 attacker_turn_limited, omega_att_max, e_att, n_t=24,
+                                 return_paths=False):
     """Integrate piecewise-constant controls and return (endpoints, feasible).
 
     - Trajectory: K segments of length h=tau/K; within each, exact constant-accel
@@ -430,6 +431,10 @@ def _segments_endpoints_feasible(x0, v0, seg_accels, *, tau, limiters, kill_radi
             pts = np.concatenate(seg_pts, axis=1)               # (n, K*n_t, 3)
             d = np.linalg.norm(pts[:, :, None, :] - L[None, None, :, :], axis=3)
             feasible_lim = ~(d <= kill_radius).any(axis=(1, 2))
+    if return_paths:
+        # ★ hit 판정에 **실제로 쓴 점 그대로** 돌려준다 (재보간·형변환 없음).
+        #   docs/52 §8.0 -- 공식을 복제하지 않고 같은 코드 경로를 노출한다.
+        return endpoints, feasible_lim & feasible_turn, np.concatenate(seg_pts, axis=1)
     return endpoints, feasible_lim & feasible_turn
 
 
@@ -455,11 +460,45 @@ def _assemble(feasible, caught, n_total, judge, seed):
     )
 
 
+@dataclass(frozen=True)
+class UnionTrace:
+    """`_union_sets` 의 표본별 중간 산출물 (docs/52 §8.0 trace API).
+
+    **정렬 계약** -- 진단 코드가 의존해도 되는 것:
+
+        paths[k] / endpoints[k] / feasible[k] / caught[k] / block_id[k] 는 같은 표본
+        Block 1 (단일구간 uniform-in-ball) 이 항상 **prefix**
+        paths[k, path_len[k] - 1] == endpoints[k]
+        paths 는 **hit 판정에 실제로 쓴 점 그대로** (재보간·float32 변환 없음)
+
+    블록마다 시간 격자 길이가 다르다 (Block 1 = n_t, extreme = K*n_t). 임의로
+    맞춰 재보간하면 판정과 갈라지므로 **패딩 + `path_len`** 으로 노출한다.
+    패딩 구간은 마지막 유효점 반복이라 거리 최소화에 영향이 없다.
+    """
+    endpoints: np.ndarray
+    feasible: np.ndarray
+    caught: np.ndarray
+    paths: np.ndarray            # (n, max_pts, 3)
+    path_len: np.ndarray         # (n,)
+    block_id: np.ndarray         # (n,) 0 = Block 1 (legacy single-segment)
+
+    @staticmethod
+    def build(endpoints, feasible, caught, path_blocks, block_ids):
+        m = max(b.shape[1] for b in path_blocks)
+        P = np.concatenate([np.concatenate(
+            [b, np.repeat(b[:, -1:, :], m - b.shape[1], axis=1)], axis=1)
+            if b.shape[1] < m else b for b in path_blocks], axis=0)
+        ln = np.concatenate([np.full(len(b), b.shape[1], np.int32)
+                             for b in path_blocks])
+        return UnionTrace(endpoints, feasible, caught, P, ln,
+                          np.concatenate(block_ids))
+
+
 def _union_sets(x_att, v_att, *, tau, a_att_max, judge,
                 net_center, net_radius, net_apex, n_F, theta_net,
                 range_min, range_max, limiters, kill_radius,
                 attacker_turn_limited, omega_att_max, e_att,
-                n, n_segments, seed, n_dir=32):
+                n, n_segments, seed, n_dir=32, return_paths=False):
     """Build the conservative UNION reachable set as (endpoints, feasible, caught).
 
     Block 1 is the VERBATIM single-segment uniform-in-ball reachable set (same math
@@ -487,18 +526,33 @@ def _union_sets(x_att, v_att, *, tau, a_att_max, judge,
         feas1 = feas1 & _feasible_turn(accels1, heading, omega_att_max, tau)
     end_blocks = [end1]
     feas_blocks = [feas1]
+    # Block 1 의 경로 = `_feasible_limiter` 가 쓰는 그 포물선 (같은 n_t)
+    path_blocks = ([x_att[None, None, :]
+                    + v_att[None, None, :] * np.linspace(0.0, tau, 24)[None, :, None]
+                    + 0.5 * accels1[:, None, :]
+                    * (np.linspace(0.0, tau, 24) ** 2)[None, :, None]]
+                   if return_paths else None)
+    block_ids = [np.zeros(len(end1), np.int8)] if return_paths else None
+    _blk = [1]
 
     dirs = _extreme_dirs(n_dir=n_dir, seed=seed, e_att=heading)
 
     def _add(seg_accels):
         if len(seg_accels) == 0:
+            if return_paths:
+                _blk[0] += 1
             return
-        ep, fe = _segments_endpoints_feasible(
+        out = _segments_endpoints_feasible(
             x_att, v_att, seg_accels, tau=tau, limiters=limiters, kill_radius=kill_radius,
             attacker_turn_limited=attacker_turn_limited, omega_att_max=omega_att_max,
-            e_att=e_att)
+            e_att=e_att, return_paths=return_paths)
+        ep, fe = out[0], out[1]
         end_blocks.append(ep)
         feas_blocks.append(fe)
+        if return_paths:
+            path_blocks.append(out[2])
+            block_ids.append(np.full(len(ep), _blk[0], np.int8))
+            _blk[0] += 1
 
     _add(_boundary_accels(a_att_max, dirs))                  # boundary spheres (K=1)
     _add(_bangbang_segments(a_att_max, dirs, n_segments))    # doglegs
@@ -511,6 +565,9 @@ def _union_sets(x_att, v_att, *, tau, a_att_max, judge,
     caught = _caught_mask(endpoints, judge, net_center=net_center, net_radius=net_radius,
                           net_apex=net_apex, n_F=n_F, theta_net=theta_net,
                           range_min=range_min, range_max=range_max)
+    if return_paths:
+        return endpoints, feasible, caught, UnionTrace.build(
+            endpoints, feasible, caught, path_blocks, block_ids)
     return endpoints, feasible, caught
 
 
