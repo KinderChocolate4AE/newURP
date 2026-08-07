@@ -1,0 +1,65 @@
+"""draw_threat_v3 (docs/61 §1-§2, P92 대상 성질) — 순수 draw 수준 회귀.
+
+P92 게이트(threat_v3_gates.p92)가 정본 판정이고, 여기는 그 성질들이
+회귀하지 않게 잠그는 경량판이다 (env 불필요 — SHA-256 산술만).
+"""
+from __future__ import annotations
+
+import pytest
+
+from shepherd.scale_v2 import (A2_V4, EPISODE_LEN_TRAIN, SCALE_V3_TRAIN_CFG,
+                               THREAT_V3_SPAWN, V3_STANDBY_R, V3_TRAIN_CELLS_A,
+                               draw_threat_v3)
+
+
+def test_deterministic_and_layer_separated():
+    a = draw_threat_v3(0, 3, "train")
+    b = draw_threat_v3(0, 3, "train")
+    assert a["attacker"] == b["attacker"] and a["standby"] == b["standby"]
+    assert a["cell"] == b["cell"]
+    # IID 는 namespace 가 다르다 -- 같은 (seed, ep) 에서 다른 draw
+    assert any(draw_threat_v3(0, ep, "iid")["attacker"]
+               != draw_threat_v3(0, ep, "train")["attacker"] for ep in range(8))
+
+
+def test_unknown_layer_rejected():
+    with pytest.raises(ValueError):
+        draw_threat_v3(0, 0, "nominal")   # NOMINAL 로 학습 금지 (관통 규율 2)
+
+
+def test_bounds_and_cell_consistency():
+    for ep in range(300):
+        d = draw_threat_v3(0, ep, "train")
+        att, (a_name, b_name) = d["attacker"], d["cell"]
+        rg, sr = V3_TRAIN_CELLS_A[a_name]
+        assert rg[0] <= att.route_gain <= rg[1]
+        assert sr[0] <= att.sense_range <= sr[1]
+        assert V3_STANDBY_R[0] <= d["standby"].R <= V3_STANDBY_R[1]
+        assert d["spawn"] == THREAT_V3_SPAWN
+        assert d["cfg"] is SCALE_V3_TRAIN_CFG
+        if b_name == "cruise":
+            assert att.sprint_range == 0.0 and att.slowdown_range == (0.0, 0.0)
+        elif b_name == "sprint_slowdown":
+            far, near = att.slowdown_range
+            assert near == att.sprint_range and 20.0 <= far - near <= 40.0
+            assert 0.4 <= att.slowdown_frac <= 0.8
+
+
+def test_all_nine_cells_reachable():
+    cells = {draw_threat_v3(0, ep, "train")["cell"] for ep in range(400)}
+    assert len(cells) == 9
+
+
+def test_cruise_is_nested_v2_profile():
+    """cruise 층 = 속도 프로파일 필드가 A2_V4 기본값과 bit 동일 (v2 nested)."""
+    cruise = next(d["attacker"] for ep in range(200)
+                  if (d := draw_threat_v3(0, ep, "train"))["cell"][1] == "cruise")
+    for f in ("level", "jink_amp", "jink_freq", "homing_gain", "sprint_range",
+              "sprint_frac", "slowdown_range", "slowdown_frac", "lam_gain",
+              "lam_range", "seed"):
+        assert getattr(cruise, f) == getattr(A2_V4, f), f
+
+
+def test_horizon_declared():
+    assert EPISODE_LEN_TRAIN == 1100                     # docs/61 §2 (P93 후 확정)
+    assert SCALE_V3_TRAIN_CFG["train.episode_len"] == 1100

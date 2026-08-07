@@ -5,6 +5,7 @@
     python -m shepherd.scripts.threat_v3_gates --gate p90 --eps 0 100
     python -m shepherd.scripts.threat_v3_gates --gate p91a
     python -m shepherd.scripts.threat_v3_gates --gate p91b
+    python -m shepherd.scripts.threat_v3_gates --gate p92     # docs/61 §5 (draw)
 
 판정식은 docs/60 §3.3·§4.3·§5 에 결과 전 고정. 전부 NOMINAL 에서 실행.
 
@@ -31,7 +32,7 @@ from shepherd.m4_env import build_m4_env
 from shepherd.scale_v2 import THREAT_V3_NOMINAL, V3_ARMS
 from shepherd.scripts.mission_rollout import ROLES, run_episode, scripted_role_actions
 
-__all__ = ["p88", "p89", "p90", "p91a", "p91b"]
+__all__ = ["p88", "p89", "p90", "p91a", "p91b", "p92", "p94"]
 
 RESULTS = pathlib.Path(__file__).resolve().parents[2] / "results"
 
@@ -507,6 +508,95 @@ def p94(eps=P94_EPS):
     return out
 
 
+# ============================================================== P92 =======
+P92_N = 900                  # coverage 검정 draw 수 (docs/61 §5: 9셀 각 100 기대)
+P92_Z = 2.576                # 99% 양측 귀무 이항 CI
+
+
+def p92(n: int = P92_N):
+    """TRAIN 분포 배선 게이트 (docs/61 §5 P92): 결정론·coverage·경계·nesting."""
+    import math as _m
+
+    from shepherd.scale_v2 import (A2_V4, EPISODE_LEN_TRAIN, THREAT_V3_SPAWN,
+                                   V3_SLOWDOWN_FRAC, V3_SLOWDOWN_WIDTH,
+                                   V3_SPRINT_FRAC, V3_SPRINT_RANGE,
+                                   V3_STANDBY_R, V3_TRAIN_CELLS_A,
+                                   draw_threat_v3)
+    from shepherd.m4_config import m4_config
+
+    # (i) 결정론 -- 동일 (seed, episode, layer) -> 동일 draw (frozen dataclass
+    #     값 동등 = bit 동등) + layer namespace 분리 확인
+    det_ok, layer_sep = True, False
+    for ep in (0, 1, 7, 123):
+        a1, a2 = draw_threat_v3(0, ep, "train"), draw_threat_v3(0, ep, "train")
+        det_ok &= (a1["attacker"] == a2["attacker"]
+                   and a1["standby"] == a2["standby"] and a1["cell"] == a2["cell"])
+        layer_sep |= (draw_threat_v3(0, ep, "iid")["attacker"] != a1["attacker"])
+
+    # (ii)+(iii) coverage + 경계 전수
+    counts: dict = {}
+    bounds_bad = []
+    for ep in range(n):
+        d = draw_threat_v3(0, ep, "train")
+        att, cell = d["attacker"], d["cell"]
+        counts[cell] = counts.get(cell, 0) + 1
+        (rg, sr) = V3_TRAIN_CELLS_A[cell[0]]
+        ok = (rg[0] <= att.route_gain <= rg[1]
+              and sr[0] <= att.sense_range <= sr[1]
+              and V3_STANDBY_R[0] <= d["standby"].R <= V3_STANDBY_R[1]
+              and d["spawn"] == THREAT_V3_SPAWN
+              and d["cfg"]["train.episode_len"] == EPISODE_LEN_TRAIN)
+        if cell[1] == "cruise":
+            ok &= (att.sprint_range == 0.0 and att.slowdown_range == (0.0, 0.0)
+                   and att.sprint_frac == 1.0 and att.slowdown_frac == 1.0)
+        else:
+            ok &= (V3_SPRINT_RANGE[0] <= att.sprint_range <= V3_SPRINT_RANGE[1]
+                   and V3_SPRINT_FRAC[0] <= att.sprint_frac <= V3_SPRINT_FRAC[1])
+            if cell[1] == "sprint_slowdown":
+                far, near = att.slowdown_range
+                ok &= (near == att.sprint_range
+                       and V3_SLOWDOWN_WIDTH[0] <= far - near <= V3_SLOWDOWN_WIDTH[1]
+                       and V3_SLOWDOWN_FRAC[0] <= att.slowdown_frac
+                       <= V3_SLOWDOWN_FRAC[1])
+            else:
+                ok &= att.slowdown_range == (0.0, 0.0)
+        if not ok:
+            bounds_bad.append(dict(episode=ep, cell=list(cell)))
+
+    p0 = 1.0 / 9.0
+    sd = _m.sqrt(n * p0 * (1.0 - p0))
+    lo, hi = n * p0 - P92_Z * sd, n * p0 + P92_Z * sd
+    cover_ok = (len(counts) == 9
+                and all(lo <= c <= hi for c in counts.values()))
+
+    # (iv) NESTING -- 배선 추가가 기존 경로를 흔들지 않았고(모듈 상수 불변),
+    #     cruise 층의 속도 프로파일 필드가 A2_V4 기본값과 bit 동일 (v2 nested)
+    cruise = next(draw_threat_v3(0, ep, "train")["attacker"]
+                  for ep in range(200)
+                  if draw_threat_v3(0, ep, "train")["cell"][1] == "cruise")
+    nest_ok = (m4_config()["train"]["episode_len"] == 160          # legacy 불변
+               and all(getattr(cruise, f) == getattr(A2_V4, f)
+                       for f in ("level", "jink_amp", "jink_freq", "homing_gain",
+                                 "sprint_range", "sprint_frac", "slowdown_range",
+                                 "slowdown_frac", "lam_gain", "lam_range", "seed")))
+
+    verdict = dict(i_determinism=bool(det_ok and layer_sep),
+                   ii_coverage=bool(cover_ok),
+                   iii_bounds=not bounds_bad,
+                   iv_nesting=bool(nest_ok))
+    out = dict(contract="docs/61 §5 P92", n=n,
+               cell_counts={f"{a}/{b}": c for (a, b), c in sorted(counts.items())},
+               coverage_ci_99=[round(lo, 1), round(hi, 1)],
+               bounds_violations=bounds_bad, verdict=verdict,
+               all_pass=all(verdict.values()),
+               note=("episode_len_train=1100 은 P93 green 후 확정 (docs/61 "
+                     "비준표 조건부). IID 대역 분리(10000..)는 호출자 규율."))
+    print(f"P92 cells={out['cell_counts']}")
+    print(f"P92 verdict={verdict} -> "
+          f"{'ALL PASS' if out['all_pass'] else 'FAIL'}")
+    return out
+
+
 # ============================================================= P91b =======
 def p91b():
     """actual-v3 bearing sanity (docs/60 §4.3): finisher (2,0,0) 고정 ·
@@ -559,13 +649,13 @@ def p91b():
 def main():
     ap = argparse.ArgumentParser(description="threat v3 gates (docs/60 §5)")
     ap.add_argument("--gate", required=True,
-                    choices=["p88", "p89", "p90", "p91a", "p91b", "p94"])
+                    choices=["p88", "p89", "p90", "p91a", "p91b", "p92", "p94"])
     ap.add_argument("--eps", type=int, nargs=2, default=[0, P90_N],
                     metavar=("A", "B"), help="p90 샤딩 range [A, B)")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
     fn = {"p88": p88, "p89": p89, "p91a": p91a, "p91b": p91b,
-          "p94": p94}.get(a.gate)
+          "p92": p92, "p94": p94}.get(a.gate)
     out = fn() if fn else p90(range(a.eps[0], a.eps[1]))
     path = pathlib.Path(a.out) if a.out else (
         RESULTS / (f"threat_v3_{a.gate}.json" if a.gate != "p90"
