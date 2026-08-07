@@ -44,8 +44,10 @@ from typing import Dict, List, Optional, Sequence
 
 import numpy as np
 
-from shepherd.agents.baselines import (brake_limiter, hold_position_limiter,
-                                       lambda_brake_limiter, scripted_finisher,
+from shepherd.agents.baselines import (arc_redeploy_limiter, arc_slots,
+                                       brake_limiter, hold_position_limiter,
+                                       lambda_brake_limiter, min_cost_assignment,
+                                       scripted_finisher,
                                        scripted_shaping_limiter)
 
 __all__ = ["MissionResult", "run_episode", "run_batch", "summarize",
@@ -54,7 +56,7 @@ __all__ = ["MissionResult", "run_episode", "run_batch", "summarize",
 
 LABELS = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL",
           "PENETRATED", "SPENT_FAIL", "TRUNCATED")
-LIMITER_MODES = ("hold", "ring", "intercept", "brake", "lam20")
+LIMITER_MODES = ("hold", "ring", "intercept", "brake", "lam20", "arc")
 ROLES = ("limiter", "finisher")
 
 
@@ -160,9 +162,25 @@ def _zero_commit(acts):
     return acts
 
 
-def _limiter_actions(env, scn, lay, mode, lims, p_att, v_att):
+def _limiter_actions(env, scn, lay, mode, lims, p_att, v_att, limiter_kw=None):
     if mode == "hold":
         return {lid: hold_position_limiter() for lid in env.limiter_ids}
+    if mode == "arc":
+        # docs/63 r2 scripted baseline. 자유도 = (r_d, dphi) 뿐 -- 반드시
+        # 호출부가 grid 값을 명시한다 (silent default 금지, F4).
+        if not limiter_kw or "r_d" not in limiter_kw or "dphi" not in limiter_kw:
+            raise ValueError(
+                "limiter_mode='arc' 는 limiter_kw={'r_d':..,'dphi':..} 필수 "
+                "(docs/63 F4 grid)")
+        n = len(env.limiter_ids)
+        slots = arc_slots(lay.target, p_att, limiter_kw["r_d"],
+                          limiter_kw["dphi"], n=n)
+        pos = [env._p(lims[i]) for i in range(n)]
+        perm = min_cost_assignment(pos, slots)
+        return {lid: arc_redeploy_limiter(pos[i], env._v(lims[i]),
+                                          slots[perm[i]],
+                                          a_max=scn.limiter.a_max)
+                for i, lid in enumerate(env.limiter_ids)}
     if mode == "intercept":
         spec = getattr(env, "spec", None)
         tau_k = 0.1 if spec is None else spec.tau_kill
@@ -192,7 +210,7 @@ def _limiter_actions(env, scn, lay, mode, lims, p_att, v_att):
 def scripted_role_actions(env, scn, lay, *, roles: Sequence[str] = ROLES,
                           limiter_mode: str = "hold", fire_mode: str = "clean",
                           prev_clean: bool = False, baseline_commit: bool = False,
-                          states=None) -> Dict[str, np.ndarray]:
+                          states=None, limiter_kw=None) -> Dict[str, np.ndarray]:
     """스크립트 역할의 **env Box** 행동. `roles` 에 든 역할만 낸다.
 
     WHY 한 곳에만 두는가 (docs/48 §3)
@@ -210,7 +228,8 @@ def scripted_role_actions(env, scn, lay, *, roles: Sequence[str] = ROLES,
     p_att, v_att, p_fin = env._p(att), env._v(att), env._p(fin)
     acts: Dict[str, np.ndarray] = {}
     if "limiter" in roles:
-        acts.update(_limiter_actions(env, scn, lay, limiter_mode, lims, p_att, v_att))
+        acts.update(_limiter_actions(env, scn, lay, limiter_mode, lims, p_att,
+                                     v_att, limiter_kw=limiter_kw))
         if not baseline_commit:
             _zero_commit(acts)              # idx3 = 커밋 비트 (M4). 기본 OFF
     if "finisher" in roles:
@@ -231,7 +250,8 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
                 fire_mode: str = "clean", max_steps: Optional[int] = None,
                 attacker_name: str = "", policy=None,
                 baseline_commit: bool = False,
-                scripted_roles: Sequence[str] = ()) -> MissionResult:
+                scripted_roles: Sequence[str] = (),
+                limiter_kw=None) -> MissionResult:
     """한 에피소드. env.step / env termination 을 그대로 호출한다 (술어 복제 금지).
 
     fire_mode:
@@ -284,12 +304,14 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
                 acts.update(scripted_role_actions(
                     env, scn, lay, roles=scripted_roles, limiter_mode=limiter_mode,
                     fire_mode=fire_mode, prev_clean=prev_clean,
-                    baseline_commit=baseline_commit, states=(lims, fin, att)))
+                    baseline_commit=baseline_commit, states=(lims, fin, att),
+                    limiter_kw=limiter_kw))
         else:
             acts = scripted_role_actions(
                 env, scn, lay, roles=ROLES, limiter_mode=limiter_mode,
                 fire_mode=fire_mode, prev_clean=prev_clean,
-                baseline_commit=baseline_commit, states=(lims, fin, att))
+                baseline_commit=baseline_commit, states=(lims, fin, att),
+                limiter_kw=limiter_kw)
         acts[env.adversary_id] = np.zeros(3, np.float32)   # env-scripted; 무시됨
 
         obs_next, _, term, trunc, info = env.step(acts)

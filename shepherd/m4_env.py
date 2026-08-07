@@ -184,6 +184,7 @@ def mission_eval(seed0: int, episodes: int, *,
                  standby: Optional[StandbySpec] = None,
                  extra_cfg: Optional[dict] = None,
                  threat_layer: Optional[str] = None,
+                 limiter_kw: Optional[dict] = None,
                  limiter_mode: str = "hold", fire_mode: str = "clean",
                  randomize_threat: bool = True, threat_obs: bool = True,
                  baseline_commit: bool = False,
@@ -237,7 +238,7 @@ def mission_eval(seed0: int, episodes: int, *,
         r = run_episode(st.env, st.scn, st.lay, seed=seed0 + ep,
                         limiter_mode=limiter_mode, fire_mode=fire_mode,
                         policy=policy, baseline_commit=baseline_commit,
-                        scripted_roles=scripted_roles)
+                        scripted_roles=scripted_roles, limiter_kw=limiter_kw)
         counts[r.label] += 1
         reg = regime_of(st.threat["a_att"], st.threat["tau"], st.threat["net_radius"])
         by_regime.setdefault(reg, {lab: 0 for lab in LABELS})[r.label] += 1

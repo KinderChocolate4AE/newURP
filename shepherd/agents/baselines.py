@@ -108,6 +108,52 @@ def scripted_finisher(p_fin, p_att, v_att, *, tau, clean_threshold_crossed):
     return np.array([axis[0], axis[1], axis[2], 1.0, fire_logit], dtype=np.float32)
 
 
+# ── docs/63 r2 scripted baseline — bearing-aware arc redeployment ──────────
+#   family = reactive arc (예측 lead·CPA·v_shot 소비·z 배치 금지, §2).
+#   kp/kd 는 선언값 (params scripted.limiter_kp/kd = 8.0/4.0) 재사용 — 재튜닝
+#   금지. 자유도는 (r_d, dphi) grid 2축뿐 (F4).
+def arc_slots(target, p_att, r_d: float, dphi: float, n: int = 4):
+    """docs/63 §2-1: 공격자 현재 bearing 중심, 반경 r_d 수평 호 위 slot n개.
+
+    z = 0 은 scope limitation (수평 섹터 last-mile, docs/61 §4)이다.
+    """
+    import math
+    d = np.asarray(p_att, float) - np.asarray(target, float)
+    phi = math.atan2(d[1], d[0])
+    return [np.asarray(target, float) + float(r_d) * np.array(
+                [math.cos(phi + (k - (n - 1) / 2.0) * float(dphi)),
+                 math.sin(phi + (k - (n - 1) / 2.0) * float(dphi)), 0.0])
+            for k in range(n)]
+
+
+def min_cost_assignment(positions, slots):
+    """docs/63 §2-2 (r1): permutation 전수에서 이동거리 제곱합 최소를 고른다.
+
+    4기 → 24개 전수. parameter-free (oracle·예측·신규 hyperparameter 없음).
+    동률 = 사전순 첫 permutation (strict < 비교 — 결정론).
+    """
+    import itertools
+    best, best_c = None, None
+    for perm in itertools.permutations(range(len(slots))):
+        c = sum(float(np.sum((np.asarray(positions[i], float)
+                              - np.asarray(slots[perm[i]], float)) ** 2))
+                for i in range(len(positions)))
+        if best_c is None or c < best_c:
+            best, best_c = perm, c
+    return best
+
+
+def arc_redeploy_limiter(p_lim, v_lim, slot, *, a_max, kp=8.0, kd=4.0):
+    """docs/63 §2-3: 선언 PD 로 배정 slot 호밍. Box(4), idx3 = 0 (commit 금지
+    — `_zero_commit` 이 한 번 더 누르지만 여기서도 0 을 낸다)."""
+    err = np.asarray(slot, float) - np.asarray(p_lim, float)
+    a_cmd = kp * err - kd * np.asarray(v_lim, float)
+    n = float(np.linalg.norm(a_cmd))
+    if n > a_max and n > _EPS:
+        a_cmd = a_cmd * (a_max / n)
+    return np.array([a_cmd[0], a_cmd[1], a_cmd[2], 0.0], dtype=np.float32)
+
+
 # --- stubs (exchange-frontier comparison; NOT exercised in M2) --------------
 def no_shaping(*a, **k):
     raise NotImplementedError("no_shaping is an S9/M3 exchange-frontier baseline (not M2).")
