@@ -15,11 +15,25 @@ from shepherd.scripts.recoverability_probe import (MISS_EPISODES, _Driver,
                                                    _build, _sysenv)
 
 CAPTURE_EPISODES = (1, 4, 10)          # handoff_audit hold NET_CAPTURE 앞 3판
-EPISODE_LEN = 80
 
 
-def dump_episode(ep: int) -> dict:
-    env, scn, lay = _build(ep)
+def _build_v2(ep: int):
+    from shepherd.agents.attacker_ladder import AttackerSpec
+    from shepherd.env_sys import RewardSpec, SystemSpec
+    from shepherd.m4_env import build_m4_env
+    from shepherd.scale_v2 import SCALE_V2_CFG, SCALE_V2_SPAWN
+    st = build_m4_env(
+        0, ep,
+        system=SystemSpec(enabled=True, contact_resolver=True,
+                          miss_terminates=False, p_kill=1.0),
+        reward=RewardSpec(w_kill=0.5, enabled=True),
+        attacker=AttackerSpec(level="A2", jink_amp=0.6, seed=0),
+        spawn=SCALE_V2_SPAWN, extra_cfg=dict(SCALE_V2_CFG))
+    return st.env, st.scn, st.lay
+
+
+def dump_episode(ep: int, *, v2: bool = False) -> dict:
+    env, scn, lay = _build_v2(ep) if v2 else _build(ep)
     d = _Driver(env, scn, lay, ep)
     se = d.se
     inner = se.inner
@@ -43,7 +57,7 @@ def dump_episode(ep: int) -> dict:
     net_center = None
     resolve_step = None
     n_events = 0
-    for t in range(EPISODE_LEN):
+    for t in range(int(lay.episode_len)):
         lims, fin, att = env._states()
         prev_state = inner.fsm.state.value
         fi = d.step()
@@ -95,21 +109,32 @@ def main() -> None:
     ap.add_argument("--template", default="viz/trajectory_viewer_template.html")
     ap.add_argument("--out-html", default="viz/trajectory_viewer.html")
     ap.add_argument("--out-json", default="results/viz_trajectories.json")
+    ap.add_argument("--v2", action="store_true", help="스케일 v2 (docs/59)")
+    ap.add_argument("--eps", type=int, nargs="*", default=None,
+                    help="에피소드 목록 override (그룹 = 실측 라벨)")
     a = ap.parse_args()
 
     episodes = []
-    for ep in CAPTURE_EPISODES:
-        e = dump_episode(ep)
-        e["group"] = "CAPTURE"
-        episodes.append(e)
-        print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
-    for ep in MISS_EPISODES:
-        e = dump_episode(ep)
-        e["group"] = "MISS"
-        episodes.append(e)
-        print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
+    if a.eps is not None:
+        for ep in a.eps:
+            e = dump_episode(ep, v2=a.v2)
+            e["group"] = e["label"]
+            episodes.append(e)
+            print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
+    else:
+        for ep in CAPTURE_EPISODES:
+            e = dump_episode(ep, v2=a.v2)
+            e["group"] = "CAPTURE"
+            episodes.append(e)
+            print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
+        for ep in MISS_EPISODES:
+            e = dump_episode(ep, v2=a.v2)
+            e["group"] = "MISS"
+            episodes.append(e)
+            print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
 
-    data = dict(note="hold/clean · F-flags (contact_resolver on, miss nonterminal) · Pk=1",
+    data = dict(note=("scale v2 (docs/59) · " if a.v2 else "legacy · ")
+                     + "hold/clean · F-flags · Pk=1",
                 episodes=episodes)
     pathlib.Path(a.out_json).parent.mkdir(parents=True, exist_ok=True)
     pathlib.Path(a.out_json).write_text(

@@ -1,0 +1,230 @@
+{
+  "contract": "docs/59 V4",
+  "records": [
+    {
+      "episode": 75,
+      "label": "PENETRATED",
+      "steps": 205,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.49
+    },
+    {
+      "episode": 76,
+      "label": "PENETRATED",
+      "steps": 372,
+      "fire_step": 334,
+      "wasted": 1,
+      "net_spent": true,
+      "min_target_dist": 0.81
+    },
+    {
+      "episode": 77,
+      "label": "PENETRATED",
+      "steps": 286,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.65
+    },
+    {
+      "episode": 78,
+      "label": "PENETRATED",
+      "steps": 345,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.45
+    },
+    {
+      "episode": 79,
+      "label": "PENETRATED",
+      "steps": 257,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.85
+    },
+    {
+      "episode": 80,
+      "label": "PENETRATED",
+      "steps": 387,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.65
+    },
+    {
+      "episode": 81,
+      "label": "TRUNCATED",
+      "steps": 400,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 31.26
+    },
+    {
+      "episode": 82,
+      "label": "PENETRATED",
+      "steps": 221,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.39
+    },
+    {
+      "episode": 83,
+      "label": "NET_CAPTURE",
+      "steps": 315,
+      "fire_step": 306,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 5.83
+    },
+    {
+      "episode": 84,
+      "label": "PENETRATED",
+      "steps": 379,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.64
+    },
+    {
+      "episode": 85,
+      "label": "PENETRATED",
+      "steps": 206,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.95
+    },
+    {
+      "episode": 86,
+      "label": "TRUNCATED",
+      "steps": 400,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 38.01
+    },
+    {
+      "episode": 87,
+      "label": "PENETRATED",
+      "steps": 222,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.48
+    },
+    {
+      "episode": 88,
+      "label": "PENETRATED",
+      "steps": 381,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.6
+    },
+    {
+      "episode": 89,
+      "label": "PENETRATED",
+      "steps": 359,
+      "fire_step": 320,
+      "wasted": 1,
+      "net_spent": true,
+      "min_target_dist": 0.66
+    },
+    {
+      "episode": 90,
+      "label": "TRUNCATED",
+      "steps": 400,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 110.18
+    },
+    {
+      "episode": 91,
+      "label": "PENETRATED",
+      "steps": 239,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.53
+    },
+    {
+      "episode": 92,
+      "label": "PENETRATED",
+      "steps": 310,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.96
+    },
+    {
+      "episode": 93,
+      "label": "PENETRATED",
+      "steps": 210,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.59
+    },
+    {
+      "episode": 94,
+      "label": "TRUNCATED",
+      "steps": 400,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 139.7
+    },
+    {
+      "episode": 95,
+      "label": "PENETRATED",
+      "steps": 294,
+      "fire_step": 244,
+      "wasted": 1,
+      "net_spent": true,
+      "min_target_dist": 0.51
+    },
+    {
+      "episode": 96,
+      "label": "TRUNCATED",
+      "steps": 400,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 130.83
+    },
+    {
+      "episode": 97,
+      "label": "TRUNCATED",
+      "steps": 400,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 106.44
+    },
+    {
+      "episode": 98,
+      "label": "PENETRATED",
+      "steps": 362,
+      "fire_step": 320,
+      "wasted": 1,
+      "net_spent": true,
+      "min_target_dist": 0.88
+    },
+    {
+      "episode": 99,
+      "label": "PENETRATED",
+      "steps": 393,
+      "fire_step": null,
+      "wasted": 0,
+      "net_spent": false,
+      "min_target_dist": 0.83
+    }
+  ]
+}
