@@ -18,7 +18,7 @@ def test_p85_default_config_unchanged():
     assert tuple(cfg["train"]["layout"]["ring_center"]) == (8.0, 0.0, 0.0)
     # overlay 는 명시 전달로만 작동한다
     cfg2 = as_config(dict(SCALE_V2_CFG))
-    assert cfg2["train"]["episode_len"] == 480
+    assert cfg2["train"]["episode_len"] == 800
     assert float(cfg2["train"]["layout"]["adversary_start_x"]) == 300.0
 
 
@@ -37,7 +37,7 @@ def test_p86_v2_smoke():
         attacker=AttackerSpec(level="A2", jink_amp=0.6, seed=0),
         spawn=SCALE_V2_SPAWN, extra_cfg=dict(SCALE_V2_CFG))
     env, scn, lay = st.env, st.scn, st.lay
-    assert int(lay.episode_len) == 480
+    assert int(lay.episode_len) == 800
     env.reset(seed=0)
     p0 = env._p(env._states()[2])
     d0 = float(np.linalg.norm(p0 - np.asarray(lay.target, float)))

@@ -19,8 +19,8 @@ __all__ = ["SCALE_V2_CFG", "SCALE_V2_SPAWN"]
 # docs/59 §1 선언값. 결과를 본 뒤 바꾸지 않는다.
 SCALE_V2_CFG = {
     "train.layout.adversary_start_x": 300.0,   # 24 -> 300 (~10 s+ 대응시간)
-    "train.episode_len": 480,                  # 80 -> 480 (24 s; docs/59 2026-08-07b
-                                               # 정정 -- 400 은 저속 draw 미커버)
+    "train.episode_len": 800,                  # 80 -> 800 (40 s; docs/59 정정 2 --
+                                               # att_speed 하한 8 m/s -> 310/8=38.75 s)
     "train.layout.ring_center": (50.0, 0.0, 0.0),  # 8 -> 50 (NK 밖 + cone 상류)
 }
 
