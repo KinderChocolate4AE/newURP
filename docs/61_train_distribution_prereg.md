@@ -144,7 +144,20 @@ P95  ★ (r1, 리뷰 5 수정 2) realized-reactivity audit: 분포 배선 후 �
      (성능 아닌 기하 관측이므로 학습 전 수행이 안전).
 ```
 
-## 6. 평가 프로토콜 (r1 재작성 — 학습 결과 전 동결)
+### 5.1 ★ P94 결과 (2026-08-07 — `results/threat_v3_p94.json`, 판정식 커밋 f5c75b6 은 결과 전)
+
+```
+발산 >= 1 m: 46/50 (판정 기준 >= 25/50 의 1.8배) · 발산 > 0: 50/50
+route 활성률 평균 0.13 · label 변화 7/50 · fire 시각 변화 5/50
+label 변화의 방향성 관찰: HARD_KILL->PENETRATED 4 · CAPTURED->PENETRATED 2
+  · HARD_KILL->CAPTURED 1 -- route ON 이 방어측 무력화를 회피하는 방향
+```
+
+**판정 = GREEN.** 자연 발생 상태에서 route 는 궤적 수준(전판)·임무
+수준(14%)의 측정 가능한 인과효과를 갖는다. → docs/62 §2 의 명칭 제한 해제:
+**"학습 가능한 shepherding channel"** 사용 가능 (단 "학습이 실제로 이용했다"
+는 여전히 MARL 결과 + static/active 대조의 몫). 리뷰 5 최위험 가정이 이
+표본에서 지지됐다.
 
 - **비교 구조 (headline)**: `hold` vs `scripted(bearing-aware 재배치)` vs
   `MARL` — **같은 TRAIN/IID/OOD 분포 위, paired CRN**. nominal 점 비교를
