@@ -1,7 +1,17 @@
-# 61 — THREAT_V3_TRAIN_DISTRIBUTION 사전등록 초안 r0 (Hyunjun 비준 대기)
+# 61 — THREAT_V3_TRAIN 분포 사전등록 r1 (리뷰 5 반영 · Hyunjun 비준 대기)
 
 **2026-08-07 · 학습 결과를 보기 전에 쓴다. docs/60 §1 의 TRAIN/IID/OOD 층을
-동결하는 문서다. 지위 = 초안 — 비준 후 확정, 학습 개시 후 불변경.**
+동결하는 문서다. r0 = 초안 · r1 = 리뷰 5 (docs/62) 동결 전 수정 3개 반영.
+지위 = 비준 대기 — 비준 후 확정, 학습 개시 후 불변경.**
+
+★ **명칭 (r1)**: 이 분포는 실제 위협 빈도 추정이 아니라 **balanced
+experimental design distribution** 이다 — 각 위협 regime 을 동일하게
+시험·학습하기 위한 설계분포. "최소 가정" 이라 부르지 않는다 (9셀 균등도
+가정이다). 셀별 성능이 전부 공개되므로 (§6) 가중 재해석은 독자의 몫.
+
+★ **nominal 관계 (r1)**: 범위는 nominal (0.5/30) 중심 설계가 맞다 — 이를
+숨기지 않는다. 주장하는 것은 **V6 결과 비의존** 하나뿐 (git 이력이 지지:
+범위 선언 커밋과 V6 결과 커밋의 선후 관계로 검증 가능).
 
 관통 규율 3개:
 1. **V6 결과 비의존** — 범위·셀 경계는 설계 불확실성 근거로만 정한다. V6 는
@@ -56,7 +66,7 @@ sense 하한 15 m: 교전 반경(1.125 m)의 ~13배 — "감지 > 교전" 의무
 | 능력 a_att, att_speed | 기존 THREAT_BRACKET (11,78)/(8,30) + CAPABILITY_RATIOS | 기 선언 유지 — TRAIN 분포와 **곱** |
 | 스폰 r_range · azimuth | (250, 350) m · ±π/4 | docs/60 비준값 유지 |
 | R_standby | **U[8, 16] m** (jitter — 방어측 초기화 축, 위협 아님) | 비준 대상 (Hyunjun 예시대역. 구속 = r_nk 6 밖) |
-| jink_amp · homing 등 A2 상속값 | nominal 고정 (0.6 / 4.0 / …) | TRAIN 에서 흔들지 않음 — 축을 늘릴수록 귀속 약화. OOD 로만 변형 |
+| jink_amp · homing 등 A2 상속값 | nominal 고정 (0.6 / 4.0 / …) | ★ (r1) **fixed inherited nuisance parameters** 로 명시 — defender 가 이 주기성/gain 을 암기할 수 있는 알려진 한계. TRAIN 에서 흔들지 않는 이유 = 귀속 보존. 완화 장치 = IID/OOD/A4 + sensitivity 등재 (OOD-JINK 후보) |
 
 ### ★ 지평선 재산술 (오류 18 규율 — TRAIN 최악 모서리)
 
@@ -88,6 +98,15 @@ slowdown 최악 = 40 m 구간을 0.4×8 m/s 로 통과: 40/3.2 − 40/8 = +7.5 s
 
 - A4 (self-play/optimizer) 는 OOD 가 아니라 별도 falsifier 층 (docs/60 §1).
 - OOD 에서의 성능 하락은 실패가 아니라 **보고 대상** — 판정식은 §6.
+- ★ (r1) OOD 의 지위: **반례를 찾는 장치이지 일반화 인증서가 아니다.**
+  허용 문장 = "사전등록된 4종의 structural/parametric OOD perturbation
+  에서 성능 유지 여부를 시험한다". "암기가 아님을 증명" 표현 금지.
+  **OOD-CPA 가 headline 의 핵심 falsifier 다** — angular-gap 에서만 gain 이
+  있고 CPA 에서 사라지면 결론은 "angular-gap reactive attacker 에서
+  cooperative shaping 을 학습했다" 로 제한된다.
+- ★ (r1) scope limitation 명시: 본 계약의 위협은 **수평 섹터 last-mile**
+  이다 (스폰 수평 ±45° + z 지터 ±5 m). 수직 접근(다이브)은 범위 밖 —
+  3D shepherding 일반 주장을 하려면 elevation OOD 가 별도로 필요하다.
 
 ## 5. 배선 계획 + 게이트 (결과 보기 전 선언)
 
@@ -104,38 +123,67 @@ P92  분포 배선 게이트:
 P93  TRAIN 침투 보존 표본검사: train draw 50판 · defender 제거 ->
      50/50 PENETRATED · TRUNCATED 0 (P90 동형 — 분포 모서리의 자멸 배제.
      episode_len_train=1100 의 첫 검증을 겸함)
+
+P94  ★ (r1, 리뷰 5 수정 1 — 학습 전 필수) natural-state route paired
+     ablation: V3-FULL NOMINAL · ep 0..49 · 동일 seed paired
+     {route ON (nominal)} vs {route OFF (route_gain=0, 그 외 전부 동일)}.
+     defender = hold (자연 발생 상태 — teleport 개입 없음).
+     보고 (수락대역 없음): route 활성률 · attacker 행동/궤적 발산 (첫 발산
+     스텝·max) · v_shot_soft 차이 · fire_step 변화 · label 변화 수.
+     판정 (결과 보기 전 고정): green = paired 판의 ≥ 50% 에서 궤적 max
+     발산 ≥ 1 m (1 m·50% 는 앵커 없는 선언값 — 300 m 스케일 대비 보수적
+     최소 크기). ★ green 전에는 "학습 가능한 shepherding channel" 명칭
+     금지 (허용 = "구현·검증된 causal channel", docs/62 §2).
+     red 여도 학습 금지 아님 — 단 기전 서사가 "shaping" 에서 "속도/기하
+     적응" 으로 강등된 채 진행 여부를 재결정한다.
+
+P95  ★ (r1, 리뷰 5 수정 2) realized-reactivity audit: 분포 배선 후 셀별
+     n=30 draw 에서 realized/requested route authority + 궤적 response
+     크기를 측정. 판정: 동일 속도 regime 안에서 weak < medium < strong
+     순서 유지. 깨지면 해당 셀 라벨이 잘못된 것 — 셀 경계 재사전등록
+     (성능 아닌 기하 관측이므로 학습 전 수행이 안전).
 ```
 
-## 6. 평가 프로토콜 (학습 결과 전 동결)
+## 6. 평가 프로토콜 (r1 재작성 — 학습 결과 전 동결)
 
-- **비교 구조 (headline)**: `hold` vs `scripted(재배치 휴리스틱, 추후 선언)`
-  vs `MARL` — **같은 TRAIN/IID/OOD 분포 위, paired CRN** (동일 seed·draw).
-  특정 nominal 점 비교를 headline 으로 쓰지 않는다.
-- **지표 (per arm × per 분포층)**:
+- **비교 구조 (headline)**: `hold` vs `scripted(bearing-aware 재배치)` vs
+  `MARL` — **같은 TRAIN/IID/OOD 분포 위, paired CRN**. nominal 점 비교를
+  headline 으로 쓰지 않는다.
+- ★ **scripted baseline 동결 (리뷰 5 수정 3)**: bearing-aware scripted
+  redeployment controller 의 **관측 집합·규칙 family·튜닝 예산·파라미터
+  탐색 예산**을 **docs/63 으로 학습 결과 전에 동결**한다. 실행은 나중이어도
+  되나 설계 고정이 먼저다 — "결과를 본 뒤 만든 baseline" 방지.
+- ★ **primary endpoint (lexicographic — E[J] 모호성 제거)**:
 ```
-E[J]        NET_CAPTURE율 · neutralized율 · penetration율 (평균)
-Q_0.1       9셀 × regime(SHAPING/FREE) 분할별 penetration 의 최악 셀
-            (평균 뒤에 숨은 corner 실패 노출)
-CVaR_0.1    limiter 소모 수 분포의 상위 10% 평균 (손실 위험)
-보조         wasted_fire · TRUNCATED (0 이어야 — 아니면 horizon 재등록)
+1차   NET_CAPTURE 율 개선 (논문 스파인 = 비손실 포획)
+2차   total defense (= 1 − penetration) 비열화
+3차   최악 셀 penetration 비열화 (9셀 × regime 분할)
+보조   CVaR_0.1 limiter 소모 · wasted_fire · TRUNCATED(=0 강제)
 ```
-- 판정 규율: "MARL 이 이겼다" 는 **E[J] 개선 ∧ 최악 셀 비열화** 를 함께
-  보일 때만. 한쪽만 성립하면 그대로 분리 보고 (리뷰 3·4 의 두-줄 분리 규율).
-- 유도(shepherding) 주장: P88 통과는 필요조건일 뿐 — 유도 성공 주장은
-  V3-FULL 위 static vs active limiter 대조 + (필요 시) route 인과 paired
-  ablation 후에만.
+  - 비열화 판정 = raw 점추정이 아니라 **사전 고정 margin + CI**:
+    비열화 margin = 5 %p (앵커 없는 선언값 — 비준 대상), 95% CI (paired
+    bootstrap, seed resample) 상한이 margin 안일 때만 비열화 인정.
+  - ★ **9셀 전체 결과 벡터는 headline 판정과 무관하게 의무 공개** —
+    "최악 셀 비열화" 는 2위 취약 셀의 악화를 숨길 수 있으므로 (리뷰 5
+    §6-iii), 셀 벡터 공개가 그 보완이다.
+- 판정 규율: lexicographic 1~3 을 모두 보일 때만 "개선" — 일부만 성립하면
+  그 단계까지 분리 보고 (리뷰 3·4 의 두-줄 규율).
+- 유도(shepherding) 주장: P88 + **P94 green** 이 필요조건. 충분조건은
+  V3-FULL 위 static vs active limiter 대조 후에만.
 
-## 7. 비준 체크리스트 (Hyunjun)
+## 7. 비준 체크리스트 (Hyunjun — r1)
 
 ```
+[ ] balanced design distribution 명명 + nominal-중심 인정 문구 (§0)
 [ ] 3×3 stratification 구조 + 9셀 균등 (§1)
 [ ] 층 A 셀 경계 — 특히 strong 층의 예시-box 밖 확장 (0.8 / 45 m) (§2)
-[ ] 층 B cruise 층 포함 (TRAIN 안에 비반응 종축 = v2 거동 nested) (§2)
+[ ] 층 B cruise 층 포함 (§2)
 [ ] R_standby jitter U[8,16] (§2)
-[ ] A2 상속값(jink 등) TRAIN 고정 (변형은 OOD 로만) (§2)
+[ ] A2 상속값 = fixed inherited nuisance parameters (§2)
 [ ] episode_len_train = 1100 (§2 산술)
-[ ] IID seed/에피소드 분리 규약 (§3)
-[ ] OOD 4 arm 정의 (§4)
-[ ] 평가 판정식 — E[J] ∧ 최악 셀 비열화 동시 조건 (§6)
-[ ] scripted 재배치 휴리스틱 arm 의 설계는 별도 문서로 (§6 — 미정 명시)
+[ ] IID 분리 규약 (§3) · OOD 4 arm + 지위 문구 (§4)
+[ ] P94 판정값 (발산 1 m · 판 비율 50%) — 앵커 없는 선언 (§5)
+[ ] P95 realized-reactivity 순서 판정 (§5)
+[ ] lexicographic primary endpoint + 비열화 margin 5 %p·95% CI (§6)
+[ ] scripted baseline 동결 문서 = docs/63 (학습 결과 전) (§6)
 ```
