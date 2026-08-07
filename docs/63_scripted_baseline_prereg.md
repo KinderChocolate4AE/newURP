@@ -1,4 +1,4 @@
-# 63 — scripted baseline (bearing-aware 재배치) 사전 동결 r1 — 수정 4건 이행
+# 63 — scripted baseline (bearing-aware 재배치) 사전 동결 r2 — 비준·동결
 
 **2026-08-08 · docs/61 §6 (리뷰 5 수정 3) 가 예약한 문서. headline comparator
 의 설계를 **MARL/tuning 결과를 보기 전에** 동결한다 ("결과를 본 뒤 만든
@@ -8,7 +8,9 @@ r0 → r1 = 조건부 승인의 필수 수정 4건 이행: ① "strongest nonlea
 명칭 삭제 → bounded wording (§0) ② 튜닝/headline 평가 표본 완전 분리
 (§3.1 신설) ③ parameter-free permutation 최소비용 slot assignment (§2)
 ④ F1/F3 capability parity — actor 관측 코드 확인 + commit 권한 차이 명시
-(§1·§2). 비준 전 구현·튜닝 금지 — **최종 비준 = 이 r1 확인 후.****
+(§1·§2). r1 → r2 = 최종 조건부 승인의 수정 1건 이행: **sole primary headline
+set = IID 10000..10299 (n=300)** — TRAIN 20000 대역 제거, headline
+판정 데이터셋 단일화 (§3.1). **r2 = 비준·동결 — 구현·튜닝 인가.****
 
 ★ **baseline 지위 (r1 고정 문구 — 논문 그대로 사용)**:
 
@@ -87,7 +89,9 @@ privileged 논거 아님 — 오독 방지 재서술). scripted finisher 의 cle
    comparator intentionally isolates nondestructive formation control;
    destructive-commit reference lines are reported separately."* 2차 지표
    (1−penetration) 에서 MARL 의 hard-kill fallback 이득 가능성은 이 병기로
-   드러난다.
+   드러난다. 논문 표현 규율 (r2): ~~"MARL beats an equally capable
+   scripted policy"~~ 금지 — 정확한 비교 = *"MARL vs a preregistered
+   nondestructive bearing-aware formation controller"*.
 6. finisher = 기존 scripted `clean` 발사 (변경 없음). 역할 분리 없음.
 
 family 밖 (금지): 궤적 예측·CPA 계산 · v_shot 소비 · 위협 draw 의존 분기 ·
@@ -108,19 +112,36 @@ family 밖 (금지): 궤적 예측·CPA 계산 · v_shot 소비 · 위협 draw �
 - 튜닝 에피소드 대역: `train` layer, episode 5000..5099 (**학습 대역
   0..N·early-stop 검증 대역과 분리** — 대역 선언 자체가 F5 의 일부).
 
-### 3.1 ★ 튜닝 표본 ≠ headline 평가 표본 (r1 필수 신설 — winner's curse 차단)
+### 3.1 ★ 튜닝 표본 ≠ headline 평가 표본 (r1 신설 · r2 단일화 — 원문 고정)
 
-> **Baseline selection set and headline evaluation set are disjoint.**
-> Episodes 5000..5099 are used only to choose (R_d, Δφ). Their
-> performance is reported as tuning evidence but is never used in the
-> MARL-vs-scripted headline comparison. After the parameters are frozen,
-> scripted and MARL are evaluated with paired CRN on the separately
-> preregistered headline evaluation episode set.
+> Episodes train/5000..5099 are used exclusively for scripted
+> hyperparameter selection and never contribute to headline inference.
+>
+> **The sole primary headline evaluation set is the held-out IID layer:
+> iid episodes 10000..10299 (n=300).**
+>
+> After scripted parameters and MARL training are frozen, hold,
+> scripted, and MARL are evaluated on exactly these paired IID draws.
+>
+> All three preregistered lexicographic headline criteria are computed
+> on this same IID set. TRAIN tuning outcomes, any secondary TRAIN
+> evaluation, and all OOD evaluations cannot alter the headline
+> decision.
+>
+> OOD arms remain preregistered falsification analyses and are reported
+> separately.
 
-- headline 평가 대역 (지금 선언 — scripted 튜닝 결과를 보기 전):
-  `train` layer **episode 20000..20299 (n=300)** (docs/47 §4.3 검정력
-  산술과 동일 n) + IID = docs/61 §3 의 `iid` layer 10000.. 대역.
-  hold/scripted/MARL 세 팔 전부 **같은 대역 paired CRN**.
+- 구조 (selection → freeze → held-out evaluation 완결):
+  TRAIN = MARL 학습 (0..N) + scripted 튜닝 (5000..5099) → 전부 freeze →
+  **IID 10000..10299 에서 hold/scripted/MARL 세 팔 paired CRN → headline
+  판정 (docs/61 lexicographic 1~3 전부 이 set 에서)** → OOD/A4 는
+  falsification 별도 보고.
+- IID 가 맞는 이유: scripted 는 TRAIN 에서 튜닝됐고 MARL 은 TRAIN 에서
+  학습했다 — 둘 다 보지 않은 held-out namespace 에서 재는 것이 대칭적이고,
+  train layer 내 대역 분리(20000..)와 달리 **학습 대역 확장과의 구조적
+  비중첩이 namespace 로 보장**된다.
+- n=300 은 **preregistered fixed evaluation budget** (기존 평가 규모 유지)
+  이다 — v3 effect size 에 대한 power 보장 주장이 아니다 (r2 wording).
 - max-선택된 조합의 튜닝 대역 성능(9조합 표)은 공개하되 headline 수치로
   재사용 금지.
 
@@ -141,7 +162,7 @@ family 밖 (금지): 궤적 예측·CPA 계산 · v_shot 소비 · 위협 draw �
 baseline 의 어떤 요소도 변경 금지** (docs/62 §2 소급 규율 동형). scripted
 runner 는 A4c manifest parity 를 통과해야 한다 (world contract 동일 인증).
 
-## 6. 판정표 (조건부 승인 — r1 수정 이행 후 최종 비준 대기)
+## 6. 최종 비준표 (2026-08-08 Hyunjun — r2 로 동결)
 
 ```
 [v] headline comparator 필요성                          승인
@@ -158,7 +179,11 @@ runner 는 A4c manifest parity 를 통과해야 한다 (world contract 동일 �
 [v] F8 동결 + A4c parity                                승인
 ```
 
-**r1 수정 4건 이행 완료. 최종 비준 (Hyunjun) 후 구현·튜닝 개시.**
+```
+[v] primary headline dataset 단일화 (IID 10000..10299)   r2 이행 -> PASS
+```
+
+**최종 비준 완료 (전항 PASS) — 구현·튜닝 개시 인가.**
 headline 평가 문구 (고정):
 
 > Hyperparameter selection episodes are disjoint from all headline
