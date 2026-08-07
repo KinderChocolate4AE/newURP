@@ -32,7 +32,8 @@ from shepherd.m4_env import build_m4_env
 from shepherd.scale_v2 import THREAT_V3_NOMINAL, V3_ARMS
 from shepherd.scripts.mission_rollout import ROLES, run_episode, scripted_role_actions
 
-__all__ = ["p88", "p89", "p90", "p91a", "p91b", "p92", "p93", "p94", "p95"]
+__all__ = ["p88", "p89", "p90", "p91a", "p91b", "p92", "p93", "p94", "p95",
+           "p95prime"]
 
 RESULTS = pathlib.Path(__file__).resolve().parents[2] / "results"
 
@@ -569,7 +570,11 @@ P95_STRATA = ("weak", "medium", "strong")
 
 
 def p95(n: int = P95_N):
-    """realized-reactivity audit (docs/61 §5 P95, r2 paired CRN 재정식화).
+    """★ 원 P95 (docs/61) -- RED 로 영구 봉인 (f7a65c6, results/threat_v3_p95
+    .json). docs/68 이후 draw 가 v2 로 바뀌어 이 함수의 재실행은 원 결과
+    재현이 아니다 (재현 = git 657b330~f7a65c6). 후속 판정은 p95prime.
+
+    realized-reactivity audit (docs/61 §5 P95, r2 paired CRN 재정식화).
 
     base 30판 × reaction stratum 3중 (능력·속도 draw·spawn·azimuth·standby·
     jink 위상 전부 고정, route_gain·sense_range 만 교체 — scale_v2.
@@ -662,20 +667,120 @@ def p95(n: int = P95_N):
     return out
 
 
+# ============================================================= P95p ======
+def p95prime():
+    """P95' -- route-gain stratum ordinal validity gate (docs/68 §2-§3).
+
+    confirmatory **1회** 규율: 부분 출력 보고 중단·regime 재실행·seed 변경·
+    지표 재선택 전부 금지. 인프라 오류만 bit-identical rerun (별도 로그).
+    RED 여도 §2.1 해석 제한 그대로 기록하고 멈춘다 (P95'' 금지).
+    """
+    from shepherd.scale_v2 import p95_confirm_triplet
+
+    strata = ("weak", "medium", "strong")
+    rows = []
+    for ep in range(30):
+        trip = p95_confirm_triplet(ep)
+        per = {}
+        for s in strata:
+            att = trip["arms"][s]
+            st = build_m4_env(
+                0, ep,
+                system=SystemSpec(enabled=True, contact_resolver=True,
+                                  miss_terminates=False, p_kill=1.0),
+                reward=RewardSpec(w_kill=0.5, enabled=True),
+                attacker=att, spawn=trip["spawn"], standby=trip["standby"],
+                extra_cfg=dict(trip["cfg"], **NS_FAST))
+            base = _base_env(st.env)
+            diags = []
+
+            def instr(pv, vv, _s=att, _d=diags, **kw):
+                dg = {}
+                out = _general_action(_s, pv, vv, diag=dg, **kw)
+                _d.append(dg)
+                return out
+
+            attach_attacker(base, instr,
+                            phase=float(getattr(base, "_attacker_phase", 0.0)))
+            r = run_episode(st.env, st.scn, st.lay, seed=ep,
+                            limiter_mode="hold", fire_mode="never")
+            act = []
+            for dg in diags:
+                rq = np.asarray(dg["route_req"], float)
+                nrq = float(np.linalg.norm(rq))
+                if nrq > _EPS_N:
+                    af = np.asarray(dg["a_final"], float)
+                    act.append(abs(float(af @ (rq / nrq))))
+            per[s] = dict(R_route=(float(np.mean(act)) if act else 0.0),
+                          T_active=len(act), steps=r.steps, label=r.label,
+                          route_gain=round(att.route_gain, 4),
+                          sense_range=round(att.sense_range, 2))
+        rows.append(dict(episode=ep, regime=trip["regime"],
+                         **{s: per[s] for s in strata}))
+        print(f"ep{ep:>3} [{trip['regime']:>15}] " + " ".join(
+            f"{s}={per[s]['R_route']:.3f}(T={per[s]['T_active']})"
+            for s in strata), flush=True)
+
+    order = ("weak", "medium", "strong")
+    verdict, agg = {}, {}
+    for reg in ("cruise", "sprint", "sprint_slowdown"):
+        sub = [r for r in rows if r["regime"] == reg]
+        mean = {s: float(np.mean([r[s]["R_route"] for r in sub])) for s in order}
+        med = {s: float(np.median([r[s]["R_route"] for r in sub])) for s in order}
+        mono_mean = all(mean[order[i]] < mean[order[i + 1]] for i in range(2))
+        mono_med = all(med[order[i]] < med[order[i + 1]] for i in range(2))
+        # diagnostic 의무 보고 (판정 미사용): 인접 층 차 + episode 순서 비율
+        ep_frac = float(np.mean([
+            r["weak"]["R_route"] < r["medium"]["R_route"] < r["strong"]["R_route"]
+            for r in sub]))
+        agg[reg] = dict(n=len(sub), mean=mean, median=med,
+                        adj_diff_mean=[mean["medium"] - mean["weak"],
+                                       mean["strong"] - mean["medium"]],
+                        adj_diff_median=[med["medium"] - med["weak"],
+                                         med["strong"] - med["medium"]],
+                        episode_order_frac=ep_frac)
+        verdict[reg] = bool(mono_mean and mono_med)
+    green = all(verdict.values())
+    out = dict(contract="docs/68 §2 P95' (confirmatory, 1회)",
+               n_base=30, by_regime=agg, verdict=verdict, green=green,
+               rows=rows,
+               interpretation=(
+                   "GREEN: confirmatory set 에서 route_gain strata 의 R_route "
+                   "ordinal ordering 이 3 regime x mean·median 로 확인 -- "
+                   "일반적 realized-authority proxy 증명 아님 (docs/68 §2.1)."
+                   if green else
+                   "RED: confirmatory set 에서 ordinal validity 미확립 -- "
+                   "사전등록 stop rule 발동, ordinal terminology 폐기 트랙. "
+                   "P95'' 금지 (docs/68 §2.1/§3)."))
+    for reg in ("cruise", "sprint", "sprint_slowdown"):
+        a = agg[reg]
+        print(f"P95' {reg:>15}: mean {a['mean']['weak']:.3f}/"
+              f"{a['mean']['medium']:.3f}/{a['mean']['strong']:.3f} "
+              f"med {a['median']['weak']:.3f}/{a['median']['medium']:.3f}/"
+              f"{a['median']['strong']:.3f} -> "
+              f"{'PASS' if verdict[reg] else 'FAIL'}")
+    print(f"P95' -> {'GREEN' if green else 'RED (stop rule)'}")
+    return out
+
+
 # ============================================================== P92 =======
 P92_N = 900                  # coverage 검정 draw 수 (docs/61 §5: 9셀 각 100 기대)
 P92_Z = 2.576                # 99% 양측 귀무 이항 CI
 
 
 def p92(n: int = P92_N):
-    """TRAIN 분포 배선 게이트 (docs/61 §5 P92): 결정론·coverage·경계·nesting."""
+    """TRAIN 분포 배선 게이트: 결정론·coverage·경계·nesting.
+
+    P92 (docs/61 factorization) GREEN = 657b330. **P92' (docs/68 v2 --
+    route-gain stratum + sense 공통 nuisance) 는 같은 판정식을 새
+    factorization 에서 재실행한 것**이다 (docs/68 §4)."""
     import math as _m
 
     from shepherd.scale_v2 import (A2_V4, EPISODE_LEN_TRAIN, THREAT_V3_SPAWN,
-                                   V3_SLOWDOWN_FRAC, V3_SLOWDOWN_WIDTH,
-                                   V3_SPRINT_FRAC, V3_SPRINT_RANGE,
-                                   V3_STANDBY_R, V3_TRAIN_CELLS_A,
-                                   draw_threat_v3)
+                                   V3_SENSE_COMMON, V3_SLOWDOWN_FRAC,
+                                   V3_SLOWDOWN_WIDTH, V3_SPRINT_FRAC,
+                                   V3_SPRINT_RANGE, V3_STANDBY_R,
+                                   V3_TRAIN_GAIN, draw_threat_v3)
     from shepherd.m4_config import m4_config
 
     # (i) 결정론 -- 동일 (seed, episode, layer) -> 동일 draw (frozen dataclass
@@ -694,9 +799,9 @@ def p92(n: int = P92_N):
         d = draw_threat_v3(0, ep, "train")
         att, cell = d["attacker"], d["cell"]
         counts[cell] = counts.get(cell, 0) + 1
-        (rg, sr) = V3_TRAIN_CELLS_A[cell[0]]
+        rg = V3_TRAIN_GAIN[cell[0]]
         ok = (rg[0] <= att.route_gain <= rg[1]
-              and sr[0] <= att.sense_range <= sr[1]
+              and V3_SENSE_COMMON[0] <= att.sense_range <= V3_SENSE_COMMON[1]
               and V3_STANDBY_R[0] <= d["standby"].R <= V3_STANDBY_R[1]
               and d["spawn"] == THREAT_V3_SPAWN
               and d["cfg"]["train.episode_len"] == EPISODE_LEN_TRAIN)
@@ -738,7 +843,8 @@ def p92(n: int = P92_N):
                    ii_coverage=bool(cover_ok),
                    iii_bounds=not bounds_bad,
                    iv_nesting=bool(nest_ok))
-    out = dict(contract="docs/61 §5 P92", n=n,
+    out = dict(contract="docs/61 §5 P92 + docs/68 §4 P92' (v2 factorization)",
+               n=n,
                cell_counts={f"{a}/{b}": c for (a, b), c in sorted(counts.items())},
                coverage_ci_99=[round(lo, 1), round(hi, 1)],
                bounds_violations=bounds_bad, verdict=verdict,
@@ -804,13 +910,14 @@ def main():
     ap = argparse.ArgumentParser(description="threat v3 gates (docs/60 §5)")
     ap.add_argument("--gate", required=True,
                     choices=["p88", "p89", "p90", "p91a", "p91b", "p92", "p93",
-                             "p94", "p95"])
+                             "p94", "p95", "p95prime"])
     ap.add_argument("--eps", type=int, nargs=2, default=[0, P90_N],
                     metavar=("A", "B"), help="p90 샤딩 range [A, B)")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
     fn = {"p88": p88, "p89": p89, "p91a": p91a, "p91b": p91b,
-          "p92": p92, "p93": p93, "p94": p94, "p95": p95}.get(a.gate)
+          "p92": p92, "p93": p93, "p94": p94, "p95": p95,
+          "p95prime": p95prime}.get(a.gate)
     out = fn() if fn else p90(range(a.eps[0], a.eps[1]))
     path = pathlib.Path(a.out) if a.out else (
         RESULTS / (f"threat_v3_{a.gate}.json" if a.gate != "p90"

@@ -22,7 +22,8 @@ from shepherd.spawn_rand import SpawnSpec, StandbySpec
 __all__ = ["SCALE_V2_CFG", "SCALE_V2_SPAWN",
            "A2_V4", "THREAT_V3_NOMINAL", "THREAT_V3_SPAWN", "THREAT_V3_STANDBY",
            "SCALE_V3_FULL_CFG", "V3_ARMS",
-           "V3_TRAIN_CELLS_A", "V3_TRAIN_CELLS_B", "V3_STANDBY_R",
+           "V3_TRAIN_GAIN", "V3_SENSE_COMMON", "V3_TRAIN_CELLS_B",
+           "V3_STANDBY_R", "P95_CONFIRM_NS", "p95_confirm_triplet",
            "EPISODE_LEN_TRAIN", "SCALE_V3_TRAIN_CFG", "draw_threat_v3",
            "v3_distribution_hash", "reaction_stratum"]
 
@@ -64,16 +65,22 @@ THREAT_V3_STANDBY = StandbySpec(R=12.0)                  # #11~13
 SCALE_V3_FULL_CFG = dict(SCALE_V2_CFG, **{"train.episode_len": 1000})
 
 # ===========================================================================
-# THREAT_V3_TRAIN — balanced experimental design distribution (docs/61 r2
-# 비준·동결). 셀 경계·범위는 전부 결과 전 선언값 — 변경은 새 사전등록으로만.
-# 9셀 균등은 위협 빈도 추정이 아니라 각 regime 동일 실험 가중치 (§0 재명명).
+# THREAT_V3_TRAIN — balanced experimental design distribution.
+# docs/61 r2 로 동결됐던 층 A(반응성 결합)는 P95 RED (f7a65c6) 후 docs/68 r1
+# (P95-failure-informed redesign, 리뷰 7 (b') 비준)로 **재사전등록** 됐다:
+# 층 A = route_gain 단독 (route-gain stratum, `reactivity` 명칭 폐기) ·
+# sense_range = 전 층 공통 nuisance. 셀 경계·범위는 결과 전 선언값 — 변경은
+# 새 사전등록으로만. 원 P95 RED 는 영구 보존 (재현 = git 657b330~f7a65c6).
 # ===========================================================================
-# 층 A — 횡 반응성: (route_gain 범위, sense_range 범위)  [docs/61 §2]
-V3_TRAIN_CELLS_A = {
-    "weak":   ((0.2, 0.4), (15.0, 25.0)),   # 하한 0.2: 전 위협 반응형 (0 = v2 회귀)
-    "medium": ((0.4, 0.6), (25.0, 35.0)),   # nominal (0.5, 30) 포함 셀
-    "strong": ((0.6, 0.8), (35.0, 45.0)),   # 비준된 상단 확장
+# 층 A — route-gain stratum (docs/68 §1; 구간 = docs/61 값 그대로, 상향 없음)
+V3_TRAIN_GAIN = {
+    "weak":   (0.2, 0.4),   # 하한 0.2: 전 위협 반응형 (0 = v2 회귀)
+    "medium": (0.4, 0.6),   # nominal 0.5 포함 층
+    "strong": (0.6, 0.8),
 }
+# sense_range — 전 층 공통 nuisance (docs/68 §1). draw 는 에피소드 metadata
+# (attacker.sense_range + mission records)에 기록 — 후속 sensitivity 분석 몫.
+V3_SENSE_COMMON = (15.0, 45.0)
 # 층 B — 종축 속도 프로파일
 V3_TRAIN_CELLS_B = ("cruise", "sprint", "sprint_slowdown")
 V3_SPRINT_RANGE = (40.0, 80.0)
@@ -118,12 +125,12 @@ def draw_threat_v3(seed: int, episode: int, layer: str) -> dict:
     lerp = lambda lo_hi, x: lo_hi[0] + x * (lo_hi[1] - lo_hi[0])   # noqa: E731
 
     cell = int(u("cell") * 9)                     # u < 1 이므로 0..8
-    a_name = tuple(V3_TRAIN_CELLS_A)[cell // 3]
+    a_name = tuple(V3_TRAIN_GAIN)[cell // 3]
     b_name = V3_TRAIN_CELLS_B[cell % 3]
-    rg, sr = V3_TRAIN_CELLS_A[a_name]
 
-    kw = dict(route_gain=lerp(rg, u("route_gain")),
-              sense_range=lerp(sr, u("sense_range")))
+    # sense 는 층과 무관한 공통 nuisance (docs/68 §1) -- 같은 key, 층 비의존
+    kw = dict(route_gain=lerp(V3_TRAIN_GAIN[a_name], u("route_gain")),
+              sense_range=lerp(V3_SENSE_COMMON, u("sense_range")))
     if b_name != "cruise":
         sprint_range = lerp(V3_SPRINT_RANGE, u("sprint_range"))
         kw.update(sprint_range=sprint_range,
@@ -144,24 +151,67 @@ def draw_threat_v3(seed: int, episode: int, layer: str) -> dict:
 
 def reaction_stratum(seed: int, episode: int, stratum: str,
                      layer: str = "train") -> dict:
-    """P95 paired CRN 재정식화 (docs/61 §5 r2): base draw 의 능력·속도
-    프로파일·spawn·standby·jink 위상을 **전부 고정**하고, reaction 축
-    (route_gain·sense_range)만 지정 층의 범위로 재사상한다.
+    """paired CRN 층 재사상 (docs/68 v2): base draw 에서 **route_gain 만**
+    지정 층의 범위로 재사상한다. sense_range 는 공통 nuisance 라 base 와
+    동일 (triplet 이 같은 sense draw 를 공유 — docs/68 §2 CRN 핵심).
 
-    같은 에피소드의 축별 u 를 그대로 쓰므로 세 층은 축 내 상대 위치까지
-    동일한 **paired 3중**이다. draw_threat_v3 와 같은 단일 산지 규율.
+    ★ 원 P95 (docs/61 정의: gain+sense 동시 재사상)는 RED 로 영구 봉인됐다
+    (f7a65c6). 이 함수는 v2 의미이며 원 결과 재현용이 아니다.
     """
-    if stratum not in V3_TRAIN_CELLS_A:
-        raise ValueError(f"stratum 은 {tuple(V3_TRAIN_CELLS_A)} 중 하나: "
+    if stratum not in V3_TRAIN_GAIN:
+        raise ValueError(f"stratum 은 {tuple(V3_TRAIN_GAIN)} 중 하나: "
                          f"{stratum!r}")
     d = draw_threat_v3(seed, episode, layer)
-    rg, sr = V3_TRAIN_CELLS_A[stratum]
+    rg = V3_TRAIN_GAIN[stratum]
     u = lambda key: _u_v3(layer, seed, episode, key)          # noqa: E731
     att = replace(d["attacker"],
                   route_gain=rg[0] + u("route_gain") * (rg[1] - rg[0]),
-                  sense_range=sr[0] + u("sense_range") * (sr[1] - sr[0]),
                   label=f"A2-v3-{layer}-p95-{stratum}")
     return dict(d, attacker=att, cell=(stratum, d["cell"][1]))
+
+
+# ── P95′ confirmatory draw (docs/68 §3) ─────────────────────────────────────
+P95_CONFIRM_NS = "p95_route_authority_confirm"
+
+
+def _u_ns(ns: str, seed: int, episode: int, key: str) -> float:
+    h = hashlib.sha256(
+        f"{ns}|{int(seed)}|{int(episode)}|{key}".encode()).digest()
+    return int.from_bytes(h[:8], "big") / 2 ** 64
+
+
+def p95_confirm_triplet(episode: int, seed: int = 0) -> dict:
+    """P95′ confirmatory triplet (docs/68 §3 — 결과 전 고정 프로토콜).
+
+    새 namespace (기존 P95/TRAIN draw 와 분리) · base 0..29 · speed regime
+    **사전 배정** (0..9 cruise · 10..19 sprint · 20..29 sprint_slowdown —
+    regime 별 판정 n=10 보장). triplet 은 sense_range·속도 프로파일·standby·
+    (build 의 seed/episode 로 정해지는) spawn·jink 위상을 전부 공유하고
+    route_gain 만 층 사상.
+    """
+    if not 0 <= int(episode) < 30:
+        raise ValueError(f"P95' base episode 는 0..29 다: {episode}")
+    regime = V3_TRAIN_CELLS_B[int(episode) // 10]
+    u = lambda key: _u_ns(P95_CONFIRM_NS, seed, episode, key)   # noqa: E731
+    lerp = lambda lo_hi, x: lo_hi[0] + x * (lo_hi[1] - lo_hi[0])  # noqa: E731
+
+    kw = dict(sense_range=lerp(V3_SENSE_COMMON, u("sense_range")))
+    if regime != "cruise":
+        sprint_range = lerp(V3_SPRINT_RANGE, u("sprint_range"))
+        kw.update(sprint_range=sprint_range,
+                  sprint_frac=lerp(V3_SPRINT_FRAC, u("sprint_frac")))
+        if regime == "sprint_slowdown":
+            near = sprint_range
+            far = near + lerp(V3_SLOWDOWN_WIDTH, u("slowdown_width"))
+            kw.update(slowdown_range=(far, near),
+                      slowdown_frac=lerp(V3_SLOWDOWN_FRAC, u("slowdown_frac")))
+    arms = {
+        name: replace(A2_V4, route_gain=lerp(rg, u("route_gain")),
+                      label=f"A2-p95c-{name}/{regime}", **kw)
+        for name, rg in V3_TRAIN_GAIN.items()}
+    return dict(regime=regime, arms=arms, spawn=THREAT_V3_SPAWN,
+                standby=StandbySpec(R=lerp(V3_STANDBY_R, u("standby_R"))),
+                cfg=SCALE_V3_TRAIN_CFG)
 
 
 def v3_distribution_hash() -> str:
@@ -176,7 +226,8 @@ def v3_distribution_hash() -> str:
 
     from shepherd.m4_config import CAPABILITY_RATIOS, THREAT_BRACKET
     payload = dict(
-        cells_a=V3_TRAIN_CELLS_A, cells_b=V3_TRAIN_CELLS_B,
+        gain_strata=V3_TRAIN_GAIN, sense_common=V3_SENSE_COMMON,
+        cells_b=V3_TRAIN_CELLS_B,
         sprint_range=V3_SPRINT_RANGE, sprint_frac=V3_SPRINT_FRAC,
         slowdown_width=V3_SLOWDOWN_WIDTH, slowdown_frac=V3_SLOWDOWN_FRAC,
         standby_r=V3_STANDBY_R, episode_len_train=EPISODE_LEN_TRAIN,

@@ -1,0 +1,28 @@
+{
+ "contract": "docs/61 §5 P92 + docs/68 §4 P92' (v2 factorization)",
+ "n": 900,
+ "cell_counts": {
+  "medium/cruise": 92,
+  "medium/sprint": 107,
+  "medium/sprint_slowdown": 109,
+  "strong/cruise": 103,
+  "strong/sprint": 85,
+  "strong/sprint_slowdown": 110,
+  "weak/cruise": 93,
+  "weak/sprint": 113,
+  "weak/sprint_slowdown": 88
+ },
+ "coverage_ci_99": [
+  75.7,
+  124.3
+ ],
+ "bounds_violations": [],
+ "verdict": {
+  "i_determinism": true,
+  "ii_coverage": true,
+  "iii_bounds": true,
+  "iv_nesting": true
+ },
+ "all_pass": true,
+ "note": "episode_len_train=1100 은 P93 green 후 확정 (docs/61 비준표 조건부). IID 대역 분리(10000..)는 호출자 규율."
+}
