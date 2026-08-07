@@ -32,7 +32,7 @@ ring 대기 x=8 -- NK 경계(x=6)에서 2 m · tau_deploy 0.3 s = 성공 판의 
 | **고정** (하드웨어 N1 근거) | kill_radius 0.75 · net cone (half-angle 0.067, range_max 29.85) · net_radius 1.77 · tau_deploy 0.3 · a_max 들 · dt 0.05 | — | 불변 |
 | **고정** (안전/법 근거) | r_nk = 6 m | — | 불변. 300 m 세계에선 2 % — NK 구속이 저절로 풀리는지가 v2 첫 관전 포인트 |
 | **확장** | `train.layout.adversary_start_x` | 24 → **300** | 30 m/s 급에 ~10 s+ 대응시간 (Hyunjun 지시 "적어도 300 m") |
-| **확장** | `train.episode_len` | 80 → **400** (20 s) | 300 m / 15 m/s 최악 커버. dt 유지 (적분·swept 분석이 dt=0.05 전제) |
+| **확장** | `train.episode_len` | 80 → ~~400~~ **480** (24 s) | ★ 2026-08-07b 정정: 400(20 s)은 산술 오류 — 스폰 상한 310 m ÷ 속도 하한 ~14 m/s = 22.1 s > 20 s 라 저속 draw 가 구조적으로 절단됐다 (V4 1차에서 TRUNCATED 29%, ep4 는 포획 진행 중 절단 실측). 480 = 310/13.5 + 전개·lock 여유. dt 유지 |
 | **확장** | `train.layout.ring_center` | (8,0,0) → **(50,0,0)** | 대기점 승격: NK 밖 + cone 상류. 공격자 20 m/s 기준 ring→NK 44 m = 2.2 s (기존 0.1 s 의 22배). **설계 변수로 승격 — 추후 sweep 축 후보** |
 | **확장** | SpawnSpec.dx | 2 → **10** | 도달시간 지터 ±0.5 s (v=20). x∈[290,310] |
 | 유지 | SpawnSpec.r_lat = ring_radius = 5 | — | "위협은 방어 개구 어디로든" 선언 논리 유지 (넓히면 우회 문제로 성격 변경) |
@@ -64,6 +64,20 @@ V4   v2 baseline (hold/clean · F-flags · n=100): 라벨 분포 보고.
 V5   v2 뷰어 재생성 -> 육안 재검사 (Hyunjun) -- 스폰·대기·NK 비율이
      의도대로인지. 여기서 승인 후에야 v2 위 실험 사슬 재개
 ```
+
+## 3.1 V4 1차 결과 + V5 1차 육안 검사 기록 (2026-08-07b)
+
+V4 1차 (episode_len=400, n=100): capture 10 / 침투 61 / **절단 29**.
+V5 (Hyunjun): 스케일감 승인 · cone 시각화 요청 · "절단 판이 포획처럼 보인다".
+
+- **절단 29% = 지평선 산술 오류로 판정** (ep4 = t396 clean 발사 후 해소 전
+  절단 — 포획 진행 중; ep9 = 저속 draw 미도달). "A2 배회·시간상수" 의심은
+  **철회** (분포 요약의 과잉해석). → episode_len 480 정정 후 V4 재실행.
+- **hold 기저선의 clean 게이트 붕괴는 실재** (fire 19/100): ring x=50 이
+  cone(x≲32)과 분리 — v2 에서 limiter 기동이 구조적으로 필수가 됐다.
+  이것은 버그가 아니라 **v2 의 첫 발견**: "대기점-cone 관계" 가 설계 변수.
+- limiter 정책 확인 (Hyunjun 질문): V4 는 hold(무개입 정지) 기저선.
+  fallback 대비 근접 이동은 미구현 — scripted/학습이 채울 자리.
 
 ## 4. v2 이후 순서 (뷰어 승인 후)
 
