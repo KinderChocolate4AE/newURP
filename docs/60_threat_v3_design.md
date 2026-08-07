@@ -1,10 +1,10 @@
-# 60 — 위협 계약 v3 설계 r2 (분포 위협 구조 · 배선 전 · 결과 없음)
+# 60 — 위협 계약 v3 설계 r3 (비준 완료 · 배선 개시)
 
-**2026-08-07 · 결과를 보기 전에 쓴다. r0 = 초안 (94b786e) · r1 = 조건부 비준
-반영 (4d87f53) · r2 = Hyunjun 2차 지시 반영: ① 위협을 점이 아니라 **분포**로
-② route_probe 파라미터 소멸 (angular-gap 재정식화) ③ 축 (iii) ring-회전
-정렬 폐기 → **bearing-독립 symmetric standby**. 비준 전 금지 유지: limiter
-학습 · oracle 확장 · r_nk 튜닝.**
+**2026-08-07 · r0 = 초안 (94b786e) · r1 = 조건부 비준 반영 (4d87f53) ·
+r2 = 분포 위협 구조 (ea77aed) · r3 = 최종 3수정 반영 후 **배선 승인**
+(§8 r3 비준표): ① angular-gap 을 instantaneous transverse heuristic 으로
+범위 제한 ② r_block 재사용 = nominal modeling choice 명시 ③ P91 을
+backend 회전성(P91a)과 actual-v3 bearing sanity(P91b)로 분리.**
 
 > **v3 의 목적은 공격자를 "더 어렵게" 만드는 것이 아니라, limiter 배치가
 > attacker 행동을 실제로 변화시킬 수 있는 causal channel 을 추가하여 원래
@@ -93,7 +93,16 @@ acceleration 을 수행하는 비정상 종축 속도 프로파일"*. "gate 기�
   parametrization)를 버리고, "최대 간극으로 회피" 의미는 유지한 채 **각도
   공간에서 직접 widest gap 을 찾는다.**
 
-### 3.2 angular-gap 알고리즘 (설계 — 배선은 비준 후)
+### 3.2 angular-gap 알고리즘 — **instantaneous transverse angular-gap heuristic** (r3 범위 제한)
+
+★ **명칭·주장 제한 (r3)**: 이 항은 현재 횡단면의 순간 기하만 본다 — limiter
+가 2 m 앞이든 25 m 앞이든 lateral offset 이 같으면 같은 각도를 막는다
+(sense_range 안에서 종축 거리 정보가 소거됨). 따라서 이것은 "physical
+widest escape gap" 이 **아니며** 그렇게 부르지 않는다. 종축 기하까지 보는
+판은 candidate 방향별 geometric CPA (`d_CPA(u,i) = min_τ |(p_i−p_A) −
+v_test(u)·τ|`) 로 threat tube 겹침 각을 계산하는 것이나, 그건 controller
+가 커지므로 **최소 causal channel** 목적의 nominal 에서는 채택하지 않는다
+(P88/P90 실패 시의 escalation 경로로만, §3.3).
 
 ```
 1. 감지: 전방(진행축 내적 > 0) ∧ 거리 ≤ sense_range 인 limiter 검출
@@ -102,8 +111,11 @@ acceleration 을 수행하는 비정상 종축 속도 프로파일"*. "gate 기�
 4. blockage: limiter i 가 가리는 각도 구간 = [β_i − α_i, β_i + α_i],
    α_i = asin(min(1, r_block / |o_i|)),  |o_i| ≤ r_block 이면 α_i = π/2
    r_block = repel 반경 = repel_margin × lam_range × kill_radius
-   (기존 선언량 재사용 -- "위협으로 인지하는 반경" 을 lambda 채널과 일원화.
-    신규 상수 0)
+   ★ (r3) 이 재사용은 물리적 동일성 주장이 아니라 **신규 자유도를 추가하지
+   않기 위한 nominal modeling choice 다.** repel 반경(반발 발동 거리)과
+   threat footprint(위험 판단 반경)가 같아야 할 물리적 이유는 없다 --
+   sense 30 m 로 감지하면서 1.125 m disk 만 피하는 모델임을 인지하고 쓴다.
+   TRAIN/OOD 에서 별도 threat-footprint 모델이 필요할 수 있다 (분포 축 후보)
 5. free sector: S¹ 에서 blockage 합집합의 여집합 중 최대 호(arc) 선택
 6. 출력: a = route_gain × a_lat_max × (호 중점 방향 단위벡터)
 ```
@@ -164,7 +176,9 @@ ring-회전 정렬은 2 를 환경이 대신 해주는 것이었다. 폐기.
 
 - **배치**: limiter 4기를 자산 중심 4방위 대칭으로 —
   `p_i(0) = R_standby × [cos(φ₀ + iπ/2), sin(φ₀ + iπ/2), 0]`, i = 0..3.
-- **`φ₀` 에피소드마다 랜덤** (SHA-256 규약) — 특정 world axis 편향 제거.
+- **`φ₀ ~ U[0, π/2)` 에피소드마다 랜덤** (SHA-256 규약) — 특정 world axis
+  편향 제거. 4기 정사각 대칭이라 φ₀ ≡ φ₀+π/2 이므로 독립 기하는 [0, π/2)
+  뿐 — full 2π 로 뽑지 않는다 (r3).
 - **`R_standby` nominal = 12 m** (선언값: Hyunjun 예시대역 8~16 의 중앙.
   구속조건 = r_nk 6 밖 + 4기 비중첩. 원점 몰아넣기는 기각 — NK fallback 기하
   왜곡·초기 겹침·전원 외곽 출동의 불필요한 불리). TRAIN 분포에서 jitter
@@ -183,14 +197,21 @@ ring-회전 정렬은 2 를 환경이 대신 해주는 것이었다. 폐기.
   **COMA cf = layout.limiter_p0 의존 감사는 P51 재검토와 묶어 MARL 재개 전
   필수** (ring 의존은 초기조건이 아니라 학습 신호 기준점이므로).
 
-### 4.3 P91 · P91b (배선 전 sanity)
+### 4.3 P91a · P91b (r3 분리 — finisher 고정과의 충돌 해소)
+
+r2 의 P91 은 "무엇을 회전하는가" 가 미명시였다. finisher 는 (2,0,0) 위치
+고정인데 접근 방위가 ±45° 랜덤이므로, finisher 를 회전에서 빼면 viability
+가 θ 에 따라 달라지는 것이 **버그가 아니라 실제 v3 문제의 성질**이다. 분리:
 
 ```
-P91   rotation-equivariance: spawn·formation·velocity 를 θ 회전 -> 역회전시
-      dynamics·viability 판정이 θ=0 과 동일. 실패 = hidden +x assumption
+P91a  backend rotational covariance: target-relative 전체 장면(공격자·
+      limiter·finisher·velocity)을 함께 θ 회전 -> 역회전시 dynamics·
+      evaluator 동일. 순수 backend isotropy 검사 -- 실패 = hidden +x bug
       -> 축 (iii) 동결
-P91b  bearing-response mirror: 동일 standby 에서 spawn bearing ±θ mirror ->
-      scripted/kinematic 대응도 mirror (학습 전이므로 scripted sanity 만)
+P91b  actual-v3 bearing sanity: finisher 는 계약대로 (2,0,0) 고정 ·
+      standby 는 bearing-독립 · spawn bearing 만 ±θ mirror -> 사전 정의한
+      대칭(공격자 궤적·scripted 대응의 mirror 관계)만 검사. viability 의
+      θ 의존은 실패가 아니라 기록 대상 (finisher 방위 추종의 실측 자료)
 ```
 
 ## 4.5 nested arm 규율 (r1 유지 + r2 주석)
@@ -222,7 +243,8 @@ P90   침투 능력 보존: 사전등록 seed n=100 · defender 전원 제거 ->
       100/100 PENETRATED · TRUNCATED 0 · self-failure 0.
       TRUNCATED 발생 -> 해석 금지, V6 전 horizon 재사전등록
       (episode_len 1000 은 이 gate 조건부 임시값)
-P91   rotation-equivariance (§4.3) · P91b bearing-response mirror
+P91a  backend rotational covariance (§4.3 -- finisher 포함 전체 회전)
+P91b  actual-v3 bearing sanity (§4.3 -- finisher 고정, mirror 대칭만)
 V6    nested arm baseline (V3-C/CS/FULL · hold=standby/clean · 동일 seed ·
       각 n=100) -- 수락대역 없음, descriptive
 V7    뷰어 재생성 -> Hyunjun 육안 (standby 4방위·bearing 대응·저속 구간·
@@ -232,6 +254,11 @@ V7    뷰어 재생성 -> Hyunjun 육안 (standby 4방위·bearing 대응·저�
 이후 순서: P88~P91 green → **docs/61 THREAT_V3_TRAIN_DISTRIBUTION 사전등록**
 (축별 범위 + IID held-out 프로토콜 + OOD 공격자 정의 + 평가지표
 E[J]/Q_0.1/CVaR 판정식, 전부 학습 결과 전 동결) → 그 뒤에만 MARL.
+★ (r3) docs/61 규율 예약: parameter-wise independent uniform box 하나로
+끝내지 않는다 — 독립 uniform 이 자동으로 좋은 threat distribution 이
+아니다 (예: sense 높음 × route_gain≈0 × 이른 sprint × 강한 slowdown 조합의
+확률은 모델링 선택이다). 최소한 축별 stratification (예: weak/medium/strong
+reactivity × speed profile) 으로 coverage 를 보장한 뒤 내부 jitter.
 
 판정식·선언값은 결과 후 불변경. 조정은 새 사전등록으로만.
 
@@ -252,15 +279,15 @@ E[J]/Q_0.1/CVaR 판정식, 전부 학습 결과 전 동결) → 그 뒤에만 MA
 | 4 | `slowdown_frac` | 0.5 | 비준 (TRAIN 분포 축) |
 | 5 | `route_gain` | 0.5 | 조건부 (P89 audit) |
 | 6 | `sense_range` | 30 m | 비준 (TRAIN 분포 축) |
-| 7 | ~~`route_probe`~~ | 소멸 | **angular-gap 재정식화 (§3.2) — 비준 대기** |
+| 7 | ~~`route_probe`~~ | 소멸 | **비준 (r3 조건 이행)** — instantaneous heuristic 명칭 제한 + r_block 의미 제한 (§3.2) |
 | 8 | `r_range` | (250, 350) m | 비준 |
 | 9 | `azimuth` | ±π/4 | 비준 |
 | 10 | `episode_len` | 1000 | 임시 (P90 조건부) |
-| 11 | `R_standby` | 12 m | **신규 — 비준 대기** (구속: > r_nk 6, 대역 8~16) |
-| 12 | `φ₀` | 에피소드 랜덤 (SHA-256) | **신규 — 비준 대기** |
-| 13 | standby 4방위 대칭 + 탐지 가정 문구 | §4.2 | **신규 — 비준 대기** |
+| 11 | `R_standby` | 12 m | **비준** (nominal point 한정 — 최적/현실값 주장 아님) |
+| 12 | `φ₀` | ~ U[0, π/2) 에피소드 랜덤 (SHA-256) | **비준** (r3: 대칭 몫으로 축소) |
+| 13 | standby 4방위 대칭 + 탐지 가정 문구 | §4.2 | **비준** |
 
-배선 착수 조건 = #7 (angular-gap 설계) · #11~13 (standby 계약) 비준.
+**배선 승인 (r3).** 잔여 조건부 = #5 (P89 audit) · #10 (P90).
 
 ## 8. 비준 로그
 
@@ -285,3 +312,15 @@ E[J]/Q_0.1/CVaR 판정식, 전부 학습 결과 전 동결) → 그 뒤에만 MA
 | ring_radius = standby 초기조건으로 강등 · COMA cf 의존 감사 = P51 과 묶음 | §4.2 |
 | P91b bearing-response mirror 추가 | §4.3 |
 | 임의값 처리 4단계 규율 | §0.5 |
+
+**r3 (2026-08-07 3차 — 배선 승인)**:
+| 항목 | 판정 | 반영 |
+|---|---|---|
+| 분포 구조 (5층) · nominal/train 분리 · bearing-독립 standby | 방향 비준 | — |
+| #7 angular-gap | 조건부 승인 → 이행 | instantaneous transverse heuristic 명칭 제한 + 종축 소거 caveat + CPA escalation 명시 (§3.2) |
+| r_block = repel 재사용 | 의미 제한 | 물리 동일성 아님 · nominal modeling choice · TRAIN/OOD 별도 footprint 후보 (§3.2) |
+| P91 | 수정 후 승인 | P91a (finisher 포함 전체 회전 = backend isotropy) / P91b (finisher 고정 · mirror 대칭만) 분리 (§4.3) |
+| #11 R_standby 12 | 승인 (nominal point 한정) | §7 |
+| #12 φ₀ | 승인 · U[0,π/2) 권장 채택 | §4.2 |
+| #13 standby 계약 | 승인 | — |
+| docs/61 예약 | independent uniform box 단독 금지 · stratification | §5 |
