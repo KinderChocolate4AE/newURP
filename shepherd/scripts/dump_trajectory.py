@@ -114,7 +114,18 @@ def main() -> None:
     ap.add_argument("--v2", action="store_true", help="스케일 v2 (docs/59)")
     ap.add_argument("--eps", type=int, nargs="*", default=None,
                     help="에피소드 목록 override (그룹 = 실측 라벨)")
+    ap.add_argument("--from-json", default=None,
+                    help="재시뮬 없이 기존 JSON 에서 HTML 만 재생성 (서버 분업용)")
     a = ap.parse_args()
+
+    if a.from_json:
+        data = json.loads(pathlib.Path(a.from_json).read_text(encoding="utf-8"))
+        tpl = pathlib.Path(a.template).read_text(encoding="utf-8")
+        html = tpl.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False))
+        pathlib.Path(a.out_html).parent.mkdir(parents=True, exist_ok=True)
+        pathlib.Path(a.out_html).write_text(html, encoding="utf-8")
+        print(f"-> {a.out_html} (from {a.from_json})")
+        return
 
     episodes = []
     if a.eps is not None:
