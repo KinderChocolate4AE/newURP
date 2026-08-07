@@ -74,6 +74,14 @@ def test_horizon_declared():
     assert SCALE_V3_TRAIN_CFG["train.episode_len"] == 1100
 
 
+def test_gain_bin_names_display_only():
+    """docs/69 §6-2: GAIN_BIN_NAMES 는 표시용 — 키 집합만 일치하면 되고
+    sampling/SHA 개입은 parity pin (test_contract_parity) 이 잡는다."""
+    from shepherd.scale_v2 import GAIN_BIN_NAMES
+    assert set(GAIN_BIN_NAMES) == set(V3_TRAIN_GAIN)
+    assert sorted(GAIN_BIN_NAMES.values()) == ["G1", "G2", "G3"]
+
+
 def test_reaction_stratum_is_paired_crn():
     """CRN 계약 v2: route_gain 만 교체, 그 외 전부 base 와 bit 동일."""
     from dataclasses import fields

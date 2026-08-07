@@ -84,10 +84,17 @@ G3: route_gain ∈ U[0.6, 0.8]      (각 1/3 등확률 — gain-bin 1/2/3)
 ## 6. 실행 큐 (결정 A 이후)
 
 1. ~~A 채택 decision 기록~~ (본 문서)
-2. ~~명칭 규율~~ (§1; scale_v2.GAIN_BIN_NAMES + claim scan 패턴 추가)
+2. ~~명칭 규율~~ (§1; scale_v2.GAIN_BIN_NAMES = **표시용 mapping 한정** —
+   sampling·SHA 입력·cell 선택에 불개입. parity pin(efeffcbf) 이 이를 강제)
 3. ~~P95/P95′ RED 영구 보존~~ (§2)
 4. ~~TRAIN final freeze~~ (§4)
 5. ~~P92′/P93′ 재실행 안 함~~ (§4)
-6. **docs/63 scripted baseline 설계·비준·freeze** ← 다음
-7. fresh MARL smoke (G1/G2 manifest) → 8. hold vs scripted vs MARL →
-9. static/active attribution → 10. IID → OOD-CPA 중심 → A4
+6. ~~docs/63 scripted baseline 설계·비준·freeze~~ (r2 = b6ea0fb — IID
+   10000..10299 sole primary headline set)
+7. scripted 구현 + A4c world-contract parity → 9-grid 튜닝 → 선택
+   파라미터 freeze
+8. fresh MARL smoke (G1/G2 manifest)
+9. hold vs scripted vs MARL (headline, IID)
+10. static/active mechanism attribution
+11. IID 심화 보고
+12. OOD-CPA 중심 OOD battery → A4 falsifier
