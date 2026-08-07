@@ -23,7 +23,8 @@ __all__ = ["SCALE_V2_CFG", "SCALE_V2_SPAWN",
            "A2_V4", "THREAT_V3_NOMINAL", "THREAT_V3_SPAWN", "THREAT_V3_STANDBY",
            "SCALE_V3_FULL_CFG", "V3_ARMS",
            "V3_TRAIN_CELLS_A", "V3_TRAIN_CELLS_B", "V3_STANDBY_R",
-           "EPISODE_LEN_TRAIN", "SCALE_V3_TRAIN_CFG", "draw_threat_v3"]
+           "EPISODE_LEN_TRAIN", "SCALE_V3_TRAIN_CFG", "draw_threat_v3",
+           "v3_distribution_hash"]
 
 # docs/59 §1 선언값. 결과를 본 뒤 바꾸지 않는다.
 SCALE_V2_CFG = {
@@ -139,6 +140,30 @@ def draw_threat_v3(seed: int, episode: int, layer: str) -> dict:
         standby=StandbySpec(R=lerp(V3_STANDBY_R, u("standby_R"))),   # P_init
         cfg=SCALE_V3_TRAIN_CFG,
         cell=(a_name, b_name))
+
+
+def v3_distribution_hash() -> str:
+    """TRAIN 분포의 version hash (docs/65 A4b — resolved-contract manifest 용).
+
+    선언 상수 전체(셀 경계 + 공통축 + 지평선 + spawn + 능력 브래킷/비율)의
+    canonical serialization. 어느 하나라도 바뀌면 hash 가 바뀐다 — 사전등록
+    변경 감지가 목적이므로 **테스트가 현재 값을 pin 한다** (변경 = 새 사전등록
+    + pin 갱신을 같은 커밋에서).
+    """
+    import json as _json
+
+    from shepherd.m4_config import CAPABILITY_RATIOS, THREAT_BRACKET
+    payload = dict(
+        cells_a=V3_TRAIN_CELLS_A, cells_b=V3_TRAIN_CELLS_B,
+        sprint_range=V3_SPRINT_RANGE, sprint_frac=V3_SPRINT_FRAC,
+        slowdown_width=V3_SLOWDOWN_WIDTH, slowdown_frac=V3_SLOWDOWN_FRAC,
+        standby_r=V3_STANDBY_R, episode_len_train=EPISODE_LEN_TRAIN,
+        spawn=dict(dx=THREAT_V3_SPAWN.dx, r_range=THREAT_V3_SPAWN.r_range,
+                   azimuth=THREAT_V3_SPAWN.azimuth),
+        threat_bracket=THREAT_BRACKET, capability_ratios=CAPABILITY_RATIOS)
+    return hashlib.sha256(
+        _json.dumps(payload, sort_keys=True, default=str).encode()
+    ).hexdigest()[:16]
 
 
 # nested arm (docs/60 §4.5) -- 동일 seed nesting. V6 는 descriptive 전용.

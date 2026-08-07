@@ -103,18 +103,22 @@ class M4Runner(MAPPORunner):
     """
 
     def __init__(self, run_cfg: dict, seed: int, device: str, *,
-                 system: SystemSpec, reward: RewardSpec, attacker: AttackerSpec,
-                 spawn: SpawnSpec, standby=None, extra_cfg: dict | None = None,
+                 system: SystemSpec, reward: RewardSpec, attacker=None,
+                 spawn=None, standby=None, extra_cfg: dict | None = None,
+                 threat_layer: str | None = None,
                  randomize_threat: bool = True,
                  threat_obs: bool = True,
                  limiter_policy: str = "learned",
                  finisher_policy: str = "learned",
                  aim_bc: str = "none"):
-        # standby/extra_cfg 는 _m4 에 넣어 학습 롤아웃과 평가(mission_eval)가
-        # **같은 dict 로** 세계를 만든다 (docs/65 A3 -- 갈라질 자리를 없앤다).
-        # 기본 None = 기존과 bit-identical. v3 TRAIN 배선(P92)이 여기로 들어온다.
+        # standby/extra_cfg/threat_layer 는 _m4 에 넣어 학습 롤아웃과 평가
+        # (mission_eval)가 **같은 dict 로** 세계를 만든다 (docs/65 A3/A4b --
+        # 갈라질 자리를 없앤다). 기본 None = 기존과 bit-identical.
+        # threat_layer 지정 시 에피소드별 draw_threat_v3 구성 (build_m4_env 가
+        # 점 스펙과의 동시 사용을 거부한다).
         self._m4 = dict(system=system, reward=reward, attacker=attacker,
                         spawn=spawn, standby=standby, extra_cfg=extra_cfg,
+                        threat_layer=threat_layer,
                         randomize_threat=randomize_threat,
                         threat_obs=threat_obs)
         # ── 역할 분리 (docs/48) + 조준 BC (docs/49) ─────────────────────────────

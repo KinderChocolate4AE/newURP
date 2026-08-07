@@ -89,3 +89,50 @@ def test_train_specs_derive_from_ratified_contract():
     from shepherd.scripts.train_m4 import build_parser_defaults, build_specs
     s = build_specs(build_parser_defaults())["system"]
     assert s == ratified_system()
+
+
+# ------------------------------------------------- A4b (TRAIN/IID parity) ---
+V3_DIST_HASH_PIN = "e048bd3919636f22"   # 사전등록 분포 상수의 hash — 변경 =
+                                        # 새 사전등록 + 이 pin 갱신을 같은 커밋에
+
+
+def test_a4b_distribution_hash_pinned():
+    from shepherd.scale_v2 import v3_distribution_hash
+    assert v3_distribution_hash() == V3_DIST_HASH_PIN
+
+
+def test_a4b_layer_rejects_point_specs():
+    """silent override 금지 — layer 와 점 스펙 동시 사용은 명시적 오류."""
+    with pytest.raises(ValueError):
+        build_m4_env(0, 0, threat_layer="train", **KW)
+
+
+def test_a4b_train_manifest_stable_and_references_distribution():
+    """threat_layer 경로: 에피소드별 draw 는 분포 표본 — manifest 는 분포
+    참조로 기록돼 에피소드와 무관하게 동일해야 한다."""
+    base = dict(system=ratified_system(), reward=RewardSpec(w_kill=0.5, enabled=True))
+    a = build_m4_env(0, 0, threat_layer="train", **base).contract
+    b = build_m4_env(0, 7, threat_layer="train", **base).contract
+    assert a["hash"] == b["hash"]
+    assert a["attacker"] == {"threat_layer": "train",
+                             "distribution_hash": V3_DIST_HASH_PIN}
+    assert a["episode_len"] == 1100
+
+
+def test_a4b_train_vs_iid_world_contract_parity():
+    """docs/65 A4b — TRAIN 과 IID 는 layer 표식만 다르고 world contract 동일."""
+    base = dict(system=ratified_system(), reward=RewardSpec(w_kill=0.5, enabled=True))
+    tr = build_m4_env(0, 0, threat_layer="train", **base).contract
+    ii = build_m4_env(0, 0, threat_layer="iid", **base).contract
+    diffs = manifest_mismatch(tr, ii)
+    assert set(diffs) == {"attacker.threat_layer", "standby.threat_layer"}, diffs
+
+
+def test_a4b_mission_eval_accepts_layer():
+    r = mission_eval(0, 1, system=ratified_system(),
+                     reward=RewardSpec(w_kill=0.5, enabled=True),
+                     threat_layer="train", limiter_mode="hold",
+                     extra_cfg=None)
+    c = r["contract"]
+    assert c["attacker"]["threat_layer"] == "train"
+    assert c["episode_len"] == 1100

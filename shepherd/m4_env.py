@@ -49,20 +49,23 @@ CONTRACT_SCHEMA = "resolved-contract-v1"
 
 
 def contract_manifest(*, system, reward, attacker, spawn, standby,
-                      randomize_threat, threat_obs, extra_cfg, cfg) -> dict:
+                      randomize_threat, threat_obs, extra_cfg, cfg,
+                      dist_ref=None) -> dict:
     """실제 생성 입력 + 합성 cfg 에서 계약 필드를 뽑아 hash 를 붙인다.
 
     에피소드별 위협 draw(physics.a_att_max 등)는 **분포의 표본**이지 계약이
     아니므로 넣지 않는다 -- 같은 runner 의 manifest 는 에피소드와 무관하게
-    동일해야 parity 비교가 성립한다.
+    동일해야 parity 비교가 성립한다. `dist_ref` 가 있으면 (threat_layer 경로)
+    attacker/standby 도 분포의 표본이므로 점 스펙 대신 분포 참조로 기록한다.
     """
     m = {
         "schema": CONTRACT_SCHEMA,
         "system": asdict(system),
         "reward": asdict(reward),
-        "attacker": asdict(attacker),
+        "attacker": dict(dist_ref) if dist_ref else asdict(attacker),
         "spawn": asdict(spawn),
-        "standby": None if standby is None else asdict(standby),
+        "standby": (dict(dist_ref) if dist_ref
+                    else None if standby is None else asdict(standby)),
         "randomize_threat": bool(randomize_threat),
         "threat_obs": bool(threat_obs),
         "extra_cfg": ({} if not extra_cfg
@@ -100,12 +103,37 @@ class M4Stack(dict):
 
 def build_m4_env(seed: int, episode: int, *,
                  system: SystemSpec, reward: RewardSpec,
-                 attacker: AttackerSpec, spawn: SpawnSpec,
+                 attacker: Optional[AttackerSpec] = None,
+                 spawn: Optional[SpawnSpec] = None,
                  standby: Optional[StandbySpec] = None,
                  randomize_threat: bool = True,
                  threat_obs: bool = True,
-                 extra_cfg: Optional[dict] = None) -> M4Stack:
-    """M4 스택 한 판. `standby` 기본 None = 기존과 bit 동일 (docs/60 P87)."""
+                 extra_cfg: Optional[dict] = None,
+                 threat_layer: Optional[str] = None) -> M4Stack:
+    """M4 스택 한 판. `standby` 기본 None = 기존과 bit 동일 (docs/60 P87).
+
+    `threat_layer` ("train"/"iid", docs/61) 를 주면 attacker/standby/spawn/
+    extra_cfg 를 **에피소드별 `draw_threat_v3` draw 로 구성**한다 — 이때 점
+    스펙 인자를 함께 주면 ValueError (silent override 금지, docs/65 A4b).
+    manifest 의 attacker/standby 는 점 스펙 대신 분포 참조(layer +
+    distribution hash)로 기록된다 — 같은 layer 의 모든 에피소드가 같은
+    world contract 를 공유함을 hash 동일성으로 검사할 수 있다.
+    """
+    dist_ref = None
+    if threat_layer is not None:
+        from shepherd.scale_v2 import draw_threat_v3, v3_distribution_hash
+        if attacker is not None or standby is not None or extra_cfg is not None \
+                or spawn is not None:
+            raise ValueError(
+                "threat_layer 와 점 스펙(attacker/spawn/standby/extra_cfg)을 "
+                "동시에 줄 수 없다 -- draw 가 전부 구성한다 (docs/65 A4b)")
+        d = draw_threat_v3(seed, episode, threat_layer)
+        attacker, spawn, standby = d["attacker"], d["spawn"], d["standby"]
+        extra_cfg = d["cfg"]
+        dist_ref = {"threat_layer": threat_layer,
+                    "distribution_hash": v3_distribution_hash()}
+    elif attacker is None or spawn is None:
+        raise ValueError("attacker/spawn 은 필수다 (threat_layer 미사용 시)")
     if randomize_threat:
         cfg = m4_episode_config(seed, episode, extra_cfg)
     else:
@@ -133,7 +161,7 @@ def build_m4_env(seed: int, episode: int, *,
                                  spawn=spawn, standby=standby,
                                  randomize_threat=randomize_threat,
                                  threat_obs=threat_obs, extra_cfg=extra_cfg,
-                                 cfg=cfg)
+                                 cfg=cfg, dist_ref=dist_ref)
     return M4Stack(env=env, scn=scn, lay=lay, threat=threat, contract=contract)
 
 
@@ -149,10 +177,13 @@ def regime_of(a_att: float, tau: float, net_radius: float) -> str:
 
 
 def mission_eval(seed0: int, episodes: int, *,
-                 system: SystemSpec, reward: RewardSpec, attacker: AttackerSpec,
-                 spawn: SpawnSpec, policy: Optional[Callable] = None,
+                 system: SystemSpec, reward: RewardSpec,
+                 attacker: Optional[AttackerSpec] = None,
+                 spawn: Optional[SpawnSpec] = None,
+                 policy: Optional[Callable] = None,
                  standby: Optional[StandbySpec] = None,
                  extra_cfg: Optional[dict] = None,
+                 threat_layer: Optional[str] = None,
                  limiter_mode: str = "hold", fire_mode: str = "clean",
                  randomize_threat: bool = True, threat_obs: bool = True,
                  baseline_commit: bool = False,
@@ -181,6 +212,10 @@ def mission_eval(seed0: int, episodes: int, *,
     종전에는 버려져서 v3 스펙을 줘도 **조용히 legacy 기하**로 평가됐다).
     기본 None = 기존 호출부와 bit-identical. 반환 dict 의 `contract` 키가
     실제로 평가된 세계의 resolved manifest 다 (A4a).
+
+    `threat_layer` ("train"/"iid") 를 주면 에피소드별 `draw_threat_v3` 로
+    구성된다 (docs/61; 점 스펙 인자와 동시 사용 금지 -- build_m4_env 가
+    거부한다). IID episode 대역 분리(10000..)는 호출자 규율 (docs/61 §3).
     """
     from shepherd.agents.mobile_finisher import apply_mobility, apply_slew_limit
     from shepherd.scripts.mission_rollout import LABELS, run_episode
@@ -191,7 +226,7 @@ def mission_eval(seed0: int, episodes: int, *,
     for ep in range(episodes):
         st = build_m4_env(seed0, ep, system=system, reward=reward,
                           attacker=attacker, spawn=spawn, standby=standby,
-                          extra_cfg=extra_cfg,
+                          extra_cfg=extra_cfg, threat_layer=threat_layer,
                           randomize_threat=randomize_threat, threat_obs=threat_obs)
         if contract is None:
             contract = st.contract
