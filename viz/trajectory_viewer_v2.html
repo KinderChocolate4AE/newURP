@@ -204,6 +204,26 @@ function drawView(cv, view) {
   g.clearRect(0, 0, w, h);
   g.fillStyle = css("--surface"); g.fillRect(0, 0, w, h);
 
+  // m 단위 격자 (span 에 맞춰 10/25/50 m 선택)
+  {
+    const spanX = bbox.x1 - bbox.x0;
+    const G = spanX > 220 ? 50 : spanX > 90 ? 25 : 10;
+    const [lo, hi] = view === "top" ? [bbox.y0, bbox.y1] : [bbox.z0, bbox.z1];
+    g.strokeStyle = css("--grid"); g.lineWidth = 1;
+    g.fillStyle = css("--ink-mute"); g.font = "10px system-ui";
+    for (let x = Math.ceil(bbox.x0/G)*G; x <= bbox.x1; x += G) {
+      const p = map([x, view === "top" ? lo : 0, view === "top" ? 0 : lo]);
+      const q = map([x, view === "top" ? hi : 0, view === "top" ? 0 : hi]);
+      g.beginPath(); g.moveTo(p[0], 0); g.lineTo(p[0], h); g.stroke();
+      g.fillText(`${x} m`, p[0]+3, h-4);
+    }
+    for (let y = Math.ceil(lo/G)*G; y <= hi; y += G) {
+      const p = view === "top" ? map([bbox.x0, y, 0]) : map([bbox.x0, 0, y]);
+      g.beginPath(); g.moveTo(0, p[1]); g.lineTo(w, p[1]); g.stroke();
+      if (y !== 0) g.fillText(`${y}`, 3, p[1]-2);
+    }
+  }
+
   // NK zone + target
   const tgt = map(st.target);
   circle(g, tgt, st.r_nk*sc, css("--c-warn"), css("--c-warn")+"22");

@@ -99,7 +99,8 @@
       <span style="--dot:var(--c-att)">공격자 A2</span>
       <span style="--dot:var(--c-lim)">limiter ×4 (+kill 반경 0.75)</span>
       <span style="--dot:var(--c-fin)">finisher</span>
-      <span style="--dot:var(--c-net)">net (발사~해소, 반경 표시)</span>
+      <span style="--dot:var(--c-net)">net (발사→전개 비행은 보간 표시, 동결 net_center 로)</span>
+      <span style="--dot:var(--c-fin)">판정 cone (점선, 조준축 실시간)</span>
       <span style="--dot:var(--c-warn)">NK zone r=6 (파괴 요격 금지)</span>
       <span style="--dot:var(--c-crit)">event (KILL ×, VETO ▲)</span>
     </div></div>
@@ -203,6 +204,26 @@ function drawView(cv, view) {
   g.clearRect(0, 0, w, h);
   g.fillStyle = css("--surface"); g.fillRect(0, 0, w, h);
 
+  // m 단위 격자 (span 에 맞춰 10/25/50 m 선택)
+  {
+    const spanX = bbox.x1 - bbox.x0;
+    const G = spanX > 220 ? 50 : spanX > 90 ? 25 : 10;
+    const [lo, hi] = view === "top" ? [bbox.y0, bbox.y1] : [bbox.z0, bbox.z1];
+    g.strokeStyle = css("--grid"); g.lineWidth = 1;
+    g.fillStyle = css("--ink-mute"); g.font = "10px system-ui";
+    for (let x = Math.ceil(bbox.x0/G)*G; x <= bbox.x1; x += G) {
+      const p = map([x, view === "top" ? lo : 0, view === "top" ? 0 : lo]);
+      const q = map([x, view === "top" ? hi : 0, view === "top" ? 0 : hi]);
+      g.beginPath(); g.moveTo(p[0], 0); g.lineTo(p[0], h); g.stroke();
+      g.fillText(`${x} m`, p[0]+3, h-4);
+    }
+    for (let y = Math.ceil(lo/G)*G; y <= hi; y += G) {
+      const p = view === "top" ? map([bbox.x0, y, 0]) : map([bbox.x0, 0, y]);
+      g.beginPath(); g.moveTo(0, p[1]); g.lineTo(w, p[1]); g.stroke();
+      if (y !== 0) g.fillText(`${y}`, 3, p[1]-2);
+    }
+  }
+
   // NK zone + target
   const tgt = map(st.target);
   circle(g, tgt, st.r_nk*sc, css("--c-warn"), css("--c-warn")+"22");
@@ -216,10 +237,31 @@ function drawView(cv, view) {
   // ring 대기 위치 (스폰 진단용)
   for (const p of st.ring_p0) circle(g, map(p), 3, css("--axis"));
 
-  // net (발사~해소 구간)
+  // net 판정 cone (finisher apex, 조준축 따라 실시간)
+  {
+    const fp0 = map(s.fin);
+    const ax = view === "top" ? [s.fin_e[0], s.fin_e[1]] : [s.fin_e[0], s.fin_e[2]];
+    const an = Math.hypot(ax[0], ax[1]) || 1;
+    const th = Math.atan2(-ax[1]/an, ax[0]/an);      // 화면 y 반전
+    const R = st.cone_range * sc, ha = st.cone_half_angle;
+    g.beginPath();
+    g.moveTo(fp0[0], fp0[1]);
+    g.lineTo(fp0[0]+R*Math.cos(th-ha), fp0[1]+R*Math.sin(th-ha));
+    g.arc(fp0[0], fp0[1], R, th-ha, th+ha);
+    g.closePath();
+    g.fillStyle = css("--c-fin")+"14"; g.fill();
+    g.strokeStyle = css("--c-fin"); g.lineWidth = 0.8;
+    g.setLineDash([3,3]); g.stroke(); g.setLineDash([]);
+  }
+
+  // net: 전개 비행(발사 시점 finisher -> 동결 net_center, 보간 표시) 후 대기
   if (e.fire_step != null && e.net_center && t >= e.fire_step) {
+    const deployTicks = Math.max(1, Math.round(st.tau_deploy / st.dt));
+    const prog = Math.min(1, (t - e.fire_step) / deployTicks);
+    const f0 = steps()[e.fire_step].fin;
+    const pos = [0,1,2].map(i => f0[i] + (e.net_center[i]-f0[i]) * prog);
     const active = e.resolve_step == null || t <= e.resolve_step;
-    circle(g, map(e.net_center), st.net_radius*sc, css("--c-net"),
+    circle(g, map(pos), st.net_radius*sc, css("--c-net"),
            active ? css("--c-net")+"1c" : null, active ? [] : [4,4]);
   }
 
