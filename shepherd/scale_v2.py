@@ -22,7 +22,8 @@ from shepherd.spawn_rand import SpawnSpec, StandbySpec
 __all__ = ["SCALE_V2_CFG", "SCALE_V2_SPAWN",
            "A2_V4", "THREAT_V3_NOMINAL", "THREAT_V3_SPAWN", "THREAT_V3_STANDBY",
            "SCALE_V3_FULL_CFG", "V3_ARMS",
-           "V3_TRAIN_GAIN", "V3_SENSE_COMMON", "V3_TRAIN_CELLS_B",
+           "V3_TRAIN_GAIN", "GAIN_BIN_NAMES", "V3_SENSE_COMMON",
+           "V3_TRAIN_CELLS_B",
            "V3_STANDBY_R", "P95_CONFIRM_NS", "p95_confirm_triplet",
            "EPISODE_LEN_TRAIN", "SCALE_V3_TRAIN_CFG", "draw_threat_v3",
            "v3_distribution_hash", "reaction_stratum"]
@@ -72,12 +73,19 @@ SCALE_V3_FULL_CFG = dict(SCALE_V2_CFG, **{"train.episode_len": 1000})
 # sense_range = 전 층 공통 nuisance. 셀 경계·범위는 결과 전 선언값 — 변경은
 # 새 사전등록으로만. 원 P95 RED 는 영구 보존 (재현 = git 657b330~f7a65c6).
 # ===========================================================================
-# 층 A — route-gain stratum (docs/68 §1; 구간 = docs/61 값 그대로, 상향 없음)
+# 층 A — gain design bins (docs/69 결정 A: ordinal claim 폐기 후 무명 bins).
+# ★ dict 키 weak/medium/strong 은 **legacy identifier** 다 — 분포 hash 입력에
+#   포함돼 리네임 = hash 변경 = FINAL FREEZE 위반. 서술·보고·논문에서는
+#   반드시 GAIN_BIN_NAMES 의 G1/G2/G3 를 쓴다 (docs/69 §1; C4 선례 동형).
+#   이 셋은 route_gain support U[0.2,0.8] 의 balanced sampling strata 일 뿐
+#   ordinal realized-response taxonomy 가 아니다 (P95/P95' RED 영구 보존).
 V3_TRAIN_GAIN = {
-    "weak":   (0.2, 0.4),   # 하한 0.2: 전 위협 반응형 (0 = v2 회귀)
-    "medium": (0.4, 0.6),   # nominal 0.5 포함 층
-    "strong": (0.6, 0.8),
+    "weak":   (0.2, 0.4),   # = G1. 하한 0.2: 전 위협 반응형 (0 = v2 회귀)
+    "medium": (0.4, 0.6),   # = G2. nominal 0.5 포함 bin
+    "strong": (0.6, 0.8),   # = G3
 }
+# 보고·서술용 정본 표기 (docs/69 §1)
+GAIN_BIN_NAMES = {"weak": "G1", "medium": "G2", "strong": "G3"}
 # sense_range — 전 층 공통 nuisance (docs/68 §1). draw 는 에피소드 metadata
 # (attacker.sense_range + mission records)에 기록 — 후속 sensitivity 분석 몫.
 V3_SENSE_COMMON = (15.0, 45.0)

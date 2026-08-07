@@ -92,11 +92,12 @@ def test_train_specs_derive_from_ratified_contract():
 
 
 # ------------------------------------------------- A4b (TRAIN/IID parity) ---
-V3_DIST_HASH_PIN = "efeffcbf2e24d807"   # 사전등록 분포 상수의 hash — 변경 =
-                                        # 새 사전등록 + 이 pin 갱신을 같은 커밋에.
+V3_DIST_HASH_PIN = "efeffcbf2e24d807"   # ★ TRAIN DISTRIBUTION FINAL FREEZE
+                                        # (docs/69 §4, 결정 A). 이후 변경은
+                                        # 새 사전등록 + 새 리뷰 사이클로만.
                                         # 이력: e048bd3919636f22 = docs/61 r2
-                                        # (P95 RED 로 봉인) → 현재 = docs/68 r1
-                                        # (route-gain stratum factorization)
+                                        # (P95 RED 봉인) → efeffcbf = docs/68 r1
+                                        # factorization = docs/69 FINAL
 
 
 def test_a4b_distribution_hash_pinned():
