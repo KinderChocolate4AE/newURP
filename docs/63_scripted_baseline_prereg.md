@@ -191,6 +191,30 @@ headline 평가 문구 (고정):
 > evaluation and is subsequently evaluated under exactly the same paired
 > world draws as MARL.
 
+## 7. F8 이행 — 선택 결과 기입·최종 동결 (2026-08-08)
+
+```
+SELECTED = combo 5:  R_d = 9.0 m · Δφ = π/6 (0.5236 rad)
+근거     = F7 그대로: p_net 최대 동률 (c4=c5=0.110, total defense 동률
+           0.110) → tie-break ② 접촉 少 (0.01 < 0.03) 발동 → c5.
+           tie-break 는 선언 순서대로 기계 적용 (select(), 사후 개입 없음)
+구현     = fa6753f (controller/러너/A4c parity) + fc17ab9 (ntfy 훅)
+튜닝 결과 = 8275bb5 (results/arc_tuning_c0..8.json + _selected.json —
+           9조합 표 전체 공개, F5 900 롤아웃 완주, 재시도 없음)
+```
+
+관찰 기록 (해석 아님): 9조합 p_net 0.07~0.11. c0 (R_d=6=NK 경계) 만
+HARD_KILL 18 — commit=0 임에도 R1 접촉 engagement 해소(Pk=1)로 발생한
+파괴적 무력화다 (arc 가 NK 경계에 서면 접촉 빈도 상승). 선택된 c5 는
+접촉 0.01 로 nondestructive 성격이 가장 깨끗하다.
+
+★ **BASELINE FROZEN**: 이 시점 이후 MARL 결과와 무관하게 baseline 의
+어떤 요소도 변경 금지. §3.1 재확인 — 위 튜닝 수치는 선택 증거이며
+**headline 수치로 재사용 금지** (headline = IID 10000..10299 에서 hold/
+scripted(c5)/MARL paired 재측정).
+
+---
+
 *비고: R_d·Δφ 후보값은 외부 앵커 없는 설계 선언값이다 (NK 반경·standby
 대역이라는 기하 제약에서만 유도). 결과를 보고 grid 를 넓히는 것은 소급
 튜닝이므로 금지 — 9 조합이 전부 나쁘면 그 사실을 그대로 보고한다.*
