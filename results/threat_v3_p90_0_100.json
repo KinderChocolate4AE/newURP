@@ -1,0 +1,611 @@
+{
+ "contract": "docs/60 §5 P90",
+ "n": 100,
+ "labels": {
+  "PENETRATED": 100
+ },
+ "all_pass": true,
+ "rows": [
+  {
+   "episode": 0,
+   "label": "PENETRATED",
+   "steps": 272,
+   "min_d": 0.33
+  },
+  {
+   "episode": 1,
+   "label": "PENETRATED",
+   "steps": 223,
+   "min_d": 0.74
+  },
+  {
+   "episode": 2,
+   "label": "PENETRATED",
+   "steps": 286,
+   "min_d": 0.26
+  },
+  {
+   "episode": 3,
+   "label": "PENETRATED",
+   "steps": 397,
+   "min_d": 0.61
+  },
+  {
+   "episode": 4,
+   "label": "PENETRATED",
+   "steps": 473,
+   "min_d": 0.26
+  },
+  {
+   "episode": 5,
+   "label": "PENETRATED",
+   "steps": 253,
+   "min_d": 0.31
+  },
+  {
+   "episode": 6,
+   "label": "PENETRATED",
+   "steps": 332,
+   "min_d": 0.83
+  },
+  {
+   "episode": 7,
+   "label": "PENETRATED",
+   "steps": 216,
+   "min_d": 0.47
+  },
+  {
+   "episode": 8,
+   "label": "PENETRATED",
+   "steps": 204,
+   "min_d": 0.91
+  },
+  {
+   "episode": 9,
+   "label": "PENETRATED",
+   "steps": 389,
+   "min_d": 0.69
+  },
+  {
+   "episode": 10,
+   "label": "PENETRATED",
+   "steps": 313,
+   "min_d": 0.62
+  },
+  {
+   "episode": 11,
+   "label": "PENETRATED",
+   "steps": 194,
+   "min_d": 0.78
+  },
+  {
+   "episode": 12,
+   "label": "PENETRATED",
+   "steps": 487,
+   "min_d": 0.9
+  },
+  {
+   "episode": 13,
+   "label": "PENETRATED",
+   "steps": 305,
+   "min_d": 0.57
+  },
+  {
+   "episode": 14,
+   "label": "PENETRATED",
+   "steps": 249,
+   "min_d": 0.85
+  },
+  {
+   "episode": 15,
+   "label": "PENETRATED",
+   "steps": 553,
+   "min_d": 0.42
+  },
+  {
+   "episode": 16,
+   "label": "PENETRATED",
+   "steps": 303,
+   "min_d": 0.63
+  },
+  {
+   "episode": 17,
+   "label": "PENETRATED",
+   "steps": 718,
+   "min_d": 0.78
+  },
+  {
+   "episode": 18,
+   "label": "PENETRATED",
+   "steps": 507,
+   "min_d": 0.75
+  },
+  {
+   "episode": 19,
+   "label": "PENETRATED",
+   "steps": 541,
+   "min_d": 0.68
+  },
+  {
+   "episode": 20,
+   "label": "PENETRATED",
+   "steps": 256,
+   "min_d": 0.81
+  },
+  {
+   "episode": 21,
+   "label": "PENETRATED",
+   "steps": 254,
+   "min_d": 0.45
+  },
+  {
+   "episode": 22,
+   "label": "PENETRATED",
+   "steps": 336,
+   "min_d": 0.38
+  },
+  {
+   "episode": 23,
+   "label": "PENETRATED",
+   "steps": 506,
+   "min_d": 0.15
+  },
+  {
+   "episode": 24,
+   "label": "PENETRATED",
+   "steps": 588,
+   "min_d": 0.35
+  },
+  {
+   "episode": 25,
+   "label": "PENETRATED",
+   "steps": 286,
+   "min_d": 0.53
+  },
+  {
+   "episode": 26,
+   "label": "PENETRATED",
+   "steps": 318,
+   "min_d": 0.88
+  },
+  {
+   "episode": 27,
+   "label": "PENETRATED",
+   "steps": 304,
+   "min_d": 0.39
+  },
+  {
+   "episode": 28,
+   "label": "PENETRATED",
+   "steps": 234,
+   "min_d": 0.9
+  },
+  {
+   "episode": 29,
+   "label": "PENETRATED",
+   "steps": 640,
+   "min_d": 0.56
+  },
+  {
+   "episode": 30,
+   "label": "PENETRATED",
+   "steps": 439,
+   "min_d": 0.41
+  },
+  {
+   "episode": 31,
+   "label": "PENETRATED",
+   "steps": 273,
+   "min_d": 0.17
+  },
+  {
+   "episode": 32,
+   "label": "PENETRATED",
+   "steps": 283,
+   "min_d": 0.36
+  },
+  {
+   "episode": 33,
+   "label": "PENETRATED",
+   "steps": 201,
+   "min_d": 0.35
+  },
+  {
+   "episode": 34,
+   "label": "PENETRATED",
+   "steps": 547,
+   "min_d": 0.48
+  },
+  {
+   "episode": 35,
+   "label": "PENETRATED",
+   "steps": 462,
+   "min_d": 0.23
+  },
+  {
+   "episode": 36,
+   "label": "PENETRATED",
+   "steps": 401,
+   "min_d": 0.33
+  },
+  {
+   "episode": 37,
+   "label": "PENETRATED",
+   "steps": 208,
+   "min_d": 0.24
+  },
+  {
+   "episode": 38,
+   "label": "PENETRATED",
+   "steps": 236,
+   "min_d": 0.96
+  },
+  {
+   "episode": 39,
+   "label": "PENETRATED",
+   "steps": 457,
+   "min_d": 0.17
+  },
+  {
+   "episode": 40,
+   "label": "PENETRATED",
+   "steps": 412,
+   "min_d": 0.75
+  },
+  {
+   "episode": 41,
+   "label": "PENETRATED",
+   "steps": 456,
+   "min_d": 0.73
+  },
+  {
+   "episode": 42,
+   "label": "PENETRATED",
+   "steps": 426,
+   "min_d": 0.93
+  },
+  {
+   "episode": 43,
+   "label": "PENETRATED",
+   "steps": 225,
+   "min_d": 0.37
+  },
+  {
+   "episode": 44,
+   "label": "PENETRATED",
+   "steps": 252,
+   "min_d": 0.87
+  },
+  {
+   "episode": 45,
+   "label": "PENETRATED",
+   "steps": 236,
+   "min_d": 0.59
+  },
+  {
+   "episode": 46,
+   "label": "PENETRATED",
+   "steps": 313,
+   "min_d": 0.34
+  },
+  {
+   "episode": 47,
+   "label": "PENETRATED",
+   "steps": 569,
+   "min_d": 0.69
+  },
+  {
+   "episode": 48,
+   "label": "PENETRATED",
+   "steps": 277,
+   "min_d": 0.48
+  },
+  {
+   "episode": 49,
+   "label": "PENETRATED",
+   "steps": 372,
+   "min_d": 0.55
+  },
+  {
+   "episode": 50,
+   "label": "PENETRATED",
+   "steps": 261,
+   "min_d": 0.13
+  },
+  {
+   "episode": 51,
+   "label": "PENETRATED",
+   "steps": 789,
+   "min_d": 0.47
+  },
+  {
+   "episode": 52,
+   "label": "PENETRATED",
+   "steps": 427,
+   "min_d": 0.87
+  },
+  {
+   "episode": 53,
+   "label": "PENETRATED",
+   "steps": 277,
+   "min_d": 0.37
+  },
+  {
+   "episode": 54,
+   "label": "PENETRATED",
+   "steps": 345,
+   "min_d": 0.4
+  },
+  {
+   "episode": 55,
+   "label": "PENETRATED",
+   "steps": 241,
+   "min_d": 0.64
+  },
+  {
+   "episode": 56,
+   "label": "PENETRATED",
+   "steps": 237,
+   "min_d": 0.5
+  },
+  {
+   "episode": 57,
+   "label": "PENETRATED",
+   "steps": 282,
+   "min_d": 0.64
+  },
+  {
+   "episode": 58,
+   "label": "PENETRATED",
+   "steps": 361,
+   "min_d": 0.4
+  },
+  {
+   "episode": 59,
+   "label": "PENETRATED",
+   "steps": 458,
+   "min_d": 0.57
+  },
+  {
+   "episode": 60,
+   "label": "PENETRATED",
+   "steps": 555,
+   "min_d": 0.63
+  },
+  {
+   "episode": 61,
+   "label": "PENETRATED",
+   "steps": 325,
+   "min_d": 0.64
+  },
+  {
+   "episode": 62,
+   "label": "PENETRATED",
+   "steps": 638,
+   "min_d": 0.79
+  },
+  {
+   "episode": 63,
+   "label": "PENETRATED",
+   "steps": 246,
+   "min_d": 0.46
+  },
+  {
+   "episode": 64,
+   "label": "PENETRATED",
+   "steps": 592,
+   "min_d": 0.63
+  },
+  {
+   "episode": 65,
+   "label": "PENETRATED",
+   "steps": 326,
+   "min_d": 0.49
+  },
+  {
+   "episode": 66,
+   "label": "PENETRATED",
+   "steps": 250,
+   "min_d": 0.49
+  },
+  {
+   "episode": 67,
+   "label": "PENETRATED",
+   "steps": 263,
+   "min_d": 0.61
+  },
+  {
+   "episode": 68,
+   "label": "PENETRATED",
+   "steps": 569,
+   "min_d": 0.64
+  },
+  {
+   "episode": 69,
+   "label": "PENETRATED",
+   "steps": 364,
+   "min_d": 0.54
+  },
+  {
+   "episode": 70,
+   "label": "PENETRATED",
+   "steps": 480,
+   "min_d": 0.65
+  },
+  {
+   "episode": 71,
+   "label": "PENETRATED",
+   "steps": 321,
+   "min_d": 0.94
+  },
+  {
+   "episode": 72,
+   "label": "PENETRATED",
+   "steps": 411,
+   "min_d": 0.87
+  },
+  {
+   "episode": 73,
+   "label": "PENETRATED",
+   "steps": 335,
+   "min_d": 0.47
+  },
+  {
+   "episode": 74,
+   "label": "PENETRATED",
+   "steps": 480,
+   "min_d": 0.52
+  },
+  {
+   "episode": 75,
+   "label": "PENETRATED",
+   "steps": 212,
+   "min_d": 0.78
+  },
+  {
+   "episode": 76,
+   "label": "PENETRATED",
+   "steps": 318,
+   "min_d": 0.23
+  },
+  {
+   "episode": 77,
+   "label": "PENETRATED",
+   "steps": 322,
+   "min_d": 0.64
+  },
+  {
+   "episode": 78,
+   "label": "PENETRATED",
+   "steps": 385,
+   "min_d": 0.98
+  },
+  {
+   "episode": 79,
+   "label": "PENETRATED",
+   "steps": 248,
+   "min_d": 0.7
+  },
+  {
+   "episode": 80,
+   "label": "PENETRATED",
+   "steps": 453,
+   "min_d": 0.93
+  },
+  {
+   "episode": 81,
+   "label": "PENETRATED",
+   "steps": 449,
+   "min_d": 0.24
+  },
+  {
+   "episode": 82,
+   "label": "PENETRATED",
+   "steps": 221,
+   "min_d": 0.74
+  },
+  {
+   "episode": 83,
+   "label": "PENETRATED",
+   "steps": 342,
+   "min_d": 0.48
+  },
+  {
+   "episode": 84,
+   "label": "PENETRATED",
+   "steps": 360,
+   "min_d": 0.87
+  },
+  {
+   "episode": 85,
+   "label": "PENETRATED",
+   "steps": 216,
+   "min_d": 0.38
+  },
+  {
+   "episode": 86,
+   "label": "PENETRATED",
+   "steps": 473,
+   "min_d": 0.55
+  },
+  {
+   "episode": 87,
+   "label": "PENETRATED",
+   "steps": 216,
+   "min_d": 0.96
+  },
+  {
+   "episode": 88,
+   "label": "PENETRATED",
+   "steps": 441,
+   "min_d": 0.63
+  },
+  {
+   "episode": 89,
+   "label": "PENETRATED",
+   "steps": 288,
+   "min_d": 0.71
+  },
+  {
+   "episode": 90,
+   "label": "PENETRATED",
+   "steps": 681,
+   "min_d": 0.57
+  },
+  {
+   "episode": 91,
+   "label": "PENETRATED",
+   "steps": 266,
+   "min_d": 0.63
+  },
+  {
+   "episode": 92,
+   "label": "PENETRATED",
+   "steps": 333,
+   "min_d": 0.63
+  },
+  {
+   "episode": 93,
+   "label": "PENETRATED",
+   "steps": 231,
+   "min_d": 0.93
+  },
+  {
+   "episode": 94,
+   "label": "PENETRATED",
+   "steps": 847,
+   "min_d": 0.98
+  },
+  {
+   "episode": 95,
+   "label": "PENETRATED",
+   "steps": 313,
+   "min_d": 0.56
+  },
+  {
+   "episode": 96,
+   "label": "PENETRATED",
+   "steps": 741,
+   "min_d": 0.61
+  },
+  {
+   "episode": 97,
+   "label": "PENETRATED",
+   "steps": 662,
+   "min_d": 0.84
+  },
+  {
+   "episode": 98,
+   "label": "PENETRATED",
+   "steps": 360,
+   "min_d": 0.3
+  },
+  {
+   "episode": 99,
+   "label": "PENETRATED",
+   "steps": 416,
+   "min_d": 0.48
+  }
+ ],
+ "note": "TRUNCATED 발생 시 해석 금지 -- V6 전 horizon 재사전등록 (episode_len 1000 은 이 gate 조건부 임시값)."
+}

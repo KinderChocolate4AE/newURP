@@ -1,0 +1,140 @@
+{
+ "contract": "docs/60 §3.3 P88",
+ "n": 7,
+ "verdict": {
+  "a_mirror_sign": true,
+  "b_direction": true,
+  "c_in_sense_diverges": true,
+  "d_out_sense_identical": true,
+  "e_contact_diverges": true
+ },
+ "all_pass": true,
+ "rows": [
+  {
+   "episode": 0,
+   "s0": 149,
+   "d_sp": -22.01882220368779,
+   "d_sn": 22.018822203687787,
+   "route_dir": [
+    11.747662345691117,
+    -18.62312972218272,
+    -2.6965146863801315e-15
+   ],
+   "dev_in": 1.98351305285365,
+   "dev_out": 0.0,
+   "a_mirror_sign": true,
+   "b_direction": true,
+   "c_in_sense_diverges": true,
+   "d_out_sense_identical": true,
+   "e_contact_diverges": true
+  },
+  {
+   "episode": 1,
+   "s0": 99,
+   "d_sp": -10.194635384591427,
+   "d_sn": 10.194635384591423,
+   "route_dir": [
+    1.439678594170348,
+    -10.092468289286385,
+    -1.2484812162077444e-15
+   ],
+   "dev_in": 0.918925332691206,
+   "dev_out": 0.0,
+   "a_mirror_sign": true,
+   "b_direction": true,
+   "c_in_sense_diverges": true,
+   "d_out_sense_identical": true,
+   "e_contact_diverges": true
+  },
+  {
+   "episode": 2,
+   "s0": 121,
+   "d_sp": -13.898046900987127,
+   "d_sn": 13.898046900987127,
+   "route_dir": [
+    -6.301624385329631,
+    -12.387301472405396,
+    -1.7018444417993227e-15
+   ],
+   "dev_in": 1.2585256583278113,
+   "dev_out": 0.0,
+   "a_mirror_sign": true,
+   "b_direction": true,
+   "c_in_sense_diverges": true,
+   "d_out_sense_identical": true,
+   "e_contact_diverges": true
+  },
+  {
+   "episode": 3,
+   "s0": 215,
+   "d_sp": -36.34306650167428,
+   "d_sn": 36.34306650167428,
+   "route_dir": [
+    25.218038942527528,
+    -26.17000180814446,
+    -4.450458203990096e-15
+   ],
+   "dev_in": 3.2892043945861373,
+   "dev_out": 0.0,
+   "a_mirror_sign": true,
+   "b_direction": true,
+   "c_in_sense_diverges": true,
+   "d_out_sense_identical": true,
+   "e_contact_diverges": true
+  },
+  {
+   "episode": 4,
+   "s0": 244,
+   "d_sp": -5.694887137596392,
+   "d_sn": 5.694887137596391,
+   "route_dir": [
+    -3.8103987663171828,
+    -4.232328053401497,
+    -6.974174622635412e-16
+   ],
+   "dev_in": 0.5177869990844693,
+   "dev_out": 0.0,
+   "a_mirror_sign": true,
+   "b_direction": true,
+   "c_in_sense_diverges": true,
+   "d_out_sense_identical": true,
+   "e_contact_diverges": true
+  },
+  {
+   "episode": 5,
+   "s0": 113,
+   "d_sp": -16.08671184478179,
+   "d_sn": 16.08671184478179,
+   "route_dir": [
+    4.901945954768206,
+    -15.321658651515977,
+    -1.969895624821359e-15
+   ],
+   "dev_in": 1.45296064903141,
+   "dev_out": 0.0,
+   "a_mirror_sign": true,
+   "b_direction": true,
+   "c_in_sense_diverges": true,
+   "d_out_sense_identical": true,
+   "e_contact_diverges": true
+  },
+  {
+   "episode": 6,
+   "s0": 165,
+   "d_sp": -22.82430282245619,
+   "d_sn": 22.824302822456183,
+   "route_dir": [
+    13.156494577058593,
+    -18.650883351064348,
+    -2.795166988308166e-15
+   ],
+   "dev_in": 2.0660690025695896,
+   "dev_out": 0.0,
+   "a_mirror_sign": true,
+   "b_direction": true,
+   "c_in_sense_diverges": true,
+   "d_out_sense_identical": true,
+   "e_contact_diverges": true
+  }
+ ]
+}

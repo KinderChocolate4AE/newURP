@@ -113,6 +113,17 @@ def test_gap_terminal_gate_and_off_switch():
     assert np.array_equal(b, np.zeros(3))
 
 
+def test_gap_coplanar_tie_prefers_world_plus_z():
+    """P91b 1차 FAIL 교정 (docs/60 §4.3): 공면 퇴화에서 ±z free arc 동률
+    -> 세계 +z 선호 (y-mirror·z-회전 공변 tie-break)."""
+    lims = [[45.0, 2.0, 0.0], [45.0, -2.0, 0.0]]          # 평면 양쪽 봉쇄
+    a = _route(V3_ROUTE, [50.0, 0.0, 0.0], lims)
+    assert a[2] > 0.0, f"공면 동률인데 +z 가 아님: {a}"
+    mirr = [[x, -y, z] for x, y, z in lims]
+    b = _route(V3_ROUTE, [50.0, 0.0, 0.0], mirr)
+    assert np.allclose(a, b, atol=1e-9)                   # y-대칭 입력 -> 동일 +z
+
+
 def test_gap_deterministic():
     args = ([50.0, 0.0, 0.0], [[45.0, 2.0, 0.0], [42.0, -1.0, 2.0]])
     a = _route(V3_ROUTE, *args)

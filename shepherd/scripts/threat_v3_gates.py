@@ -213,10 +213,13 @@ def p88():
             "c_in_sense_diverges": bool(dev(arms["side_pos"], arms["out_a"]) > 0.0),
             # d) sense 밖 처치끼리 bit 동일
             "d_out_sense_identical": bool(dev(arms["out_a"], arms["out_b"]) == 0.0),
-            # e) positive control: repel 안 1기 -> 1스텝 내 발산
+            # e) positive control: repel 안 1기 -> 1스텝 내 발산.
+            #    contact resolver 가 즉시 종료시키면 (조기 절단) 그 자체가 발산이다
             "e_contact_diverges": bool(
-                float(np.linalg.norm(arms["contact"]["traj"][1]
-                                     - arms["out_a"]["traj"][1])) > 0.0),
+                len(arms["contact"]["traj"]) != len(arms["out_a"]["traj"])
+                or (len(arms["contact"]["traj"]) > 1
+                    and float(np.linalg.norm(arms["contact"]["traj"][1]
+                                             - arms["out_a"]["traj"][1])) > 0.0)),
         }
         rows.append(dict(episode=ep, s0=int(s0), d_sp=d_sp, d_sn=d_sn,
                          route_dir=[float(x) for x in route_dir],

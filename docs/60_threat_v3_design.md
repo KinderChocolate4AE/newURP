@@ -123,8 +123,16 @@ v_test(u)·τ|`) 로 threat tube 겹침 각을 계산하는 것이나, 그건 co
 거동 정의 (튜닝 아님 — jink_terminal_r 전례와 동일 지위로 선언 후 고정):
 - 감지된 limiter 0 → 기여 0 (bit-exactness 경로).
 - 전 원주 봉쇄 (free arc 없음) → 기여 0 (회피 불가 — repel 만 남음).
-- 최대 호 동률 → 현재 횡속도 방향과 각도상 가까운 호; 그것도 동률이면
-  기준벡터 e1 쪽 (결정론 tie-break).
+- 최대 호 동률 → 현재 횡속도 방향과 각도상 가까운 호 → ★ **세계 +z 선호**
+  → mid 각 (결정론). 동률 인정 폭 = 1e-9 rad 양자화.
+  ★ (P91b 교정 재선언, 2026-08-07): 초판의 "e1 폴백" (실구현 = 리스트 순서)
+  은 **공면(z=0) 퇴화에서 mirror 비공변** — 전원이 평면에 있으면 ±z free arc
+  가 반올림(1e-16)까지 동률인데 폴백이 y-mirror 에서 반대쪽 z 를 골랐다
+  (P91b 1차 FAIL, mirror_dev 2.42 m @ 239 steps, 첫 분기 t=223 route z-성분
+  ±21.96 — 본 단락이 1차 기록; 교정 후 재실행 = 8.95e-16 PASS).
+  세계 +z 는 y-mirror·z-회전 양쪽 불변이라 공변 tie-break 다. route 는 어떤
+  기존 결과에도 기여한 적 없어(항상 off) 소급 오염 없음. 1e-9 양자화는
+  반올림 유사동률의 정확동률 승격용 수치 항 (물리 아님).
 - 종말 게이트: `d_target ≤ jink_terminal_r` 에서 off (기존 규약 상속).
 - 난수·시간 무관 (연속 계산, 16-방위 스캔 폐지) → 결정론.
 
@@ -249,6 +257,29 @@ V6    nested arm baseline (V3-C/CS/FULL · hold=standby/clean · 동일 seed ·
       각 n=100) -- 수락대역 없음, descriptive
 V7    뷰어 재생성 -> Hyunjun 육안 (standby 4방위·bearing 대응·저속 구간·
       스프린트 전환·angular-gap 회피가 육안 식별되는지)
+```
+
+### 5.1 ★ 게이트 결과 (2026-08-07 — `results/threat_v3_*.json`, 스크립트 커밋 abc56db 는 결과 전)
+
+```
+P87   PASS  배선 전 커밋 golden (attacker 300점 + spawn 10 draw) bit 동일
+P88   PASS  7/7 · a~e 전부 (mirror 부호반전 · angular-gap 방향 일치 ·
+      sense 안 발산 · sense 밖 bit-동일 · positive control 즉시 발산/종료)
+      -> "defender geometry -> attacker action" 방향성 causal channel 개통.
+      shepherding 검정 가능성의 필요조건 확보 (충분조건 아님 -- 유도 성공 별도)
+P89   capability PASS (전 스텝 |v|/v_max <= 1.0000 · |a| 클립 준수).
+      ★ saturation 보고 (n=20): 전체 clip 7.5% 평균 (max 23.6%) · sprint
+      구간 clip 36.1% 평균 (max 76%) · route authority (realized/requested)
+      0.53. "광범위" 임계는 사전등록되지 않았음 -- route_gain 0.5 확정/인하는
+      Hyunjun 재비준 사항 (r1 조건). 관찰: sprint 구간에서 종축 P-drive 가
+      lateral budget 을 잠식 -- 축 (i)·(ii) 는 sprint 구간에서 부분 경합
+P90   PASS  100/100 PENETRATED · TRUNCATED 0 · self-failure 0 (최장 847
+      스텝 < 1000) -> episode_len 1000 확정 (#10 조건 해소)
+P91a  PASS  4/4 (ep 0,1 × θ 0.7,2.4) dyn_dev ~1e-13 · v_shot_dev 0.000
+      -> hidden +x assumption 없음 (evaluator 포함)
+P91b  1차 FAIL (mirror_dev 2.42 m) -> 원인 = 공면 퇴화 tie-break 비공변
+      (§3.2 교정 재선언: 세계 +z 선호 + 1e-9 양자화) -> 재실행 PASS
+      (mirror_dev 8.95e-16). 게이트가 설계 목적대로 대칭 결함을 사전 검출
 ```
 
 이후 순서: P88~P91 green → **docs/61 THREAT_V3_TRAIN_DISTRIBUTION 사전등록**

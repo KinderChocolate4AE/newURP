@@ -248,8 +248,22 @@ def _route_accel(spec, *, p_att, v_att, fwd, limiters, kill_radius, repel_margin
         d = abs(a - b) % two_pi
         return min(d, two_pi - d)
 
-    # 동률 tie-break: 폭 최대 -> 횡속도 bearing 근접 (결정론)
-    _, mid = min(gaps, key=lambda g: (-g[0], _angdist(g[1], ref_bearing)))
+    # 동률 tie-break (결정론): 폭 최대 -> 횡속도 bearing 근접 -> 세계 +z 선호
+    # -> mid 각. 3차 기준(+z)과 동률 인정 폭 1e-9 rad 는 P91b 1차 FAIL 의 교정
+    # 재선언 (docs/60 §4.3): 공면(z=0) 퇴화에서 ±z free arc 가 (반올림 1e-16
+    # 차이까지) 동률이 되는데, 엄격 float 비교 + 리스트 순서 폴백은 y-mirror
+    # 에서 반대쪽 z 를 골라 mirror 공변성이 깨졌다. 세계 +z 는 y-mirror 와
+    # z-회전 양쪽에 불변이므로 공변 tie-break 다. 1e-9 양자화는 반올림 유사동률
+    # 을 정확 동률로 승격시키는 수치 로버스트니스 항 (물리 아님).
+    _Q = 1e-9
+
+    def _key(g):
+        width, mid_ = g
+        dir_z = float(np.cos(mid_) * u[2] + np.sin(mid_) * w[2])
+        return (-round(width / _Q), round(_angdist(mid_, ref_bearing) / _Q),
+                -round(dir_z / _Q), mid_)
+
+    _, mid = min(gaps, key=_key)
     direction = np.cos(mid) * u + np.sin(mid) * w
     return spec.route_gain * a_lat_max * direction
 

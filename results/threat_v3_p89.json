@@ -1,0 +1,238 @@
+{
+ "contract": "docs/60 §5 P89",
+ "n": 20,
+ "capability_ok": true,
+ "aggregate": {
+  "clip_frac_mean": 0.07509098651346205,
+  "clip_frac_max": 0.23577235772357724,
+  "sprint_clip_frac_mean": 0.3605120864719235,
+  "route_authority_mean": 0.5310193508882237,
+  "max_speed_ratio": 1.0000000000000002
+ },
+ "labels": {
+  "PENETRATED": 20
+ },
+ "rows": [
+  {
+   "episode": 0,
+   "steps": 272,
+   "clip_frac": 0.0625,
+   "max_ratio_raw": 2.4373108864700055,
+   "max_speed_ratio": 1.0,
+   "route_req_mean": 1.4571279399499275,
+   "route_realized_mean": 0.8645125841355558,
+   "sprint_clip_frac": 0.4,
+   "sprint_route_realized": 6.718497796710604
+  },
+  {
+   "episode": 1,
+   "steps": 223,
+   "clip_frac": 0.16143497757847533,
+   "max_ratio_raw": 5.113038453567091,
+   "max_speed_ratio": 0.9956126073295769,
+   "route_req_mean": 0.8686012211086868,
+   "route_realized_mean": 0.18629383716772627,
+   "sprint_clip_frac": 0.6666666666666666,
+   "sprint_route_realized": 1.0652186073949477
+  },
+  {
+   "episode": 2,
+   "steps": 286,
+   "clip_frac": 0.08391608391608392,
+   "max_ratio_raw": 2.857359530419368,
+   "max_speed_ratio": 1.0000000000000002,
+   "route_req_mean": 1.2634588091806482,
+   "route_realized_mean": 1.040721405275346,
+   "sprint_clip_frac": 0.43478260869565216,
+   "sprint_route_realized": 6.470572215407585
+  },
+  {
+   "episode": 3,
+   "steps": 414,
+   "clip_frac": 0.043478260869565216,
+   "max_ratio_raw": 2.3716408996289506,
+   "max_speed_ratio": 1.0000000000000002,
+   "route_req_mean": 3.4236222066794606,
+   "route_realized_mean": 1.9479492805878473,
+   "sprint_clip_frac": 0.2727272727272727,
+   "sprint_route_realized": 12.21895457823286
+  },
+  {
+   "episode": 4,
+   "steps": 473,
+   "clip_frac": 0.08668076109936575,
+   "max_ratio_raw": 4.968111684546394,
+   "max_speed_ratio": 1.0,
+   "route_req_mean": 0.42139756832108605,
+   "route_realized_mean": 0.20802240303531425,
+   "sprint_clip_frac": 0.49230769230769234,
+   "sprint_route_realized": 1.5137630251646712
+  },
+  {
+   "episode": 5,
+   "steps": 253,
+   "clip_frac": 0.07509881422924901,
+   "max_ratio_raw": 2.8932619208647434,
+   "max_speed_ratio": 1.0000000000000002,
+   "route_req_mean": 1.4624283495256178,
+   "route_realized_mean": 0.3690570542774046,
+   "sprint_clip_frac": 0.375,
+   "sprint_route_realized": 2.334285868304584
+  },
+  {
+   "episode": 6,
+   "steps": 333,
+   "clip_frac": 0.042042042042042045,
+   "max_ratio_raw": 1.8023622860971975,
+   "max_speed_ratio": 1.0000000000000002,
+   "route_req_mean": 1.7820776978494322,
+   "route_realized_mean": 1.3580120898116474,
+   "sprint_clip_frac": 0.2826086956521739,
+   "sprint_route_realized": 9.830826650158231
+  },
+  {
+   "episode": 7,
+   "steps": 216,
+   "clip_frac": 0.09722222222222222,
+   "max_ratio_raw": 3.06217106567964,
+   "max_speed_ratio": 0.9983392766706556,
+   "route_req_mean": 1.6385621223953737,
+   "route_realized_mean": 1.241053529955442,
+   "sprint_clip_frac": 0.47058823529411764,
+   "sprint_route_realized": 7.884340072658099
+  },
+  {
+   "episode": 8,
+   "steps": 246,
+   "clip_frac": 0.23577235772357724,
+   "max_ratio_raw": 4.653146814871927,
+   "max_speed_ratio": 1.0,
+   "route_req_mean": 6.924263835022868,
+   "route_realized_mean": 3.6129660282484286,
+   "sprint_clip_frac": 0.76,
+   "sprint_route_realized": 11.850528572654847
+  },
+  {
+   "episode": 9,
+   "steps": 390,
+   "clip_frac": 0.03076923076923077,
+   "max_ratio_raw": 1.5449969884951258,
+   "max_speed_ratio": 1.0000000000000002,
+   "route_req_mean": 2.000891547891418,
+   "route_realized_mean": 1.2466610735715653,
+   "sprint_clip_frac": 0.2033898305084746,
+   "sprint_route_realized": 8.240640994795095
+  },
+  {
+   "episode": 10,
+   "steps": 313,
+   "clip_frac": 0.09904153354632587,
+   "max_ratio_raw": 4.396534882080587,
+   "max_speed_ratio": 0.999958291742065,
+   "route_req_mean": 0.7830434818614521,
+   "route_realized_mean": 0.2602495854570704,
+   "sprint_clip_frac": 0.5,
+   "sprint_route_realized": 1.7708287010448487
+  },
+  {
+   "episode": 11,
+   "steps": 227,
+   "clip_frac": 0.20704845814977973,
+   "max_ratio_raw": 6.222432479448491,
+   "max_speed_ratio": 1.0,
+   "route_req_mean": 5.78063072089762,
+   "route_realized_mean": 1.652724233656995,
+   "sprint_clip_frac": 0.703125,
+   "sprint_route_realized": 5.862006266252154
+  },
+  {
+   "episode": 12,
+   "steps": 490,
+   "clip_frac": 0.01020408163265306,
+   "max_ratio_raw": 1.4563957740694975,
+   "max_speed_ratio": 1.0000000000000002,
+   "route_req_mean": 2.525919607469962,
+   "route_realized_mean": 1.0201660157021928,
+   "sprint_clip_frac": 0.07142857142857142,
+   "sprint_route_realized": 7.141162109915349
+  },
+  {
+   "episode": 13,
+   "steps": 324,
+   "clip_frac": 0.07407407407407407,
+   "max_ratio_raw": 3.195832921327636,
+   "max_speed_ratio": 1.0,
+   "route_req_mean": 4.161137976511609,
+   "route_realized_mean": 2.2636265307783483,
+   "sprint_clip_frac": 0.4067796610169492,
+   "sprint_route_realized": 12.430762643596355
+  },
+  {
+   "episode": 14,
+   "steps": 251,
+   "clip_frac": 0.035856573705179286,
+   "max_ratio_raw": 1.8151505630324056,
+   "max_speed_ratio": 1.0000000000000002,
+   "route_req_mean": 3.2213350113678385,
+   "route_realized_mean": 2.5094807658973974,
+   "sprint_clip_frac": 0.23684210526315788,
+   "sprint_route_realized": 16.575780848427545
+  },
+  {
+   "episode": 15,
+   "steps": 555,
+   "clip_frac": 0.012612612612612612,
+   "max_ratio_raw": 1.7046562033744705,
+   "max_speed_ratio": 1.0000000000000002,
+   "route_req_mean": 1.7943657651666223,
+   "route_realized_mean": 1.026515067541334,
+   "sprint_clip_frac": 0.0945945945945946,
+   "sprint_route_realized": 7.698863006560006
+  },
+  {
+   "episode": 16,
+   "steps": 303,
+   "clip_frac": 0.10891089108910891,
+   "max_ratio_raw": 3.956788458972264,
+   "max_speed_ratio": 1.0,
+   "route_req_mean": 0.8554023488252179,
+   "route_realized_mean": 0.5840753596954532,
+   "sprint_clip_frac": 0.5909090909090909,
+   "sprint_route_realized": 4.022155317902779
+  },
+  {
+   "episode": 17,
+   "steps": 728,
+   "clip_frac": 0.012362637362637362,
+   "max_ratio_raw": 1.243428608881124,
+   "max_speed_ratio": 1.0000000000000002,
+   "route_req_mean": 3.335987954605714,
+   "route_realized_mean": 2.0181560998776,
+   "sprint_clip_frac": 0.08333333333333333,
+   "sprint_route_realized": 13.603867043619378
+  },
+  {
+   "episode": 18,
+   "steps": 510,
+   "clip_frac": 0.011764705882352941,
+   "max_ratio_raw": 1.213109618017881,
+   "max_speed_ratio": 1.0000000000000002,
+   "route_req_mean": 2.383386404997684,
+   "route_realized_mean": 0.7481214719253163,
+   "sprint_clip_frac": 0.07692307692307693,
+   "sprint_route_realized": 4.891563470280914
+  },
+  {
+   "episode": 19,
+   "steps": 544,
+   "clip_frac": 0.011029411764705883,
+   "max_ratio_raw": 1.3120727540165718,
+   "max_speed_ratio": 1.0000000000000002,
+   "route_req_mean": 2.913925610888358,
+   "route_realized_mean": 1.4300105832695962,
+   "sprint_clip_frac": 0.08823529411764706,
+   "sprint_route_realized": 11.44008466615677
+  }
+ ],
+ "note": "판정: capability_ok 는 강제. 포화 '광범위' 여부의 임계는 사전등록되지 않았다 -- 수치를 그대로 보고하고 route_gain 재비준 여부는 Hyunjun 판정 (docs/60 §8 r1)."
+}

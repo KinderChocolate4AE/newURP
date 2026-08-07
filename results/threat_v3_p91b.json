@@ -1,0 +1,9 @@
+{
+ "contract": "docs/60 §4.3 P91b",
+ "theta": 0.5,
+ "atol": 1e-06,
+ "steps": 239,
+ "mirror_dev": 8.95090418262362e-16,
+ "all_pass": true,
+ "note": "viability 의 bearing 의존은 실패가 아니라 기록 대상 (finisher 방위 추종 실측 자료) -- V6/뷰어에서 관측."
+}

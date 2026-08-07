@@ -1,0 +1,41 @@
+{
+ "contract": "docs/60 §4.3 P91a",
+ "dyn_atol": 1e-06,
+ "vshot_tol": 0.05,
+ "all_pass": true,
+ "rows": [
+  {
+   "episode": 0,
+   "theta": 0.7,
+   "steps": 60,
+   "dyn_dev": 1.7053025658242404e-13,
+   "vshot_dev": 0.0,
+   "ok": true
+  },
+  {
+   "episode": 0,
+   "theta": 2.4,
+   "steps": 60,
+   "dyn_dev": 1.657256204579568e-13,
+   "vshot_dev": 0.0,
+   "ok": true
+  },
+  {
+   "episode": 1,
+   "theta": 0.7,
+   "steps": 60,
+   "dyn_dev": 1.087506948237031e-13,
+   "vshot_dev": 0.0,
+   "ok": true
+  },
+  {
+   "episode": 1,
+   "theta": 2.4,
+   "steps": 60,
+   "dyn_dev": 9.532932764702564e-14,
+   "vshot_dev": 0.0,
+   "ok": true
+  }
+ ],
+ "note": "실패 = hidden +x assumption -> 축 (iii) 동결 (배선 전 선언)"
+}
