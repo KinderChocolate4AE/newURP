@@ -95,12 +95,11 @@ NK-aware 최근접(0.958~)이 전부 경계 직전 — **요격 기하의 성립
 
 ```
 1. [x] P2′ NK-aware 재반증 (§4.1 -- (b) 분기: proxy-정렬 대안 반증, NK-밖 최근접 ≥ 0.958)
-2. [ ] pre-fire full-env counterfactual 1 arm (t_fire−5, ★ fire 시각·miss
-       여부·v_shot·attacker 전부 closed-loop 재계산 -- fire 동결 금지.
-       라벨 {NET_CAPTURE, OUTSIDE_NK_NEUTRALIZATION, INSIDE_NK_VETO,
-       PENETRATED, NO_SOLUTION} 분리. 별도 사전등록 후 실행)
+2. [x] pre-fire full-env counterfactual 1 arm (§6.1 -- ep35 OUTSIDE_NK 실증
+       1건, 6판 실패. oracle 확장 없이 coupling gate 이동)
 3. [ ] attacker–limiter coupling adequacy gate:
-       (i) manipulation check -- 0.75 밖 배치 변화 -> attacker 불변 실측 고정
+       (i) manipulation check (P84, §7 사전등록) -- 0.75 밖 배치 변화 ->
+           attacker 불변 실측을 artifact 로 고정
        (ii) opt-in 회피 반응 attacker 계약 사전등록 (기존 A2 보존)
        (iii) 통과 전엔 "shepherding" 을 핵심 주장으로 쓰지 않는다
 4. [ ] 경로 결정: 주장 축소(interception/coverage) vs 반응형 attacker 추가
@@ -147,3 +146,53 @@ final       full env replay 라벨. 보고 5분법:
 | 전판 PENETRATED | "현 legacy A2 에서 현재 oracle family 로 recoverability 증거를 찾지 못했다" 로 닫고 **coupling gate 로 이동** (oracle 확장 금지) |
 
 판정식은 결과 후 불변경.
+
+### 6.1 ★ pre-fire 결과 (2026-08-07 — 서버 7 병렬, `results/prefire_ep*.json`, 커밋 7f8d56b)
+
+```
+ep 35   OUTSIDE_NK_NEUTRALIZATION   ★ 캠페인 최초 NK-밖 kinetic 무력화
+        s0=10(fire−5) -> fire 원래대로 15 발사 -> net 비행 중 step 21-22 에
+        limiter 0 이 d_asset 7.95 m (NK margin +2.6) 에서 KILL. miss 해소(23)
+        전 종결 -- "miss 구제"가 아니라 mode scheduling 재해결
+나머지 6판  PENETRATED · NO_SOLUTION (NK-밖 최근접 margin 0.35~0.94 -- 경계
+        직전에서 요격 반경 미달 0.85~2.25)
+관측    fire 시각 7/7 불변 (발견된 계획이 gate 를 교란하지 않았다는 관측 --
+        "교란 불가" 아님) · INSIDE_NK_VETO 0건 (NK-aware 탐색의 산물)
+```
+
+**판정 (사전 고정 해석표 적용)**:
+- OUTSIDE_NK_NEUTRALIZATION 행 발동: **"fallback 은 추격 국면이 아니라 사전
+  safe kinetic geometry 준비 문제"** 의 실증 1건 — 2모드 설계의 의미가 처음
+  으로 실측에서 회복됐다.
+- 단 **1/7** — 상태별 이질성, 단일 "가능/불가능" 결론 금지. **shepherding
+  성공이라 부르지 않는다** (공격자 무반응·privileged oracle·budget 한정).
+- NET_CAPTURE 0건 — pre-fire shaping 이 net game 을 개선한 증거는 없음.
+- **§6 첫 줄 규율 이행**: oracle 확장 없이 coupling gate 로 이동.
+
+허용 문장:
+
+> 발사 5 tick 전 개입에서 privileged planner 는 7판 중 1판(ep35)에서 net
+> 비행 중 NK 밖 무력화를 달성했다 — post-fire 전 구간에서 0건이던 safe
+> kinetic window 가 pre-fire 준비로 열릴 수 있음을 보인 첫 사례다. 나머지
+> 6판은 현 budget 에서 실패했고, 공격자가 limiter 에 반응하지 않는 legacy
+> A2 계약 아래의 결과다.
+
+## 7. ★ P84 사전등록 — coupling Gate 1: manipulation check (결과 보기 전)
+
+목적: "0.75 m 밖에서 limiter 배치는 공격자 행동에 인과효과가 없다" 를 코드
+추론이 아니라 **결과 artifact 로 공식 고정** — 원 연구 질문(협력 성형)의
+검정 가능성 판정 자료다.
+
+```
+대상       miss 7판 × 시점 2 (s0 = t_fire−5 · t*+1)
+처치       s0 에서 limiter 4기를 공격자로부터 전부 >= 2 m 떨어진 상이한
+           구성 3종으로 순간이동: swap(대각 교환) · line(일렬) · far(10 m 후방)
+채널 격리   fire_mode="never" 로 진행 (net-side 경로 -- committed 플래그 경유
+           간접 결합 -- 차단. 남는 후보 채널은 repel 뿐)
+관측       이후 T=10 스텝(hold)의 공격자 위치 시퀀스 vs baseline(무처치)
+판정       (i) 밖 구성 3종 전부에서 공격자 궤적이 baseline 과 bit 동일
+               -> "직접 coupling 부재" 공식 확정
+           (ii) positive control (limiter 1기를 0.74 m 안) 은 1스텝 내 발산
+               -> 검사의 검정력 증명. 발산 안 하면 검사 무효
+결과 무관   경로 결정(A 주장 축소 / B 반응형 attacker)은 별도 -- 이 gate 는
+           결정의 사실 기반만 제공한다
