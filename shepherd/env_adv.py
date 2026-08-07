@@ -140,6 +140,10 @@ class AdversaryOverrideBackend(EnvBackend):
             # A3-privileged 전용. 루프 구동자가 직전 스텝 info 에서 넣어준다.
             # 없으면 A3-fair 대리량으로 폴백한다(관측 가능량만 사용).
             v_shot_soft=getattr(env, "_last_v_shot_soft", None),
+            # v3 (docs/60 §2): sprint 참조속도 상한 = 백엔드 속도 클램프
+            # (기 선언 능력 adversary_v_max). 사다리 전용 kwarg -- A1 위임 시
+            # _LADDER_ONLY_KW 로 걸러진다.
+            v_max=float(self._inner.by_name(env.adversary_id).limits.v_max),
         )
 
 

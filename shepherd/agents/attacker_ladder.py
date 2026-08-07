@@ -47,7 +47,7 @@ _EPS = 1e-12
 
 # 사다리 전용 kwarg -- A1 위임 시 걸러낸다. 새 축을 추가하면 **여기에도 추가**해야
 # P1(동결 등가)이 깨지지 않는다.
-_LADDER_ONLY_KW = ("t", "phase", "v_shot_soft")
+_LADDER_ONLY_KW = ("t", "phase", "v_shot_soft", "v_max")
 
 # 현행 env.py 가 하드코딩으로 넘기는 값 (docs/28 §3). lambda 의 기준점.
 _REF_LAM_GAIN = 1.0     # 반발 크기 배수: a_rep = a_att_max * lam_gain * (1 + strength)
@@ -81,12 +81,21 @@ class AttackerSpec:
     jink_amp: float = 0.0              # x a_lat_max. 커밋 전 지속 횡진동
     jink_freq: float = 1.5             # Hz
     jink_terminal_r: float = 3.0       # m. 목표 이 반경 안에서는 회피 중단(종말 유도)
-    route_gain: float = 0.0            # x a_lat_max. 편대 최대간극 방향 사전 편향
-    route_probe: float = 2.0           # x kill_radius. 간극 평가 반경
+    route_gain: float = 0.0            # x a_lat_max. angular-gap 회피 편향 (docs/60 §3.2)
     homing_gain: float = 4.0           # 1/s. 횡속도 감쇠 = 회피 후 시선축 복귀
                                        # 값의 근거: params.py `adversary.fwd_gain`(=4.0,
                                        # A1 의 비준된 전진 P-게인)을 그대로 상속. 성능을
                                        # 보고 고른 값이 아니므로 새 자유도가 0 이다.
+
+    # --- v3 (docs/60): 종축 속도 프로파일 + 감지 반경. 전부 기본 off = bit-exact --
+    sprint_range: float = 0.0          # m. d_asset <= 이 값 -> v_ref = sprint_frac*v_max
+    sprint_frac: float = 1.0           # 능력(v_max) 대비 스프린트 참조속도 비율
+    slowdown_range: tuple = (0.0, 0.0) # m (far, near). near < d_asset <= far 에서 저속.
+                                       # "기만" 기전 주장 금지 (docs/60 §2.1) -- 비정상
+                                       # 종축 속도 프로파일일 뿐이다
+    slowdown_frac: float = 1.0         # v_nominal 대비 저속 구간 참조속도 비율
+    sense_range: float = float("inf")  # m. limiter 감지 반경 (route 항의 관측 한계.
+                                       # inf = legacy 전지 관측 경로)
 
     # --- A3: 발사 유도 -------------------------------------------------------
     bait_gain: float = 0.0             # x a_lat_max. 횡속도 억제 강도(얌전해 보이기)
@@ -123,7 +132,8 @@ def is_a1_equivalent(spec: AttackerSpec) -> bool:
     """A1 위임 경로를 쓸 수 있는가 (모든 extras off + lambda 기준점)."""
     return (spec.lam_gain == _REF_LAM_GAIN and spec.lam_range == _REF_LAM_RANGE
             and spec.jink_amp == 0.0 and spec.route_gain == 0.0
-            and spec.bait_gain == 0.0)
+            and spec.bait_gain == 0.0
+            and spec.sprint_range == 0.0 and spec.slowdown_range[0] == 0.0)
 
 
 def derive_phase(seed: int, episode: int) -> float:
@@ -158,39 +168,90 @@ def _jink_accel(spec, *, fwd, t, phase, a_lat_max, committed, d_target):
     return spec.jink_amp * a_lat_max * d
 
 
-def _route_accel(spec, *, p_att, fwd, limiters, kill_radius, a_lat_max, d_target):
-    """편대 수준 라우팅: 앞에 있는 limiter 들의 배치를 보고 **최대 간극** 방향으로
-    접근을 사전 편향한다.
+def _route_accel(spec, *, p_att, v_att, fwd, limiters, kill_radius, repel_margin,
+                 a_lat_max, d_target):
+    """**instantaneous transverse angular-gap heuristic** (docs/60 §3.2, r3).
 
-    A1 의 반발(`a_rep`)과 다르다: 저것은 살상반경에 닿아야 켜지는 접촉 회피이고,
-    이것은 개별 구가 아니라 **formation** 을 보고 미리 도는 계획 능력이다.
-    docs/28 §6 -- lambda 의 예견 성분과 분리해서 둔다.
+    감지된 limiter 들을 진행축 수직 평면에 사영해 각 limiter 가 가리는 각도
+    구간(blockage)을 만들고, 가장 넓은 free arc 의 중점 방향으로 횡가속을 낸다.
+    probe-circle parametrization (구 route_probe) 은 폐지 -- 신규 상수 없음.
+
+    A1 의 반발(`a_rep`)과 다르다: 저것은 반발 반경에 닿아야 켜지는 접촉 회피이고,
+    이것은 개별 구가 아니라 **formation blockage** 를 보고 미리 도는 계획 능력이다.
+
+    주의 (r3 범위 제한): 현재 횡단면의 순간 기하만 본다 -- 종축 거리는 blockage
+    반각에 들어가지 않는다. "physical widest escape gap" 이 아니다.
+
+    r_block = repel_margin * lam_range * kill_radius 는 물리적 동일성 주장이
+    아니라 신규 자유도를 더하지 않기 위한 nominal modeling choice (docs/60 §3.2).
+
+    거동 정의 (선언 후 고정, jink_terminal_r 전례): 감지 0 -> 0 · 전 원주 봉쇄
+    -> 0 (repel 만 남음) · 최대 호 동률 -> 횡속도 bearing 에 가까운 호, 그것도
+    동률이면 bearing 0 쪽 · 종말 게이트 상속 · 난수/시간 무관 (결정론).
     """
     if spec.route_gain == 0.0 or limiters is None:
         return np.zeros(3)
     if spec.jink_terminal_r > 0.0 and d_target <= spec.jink_terminal_r:
         return np.zeros(3)                       # 종말 구간에서는 우회도 중단
     L = np.asarray(limiters, float).reshape(-1, 3)
-    ahead = [c for c in L if float((c - p_att) @ fwd) > 0.0]   # 지나친 것은 무시
+    ahead = [c for c in L
+             if float((c - p_att) @ fwd) > 0.0                       # 지나친 것 무시
+             and float(np.linalg.norm(c - p_att)) <= spec.sense_range]
     if not ahead:
         return np.zeros(3)
     ref = np.array([0.0, 0.0, 1.0]) if abs(fwd[2]) < 0.9 else np.array([0.0, 1.0, 0.0])
     u = _unit(np.cross(fwd, ref), [0.0, 1.0, 0.0])
     w = _unit(np.cross(fwd, u), [0.0, 0.0, 1.0])
-    # 각 limiter 를 fwd 에 수직인 평면으로 사영 -> 2D offset
-    offs = []
+    r_block = float(repel_margin) * spec.lam_range * float(kill_radius)
+
+    # blockage 구간 [beta-alpha, beta+alpha] 수집
+    spans = []
     for c in ahead:
         rel = c - p_att
-        offs.append(np.array([float(rel @ u), float(rel @ w)]))
-    r_probe = spec.route_probe * kill_radius
-    best_dir, best_score = None, -np.inf
-    for k in range(16):                                  # 결정론적 방위 스캔
-        ang = 2.0 * np.pi * k / 16.0
-        probe = r_probe * np.array([np.cos(ang), np.sin(ang)])
-        score = min(float(np.linalg.norm(probe - o)) for o in offs)
-        if score > best_score:
-            best_score, best_dir = score, (np.cos(ang) * u + np.sin(ang) * w)
-    return spec.route_gain * a_lat_max * best_dir
+        ox, oy = float(rel @ u), float(rel @ w)
+        d = float(np.hypot(ox, oy))
+        beta = float(np.arctan2(oy, ox))
+        alpha = 0.5 * np.pi if d <= r_block else float(np.arcsin(r_block / d))
+        spans.append((beta - alpha, beta + alpha))
+
+    # 원주 위 병합: 시작각 정렬 후 +2pi 복제로 wrap 처리
+    two_pi = 2.0 * np.pi
+    spans = sorted(((s % two_pi, (s % two_pi) + (e - s)) for s, e in spans))
+    if sum(e - s for s, e in spans) >= two_pi:
+        return np.zeros(3)                       # 자명 전 원주 봉쇄
+    merged = []
+    for s, e in spans + [(s + two_pi, e + two_pi) for s, e in spans]:
+        if merged and s <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], e)
+        else:
+            merged.append([s, e])
+    # 병합 후에도 전 원주가 덮이면 free arc 없음
+    if any(e - s >= two_pi for s, e in merged):
+        return np.zeros(3)
+
+    # free arc = 인접 병합구간 사이 틈 (첫 바퀴 시작 구간들만 순회하면 충분)
+    gaps = []
+    for (s0, e0), (s1, _) in zip(merged, merged[1:]):
+        if s0 >= two_pi:
+            break
+        width = s1 - e0
+        if width > _EPS:
+            gaps.append((width, (e0 + s1) / 2.0 % two_pi))
+    if not gaps:
+        return np.zeros(3)
+
+    v_lat = np.asarray(v_att, float) - float(np.asarray(v_att, float) @ fwd) * fwd
+    ref_bearing = (float(np.arctan2(float(v_lat @ w), float(v_lat @ u)))
+                   if float(np.linalg.norm(v_lat)) > _EPS else 0.0)
+
+    def _angdist(a, b):
+        d = abs(a - b) % two_pi
+        return min(d, two_pi - d)
+
+    # 동률 tie-break: 폭 최대 -> 횡속도 bearing 근접 (결정론)
+    _, mid = min(gaps, key=lambda g: (-g[0], _angdist(g[1], ref_bearing)))
+    direction = np.cos(mid) * u + np.sin(mid) * w
+    return spec.route_gain * a_lat_max * direction
 
 
 def _bait_readiness(spec, *, p_att, finisher_p, limiters, kill_radius,
@@ -278,11 +339,14 @@ def _general_action(spec, p_att, v_att, *, target, net_center, finisher_p, limit
                     kill_radius, a_att_max, omega_att_max, v_nominal, dt,
                     committed=False, react_on_commit=True, a_lat_max=None,
                     repel_margin=1.5, t=0.0, phase=0.0, v_shot_soft=None,
-                    **_ignored):
-    """A1 의 산술을 그대로 재현하고 그 위에 lambda 스케일 + A2 항을 얹는다.
+                    v_max=None, **_ignored):
+    """A1 의 산술을 그대로 재현하고 그 위에 lambda 스케일 + A2/v3 항을 얹는다.
 
     extras 가 전부 꺼지고 lambda 가 기준점이면 `scripted_adversary_action` 과
     수치적으로 동일해야 한다 (P1b 가 검증).
+
+    `v_max` = 백엔드 속도 클램프 (기 선언 능력 adversary_v_max). sprint 참조속도
+    상한으로만 쓴다 -- None 이면 v_nominal 로 폴백 (sprint 무력화, 능력 초과 방지).
     """
     p_att = np.asarray(p_att, float)
     v_att = np.asarray(v_att, float)
@@ -290,9 +354,20 @@ def _general_action(spec, p_att, v_att, *, target, net_center, finisher_p, limit
         a_lat_max = a_att_max
     fwd = _unit(target - p_att, v_att)
 
-    # --- A1: 전진 P-drive (원본과 동일 순서) ---------------------------------
+    # --- v3: 종축 속도 프로파일 (docs/60 §2). off 면 산술 자체를 안 탄다 ------
+    v_ref = v_nominal
+    if spec.sprint_range > 0.0 or spec.slowdown_range[0] > 0.0:
+        d_asset = float(np.linalg.norm(np.asarray(target, float) - p_att))
+        far, near = spec.slowdown_range
+        if spec.sprint_range > 0.0 and d_asset <= spec.sprint_range:
+            v_ref = spec.sprint_frac * (float(v_max) if v_max is not None
+                                        else float(v_nominal))
+        elif far > 0.0 and near < d_asset <= far:
+            v_ref = spec.slowdown_frac * float(v_nominal)
+
+    # --- A1: 전진 P-drive (원본과 동일 순서; v3 off 면 v_ref == v_nominal) ----
     v_fwd = float(v_att @ fwd)
-    a_fwd = 4.0 * (v_nominal - v_fwd) * fwd
+    a_fwd = 4.0 * (v_ref - v_fwd) * fwd
 
     # --- A1: 커밋 후 횡회피 ---------------------------------------------------
     to_net = _unit(net_center - p_att, fwd)
@@ -328,9 +403,10 @@ def _general_action(spec, p_att, v_att, *, target, net_center, finisher_p, limit
             a_cmd = a_cmd + _jink_accel(spec, fwd=fwd, t=t, phase=phase,
                                         a_lat_max=a_lat_max, committed=committed,
                                         d_target=d_target)
-        a_cmd = a_cmd + _route_accel(spec, p_att=p_att, fwd=fwd, limiters=limiters,
-                                     kill_radius=kill_radius, a_lat_max=a_lat_max,
-                                     d_target=d_target)
+        a_cmd = a_cmd + _route_accel(spec, p_att=p_att, v_att=v_att, fwd=fwd,
+                                     limiters=limiters, kill_radius=kill_radius,
+                                     repel_margin=repel_margin,
+                                     a_lat_max=a_lat_max, d_target=d_target)
         a_cmd = a_cmd + _homing_accel(spec, v_att=v_att, fwd=fwd)
 
     nrm = np.linalg.norm(a_cmd)

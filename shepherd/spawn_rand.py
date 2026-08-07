@@ -53,7 +53,8 @@ from typing import Optional, Sequence, Tuple
 import numpy as np
 
 __all__ = ["SpawnSpec", "SpawnDraw", "derive_spawn_u", "sample_spawn",
-           "apply_spawn", "spawn_for_episode", "randomized_config"]
+           "apply_spawn", "spawn_for_episode", "randomized_config",
+           "StandbySpec", "apply_standby"]
 
 _EPS = 1e-12
 
@@ -86,19 +87,28 @@ class SpawnSpec:
         초기 속력 지터. 동결 공격자는 `v_nominal` 로 되돌아가 조절하므로
         과도현상일 뿐이다. **의미 있는 속도 축은 `v_nominal` 자체**이고 그건
         config 레벨(`randomized_config`)에서 다룬다 -- docs/36 C-2(FPV 스펙) 대기.
+
+    `r_range = None` · `azimuth = 0.0`  (v3, docs/60 §4.2)
+        표적 중심 스폰 거리 브래킷 + 접근 방위각 섹터 (수평면). 활성 시 base
+        위치가 `target + r·[cos ψ, sin ψ, 0]` 로 재정의되고 그 위에 기존
+        dx/r_lat 로직이 그대로 얹힌다. 둘 다 off (기본) = 기존 경로 bit 동일.
     """
     dx: float = 2.0             # m. 회랑축 방향 ±
     r_lat: float = 5.0          # m. y-z 횡오프셋 반경 (면적 균일)
     psi: float = 0.0            # rad. 초기 속도 방향 각오차 (0 = 표적 정조준)
     speed_frac: float = 0.0     # 초기 속력 비율 지터 (0 = v_nominal)
+    r_range: Optional[Tuple[float, float]] = None   # m. 표적 중심 거리 브래킷 (균일)
+    azimuth: float = 0.0        # rad. 접근 방위각 섹터 ± (수평면)
     enabled: bool = True
     seed_ns: str = "m4_spawn"
 
     def label(self) -> str:
         if not self.enabled:
             return "SPAWN_FIXED"
+        v3 = (f",r={self.r_range},az={self.azimuth:g}"
+              if (self.r_range is not None or self.azimuth != 0.0) else "")
         return (f"SPAWN(dx={self.dx:g},r_lat={self.r_lat:g}"
-                f",psi={self.psi:g},sf={self.speed_frac:g})")
+                f",psi={self.psi:g},sf={self.speed_frac:g}{v3})")
 
 
 @dataclass(frozen=True)
@@ -146,10 +156,21 @@ def sample_spawn(spec: SpawnSpec, *, base_p: Sequence[float],
     `spec.enabled=False` 면 `base_p` / 표적 정조준 / `speed` 그대로 (동결 경로).
     """
     # u[0] 축방향 | u[1] 횡반경 | u[2] 횡방위 | u[3] 콘방위 | u[4] 콘극각 | u[5] 속력
+    # u[6] v3 거리 | u[7] v3 방위  (인덱스별 독립 SHA 이므로 k 확장은 0~5 불변)
     # **인덱스를 공유하지 않는다** -- 축끼리 상관이 생기면 분포가 무너진다.
     base = np.asarray(base_p, float)
     tgt = np.asarray(target, float)
-    u = derive_spawn_u(seed, episode, spec.seed_ns, 6)
+    u = derive_spawn_u(seed, episode, spec.seed_ns, 8)
+
+    # --- v3 (docs/60 §4.2): 표적 중심 거리 브래킷 + 방위 섹터 -----------------
+    if spec.enabled and (spec.r_range is not None or spec.azimuth != 0.0):
+        if spec.r_range is not None:
+            lo, hi = spec.r_range
+            dist = float(lo + u[6] * (hi - lo))
+        else:
+            dist = float(np.linalg.norm(base - tgt))
+        psi_b = (2.0 * u[7] - 1.0) * spec.azimuth
+        base = tgt + dist * np.array([math.cos(psi_b), math.sin(psi_b), 0.0])
 
     if not spec.enabled:
         # 동결 경로 재현: p0=[adv_x,0,0], v0=[-speed,0,0], e0=[-1,0,0]
@@ -224,6 +245,54 @@ def spawn_for_episode(env, spec: SpawnSpec, *, seed: int, episode: int,
                         speed=speed, seed=seed, episode=episode)
     apply_spawn(env, draw)
     return draw
+
+
+# ---------------------------------------------------------------- standby ---
+@dataclass(frozen=True)
+class StandbySpec:
+    """bearing-독립 symmetric standby (docs/60 §4.2, v3).
+
+    limiter n기를 자산 중심 수평면 대칭 배치:
+        p_i(0) = target + R * [cos(phi0 + 2*pi*i/n), sin(phi0 + 2*pi*i/n), 0]
+    `phi0 ~ U[0, 2*pi/n)` 에피소드 랜덤 (4기 정사각 대칭이면 독립 기하는
+    [0, pi/2) 뿐 -- full 2*pi 로 뽑지 않는다, r3).
+
+    R = 12 m 는 nominal manipulation-check point 다 -- 최적/현실값 주장이
+    아니며 (docs/60 §7 #11), TRAIN 분포에서 jitter 후보다. 구속조건 = r_nk 6 밖
+    + 4기 비중첩.
+
+    layout.limiter_p0 도 동기화한다 -- **COMA cf / hold 기저선이 standby 로
+    재정의된다** (env.py 가 매 스텝 layout.limiter_p0 를 읽으므로 일관).
+    ring-회전 정렬은 채택하지 않는다 (문제를 환경이 대신 풀어주는 초기조건).
+    """
+    R: float = 12.0
+    enabled: bool = True
+    seed_ns: str = "v3_standby"
+
+    def label(self) -> str:
+        return f"STANDBY(R={self.R:g})" if self.enabled else "STANDBY_OFF"
+
+
+def apply_standby(env, spec: StandbySpec, *, seed: int, episode: int):
+    """limiter AgentKin 초기상태 + layout.limiter_p0 를 standby 로 재기입.
+    **`env.reset()` 전에 호출** (apply_spawn 과 동일 패턴).
+    """
+    if not spec.enabled:
+        return env
+    tgt = np.asarray(env.layout.target, float)
+    n = len(env.limiter_ids)
+    u = derive_spawn_u(seed, episode, spec.seed_ns, 1)
+    phi0 = (2.0 * math.pi / n) * u[0]           # 대칭 몫만 (r3)
+    ps = []
+    for i, lid in enumerate(env.limiter_ids):
+        ang = phi0 + 2.0 * math.pi * i / n
+        p = tgt + spec.R * np.array([math.cos(ang), math.sin(ang), 0.0])
+        ag = env.backend.by_name(lid)
+        ag.p0 = list(map(float, p))
+        ag.v0 = [0.0, 0.0, 0.0]
+        ps.append(list(map(float, p)))
+    env.layout.limiter_p0 = ps                  # COMA cf / hold 기저선 동기화
+    return env
 
 
 # ------------------------------------------------------- config-level axis ---

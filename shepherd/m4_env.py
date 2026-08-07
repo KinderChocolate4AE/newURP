@@ -30,7 +30,8 @@ from shepherd.env_adv import attach_attacker
 from shepherd.env_sys import ModeSystemEnv, RewardSpec, SystemSpec
 from shepherd.m4_config import m4_config, m4_episode_config
 from shepherd.obs_threat import attach_threat_obs
-from shepherd.spawn_rand import SpawnSpec, spawn_for_episode
+from shepherd.spawn_rand import (SpawnSpec, StandbySpec, apply_standby,
+                                 spawn_for_episode)
 from shepherd.train.make_env import make_train_env
 
 __all__ = ["M4Stack", "build_m4_env", "regime_of", "mission_eval"]
@@ -44,10 +45,11 @@ class M4Stack(dict):
 def build_m4_env(seed: int, episode: int, *,
                  system: SystemSpec, reward: RewardSpec,
                  attacker: AttackerSpec, spawn: SpawnSpec,
+                 standby: Optional[StandbySpec] = None,
                  randomize_threat: bool = True,
                  threat_obs: bool = True,
                  extra_cfg: Optional[dict] = None) -> M4Stack:
-    """M4 스택 한 판."""
+    """M4 스택 한 판. `standby` 기본 None = 기존과 bit 동일 (docs/60 P87)."""
     if randomize_threat:
         cfg = m4_episode_config(seed, episode, extra_cfg)
     else:
@@ -57,6 +59,8 @@ def build_m4_env(seed: int, episode: int, *,
     env = ModeSystemEnv(inner, lay, scn, system, reward)
     attach_attacker(inner, make_attacker(attacker),
                     phase=derive_phase(seed, episode))
+    if standby is not None:
+        apply_standby(inner, standby, seed=seed, episode=episode)
     spawn_for_episode(inner, spawn, seed=seed, episode=episode)
 
     threat = {
