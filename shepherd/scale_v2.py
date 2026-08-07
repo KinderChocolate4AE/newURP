@@ -24,7 +24,7 @@ __all__ = ["SCALE_V2_CFG", "SCALE_V2_SPAWN",
            "SCALE_V3_FULL_CFG", "V3_ARMS",
            "V3_TRAIN_CELLS_A", "V3_TRAIN_CELLS_B", "V3_STANDBY_R",
            "EPISODE_LEN_TRAIN", "SCALE_V3_TRAIN_CFG", "draw_threat_v3",
-           "v3_distribution_hash"]
+           "v3_distribution_hash", "reaction_stratum"]
 
 # docs/59 §1 선언값. 결과를 본 뒤 바꾸지 않는다.
 SCALE_V2_CFG = {
@@ -140,6 +140,28 @@ def draw_threat_v3(seed: int, episode: int, layer: str) -> dict:
         standby=StandbySpec(R=lerp(V3_STANDBY_R, u("standby_R"))),   # P_init
         cfg=SCALE_V3_TRAIN_CFG,
         cell=(a_name, b_name))
+
+
+def reaction_stratum(seed: int, episode: int, stratum: str,
+                     layer: str = "train") -> dict:
+    """P95 paired CRN 재정식화 (docs/61 §5 r2): base draw 의 능력·속도
+    프로파일·spawn·standby·jink 위상을 **전부 고정**하고, reaction 축
+    (route_gain·sense_range)만 지정 층의 범위로 재사상한다.
+
+    같은 에피소드의 축별 u 를 그대로 쓰므로 세 층은 축 내 상대 위치까지
+    동일한 **paired 3중**이다. draw_threat_v3 와 같은 단일 산지 규율.
+    """
+    if stratum not in V3_TRAIN_CELLS_A:
+        raise ValueError(f"stratum 은 {tuple(V3_TRAIN_CELLS_A)} 중 하나: "
+                         f"{stratum!r}")
+    d = draw_threat_v3(seed, episode, layer)
+    rg, sr = V3_TRAIN_CELLS_A[stratum]
+    u = lambda key: _u_v3(layer, seed, episode, key)          # noqa: E731
+    att = replace(d["attacker"],
+                  route_gain=rg[0] + u("route_gain") * (rg[1] - rg[0]),
+                  sense_range=sr[0] + u("sense_range") * (sr[1] - sr[0]),
+                  label=f"A2-v3-{layer}-p95-{stratum}")
+    return dict(d, attacker=att, cell=(stratum, d["cell"][1]))
 
 
 def v3_distribution_hash() -> str:

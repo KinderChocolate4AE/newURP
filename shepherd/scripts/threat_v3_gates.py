@@ -32,7 +32,7 @@ from shepherd.m4_env import build_m4_env
 from shepherd.scale_v2 import THREAT_V3_NOMINAL, V3_ARMS
 from shepherd.scripts.mission_rollout import ROLES, run_episode, scripted_role_actions
 
-__all__ = ["p88", "p89", "p90", "p91a", "p91b", "p92", "p93", "p94"]
+__all__ = ["p88", "p89", "p90", "p91a", "p91b", "p92", "p93", "p94", "p95"]
 
 RESULTS = pathlib.Path(__file__).resolve().parents[2] / "results"
 
@@ -563,6 +563,105 @@ def p93(eps=range(P93_N)):
     return out
 
 
+# ============================================================== P95 =======
+P95_N = 30
+P95_STRATA = ("weak", "medium", "strong")
+
+
+def p95(n: int = P95_N):
+    """realized-reactivity audit (docs/61 §5 P95, r2 paired CRN 재정식화).
+
+    base 30판 × reaction stratum 3중 (능력·속도 draw·spawn·azimuth·standby·
+    jink 위상 전부 고정, route_gain·sense_range 만 교체 — scale_v2.
+    reaction_stratum 이 CRN 계약의 단일 산지).
+
+    primary (하나로 고정): R_route = (1/T_active) Σ_{t∈active}
+    |a_route,realized(t)| — realized = 클립 후 총가속의 route 방향 사영
+    (P89 기록 필드). 보조(진단 전용) = realized/requested 비.
+    판정 (결과 전 고정): 30판 R_route 의 **평균과 중앙값 둘 다**
+    weak < medium < strong. 인접 층 차이 ≤ 0 (어느 쪽이든) → 해당 층 경계
+    미확정 → 셀 경계 재사전등록. **실패 = TRAIN taxonomy 실패이지 MARL
+    실패가 아니다** (성능 안 본 상태 재사전등록; 기준 완화 PASS 금지).
+    ★ strong 의 realized 가 약해 보여도 route_gain 상향 금지 — 목적은
+    threat difficulty tuning 이 아니라 라벨의 semantic validity (docs/65).
+
+    채널 = hold / fire=never (P89 동형 — 반응성 기하 관측이지 성능 아님;
+    NS_FAST 정당화 동일. capture 조기 종료가 없어 전 궤적을 관측한다).
+    """
+    from shepherd.scale_v2 import reaction_stratum
+
+    rows = []
+    for ep in range(n):
+        per = {}
+        base_cell_b = None
+        for s in P95_STRATA:
+            d = reaction_stratum(0, ep, s)
+            base_cell_b = d["cell"][1]
+            st = build_m4_env(
+                0, ep,
+                system=SystemSpec(enabled=True, contact_resolver=True,
+                                  miss_terminates=False, p_kill=1.0),
+                reward=RewardSpec(w_kill=0.5, enabled=True),
+                attacker=d["attacker"], spawn=d["spawn"], standby=d["standby"],
+                extra_cfg=dict(d["cfg"], **NS_FAST))
+            base = _base_env(st.env)
+            diags = []
+
+            def instr(p, v, _s=d["attacker"], _d=diags, **kw):
+                dg = {}
+                out = _general_action(_s, p, v, diag=dg, **kw)
+                _d.append(dg)
+                return out
+
+            attach_attacker(base, instr,
+                            phase=float(getattr(base, "_attacker_phase", 0.0)))
+            r = run_episode(st.env, st.scn, st.lay, seed=ep,
+                            limiter_mode="hold", fire_mode="never")
+            act = []
+            for dg in diags:
+                rq = np.asarray(dg["route_req"], float)
+                nrq = float(np.linalg.norm(rq))
+                if nrq > _EPS_N:
+                    af = np.asarray(dg["a_final"], float)
+                    act.append(abs(float(af @ (rq / nrq))))
+            per[s] = dict(R_route=(float(np.mean(act)) if act else 0.0),
+                          T_active=len(act), steps=r.steps, label=r.label,
+                          route_gain=round(d["attacker"].route_gain, 4),
+                          sense_range=round(d["attacker"].sense_range, 2))
+        rows.append(dict(episode=ep, speed_regime=base_cell_b,
+                         **{s: per[s] for s in P95_STRATA}))
+        print(f"ep{ep:>3} [{base_cell_b:>15}] " + " ".join(
+            f"{s}={per[s]['R_route']:.3f}(T={per[s]['T_active']})"
+            for s in P95_STRATA), flush=True)
+
+    def _agg(fn):
+        return {s: float(fn([r[s]["R_route"] for r in rows])) for s in P95_STRATA}
+
+    mean, med = _agg(np.mean), _agg(np.median)
+    order = ("weak", "medium", "strong")
+    mono = {stat: all(v[order[i]] < v[order[i + 1]] for i in range(2))
+            for stat, v in (("mean", mean), ("median", med))}
+    green = bool(mono["mean"] and mono["median"])
+    by_regime = {}
+    for reg in sorted({r["speed_regime"] for r in rows}):
+        sub = [r for r in rows if r["speed_regime"] == reg]
+        by_regime[reg] = {s: dict(
+            mean=float(np.mean([r[s]["R_route"] for r in sub])),
+            median=float(np.median([r[s]["R_route"] for r in sub])),
+            n=len(sub)) for s in P95_STRATA}
+    out = dict(contract="docs/61 §5 P95 (r2)", n=n,
+               R_route_mean=mean, R_route_median=med, monotone=mono,
+               green=green, by_speed_regime=by_regime, rows=rows,
+               note=("red = TRAIN taxonomy 실패 (MARL 실패 아님) -- 성능 안 본 "
+                     "상태에서 셀 경계 재사전등록. 기준 완화 PASS 금지 · "
+                     "route_gain 상향 금지 (docs/65 E3)."))
+    print(f"P95 mean w/m/s = {mean['weak']:.3f}/{mean['medium']:.3f}/"
+          f"{mean['strong']:.3f}  median = {med['weak']:.3f}/"
+          f"{med['medium']:.3f}/{med['strong']:.3f} -> "
+          f"{'GREEN' if green else 'RED (재사전등록 트랙)'}")
+    return out
+
+
 # ============================================================== P92 =======
 P92_N = 900                  # coverage 검정 draw 수 (docs/61 §5: 9셀 각 100 기대)
 P92_Z = 2.576                # 99% 양측 귀무 이항 CI
@@ -705,13 +804,13 @@ def main():
     ap = argparse.ArgumentParser(description="threat v3 gates (docs/60 §5)")
     ap.add_argument("--gate", required=True,
                     choices=["p88", "p89", "p90", "p91a", "p91b", "p92", "p93",
-                             "p94"])
+                             "p94", "p95"])
     ap.add_argument("--eps", type=int, nargs=2, default=[0, P90_N],
                     metavar=("A", "B"), help="p90 샤딩 range [A, B)")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
     fn = {"p88": p88, "p89": p89, "p91a": p91a, "p91b": p91b,
-          "p92": p92, "p93": p93, "p94": p94}.get(a.gate)
+          "p92": p92, "p93": p93, "p94": p94, "p95": p95}.get(a.gate)
     out = fn() if fn else p90(range(a.eps[0], a.eps[1]))
     path = pathlib.Path(a.out) if a.out else (
         RESULTS / (f"threat_v3_{a.gate}.json" if a.gate != "p90"

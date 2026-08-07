@@ -1,0 +1,915 @@
+{
+ "contract": "docs/61 §5 P95 (r2)",
+ "n": 30,
+ "R_route_mean": {
+  "weak": 18.074748796825872,
+  "medium": 19.769861721411626,
+  "strong": 18.9714142676276
+ },
+ "R_route_median": {
+  "weak": 18.6723807745758,
+  "medium": 21.514433181194583,
+  "strong": 20.369651375878046
+ },
+ "monotone": {
+  "mean": false,
+  "median": false
+ },
+ "green": false,
+ "by_speed_regime": {
+  "cruise": {
+   "weak": {
+    "mean": 15.746327901886609,
+    "median": 18.12669502300057,
+    "n": 9
+   },
+   "medium": {
+    "mean": 17.34372649635552,
+    "median": 18.738826738171028,
+    "n": 9
+   },
+   "strong": {
+    "mean": 18.291816015547294,
+    "median": 20.71321564293472,
+    "n": 9
+   }
+  },
+  "sprint": {
+   "weak": {
+    "mean": 20.092577477372938,
+    "median": 21.593025212903967,
+    "n": 10
+   },
+   "medium": {
+    "mean": 21.573996811261765,
+    "median": 21.655882523574586,
+    "n": 10
+   },
+   "strong": {
+    "mean": 20.638454479220105,
+    "median": 20.144844015277517,
+    "n": 10
+   }
+  },
+  "sprint_slowdown": {
+   "weak": {
+    "mean": 18.145430728551574,
+    "median": 19.0735053041304,
+    "n": 11
+   },
+   "medium": {
+    "mean": 20.11475864204832,
+    "median": 23.016631719826805,
+    "n": 11
+   },
+   "strong": {
+    "mean": 18.011958099700127,
+    "median": 20.026087108821372,
+    "n": 11
+   }
+  }
+ },
+ "rows": [
+  {
+   "episode": 0,
+   "speed_regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 19.254792180371567,
+    "T_active": 16,
+    "steps": 283,
+    "label": "PENETRATED",
+    "route_gain": 0.3294,
+    "sense_range": 20.66
+   },
+   "medium": {
+    "R_route": 21.27151606760911,
+    "T_active": 25,
+    "steps": 283,
+    "label": "PENETRATED",
+    "route_gain": 0.5294,
+    "sense_range": 30.66
+   },
+   "strong": {
+    "R_route": 17.937920346658455,
+    "T_active": 58,
+    "steps": 310,
+    "label": "PENETRATED",
+    "route_gain": 0.7294,
+    "sense_range": 40.66
+   }
+  },
+  {
+   "episode": 1,
+   "speed_regime": "cruise",
+   "weak": {
+    "R_route": 5.744229975372831,
+    "T_active": 12,
+    "steps": 214,
+    "label": "PENETRATED",
+    "route_gain": 0.2587,
+    "sense_range": 15.65
+   },
+   "medium": {
+    "R_route": 8.162186734597972,
+    "T_active": 26,
+    "steps": 214,
+    "label": "PENETRATED",
+    "route_gain": 0.4587,
+    "sense_range": 25.65
+   },
+   "strong": {
+    "R_route": 10.806798530109788,
+    "T_active": 34,
+    "steps": 215,
+    "label": "PENETRATED",
+    "route_gain": 0.6587,
+    "sense_range": 35.65
+   }
+  },
+  {
+   "episode": 2,
+   "speed_regime": "sprint",
+   "weak": {
+    "R_route": 15.993610278616046,
+    "T_active": 20,
+    "steps": 253,
+    "label": "PENETRATED",
+    "route_gain": 0.3567,
+    "sense_range": 22.66
+   },
+   "medium": {
+    "R_route": 12.923554410455935,
+    "T_active": 27,
+    "steps": 253,
+    "label": "PENETRATED",
+    "route_gain": 0.5567,
+    "sense_range": 32.66
+   },
+   "strong": {
+    "R_route": 11.26312191681998,
+    "T_active": 71,
+    "steps": 294,
+    "label": "PENETRATED",
+    "route_gain": 0.7567,
+    "sense_range": 42.66
+   }
+  },
+  {
+   "episode": 3,
+   "speed_regime": "sprint",
+   "weak": {
+    "R_route": 30.50674524627662,
+    "T_active": 21,
+    "steps": 362,
+    "label": "PENETRATED",
+    "route_gain": 0.3981,
+    "sense_range": 21.13
+   },
+   "medium": {
+    "R_route": 36.755715856202244,
+    "T_active": 31,
+    "steps": 375,
+    "label": "PENETRATED",
+    "route_gain": 0.5981,
+    "sense_range": 31.13
+   },
+   "strong": {
+    "R_route": 27.20162367351986,
+    "T_active": 60,
+    "steps": 395,
+    "label": "PENETRATED",
+    "route_gain": 0.7981,
+    "sense_range": 41.13
+   }
+  },
+  {
+   "episode": 4,
+   "speed_regime": "cruise",
+   "weak": {
+    "R_route": 5.027347631234987,
+    "T_active": 39,
+    "steps": 457,
+    "label": "PENETRATED",
+    "route_gain": 0.2312,
+    "sense_range": 19.82
+   },
+   "medium": {
+    "R_route": 4.3606839824103,
+    "T_active": 56,
+    "steps": 457,
+    "label": "PENETRATED",
+    "route_gain": 0.4312,
+    "sense_range": 29.82
+   },
+   "strong": {
+    "R_route": 4.761140237871355,
+    "T_active": 71,
+    "steps": 457,
+    "label": "PENETRATED",
+    "route_gain": 0.6312,
+    "sense_range": 39.82
+   }
+  },
+  {
+   "episode": 5,
+   "speed_regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 17.063544638732672,
+    "T_active": 20,
+    "steps": 248,
+    "label": "PENETRATED",
+    "route_gain": 0.3808,
+    "sense_range": 24.82
+   },
+   "medium": {
+    "R_route": 10.02656978536876,
+    "T_active": 59,
+    "steps": 284,
+    "label": "PENETRATED",
+    "route_gain": 0.5808,
+    "sense_range": 34.82
+   },
+   "strong": {
+    "R_route": 10.681568610484184,
+    "T_active": 72,
+    "steps": 284,
+    "label": "PENETRATED",
+    "route_gain": 0.7808,
+    "sense_range": 44.82
+   }
+  },
+  {
+   "episode": 6,
+   "speed_regime": "cruise",
+   "weak": {
+    "R_route": 18.12669502300057,
+    "T_active": 26,
+    "steps": 322,
+    "label": "PENETRATED",
+    "route_gain": 0.2986,
+    "sense_range": 20.25
+   },
+   "medium": {
+    "R_route": 18.738826738171028,
+    "T_active": 39,
+    "steps": 323,
+    "label": "PENETRATED",
+    "route_gain": 0.4986,
+    "sense_range": 30.25
+   },
+   "strong": {
+    "R_route": 20.71321564293472,
+    "T_active": 62,
+    "steps": 341,
+    "label": "PENETRATED",
+    "route_gain": 0.6986,
+    "sense_range": 40.25
+   }
+  },
+  {
+   "episode": 7,
+   "speed_regime": "cruise",
+   "weak": {
+    "R_route": 14.396551905346211,
+    "T_active": 17,
+    "steps": 209,
+    "label": "PENETRATED",
+    "route_gain": 0.3997,
+    "sense_range": 18.89
+   },
+   "medium": {
+    "R_route": 17.178086751068445,
+    "T_active": 24,
+    "steps": 209,
+    "label": "PENETRATED",
+    "route_gain": 0.5997,
+    "sense_range": 28.89
+   },
+   "strong": {
+    "R_route": 15.720369338021355,
+    "T_active": 62,
+    "steps": 239,
+    "label": "PENETRATED",
+    "route_gain": 0.7997,
+    "sense_range": 38.89
+   }
+  },
+  {
+   "episode": 8,
+   "speed_regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 20.466847866011086,
+    "T_active": 35,
+    "steps": 214,
+    "label": "PENETRATED",
+    "route_gain": 0.2444,
+    "sense_range": 23.25
+   },
+   "medium": {
+    "R_route": 37.314999974367986,
+    "T_active": 25,
+    "steps": 193,
+    "label": "PENETRATED",
+    "route_gain": 0.4444,
+    "sense_range": 33.25
+   },
+   "strong": {
+    "R_route": 26.83663233017205,
+    "T_active": 52,
+    "steps": 227,
+    "label": "PENETRATED",
+    "route_gain": 0.6444,
+    "sense_range": 43.25
+   }
+  },
+  {
+   "episode": 9,
+   "speed_regime": "sprint",
+   "weak": {
+    "R_route": 24.88831680795838,
+    "T_active": 23,
+    "steps": 348,
+    "label": "PENETRATED",
+    "route_gain": 0.3501,
+    "sense_range": 18.84
+   },
+   "medium": {
+    "R_route": 23.621113415697415,
+    "T_active": 35,
+    "steps": 350,
+    "label": "PENETRATED",
+    "route_gain": 0.5501,
+    "sense_range": 28.84
+   },
+   "strong": {
+    "R_route": 18.743166476339994,
+    "T_active": 59,
+    "steps": 370,
+    "label": "PENETRATED",
+    "route_gain": 0.7501,
+    "sense_range": 38.84
+   }
+  },
+  {
+   "episode": 10,
+   "speed_regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 7.957893961424148,
+    "T_active": 13,
+    "steps": 300,
+    "label": "HARD_KILL",
+    "route_gain": 0.2648,
+    "sense_range": 17.03
+   },
+   "medium": {
+    "R_route": 7.589147007037836,
+    "T_active": 26,
+    "steps": 306,
+    "label": "PENETRATED",
+    "route_gain": 0.4648,
+    "sense_range": 27.03
+   },
+   "strong": {
+    "R_route": 8.425381785492766,
+    "T_active": 33,
+    "steps": 307,
+    "label": "PENETRATED",
+    "route_gain": 0.6648,
+    "sense_range": 37.03
+   }
+  },
+  {
+   "episode": 11,
+   "speed_regime": "cruise",
+   "weak": {
+    "R_route": 19.729102116324192,
+    "T_active": 34,
+    "steps": 211,
+    "label": "PENETRATED",
+    "route_gain": 0.3891,
+    "sense_range": 15.4
+   },
+   "medium": {
+    "R_route": 22.307104712514928,
+    "T_active": 23,
+    "steps": 188,
+    "label": "PENETRATED",
+    "route_gain": 0.5891,
+    "sense_range": 25.4
+   },
+   "strong": {
+    "R_route": 24.598181511206352,
+    "T_active": 47,
+    "steps": 209,
+    "label": "PENETRATED",
+    "route_gain": 0.7891,
+    "sense_range": 35.4
+   }
+  },
+  {
+   "episode": 12,
+   "speed_regime": "cruise",
+   "weak": {
+    "R_route": 20.741795241217755,
+    "T_active": 44,
+    "steps": 473,
+    "label": "PENETRATED",
+    "route_gain": 0.3,
+    "sense_range": 16.93
+   },
+   "medium": {
+    "R_route": 21.75735029478006,
+    "T_active": 62,
+    "steps": 475,
+    "label": "PENETRATED",
+    "route_gain": 0.5,
+    "sense_range": 26.93
+   },
+   "strong": {
+    "R_route": 22.547349851370356,
+    "T_active": 95,
+    "steps": 492,
+    "label": "PENETRATED",
+    "route_gain": 0.7,
+    "sense_range": 36.93
+   }
+  },
+  {
+   "episode": 13,
+   "speed_regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 35.66833149560571,
+    "T_active": 18,
+    "steps": 306,
+    "label": "PENETRATED",
+    "route_gain": 0.2661,
+    "sense_range": 20.83
+   },
+   "medium": {
+    "R_route": 26.75779249381286,
+    "T_active": 25,
+    "steps": 306,
+    "label": "PENETRATED",
+    "route_gain": 0.4661,
+    "sense_range": 30.83
+   },
+   "strong": {
+    "R_route": 31.119617862493364,
+    "T_active": 57,
+    "steps": 340,
+    "label": "PENETRATED",
+    "route_gain": 0.6661,
+    "sense_range": 40.83
+   }
+  },
+  {
+   "episode": 14,
+   "speed_regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 19.0735053041304,
+    "T_active": 18,
+    "steps": 248,
+    "label": "PENETRATED",
+    "route_gain": 0.3088,
+    "sense_range": 23.57
+   },
+   "medium": {
+    "R_route": 30.782631920672817,
+    "T_active": 40,
+    "steps": 267,
+    "label": "PENETRATED",
+    "route_gain": 0.5088,
+    "sense_range": 33.57
+   },
+   "strong": {
+    "R_route": 25.390730999124475,
+    "T_active": 57,
+    "steps": 270,
+    "label": "PENETRATED",
+    "route_gain": 0.7088,
+    "sense_range": 43.57
+   }
+  },
+  {
+   "episode": 15,
+   "speed_regime": "cruise",
+   "weak": {
+    "R_route": 17.819016437684578,
+    "T_active": 49,
+    "steps": 537,
+    "label": "PENETRATED",
+    "route_gain": 0.3451,
+    "sense_range": 18.83
+   },
+   "medium": {
+    "R_route": 17.27854652793297,
+    "T_active": 69,
+    "steps": 541,
+    "label": "PENETRATED",
+    "route_gain": 0.5451,
+    "sense_range": 28.83
+   },
+   "strong": {
+    "R_route": 18.343936137863704,
+    "T_active": 90,
+    "steps": 543,
+    "label": "PENETRATED",
+    "route_gain": 0.7451,
+    "sense_range": 38.83
+   }
+  },
+  {
+   "episode": 16,
+   "speed_regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 9.16408776192526,
+    "T_active": 22,
+    "steps": 302,
+    "label": "PENETRATED",
+    "route_gain": 0.3688,
+    "sense_range": 22.41
+   },
+   "medium": {
+    "R_route": 10.270006143439163,
+    "T_active": 29,
+    "steps": 302,
+    "label": "PENETRATED",
+    "route_gain": 0.5688,
+    "sense_range": 32.41
+   },
+   "strong": {
+    "R_route": 7.923786412488428,
+    "T_active": 82,
+    "steps": 351,
+    "label": "PENETRATED",
+    "route_gain": 0.7688,
+    "sense_range": 42.41
+   }
+  },
+  {
+   "episode": 17,
+   "speed_regime": "sprint",
+   "weak": {
+    "R_route": 29.016411579558937,
+    "T_active": 62,
+    "steps": 666,
+    "label": "PENETRATED",
+    "route_gain": 0.2136,
+    "sense_range": 23.17
+   },
+   "medium": {
+    "R_route": 24.103942864253103,
+    "T_active": 90,
+    "steps": 677,
+    "label": "PENETRATED",
+    "route_gain": 0.4136,
+    "sense_range": 33.17
+   },
+   "strong": {
+    "R_route": 26.306751415774077,
+    "T_active": 126,
+    "steps": 691,
+    "label": "PENETRATED",
+    "route_gain": 0.6136,
+    "sense_range": 43.17
+   }
+  },
+  {
+   "episode": 18,
+   "speed_regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 21.009906879864648,
+    "T_active": 34,
+    "steps": 482,
+    "label": "PENETRATED",
+    "route_gain": 0.3228,
+    "sense_range": 17.69
+   },
+   "medium": {
+    "R_route": 23.016631719826805,
+    "T_active": 52,
+    "steps": 485,
+    "label": "PENETRATED",
+    "route_gain": 0.5228,
+    "sense_range": 27.69
+   },
+   "strong": {
+    "R_route": 21.733440803837627,
+    "T_active": 74,
+    "steps": 501,
+    "label": "PENETRATED",
+    "route_gain": 0.7228,
+    "sense_range": 37.69
+   }
+  },
+  {
+   "episode": 19,
+   "speed_regime": "sprint",
+   "weak": {
+    "R_route": 24.50919578624815,
+    "T_active": 28,
+    "steps": 509,
+    "label": "PENETRATED",
+    "route_gain": 0.3013,
+    "sense_range": 21.13
+   },
+   "medium": {
+    "R_route": 29.611683228763216,
+    "T_active": 45,
+    "steps": 522,
+    "label": "PENETRATED",
+    "route_gain": 0.5013,
+    "sense_range": 31.13
+   },
+   "strong": {
+    "R_route": 32.184655442587086,
+    "T_active": 75,
+    "steps": 532,
+    "label": "PENETRATED",
+    "route_gain": 0.7013,
+    "sense_range": 41.13
+   }
+  },
+  {
+   "episode": 20,
+   "speed_regime": "cruise",
+   "weak": {
+    "R_route": 21.860956541777163,
+    "T_active": 25,
+    "steps": 248,
+    "label": "PENETRATED",
+    "route_gain": 0.205,
+    "sense_range": 17.76
+   },
+   "medium": {
+    "R_route": 24.531927705648535,
+    "T_active": 36,
+    "steps": 249,
+    "label": "PENETRATED",
+    "route_gain": 0.405,
+    "sense_range": 27.76
+   },
+   "strong": {
+    "R_route": 25.62863737443022,
+    "T_active": 47,
+    "steps": 250,
+    "label": "PENETRATED",
+    "route_gain": 0.605,
+    "sense_range": 37.76
+   }
+  },
+  {
+   "episode": 21,
+   "speed_regime": "sprint",
+   "weak": {
+    "R_route": 12.404539957923191,
+    "T_active": 18,
+    "steps": 234,
+    "label": "PENETRATED",
+    "route_gain": 0.2856,
+    "sense_range": 24.51
+   },
+   "medium": {
+    "R_route": 17.909213412860517,
+    "T_active": 25,
+    "steps": 234,
+    "label": "PENETRATED",
+    "route_gain": 0.4856,
+    "sense_range": 34.51
+   },
+   "strong": {
+    "R_route": 10.940220908140837,
+    "T_active": 82,
+    "steps": 295,
+    "label": "PENETRATED",
+    "route_gain": 0.6856,
+    "sense_range": 44.51
+   }
+  },
+  {
+   "episode": 22,
+   "speed_regime": "cruise",
+   "weak": {
+    "R_route": 18.2712562450212,
+    "T_active": 34,
+    "steps": 325,
+    "label": "PENETRATED",
+    "route_gain": 0.2868,
+    "sense_range": 19.37
+   },
+   "medium": {
+    "R_route": 21.778825020075445,
+    "T_active": 48,
+    "steps": 339,
+    "label": "PENETRATED",
+    "route_gain": 0.4868,
+    "sense_range": 29.37
+   },
+   "strong": {
+    "R_route": 21.506715516117804,
+    "T_active": 62,
+    "steps": 339,
+    "label": "PENETRATED",
+    "route_gain": 0.6868,
+    "sense_range": 39.37
+   }
+  },
+  {
+   "episode": 23,
+   "speed_regime": "sprint",
+   "weak": {
+    "R_route": 6.146420621242249,
+    "T_active": 24,
+    "steps": 461,
+    "label": "PENETRATED",
+    "route_gain": 0.3261,
+    "sense_range": 20.72
+   },
+   "medium": {
+    "R_route": 9.420054907933363,
+    "T_active": 35,
+    "steps": 461,
+    "label": "PENETRATED",
+    "route_gain": 0.5261,
+    "sense_range": 30.72
+   },
+   "strong": {
+    "R_route": 9.79124966786249,
+    "T_active": 45,
+    "steps": 462,
+    "label": "PENETRATED",
+    "route_gain": 0.7261,
+    "sense_range": 40.72
+   }
+  },
+  {
+   "episode": 24,
+   "speed_regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 7.182319667010814,
+    "T_active": 32,
+    "steps": 554,
+    "label": "PENETRATED",
+    "route_gain": 0.3844,
+    "sense_range": 21.03
+   },
+   "medium": {
+    "R_route": 7.130860717865325,
+    "T_active": 45,
+    "steps": 554,
+    "label": "PENETRATED",
+    "route_gain": 0.5844,
+    "sense_range": 31.03
+   },
+   "strong": {
+    "R_route": 6.962371515176326,
+    "T_active": 57,
+    "steps": 555,
+    "label": "PENETRATED",
+    "route_gain": 0.7844,
+    "sense_range": 41.03
+   }
+  },
+  {
+   "episode": 25,
+   "speed_regime": "sprint",
+   "weak": {
+    "R_route": 22.346524621619388,
+    "T_active": 21,
+    "steps": 262,
+    "label": "PENETRATED",
+    "route_gain": 0.2873,
+    "sense_range": 20.73
+   },
+   "medium": {
+    "R_route": 29.478189164005958,
+    "T_active": 28,
+    "steps": 263,
+    "label": "PENETRATED",
+    "route_gain": 0.4873,
+    "sense_range": 30.73
+   },
+   "strong": {
+    "R_route": 32.83392445500842,
+    "T_active": 48,
+    "steps": 294,
+    "label": "PENETRATED",
+    "route_gain": 0.6873,
+    "sense_range": 40.73
+   }
+  },
+  {
+   "episode": 26,
+   "speed_regime": "sprint",
+   "weak": {
+    "R_route": 14.274484070097865,
+    "T_active": 18,
+    "steps": 293,
+    "label": "PENETRATED",
+    "route_gain": 0.3675,
+    "sense_range": 16.36
+   },
+   "medium": {
+    "R_route": 12.22584922099413,
+    "T_active": 31,
+    "steps": 293,
+    "label": "PENETRATED",
+    "route_gain": 0.5675,
+    "sense_range": 26.36
+   },
+   "strong": {
+    "R_route": 15.573309281933266,
+    "T_active": 39,
+    "steps": 293,
+    "label": "PENETRATED",
+    "route_gain": 0.7675,
+    "sense_range": 36.36
+   }
+  },
+  {
+   "episode": 27,
+   "speed_regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 24.498030181066,
+    "T_active": 26,
+    "steps": 297,
+    "label": "PENETRATED",
+    "route_gain": 0.3427,
+    "sense_range": 23.75
+   },
+   "medium": {
+    "R_route": 23.1917630105644,
+    "T_active": 35,
+    "steps": 298,
+    "label": "PENETRATED",
+    "route_gain": 0.5427,
+    "sense_range": 33.75
+   },
+   "strong": {
+    "R_route": 21.09400132195234,
+    "T_active": 60,
+    "steps": 319,
+    "label": "PENETRATED",
+    "route_gain": 0.7427,
+    "sense_range": 43.75
+   }
+  },
+  {
+   "episode": 28,
+   "speed_regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 18.260478077925033,
+    "T_active": 15,
+    "steps": 210,
+    "label": "PENETRATED",
+    "route_gain": 0.207,
+    "sense_range": 19.48
+   },
+   "medium": {
+    "R_route": 23.91042622196644,
+    "T_active": 21,
+    "steps": 210,
+    "label": "PENETRATED",
+    "route_gain": 0.407,
+    "sense_range": 29.48
+   },
+   "strong": {
+    "R_route": 20.026087108821372,
+    "T_active": 64,
+    "steps": 254,
+    "label": "PENETRATED",
+    "route_gain": 0.607,
+    "sense_range": 39.48
+   }
+  },
+  {
+   "episode": 29,
+   "speed_regime": "sprint",
+   "weak": {
+    "R_route": 20.83952580418855,
+    "T_active": 49,
+    "steps": 574,
+    "label": "PENETRATED",
+    "route_gain": 0.3456,
+    "sense_range": 22.36
+   },
+   "medium": {
+    "R_route": 19.690651631451757,
+    "T_active": 74,
+    "steps": 583,
+    "label": "PENETRATED",
+    "route_gain": 0.5456,
+    "sense_range": 32.36
+   },
+   "strong": {
+    "R_route": 21.54652155421504,
+    "T_active": 109,
+    "steps": 601,
+    "label": "PENETRATED",
+    "route_gain": 0.7456,
+    "sense_range": 42.36
+   }
+  }
+ ],
+ "note": "red = TRAIN taxonomy 실패 (MARL 실패 아님) -- 성능 안 본 상태에서 셀 경계 재사전등록. 기준 완화 PASS 금지 · route_gain 상향 금지 (docs/65 E3)."
+}

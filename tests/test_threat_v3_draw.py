@@ -61,5 +61,35 @@ def test_cruise_is_nested_v2_profile():
 
 
 def test_horizon_declared():
-    assert EPISODE_LEN_TRAIN == 1100                     # docs/61 §2 (P93 후 확정)
+    assert EPISODE_LEN_TRAIN == 1100                     # docs/61 §2 (P93 확정)
     assert SCALE_V3_TRAIN_CFG["train.episode_len"] == 1100
+
+
+def test_reaction_stratum_is_paired_crn():
+    """P95 CRN 계약: reaction 축만 교체, 그 외 전부 base 와 bit 동일."""
+    from dataclasses import fields
+
+    from shepherd.scale_v2 import V3_TRAIN_CELLS_A, reaction_stratum
+
+    for ep in (0, 3, 11):
+        base = draw_threat_v3(0, ep, "train")
+        got = {s: reaction_stratum(0, ep, s) for s in V3_TRAIN_CELLS_A}
+        for s, d in got.items():
+            rg, sr = V3_TRAIN_CELLS_A[s]
+            assert rg[0] <= d["attacker"].route_gain <= rg[1]
+            assert sr[0] <= d["attacker"].sense_range <= sr[1]
+            assert d["standby"] == base["standby"]        # P_init 고정
+            assert d["spawn"] == base["spawn"]
+            assert d["cell"][1] == base["cell"][1]        # 속도 regime 고정
+            for f in fields(d["attacker"]):
+                if f.name in ("route_gain", "sense_range", "label"):
+                    continue
+                assert getattr(d["attacker"], f.name) == \
+                    getattr(base["attacker"], f.name), f.name
+        # 축 내 상대 위치(u)가 같아야 paired: 층 간 route_gain 차 = 범위 이동분
+        u = ((got["weak"]["attacker"].route_gain - 0.2) / 0.2)
+        for s, lo in (("medium", 0.4), ("strong", 0.6)):
+            assert abs(got[s]["attacker"].route_gain - (lo + u * 0.2)) < 1e-12
+
+    with pytest.raises(ValueError):
+        reaction_stratum(0, 0, "nominal")
