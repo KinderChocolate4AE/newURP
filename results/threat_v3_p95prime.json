@@ -1,0 +1,921 @@
+{
+ "contract": "docs/68 §2 P95' (confirmatory, 1회)",
+ "n_base": 30,
+ "by_regime": {
+  "cruise": {
+   "n": 10,
+   "mean": {
+    "weak": 16.70282562909417,
+    "medium": 17.763067288138267,
+    "strong": 18.225060418188594
+   },
+   "median": {
+    "weak": 15.265871247178108,
+    "medium": 16.87683980146657,
+    "strong": 17.330867712182865
+   },
+   "adj_diff_mean": [
+    1.0602416590440953,
+    0.4619931300503275
+   ],
+   "adj_diff_median": [
+    1.610968554288462,
+    0.4540279107162952
+   ],
+   "episode_order_frac": 0.6
+  },
+  "sprint": {
+   "n": 10,
+   "mean": {
+    "weak": 21.983526371603354,
+    "medium": 22.419274319183423,
+    "strong": 22.83126684956296
+   },
+   "median": {
+    "weak": 22.10823800411739,
+    "medium": 23.683229844079065,
+    "strong": 21.68981280626197
+   },
+   "adj_diff_mean": [
+    0.43574794758006874,
+    0.4119925303795391
+   ],
+   "adj_diff_median": [
+    1.574991839961676,
+    -1.9934170378170961
+   ],
+   "episode_order_frac": 0.3
+  },
+  "sprint_slowdown": {
+   "n": 10,
+   "mean": {
+    "weak": 17.828707594017608,
+    "medium": 18.95288661189344,
+    "strong": 18.17287162543106
+   },
+   "median": {
+    "weak": 20.93187942823414,
+    "medium": 21.187218109853866,
+    "strong": 21.70239954082954
+   },
+   "adj_diff_mean": [
+    1.1241790178758322,
+    -0.7800149864623798
+   ],
+   "adj_diff_median": [
+    0.25533868161972606,
+    0.515181430975673
+   ],
+   "episode_order_frac": 0.4
+  }
+ },
+ "verdict": {
+  "cruise": true,
+  "sprint": false,
+  "sprint_slowdown": false
+ },
+ "green": false,
+ "rows": [
+  {
+   "episode": 0,
+   "regime": "cruise",
+   "weak": {
+    "R_route": 19.79496890629639,
+    "T_active": 37,
+    "steps": 265,
+    "label": "PENETRATED",
+    "route_gain": 0.3172,
+    "sense_range": 41.02
+   },
+   "medium": {
+    "R_route": 20.972298614634912,
+    "T_active": 38,
+    "steps": 266,
+    "label": "PENETRATED",
+    "route_gain": 0.5172,
+    "sense_range": 41.02
+   },
+   "strong": {
+    "R_route": 24.307199821981765,
+    "T_active": 38,
+    "steps": 266,
+    "label": "PENETRATED",
+    "route_gain": 0.7172,
+    "sense_range": 41.02
+   }
+  },
+  {
+   "episode": 1,
+   "regime": "cruise",
+   "weak": {
+    "R_route": 9.488980828866827,
+    "T_active": 31,
+    "steps": 215,
+    "label": "PENETRATED",
+    "route_gain": 0.3228,
+    "sense_range": 35.68
+   },
+   "medium": {
+    "R_route": 9.573062673143628,
+    "T_active": 31,
+    "steps": 215,
+    "label": "PENETRATED",
+    "route_gain": 0.5228,
+    "sense_range": 35.68
+   },
+   "strong": {
+    "R_route": 4.767084301774896,
+    "T_active": 109,
+    "steps": 305,
+    "label": "PENETRATED",
+    "route_gain": 0.7228,
+    "sense_range": 35.68
+   }
+  },
+  {
+   "episode": 2,
+   "regime": "cruise",
+   "weak": {
+    "R_route": 12.80989568352808,
+    "T_active": 43,
+    "steps": 275,
+    "label": "PENETRATED",
+    "route_gain": 0.3919,
+    "sense_range": 32.4
+   },
+   "medium": {
+    "R_route": 15.45426728412573,
+    "T_active": 43,
+    "steps": 275,
+    "label": "PENETRATED",
+    "route_gain": 0.5919,
+    "sense_range": 32.4
+   },
+   "strong": {
+    "R_route": 16.499192589131663,
+    "T_active": 44,
+    "steps": 276,
+    "label": "PENETRATED",
+    "route_gain": 0.7919,
+    "sense_range": 32.4
+   }
+  },
+  {
+   "episode": 3,
+   "regime": "cruise",
+   "weak": {
+    "R_route": 30.31142410034348,
+    "T_active": 49,
+    "steps": 387,
+    "label": "PENETRATED",
+    "route_gain": 0.2267,
+    "sense_range": 38.01
+   },
+   "medium": {
+    "R_route": 27.906349501150835,
+    "T_active": 57,
+    "steps": 397,
+    "label": "PENETRATED",
+    "route_gain": 0.4267,
+    "sense_range": 38.01
+   },
+   "strong": {
+    "R_route": 28.84822611485922,
+    "T_active": 62,
+    "steps": 400,
+    "label": "PENETRATED",
+    "route_gain": 0.6267,
+    "sense_range": 38.01
+   }
+  },
+  {
+   "episode": 4,
+   "regime": "cruise",
+   "weak": {
+    "R_route": 4.4880481386157,
+    "T_active": 58,
+    "steps": 457,
+    "label": "PENETRATED",
+    "route_gain": 0.3993,
+    "sense_range": 32.6
+   },
+   "medium": {
+    "R_route": 4.916456106762816,
+    "T_active": 58,
+    "steps": 457,
+    "label": "PENETRATED",
+    "route_gain": 0.5993,
+    "sense_range": 32.6
+   },
+   "strong": {
+    "R_route": 5.412366339420651,
+    "T_active": 58,
+    "steps": 457,
+    "label": "PENETRATED",
+    "route_gain": 0.7993,
+    "sense_range": 32.6
+   }
+  },
+  {
+   "episode": 5,
+   "regime": "cruise",
+   "weak": {
+    "R_route": 10.788980325141372,
+    "T_active": 28,
+    "steps": 244,
+    "label": "PENETRATED",
+    "route_gain": 0.3072,
+    "sense_range": 22.09
+   },
+   "medium": {
+    "R_route": 13.965176332991847,
+    "T_active": 28,
+    "steps": 244,
+    "label": "PENETRATED",
+    "route_gain": 0.5072,
+    "sense_range": 22.09
+   },
+   "strong": {
+    "R_route": 14.825482643343753,
+    "T_active": 29,
+    "steps": 245,
+    "label": "PENETRATED",
+    "route_gain": 0.7072,
+    "sense_range": 22.09
+   }
+  },
+  {
+   "episode": 6,
+   "regime": "cruise",
+   "weak": {
+    "R_route": 16.954383327378256,
+    "T_active": 38,
+    "steps": 323,
+    "label": "PENETRATED",
+    "route_gain": 0.394,
+    "sense_range": 31.81
+   },
+   "medium": {
+    "R_route": 18.29941231880741,
+    "T_active": 40,
+    "steps": 338,
+    "label": "PENETRATED",
+    "route_gain": 0.594,
+    "sense_range": 31.81
+   },
+   "strong": {
+    "R_route": 18.162542835234063,
+    "T_active": 59,
+    "steps": 344,
+    "label": "PENETRATED",
+    "route_gain": 0.794,
+    "sense_range": 31.81
+   }
+  },
+  {
+   "episode": 7,
+   "regime": "cruise",
+   "weak": {
+    "R_route": 13.577359166977958,
+    "T_active": 24,
+    "steps": 209,
+    "label": "PENETRATED",
+    "route_gain": 0.2744,
+    "sense_range": 21.73
+   },
+   "medium": {
+    "R_route": 14.311093158965546,
+    "T_active": 24,
+    "steps": 209,
+    "label": "PENETRATED",
+    "route_gain": 0.4744,
+    "sense_range": 21.73
+   },
+   "strong": {
+    "R_route": 15.483977718354218,
+    "T_active": 24,
+    "steps": 209,
+    "label": "PENETRATED",
+    "route_gain": 0.6744,
+    "sense_range": 21.73
+   }
+  },
+  {
+   "episode": 8,
+   "regime": "cruise",
+   "weak": {
+    "R_route": 31.726536410348565,
+    "T_active": 41,
+    "steps": 198,
+    "label": "PENETRATED",
+    "route_gain": 0.2956,
+    "sense_range": 42.81
+   },
+   "medium": {
+    "R_route": 32.82638309963226,
+    "T_active": 41,
+    "steps": 198,
+    "label": "PENETRATED",
+    "route_gain": 0.4956,
+    "sense_range": 42.81
+   },
+   "strong": {
+    "R_route": 34.757778629082125,
+    "T_active": 42,
+    "steps": 199,
+    "label": "PENETRATED",
+    "route_gain": 0.6956,
+    "sense_range": 42.81
+   }
+  },
+  {
+   "episode": 9,
+   "regime": "cruise",
+   "weak": {
+    "R_route": 17.08767940344506,
+    "T_active": 53,
+    "steps": 377,
+    "label": "PENETRATED",
+    "route_gain": 0.2373,
+    "sense_range": 30.65
+   },
+   "medium": {
+    "R_route": 19.40617379116767,
+    "T_active": 54,
+    "steps": 378,
+    "label": "PENETRATED",
+    "route_gain": 0.4373,
+    "sense_range": 30.65
+   },
+   "strong": {
+    "R_route": 19.186753188703552,
+    "T_active": 57,
+    "steps": 390,
+    "label": "PENETRATED",
+    "route_gain": 0.6373,
+    "sense_range": 30.65
+   }
+  },
+  {
+   "episode": 10,
+   "regime": "sprint",
+   "weak": {
+    "R_route": 9.24742567416024,
+    "T_active": 24,
+    "steps": 290,
+    "label": "PENETRATED",
+    "route_gain": 0.3226,
+    "sense_range": 35.86
+   },
+   "medium": {
+    "R_route": 7.266286215001752,
+    "T_active": 33,
+    "steps": 290,
+    "label": "PENETRATED",
+    "route_gain": 0.5226,
+    "sense_range": 35.86
+   },
+   "strong": {
+    "R_route": 8.149525271223798,
+    "T_active": 33,
+    "steps": 290,
+    "label": "PENETRATED",
+    "route_gain": 0.7226,
+    "sense_range": 35.86
+   }
+  },
+  {
+   "episode": 11,
+   "regime": "sprint",
+   "weak": {
+    "R_route": 18.96445115899721,
+    "T_active": 16,
+    "steps": 172,
+    "label": "PENETRATED",
+    "route_gain": 0.2337,
+    "sense_range": 27.25
+   },
+   "medium": {
+    "R_route": 22.814214432610186,
+    "T_active": 16,
+    "steps": 172,
+    "label": "PENETRATED",
+    "route_gain": 0.4337,
+    "sense_range": 27.25
+   },
+   "strong": {
+    "R_route": 16.62752122292805,
+    "T_active": 47,
+    "steps": 206,
+    "label": "PENETRATED",
+    "route_gain": 0.6337,
+    "sense_range": 27.25
+   }
+  },
+  {
+   "episode": 12,
+   "regime": "sprint",
+   "weak": {
+    "R_route": 24.274429039198022,
+    "T_active": 38,
+    "steps": 451,
+    "label": "PENETRATED",
+    "route_gain": 0.3409,
+    "sense_range": 26.05
+   },
+   "medium": {
+    "R_route": 25.62669731273088,
+    "T_active": 41,
+    "steps": 454,
+    "label": "PENETRATED",
+    "route_gain": 0.5409,
+    "sense_range": 26.05
+   },
+   "strong": {
+    "R_route": 23.063948967356108,
+    "T_active": 44,
+    "steps": 466,
+    "label": "PENETRATED",
+    "route_gain": 0.7409,
+    "sense_range": 26.05
+   }
+  },
+  {
+   "episode": 13,
+   "regime": "sprint",
+   "weak": {
+    "R_route": 27.817050302373158,
+    "T_active": 42,
+    "steps": 304,
+    "label": "PENETRATED",
+    "route_gain": 0.3381,
+    "sense_range": 39.61
+   },
+   "medium": {
+    "R_route": 27.930088104871995,
+    "T_active": 51,
+    "steps": 307,
+    "label": "PENETRATED",
+    "route_gain": 0.5381,
+    "sense_range": 39.61
+   },
+   "strong": {
+    "R_route": 33.319799886280535,
+    "T_active": 53,
+    "steps": 319,
+    "label": "PENETRATED",
+    "route_gain": 0.7381,
+    "sense_range": 39.61
+   }
+  },
+  {
+   "episode": 14,
+   "regime": "sprint",
+   "weak": {
+    "R_route": 37.77194019878917,
+    "T_active": 30,
+    "steps": 227,
+    "label": "PENETRATED",
+    "route_gain": 0.3104,
+    "sense_range": 39.71
+   },
+   "medium": {
+    "R_route": 33.90704505962811,
+    "T_active": 44,
+    "steps": 244,
+    "label": "PENETRATED",
+    "route_gain": 0.5104,
+    "sense_range": 39.71
+   },
+   "strong": {
+    "R_route": 36.39294659090081,
+    "T_active": 49,
+    "steps": 247,
+    "label": "PENETRATED",
+    "route_gain": 0.7104,
+    "sense_range": 39.71
+   }
+  },
+  {
+   "episode": 15,
+   "regime": "sprint",
+   "weak": {
+    "R_route": 15.882472582239389,
+    "T_active": 44,
+    "steps": 511,
+    "label": "PENETRATED",
+    "route_gain": 0.3234,
+    "sense_range": 26.65
+   },
+   "medium": {
+    "R_route": 17.777554855609896,
+    "T_active": 45,
+    "steps": 513,
+    "label": "PENETRATED",
+    "route_gain": 0.5234,
+    "sense_range": 26.65
+   },
+   "strong": {
+    "R_route": 19.305288332500357,
+    "T_active": 46,
+    "steps": 515,
+    "label": "PENETRATED",
+    "route_gain": 0.7234,
+    "sense_range": 26.65
+   }
+  },
+  {
+   "episode": 16,
+   "regime": "sprint",
+   "weak": {
+    "R_route": 10.096851722435684,
+    "T_active": 33,
+    "steps": 277,
+    "label": "PENETRATED",
+    "route_gain": 0.3063,
+    "sense_range": 35.06
+   },
+   "medium": {
+    "R_route": 11.365805018122625,
+    "T_active": 33,
+    "steps": 277,
+    "label": "PENETRATED",
+    "route_gain": 0.5063,
+    "sense_range": 35.06
+   },
+   "strong": {
+    "R_route": 12.287292982526962,
+    "T_active": 33,
+    "steps": 277,
+    "label": "PENETRATED",
+    "route_gain": 0.7063,
+    "sense_range": 35.06
+   }
+  },
+  {
+   "episode": 17,
+   "regime": "sprint",
+   "weak": {
+    "R_route": 25.188762580283104,
+    "T_active": 97,
+    "steps": 666,
+    "label": "PENETRATED",
+    "route_gain": 0.3639,
+    "sense_range": 44.29
+   },
+   "medium": {
+    "R_route": 24.552245255547945,
+    "T_active": 110,
+    "steps": 679,
+    "label": "PENETRATED",
+    "route_gain": 0.5639,
+    "sense_range": 44.29
+   },
+   "strong": {
+    "R_route": 26.85708235593929,
+    "T_active": 123,
+    "steps": 692,
+    "label": "PENETRATED",
+    "route_gain": 0.7639,
+    "sense_range": 44.29
+   }
+  },
+  {
+   "episode": 18,
+   "regime": "sprint",
+   "weak": {
+    "R_route": 19.942046969036753,
+    "T_active": 60,
+    "steps": 468,
+    "label": "PENETRATED",
+    "route_gain": 0.3006,
+    "sense_range": 36.62
+   },
+   "medium": {
+    "R_route": 20.955215776348428,
+    "T_active": 62,
+    "steps": 471,
+    "label": "PENETRATED",
+    "route_gain": 0.5006,
+    "sense_range": 36.62
+   },
+   "strong": {
+    "R_route": 20.31567664516783,
+    "T_active": 72,
+    "steps": 485,
+    "label": "PENETRATED",
+    "route_gain": 0.7006,
+    "sense_range": 36.62
+   }
+  },
+  {
+   "episode": 19,
+   "regime": "sprint",
+   "weak": {
+    "R_route": 30.649833488520844,
+    "T_active": 60,
+    "steps": 507,
+    "label": "PENETRATED",
+    "route_gain": 0.3113,
+    "sense_range": 43.62
+   },
+   "medium": {
+    "R_route": 31.997591161362386,
+    "T_active": 67,
+    "steps": 520,
+    "label": "PENETRATED",
+    "route_gain": 0.5113,
+    "sense_range": 43.62
+   },
+   "strong": {
+    "R_route": 31.993586240805865,
+    "T_active": 73,
+    "steps": 526,
+    "label": "PENETRATED",
+    "route_gain": 0.7113,
+    "sense_range": 43.62
+   }
+  },
+  {
+   "episode": 20,
+   "regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 21.875223613346208,
+    "T_active": 32,
+    "steps": 238,
+    "label": "PENETRATED",
+    "route_gain": 0.2845,
+    "sense_range": 36.58
+   },
+   "medium": {
+    "R_route": 27.083819402468976,
+    "T_active": 32,
+    "steps": 239,
+    "label": "PENETRATED",
+    "route_gain": 0.4845,
+    "sense_range": 36.58
+   },
+   "strong": {
+    "R_route": 26.117395944434435,
+    "T_active": 46,
+    "steps": 258,
+    "label": "PENETRATED",
+    "route_gain": 0.6845,
+    "sense_range": 36.58
+   }
+  },
+  {
+   "episode": 21,
+   "regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 20.687663197250686,
+    "T_active": 23,
+    "steps": 258,
+    "label": "PENETRATED",
+    "route_gain": 0.3962,
+    "sense_range": 33.06
+   },
+   "medium": {
+    "R_route": 22.53848765885654,
+    "T_active": 23,
+    "steps": 258,
+    "label": "PENETRATED",
+    "route_gain": 0.5962,
+    "sense_range": 33.06
+   },
+   "strong": {
+    "R_route": 12.144780390944003,
+    "T_active": 78,
+    "steps": 323,
+    "label": "PENETRATED",
+    "route_gain": 0.7962,
+    "sense_range": 33.06
+   }
+  },
+  {
+   "episode": 22,
+   "regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 17.78858053959452,
+    "T_active": 24,
+    "steps": 314,
+    "label": "PENETRATED",
+    "route_gain": 0.3378,
+    "sense_range": 21.42
+   },
+   "medium": {
+    "R_route": 19.83594856085119,
+    "T_active": 24,
+    "steps": 314,
+    "label": "PENETRATED",
+    "route_gain": 0.5378,
+    "sense_range": 21.42
+   },
+   "strong": {
+    "R_route": 23.44419573781101,
+    "T_active": 25,
+    "steps": 315,
+    "label": "PENETRATED",
+    "route_gain": 0.7378,
+    "sense_range": 21.42
+   }
+  },
+  {
+   "episode": 23,
+   "regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 8.435006897924815,
+    "T_active": 16,
+    "steps": 528,
+    "label": "PENETRATED",
+    "route_gain": 0.376,
+    "sense_range": 15.81
+   },
+   "medium": {
+    "R_route": 8.704114924772998,
+    "T_active": 16,
+    "steps": 528,
+    "label": "PENETRATED",
+    "route_gain": 0.576,
+    "sense_range": 15.81
+   },
+   "strong": {
+    "R_route": 9.691268960840837,
+    "T_active": 16,
+    "steps": 528,
+    "label": "PENETRATED",
+    "route_gain": 0.776,
+    "sense_range": 15.81
+   }
+  },
+  {
+   "episode": 24,
+   "regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 4.826509789242651,
+    "T_active": 30,
+    "steps": 599,
+    "label": "PENETRATED",
+    "route_gain": 0.2413,
+    "sense_range": 16.88
+   },
+   "medium": {
+    "R_route": 3.7656750017455485,
+    "T_active": 30,
+    "steps": 599,
+    "label": "PENETRATED",
+    "route_gain": 0.4413,
+    "sense_range": 16.88
+   },
+   "strong": {
+    "R_route": 3.874837983091571,
+    "T_active": 30,
+    "steps": 599,
+    "label": "PENETRATED",
+    "route_gain": 0.6413,
+    "sense_range": 16.88
+   }
+  },
+  {
+   "episode": 25,
+   "regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 22.738783953302992,
+    "T_active": 34,
+    "steps": 275,
+    "label": "PENETRATED",
+    "route_gain": 0.3562,
+    "sense_range": 33.44
+   },
+   "medium": {
+    "R_route": 25.538144383185088,
+    "T_active": 34,
+    "steps": 275,
+    "label": "PENETRATED",
+    "route_gain": 0.5562,
+    "sense_range": 33.44
+   },
+   "strong": {
+    "R_route": 28.471684014729867,
+    "T_active": 45,
+    "steps": 294,
+    "label": "PENETRATED",
+    "route_gain": 0.7562,
+    "sense_range": 33.44
+   }
+  },
+  {
+   "episode": 26,
+   "regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 9.974424405186378,
+    "T_active": 36,
+    "steps": 332,
+    "label": "PENETRATED",
+    "route_gain": 0.2468,
+    "sense_range": 28.66
+   },
+   "medium": {
+    "R_route": 10.903245340179621,
+    "T_active": 36,
+    "steps": 332,
+    "label": "PENETRATED",
+    "route_gain": 0.4468,
+    "sense_range": 28.66
+   },
+   "strong": {
+    "R_route": 11.702200045966896,
+    "T_active": 37,
+    "steps": 332,
+    "label": "PENETRATED",
+    "route_gain": 0.6468,
+    "sense_range": 28.66
+   }
+  },
+  {
+   "episode": 27,
+   "regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 24.188196566359306,
+    "T_active": 21,
+    "steps": 285,
+    "label": "PENETRATED",
+    "route_gain": 0.3992,
+    "sense_range": 21.54
+   },
+   "medium": {
+    "R_route": 28.750468204090758,
+    "T_active": 22,
+    "steps": 286,
+    "label": "PENETRATED",
+    "route_gain": 0.5992,
+    "sense_range": 21.54
+   },
+   "strong": {
+    "R_route": 22.480105711289248,
+    "T_active": 38,
+    "steps": 322,
+    "label": "PENETRATED",
+    "route_gain": 0.7992,
+    "sense_range": 21.54
+   }
+  },
+  {
+   "episode": 28,
+   "regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 26.596591318750917,
+    "T_active": 23,
+    "steps": 197,
+    "label": "PENETRATED",
+    "route_gain": 0.2907,
+    "sense_range": 37.88
+   },
+   "medium": {
+    "R_route": 22.865433174732907,
+    "T_active": 46,
+    "steps": 225,
+    "label": "PENETRATED",
+    "route_gain": 0.4907,
+    "sense_range": 37.88
+   },
+   "strong": {
+    "R_route": 22.87755409483291,
+    "T_active": 51,
+    "steps": 226,
+    "label": "PENETRATED",
+    "route_gain": 0.6907,
+    "sense_range": 37.88
+   }
+  },
+  {
+   "episode": 29,
+   "regime": "sprint_slowdown",
+   "weak": {
+    "R_route": 21.176095659217598,
+    "T_active": 88,
+    "steps": 621,
+    "label": "PENETRATED",
+    "route_gain": 0.223,
+    "sense_range": 39.13
+   },
+   "medium": {
+    "R_route": 19.54352946805075,
+    "T_active": 99,
+    "steps": 633,
+    "label": "PENETRATED",
+    "route_gain": 0.423,
+    "sense_range": 39.13
+   },
+   "strong": {
+    "R_route": 20.92469337036983,
+    "T_active": 108,
+    "steps": 643,
+    "label": "PENETRATED",
+    "route_gain": 0.623,
+    "sense_range": 39.13
+   }
+  }
+ ],
+ "interpretation": "RED: confirmatory set 에서 ordinal validity 미확립 -- 사전등록 stop rule 발동, ordinal terminology 폐기 트랙. P95'' 금지 (docs/68 §2.1/§3)."
+}
