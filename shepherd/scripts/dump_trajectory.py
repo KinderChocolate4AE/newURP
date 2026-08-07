@@ -32,8 +32,25 @@ def _build_v2(ep: int):
     return st.env, st.scn, st.lay
 
 
-def dump_episode(ep: int, *, v2: bool = False) -> dict:
-    env, scn, lay = _build_v2(ep) if v2 else _build(ep)
+def _build_v3(ep: int):
+    """위협 계약 v3 NOMINAL FULL arm (docs/60 §7 · V3_ARMS['V3-FULL'])."""
+    from shepherd.env_sys import RewardSpec, SystemSpec
+    from shepherd.m4_env import build_m4_env
+    from shepherd.scale_v2 import V3_ARMS
+    arm = V3_ARMS["V3-FULL"]
+    st = build_m4_env(
+        0, ep,
+        system=SystemSpec(enabled=True, contact_resolver=True,
+                          miss_terminates=False, p_kill=1.0),
+        reward=RewardSpec(w_kill=0.5, enabled=True),
+        attacker=arm["attacker"], spawn=arm["spawn"], standby=arm["standby"],
+        extra_cfg=dict(arm["cfg"]))
+    return st.env, st.scn, st.lay
+
+
+def dump_episode(ep: int, *, v2: bool = False, v3: bool = False) -> dict:
+    env, scn, lay = (_build_v3(ep) if v3
+                     else _build_v2(ep) if v2 else _build(ep))
     d = _Driver(env, scn, lay, ep)
     se = d.se
     inner = se.inner
@@ -112,6 +129,8 @@ def main() -> None:
     ap.add_argument("--out-html", default="viz/trajectory_viewer.html")
     ap.add_argument("--out-json", default="results/viz_trajectories.json")
     ap.add_argument("--v2", action="store_true", help="스케일 v2 (docs/59)")
+    ap.add_argument("--v3", action="store_true",
+                    help="위협 v3 NOMINAL FULL (docs/60 -- standby·방위 스폰)")
     ap.add_argument("--eps", type=int, nargs="*", default=None,
                     help="에피소드 목록 override (그룹 = 실측 라벨)")
     ap.add_argument("--from-json", default=None,
@@ -130,23 +149,24 @@ def main() -> None:
     episodes = []
     if a.eps is not None:
         for ep in a.eps:
-            e = dump_episode(ep, v2=a.v2)
+            e = dump_episode(ep, v2=a.v2, v3=a.v3)
             e["group"] = e["label"]
             episodes.append(e)
             print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
     else:
         for ep in CAPTURE_EPISODES:
-            e = dump_episode(ep, v2=a.v2)
+            e = dump_episode(ep, v2=a.v2, v3=a.v3)
             e["group"] = "CAPTURE"
             episodes.append(e)
             print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
         for ep in MISS_EPISODES:
-            e = dump_episode(ep, v2=a.v2)
+            e = dump_episode(ep, v2=a.v2, v3=a.v3)
             e["group"] = "MISS"
             episodes.append(e)
             print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
 
-    data = dict(note=("scale v2 (docs/59) · " if a.v2 else "legacy · ")
+    data = dict(note=("threat v3 NOMINAL FULL (docs/60) · " if a.v3
+                      else "scale v2 (docs/59) · " if a.v2 else "legacy · ")
                      + "hold/clean · F-flags · Pk=1",
                 episodes=episodes)
     pathlib.Path(a.out_json).parent.mkdir(parents=True, exist_ok=True)
