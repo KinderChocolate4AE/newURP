@@ -332,6 +332,24 @@ P91b  1차 FAIL (mirror_dev 2.42 m) -> 원인 = 공면 퇴화 tie-break 비공�
 끝내지 않는다 — 축별 stratification (예: weak/medium/strong reactivity ×
 speed profile) 으로 coverage 를 보장한 뒤 내부 jitter.
 
+### 5.2 ★ V6 결과 (2026-08-07 — 서버 12샤드, `results/v6_*.json`, 커밋 33165ed)
+
+**descriptive 전용 (수락대역 없음 · arm 간 차분 귀속 금지 · TRAIN 범위 튜닝
+금지).** 라벨: V3-C 85 침투/15 포획 · V3-CS 87/13 · V3-FULL 87/13
+(비교 맥락: v2 V4-800 무반응 공격자 = 85/15).
+
+| 항목 | 관측 | sanity 판독 |
+|---|---|---|
+| (a) route 활성 | 3 arm 전부 100/100 판, 스텝 11~17% | 채널이 매 판 살아있음 |
+| (b) vertical escape | z-지배 비율 C 0.55 / CS 0.51 / **FULL 0.81** · z_max 평균 4.0~9.1 m (최대 22.6) | 실재 — 수평 standby 는 평면 봉쇄 시 위 탈출이 지배. V7 육안 확인 대상 |
+| (c) saturation | FULL sprint 구간 clip 평균 0.39 (일부 판 1.00) | P89 정합 — §2.2 budget 계약 범위 |
+| (d) 속도 프로파일 | sprint/slowdown 개입: C 0/100 · CS/FULL 100/100 (판당 57~67 스텝) | nesting 설계대로 동작 |
+| (e) FULL 재배치 기하 | redeploy_ratio 평균 0.115 (최대 0.143) | 방위 대응 재배치 물리적으로 여유 |
+| (f) self-defeat | max\|v\|/v_max=1.0000 · fire 18~24/100 · min_d 평균 1.0~1.4 m | 없음 — 능력 준수·위협 유지 |
+
+→ sanity 전 항목 이상 없음. 다음 = V7 뷰어 (Hyunjun 육안 — 특히 (b) 의
+"평면 봉쇄 → over-the-top escape" 실존 확인) → docs/61.
+
 판정식·선언값은 결과 후 불변경. 조정은 새 사전등록으로만.
 
 ## 6. 격리·배선 규율
