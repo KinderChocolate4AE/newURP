@@ -203,10 +203,17 @@ SELECTED = combo 5:  R_d = 9.0 m · Δφ = π/6 (0.5236 rad)
            9조합 표 전체 공개, F5 900 롤아웃 완주, 재시도 없음)
 ```
 
-관찰 기록 (해석 아님): 9조합 p_net 0.07~0.11. c0 (R_d=6=NK 경계) 만
-HARD_KILL 18 — commit=0 임에도 R1 접촉 engagement 해소(Pk=1)로 발생한
-파괴적 무력화다 (arc 가 NK 경계에 서면 접촉 빈도 상승). 선택된 c5 는
-접촉 0.01 로 nondestructive 성격이 가장 깨끗하다.
+관찰 기록 (해석 아님·선택 근거 아님 — 선택은 위 preregistered tie-break
+로만 결정됐다): 9조합 p_net 0.07~0.11. c0 (R_d=6=NK 경계) 만 HARD_KILL 18
+— **commit=0 은 "controller 가 destructive commit action 을 내지 않는다"
+는 뜻이지 destructive outcome 이 불가능하다는 뜻이 아니다.** 공유 world
+contract 의 R1 autonomous engagement resolver 가 근접 접촉을 해소한 결과다
+(arc 가 NK 경계에 서면 접촉 빈도 상승). 고정 문구 (§2-5 의 isolates 문구는
+**controller action family 한정** 표현으로 제한):
+
+> *The scripted limiter controller never issues destructive commit
+> actions; however, proximal engagement events may still be resolved by
+> the shared R1 environment contract.*
 
 ★ **BASELINE FROZEN**: 이 시점 이후 MARL 결과와 무관하게 baseline 의
 어떤 요소도 변경 금지. §3.1 재확인 — 위 튜닝 수치는 선택 증거이며

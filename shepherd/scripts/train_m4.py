@@ -536,6 +536,14 @@ def _add_args(ap):
     ap.add_argument("--aim-bc", default="none", choices=list(AIM_BC_MODES),
                     help="warm = 교사 궤적에서 조준 헤드를 먼저 지도학습한 뒤 RL. "
                          "aux = 학습 내내 cosine 보조손실(lambda 고정). docs/49 §2")
+    # ★ docs/61/63/69 — v3 TRAIN 학습 진입점. "train" 만 허용한다:
+    #   iid = held-out (docs/61 §3 — 학습 노출 전면 금지, headline 전용),
+    #   NOMINAL = manipulation-check 대표점 (관통 규율 2 — 학습 금지).
+    #   둘 다 argparse choices 로 hard fail. 평가 전용 layer 는 평가 runner 몫.
+    ap.add_argument("--threat-layer", default=None, choices=["train"],
+                    help="v3 TRAIN 분포 학습 (draw_threat_v3, hash 는 parity "
+                         "pin 강제). 미지정 = 기존 legacy 경로 불변. "
+                         "iid/nominal 은 학습 진입점에서 금지")
     ap.add_argument("--resume", action="store_true",
                     help="출력 디렉터리에 체크포인트가 있으면 이어서 학습한다. "
                          "스윕(40~50런 x 24h)에서 죽은 런을 통째로 잃지 않기 위한 것. "
@@ -556,6 +564,10 @@ def main(argv=None) -> None:
     if args.no_threat_randomization:
         print("[경고] 위협 랜덤화 OFF -- 고정 운용점은 적형성 게이트를 통과하지 "
               "못한다(hold 가 이미 전부 저지). 진단용으로만. docs/40 §8.2")
+    if args.threat_layer and args.no_threat_randomization:
+        ap.error("--threat-layer 는 능력 브래킷 draw(위협 랜덤화)와 곱이다 "
+                 "(docs/61 §2 공통표) -- --no-threat-randomization 과 동시 "
+                 "사용 불가")
 
     run_cfg = yaml.safe_load(open(pathlib.Path(args.config)))
     if args.total_env_steps is not None:
@@ -579,6 +591,14 @@ def main(argv=None) -> None:
           f"aim_bc={args.aim_bc})")
 
     specs = build_specs(args)
+    if args.threat_layer:
+        # 점 스펙과 layer 동시 전달은 build_m4_env 가 거부한다 (A4b) --
+        # v3 학습은 attacker/spawn 을 draw 가 전부 구성한다.
+        from shepherd.scale_v2 import v3_distribution_hash
+        specs.update(attacker=None, spawn=None)
+        print(f"[M4] threat_layer={args.threat_layer} "
+              f"distribution_hash={v3_distribution_hash()} "
+              f"(TRAIN FINAL FREEZE, docs/69)")
     seeds = args.seeds if args.seeds is not None else [args.seed]
     out_root = pathlib.Path(args.output)
     eval_every = int(run_cfg["loop"]["eval_interval_updates"])
@@ -587,6 +607,7 @@ def main(argv=None) -> None:
     for s in seeds:
         seed_everything(s)
         runner = M4Runner(run_cfg, s, args.device,
+                          threat_layer=args.threat_layer,
                           randomize_threat=not args.no_threat_randomization,
                           threat_obs=not args.no_threat_obs,
                           limiter_policy=args.limiter_policy,
@@ -674,6 +695,8 @@ def main(argv=None) -> None:
             "bc_warmup": bc_warm,
             "threat_randomized": not args.no_threat_randomization,
             "threat_obs": not args.no_threat_obs,
+            "threat_layer": args.threat_layer,     # None = legacy 경로
+            "contract": runner.contract,           # resolved manifest (G1)
             "final": curve[-1] if curve else None,
             "final_eval_episodes": int(args.final_eval_episodes),
             "resumed_from": int(resumed_from),

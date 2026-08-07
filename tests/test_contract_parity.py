@@ -132,6 +132,19 @@ def test_a4b_train_vs_iid_world_contract_parity():
     assert set(diffs) == {"attacker.threat_layer", "standby.threat_layer"}, diffs
 
 
+def test_train_cli_layer_guard():
+    """docs/69 큐: 학습 진입점은 train 만 -- iid/nominal hard fail (서버 검증)."""
+    pytest.importorskip("torch")
+    import argparse
+
+    from shepherd.scripts.train_m4 import _add_args
+    ap = _add_args(argparse.ArgumentParser())
+    assert ap.parse_args(["--threat-layer", "train"]).threat_layer == "train"
+    for bad in ("iid", "nominal"):
+        with pytest.raises(SystemExit):
+            ap.parse_args(["--threat-layer", bad])
+
+
 def test_a4b_mission_eval_accepts_layer():
     r = mission_eval(0, 1, system=ratified_system(),
                      reward=RewardSpec(w_kill=0.5, enabled=True),
