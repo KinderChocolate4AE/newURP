@@ -1,0 +1,131 @@
+{
+ "selected": 5,
+ "r_d": 9.0,
+ "dphi": 0.5235987755982988,
+ "table": [
+  {
+   "combo": 0,
+   "r_d": 6.0,
+   "dphi": 0.2617993877991494,
+   "n": 100,
+   "p_net": 0.07,
+   "total_defense": 0.25,
+   "limiter_contact_mean": 0.15,
+   "counts": {
+    "PENETRATED": 75,
+    "NET_CAPTURE": 4,
+    "CAPTURE_WITH_CONTACT": 3,
+    "HARD_KILL": 18
+   }
+  },
+  {
+   "combo": 1,
+   "r_d": 6.0,
+   "dphi": 0.39269908169872414,
+   "n": 100,
+   "p_net": 0.1,
+   "total_defense": 0.10999999999999999,
+   "limiter_contact_mean": 0.05,
+   "counts": {
+    "PENETRATED": 89,
+    "HARD_KILL": 1,
+    "NET_CAPTURE": 10
+   }
+  },
+  {
+   "combo": 2,
+   "r_d": 6.0,
+   "dphi": 0.5235987755982988,
+   "n": 100,
+   "p_net": 0.1,
+   "total_defense": 0.10999999999999999,
+   "limiter_contact_mean": 0.01,
+   "counts": {
+    "PENETRATED": 89,
+    "HARD_KILL": 1,
+    "NET_CAPTURE": 10
+   }
+  },
+  {
+   "combo": 3,
+   "r_d": 9.0,
+   "dphi": 0.2617993877991494,
+   "n": 100,
+   "p_net": 0.1,
+   "total_defense": 0.10999999999999999,
+   "limiter_contact_mean": 0.06,
+   "counts": {
+    "PENETRATED": 89,
+    "HARD_KILL": 1,
+    "NET_CAPTURE": 10
+   }
+  },
+  {
+   "combo": 4,
+   "r_d": 9.0,
+   "dphi": 0.39269908169872414,
+   "n": 100,
+   "p_net": 0.11,
+   "total_defense": 0.10999999999999999,
+   "limiter_contact_mean": 0.03,
+   "counts": {
+    "PENETRATED": 89,
+    "NET_CAPTURE": 11
+   }
+  },
+  {
+   "combo": 5,
+   "r_d": 9.0,
+   "dphi": 0.5235987755982988,
+   "n": 100,
+   "p_net": 0.11,
+   "total_defense": 0.10999999999999999,
+   "limiter_contact_mean": 0.01,
+   "counts": {
+    "PENETRATED": 89,
+    "NET_CAPTURE": 11
+   }
+  },
+  {
+   "combo": 6,
+   "r_d": 12.0,
+   "dphi": 0.2617993877991494,
+   "n": 100,
+   "p_net": 0.08,
+   "total_defense": 0.08999999999999997,
+   "limiter_contact_mean": 0.08,
+   "counts": {
+    "PENETRATED": 91,
+    "NET_CAPTURE": 8,
+    "HARD_KILL": 1
+   }
+  },
+  {
+   "combo": 7,
+   "r_d": 12.0,
+   "dphi": 0.39269908169872414,
+   "n": 100,
+   "p_net": 0.09,
+   "total_defense": 0.08999999999999997,
+   "limiter_contact_mean": 0.07,
+   "counts": {
+    "PENETRATED": 91,
+    "NET_CAPTURE": 9
+   }
+  },
+  {
+   "combo": 8,
+   "r_d": 12.0,
+   "dphi": 0.5235987755982988,
+   "n": 100,
+   "p_net": 0.09,
+   "total_defense": 0.08999999999999997,
+   "limiter_contact_mean": 0.0,
+   "counts": {
+    "PENETRATED": 91,
+    "NET_CAPTURE": 9
+   }
+  }
+ ],
+ "note": "docs/63 §3.1: 이 표는 선택 증거 — headline 수치로 재사용 금지. 9조합 전체 의무 공개."
+}

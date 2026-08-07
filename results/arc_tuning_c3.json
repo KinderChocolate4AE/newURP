@@ -1,0 +1,616 @@
+{
+ "combo": 3,
+ "r_d": 9.0,
+ "dphi": 0.2617993877991494,
+ "n": 100,
+ "p_net": 0.1,
+ "total_defense": 0.10999999999999999,
+ "limiter_contact_mean": 0.06,
+ "counts": {
+  "PENETRATED": 89,
+  "HARD_KILL": 1,
+  "NET_CAPTURE": 10
+ },
+ "rows": [
+  {
+   "episode": 5000,
+   "label": "PENETRATED",
+   "steps": 234,
+   "n_contact": 0
+  },
+  {
+   "episode": 5001,
+   "label": "PENETRATED",
+   "steps": 450,
+   "n_contact": 0
+  },
+  {
+   "episode": 5002,
+   "label": "PENETRATED",
+   "steps": 563,
+   "n_contact": 0
+  },
+  {
+   "episode": 5003,
+   "label": "PENETRATED",
+   "steps": 336,
+   "n_contact": 0
+  },
+  {
+   "episode": 5004,
+   "label": "PENETRATED",
+   "steps": 308,
+   "n_contact": 0
+  },
+  {
+   "episode": 5005,
+   "label": "PENETRATED",
+   "steps": 861,
+   "n_contact": 0
+  },
+  {
+   "episode": 5006,
+   "label": "PENETRATED",
+   "steps": 322,
+   "n_contact": 1
+  },
+  {
+   "episode": 5007,
+   "label": "PENETRATED",
+   "steps": 366,
+   "n_contact": 0
+  },
+  {
+   "episode": 5008,
+   "label": "PENETRATED",
+   "steps": 243,
+   "n_contact": 0
+  },
+  {
+   "episode": 5009,
+   "label": "PENETRATED",
+   "steps": 361,
+   "n_contact": 0
+  },
+  {
+   "episode": 5010,
+   "label": "PENETRATED",
+   "steps": 297,
+   "n_contact": 0
+  },
+  {
+   "episode": 5011,
+   "label": "PENETRATED",
+   "steps": 325,
+   "n_contact": 0
+  },
+  {
+   "episode": 5012,
+   "label": "HARD_KILL",
+   "steps": 171,
+   "n_contact": 0
+  },
+  {
+   "episode": 5013,
+   "label": "PENETRATED",
+   "steps": 314,
+   "n_contact": 0
+  },
+  {
+   "episode": 5014,
+   "label": "PENETRATED",
+   "steps": 241,
+   "n_contact": 0
+  },
+  {
+   "episode": 5015,
+   "label": "PENETRATED",
+   "steps": 681,
+   "n_contact": 0
+  },
+  {
+   "episode": 5016,
+   "label": "PENETRATED",
+   "steps": 218,
+   "n_contact": 0
+  },
+  {
+   "episode": 5017,
+   "label": "PENETRATED",
+   "steps": 379,
+   "n_contact": 0
+  },
+  {
+   "episode": 5018,
+   "label": "PENETRATED",
+   "steps": 286,
+   "n_contact": 0
+  },
+  {
+   "episode": 5019,
+   "label": "PENETRATED",
+   "steps": 777,
+   "n_contact": 0
+  },
+  {
+   "episode": 5020,
+   "label": "PENETRATED",
+   "steps": 514,
+   "n_contact": 0
+  },
+  {
+   "episode": 5021,
+   "label": "PENETRATED",
+   "steps": 253,
+   "n_contact": 1
+  },
+  {
+   "episode": 5022,
+   "label": "PENETRATED",
+   "steps": 600,
+   "n_contact": 0
+  },
+  {
+   "episode": 5023,
+   "label": "PENETRATED",
+   "steps": 388,
+   "n_contact": 0
+  },
+  {
+   "episode": 5024,
+   "label": "PENETRATED",
+   "steps": 536,
+   "n_contact": 0
+  },
+  {
+   "episode": 5025,
+   "label": "PENETRATED",
+   "steps": 370,
+   "n_contact": 0
+  },
+  {
+   "episode": 5026,
+   "label": "PENETRATED",
+   "steps": 261,
+   "n_contact": 0
+  },
+  {
+   "episode": 5027,
+   "label": "NET_CAPTURE",
+   "steps": 355,
+   "n_contact": 0
+  },
+  {
+   "episode": 5028,
+   "label": "PENETRATED",
+   "steps": 371,
+   "n_contact": 0
+  },
+  {
+   "episode": 5029,
+   "label": "PENETRATED",
+   "steps": 274,
+   "n_contact": 0
+  },
+  {
+   "episode": 5030,
+   "label": "PENETRATED",
+   "steps": 289,
+   "n_contact": 0
+  },
+  {
+   "episode": 5031,
+   "label": "PENETRATED",
+   "steps": 272,
+   "n_contact": 0
+  },
+  {
+   "episode": 5032,
+   "label": "PENETRATED",
+   "steps": 266,
+   "n_contact": 0
+  },
+  {
+   "episode": 5033,
+   "label": "PENETRATED",
+   "steps": 240,
+   "n_contact": 0
+  },
+  {
+   "episode": 5034,
+   "label": "PENETRATED",
+   "steps": 431,
+   "n_contact": 0
+  },
+  {
+   "episode": 5035,
+   "label": "PENETRATED",
+   "steps": 411,
+   "n_contact": 0
+  },
+  {
+   "episode": 5036,
+   "label": "PENETRATED",
+   "steps": 254,
+   "n_contact": 1
+  },
+  {
+   "episode": 5037,
+   "label": "PENETRATED",
+   "steps": 216,
+   "n_contact": 0
+  },
+  {
+   "episode": 5038,
+   "label": "PENETRATED",
+   "steps": 377,
+   "n_contact": 0
+  },
+  {
+   "episode": 5039,
+   "label": "PENETRATED",
+   "steps": 267,
+   "n_contact": 0
+  },
+  {
+   "episode": 5040,
+   "label": "PENETRATED",
+   "steps": 300,
+   "n_contact": 0
+  },
+  {
+   "episode": 5041,
+   "label": "NET_CAPTURE",
+   "steps": 683,
+   "n_contact": 0
+  },
+  {
+   "episode": 5042,
+   "label": "NET_CAPTURE",
+   "steps": 502,
+   "n_contact": 0
+  },
+  {
+   "episode": 5043,
+   "label": "PENETRATED",
+   "steps": 282,
+   "n_contact": 0
+  },
+  {
+   "episode": 5044,
+   "label": "PENETRATED",
+   "steps": 265,
+   "n_contact": 0
+  },
+  {
+   "episode": 5045,
+   "label": "PENETRATED",
+   "steps": 335,
+   "n_contact": 0
+  },
+  {
+   "episode": 5046,
+   "label": "PENETRATED",
+   "steps": 590,
+   "n_contact": 0
+  },
+  {
+   "episode": 5047,
+   "label": "NET_CAPTURE",
+   "steps": 323,
+   "n_contact": 0
+  },
+  {
+   "episode": 5048,
+   "label": "PENETRATED",
+   "steps": 310,
+   "n_contact": 0
+  },
+  {
+   "episode": 5049,
+   "label": "PENETRATED",
+   "steps": 374,
+   "n_contact": 0
+  },
+  {
+   "episode": 5050,
+   "label": "PENETRATED",
+   "steps": 235,
+   "n_contact": 0
+  },
+  {
+   "episode": 5051,
+   "label": "PENETRATED",
+   "steps": 332,
+   "n_contact": 0
+  },
+  {
+   "episode": 5052,
+   "label": "PENETRATED",
+   "steps": 563,
+   "n_contact": 0
+  },
+  {
+   "episode": 5053,
+   "label": "NET_CAPTURE",
+   "steps": 441,
+   "n_contact": 0
+  },
+  {
+   "episode": 5054,
+   "label": "PENETRATED",
+   "steps": 295,
+   "n_contact": 0
+  },
+  {
+   "episode": 5055,
+   "label": "PENETRATED",
+   "steps": 297,
+   "n_contact": 0
+  },
+  {
+   "episode": 5056,
+   "label": "PENETRATED",
+   "steps": 716,
+   "n_contact": 0
+  },
+  {
+   "episode": 5057,
+   "label": "PENETRATED",
+   "steps": 286,
+   "n_contact": 0
+  },
+  {
+   "episode": 5058,
+   "label": "PENETRATED",
+   "steps": 329,
+   "n_contact": 0
+  },
+  {
+   "episode": 5059,
+   "label": "PENETRATED",
+   "steps": 381,
+   "n_contact": 0
+  },
+  {
+   "episode": 5060,
+   "label": "PENETRATED",
+   "steps": 252,
+   "n_contact": 0
+  },
+  {
+   "episode": 5061,
+   "label": "PENETRATED",
+   "steps": 276,
+   "n_contact": 1
+  },
+  {
+   "episode": 5062,
+   "label": "PENETRATED",
+   "steps": 341,
+   "n_contact": 0
+  },
+  {
+   "episode": 5063,
+   "label": "PENETRATED",
+   "steps": 249,
+   "n_contact": 0
+  },
+  {
+   "episode": 5064,
+   "label": "PENETRATED",
+   "steps": 220,
+   "n_contact": 0
+  },
+  {
+   "episode": 5065,
+   "label": "PENETRATED",
+   "steps": 275,
+   "n_contact": 0
+  },
+  {
+   "episode": 5066,
+   "label": "PENETRATED",
+   "steps": 254,
+   "n_contact": 0
+  },
+  {
+   "episode": 5067,
+   "label": "PENETRATED",
+   "steps": 240,
+   "n_contact": 0
+  },
+  {
+   "episode": 5068,
+   "label": "PENETRATED",
+   "steps": 425,
+   "n_contact": 0
+  },
+  {
+   "episode": 5069,
+   "label": "PENETRATED",
+   "steps": 579,
+   "n_contact": 0
+  },
+  {
+   "episode": 5070,
+   "label": "PENETRATED",
+   "steps": 351,
+   "n_contact": 1
+  },
+  {
+   "episode": 5071,
+   "label": "NET_CAPTURE",
+   "steps": 367,
+   "n_contact": 0
+  },
+  {
+   "episode": 5072,
+   "label": "PENETRATED",
+   "steps": 607,
+   "n_contact": 0
+  },
+  {
+   "episode": 5073,
+   "label": "PENETRATED",
+   "steps": 376,
+   "n_contact": 0
+  },
+  {
+   "episode": 5074,
+   "label": "PENETRATED",
+   "steps": 272,
+   "n_contact": 0
+  },
+  {
+   "episode": 5075,
+   "label": "PENETRATED",
+   "steps": 515,
+   "n_contact": 0
+  },
+  {
+   "episode": 5076,
+   "label": "PENETRATED",
+   "steps": 466,
+   "n_contact": 0
+  },
+  {
+   "episode": 5077,
+   "label": "PENETRATED",
+   "steps": 344,
+   "n_contact": 0
+  },
+  {
+   "episode": 5078,
+   "label": "PENETRATED",
+   "steps": 281,
+   "n_contact": 1
+  },
+  {
+   "episode": 5079,
+   "label": "PENETRATED",
+   "steps": 554,
+   "n_contact": 0
+  },
+  {
+   "episode": 5080,
+   "label": "PENETRATED",
+   "steps": 228,
+   "n_contact": 0
+  },
+  {
+   "episode": 5081,
+   "label": "PENETRATED",
+   "steps": 276,
+   "n_contact": 0
+  },
+  {
+   "episode": 5082,
+   "label": "PENETRATED",
+   "steps": 370,
+   "n_contact": 0
+  },
+  {
+   "episode": 5083,
+   "label": "PENETRATED",
+   "steps": 224,
+   "n_contact": 0
+  },
+  {
+   "episode": 5084,
+   "label": "PENETRATED",
+   "steps": 418,
+   "n_contact": 0
+  },
+  {
+   "episode": 5085,
+   "label": "PENETRATED",
+   "steps": 292,
+   "n_contact": 0
+  },
+  {
+   "episode": 5086,
+   "label": "PENETRATED",
+   "steps": 244,
+   "n_contact": 0
+  },
+  {
+   "episode": 5087,
+   "label": "PENETRATED",
+   "steps": 359,
+   "n_contact": 0
+  },
+  {
+   "episode": 5088,
+   "label": "PENETRATED",
+   "steps": 280,
+   "n_contact": 0
+  },
+  {
+   "episode": 5089,
+   "label": "PENETRATED",
+   "steps": 424,
+   "n_contact": 0
+  },
+  {
+   "episode": 5090,
+   "label": "PENETRATED",
+   "steps": 218,
+   "n_contact": 0
+  },
+  {
+   "episode": 5091,
+   "label": "NET_CAPTURE",
+   "steps": 495,
+   "n_contact": 0
+  },
+  {
+   "episode": 5092,
+   "label": "PENETRATED",
+   "steps": 298,
+   "n_contact": 0
+  },
+  {
+   "episode": 5093,
+   "label": "PENETRATED",
+   "steps": 336,
+   "n_contact": 0
+  },
+  {
+   "episode": 5094,
+   "label": "PENETRATED",
+   "steps": 230,
+   "n_contact": 0
+  },
+  {
+   "episode": 5095,
+   "label": "PENETRATED",
+   "steps": 463,
+   "n_contact": 0
+  },
+  {
+   "episode": 5096,
+   "label": "NET_CAPTURE",
+   "steps": 321,
+   "n_contact": 0
+  },
+  {
+   "episode": 5097,
+   "label": "PENETRATED",
+   "steps": 380,
+   "n_contact": 0
+  },
+  {
+   "episode": 5098,
+   "label": "NET_CAPTURE",
+   "steps": 284,
+   "n_contact": 0
+  },
+  {
+   "episode": 5099,
+   "label": "NET_CAPTURE",
+   "steps": 246,
+   "n_contact": 0
+  }
+ ]
+}
