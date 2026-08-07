@@ -1,7 +1,10 @@
-# 66 — terminal-event precedence truth table (B1 trace + B3 초안, r0)
+# 66 — terminal-event precedence truth table (B1 trace + B3, r1 비준)
 
-**2026-08-08 · docs/65 사다리 [3]~[4]. B1(semantics trace) = 완료 보고,
-B3(truth table) = **비준 대기 초안**. 비준 전 B2(구현) 금지 (docs/65 §3).
+**2026-08-08 · docs/65 사다리 [3]~[4]. B1(semantics trace) = 완료,
+B3(truth table) = **r1 비준 완료** (§5 비준문). Q1/Q2/Q4 PASS ·
+Q3 CONDITIONAL PASS(명칭/지위 분리 — 본 r1 에 반영, 조건 충족).
+[4] 게이트 통과 — 다음 = B2(명시 분기) → B4(행 단위 테스트) → full
+regression. reward-weight 튜닝·기타 계약 변경 비인가.
 코드 앵커 기준 = 5d1a3b6 (contract parity 복구 후).**
 
 ---
@@ -70,15 +73,22 @@ event (구 명칭 contact). 라벨 열은 §1.2 순서의 결과다.
 | 11 | truncation (지평선) | §3/§3b | TRUNCATED | −c_trunc (보상) / 지표 우측절단 (선언 분리) | — | — |
 | 12 | **과거-접촉 후 clean capture** (PK_FAIL park 등) | §6b 순간 근접 거짓 | 보상 라벨 NET_CAPTURE / **지표 라벨 CWC** | +b_net (제안 후 값 동일 → 무해) | 이력 1 | spent |
 
-주 6: capture 가 destructive 로 masked 되는 유일한 행. 빈도는 낮을 것으로
-예상되나(같은 tick 요구) v3 근접 설계에서 0 이 아닐 수 있다. **현행 유지를
-제안**한다 — hard_kill 은 종료 강제·비가역이라 순서 변경은 계약 재설계이고,
-지표에서 HARD_KILL 로 세는 것이 "파괴 발생" 사실과 일치한다. 비준 확인 요청.
+주 6 (**r1 비준**): capture 가 destructive 로 masked 되는 유일한 행. 현행
+유지 — 1차 endpoint 가 NET_CAPTURE 이므로 동시 사건을 NET 우선으로 하면
+nondestructive 성과를 과대계상할 위험이 있다. **단, 이것은 discrete-event
+precedence convention 이다 — 50 ms tick 내부에서 destructive neutralization
+이 net capture 보다 물리적으로 먼저 일어났다는 주장이 아니며, 물리
+시간순서 주장으로 확장 금지.**
 
-주 12: 보상↔지표 술어 divergence 행. (a) 채택 시 보상값 동일로 무해화.
-지표는 mission_rollout 의 에피소드-집합 술어가 정본 (docs/28 "접촉 = 수식어").
-**두 술어를 통일하지 않는 것을 제안** — 통일하려면 env_sys 가 에피소드 접촉
-이력을 라벨에 넣어야 하는데(동결 env 계약 위 상태 추가), 보상상 이득이 0 이다.
+주 12 (**r1 비준, Q3 조건 반영**): 두 술어는 서로 다른 질문이므로 통일하지
+않는다 — reward 측 = **terminal-state property** (종료 순간 근접) / 지표 측
+= **trajectory-history purity qualifier** (에피소드 중 engagement 이력).
+단 **같은 terminal label 이름을 공유하지 않는다**: terminal/reward 어휘는
+`NET_CAPTURE`/`CAPTURE_WITH_CONTACT`(same-tick qualifier), 지표 측 이력
+술어는 분석 수식어 **`had_prior_engagement`** (또는
+`capture_with_prior_engagement`) 로 표기·문서화한다. mission_rollout 의
+집합 술어는 terminal label 이 아니라 **episode-history 분석 수식어**다 —
+CONTACT_NEUTRALIZATION(G03)과 같은 semantic debt 재발 방지.
 
 ## 3. B2 구현 스펙 (비준 후 그대로 반영)
 
@@ -92,21 +102,53 @@ if label in ("NET_CAPTURE", "CAPTURE_WITH_CONTACT"):   # 비준: 동일 utility 
 + docstring 의 TERMINAL 표에 CWC 행 추가 (우연한 else 경유 제거). 순서
 불변식은 `NET_CAPTURE = CWC > HARD_KILL > PENETRATED = TRUNCATED` 로 갱신.
 
-## 4. B4 — executable test 목록 (비준 후 작성)
+## 4. B4 — executable test 목록 (비준 완료, 구현 대기)
 
 1. terminal truth table 행 1·2·5·6·9·10·11 의 라벨·보상 일치 (합성 상태 유닛).
 2. 행 5: veto 잔류 + capture → CWC ∧ terminal == b_net.
-3. 행 6: 같은 tick KILL+captured → HARD_KILL (masking 계약 고정).
-4. 행 12: 과거 접촉 + clean capture → 보상 NET / 지표 CWC divergence 를
-   **명시적으로 고정** (조용한 재발산 방지).
-5. 순서 불변식 재검 (기존 테스트 갱신: CWC = NET 동등).
+3. 행 6: 같은 tick KILL+captured → HARD_KILL (masking 계약 고정,
+   NET_CAPTURE 계상 금지).
+4. ★ 행 12 canonical regression: **"step 10 proximity → step 50 clean
+   capture"** → terminal reward +b_net ∧ 분석 수식어
+   had_prior_engagement=True (이번 B1 divergence 를 정확히 재현하는 고정
+   테스트).
+5. engagement + NK veto + later capture → nondestructive utility ∧
+   had_prior_engagement=True.
+6. net miss + R2 handoff + later engagement KILL → HARD_KILL.
+7. net miss + 회복 없음 + penetration → PENETRATED.
+8. 순서 불변식 재검 (기존 테스트 갱신: CWC = NET 동등,
+   NET = CWC > HARD_KILL > PENETRATED = TRUNCATED).
 
-## 5. 비준 요청 (Hyunjun)
+## 5. 비준문 (Hyunjun, 2026-08-08 — 원문 고정)
 
-1. §1.3 분기 판정 → **행 5 = +b_net (NET 동일)** 채택.
-2. 행 6 masking **현행 유지** 승인 (또는 재설계 지시 — 후자는 계약 변경).
-3. 행 12 두-술어 **비통일 유지** 승인 (보상 무해화 + 지표 순도 수식어 보존).
-4. 승인 시 B2(§3 스펙) → B4(§4 테스트) 순서로 구현.
+```text
+§5 RATIFICATION — 2026-08-08
+
+Q1 PASS:
+CAPTURE_WITH_CONTACT terminal utility is assigned to the
+nondestructive-capture class:
+R_terminal(CWC) = R_terminal(NET_CAPTURE) = +b_net.
+
+Q2 PASS:
+Same-tick capture + destructive KILL retains existing HARD_KILL
+precedence. This is a discrete-event precedence convention and
+does not assert sub-step physical temporal ordering.
+
+Q3 CONDITIONAL PASS:
+Reward-side terminal proximity predicate and episode-history
+capture-purity predicate remain intentionally distinct.
+The history predicate must be represented/documented as an
+analysis qualifier, not as the same terminal-label semantics.
+
+Q4 PASS:
+After Q3 semantic/name separation is reflected in docs/66,
+proceed B2 → B4. No reward-weight tuning or other contract
+change is authorized.
+```
+
+Q3 조건(명칭/지위 분리)은 본 r1 의 §2 주 12 로 반영 완료 — [4] 게이트 통과.
+진행 순서 고정: **B2 (명시 branch, 우연한 else=0 제거 — 큰 refactor 금지)
+→ B4 (§4 행 단위 테스트) → full regression.**
 
 ---
 
