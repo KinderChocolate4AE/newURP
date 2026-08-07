@@ -149,6 +149,7 @@ function steps() { return ep().steps; }
 
 // ---- 좌표계: 두 뷰가 같은 x 스케일 공유 -------------------------------
 let bbox = null;
+let spArr = [], spLo = 0, spHi = 1;          // 궤적 속도 색상용 (에피소드 전역)
 function refit() {
   const e = ep(); const pts = [];
   for (const s of e.steps) { pts.push(s.att, s.fin, ...s.lims); }
@@ -164,6 +165,8 @@ function refit() {
   y0=Math.min(y0,tg[1]-nk)-2; y1=Math.max(y1,tg[1]+nk)+2;
   z0=Math.min(z0,tg[2]-nk)-2; z1=Math.max(z1,tg[2]+nk)+2;
   bbox = {x0,x1,y0,y1,z0,z1};
+  spArr = e.steps.map(s => Math.hypot(s.att_v[0], s.att_v[1], s.att_v[2]));
+  spLo = Math.min(...spArr); spHi = Math.max(...spArr);
   $("scrub").max = e.steps.length - 1;
   $("verdict").textContent = e.label + (e.net_spent ? " (net 소진)" : "");
   $("verdict").className = "chip " + (e.label === "CAPTURED" ? "cap" : "miss");
@@ -177,19 +180,29 @@ function refit() {
 function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 
 function setup(cv, hFrac) {
+  // 맵 크기에 맞춰 화면 fit: 두 pane 이 스크롤 없이 한눈에 들어오도록
+  // 뷰 높이를 뷰포트 비율로 상한하고, 등축 스케일 sc = min(가로, 세로 제약)
   const dpr = devicePixelRatio || 1;
   const w = cv.clientWidth || cv.parentElement.clientWidth - 20;
   const spanX = bbox.x1 - bbox.x0;
   const spanY = hFrac === "top" ? bbox.y1 - bbox.y0 : bbox.z1 - bbox.z0;
-  const h = Math.max(120, w * spanY / spanX);
+  const hMax = Math.max(200, (window.innerHeight || 800) * 0.36);
+  const sc = Math.min(w / spanX, hMax / spanY);
+  const h = Math.max(120, Math.min(hMax, spanY * sc));
   cv.width = w * dpr; cv.height = h * dpr; cv.style.height = h + "px";
   const g = cv.getContext("2d");
   g.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const sc = w / spanX;
+  const ox = (w - spanX * sc) / 2;              // 가로 여백 중앙 정렬
   const map = hFrac === "top"
-    ? p => [(p[0]-bbox.x0)*sc, h-(p[1]-bbox.y0)*sc]
-    : p => [(p[0]-bbox.x0)*sc, h-(p[2]-bbox.z0)*sc];
+    ? p => [ox+(p[0]-bbox.x0)*sc, h-(p[1]-bbox.y0)*sc]
+    : p => [ox+(p[0]-bbox.x0)*sc, h-(p[2]-bbox.z0)*sc];
   return {g, w, h, sc, map};
+}
+
+// 속도 -> 색: 느림(파랑 210°) -> 빠름(주황 20°). 에피소드 전역 범위 정규화
+function speedColor(v) {
+  const u = Math.max(0, Math.min(1, (v - spLo) / ((spHi - spLo) || 1)));
+  return `hsl(${210 - 190 * u}, 78%, 46%)`;
 }
 
 function circle(g, c, r, stroke, fill, dash) {
@@ -265,13 +278,26 @@ function drawView(cv, view) {
            active ? css("--c-net")+"1c" : null, active ? [] : [4,4]);
   }
 
-  // 공격자 trail + 현재
-  g.beginPath();
-  for (let i = 0; i <= t; i++) {
+  // 공격자 trail (속도 색상: 파랑=느림 -> 주황=빠름) + 현재
+  g.lineWidth = 2; g.lineCap = "round";
+  let pPrev = map(steps()[0].att);
+  for (let i = 1; i <= t; i++) {
     const p = map(steps()[i].att);
-    i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]);
+    g.beginPath(); g.moveTo(pPrev[0], pPrev[1]); g.lineTo(p[0], p[1]);
+    g.strokeStyle = speedColor(spArr[i]); g.stroke();
+    pPrev = p;
   }
-  g.strokeStyle = css("--c-att"); g.lineWidth = 2; g.stroke();
+  // 속도 범례 (우상단)
+  {
+    const lw = 64, lx = w - lw - 10, ly = 10;
+    for (let k = 0; k < lw; k++) {
+      g.fillStyle = speedColor(spLo + (spHi - spLo) * k / (lw - 1));
+      g.fillRect(lx + k, ly, 1.2, 6);
+    }
+    g.fillStyle = css("--ink-mute"); g.font = "10px system-ui";
+    g.fillText(`${spLo.toFixed(0)}`, lx - 2, ly + 16);
+    g.fillText(`${spHi.toFixed(0)} m/s`, lx + lw - 22, ly + 16);
+  }
   const ap = map(s.att);
   circle(g, ap, 4.5, null, css("--c-att"));
   circle(g, map(steps()[0].att), 3, css("--c-att"));   // 스폰 마커
