@@ -65,16 +65,20 @@ def measure_baseline(n: int = 500, seed0: int = 0, mode: str = "hold") -> dict:
     `hold + commit` 은 `hold` 와 완전히 같다 (정정 8, docs/45 §9.6).
     """
     from shepherd.agents.attacker_ladder import AttackerSpec
-    from shepherd.env_sys import RewardSpec, SystemSpec
+    from shepherd.env_sys import RewardSpec, ratified_system
     from shepherd.m4_env import mission_eval
     from shepherd.spawn_rand import SpawnSpec
 
     recs: list = []
-    r = mission_eval(seed0, n, system=SystemSpec(), reward=RewardSpec(w_kill=0.5, enabled=True),
+    # ★ docs/65 A2 — 기저선도 학습과 **같은 비준 계약**에서 잰다. 종전의 bare
+    #   SystemSpec() 기저선(docs/47 hold 0/297 등)은 legacy 구계약 산물이며
+    #   재집계 시 그 한정을 병기한다. 새 측정과 옛 JSON 을 섞지 않는다.
+    r = mission_eval(seed0, n, system=ratified_system(),
+                     reward=RewardSpec(w_kill=0.5, enabled=True),
                      attacker=AttackerSpec(level="A2", jink_amp=0.6, seed=0),
                      spawn=SpawnSpec(), limiter_mode=mode,
                      baseline_commit=(mode == "intercept"), records=recs)
-    out = {"n": n, "limiter_mode": mode,
+    out = {"contract": r.get("contract"), "n": n, "limiter_mode": mode,
            "baseline_commit": (mode == "intercept"), "attacker": "A2/jink0.6",
            "neutralized_rate": r["neutralized_rate"],
            "nondestructive_frac": r["nondestructive_frac"],

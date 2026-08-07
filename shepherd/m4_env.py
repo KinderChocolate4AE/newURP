@@ -20,6 +20,9 @@ torch-free.
 from __future__ import annotations
 
 import copy
+import hashlib
+import json
+from dataclasses import asdict
 from typing import Callable, Dict, Optional, Sequence
 
 import numpy as np
@@ -34,11 +37,64 @@ from shepherd.spawn_rand import (SpawnSpec, StandbySpec, apply_standby,
                                  spawn_for_episode)
 from shepherd.train.make_env import make_train_env
 
-__all__ = ["M4Stack", "build_m4_env", "regime_of", "mission_eval"]
+__all__ = ["M4Stack", "build_m4_env", "regime_of", "mission_eval",
+           "contract_manifest", "manifest_mismatch", "CONTRACT_SCHEMA"]
+
+# ── resolved-contract manifest (docs/65 A4a) ────────────────────────────────
+# "같은 실험" 은 코드 entrypoint 가 아니라 **동일한 resolved world contract**
+# 를 공유할 때만 성립한다 (docs/65 §9 운영 규율). 그래서 manifest 는 호출자의
+# 의도(kwargs)가 아니라 **build_m4_env 가 실제로 받은 것 + 합성된 cfg** 에서
+# 뽑는다 -- 전달 누락(silent legacy fallback)이 곧 hash 불일치로 드러난다.
+CONTRACT_SCHEMA = "resolved-contract-v1"
+
+
+def contract_manifest(*, system, reward, attacker, spawn, standby,
+                      randomize_threat, threat_obs, extra_cfg, cfg) -> dict:
+    """실제 생성 입력 + 합성 cfg 에서 계약 필드를 뽑아 hash 를 붙인다.
+
+    에피소드별 위협 draw(physics.a_att_max 등)는 **분포의 표본**이지 계약이
+    아니므로 넣지 않는다 -- 같은 runner 의 manifest 는 에피소드와 무관하게
+    동일해야 parity 비교가 성립한다.
+    """
+    m = {
+        "schema": CONTRACT_SCHEMA,
+        "system": asdict(system),
+        "reward": asdict(reward),
+        "attacker": asdict(attacker),
+        "spawn": asdict(spawn),
+        "standby": None if standby is None else asdict(standby),
+        "randomize_threat": bool(randomize_threat),
+        "threat_obs": bool(threat_obs),
+        "extra_cfg": ({} if not extra_cfg
+                      else {k: extra_cfg[k] for k in sorted(extra_cfg)}),
+        "episode_len": int(cfg["train"]["episode_len"]),
+        "judge": str(cfg["viability"]["judge"]),
+        "n_segments": int(cfg["viability"]["n_segments"]),
+    }
+    m["hash"] = hashlib.sha256(
+        json.dumps(m, sort_keys=True, default=str).encode()).hexdigest()[:16]
+    return m
+
+
+def manifest_mismatch(a: dict, b: dict, allow: Sequence[str] = ()) -> list:
+    """두 manifest 의 불일치 경로 목록. `allow` 에 선언된 축(예: "reward.w_kill",
+    "attacker.label")만 예외 -- 그 외 mismatch 는 다른 세계다 (fail 대상)."""
+    diffs = []
+    for k in sorted(set(a) | set(b)):
+        if k in ("hash",):
+            continue
+        va, vb = a.get(k), b.get(k)
+        if isinstance(va, dict) and isinstance(vb, dict):
+            for kk in sorted(set(va) | set(vb)):
+                if va.get(kk) != vb.get(kk) and f"{k}.{kk}" not in allow:
+                    diffs.append(f"{k}.{kk}")
+        elif va != vb and k not in allow:
+            diffs.append(k)
+    return diffs
 
 
 class M4Stack(dict):
-    """조립 결과 묶음. `env / scn / lay / threat` 키를 갖는다."""
+    """조립 결과 묶음. `env / scn / lay / threat / contract` 키를 갖는다."""
     __getattr__ = dict.__getitem__
 
 
@@ -73,7 +129,12 @@ def build_m4_env(seed: int, episode: int, *,
     }
     env = attach_threat_obs(env, a_att=threat["a_att"],
                             att_speed=threat["att_speed"], enabled=threat_obs)
-    return M4Stack(env=env, scn=scn, lay=lay, threat=threat)
+    contract = contract_manifest(system=system, reward=reward, attacker=attacker,
+                                 spawn=spawn, standby=standby,
+                                 randomize_threat=randomize_threat,
+                                 threat_obs=threat_obs, extra_cfg=extra_cfg,
+                                 cfg=cfg)
+    return M4Stack(env=env, scn=scn, lay=lay, threat=threat, contract=contract)
 
 
 def regime_of(a_att: float, tau: float, net_radius: float) -> str:
@@ -90,6 +151,8 @@ def regime_of(a_att: float, tau: float, net_radius: float) -> str:
 def mission_eval(seed0: int, episodes: int, *,
                  system: SystemSpec, reward: RewardSpec, attacker: AttackerSpec,
                  spawn: SpawnSpec, policy: Optional[Callable] = None,
+                 standby: Optional[StandbySpec] = None,
+                 extra_cfg: Optional[dict] = None,
                  limiter_mode: str = "hold", fire_mode: str = "clean",
                  randomize_threat: bool = True, threat_obs: bool = True,
                  baseline_commit: bool = False,
@@ -113,16 +176,25 @@ def mission_eval(seed0: int, episodes: int, *,
 
     초기조건과 공격자 난수는 `mobility`·`omega_max` 와 무관하게 `(seed0, ep)` 로만
     정해지므로 이 인자만 바꾼 호출들은 전부 **paired CRN** 이다 (P73).
+
+    `standby`/`extra_cfg` 는 `build_m4_env` 로 그대로 전달된다 (docs/65 A3 --
+    종전에는 버려져서 v3 스펙을 줘도 **조용히 legacy 기하**로 평가됐다).
+    기본 None = 기존 호출부와 bit-identical. 반환 dict 의 `contract` 키가
+    실제로 평가된 세계의 resolved manifest 다 (A4a).
     """
     from shepherd.agents.mobile_finisher import apply_mobility, apply_slew_limit
     from shepherd.scripts.mission_rollout import LABELS, run_episode
 
     counts = {lab: 0 for lab in LABELS}
     by_regime: Dict[str, Dict[str, int]] = {}
+    contract: Optional[dict] = None
     for ep in range(episodes):
         st = build_m4_env(seed0, ep, system=system, reward=reward,
-                          attacker=attacker, spawn=spawn,
+                          attacker=attacker, spawn=spawn, standby=standby,
+                          extra_cfg=extra_cfg,
                           randomize_threat=randomize_threat, threat_obs=threat_obs)
+        if contract is None:
+            contract = st.contract
         if mobility > 0.0:
             apply_mobility(st.env, a_max=mobility)
         if omega_max is not None:                  # 무한 슬루 반사실 (docs/51 §9)
@@ -156,4 +228,5 @@ def mission_eval(seed0: int, episodes: int, *,
 
     # 전체 지표는 regime 분해와 **같은 식**이다 (n = sum(counts) = episodes).
     return {**_split(counts), "counts": counts,
-            "by_regime": {k: _split(v) for k, v in by_regime.items()}}
+            "by_regime": {k: _split(v) for k, v in by_regime.items()},
+            "contract": contract}

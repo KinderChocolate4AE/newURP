@@ -42,7 +42,7 @@ import numpy as np
 import torch
 
 from shepherd.agents.attacker_ladder import AttackerSpec, LAMBDA_PRESETS
-from shepherd.env_sys import RewardSpec, SystemSpec
+from shepherd.env_sys import RewardSpec, SystemSpec, ratified_system
 from shepherd.m4_config import (CAPABILITY_RATIOS, M4_OVERRIDES, TAU_DECOMPOSITION,
                                 THREAT_BRACKET, m4_config)
 from shepherd.m4_env import build_m4_env, mission_eval, regime_of
@@ -104,13 +104,18 @@ class M4Runner(MAPPORunner):
 
     def __init__(self, run_cfg: dict, seed: int, device: str, *,
                  system: SystemSpec, reward: RewardSpec, attacker: AttackerSpec,
-                 spawn: SpawnSpec, randomize_threat: bool = True,
+                 spawn: SpawnSpec, standby=None, extra_cfg: dict | None = None,
+                 randomize_threat: bool = True,
                  threat_obs: bool = True,
                  limiter_policy: str = "learned",
                  finisher_policy: str = "learned",
                  aim_bc: str = "none"):
+        # standby/extra_cfg 는 _m4 에 넣어 학습 롤아웃과 평가(mission_eval)가
+        # **같은 dict 로** 세계를 만든다 (docs/65 A3 -- 갈라질 자리를 없앤다).
+        # 기본 None = 기존과 bit-identical. v3 TRAIN 배선(P92)이 여기로 들어온다.
         self._m4 = dict(system=system, reward=reward, attacker=attacker,
-                        spawn=spawn, randomize_threat=randomize_threat,
+                        spawn=spawn, standby=standby, extra_cfg=extra_cfg,
+                        randomize_threat=randomize_threat,
                         threat_obs=threat_obs)
         # ── 역할 분리 (docs/48) + 조준 BC (docs/49) ─────────────────────────────
         self.arm = arm_of(limiter_policy, finisher_policy, aim_bc)
@@ -132,6 +137,9 @@ class M4Runner(MAPPORunner):
         self.seed = int(seed)
 
         st = build_m4_env(seed, 0, **self._m4)              # <-- M4 스택으로 dim 산출
+        # ★ docs/65 A4a/A5 — 이 러너가 실제로 사는 세계의 resolved manifest.
+        #   save 가 체크포인트 옆에 쓰고, restore 가 hash 불일치를 거부한다.
+        self.contract = st.contract
         ad = ShepherdAdapter(st.env, M4_LIVE_DIMS)         # 커밋 비트 live (결함 2)
         self.n = len(ad.limiter_ids)
         self.obs_dim = ad.obs_dim
@@ -398,6 +406,8 @@ class M4Runner(MAPPORunner):
         super().save(out_dir, tag)
         (out_dir / f"threat_log_{tag}.json").write_text(
             json.dumps(self._threat_log[-2000:]))
+        (out_dir / f"contract_{tag}.json").write_text(
+            json.dumps(self.contract, indent=2, ensure_ascii=False))
 
     # ------------------------------------------------------------ 재개 ---
     def restore(self, out_dir: pathlib.Path, tag: str = "latest") -> int:
@@ -415,6 +425,20 @@ class M4Runner(MAPPORunner):
         st = out_dir / f"run_state_{tag}.json"
         if not (ck.exists() and st.exists()):
             return 0
+        # ★ docs/65 A5 — resume 은 env contract hash 가 일치할 때만.
+        #   manifest 파일이 없으면 비준 계약 이전 세계의 런이므로 이어붙이지 않는다
+        #   (조용히 다른 세계를 학습하는 것이 이번 감사의 핵심 결함이었다).
+        cf = out_dir / f"contract_{tag}.json"
+        if not cf.exists():
+            raise ValueError(
+                f"{cf} 없음 -- docs/65 A5 이전(구계약) 체크포인트다. resume 금지, "
+                f"fresh 로 새로 돌릴 것 (기존 산출물은 대조용으로 보존)")
+        old = json.loads(cf.read_text()).get("hash")
+        if old != self.contract["hash"]:
+            raise ValueError(
+                f"env contract hash 불일치: ckpt {old} != 현재 "
+                f"{self.contract['hash']} -- 다른 세계의 체크포인트를 이어붙이지 "
+                f"않는다 (docs/65 A5)")
         self.tr = MAPPOTrainer.load(str(ck), map_location=self.tr.cfg.device)
         # ★ 결함 2 이전 체크포인트(limiter_commit 없음 -> lim_dim 3)를 커밋 배선된
         #   러너에 이어 붙이면 조용히 틀린 폭을 학습한다. 조용히 넘기지 않는다.
@@ -444,10 +468,13 @@ def build_specs(args) -> Dict[str, object]:
     lam = LAMBDA_PRESETS[args.lam]
     dflt = SystemSpec()
     _or = lambda v, d: d if v is None else v          # noqa: E731
+    # ★ docs/65 A1 — 학습 env 는 비준 계약(R1 resolver on · R2 handoff on)에서
+    #   파생된다. 종전에는 두 플래그를 전달하지 않아 학습이 docs/53-54 가
+    #   "구현 비정합" 으로 판정한 구계약에서 돌았다 (v2/v3 측정 사슬과 다른 세계).
     return dict(
-        system=SystemSpec(tau_kill=_or(args.tau_kill, dflt.tau_kill),
-                          p_kill=_or(args.p_kill, dflt.p_kill),
-                          r_nk=_or(args.r_nk, dflt.r_nk), enabled=True),
+        system=ratified_system(tau_kill=_or(args.tau_kill, dflt.tau_kill),
+                               p_kill=_or(args.p_kill, dflt.p_kill),
+                               r_nk=_or(args.r_nk, dflt.r_nk)),
         reward=RewardSpec(w_kill=args.w_kill,
                           terminal_scale=_or(args.terminal_scale,
                                              RewardSpec().terminal_scale),

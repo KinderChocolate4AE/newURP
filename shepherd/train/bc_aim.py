@@ -48,9 +48,10 @@ def teacher_axis(env) -> np.ndarray:
 
 def _kw(w_kill: float = 0.5) -> dict:
     from shepherd.agents.attacker_ladder import AttackerSpec
-    from shepherd.env_sys import RewardSpec, SystemSpec
+    from shepherd.env_sys import RewardSpec, ratified_system
     from shepherd.spawn_rand import SpawnSpec
-    return dict(system=SystemSpec(enabled=True),
+    # docs/65 A2 — 교사 궤적도 학습이 볼 세계(비준 계약)에서 모은다.
+    return dict(system=ratified_system(),
                 reward=RewardSpec(w_kill=w_kill, enabled=True),
                 attacker=AttackerSpec(level="A2", jink_amp=0.6, seed=0),
                 spawn=SpawnSpec())

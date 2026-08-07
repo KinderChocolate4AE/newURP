@@ -85,7 +85,7 @@ def test_p44g_run_curve_matches_mission_eval_episode_for_episode():
     `mission_eval(records=...)` 와 `run_curve` 는 같은 draw 를 돈다고 주장한다.
     주장만 하고 두면 한쪽만 고쳐졌을 때 곡선과 기준선이 조용히 갈라진다.
     """
-    from shepherd.env_sys import RewardSpec, SystemSpec
+    from shepherd.env_sys import RewardSpec, ratified_system
     from shepherd.agents.attacker_ladder import AttackerSpec
     from shepherd.m4_env import mission_eval
     from shepherd.scripts.curve_sweep import run_curve
@@ -93,7 +93,9 @@ def test_p44g_run_curve_matches_mission_eval_episode_for_episode():
 
     n = 4
     ref = []
-    mission_eval(0, n, system=SystemSpec(),
+    # run_curve 는 비준 계약(ratified_system)으로 파생된다 (docs/65 A2) --
+    # 참조 경로도 같은 계약이어야 "같은 판" 비교가 성립한다.
+    mission_eval(0, n, system=ratified_system(),
                  reward=RewardSpec(w_kill=0.5, enabled=True),
                  attacker=AttackerSpec(level="A2", jink_amp=0.6, seed=0),
                  spawn=SpawnSpec(), limiter_mode="hold", records=ref)

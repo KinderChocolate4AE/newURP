@@ -55,7 +55,7 @@ import numpy as np
 from shepherd.game.finisher_fsm import FinisherState
 
 __all__ = ["SystemSpec", "RewardSpec", "CommitRecord", "ModeSystemEnv",
-           "PARK_POSITION"]
+           "PARK_POSITION", "ratified_system"]
 
 _EPS = 1e-12
 
@@ -109,6 +109,20 @@ class SystemSpec:
     # False 면 spent-fail 종료만 억제하고 에피소드가 계속된다 (FALLBACK).
     miss_terminates: bool = True
     seed_ns: str = "m4_hardkill"
+
+
+def ratified_system(**overrides) -> SystemSpec:
+    """비준 계약 SystemSpec — R1 contact resolver on · R2 miss handoff on.
+
+    docs/53-54 가 구계약(접촉 무력화 없음 · miss 즉시 종료)을 "구현 비정합" 으로
+    판정했고, v2/v3 측정 사슬은 전부 이 F-flags 로 돈다. 학습·평가·스윕도 같은
+    계약에서 파생돼야 한다 (docs/65 §2-1 contract parity, A1/A2).
+
+    SystemSpec 의 필드 **기본값은 바꾸지 않는다** (legacy 재현 경로 보존) --
+    같은 실험 family 에 속하는 runner 가 여기서 명시적으로 파생할 뿐이다.
+    """
+    return SystemSpec(enabled=True, contact_resolver=True,
+                      miss_terminates=False, **overrides)
 
 
 @dataclass(frozen=True)

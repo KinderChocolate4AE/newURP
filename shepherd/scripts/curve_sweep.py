@@ -35,7 +35,7 @@ import os
 from typing import Callable, Dict, List, Optional, Sequence, Tuple
 
 from shepherd.agents.attacker_ladder import AttackerSpec
-from shepherd.env_sys import RewardSpec, SystemSpec
+from shepherd.env_sys import RewardSpec, ratified_system
 from shepherd.m4_config import THREAT_BRACKET, m4_config
 from shepherd.m4_env import build_m4_env, regime_of
 from shepherd.spawn_rand import SpawnSpec
@@ -141,7 +141,9 @@ def bin_edges(lo: float, hi: float, boundary: float, per_side: int = 4) -> List[
 
 # ----------------------------------------------------------------------- 계측
 def _default_kw(w_kill: float, level: str, jink: float) -> dict:
-    return dict(system=SystemSpec(),
+    # docs/65 A2 — 학습·평가·스윕과 같은 비준 계약. docs/45 의 곡선(50% 교차
+    # 24.06 등)은 legacy 구계약 실측이므로 재실행 수치와 병치할 때 한정 병기.
+    return dict(system=ratified_system(),
                 reward=RewardSpec(w_kill=w_kill, enabled=True),
                 attacker=AttackerSpec(level=level, jink_amp=jink, seed=0),
                 spawn=SpawnSpec())

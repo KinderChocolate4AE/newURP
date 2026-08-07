@@ -38,7 +38,7 @@ import numpy as np
 from shepherd.agents.attacker_ladder import AttackerSpec
 from shepherd.agents.mobile_finisher import (MOBILE_A_MAX, SLEW_UNLIMITED,
                                             apply_mobility)
-from shepherd.env_sys import RewardSpec, SystemSpec
+from shepherd.env_sys import RewardSpec, ratified_system
 from shepherd.m4_env import build_m4_env, mission_eval
 from shepherd.spawn_rand import SpawnSpec
 from shepherd.stats import wilson
@@ -63,7 +63,10 @@ def _check_labels() -> None:
 
 
 def _kw() -> dict:
-    return dict(system=SystemSpec(), reward=RewardSpec(w_kill=0.5, enabled=True),
+    # docs/65 A2 — 비준 계약으로 파생. docs/51 의 factorial 결과는 legacy
+    # 구계약 실측 (재실행 수치와 병치 시 한정 병기).
+    return dict(system=ratified_system(),
+                reward=RewardSpec(w_kill=0.5, enabled=True),
                 attacker=AttackerSpec(level="A2", jink_amp=0.6, seed=0),
                 spawn=SpawnSpec())
 
