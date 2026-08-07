@@ -26,6 +26,7 @@ import pathlib
 
 from shepherd.env_sys import RewardSpec, ratified_system
 from shepherd.m4_env import build_m4_env
+from shepherd.notify import ntfy
 from shepherd.scripts.mission_rollout import run_episode
 
 __all__ = ["GRID", "TUNE_EPS", "world_kw", "run_combo", "select"]
@@ -114,16 +115,26 @@ def main() -> None:
         p.write_text(json.dumps(out, indent=1, ensure_ascii=False),
                      encoding="utf-8")
         print(f"-> {p}")
+        ntfy(f"arc tuning SELECTED c{out['selected']} "
+             f"(r_d={out['r_d']:g}, dphi={out['dphi']:.4f})",
+             title="arc-tuning", priority="high")
         return
 
     assert a.combo is not None, "--combo 0..8 필요 (또는 --dry-run/--aggregate)"
     assert 5000 <= a.eps[0] and a.eps[1] <= 5100, "F5 대역 밖 (5000..5100)"
-    out = run_combo(a.combo, range(a.eps[0], a.eps[1]))
+    try:
+        out = run_combo(a.combo, range(a.eps[0], a.eps[1]))
+    except Exception as exc:
+        ntfy(f"arc tuning c{a.combo} FAILED: {type(exc).__name__}",
+             title="arc-tuning", priority="high")
+        raise
     p = pathlib.Path(a.out or f"results/arc_tuning_c{a.combo}.json")
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")
     print(f"c{a.combo}: p_net={out['p_net']:.3f} "
           f"total_defense={out['total_defense']:.3f} -> {p}")
+    ntfy(f"arc tuning c{a.combo} done: p_net={out['p_net']:.3f} "
+         f"td={out['total_defense']:.3f} n={out['n']}", title="arc-tuning")
 
 
 if __name__ == "__main__":
