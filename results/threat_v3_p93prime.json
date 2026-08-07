@@ -1,0 +1,512 @@
+{
+ "contract": "docs/61 §5 P93",
+ "n": 50,
+ "labels": {
+  "PENETRATED": 50
+ },
+ "episode_len_train": 1100,
+ "all_pass": true,
+ "rows": [
+  {
+   "episode": 0,
+   "cell": [
+    "medium",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 283,
+   "min_d": 0.43
+  },
+  {
+   "episode": 1,
+   "cell": [
+    "weak",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 214,
+   "min_d": 0.9
+  },
+  {
+   "episode": 2,
+   "cell": [
+    "medium",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 253,
+   "min_d": 0.27
+  },
+  {
+   "episode": 3,
+   "cell": [
+    "weak",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 361,
+   "min_d": 0.57
+  },
+  {
+   "episode": 4,
+   "cell": [
+    "medium",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 457,
+   "min_d": 0.52
+  },
+  {
+   "episode": 5,
+   "cell": [
+    "strong",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 247,
+   "min_d": 0.87
+  },
+  {
+   "episode": 6,
+   "cell": [
+    "weak",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 322,
+   "min_d": 0.67
+  },
+  {
+   "episode": 7,
+   "cell": [
+    "strong",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 208,
+   "min_d": 1.0
+  },
+  {
+   "episode": 8,
+   "cell": [
+    "weak",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 192,
+   "min_d": 0.87
+  },
+  {
+   "episode": 9,
+   "cell": [
+    "weak",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 348,
+   "min_d": 0.52
+  },
+  {
+   "episode": 10,
+   "cell": [
+    "strong",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 306,
+   "min_d": 0.84
+  },
+  {
+   "episode": 11,
+   "cell": [
+    "medium",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 188,
+   "min_d": 0.59
+  },
+  {
+   "episode": 12,
+   "cell": [
+    "medium",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 472,
+   "min_d": 0.87
+  },
+  {
+   "episode": 13,
+   "cell": [
+    "strong",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 305,
+   "min_d": 0.7
+  },
+  {
+   "episode": 14,
+   "cell": [
+    "weak",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 248,
+   "min_d": 0.65
+  },
+  {
+   "episode": 15,
+   "cell": [
+    "weak",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 536,
+   "min_d": 0.78
+  },
+  {
+   "episode": 16,
+   "cell": [
+    "medium",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 302,
+   "min_d": 0.3
+  },
+  {
+   "episode": 17,
+   "cell": [
+    "strong",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 663,
+   "min_d": 0.9
+  },
+  {
+   "episode": 18,
+   "cell": [
+    "strong",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 482,
+   "min_d": 0.67
+  },
+  {
+   "episode": 19,
+   "cell": [
+    "medium",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 508,
+   "min_d": 0.94
+  },
+  {
+   "episode": 20,
+   "cell": [
+    "medium",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 248,
+   "min_d": 0.62
+  },
+  {
+   "episode": 21,
+   "cell": [
+    "medium",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 234,
+   "min_d": 0.3
+  },
+  {
+   "episode": 22,
+   "cell": [
+    "weak",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 325,
+   "min_d": 0.53
+  },
+  {
+   "episode": 23,
+   "cell": [
+    "strong",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 461,
+   "min_d": 0.48
+  },
+  {
+   "episode": 24,
+   "cell": [
+    "strong",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 554,
+   "min_d": 0.64
+  },
+  {
+   "episode": 25,
+   "cell": [
+    "weak",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 262,
+   "min_d": 0.67
+  },
+  {
+   "episode": 26,
+   "cell": [
+    "weak",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 293,
+   "min_d": 0.28
+  },
+  {
+   "episode": 27,
+   "cell": [
+    "strong",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 296,
+   "min_d": 0.77
+  },
+  {
+   "episode": 28,
+   "cell": [
+    "medium",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 210,
+   "min_d": 0.84
+  },
+  {
+   "episode": 29,
+   "cell": [
+    "medium",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 570,
+   "min_d": 0.88
+  },
+  {
+   "episode": 30,
+   "cell": [
+    "strong",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 418,
+   "min_d": 0.92
+  },
+  {
+   "episode": 31,
+   "cell": [
+    "medium",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 259,
+   "min_d": 0.64
+  },
+  {
+   "episode": 32,
+   "cell": [
+    "medium",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 274,
+   "min_d": 0.25
+  },
+  {
+   "episode": 33,
+   "cell": [
+    "strong",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 194,
+   "min_d": 0.52
+  },
+  {
+   "episode": 34,
+   "cell": [
+    "weak",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 511,
+   "min_d": 0.56
+  },
+  {
+   "episode": 35,
+   "cell": [
+    "weak",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 448,
+   "min_d": 0.87
+  },
+  {
+   "episode": 36,
+   "cell": [
+    "strong",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 390,
+   "min_d": 0.72
+  },
+  {
+   "episode": 37,
+   "cell": [
+    "weak",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 258,
+   "min_d": 0.2
+  },
+  {
+   "episode": 38,
+   "cell": [
+    "medium",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 227,
+   "min_d": 1.0
+  },
+  {
+   "episode": 39,
+   "cell": [
+    "medium",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 442,
+   "min_d": 0.61
+  },
+  {
+   "episode": 40,
+   "cell": [
+    "strong",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 373,
+   "min_d": 0.55
+  },
+  {
+   "episode": 41,
+   "cell": [
+    "medium",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 426,
+   "min_d": 0.48
+  },
+  {
+   "episode": 42,
+   "cell": [
+    "medium",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 394,
+   "min_d": 0.55
+  },
+  {
+   "episode": 43,
+   "cell": [
+    "strong",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 210,
+   "min_d": 0.28
+  },
+  {
+   "episode": 44,
+   "cell": [
+    "weak",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 234,
+   "min_d": 0.87
+  },
+  {
+   "episode": 45,
+   "cell": [
+    "medium",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 217,
+   "min_d": 0.47
+  },
+  {
+   "episode": 46,
+   "cell": [
+    "strong",
+    "cruise"
+   ],
+   "label": "PENETRATED",
+   "steps": 300,
+   "min_d": 0.91
+  },
+  {
+   "episode": 47,
+   "cell": [
+    "strong",
+    "sprint_slowdown"
+   ],
+   "label": "PENETRATED",
+   "steps": 571,
+   "min_d": 0.97
+  },
+  {
+   "episode": 48,
+   "cell": [
+    "strong",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 256,
+   "min_d": 0.45
+  },
+  {
+   "episode": 49,
+   "cell": [
+    "strong",
+    "sprint"
+   ],
+   "label": "PENETRATED",
+   "steps": 345,
+   "min_d": 0.77
+  }
+ ],
+ "note": "green = episode_len_train 1100 확정 (비준표 조건부 이행). TRUNCATED 발생 시 해석 금지 + 재사전등록 (docs/61 §2)."
+}
