@@ -111,3 +111,39 @@ NK-aware 최근접(0.958~)이 전부 경계 직전 — **요격 기하의 성립
 시각과 miss 결과를 동결하지 않는다 — attacker·viability·fire gate·net
 outcome 전부 실제 env closed-loop 재계산. 원래 fire 를 고정하면 "scheduling"
 이 아니라 고정 궤적 위 위치 최적화가 된다.
+
+## 6. ★ pre-fire arm 사전등록 (2026-08-07, 결과 보기 전 — 리뷰 5 지시 반영)
+
+> **이번 pre-fire arm 은 legacy A2 에 대한 마지막 oracle 진단이다. 결과가
+> 어떻든 post-fire CEM 개선·추가 timing sweep·새 reward·RL 학습으로 확장하지
+> 않는다. 종료 후 반드시 coupling adequacy gate 로 이동한다.**
+
+질문: post-fire 에서 못 찾은 NK-밖 engagement / net opportunity 를, limiter
+가 **발사 전에** 움직이면 실제 closed-loop 환경에서 만들 수 있는가 —
+"원래 miss 구제"가 아니라 **mode scheduling 자체를 다시 푸는 counterfactual**.
+
+```
+대상        동일 7판 · s0 = t_fire − 5 (baseline fire 기준 checkpoint 정의만;
+            개입 뒤 실제 fire 시각은 달라질 수 있어야 한다)
+rollout     ★ full-fidelity env (경량 클론 금지 -- 발사 전엔 v_shot 이
+            dynamics 에 인과적: fire gate·capture 동결값이 바뀐다)
+동결 금지    fire 시각 · miss 여부 · attacker 궤적 · v_shot · fire gate ·
+            net outcome 전부 closed-loop 재계산 (필수 계약 §5)
+controller  privileged CEM, §7.1 상수 (P64·I2·elite16·seed 3 = 384/판)
+proxy       NK-aware (_proxy_score_nk -- L1 에 NET_CAPTURE 포함: 임무 성공
+            우선, NK-안 접근 신호 금지 유지)
+final       full env replay 라벨. 보고 5분법:
+            NET_CAPTURE / OUTSIDE_NK_NEUTRALIZATION(=HARD_KILL) /
+            INSIDE_NK_VETO(event 수, nonterminal) / PENETRATED / NO_SOLUTION
+            + 신규 fire 시각·발사 여부·miss 지속 여부
+```
+
+해석 (결과 보기 전 고정, 리뷰 5):
+
+| 결과 | 허용 해석 |
+|---|---|
+| NET_CAPTURE 발생 | limiter 사전 움직임이 fallback 이 아니라 **net game 자체를 개선** — pre-fire shaping/pre-positioning 증거. 단 attacker 는 반응하지 않았으므로 **shepherding 성공이라 부르지 않는다** |
+| OUTSIDE_NK_NEUTRALIZATION 발생 | fallback 은 추격 국면이 아니라 **사전 safe kinetic geometry 준비 문제** — 2모드 설계의 의미 회복 |
+| 전판 PENETRATED | "현 legacy A2 에서 현재 oracle family 로 recoverability 증거를 찾지 못했다" 로 닫고 **coupling gate 로 이동** (oracle 확장 금지) |
+
+판정식은 결과 후 불변경.

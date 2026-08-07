@@ -224,7 +224,9 @@ def transfer_state(src: _Driver, dst: _Driver) -> _Driver:
     return dst
 
 
-def clone_at(src: _Driver, ep: int, *, n_samples: int = CLONE_N_SAMPLES) -> _Driver:
+def clone_at(src: _Driver, ep: int, *,
+             n_samples: Optional[int] = CLONE_N_SAMPLES) -> _Driver:
+    """n_samples=None -> full-fidelity 클론 (pre-fire arm 용, docs/58 §6)."""
     env, scn, lay = _build(ep, n_samples=n_samples)
     return transfer_state(src, _Driver(env, scn, lay, ep))
 
@@ -287,12 +289,17 @@ def _clip_ball(x, a_max):
 
 def plan_cem(src: _Driver, ep: int, s0: int, a_max: float, *,
              seeds: Sequence[int] = SOLVER_SEEDS,
-             score_fn=_proxy_score) -> PlanResult:
-    """§7.1: CEM P=64·I=2·elite16. seeds/score_fn 은 P2'(docs/58 §4) 확장점."""
+             score_fn=_proxy_score,
+             clone_n_samples: Optional[int] = CLONE_N_SAMPLES) -> PlanResult:
+    """§7.1: CEM P=64·I=2·elite16. seeds/score_fn/clone 충실도는 확장점.
+
+    clone_n_samples=None -> full-fidelity rollout (pre-fire, docs/58 §6 --
+    발사 전엔 v_shot 이 dynamics 에 인과적이라 경량 클론 금지).
+    """
     best_plan, best_score = None, None
     rollouts = 0
     structured = [("policy", "intercept"), ("policy", "hold")]
-    reuse = clone_at(src, ep)                    # 경량 클론 1개 재사용
+    reuse = clone_at(src, ep, n_samples=clone_n_samples)   # 클론 1개 재사용
     for ss in seeds:
         rng = np.random.default_rng(97 + 1000 * ss + ep)
         mean = np.zeros((4, K_SEG, 3))
@@ -326,7 +333,8 @@ def plan_cem(src: _Driver, ep: int, s0: int, a_max: float, *,
 # ------------------------------------------------------------------ arms ----
 def run_arm(ep: int, arm: str, t_star: int, s0: Optional[int] = None, *,
             seeds: Sequence[int] = SOLVER_SEEDS,
-            score_fn=_proxy_score) -> dict:
+            score_fn=_proxy_score,
+            clone_n_samples: Optional[int] = CLONE_N_SAMPLES) -> dict:
     """arm ∈ *-INT | *-ORC. s0 미지정 시 2×2 규약 (T0=t*+1 / TP=t*−5).
 
     docs/57 §3 sweep · docs/58 §4 P2' 는 s0/seeds/score_fn 만 바꿔 같은 경로를
@@ -343,7 +351,8 @@ def run_arm(ep: int, arm: str, t_star: int, s0: Optional[int] = None, *,
         #   어긋날 수 있다. 이식 경로만 쓴다 (P83d 가 동치 강제).
         src_full = drive_to(ep, s0)
         a_max = float(src_full.scn.limiter.a_max)
-        pr = plan_cem(src_full, ep, s0, a_max, seeds=seeds, score_fn=score_fn)
+        pr = plan_cem(src_full, ep, s0, a_max, seeds=seeds, score_fn=score_fn,
+                      clone_n_samples=clone_n_samples)
         plan = pr.plan
         out.update(no_solution_within_budget=pr.no_solution,
                    proxy_score=[float(x) for x in pr.proxy],
@@ -469,6 +478,43 @@ def run_p2prime(episodes: Sequence[int] = MISS_EPISODES) -> dict:
     return {"meta": meta, "records": rows}
 
 
+def run_prefire(episodes: Sequence[int] = MISS_EPISODES) -> dict:
+    """pre-fire arm (docs/58 §6, 결과 이전 커밋 사전등록) — legacy A2 마지막
+    oracle 진단. s0 = t_fire−5, rollout·final 모두 full-fidelity, fire 시각·
+    miss·v_shot·attacker 전부 closed-loop 재계산 (동결 금지 계약).
+    """
+    from shepherd.notify import ntfy
+    meta = {"contract": "docs/58 §6", "Pk": 1.0, "s0": "t_fire-5",
+            "rollout": "full-fidelity (clone_n_samples=None)",
+            "solver_seeds": list(SOLVER_SEEDS), "proxy": "nk_aware",
+            "budget_per_ep": POP * ITERS * len(SOLVER_SEEDS)}
+    rows: List[dict] = []
+    for ep in episodes:
+        base = replay_baseline(ep)
+        assert base.fire_step is not None and base.handoff_step is not None
+        s0 = base.fire_step - 5
+        r = run_arm(ep, "PF-ORC", base.handoff_step, s0=s0,
+                    seeds=SOLVER_SEEDS, score_fn=_proxy_score_nk,
+                    clone_n_samples=None)
+        r["base_fire_step"] = base.fire_step
+        r["new_fire_step"] = r.get("fire_step")      # 개입 후 실제 fire 시각
+        n_veto = sum(1 for c in r.get("contact_order", [])
+                     if c[2] == "VETO_NO_KINETIC")
+        r["inside_nk_veto_events"] = n_veto
+        # 5분법 (docs/58 §6)
+        r["report_label"] = (
+            "NET_CAPTURE" if r["label"] == "CAPTURED" else
+            "OUTSIDE_NK_NEUTRALIZATION" if r["label"] == "HARD_KILL" else
+            r["label"])
+        rows.append(r)
+        print(f"ep{ep:>3}: {r['report_label']:>26} nosol={r['no_solution_within_budget']} "
+              f"fire {r['base_fire_step']}->{r['new_fire_step']} "
+              f"veto_ev={n_veto} out_swept={r['min_out_swept']}", flush=True)
+        ntfy(f"prefire ep{ep}: {r['report_label']} "
+             f"nosol={r['no_solution_within_budget']}")
+    return {"meta": meta, "records": rows}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="recoverability probe (docs/56·57·58)")
     ap.add_argument("--episodes", type=int, nargs="*", default=list(MISS_EPISODES))
@@ -476,8 +522,19 @@ def main() -> None:
                     help="docs/57 발사 후 latest-start sweep 실행")
     ap.add_argument("--p2prime", action="store_true",
                     help="docs/58 §4 NK-aware 재반증 실행")
+    ap.add_argument("--prefire", action="store_true",
+                    help="docs/58 §6 pre-fire arm 실행 (full-fidelity)")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
+    if a.prefire:
+        r = run_prefire(tuple(a.episodes))
+        if a.out:
+            p = pathlib.Path(a.out)
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text(json.dumps(r, indent=2, ensure_ascii=False),
+                         encoding="utf-8")
+            print(f"  -> {a.out}")
+        return
     if a.p2prime:
         r = run_p2prime(tuple(a.episodes))
         if a.out:
