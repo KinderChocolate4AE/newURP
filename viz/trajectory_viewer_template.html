@@ -1,0 +1,369 @@
+<meta charset="utf-8">
+<title>WarSim 궤적 뷰어 — miss vs capture</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface: #fcfcfb; --page: #f9f9f7;
+    --ink: #0b0b0b; --ink-2: #52514e; --ink-mute: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+    --c-lim: #2a78d6; --c-att: #eb6834; --c-fin: #1baf7a; --c-net: #4a3aa7;
+    --c-warn: #fab219; --c-crit: #d03b3b; --c-good: #0ca30c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --surface: #1a1a19; --page: #0d0d0d;
+      --ink: #ffffff; --ink-2: #c3c2b7; --ink-mute: #898781;
+      --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+      --c-lim: #3987e5; --c-att: #d95926; --c-fin: #199e70; --c-net: #9085e9;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface: #1a1a19; --page: #0d0d0d;
+    --ink: #ffffff; --ink-2: #c3c2b7; --ink-mute: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --c-lim: #3987e5; --c-att: #d95926; --c-fin: #199e70; --c-net: #9085e9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  header {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+    padding: 10px 16px; border-bottom: 1px solid var(--grid);
+  }
+  header h1 { font-size: 15px; margin: 0 8px 0 0; font-weight: 650; }
+  select, button {
+    font: inherit; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--axis); border-radius: 6px; padding: 4px 10px;
+  }
+  button { cursor: pointer; }
+  button:focus-visible, select:focus-visible, input:focus-visible {
+    outline: 2px solid var(--c-lim); outline-offset: 1px;
+  }
+  .chip {
+    padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    border: 1px solid var(--ring);
+  }
+  .chip.miss { color: var(--c-crit); }
+  .chip.cap  { color: var(--c-good); }
+  main { display: grid; grid-template-columns: 1fr 300px; gap: 12px; padding: 12px 16px; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  .panes { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .pane {
+    background: var(--surface); border: 1px solid var(--ring); border-radius: 8px;
+    padding: 8px 10px 6px;
+  }
+  .pane h2 {
+    margin: 0 0 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-mute);
+  }
+  canvas { width: 100%; display: block; }
+  aside { display: flex; flex-direction: column; gap: 12px; }
+  table.readout { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  table.readout td { padding: 2px 4px; border-bottom: 1px solid var(--grid); }
+  table.readout td:first-child { color: var(--ink-2); }
+  table.readout td:last-child { text-align: right; }
+  #eventlog { max-height: 260px; overflow-y: auto; font-size: 13px; }
+  #eventlog div { padding: 3px 4px; border-bottom: 1px solid var(--grid); cursor: pointer; }
+  #eventlog div:hover { background: var(--page); }
+  #legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 12px; color: var(--ink-2); }
+  #legend span::before {
+    content: ""; display: inline-block; width: 10px; height: 10px;
+    border-radius: 50%; margin-right: 5px; vertical-align: -1px;
+    background: var(--dot);
+  }
+  footer {
+    display: flex; align-items: center; gap: 10px; padding: 10px 16px 16px;
+    flex-wrap: wrap;
+  }
+  #scrub { flex: 1; min-width: 200px; accent-color: var(--c-lim); }
+  #tlabel { font-variant-numeric: tabular-nums; color: var(--ink-2); min-width: 84px; }
+  #timeline { width: 100%; height: 18px; display: block; }
+</style>
+
+<header>
+  <h1>WarSim 궤적 뷰어</h1>
+  <select id="epsel" aria-label="에피소드 선택"></select>
+  <span id="verdict" class="chip"></span>
+  <span id="meta" style="color:var(--ink-2); font-size:12px"></span>
+</header>
+
+<main>
+  <div class="panes">
+    <div class="pane"><h2>위에서 (x–y)</h2><canvas id="top"></canvas></div>
+    <div class="pane"><h2>옆에서 (x–z)</h2><canvas id="side"></canvas></div>
+    <div class="pane"><div id="legend">
+      <span style="--dot:var(--c-att)">공격자 A2</span>
+      <span style="--dot:var(--c-lim)">limiter ×4 (+kill 반경 0.75)</span>
+      <span style="--dot:var(--c-fin)">finisher</span>
+      <span style="--dot:var(--c-net)">net (발사~해소, 반경 표시)</span>
+      <span style="--dot:var(--c-warn)">NK zone r=6 (파괴 요격 금지)</span>
+      <span style="--dot:var(--c-crit)">event (KILL ×, VETO ▲)</span>
+    </div></div>
+  </div>
+  <aside>
+    <div class="pane"><h2>스텝 상태</h2>
+      <table class="readout" id="readout"></table>
+    </div>
+    <div class="pane"><h2>이벤트</h2><div id="eventlog"></div></div>
+  </aside>
+</main>
+
+<footer>
+  <button id="play" aria-label="재생/정지">▶</button>
+  <button id="stepb" aria-label="한 스텝 뒤로">−1</button>
+  <button id="stepf" aria-label="한 스텝 앞으로">+1</button>
+  <select id="speed" aria-label="배속">
+    <option value="8">0.25×</option><option value="4">0.5×</option>
+    <option value="2" selected>1×</option><option value="1">2×</option>
+  </select>
+  <span id="tlabel"></span>
+  <div style="flex-basis:100%; display:flex; flex-direction:column; gap:2px">
+    <input type="range" id="scrub" min="0" max="1" value="0" step="1" aria-label="타임라인">
+    <canvas id="timeline"></canvas>
+  </div>
+</footer>
+
+<script>
+const DATA = /*__DATA__*/null;
+
+const $ = id => document.getElementById(id);
+const eps = DATA.episodes;
+let cur = 0, t = 0, playing = false, acc = 0;
+
+const sel = $("epsel");
+for (const [i, e] of eps.entries()) {
+  const o = document.createElement("option");
+  o.value = i;
+  o.textContent = `${e.group === "CAPTURE" ? "성공" : "미스"} · ep ${e.static.episode} — ${e.label}`;
+  sel.appendChild(o);
+}
+sel.onchange = () => { cur = +sel.value; t = 0; refit(); draw(); };
+
+function ep() { return eps[cur]; }
+function steps() { return ep().steps; }
+
+// ---- 좌표계: 두 뷰가 같은 x 스케일 공유 -------------------------------
+let bbox = null;
+function refit() {
+  const e = ep(); const pts = [];
+  for (const s of e.steps) { pts.push(s.att, s.fin, ...s.lims); }
+  pts.push(e.static.target, ...e.static.ring_p0);
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9,z0=1e9,z1=-1e9;
+  for (const p of pts) {
+    x0=Math.min(x0,p[0]); x1=Math.max(x1,p[0]);
+    y0=Math.min(y0,p[1]); y1=Math.max(y1,p[1]);
+    z0=Math.min(z0,p[2]); z1=Math.max(z1,p[2]);
+  }
+  const nk = e.static.r_nk, tg = e.static.target;
+  x0=Math.min(x0,tg[0]-nk)-2; x1=Math.max(x1,tg[0]+nk)+2;
+  y0=Math.min(y0,tg[1]-nk)-2; y1=Math.max(y1,tg[1]+nk)+2;
+  z0=Math.min(z0,tg[2]-nk)-2; z1=Math.max(z1,tg[2]+nk)+2;
+  bbox = {x0,x1,y0,y1,z0,z1};
+  $("scrub").max = e.steps.length - 1;
+  $("verdict").textContent = e.label + (e.net_spent ? " (net 소진)" : "");
+  $("verdict").className = "chip " + (e.label === "CAPTURED" ? "cap" : "miss");
+  $("meta").textContent =
+    `a_att=${e.static.threat.a_att.toFixed(0)} m/s² · v=${e.static.threat.speed.toFixed(0)} m/s`
+    + ` · fire@${e.fire_step ?? "–"} · 해소@${e.resolve_step ?? "–"}`
+    + (e.handoff_step != null ? ` · miss@${e.handoff_step}` : "");
+  buildLog(); drawTimeline();
+}
+
+function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+function setup(cv, hFrac) {
+  const dpr = devicePixelRatio || 1;
+  const w = cv.clientWidth || cv.parentElement.clientWidth - 20;
+  const spanX = bbox.x1 - bbox.x0;
+  const spanY = hFrac === "top" ? bbox.y1 - bbox.y0 : bbox.z1 - bbox.z0;
+  const h = Math.max(120, w * spanY / spanX);
+  cv.width = w * dpr; cv.height = h * dpr; cv.style.height = h + "px";
+  const g = cv.getContext("2d");
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const sc = w / spanX;
+  const map = hFrac === "top"
+    ? p => [(p[0]-bbox.x0)*sc, h-(p[1]-bbox.y0)*sc]
+    : p => [(p[0]-bbox.x0)*sc, h-(p[2]-bbox.z0)*sc];
+  return {g, w, h, sc, map};
+}
+
+function circle(g, c, r, stroke, fill, dash) {
+  g.beginPath(); g.arc(c[0], c[1], r, 0, 7);
+  if (fill) { g.fillStyle = fill; g.fill(); }
+  if (stroke) { g.setLineDash(dash || []); g.strokeStyle = stroke; g.lineWidth = 1.5; g.stroke(); g.setLineDash([]); }
+}
+
+function drawView(cv, view) {
+  const e = ep(), s = steps()[t], st = e.static;
+  const {g, w, h, sc, map} = setup(cv, view);
+  g.clearRect(0, 0, w, h);
+  g.fillStyle = css("--surface"); g.fillRect(0, 0, w, h);
+
+  // NK zone + target
+  const tgt = map(st.target);
+  circle(g, tgt, st.r_nk*sc, css("--c-warn"), css("--c-warn")+"22");
+  g.fillStyle = css("--ink-mute"); g.font = "11px system-ui";
+  g.fillText("NK", tgt[0]-8, tgt[1]-st.r_nk*sc+12);
+  circle(g, tgt, st.target_radius*sc, css("--ink-mute"));
+  g.beginPath(); g.moveTo(tgt[0]-5,tgt[1]); g.lineTo(tgt[0]+5,tgt[1]);
+  g.moveTo(tgt[0],tgt[1]-5); g.lineTo(tgt[0],tgt[1]+5);
+  g.strokeStyle = css("--ink-2"); g.lineWidth = 1.2; g.stroke();
+
+  // ring 대기 위치 (스폰 진단용)
+  for (const p of st.ring_p0) circle(g, map(p), 3, css("--axis"));
+
+  // net (발사~해소 구간)
+  if (e.fire_step != null && e.net_center && t >= e.fire_step) {
+    const active = e.resolve_step == null || t <= e.resolve_step;
+    circle(g, map(e.net_center), st.net_radius*sc, css("--c-net"),
+           active ? css("--c-net")+"1c" : null, active ? [] : [4,4]);
+  }
+
+  // 공격자 trail + 현재
+  g.beginPath();
+  for (let i = 0; i <= t; i++) {
+    const p = map(steps()[i].att);
+    i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]);
+  }
+  g.strokeStyle = css("--c-att"); g.lineWidth = 2; g.stroke();
+  const ap = map(s.att);
+  circle(g, ap, 4.5, null, css("--c-att"));
+  circle(g, map(steps()[0].att), 3, css("--c-att"));   // 스폰 마커
+  // 속도 화살표
+  const vsc = 0.15 * sc;
+  const av = view === "top" ? [s.att_v[0], s.att_v[1]] : [s.att_v[0], s.att_v[2]];
+  g.beginPath(); g.moveTo(ap[0], ap[1]);
+  g.lineTo(ap[0]+av[0]*vsc, ap[1]-av[1]*vsc);
+  g.strokeStyle = css("--c-att"); g.lineWidth = 1.2; g.stroke();
+
+  // limiters
+  s.lims.forEach((p, i) => {
+    const q = map(p); const dead = s.retired.includes(i);
+    circle(g, q, st.kill_radius*sc, dead ? css("--axis") : css("--c-lim"));
+    circle(g, q, 4, null, dead ? css("--axis") : css("--c-lim"));
+    g.fillStyle = css("--ink-2"); g.font = "10px system-ui";
+    g.fillText(String(i), q[0]+6, q[1]-5);
+  });
+
+  // finisher + 조준축
+  const fp = map(s.fin);
+  g.save(); g.translate(fp[0], fp[1]);
+  g.beginPath(); g.moveTo(0,-6); g.lineTo(5,5); g.lineTo(-5,5); g.closePath();
+  g.fillStyle = css("--c-fin"); g.fill(); g.restore();
+  const ev = view === "top" ? [s.fin_e[0], s.fin_e[1]] : [s.fin_e[0], s.fin_e[2]];
+  g.beginPath(); g.moveTo(fp[0], fp[1]);
+  g.lineTo(fp[0]+ev[0]*18, fp[1]-ev[1]*18);
+  g.strokeStyle = css("--c-fin"); g.lineWidth = 1.2; g.stroke();
+
+  // events (해당 스텝까지 발생분, limiter 위치에 마커)
+  for (let i = 0; i <= t; i++) for (const evn of steps()[i].events) {
+    const q = map(steps()[i].lims[evn.limiter]);
+    g.font = "12px system-ui";
+    g.fillStyle = evn.outcome === "KILL" ? css("--c-crit") : css("--c-warn");
+    g.fillText(evn.outcome === "KILL" ? "✕" : "▲", q[0]-4, q[1]+4);
+  }
+
+  // boxed 표시
+  if (s.boxed) {
+    g.fillStyle = css("--c-warn"); g.font = "600 11px system-ui";
+    g.fillText("BOXED", 8, 14);
+  }
+}
+
+function drawTimeline() {
+  const cv = $("timeline"), e = ep();
+  const dpr = devicePixelRatio || 1;
+  const w = cv.clientWidth || 400; const h = 18;
+  cv.width = w*dpr; cv.height = h*dpr; cv.style.height = h+"px";
+  const g = cv.getContext("2d"); g.setTransform(dpr,0,0,dpr,0,0);
+  g.clearRect(0,0,w,h);
+  const n = e.steps.length - 1 || 1;
+  const X = i => 8 + (w-16) * i / n;
+  g.strokeStyle = css("--grid"); g.beginPath(); g.moveTo(8,9); g.lineTo(w-8,9); g.stroke();
+  const mark = (i, ch, col) => {
+    if (i == null) return;
+    g.fillStyle = col; g.font = "600 10px system-ui";
+    g.fillText(ch, X(i)-3, 8);
+    g.fillRect(X(i)-0.5, 9, 1.5, 6);
+  };
+  mark(e.fire_step, "F", css("--c-fin"));
+  mark(e.resolve_step, "R", css("--c-net"));
+  mark(e.handoff_step, "M", css("--c-crit"));
+  e.steps.forEach((s,i) => { if (s.events.some(v=>v.outcome==="KILL")) mark(i,"K",css("--c-crit")); });
+}
+
+function buildLog() {
+  const e = ep(); const log = $("eventlog"); log.innerHTML = "";
+  const add = (i, txt) => {
+    const d = document.createElement("div");
+    d.textContent = `t=${i}  ${txt}`;
+    d.onclick = () => { t = i; draw(); };
+    log.appendChild(d);
+  };
+  if (e.fire_step != null) add(e.fire_step, "🕸 net 발사");
+  if (e.resolve_step != null)
+    add(e.resolve_step, e.label === "CAPTURED" ? "✅ net 포획" : "❌ net 해소(빗나감)");
+  if (e.handoff_step != null) add(e.handoff_step, "⚠ NET_MISS → FALLBACK");
+  e.steps.forEach((s,i) => s.events.forEach(v =>
+    add(i, `${v.outcome === "KILL" ? "✕ KILL" : v.outcome === "VETO_NO_KINETIC" ? "▲ NK VETO" : v.outcome} lim${v.limiter} d=${v.d}`)));
+  e.steps.forEach((s,i) => { if (s.clean && !(e.steps[i-1]||{}).clean) add(i, "· clean 게이트 개방"); });
+  if (!log.children.length) add(0, "(이벤트 없음)");
+}
+
+function readout() {
+  const s = steps()[t], e = ep();
+  const rows = [
+    ["t / 총", `${s.t} / ${steps().length-1}`],
+    ["FSM", s.fsm],
+    ["v_soft (대리)", s.v_soft.toFixed(3)],
+    ["v_worst", s.v_worst.toFixed(3)],
+    ["boxed", s.boxed ? "예" : "—"],
+    ["clean 게이트", s.clean ? "개방" : "—"],
+    ["자산까지 (m)", s.d_asset.toFixed(2) + (s.d_asset <= e.static.r_nk ? "  (NK 안)" : "")],
+    ["최근접 limiter (m)", s.d_lim_min.toFixed(2)],
+  ];
+  $("readout").innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
+}
+
+function draw() {
+  $("scrub").value = t;
+  $("tlabel").textContent = `t = ${t} (${(t*ep().static.dt).toFixed(2)} s)`;
+  drawView($("top"), "top");
+  drawView($("side"), "side");
+  readout();
+}
+
+// ---- transport ----------------------------------------------------------
+$("scrub").oninput = () => { t = +$("scrub").value; draw(); };
+$("stepf").onclick = () => { t = Math.min(t+1, steps().length-1); draw(); };
+$("stepb").onclick = () => { t = Math.max(t-1, 0); draw(); };
+$("play").onclick = toggle;
+function toggle() {
+  playing = !playing;
+  $("play").textContent = playing ? "⏸" : "▶";
+  if (playing) requestAnimationFrame(tick);
+}
+function tick() {
+  if (!playing) return;
+  if (++acc >= +$("speed").value) {
+    acc = 0; t++;
+    if (t >= steps().length) { t = steps().length-1; playing = false; $("play").textContent = "▶"; }
+    draw();
+  }
+  requestAnimationFrame(tick);
+}
+addEventListener("keydown", ev => {
+  if (ev.target.tagName === "SELECT" || ev.target.tagName === "INPUT") return;
+  if (ev.code === "Space") { ev.preventDefault(); toggle(); }
+  if (ev.code === "ArrowRight") { $("stepf").click(); }
+  if (ev.code === "ArrowLeft") { $("stepb").click(); }
+});
+addEventListener("resize", draw);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+
+refit(); draw();
+</script>
