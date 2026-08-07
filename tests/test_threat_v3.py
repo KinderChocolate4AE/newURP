@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import math
 import pathlib
+import sys
 
 import numpy as np
 import pytest
@@ -32,24 +33,41 @@ V3_ROUTE = AttackerSpec(level="A2", route_gain=0.5, sense_range=30.0)
 
 
 # ------------------------------------------------------------------ P87 ---
+# golden 은 win32 로컬(배선 전 커밋)에서 생성됐다. bit-동일 계약은 **생성
+# 플랫폼 한정**이다 -- 다른 OS 는 libm(cos/sin/atan2/norm) 마지막 ULP 가 달라
+# 정의상 bit 이 어긋난다 (서버 실측 2026-08-07). 비-win32 에서는 atol 1e-9
+# 대조로 내린다: 배선 회귀(항 추가/순서 변경)는 이 허용오차보다 수십 자릿수
+# 크므로 여전히 잡힌다.
+_BIT = sys.platform == "win32"
+
+
+def _cmp(a, b, msg):
+    if _BIT:
+        assert a == b, msg + " (bit)"
+    else:
+        assert np.allclose(np.asarray(a, float), np.asarray(b, float),
+                           rtol=0.0, atol=1e-9), msg + " (atol 1e-9)"
+
+
 def test_p87_attacker_bit_identical_to_prewiring_golden():
-    """v3 필드 기본값(A2_V4)의 general 경로 출력 == 배선 전 golden (bit)."""
+    """v3 필드 기본값(A2_V4)의 general 경로 출력 == 배선 전 golden."""
     import make_golden_p87 as g
     ref = json.loads(GOLDEN.read_text(encoding="utf-8"))
     got = g.attacker_grid()
     assert len(got) == len(ref["attacker"])
     for i, (a, b) in enumerate(zip(got, ref["attacker"])):
-        assert a["a"] == b["a"], f"row {i}: accel 불일치"
-        assert a["e"] == b["e"], f"row {i}: e_cmd 불일치"
+        _cmp(a["a"], b["a"], f"row {i}: accel 불일치")
+        _cmp(a["e"], b["e"], f"row {i}: e_cmd 불일치")
 
 
 def test_p87_spawn_bit_identical_to_prewiring_golden():
-    """SCALE_V2_SPAWN (r_range/azimuth off) draw == 배선 전 golden (bit)."""
+    """SCALE_V2_SPAWN (r_range/azimuth off) draw == 배선 전 golden."""
     import make_golden_p87 as g
     ref = json.loads(GOLDEN.read_text(encoding="utf-8"))
     got = g.spawn_grid()
     for i, (a, b) in enumerate(zip(got, ref["spawn"])):
-        assert a == b, f"ep {i}: spawn draw 불일치"
+        for k in ("p", "v", "e"):
+            _cmp(a[k], b[k], f"ep {i}: spawn {k} 불일치")
 
 
 def test_p87_nesting_flags():
