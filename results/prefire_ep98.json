@@ -1,0 +1,56 @@
+{
+  "meta": {
+    "contract": "docs/58 §6",
+    "Pk": 1.0,
+    "s0": "t_fire-5",
+    "rollout": "full-fidelity (clone_n_samples=None)",
+    "solver_seeds": [
+      0,
+      1,
+      2
+    ],
+    "proxy": "nk_aware",
+    "budget_per_ep": 384
+  },
+  "records": [
+    {
+      "episode": 98,
+      "arm": "PF-ORC",
+      "s0": 8,
+      "t_star": 21,
+      "no_solution_within_budget": true,
+      "proxy_score": [
+        0.0,
+        0.0,
+        -2.2460566824393826,
+        0.6450135685270029,
+        56.0
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "PENETRATED",
+      "fire_step": 13,
+      "handoff_step": 21,
+      "miss_still_occurred": true,
+      "first_kill_step": null,
+      "steps": 56,
+      "min_swept_after": 2.106,
+      "min_out_swept": 2.246,
+      "margin_at_best": 0.645,
+      "d_asset_final": 0.468,
+      "limiter_consumed": 0,
+      "contact_order": [],
+      "lim_min_dist": [
+        16.436,
+        16.103,
+        13.027,
+        13.665
+      ],
+      "bucket": "PENETRATED",
+      "base_fire_step": 13,
+      "new_fire_step": 13,
+      "inside_nk_veto_events": 0,
+      "report_label": "PENETRATED"
+    }
+  ]
+}

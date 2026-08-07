@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "contract": "docs/58 §6",
+    "Pk": 1.0,
+    "s0": "t_fire-5",
+    "rollout": "full-fidelity (clone_n_samples=None)",
+    "solver_seeds": [
+      0,
+      1,
+      2
+    ],
+    "proxy": "nk_aware",
+    "budget_per_ep": 384
+  },
+  "records": [
+    {
+      "episode": 35,
+      "arm": "PF-ORC",
+      "s0": 10,
+      "t_star": 23,
+      "no_solution_within_budget": false,
+      "proxy_score": [
+        1.0,
+        1.0,
+        -0.7618574552099902,
+        2.617240136216056,
+        22.0
+      ],
+      "rollouts": 384,
+      "plan_kind": "accels",
+      "label": "HARD_KILL",
+      "fire_step": 15,
+      "handoff_step": null,
+      "miss_still_occurred": false,
+      "first_kill_step": 21,
+      "steps": 22,
+      "min_swept_after": 0.762,
+      "min_out_swept": 0.762,
+      "margin_at_best": 2.617,
+      "d_asset_final": 7.954,
+      "limiter_consumed": 1,
+      "contact_order": [
+        [
+          0,
+          22,
+          "KILL"
+        ]
+      ],
+      "lim_min_dist": [
+        61.293,
+        6.186,
+        9.405,
+        7.003
+      ],
+      "bucket": "PRE_MISS_NEUTRALIZATION",
+      "base_fire_step": 15,
+      "new_fire_step": 15,
+      "inside_nk_veto_events": 0,
+      "report_label": "OUTSIDE_NK_NEUTRALIZATION"
+    }
+  ]
+}
