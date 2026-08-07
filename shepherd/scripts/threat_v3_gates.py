@@ -419,6 +419,94 @@ def p91a():
     return out
 
 
+# ============================================================== P94 =======
+P94_EPS = range(50)
+P94_DIV_M = 1.0             # m. 궤적 발산 최소 크기 (docs/61 §5 선언값)
+P94_FRAC = 0.5              # green = 이 비율 이상의 판에서 발산 >= P94_DIV_M
+
+
+def p94(eps=P94_EPS):
+    """natural-state route paired ablation (docs/61 §5 P94 — 학습 전 필수).
+
+    동일 seed 로 {route ON = nominal} vs {route OFF = route_gain 0} 를 자연
+    발생 상태(hold/clean, teleport 개입 없음)에서 비교. green 전에는
+    "학습 가능한 shepherding channel" 명칭 금지 (docs/62 §2).
+    """
+    spec_on = V3_ARMS["V3-FULL"]["attacker"]
+    spec_off = replace(spec_on, route_gain=0.0, label="A2-v3-route-off")
+    rows = []
+    for ep in eps:
+        arms = {}
+        for tag, spec in (("on", spec_on), ("off", spec_off)):
+            st = _stack(ep, attacker=spec)
+            base = _base_env(st.env)
+            diags = []
+
+            def instr(p, v, _s=spec, _d=diags, **kw):
+                d = {}
+                out = _general_action(_s, p, v, diag=d, **kw)
+                _d.append(d)
+                return out
+
+            attach_attacker(base, instr,
+                            phase=float(getattr(base, "_attacker_phase", 0.0)))
+            traj, vshot, last = [], [], {}
+            fire = {"step": None}
+
+            def on_info(fi, t, _f=fire, _v=vshot, _l=last):
+                _v.append(float(fi.get("v_shot_soft", 0.0)))
+                if fi.get("fire_event") and _f["step"] is None:
+                    _f["step"] = t
+                _l.clear(); _l.update(fi)
+
+            _run(st, seed=ep, steps=2000, fire_mode="clean",
+                 record=lambda e, s, t: traj.append(e._p(s[2]).copy()),
+                 on_info=on_info)
+            lab = ("HARD_KILL" if last.get("hard_kill") else
+                   "CAPTURED" if last.get("captured") else
+                   "PENETRATED" if last.get("penetrated") else "OTHER")
+            arms[tag] = dict(traj=np.array(traj), vshot=np.array(vshot),
+                             fire=fire["step"], label=lab,
+                             route_frac=float(np.mean(
+                                 [np.linalg.norm(d["route_req"]) > 0.0
+                                  for d in diags])))
+        n = min(len(arms["on"]["traj"]), len(arms["off"]["traj"]))
+        dv = np.linalg.norm(arms["on"]["traj"][:n] - arms["off"]["traj"][:n],
+                            axis=1)
+        m = min(len(arms["on"]["vshot"]), len(arms["off"]["vshot"]))
+        rows.append(dict(
+            episode=ep,
+            route_frac_on=round(arms["on"]["route_frac"], 4),
+            first_div=(int(np.argmax(dv > 1e-6)) if (dv > 1e-6).any() else None),
+            max_div=round(float(dv.max()), 3),
+            steps_delta=int(len(arms["on"]["traj"]) - len(arms["off"]["traj"])),
+            vshot_maxdiff=round(float(np.max(np.abs(
+                arms["on"]["vshot"][:m] - arms["off"]["vshot"][:m]))), 3)
+            if m else 0.0,
+            fire_on=arms["on"]["fire"], fire_off=arms["off"]["fire"],
+            label_on=arms["on"]["label"], label_off=arms["off"]["label"]))
+        r = rows[-1]
+        print(f"ep{ep:>3}: div_max={r['max_div']:>8} first@{r['first_div']} "
+              f"route={r['route_frac_on']:.2f} "
+              f"label {r['label_off']}->{r['label_on']} "
+              f"fire {r['fire_off']}->{r['fire_on']}", flush=True)
+    n_div = sum(1 for r in rows if r["max_div"] >= P94_DIV_M)
+    n_label = sum(1 for r in rows if r["label_on"] != r["label_off"])
+    n_fire = sum(1 for r in rows if r["fire_on"] != r["fire_off"])
+    green = bool(n_div >= P94_FRAC * len(rows))
+    out = dict(contract="docs/61 §5 P94", n=len(rows),
+               n_div_ge_1m=n_div, n_label_changed=n_label,
+               n_fire_changed=n_fire,
+               route_frac_mean=float(np.mean([r["route_frac_on"] for r in rows])),
+               green=green, rows=rows,
+               note=("green 전 'shepherding channel 학습 가능' 명칭 금지. "
+                     "red 여도 학습 금지 아님 -- 기전 서사 강등 후 재결정 "
+                     "(docs/61 §5)."))
+    print(f"P94: div>=1m {n_div}/{len(rows)} · label 변화 {n_label} · "
+          f"fire 변화 {n_fire} -> {'GREEN' if green else 'RED'}")
+    return out
+
+
 # ============================================================= P91b =======
 def p91b():
     """actual-v3 bearing sanity (docs/60 §4.3): finisher (2,0,0) 고정 ·
@@ -471,12 +559,13 @@ def p91b():
 def main():
     ap = argparse.ArgumentParser(description="threat v3 gates (docs/60 §5)")
     ap.add_argument("--gate", required=True,
-                    choices=["p88", "p89", "p90", "p91a", "p91b"])
+                    choices=["p88", "p89", "p90", "p91a", "p91b", "p94"])
     ap.add_argument("--eps", type=int, nargs=2, default=[0, P90_N],
                     metavar=("A", "B"), help="p90 샤딩 range [A, B)")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
-    fn = {"p88": p88, "p89": p89, "p91a": p91a, "p91b": p91b}.get(a.gate)
+    fn = {"p88": p88, "p89": p89, "p91a": p91a, "p91b": p91b,
+          "p94": p94}.get(a.gate)
     out = fn() if fn else p90(range(a.eps[0], a.eps[1]))
     path = pathlib.Path(a.out) if a.out else (
         RESULTS / (f"threat_v3_{a.gate}.json" if a.gate != "p90"
