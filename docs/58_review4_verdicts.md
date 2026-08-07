@@ -196,3 +196,21 @@ ep 35   OUTSIDE_NK_NEUTRALIZATION   ★ 캠페인 최초 NK-밖 kinetic 무력�
                -> 검사의 검정력 증명. 발산 안 하면 검사 무효
 결과 무관   경로 결정(A 주장 축소 / B 반응형 attacker)은 별도 -- 이 gate 는
            결정의 사실 기반만 제공한다
+
+### 7.1 ★ P84 결과 (2026-08-07 — `results/coupling_gate.json`)
+
+```
+밖 구성 42/42 (7판 × {t_fire−5, t*+1} × {side, line, far}) 공격자 궤적 bit 동일
+  (최소 이격 6.0 m -- 선언 하한 2.0 충족)
+positive control 14/14 (0.74 m 안) 1스텝 내 발산 -- 검사 검정력 증명
+```
+
+**판정: (i)(ii) 모두 성립 — "현행 A2 계약에서 0.75 m 밖 limiter 배치는
+공격자 행동에 직접 인과효과가 없다" 가 artifact 로 공식 확정됐다.**
+(net-side 간접 채널은 fire_mode="never" 로 격리한 상태의 결과 — fire gate
+경유 간접 결합은 별도 존재하며 이는 "성형→v_shot→발사 결정" 경로다.)
+
+귀결: 현 환경의 limiter 독립변수가 공격자 행동을 바꾸는 채널은 (a) 접촉
+반경 안 repel (b) v_shot 경유 net-side 뿐이다. **"shepherding(행동 유도)"
+주장은 현 계약에서 검정 불가** — 경로 결정(§5 큐 4: A 주장 축소 vs B 반응형
+attacker 계약)이 논문 방향 결정이며, 이는 Hyunjun 비준 사항이다.

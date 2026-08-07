@@ -1,0 +1,514 @@
+{
+  "contract": "docs/58 §7 (P84)",
+  "outside_all_identical": true,
+  "outside_n": 42,
+  "positive_control_all_diverge": true,
+  "positive_control_n": 14,
+  "min_clearance_outside": 6.0,
+  "records": [
+    {
+      "episode": 2,
+      "timepoint": "prefire",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 2,
+      "timepoint": "prefire",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 2,
+      "timepoint": "prefire",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 2,
+      "timepoint": "prefire",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 1,
+      "max_dev": 0.05987254845103183,
+      "identical": false
+    },
+    {
+      "episode": 2,
+      "timepoint": "postmiss",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 2,
+      "timepoint": "postmiss",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 2,
+      "timepoint": "postmiss",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 2,
+      "timepoint": "postmiss",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 3,
+      "max_dev": 0.02858376780732932,
+      "identical": false
+    },
+    {
+      "episode": 26,
+      "timepoint": "prefire",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 26,
+      "timepoint": "prefire",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 26,
+      "timepoint": "prefire",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 26,
+      "timepoint": "prefire",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 1,
+      "max_dev": 0.05480241913301227,
+      "identical": false
+    },
+    {
+      "episode": 26,
+      "timepoint": "postmiss",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 26,
+      "timepoint": "postmiss",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 26,
+      "timepoint": "postmiss",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 26,
+      "timepoint": "postmiss",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 3,
+      "max_dev": 0.034198396452646315,
+      "identical": false
+    },
+    {
+      "episode": 35,
+      "timepoint": "prefire",
+      "config": "side",
+      "clearance": 11.63,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 35,
+      "timepoint": "prefire",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 35,
+      "timepoint": "prefire",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 35,
+      "timepoint": "prefire",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 1,
+      "max_dev": 0.05866207236505363,
+      "identical": false
+    },
+    {
+      "episode": 35,
+      "timepoint": "postmiss",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 35,
+      "timepoint": "postmiss",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 35,
+      "timepoint": "postmiss",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 35,
+      "timepoint": "postmiss",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 1,
+      "max_dev": 0.04708960912226665,
+      "identical": false
+    },
+    {
+      "episode": 46,
+      "timepoint": "prefire",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 46,
+      "timepoint": "prefire",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 46,
+      "timepoint": "prefire",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 46,
+      "timepoint": "prefire",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 1,
+      "max_dev": 0.0537786728702206,
+      "identical": false
+    },
+    {
+      "episode": 46,
+      "timepoint": "postmiss",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 46,
+      "timepoint": "postmiss",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 46,
+      "timepoint": "postmiss",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 46,
+      "timepoint": "postmiss",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 3,
+      "max_dev": 0.03362070842697514,
+      "identical": false
+    },
+    {
+      "episode": 76,
+      "timepoint": "prefire",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 76,
+      "timepoint": "prefire",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 76,
+      "timepoint": "prefire",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 76,
+      "timepoint": "prefire",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 1,
+      "max_dev": 0.05971036515498056,
+      "identical": false
+    },
+    {
+      "episode": 76,
+      "timepoint": "postmiss",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 76,
+      "timepoint": "postmiss",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 76,
+      "timepoint": "postmiss",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 76,
+      "timepoint": "postmiss",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 3,
+      "max_dev": 0.03543087138816376,
+      "identical": false
+    },
+    {
+      "episode": 95,
+      "timepoint": "prefire",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 95,
+      "timepoint": "prefire",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 95,
+      "timepoint": "prefire",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 95,
+      "timepoint": "prefire",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 1,
+      "max_dev": 0.05493730088120152,
+      "identical": false
+    },
+    {
+      "episode": 95,
+      "timepoint": "postmiss",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 95,
+      "timepoint": "postmiss",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 95,
+      "timepoint": "postmiss",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 95,
+      "timepoint": "postmiss",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 3,
+      "max_dev": 0.026148590572309824,
+      "identical": false
+    },
+    {
+      "episode": 98,
+      "timepoint": "prefire",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 98,
+      "timepoint": "prefire",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 98,
+      "timepoint": "prefire",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 98,
+      "timepoint": "prefire",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 1,
+      "max_dev": 0.05541429416336078,
+      "identical": false
+    },
+    {
+      "episode": 98,
+      "timepoint": "postmiss",
+      "config": "side",
+      "clearance": 12.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 98,
+      "timepoint": "postmiss",
+      "config": "line",
+      "clearance": 6.0,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 98,
+      "timepoint": "postmiss",
+      "config": "far",
+      "clearance": 21.21,
+      "steps": 10,
+      "max_dev": 0.0,
+      "identical": true
+    },
+    {
+      "episode": 98,
+      "timepoint": "postmiss",
+      "config": "POSITIVE_CONTROL",
+      "clearance": 0.74,
+      "steps": 3,
+      "max_dev": 0.03034324942650943,
+      "identical": false
+    }
+  ]
+}

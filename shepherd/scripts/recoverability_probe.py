@@ -81,6 +81,7 @@ class _Driver:
         env.reset(seed=SEED0 + ep)
         self.se = _sysenv(env)
         self.fid = env.finisher_id
+        self.fire_mode = "clean"          # P84 채널 격리용 (기본 = 기존과 동일)
         self.prev_clean = False
         self.t = -1                       # 마지막으로 실행한 loop index
         self.fire_step: Optional[int] = None
@@ -103,7 +104,8 @@ class _Driver:
         p_att_pre = env._p(att).copy()
 
         acts = scripted_role_actions(env, scn, lay, limiter_mode=limiter_mode,
-                                     fire_mode="clean", prev_clean=self.prev_clean,
+                                     fire_mode=self.fire_mode,
+                                     prev_clean=self.prev_clean,
                                      states=(lims, fin, att))
         if limiter_override is not None:
             acts.update(limiter_override)
