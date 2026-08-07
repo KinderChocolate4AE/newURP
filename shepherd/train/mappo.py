@@ -105,6 +105,13 @@ class MAPPOConfig:
     # limiter advantage" literal form. CAVEAT (flagged in docs/09 SS8): at
     # mix=1 the limiter gradient no longer sees the shared J's -lambda3 loss
     # cost; if limiter_loss regresses, mix=0.5 is the documented fallback arm.
+    #
+    # ★ docs/65 D1 (2026-08-08 감사): l2_mappo.yaml 에 이 키가 없어 **전 M4
+    #   런에서 coma_mix=0.0** 이었다 -- coma_D 는 계산·로그되지만 gradient
+    #   contribution 0 인 DIAGNOSTIC ONLY 값이다. `train/coma_D_mean` 을 학습
+    #   신호로 인용하면 오독. 활성화(>0)는 단순 toggle 이 아니라 **새 learning
+    #   contract** 다: random standby 에선 cf=layout.limiter_p0 counterfactual
+    #   의 의미 재선언 + 재사전등록이 선행돼야 한다 (docs/65 D4).
     coma_mix: float = 0.0
     coma_gamma: float = 0.99
     coma_lam: float = 0.95

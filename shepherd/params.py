@@ -127,7 +127,10 @@ PARAMS: Dict[str, Param] = {
         "FinisherSpec.omega_max -> finisher backend slew limit",
         "R3 parameter choice (half turn per second)"),
     "attitude.e_net_init": Param((1.0, 0.0, 0.0), "unit vec", "ASSUMED", "config",
-        "FinisherSpec.e_net", "corridor geometry (net points +x at the corridor)"),
+        "parsed into scenario only -- ★ backend init hardcodes [1,0,0] "
+        "(make_env.py:104-109), so changing this value is SILENTLY INERT "
+        "(2026-08-08 감사 C6 정정; 두 값이 우연히 같아 현행 무해)",
+        "corridor geometry (net points +x at the corridor)"),
 
     # --- viability (v_shot surrogate) -----------------------------------------
     "viability.judge": Param("se3_cone", "-", "ASSUMED", "config",
@@ -142,7 +145,10 @@ PARAMS: Dict[str, Param] = {
         "2A' spike (2026-07-03): n-cut UNSAFE near the gate (n=500 err_max 0.190 > "
         "zero-waste band width 0.15) -> 2000 ratified for training; n-cuts debug-only"),
     "viability.seed": Param(0, "-", "ASSUMED", "config",
-        "ViabilitySpec.seed", "reproducibility convention"),
+        "parsed into ViabilitySpec only -- ★ runtime v_shot 은 스텝별 seed 를 "
+        "명시 인자로 받아 이 필드는 SILENTLY INERT (env.py:195,252; "
+        "2026-08-08 감사 C6 정정)",
+        "reproducibility convention"),
     "viability.n_segments": Param(4, "segments", "ASSUMED", "config",
         "S14 conservative extreme-point union (doglegs use ceil(K/2)+rest split)",
         "S14 ratified: >1 = trustworthy conservative signal L2 trains on; "
@@ -182,9 +188,16 @@ PARAMS: Dict[str, Param] = {
 
     # --- credit-assignment baselines (S8, FIXED) -------------------------------
     "baselines.headline_u0": Param("hold_position", "-", "ASSUMED", "config",
-        "env vbase layout", "S8: fixed baseline (vary per-step = reward hacking)"),
+        "parsed into BaselineSpec only -- ★ env hardcodes the hold-position "
+        "semantics via layout.limiter_p0 (env.py vbase; standby 활성 시 "
+        "apply_standby 가 재기입), string 값 변경은 SILENTLY INERT "
+        "(2026-08-08 감사 C6 정정)",
+        "S8: fixed baseline (vary per-step = reward hacking)"),
     "baselines.coma_u0": Param("hold_position", "-", "ASSUMED", "config",
-        "env coma_D counterfactual", "S8 fixed baseline"),
+        "parsed into BaselineSpec only -- ★ env coma_D counterfactual 도 "
+        "layout.limiter_p0 하드코딩 (env.py:272-288), string 값 변경은 "
+        "SILENTLY INERT (2026-08-08 감사 C6 정정)",
+        "S8 fixed baseline"),
 
     # --- train block (composition-root pins, 2026-07-03) -----------------------
     "train.episode_len": Param(80, "steps", "ASSUMED", "config",
@@ -274,8 +287,12 @@ PARAMS: Dict[str, Param] = {
     "scripted.limiter_kd": Param(4.0, "1/s", "TUNED", "code-default",
         "agents/baselines.scripted_shaping_limiter PD", "damps ring-slot overshoot"),
     "scripted.limiter_pressure": Param(1.0, "-", "RESERVED", "code-default",
-        "Box(4) idx 3 -- env receives-and-ignores (reserved dim)",
-        "docs/09 SS2 reserved-dim decision"),
+        "Box(4) idx 3 -- frozen env ignores; ★ M4 ModeSystemEnv reads idx3 as "
+        "the COMMIT BIT (commit_threshold=0.5). Baselines emit 1.0 and only "
+        "mission_rollout._zero_commit keeps them commit-free on M4 stacks -- "
+        "reusing a baseline WITHOUT _zero_commit on M4 = step-1 all-commit trap "
+        "(rollout_gif has this bug; 2026-08-08 감사 C6 정정)",
+        "docs/09 SS2 reserved-dim decision; docs/29 §3.1 idx3=commit"),
     "scripted.finisher_slew_cmd": Param(1.0, "-", "RESERVED", "code-default",
         "Box(5) idx 3 -- env receives-and-ignores (reserved dim)", "same decision"),
 

@@ -129,7 +129,7 @@ docs/61 은 동결 상태 그대로다 (r2 비준, f4fa6bf).
 | NK 42/42 | "해당 7판·해당 budget 에서 NK 밖 contact 미발견" (legacy 한정) |
 | LS≈SS | "한 운용점·한 알고리즘·발사 정상 조건에서 편대 학습 순이득 미측정" |
 | P94 GREEN | "자연 상태 route causal channel 의 측정 가능한 인과효과 실증 — 학습 이용 여부는 MARL+대조의 몫" |
-| pre-fire ep35 | "NK-밖 창 개방 가능성의 첫 사례 (1/7, 무반응 A2·privileged·budget 한정)" |
+| pre-fire ep35 | "**NK-밖 engagement opportunity 의 첫 witness** (1/7, 무반응 A2·privileged·budget 한정)" [C8 하향 2026-08-08 — "창(window)" 은 시간 지속 함의라 금지, docs/65 §4] |
 | V2 | "primary 재현 FAIL / 기전 귀속 PASS" 2줄 고정 |
 | C2R 1.000 | "Pk=1 semantics check" (성능 아님) |
 | R2 handoff | "전환 기제 검증 / scripted 폴백 무력화 미실증 (0/7)" + F-flags 한정 |

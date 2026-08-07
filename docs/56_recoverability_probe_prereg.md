@@ -123,6 +123,13 @@ optimizer 내부 proxy 를 "접촉 거리 최소화" 하나로 두지 않는다 
 replay 의 terminal 라벨** (`NET_CAPTURE / CONTACT_NEUTRALIZATION /
 COMMIT_HARD_KILL / PENETRATED`) 로 하고, proxy 점수는 후보 선택에만 쓴다.
 
+> [표기 정정 2026-08-08, G03 — 원문 보존, 소급 수정 없음] 위와 §9 의
+> `CONTACT_NEUTRALIZATION` / `COMMIT_HARD_KILL` 은 **env terminal 라벨이
+> 아니다.** 실제 env 라벨 집합은 `NET_CAPTURE / CAPTURE_WITH_CONTACT /
+> HARD_KILL / PENETRATED / SPENT_FAIL / TRUNCATED` (mission_rollout.LABELS)
+> 이고, 두 표기는 `HARD_KILL` 을 `CommitRecord.source`("contact"/"commit")
+> 로 나눈 **분석 카테고리**다. 인용 시 env 라벨처럼 쓰지 않는다.
+
 ## 7. ★ 실행 환경 격리 게이트 (리뷰 3 후속 — 재현성 최대 위험)
 
 **이번 세션(2026-08-06)의 모든 감사·회귀는 dirty tree 위에서 실행됐다**:

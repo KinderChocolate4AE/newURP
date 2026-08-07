@@ -238,6 +238,8 @@ class MAPPORunner:
             "train/ep_return": float(np.mean([x["ret"] for x in recs])),
             "train/ep_len": float(np.mean([x["len"] for x in recs])),
             "train/headline_sum": float(np.mean([x["headline_sum"] for x in recs])),
+            # ★ diagnostic only (docs/65 D1/D2): coma_mix=0 이면 gradient 미도달.
+            #   키 이름은 기존 dump 와의 비교성 때문에 유지 -- 학습 신호로 읽지 말 것.
             "train/coma_D_mean": float(np.mean([x["coma_D_mean"] for x in recs])),
             "train/limiter_loss_sum": float(np.mean([x["limiter_loss_sum"] for x in recs])),
             "train/fire_events": float(np.mean([x["fire_events"] for x in recs])),
