@@ -1,0 +1,27 @@
+V3-C ep 25:  PENETRATED steps= 269 route=0.10 zdom=0.57 zmax= 6.31 clip=0.01
+V3-C ep 26:  PENETRATED steps= 340 route=0.09 zdom=0.03 zmax= 4.88 clip=0.11
+V3-C ep 27:  PENETRATED steps= 312 route=0.11 zdom=0.27 zmax= 5.63 clip=0.00
+V3-C ep 28:  PENETRATED steps= 209 route=0.11 zdom=0.73 zmax= 4.69 clip=0.00
+V3-C ep 29:  PENETRATED steps= 738 route=0.13 zdom=0.31 zmax=15.83 clip=0.00
+V3-C ep 30:  PENETRATED steps= 490 route=0.11 zdom=0.52 zmax= 7.51 clip=0.00
+V3-C ep 31: NET_CAPTURE steps= 243 route=0.10 zdom=0.38 zmax= 2.39 clip=0.03
+V3-C ep 32:  PENETRATED steps= 272 route=0.10 zdom=0.96 zmax= 2.97 clip=0.01
+V3-C ep 33:  PENETRATED steps= 202 route=0.10 zdom=0.86 zmax= 3.55 clip=0.00
+V3-C ep 34:  PENETRATED steps= 477 route=0.12 zdom=0.52 zmax=11.13 clip=0.00
+V3-C ep 35:  PENETRATED steps= 415 route=0.10 zdom=0.90 zmax= 4.54 clip=0.08
+V3-C ep 36:  PENETRATED steps= 339 route=0.11 zdom=0.42 zmax= 5.92 clip=0.00
+V3-C ep 37:  PENETRATED steps= 206 route=0.10 zdom=0.55 zmax= 2.18 clip=0.00
+V3-C ep 38:  PENETRATED steps= 214 route=0.11 zdom=0.70 zmax= 2.97 clip=0.00
+V3-C ep 39: NET_CAPTURE steps= 391 route=0.10 zdom=0.39 zmax= 3.78 clip=0.01
+V3-C ep 40: NET_CAPTURE steps= 403 route=0.10 zdom=0.97 zmax= 1.98 clip=0.01
+V3-C ep 41:  PENETRATED steps= 454 route=0.11 zdom=0.44 zmax= 9.86 clip=0.00
+V3-C ep 42:  PENETRATED steps= 447 route=0.12 zdom=0.48 zmax=11.61 clip=0.00
+V3-C ep 43:  PENETRATED steps= 202 route=0.10 zdom=0.10 zmax= 4.99 clip=0.01
+V3-C ep 44:  PENETRATED steps= 274 route=0.11 zdom=0.57 zmax= 7.78 clip=0.01
+V3-C ep 45:  PENETRATED steps= 221 route=0.10 zdom=0.74 zmax= 5.33 clip=0.01
+V3-C ep 46:  PENETRATED steps= 374 route=0.09 zdom=0.85 zmax= 3.01 clip=0.10
+V3-C ep 47:  PENETRATED steps= 511 route=0.12 zdom=0.51 zmax=14.62 clip=0.00
+V3-C ep 48:  PENETRATED steps= 266 route=0.10 zdom=0.48 zmax= 4.62 clip=0.01
+V3-C ep 49:  PENETRATED steps= 348 route=0.11 zdom=0.51 zmax= 9.15 clip=0.00
+V3-C labels: {'PENETRATED': 22, 'NET_CAPTURE': 3}
+-> results/v6_v3_c_25_50.json

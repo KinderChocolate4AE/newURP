@@ -1,0 +1,27 @@
+V3-CS ep 25:  PENETRATED steps= 278 route=0.17 zdom=0.57 zmax= 9.13 clip=0.02
+V3-CS ep 26:  PENETRATED steps= 321 route=0.16 zdom=0.29 zmax= 4.88 clip=0.06
+V3-CS ep 27:  PENETRATED steps= 322 route=0.17 zdom=0.46 zmax= 8.58 clip=0.03
+V3-CS ep 28:  PENETRATED steps= 216 route=0.17 zdom=0.59 zmax= 7.54 clip=0.05
+V3-CS ep 29:  PENETRATED steps= 767 route=0.18 zdom=0.22 zmax=20.46 clip=0.00
+V3-CS ep 30:  PENETRATED steps= 506 route=0.16 zdom=0.57 zmax=11.33 clip=0.01
+V3-CS ep 31: NET_CAPTURE steps= 255 route=0.17 zdom=0.18 zmax=  3.7 clip=0.14
+V3-CS ep 32:  PENETRATED steps= 281 route=0.16 zdom=0.76 zmax= 4.39 clip=0.06
+V3-CS ep 33:  PENETRATED steps= 209 route=0.17 zdom=0.72 zmax= 5.11 clip=0.06
+V3-CS ep 34:  PENETRATED steps= 495 route=0.18 zdom=0.32 zmax=15.26 clip=0.00
+V3-CS ep 35:  PENETRATED steps= 440 route=0.15 zdom=0.84 zmax=  7.0 clip=0.11
+V3-CS ep 36:  PENETRATED steps= 351 route=0.17 zdom=0.61 zmax= 8.68 clip=0.03
+V3-CS ep 37:  PENETRATED steps= 213 route=0.16 zdom=0.69 zmax= 3.76 clip=0.10
+V3-CS ep 38:  PENETRATED steps= 222 route=0.17 zdom=0.82 zmax= 5.07 clip=0.09
+V3-CS ep 39: NET_CAPTURE steps= 408 route=0.17 zdom=0.76 zmax= 5.16 clip=0.06
+V3-CS ep 40: NET_CAPTURE steps= 422 route=0.16 zdom=0.99 zmax= 2.87 clip=0.08
+V3-CS ep 41:  PENETRATED steps= 470 route=0.18 zdom=0.32 zmax=13.38 clip=0.00
+V3-CS ep 42:  PENETRATED steps= 464 route=0.19 zdom=0.40 zmax=15.73 clip=0.00
+V3-CS ep 43:  PENETRATED steps= 210 route=0.17 zdom=0.50 zmax= 4.99 clip=0.12
+V3-CS ep 44:  PENETRATED steps= 282 route=0.17 zdom=0.38 zmax=11.27 clip=0.02
+V3-CS ep 45:  PENETRATED steps= 228 route=0.17 zdom=0.46 zmax= 8.21 clip=0.04
+V3-CS ep 46:  PENETRATED steps= 400 route=0.14 zdom=0.76 zmax= 4.65 clip=0.16
+V3-CS ep 47:  PENETRATED steps= 532 route=0.18 zdom=0.50 zmax=20.14 clip=0.00
+V3-CS ep 48:  PENETRATED steps= 275 route=0.16 zdom=0.62 zmax= 6.81 clip=0.04
+V3-CS ep 49:  PENETRATED steps= 360 route=0.17 zdom=0.48 zmax=13.34 clip=0.01
+V3-CS labels: {'PENETRATED': 22, 'NET_CAPTURE': 3}
+-> results/v6_v3_cs_25_50.json

@@ -1,0 +1,27 @@
+V3-C ep 75:  PENETRATED steps= 205 route=0.10 zdom=0.62 zmax= 4.68 clip=0.02
+V3-C ep 76:  PENETRATED steps= 372 route=0.10 zdom=0.94 zmax= 3.64 clip=0.10
+V3-C ep 77:  PENETRATED steps= 286 route=0.10 zdom=0.66 zmax= 6.35 clip=0.00
+V3-C ep 78:  PENETRATED steps= 345 route=0.10 zdom=0.61 zmax=  5.5 clip=0.00
+V3-C ep 79:  PENETRATED steps= 257 route=0.10 zdom=0.38 zmax=  4.3 clip=0.00
+V3-C ep 80:  PENETRATED steps= 387 route=0.11 zdom=0.59 zmax= 8.01 clip=0.00
+V3-C ep 81: NET_CAPTURE steps= 437 route=0.10 zdom=0.96 zmax=  2.6 clip=0.01
+V3-C ep 82:  PENETRATED steps= 221 route=0.10 zdom=0.48 zmax= 4.09 clip=0.01
+V3-C ep 83: NET_CAPTURE steps= 315 route=0.10 zdom=0.00 zmax= 3.53 clip=0.02
+V3-C ep 84:  PENETRATED steps= 380 route=0.11 zdom=0.56 zmax=10.55 clip=0.00
+V3-C ep 85:  PENETRATED steps= 207 route=0.10 zdom=0.95 zmax= 3.13 clip=0.00
+V3-C ep 86:  PENETRATED steps= 457 route=0.10 zdom=0.50 zmax= 8.22 clip=0.00
+V3-C ep 87:  PENETRATED steps= 222 route=0.10 zdom=0.36 zmax= 3.65 clip=0.00
+V3-C ep 88:  PENETRATED steps= 381 route=0.10 zdom=0.64 zmax= 4.33 clip=0.01
+V3-C ep 89:  PENETRATED steps= 359 route=0.09 zdom=0.82 zmax= 3.54 clip=0.11
+V3-C ep 90:  PENETRATED steps= 631 route=0.11 zdom=0.46 zmax=11.02 clip=0.00
+V3-C ep 91:  PENETRATED steps= 239 route=0.10 zdom=0.48 zmax= 5.55 clip=0.01
+V3-C ep 92:  PENETRATED steps= 311 route=0.11 zdom=0.56 zmax=  9.5 clip=0.00
+V3-C ep 93:  PENETRATED steps= 210 route=0.10 zdom=0.45 zmax= 5.76 clip=0.00
+V3-C ep 94:  PENETRATED steps= 736 route=0.11 zdom=0.43 zmax=10.58 clip=0.00
+V3-C ep 95:  PENETRATED steps= 294 route=0.09 zdom=0.44 zmax= 3.45 clip=0.15
+V3-C ep 96:  PENETRATED steps= 724 route=0.13 zdom=0.34 zmax= 14.2 clip=0.00
+V3-C ep 97:  PENETRATED steps= 614 route=0.11 zdom=0.48 zmax=10.04 clip=0.00
+V3-C ep 98:  PENETRATED steps= 362 route=0.09 zdom=0.73 zmax= 3.18 clip=0.11
+V3-C ep 99:  PENETRATED steps= 394 route=0.10 zdom=0.46 zmax= 8.49 clip=0.00
+V3-C labels: {'PENETRATED': 23, 'NET_CAPTURE': 2}
+-> results/v6_v3_c_75_100.json

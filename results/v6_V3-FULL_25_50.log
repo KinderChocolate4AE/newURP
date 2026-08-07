@@ -1,0 +1,27 @@
+V3-FULL ep 25:  PENETRATED steps= 306 route=0.13 zdom=0.85 zmax= 3.35 clip=0.09
+V3-FULL ep 26:  PENETRATED steps= 319 route=0.08 zdom=0.73 zmax= 4.88 clip=0.07
+V3-FULL ep 27:  PENETRATED steps= 305 route=0.09 zdom=0.85 zmax= 4.15 clip=0.04
+V3-FULL ep 28:  PENETRATED steps= 234 route=0.18 zdom=0.86 zmax= 3.32 clip=0.19
+V3-FULL ep 29:  PENETRATED steps= 655 route=0.11 zdom=0.76 zmax= 7.45 clip=0.00
+V3-FULL ep 30:  PENETRATED steps= 440 route=0.10 zdom=0.77 zmax= 4.31 clip=0.02
+V3-FULL ep 31: NET_CAPTURE steps= 272 route=0.08 zdom=0.86 zmax= 2.39 clip=0.16
+V3-FULL ep 32:  PENETRATED steps= 283 route=0.08 zdom=0.74 zmax= 1.09 clip=0.07
+V3-FULL ep 33:  PENETRATED steps= 270 route=0.30 zdom=0.90 zmax=  6.9 clip=0.33
+V3-FULL ep 34:  PENETRATED steps= 551 route=0.09 zdom=0.68 zmax= 5.76 clip=0.01
+V3-FULL ep 35:  PENETRATED steps= 492 route=0.12 zdom=0.88 zmax= 2.77 clip=0.10
+V3-FULL ep 36:  PENETRATED steps= 402 route=0.07 zdom=0.80 zmax=  5.0 clip=0.04
+V3-FULL ep 37:  PENETRATED steps= 263 route=0.26 zdom=0.94 zmax= 4.63 clip=0.30
+V3-FULL ep 38:  PENETRATED steps= 280 route=0.21 zdom=0.93 zmax= 4.11 clip=0.24
+V3-FULL ep 39:  PENETRATED steps= 500 route=0.15 zdom=0.86 zmax= 3.79 clip=0.15
+V3-FULL ep 40: NET_CAPTURE steps= 409 route=0.07 zdom=0.93 zmax= 1.39 clip=0.09
+V3-FULL ep 41:  PENETRATED steps= 460 route=0.10 zdom=0.75 zmax= 4.23 clip=0.02
+V3-FULL ep 42:  PENETRATED steps= 430 route=0.10 zdom=0.70 zmax= 4.38 clip=0.01
+V3-FULL ep 43:  PENETRATED steps= 225 route=0.08 zdom=0.72 zmax=  5.0 clip=0.15
+V3-FULL ep 44:  PENETRATED steps= 253 route=0.09 zdom=0.95 zmax=  4.2 clip=0.02
+V3-FULL ep 45:  PENETRATED steps= 262 route=0.16 zdom=0.90 zmax=  5.1 clip=0.14
+V3-FULL ep 46:  PENETRATED steps= 313 route=0.09 zdom=0.89 zmax= 1.72 clip=0.05
+V3-FULL ep 47:  PENETRATED steps= 578 route=0.09 zdom=0.67 zmax= 6.55 clip=0.01
+V3-FULL ep 48:  PENETRATED steps= 308 route=0.16 zdom=0.92 zmax= 4.62 clip=0.15
+V3-FULL ep 49:  PENETRATED steps= 386 route=0.08 zdom=0.83 zmax= 4.27 clip=0.05
+V3-FULL labels: {'PENETRATED': 23, 'NET_CAPTURE': 2}
+-> results/v6_v3_full_25_50.json

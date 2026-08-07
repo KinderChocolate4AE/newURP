@@ -1,0 +1,27 @@
+V3-C ep  0:  PENETRATED steps= 234 route=0.10 zdom=0.74 zmax=  3.4 clip=0.00
+V3-C ep  1:  PENETRATED steps= 277 route=0.09 zdom=0.92 zmax= 1.79 clip=0.21
+V3-C ep  2:  PENETRATED steps= 343 route=0.09 zdom=0.32 zmax= 4.07 clip=0.11
+V3-C ep  3:  PENETRATED steps= 340 route=0.11 zdom=0.47 zmax= 9.87 clip=0.00
+V3-C ep  4: NET_CAPTURE steps= 405 route=0.11 zdom=0.95 zmax=  2.0 clip=0.01
+V3-C ep  5:  PENETRATED steps= 258 route=0.10 zdom=0.31 zmax= 4.17 clip=0.00
+V3-C ep  6:  PENETRATED steps= 306 route=0.10 zdom=0.50 zmax= 5.08 clip=0.00
+V3-C ep  7:  PENETRATED steps= 213 route=0.10 zdom=0.86 zmax= 3.11 clip=0.00
+V3-C ep  8:  PENETRATED steps= 222 route=0.10 zdom=0.43 zmax= 5.72 clip=0.01
+V3-C ep  9:  PENETRATED steps= 412 route=0.11 zdom=0.45 zmax= 7.03 clip=0.00
+V3-C ep 10: NET_CAPTURE steps= 296 route=0.10 zdom=1.00 zmax=  2.0 clip=0.01
+V3-C ep 11:  PENETRATED steps= 209 route=0.10 zdom=0.57 zmax= 4.05 clip=0.00
+V3-C ep 12:  PENETRATED steps= 471 route=0.11 zdom=0.52 zmax= 9.84 clip=0.00
+V3-C ep 13:  PENETRATED steps= 283 route=0.10 zdom=0.48 zmax= 6.99 clip=0.00
+V3-C ep 14:  PENETRATED steps= 244 route=0.11 zdom=0.54 zmax= 7.41 clip=0.00
+V3-C ep 15:  PENETRATED steps= 516 route=0.11 zdom=0.57 zmax= 8.06 clip=0.00
+V3-C ep 16: NET_CAPTURE steps= 285 route=0.10 zdom=0.97 zmax=  2.5 clip=0.02
+V3-C ep 17:  PENETRATED steps= 692 route=0.13 zdom=0.33 zmax= 17.3 clip=0.00
+V3-C ep 18:  PENETRATED steps= 540 route=0.11 zdom=0.47 zmax=10.67 clip=0.00
+V3-C ep 19:  PENETRATED steps= 453 route=0.13 zdom=0.37 zmax=14.32 clip=0.00
+V3-C ep 20:  PENETRATED steps= 293 route=0.10 zdom=0.57 zmax= 6.76 clip=0.01
+V3-C ep 21:  PENETRATED steps= 252 route=0.10 zdom=0.24 zmax= 3.76 clip=0.01
+V3-C ep 22:  PENETRATED steps= 352 route=0.10 zdom=0.34 zmax= 6.02 clip=0.00
+V3-C ep 23: NET_CAPTURE steps= 422 route=0.10 zdom=0.20 zmax= 3.84 clip=0.02
+V3-C ep 24: NET_CAPTURE steps= 545 route=0.10 zdom=1.00 zmax= 3.17 clip=0.01
+V3-C labels: {'PENETRATED': 20, 'NET_CAPTURE': 5}
+-> results/v6_v3_c_0_25.json
