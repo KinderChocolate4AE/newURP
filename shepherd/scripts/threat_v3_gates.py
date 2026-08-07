@@ -32,7 +32,7 @@ from shepherd.m4_env import build_m4_env
 from shepherd.scale_v2 import THREAT_V3_NOMINAL, V3_ARMS
 from shepherd.scripts.mission_rollout import ROLES, run_episode, scripted_role_actions
 
-__all__ = ["p88", "p89", "p90", "p91a", "p91b", "p92", "p94"]
+__all__ = ["p88", "p89", "p90", "p91a", "p91b", "p92", "p93", "p94"]
 
 RESULTS = pathlib.Path(__file__).resolve().parents[2] / "results"
 
@@ -508,6 +508,61 @@ def p94(eps=P94_EPS):
     return out
 
 
+# ============================================================== P93 =======
+P93_N = 50
+
+
+def p93(eps=range(P93_N)):
+    """TRAIN 침투 보존 표본검사 (docs/61 §5 P93, P90 동형).
+
+    train draw 50판 · defender 제거 -> 50/50 PENETRATED · TRUNCATED 0.
+    분포 모서리(cruise 저속 + slowdown)의 자멸 배제 + episode_len_train=1100
+    의 첫 검증을 겸한다 (green -> 1100 확정, docs/61 비준표 조건부 이행).
+
+    게이트는 draw 를 **명시적으로 풀어서** 점 스펙으로 조립한다 (threat_layer
+    경로는 extra_cfg 를 막는데, fire=never 게이트는 NS_FAST 축소가 정당 --
+    모듈 헤더). standby 는 defender 제거 처치로 무의미해 None.
+    """
+    from shepherd.scale_v2 import draw_threat_v3
+
+    rows = []
+    for ep in eps:
+        d = draw_threat_v3(0, ep, "train")
+        st = build_m4_env(
+            0, ep,
+            system=SystemSpec(enabled=True, contact_resolver=True,
+                              miss_terminates=False, p_kill=1.0),
+            reward=RewardSpec(w_kill=0.5, enabled=True),
+            attacker=d["attacker"], spawn=d["spawn"], standby=None,
+            extra_cfg=dict(d["cfg"], **NS_FAST))
+        base = _base_env(st.env)
+        far = [[10000.0, 10000.0 + 10.0 * i, 0.0]
+               for i in range(len(base.limiter_ids))]
+        for lid, p in zip(base.limiter_ids, far):
+            ag = base.backend.by_name(lid)
+            ag.p0 = list(p)
+            ag.v0 = [0.0, 0.0, 0.0]
+        base.layout.limiter_p0 = far
+        r = run_episode(st.env, st.scn, st.lay, seed=ep,
+                        limiter_mode="hold", fire_mode="never")
+        rows.append(dict(episode=ep, cell=list(d["cell"]), label=r.label,
+                         steps=r.steps, min_d=round(r.min_target_dist, 2)))
+        print(f"ep{ep:>3}: {r.label:>11} steps={r.steps:>4} "
+              f"cell={d['cell'][0]}/{d['cell'][1]} "
+              f"min_d={r.min_target_dist:.2f}", flush=True)
+    labs = {}
+    for r in rows:
+        labs[r["label"]] = labs.get(r["label"], 0) + 1
+    ok = (labs.get("PENETRATED", 0) == len(rows)
+          and labs.get("TRUNCATED", 0) == 0)
+    out = dict(contract="docs/61 §5 P93", n=len(rows), labels=labs,
+               episode_len_train=1100, all_pass=ok, rows=rows,
+               note=("green = episode_len_train 1100 확정 (비준표 조건부 이행). "
+                     "TRUNCATED 발생 시 해석 금지 + 재사전등록 (docs/61 §2)."))
+    print(f"P93 labels={labs} -> {'PASS (1100 확정)' if ok else 'FAIL'}")
+    return out
+
+
 # ============================================================== P92 =======
 P92_N = 900                  # coverage 검정 draw 수 (docs/61 §5: 9셀 각 100 기대)
 P92_Z = 2.576                # 99% 양측 귀무 이항 CI
@@ -649,13 +704,14 @@ def p91b():
 def main():
     ap = argparse.ArgumentParser(description="threat v3 gates (docs/60 §5)")
     ap.add_argument("--gate", required=True,
-                    choices=["p88", "p89", "p90", "p91a", "p91b", "p92", "p94"])
+                    choices=["p88", "p89", "p90", "p91a", "p91b", "p92", "p93",
+                             "p94"])
     ap.add_argument("--eps", type=int, nargs=2, default=[0, P90_N],
                     metavar=("A", "B"), help="p90 샤딩 range [A, B)")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
     fn = {"p88": p88, "p89": p89, "p91a": p91a, "p91b": p91b,
-          "p92": p92, "p94": p94}.get(a.gate)
+          "p92": p92, "p93": p93, "p94": p94}.get(a.gate)
     out = fn() if fn else p90(range(a.eps[0], a.eps[1]))
     path = pathlib.Path(a.out) if a.out else (
         RESULTS / (f"threat_v3_{a.gate}.json" if a.gate != "p90"
