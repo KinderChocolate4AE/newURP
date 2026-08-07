@@ -430,6 +430,7 @@ def _general_action(spec, p_att, v_att, *, target, net_center, finisher_p, limit
         diag.update(
             a_raw=float(nrm), clipped=bool(nrm > a_att_max),
             route_req=[float(x) for x in a_route], v_ref=float(v_ref),
+            v_nominal=float(v_nominal),
             speed=float(np.linalg.norm(v_att)),
             v_max=(float(v_max) if v_max is not None else None),
             d_asset=float(np.linalg.norm(np.asarray(target, float) - p_att)),

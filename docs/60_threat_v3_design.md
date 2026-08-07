@@ -79,6 +79,25 @@ legacy A2 를 NESTING 으로 bit-exact 내포한다.
 acceleration 을 수행하는 비정상 종축 속도 프로파일"*. "gate 기만 / 창을
 거짓으로 넓힘" 금지. bait 효과 주장은 별도 paired micro-test 사전등록으로.
 
+### 2.2 ★ 가속도 budget 구성 계약 (r4 — P89 재비준 명문화)
+
+> **Acceleration-budget composition:** longitudinal speed tracking, jink,
+> and reactive routing share a single 3-D acceleration budget bounded by
+> `a_att_max`. Component interactions caused by final norm clipping are
+> therefore part of the threat contract, not treated as an implementation
+> defect. `route_gain = 0.5` is retained as the NOMINAL manipulation-check
+> value; realized route authority is reported separately from requested
+> authority.
+
+- 공격자 능력이 단일 `|a| ≤ a_att_max` 라면 종축 sprint 와 횡축
+  회피가 **같은 actuator authority 를 경쟁하는 것이 물리적으로 맞다.**
+  lateral budget 보장/route 우선권은 오히려 새 임의 설계 — 도입하지 않는다.
+- **축 (i)·(ii) 의 independence 주장은 하지 않는다** (P89 saturation 실측:
+  sprint 구간 clip 36% 평균·route authority 0.53 — §5.1).
+- route_gain 을 지금 수치를 보고 내리는 것(예: 0.5→0.3)은 "포화를 덜 보이게
+  하는 값" 으로의 사후 튜닝이라 금지. P88 이 0.5 에서 channel 을 열었고
+  낮출 물리 앵커도 없다.
+
 ## 3. 축 (ii) — 횡 반응성: angular-gap 재정식화 (r2 — route_probe 소멸)
 
 ### 3.1 왜 probe-circle 을 버리는가
@@ -135,6 +154,12 @@ v_test(u)·τ|`) 로 threat tube 겹침 각을 계산하는 것이나, 그건 co
   반올림 유사동률의 정확동률 승격용 수치 항 (물리 아님).
 - 종말 게이트: `d_target ≤ jink_terminal_r` 에서 off (기존 규약 상속).
 - 난수·시간 무관 (연속 계산, 16-방위 스캔 폐지) → 결정론.
+- ★ (r4) **+z 선호의 결정론적 위쪽 편향 주의**: 공면 동률에서 공격자는
+  항상 위로 간다 — MARL 이 "평면에서 막으면 무조건 위" 를 exploit 로 암기할
+  수 있다. 대응: **TRAIN 에서 tie-break 를 랜덤화하지 않는다** (비정상성
+  금지). 대신 **OOD 에 −z tie-break variant (또는 ±ε vertical bias) 를
+  예약** (docs/61) — OOD 에서도 성능이 유지되면 3D geometry 를 배운 것이지
+  +z 규칙 암기가 아니라는 증거가 된다.
 
 **남는 파라미터 = `sense_range` · `route_gain` 둘뿐** (r_block 은 기존 선언량
 합성). 해석: *"attacker 는 감지된 limiter 가 만드는 angular blockage 를 보고
@@ -282,14 +307,30 @@ P91b  1차 FAIL (mirror_dev 2.42 m) -> 원인 = 공면 퇴화 tie-break 비공�
       (mirror_dev 8.95e-16). 게이트가 설계 목적대로 대칭 결함을 사전 검출
 ```
 
-이후 순서: P88~P91 green → **docs/61 THREAT_V3_TRAIN_DISTRIBUTION 사전등록**
-(축별 범위 + IID held-out 프로토콜 + OOD 공격자 정의 + 평가지표
-E[J]/Q_0.1/CVaR 판정식, 전부 학습 결과 전 동결) → 그 뒤에만 MARL.
-★ (r3) docs/61 규율 예약: parameter-wise independent uniform box 하나로
-끝내지 않는다 — 독립 uniform 이 자동으로 좋은 threat distribution 이
-아니다 (예: sense 높음 × route_gain≈0 × 이른 sprint × 강한 slowdown 조합의
-확률은 모델링 선택이다). 최소한 축별 stratification (예: weak/medium/strong
-reactivity × speed profile) 으로 coverage 를 보장한 뒤 내부 jitter.
+★ 이후 순서 (r4 개정 — V6/V7 을 docs/61 앞으로): P87~P91 은 계약 correctness
+검증이지 nominal behavioral sanity 가 아니다. NOMINAL 이 실제로 어떤
+상태분포를 만드는지 한 번도 보지 않고 TRAIN 범위를 동결할 수 없다:
+
+```
+1. P89 재비준 [완료 r4] -- route_gain 0.5 확정 + §2.2 budget 계약
+2. V6 nominal nested baseline (학습 없음 · C/CS/FULL 각 n=100 · hold/clean)
+   관측 항목 (사전 선언 -- 성능 판정 아님·수락대역 없음):
+     (a) route 활성 빈도 (스텝 비율)   (b) vertical escape 빈도·크기 (|z|)
+     (c) saturation 분포              (d) sprint/slowdown 실제 발생 여부
+     (e) FULL 초기 재배치의 물리 가능성 (t_redeploy vs t_arrival 기하비)
+     (f) trivial self-defeat 부재 (라벨 분포)
+3. V7 뷰어 -- 특히 "평면 봉쇄 -> over-the-top escape" 실존 확인 (Hyunjun)
+4. docs/61 THREAT_V3_TRAIN_DISTRIBUTION 사전등록 -- ★ V6 결과로 범위를
+   튜닝하지 않는다. V6 는 계약이 의도대로 작동하는지 sanity 전용이고,
+   TRAIN 범위는 물리/설계 불확실성 근거로만 정한다 (데이터 의존 금지).
+   축별 범위 + IID held-out + OOD (구조 변형 + ★ −z tie-break variant)
+   + 평가지표 E[J]/Q_0.1/CVaR 판정식, 학습 결과 전 동결
+5. 그 뒤에만 MARL
+```
+
+★ (r3 유지) docs/61 규율: parameter-wise independent uniform box 하나로
+끝내지 않는다 — 축별 stratification (예: weak/medium/strong reactivity ×
+speed profile) 으로 coverage 를 보장한 뒤 내부 jitter.
 
 판정식·선언값은 결과 후 불변경. 조정은 새 사전등록으로만.
 
@@ -308,7 +349,7 @@ reactivity × speed profile) 으로 coverage 를 보장한 뒤 내부 jitter.
 | 2 | `sprint_frac` | 1.0 | 비준 (TRAIN 분포 축) |
 | 3 | `slowdown_range` | (90, 60) m | 비준 (기전 주장 보류) |
 | 4 | `slowdown_frac` | 0.5 | 비준 (TRAIN 분포 축) |
-| 5 | `route_gain` | 0.5 | 조건부 (P89 audit) |
+| 5 | `route_gain` | 0.5 | **비준 확정 (r4)** — §2.2 budget 계약으로 명문화, 인하 금지 |
 | 6 | `sense_range` | 30 m | 비준 (TRAIN 분포 축) |
 | 7 | ~~`route_probe`~~ | 소멸 | **비준 (r3 조건 이행)** — instantaneous heuristic 명칭 제한 + r_block 의미 제한 (§3.2) |
 | 8 | `r_range` | (250, 350) m | 비준 |
@@ -355,3 +396,13 @@ reactivity × speed profile) 으로 coverage 를 보장한 뒤 내부 jitter.
 | #12 φ₀ | 승인 · U[0,π/2) 권장 채택 | §4.2 |
 | #13 standby 계약 | 승인 | — |
 | docs/61 예약 | independent uniform box 단독 금지 · stratification | §5 |
+
+**r4 (2026-08-07 4차 — P89 재비준 + 순서 개정)**:
+| 항목 | 판정 | 반영 |
+|---|---|---|
+| P89 | route_gain 0.5 **확정** — 단일 3D 가속도 budget 공유를 의도된 계약으로 명문화 (수치 보고 후 인하 = 사후 튜닝 금지) | §2.2 |
+| 축 (i)·(ii) independence | **기각** — saturation 은 계약의 일부, 결함 아님 | §2.2 |
+| +z tie-break | NOMINAL 유지 · TRAIN 랜덤화 금지 · OOD 에 −z/±ε variant 예약 | §3.2·§5 |
+| standby | 유지 (구/사면체 금지) — vertical escape 는 MARL 의 3D 협력 시험대 | §4.2 |
+| V3-CS→FULL 차분 | descriptive 재강조 (초기거리·orientation·수직 coverage·역할 난도 동시 변화) | §4.5 |
+| 순서 | V6/V7 을 docs/61 앞으로 · TRAIN 범위는 V6 결과 비의존 | §5 |
