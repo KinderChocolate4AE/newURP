@@ -134,17 +134,19 @@ class RewardSpec:
              + terminal_scale * TERMINAL      (에피소드 종료 1회)
              - c_lim * (소모된 limiter 수)
 
-        TERMINAL   NET_CAPTURE   +b_net
-                   HARD_KILL     +b_net*(1 - w_kill)
-                   PENETRATED    -c_pen
-                   TRUNCATED     -c_trunc      <- 지평선에서 미격퇴 = 보상상 실패
+        TERMINAL   NET_CAPTURE            +b_net
+                   CAPTURE_WITH_CONTACT   +b_net   <- docs/66 r1 (Q1): 동일
+                                                      nondestructive utility class
+                   HARD_KILL              +b_net*(1 - w_kill)
+                   PENETRATED             -c_pen
+                   TRUNCATED              -c_trunc <- 지평선 미격퇴 = 보상상 실패
 
     **보상과 지표를 분리한다**: 학습에서는 TRUNCATED 를 미격퇴로 벌하지만, 보고 지표는
     우측 절단(censored)으로 유지한다(docs/26). 둘을 같게 맞출 이유가 없고, 섞으면
     "지평선이 짧아서 이긴 것처럼 보이는" 산물이 생긴다.
 
     순서 불변식 (테스트로 강제): 모든 `w_kill in [0,1]` 에서
-        NET_CAPTURE > HARD_KILL > PENETRATED = TRUNCATED
+        NET_CAPTURE = CAPTURE_WITH_CONTACT >= HARD_KILL > PENETRATED = TRUNCATED
     `w_kill=0` 이면 두 성공이 동등 -> 정책은 쉬운 쪽(하드킬)을 고른다.
     `w_kill=1` 이면 하드킬 보상 0 -> 소모 비용만 남아 비손실만 값어치.
     **그 사이 어디서 뒤집히는지가 논문의 결과다** -- 값을 하나 골라 튜닝하지 않는다.
@@ -172,7 +174,12 @@ class RewardSpec:
     enabled: bool = False        # 기본 off -> 기존 보상 그대로 (P6 bit-identical 보존)
 
     def terminal(self, label: str) -> float:
-        if label == "NET_CAPTURE":
+        # ★ docs/66 r1 비준 (Q1): CAPTURE_WITH_CONTACT 는 nondestructive-capture
+        #   utility class -- NET_CAPTURE 와 동일 +b_net. B1 trace 가 같은 tick
+        #   destructive KILL 은 항상 HARD_KILL 로 라벨됨을 확인했으므로 CWC 에
+        #   파괴 혼입 경로가 없다. 종전에는 명시 분기가 없어 아래 else 로
+        #   떨어져 **우연히 0** 이었다 (감사 blocker 3).
+        if label in ("NET_CAPTURE", "CAPTURE_WITH_CONTACT"):
             return self.b_net
         if label == "HARD_KILL":
             return self.b_net * (1.0 - self.w_kill)
