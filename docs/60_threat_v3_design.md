@@ -350,6 +350,31 @@ speed profile) 으로 coverage 를 보장한 뒤 내부 jitter.
 → sanity 전 항목 이상 없음. 다음 = V7 뷰어 (Hyunjun 육안 — 특히 (b) 의
 "평면 봉쇄 → over-the-top escape" 실존 확인) → docs/61.
 
+### 5.3 ★ V7 육안 판독 (2026-08-07 — Hyunjun, artifact 0a31f6b9)
+
+```
+①  ★ (b) 해석 정정: ep1 의 vertical move 는 "route 가 위로 탈출" 이 아니라
+   net 회피 후 관성으로 뒤로 밀리며 위로 뜬 것. 실제 회피는 jink (옆 jitter)
+   가 우연히 맞은 것으로 판독. -> §5.2 (b) 의 "z-지배 0.81" 은 route 가
+   z 를 **요청**한다는 수치이지, 침투 성공의 실현 기전이 route 의 z 선택
+   이라는 증거가 아니다. route 의 인과 기여 귀속은 paired ablation
+   (동일 seed·route on/off) 로만 가능 -- 미실시, 필요 시 별도 사전등록.
+   (뷰어가 수치 해석을 이김 -- viz-first 재확인)
+②  standby 4방위·방위 스폰 = 의도대로 (승인)
+③  스프린트 전환 궤적 식별됨 (승인)
+④  angular-gap 기동: nominal 에서 육안상 미세 -- hold limiter 4기의
+   blockage 반각이 asin(0.75/d) 로 수 도(°) 수준이라 정면과 몇 도 차이의
+   편향임. 설계와 일치 (§3.2 instantaneous heuristic 의 예상 거동)
+뷰어 개선 반영 (같은 artifact 재게시): fit-to-screen (뷰포트 상한·중앙
+정렬) + 궤적 속도 색상 (파랑 느림 -> 주황 빠름, 범례)
+```
+
+주의 재확인 (r4 §3.2 와 연결): 현 nominal 의 "미세 요동" 인상은 설계된
+모습이다 — jink 변위 진폭 ≈ 0.6·a_att/(2πf)² ≈ 0.07~0.53 m (브래킷별),
+homing 4.0 이 횡속도를 즉시 감쇠, 종말 3 m 게이트에서 회피 off. 반응성의
+"크기" 자체가 TRAIN 분포 축이다 — nominal 하나의 인상으로 위협 강도를
+논하지 않는다.
+
 판정식·선언값은 결과 후 불변경. 조정은 새 사전등록으로만.
 
 ## 6. 격리·배선 규율
