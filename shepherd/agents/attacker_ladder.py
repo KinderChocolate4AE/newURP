@@ -339,7 +339,7 @@ def _general_action(spec, p_att, v_att, *, target, net_center, finisher_p, limit
                     kill_radius, a_att_max, omega_att_max, v_nominal, dt,
                     committed=False, react_on_commit=True, a_lat_max=None,
                     repel_margin=1.5, t=0.0, phase=0.0, v_shot_soft=None,
-                    v_max=None, **_ignored):
+                    v_max=None, diag=None, **_ignored):
     """A1 의 산술을 그대로 재현하고 그 위에 lambda 스케일 + A2/v3 항을 얹는다.
 
     extras 가 전부 꺼지고 lambda 가 기준점이면 `scripted_adversary_action` 과
@@ -392,6 +392,7 @@ def _general_action(spec, p_att, v_att, *, target, net_center, finisher_p, limit
     a_cmd = a_fwd + a_dodge + a_rep
 
     # --- A2/A3 (extras). 꺼져 있으면 덧셈 자체를 하지 않는다 (bit-exactness) --
+    a_route = np.zeros(3)
     if spec.jink_amp != 0.0 or spec.route_gain != 0.0 or spec.bait_gain != 0.0:
         d_target = float(np.linalg.norm(np.asarray(target, float) - p_att))
         a_bait, baiting = _bait_accel(
@@ -403,15 +404,26 @@ def _general_action(spec, p_att, v_att, *, target, net_center, finisher_p, limit
             a_cmd = a_cmd + _jink_accel(spec, fwd=fwd, t=t, phase=phase,
                                         a_lat_max=a_lat_max, committed=committed,
                                         d_target=d_target)
-        a_cmd = a_cmd + _route_accel(spec, p_att=p_att, v_att=v_att, fwd=fwd,
-                                     limiters=limiters, kill_radius=kill_radius,
-                                     repel_margin=repel_margin,
-                                     a_lat_max=a_lat_max, d_target=d_target)
+        a_route = _route_accel(spec, p_att=p_att, v_att=v_att, fwd=fwd,
+                               limiters=limiters, kill_radius=kill_radius,
+                               repel_margin=repel_margin,
+                               a_lat_max=a_lat_max, d_target=d_target)
+        a_cmd = a_cmd + a_route
         a_cmd = a_cmd + _homing_accel(spec, v_att=v_att, fwd=fwd)
 
     nrm = np.linalg.norm(a_cmd)
+    if diag is not None:                     # P89 계측 싱크 (docs/60 §5) -- 행동 불변
+        diag.update(
+            a_raw=float(nrm), clipped=bool(nrm > a_att_max),
+            route_req=[float(x) for x in a_route], v_ref=float(v_ref),
+            speed=float(np.linalg.norm(v_att)),
+            v_max=(float(v_max) if v_max is not None else None),
+            d_asset=float(np.linalg.norm(np.asarray(target, float) - p_att)),
+            committed=bool(committed))
     if nrm > a_att_max and nrm > _EPS:
         a_cmd = a_cmd * (a_att_max / nrm)
+    if diag is not None:
+        diag["a_final"] = [float(x) for x in a_cmd]
 
     e_cmd = _unit(v_att + a_cmd * dt, fwd)
     return {"a": a_cmd, "e_cmd": e_cmd}
