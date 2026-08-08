@@ -38,6 +38,7 @@ from shepherd.spawn_rand import (SpawnSpec, StandbySpec, apply_standby,
 from shepherd.train.make_env import make_train_env
 
 __all__ = ["M4Stack", "build_m4_env", "regime_of", "mission_eval",
+           "label_rates",
            "contract_manifest", "manifest_mismatch", "CONTRACT_SCHEMA"]
 
 # ── resolved-contract manifest (docs/65 A4a) ────────────────────────────────
@@ -165,6 +166,27 @@ def build_m4_env(seed: int, episode: int, *,
     return M4Stack(env=env, scn=scn, lay=lay, threat=threat, contract=contract)
 
 
+def label_rates(counts: Dict[str, int]) -> dict:
+    """종말 라벨 카운트 -> 2층 임무 지표 (docs/29 §4).
+
+    `mission_eval` 안의 지역 함수였다 -- IID 대역 러너(docs/71)가 같은 정의를
+    써야 하므로 밖으로 뺐다. 정의가 두 곳에 있으면 조용히 갈라진다 (P40).
+    `p_net` = 비파괴 포획 (net + 접촉포함 포획); 종말 라벨 enum 은
+    `mission_rollout.LABELS`.
+    """
+    m = max(sum(counts.values()), 1)
+    k = counts["NET_CAPTURE"] + counts["CAPTURE_WITH_CONTACT"]
+    return {
+        "n": sum(counts.values()),
+        "p_net": k / m,
+        "penetrated_rate": counts["PENETRATED"] / m,
+        "neutralized_rate": (k + counts["HARD_KILL"]) / m,
+        "spent_fail_rate": counts["SPENT_FAIL"] / m,
+        "truncated_rate": counts["TRUNCATED"] / m,
+        "nondestructive_frac": k / max(k + counts["HARD_KILL"], 1),
+    }
+
+
 def regime_of(a_att: float, tau: float, net_radius: float) -> str:
     """명제 N (docs/10) 기준 regime.
 
@@ -250,19 +272,7 @@ def mission_eval(seed0: int, episodes: int, *,
                             "a_att": st.threat["a_att"], "att_speed": st.threat["att_speed"],
                             "net_radius": st.threat["net_radius"], "tau": st.threat["tau"]})
 
-    def _split(c: Dict[str, int]) -> dict:
-        m = max(sum(c.values()), 1)
-        k = c["NET_CAPTURE"] + c["CAPTURE_WITH_CONTACT"]
-        return {
-            "n": sum(c.values()),
-            "penetrated_rate": c["PENETRATED"] / m,
-            "neutralized_rate": (k + c["HARD_KILL"]) / m,
-            "spent_fail_rate": c["SPENT_FAIL"] / m,
-            "truncated_rate": c["TRUNCATED"] / m,
-            "nondestructive_frac": k / max(k + c["HARD_KILL"], 1),
-        }
-
     # 전체 지표는 regime 분해와 **같은 식**이다 (n = sum(counts) = episodes).
-    return {**_split(counts), "counts": counts,
-            "by_regime": {k: _split(v) for k, v in by_regime.items()},
+    return {**label_rates(counts), "counts": counts,
+            "by_regime": {k: label_rates(v) for k, v in by_regime.items()},
             "contract": contract}
