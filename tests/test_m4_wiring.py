@@ -570,17 +570,23 @@ def test_p49_action_scale_tracks_the_episode_authority():
 #   정책 손에서 떨어졌는지(①)와 연속 3축 경로가 LS-live 와 같은지(④)를 코드가
 #   지켜야 한다. 배선이 갈라지면 결함 2 가 반대 방향으로 재발한다.
 # ─────────────────────────────────────────────────────────────────────────
-def _runner_off(seed=0, steps=256, rollout=64):
+def _runner_ls(commit: bool, seed=0, steps=256, rollout=64):
+    """LS 팔 러너 (learned limiter + scripted finisher). commit 만 갈아탄다."""
     import yaml
 
     from shepherd.scripts.train_m4 import (M4Runner, build_parser_defaults,
                                            build_specs)
     d = build_parser_defaults()
-    cfg = yaml.safe_load(open(pathlib.Path("configs/l2_mappo_nocommit.yaml")))
+    cfg = yaml.safe_load(open(pathlib.Path(
+        "configs/l2_mappo.yaml" if commit else "configs/l2_mappo_nocommit.yaml")))
     cfg["loop"]["total_env_steps"] = steps
     cfg["loop"]["rollout_env_steps"] = rollout
     return M4Runner(cfg, seed, "cpu", finisher_policy="scripted",
                     **build_specs(d))
+
+
+def _runner_off(seed=0, steps=256, rollout=64):
+    return _runner_ls(False, seed=seed, steps=steps, rollout=rollout)
 
 
 def test_p71a_commit_off_config_diff_is_one_key():          # torch 불요
@@ -667,26 +673,40 @@ def test_p71c_commit_head_is_structurally_absent():
 
 @pytest.mark.torch
 def test_p71d_continuous_path_matches_ls_live():
-    """④ 연속 3축 loss 경로 = LS-live 와 동일 (형상·클립·스케일).
+    """④ 연속 3축 경로 = LS-live 와 동일 (**형상·클립·스케일·학습계수**).
 
-    같은 torch 시드에서 두 팔의 **연속 mean MLP 초기값이 같아야** 한다 (두 팔의
-    차이가 정말 이산 헤드 하나뿐이라는 뜻). 클립은 [:3] 만, 스케일은 LS-live 의
-    앞 3축과 같아야 한다.
+    ★ 초기 **값** 동일성은 요구하지 않는다 (2026-08-09 정정). `MixedActor` 는
+    mean MLP 를 만든 뒤 fire_logit 을 만들고 그 다음 ortho 초기화를 걸기 때문에,
+    같은 torch 시드에서도 mean 의 ortho 초기화가 소비하는 RNG 상태가 두 팔에서
+    다르다 -- 값이 갈라지는 것은 정상이고, 계약은 "연속 경로의 **구조와 계수**가
+    같다" 다. 값 동일성을 요구하면 head 하나를 뺀 팔에서 영원히 실패한다.
     """
     import torch
+    from dataclasses import asdict
 
-    torch.manual_seed(0)
-    live = _runner(steps=256)
-    torch.manual_seed(0)
-    off = _runner_off(steps=256)
+    live, off = _runner_ls(True, steps=256), _runner_ls(False, steps=256)
 
-    sl, so = live.tr.lim_actor.mean.state_dict(), off.tr.lim_actor.mean.state_dict()
+    # (a) 학습 계약: cfg 의 diff 가 limiter_commit **하나**여야 한다
+    cl, co = asdict(live.tr.cfg), asdict(off.tr.cfg)
+    assert {k for k in cl if cl[k] != co[k]} == {"limiter_commit"}, \
+        f"두 팔의 학습 계약이 갈라졌다: {sorted(k for k in cl if cl[k] != co[k])}"
+
+    # (b) 연속 헤드 구조: 키·형상 동일. 차이는 이산 헤드 존재 여부 하나뿐
+    sl = live.tr.lim_actor.mean.state_dict()
+    so = off.tr.lim_actor.mean.state_dict()
     assert set(sl) == set(so)
     for k in sl:
-        assert torch.allclose(sl[k], so[k]), f"연속 mean MLP 초기값이 갈라졌다: {k}"
-    assert torch.allclose(live.tr.lim_actor.log_std[:3], off.tr.lim_actor.log_std)
+        assert sl[k].shape == so[k].shape, f"연속 mean MLP 형상이 갈라졌다: {k}"
+    assert live.tr.lim_actor.log_std.shape == off.tr.lim_actor.log_std.shape == (3,)
+    assert torch.allclose(live.tr.lim_actor.log_std, off.tr.lim_actor.log_std), \
+        "init_log_std 가 두 팔에서 다르다"
+    lp = {n for n, _ in live.tr.lim_actor.named_parameters()}
+    op = {n for n, _ in off.tr.lim_actor.named_parameters()}
+    assert (lp - op) and all(n.startswith("fire_logit.") for n in lp - op), \
+        f"이산 헤드 외의 파라미터가 다르다: {sorted(lp - op)}"
+    assert not op - lp, f"commit-off 에만 있는 파라미터가 있다: {op - lp}"
 
-    # 스케일: LS-live 의 앞 3축과 같다 (4번째 = commit 축은 애초에 없다)
+    # (c) 스케일: 같은 에피소드 권한의 앞 3축이 같다 (4번째 = commit 축은 부재)
     live._begin_episode(); off._begin_episode()
     assert np.allclose(live.lim_scale[:3], off.lim_scale)
 
