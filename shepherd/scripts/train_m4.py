@@ -166,7 +166,11 @@ class M4Runner(MAPPORunner):
         if not (np.allclose(lim_low[:3], -lim_high[:3])
                 and np.allclose(fin_low[:3], -fin_high[:3])):
             raise ValueError("action Boxes are expected symmetric for [-1,1] scaling")
-        if not (np.isclose(lim_low[3], 0.0) and np.isclose(lim_high[3], 1.0)):
+        # ★ `action_bounds` 는 **live 차원만** 준다 (adapter.py:71). commit-off 팔은
+        #   폭이 3 이므로 idx 3 을 보면 IndexError 다 -- 커밋 비트 Box 검사는
+        #   커밋이 live 인 팔에서만 의미가 있다.
+        if self.limiter_commit and not (np.isclose(lim_low[3], 0.0)
+                                        and np.isclose(lim_high[3], 1.0)):
             raise ValueError(f"커밋 비트 Box 가 [0,1] 이 아니다: "
                              f"[{lim_low[3]}, {lim_high[3]}] -- env.py 와 어긋났다")
         # lim_scale = [a_max, a_max, a_max, 1.0]. 커밋 비트는 Bernoulli {0,1} 이
@@ -180,9 +184,8 @@ class M4Runner(MAPPORunner):
         #   **시드마다 동결값이 달라 시드가 복제가 아니게 된다**(실효 권한 100/72/48%).
         #   `_begin_episode` 가 매 에피소드 갱신한다(아래). 여기 값은 첫 롤아웃 전
         #   부트스트랩일 뿐이다.
-        #   commit-off 팔에서는 정책 출력이 3 축이므로 스케일도 3 축이다
-        #   (4 축을 그대로 두면 (N,3)*(4,) 브로드캐스트에서 죽는다).
-        self.lim_scale = lim_high[:self.lim_live].astype(np.float32)
+        #   폭은 어댑터가 정한다 (live 차원만) -- commit-off 팔은 3, live 는 4.
+        self.lim_scale = lim_high.astype(np.float32)
         self.fin_axis_scale = fin_high[:3].astype(np.float32)
 
         self.norm = RunningNorm(self.obs_dim)
@@ -201,6 +204,14 @@ class M4Runner(MAPPORunner):
                                      "bc_lambda": (BC_LAMBDA if aim_bc == "aux"
                                                    else 0.0)})
         self.tr = MAPPOTrainer(self.obs_dim, self.n, cfg)
+        # ★ 프로파일(어댑터) · 액터 · 스케일의 폭이 한 몸인지 조립 시점에 못박는다.
+        #   갈라지면 (N,3)*(4,) 같은 브로드캐스트 사고나 조용히 틀린 차원 학습이
+        #   된다 -- 결함 2 부류. 여기서 크게 죽는 편이 낫다.
+        if not (self.lim_scale.shape[0] == self.tr.lim_dim == self.lim_live):
+            raise ValueError(
+                f"limiter 폭 불일치: lim_scale {self.lim_scale.shape[0]} · "
+                f"actor {self.tr.lim_dim} · 프로파일 {self.lim_live} "
+                f"(limiter_commit={self.limiter_commit})")
         self.buf = MAPPORollout(self.rollout_env_steps, self.obs_dim, self.n,
                                 lim_dim=self.tr.lim_dim,
                                 bc_dim=(3 if aim_bc == "aux" else 0))
@@ -225,7 +236,7 @@ class M4Runner(MAPPORunner):
         self._adapter = ShepherdAdapter(st.env, self.live_dims)
         # ★ P5: 이 에피소드의 실제 권한으로 행동 스케일을 갱신한다 (a_lim = 0.35·a_att).
         self.lim_scale = self._adapter.action_bounds(
-            self._adapter.limiter_ids[0])[1][:self.lim_live].astype(np.float32)
+            self._adapter.limiter_ids[0])[1].astype(np.float32)
         obs_d, _ = self._adapter.reset(seed=self.base_seed + self._ep_idx)
         self._obs = obs_d[self._adapter.limiter_ids[0]]
         self._ep = {"ret": 0.0, "headline": 0.0, "limiter_loss": 0.0,

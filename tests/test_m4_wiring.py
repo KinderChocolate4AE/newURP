@@ -694,3 +694,24 @@ def test_p71d_continuous_path_matches_ls_live():
     off.collect_rollout()
     assert off.buf.lim_raw.shape[-1] == 3 == off.buf.lim_clip.shape[-1]
     assert np.allclose(off.buf.lim_clip, np.clip(off.buf.lim_raw, -1.0, 1.0))
+
+
+def test_p71a2_adapter_bounds_are_live_width():          # torch 불요
+    """★ `action_bounds` 는 **live 차원만** 준다 (adapter.py:71).
+
+    이 불변식을 잘못 읽어서 commit-off 팔의 조립이 `lim_low[3]` 에서
+    IndexError 로 죽었다 (2026-08-09, 서버 p71 첫 실행). env Box 는 항상 4 지만
+    어댑터가 프로파일로 자른 뒤를 주므로, 프로파일이 3 인 팔에서 idx 3 을 보는
+    코드는 전부 커밋 live 조건 아래에 있어야 한다.
+    """
+    from shepherd.train.action_dims import LIVE_DIMS, M4_LIVE_DIMS
+    from shepherd.train.adapter import ShepherdAdapter
+
+    st = build_m4_env(0, 0, **KW)
+    for dims, want in ((M4_LIVE_DIMS, 4), (LIVE_DIMS, 3)):
+        ad = ShepherdAdapter(st.env, dims)
+        lo, hi = ad.action_bounds(ad.limiter_ids[0])
+        assert lo.shape == hi.shape == (want,), f"{want} 축을 기대했다: {hi.shape}"
+        assert ad.live_dim(ad.limiter_ids[0]) == want
+        # env Box 자체는 두 팔에서 같다 (변경 없음) -- 잘라주는 쪽이 어댑터다
+        assert st.env.action_space(ad.limiter_ids[0]).shape == (4,)
