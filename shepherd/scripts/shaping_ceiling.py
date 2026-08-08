@@ -1,7 +1,16 @@
-"""SHAPING 결정적 대역 진단 — 발사게이트를 열려면 limiter 가 몇 기 필요한가.
+"""relaxed static-placement 천장 탐색 — 문턱 교차가 어디서 관측되나.
 
-**진단 전용. 학습·판정·사전등록과 무관하고 어떤 동결값도 바꾸지 않는다.**
-docs/71 블록의 결과를 보기 전에 돌려도 안전하다 (IID 대역 접근 0, 학습 0).
+**★ EXPLORATORY DIAGNOSTIC (docs/74 Phase II). confirmatory 아니며 어떤 판정에도
+쓰지 않는다.** 학습·사전등록·동결값과 무관 (IID 대역 접근 0, 학습 0).
+
+★ 리뷰 10 (docs/73) 이행 — 이 스크립트가 재는 것의 정확한 지위:
+  - 배치 탐색은 limiter **도달가능성(a_lim)·no-kinetic 존을 요구하지 않는다**
+    (teleporting 배치) => **relaxed static-placement 문제**다.
+  - 그리디 값은 그 **relaxed 문제 최적의 하한**이고 실제 시스템 최적
+    `V_N^actual` 과는 **순서관계가 없다** (한 기가 이상적 choke point 를 순간
+    점유할 수 있어 N=1 쪽으로 편향된다). "달성가능 하한" 이라 쓰지 말 것.
+  - 따라서 이 산출물로 **불가능(INFEASIBLE)을 주장할 수 없다**. 상한 certificate
+    (docs/74 §3.4) 이 붙기 전까지 못 찾은 셀은 `NO_SOLUTION_FOUND` 다.
 
 묻는 것
 -------
@@ -14,17 +23,18 @@ p_net = 0 이었다. 그것이 (i) 학습 실패인가 (ii) 현재 파라미터�
 (limiter 의 kill_radius 구가 escape 를 infeasible 로 만든다 = shaping 채널).
 그래서 a_att 를 축으로:
 
-    v_hold        limiter 를 standby 링에 둔 채 (무개입)
-    v_greedy(k)   limiter k 기를 **최적 배치**했을 때 (그리디 = 달성가능 하한)
-    N_req         v_greedy(k) >= 0.9 가 되는 최소 k  (선언값은 4 기)
+    V_0           무개입 (standby hold) 의 v_shot
+    G_k           relaxed 배치 k 기의 그리디 v_shot  (G_k <= V_k^relaxed)
+    N_req         G_k >= theta 가 되는 최소 k. **V_0 >= theta 면 N_req = 0**
+                  (정의: N_req = min{N >= 0 : V_N^* >= theta})
 
-를 잰다. `N_req(a_att) > 4` 인 구간 = **현재 구조에서 어떤 컨트롤러도 발사할
-수 없는 영역** (그리디는 최적의 하한이므로 N_req 는 상한 추정 -- 정직한 방향:
-"4 기로 된다"는 증명은 되고 "4 기로 안 된다"의 증명은 아니다).
+`N_req <= 4` 는 "relaxed 기하에서 문턱을 넘는 배치가 존재한다"의 **증명**이지만,
+`N_req` 미발견은 **불가능의 증명이 아니다** (docs/74 §3.4 상한 필요).
 
-기하는 실제 env 의 hold 롤아웃에서 **방어자에게 가장 유리한 순간**(v_hold 최대
-스텝) 을 뽑아 쓴다 -- 즉 이 곡선은 낙관 쪽으로 기울어 있다. 배치에 물리적
-도달가능성(a_lim = 0.35·a_att)은 **요구하지 않는다**: 순수 기하 천장이다.
+기하는 hold 롤아웃의 **V_0 최대 스텝** 상위 몇 개에서 뽑는다 -- 스냅샷 선택
+편향이다 (multi-agent synergy 가 필요한 순간은 hold 기하가 나쁜 다른 시각일 수
+있다; 리뷰 10 의 F2 반증 2 위). 표본은 a_att 당 에피소드 **1 개**로 리뷰 10 이
+요구한 조건당 20~30 realization 에 미달 -- **경계값·N_req 는 논문 숫자가 아니다.**
 
     python -m shepherd.scripts.shaping_ceiling --out results/shaping_ceiling.json
     python -m shepherd.scripts.shaping_ceiling --plot results/shaping_ceiling.json
@@ -159,11 +169,15 @@ def ceiling_at(a_att: float, *, seed: int = 0, episode: int = 0,
         union = _union_at(base, s)
         traj, chosen = _greedy(union, base.kill_radius,
                               candidates(s["p_att"], base.kill_radius), k_max)
-        n_req = next((j + 1 for j, v in enumerate(traj) if v >= base.theta_fire), None)
+        # ★ N_req = min{N >= 0 : V_N >= theta}. V_0 (무개입) 이 이미 문턱을 넘으면
+        #   필요 기수는 **0** 이다 (리뷰 10 정의 오류 수정 -- 종전엔 1 로 적었다).
+        n_req = (0 if v_hold >= base.theta_fire else
+                 next((j + 1 for j, v in enumerate(traj)
+                       if v >= base.theta_fire), None))
         cand = dict(
-            step=i, v_hold=v_hold, v_greedy=traj,
-            v_greedy_k4=(traj[3] if len(traj) >= 4 else (traj[-1] if traj else None)),
-            v_greedy_max=(max(traj) if traj else None),
+            step=i, V_0=v_hold, G_relaxed=traj,
+            G_relaxed_k4=(traj[3] if len(traj) >= 4 else (traj[-1] if traj else None)),
+            G_relaxed_max=(max(traj) if traj else None),
             n_req=n_req,
             chosen_r_from_att=[round(float(np.linalg.norm(c - s["p_att"])), 2)
                                for c in chosen],
@@ -171,14 +185,18 @@ def ceiling_at(a_att: float, *, seed: int = 0, episode: int = 0,
                 c - np.asarray(base.layout.target, float))), 2) for c in chosen],
             d_att_asset=round(float(np.linalg.norm(
                 s["p_att"] - np.asarray(base.layout.target, float))), 2))
-        if best is None or (cand["v_greedy_max"] or -1) > (best["v_greedy_max"] or -1):
+        if best is None or (cand["G_relaxed_max"] or -1) > (best["G_relaxed_max"] or -1):
             best = cand
         if log:
-            log(f"  a_att={a_att:>5.1f} step{i:>4} v_hold={v_hold:.3f} "
-                f"-> k4 {cand['v_greedy_k4']} max {cand['v_greedy_max']} "
+            log(f"  a_att={a_att:>5.1f} step{i:>4} V_0={v_hold:.3f} "
+                f"-> G_k4 {cand['G_relaxed_k4']} G_max {cand['G_relaxed_max']} "
                 f"N_req={n_req}", flush=True)
     rho, tau = base.net_radius, base.tau_deploy
-    return dict(a_att=a_att, regime=regime_of(a_att, tau, rho),
+    return dict(a_att=a_att,
+                # ★ 이름 강등: 이 스칼라 판정은 clean-fire 필요조건이 아니라
+                #   free-capture **analytic proxy** 다 (docs/73 §3, 리뷰 10 항목 6).
+                regime_proxy=regime_of(a_att, tau, rho),
+                chi=round(a_att * tau ** 2 / (2 * rho), 3),
                 r_escape=round(0.5 * a_att * tau ** 2, 3),
                 theta_fire=base.theta_fire, kill_radius=base.kill_radius,
                 net_radius=rho, tau=tau, judge=base.judge,
@@ -188,19 +206,22 @@ def ceiling_at(a_att: float, *, seed: int = 0, episode: int = 0,
 def sweep(grid=A_ATT_GRID, **kw) -> dict:
     rows = [ceiling_at(a, **kw) for a in grid]
     lo, hi = THREAT_BRACKET["physics.a_att_max"]
-    decisive = [r["a_att"] for r in rows
-                if r["v_hold"] < r["theta_fire"]
-                and (r["v_greedy_k4"] or 0) >= r["theta_fire"]]
+    crossings = [r["a_att"] for r in rows
+                 if r["V_0"] < r["theta_fire"]
+                 and (r["G_relaxed_k4"] or 0) >= r["theta_fire"]]
     return dict(
-        contract_doc="진단 전용 (판정·사전등록 무관). SHAPING 결정적 대역 존재 여부",
-        note=("v_greedy 는 그리디 최적배치 = 달성가능 하한. 배치 도달가능성"
-              "(a_lim=0.35·a_att)·NK 존 제약을 걸지 않은 낙관 천장이다. "
-              "따라서 'N_req<=4 면 기하적으로 가능' 은 성립하고 "
-              "'N_req>4 면 불가능' 은 강한 시사이지 증명이 아니다."),
+        status="EXPLORATORY DIAGNOSTIC (docs/74 Phase II) -- 판정 사용 금지",
+        contract_doc="docs/73 리뷰 10 이행 · docs/74 Phase II",
+        note=("G_relaxed 는 **relaxed static-placement 문제 최적의 하한**이다 "
+              "(도달가능성·NK 존 미요구 = teleporting 배치). 실제 시스템 최적과 "
+              "순서관계 없음. 'N_req<=4' 는 relaxed 기하에서의 존재 증명이고 "
+              "N_req 미발견은 **불가능의 증명이 아니다** (상한 certificate 필요, "
+              "docs/74 §3.4). 표본 = a_att 당 에피소드 1 개 (요구 20~30 미달)."),
         bracket=[lo, hi], a_star=round(2 * rows[0]["net_radius"]
                                        / rows[0]["tau"] ** 2, 2),
         declared_n_limiters=4,
-        decisive_band_a_att=decisive, rows=rows)
+        threshold_crossing_points_observed=crossings,   # 연속 대역이 아니다
+        rows=rows)
 
 
 def _plot(path: str, out_png: str) -> None:
@@ -215,13 +236,13 @@ def _plot(path: str, out_png: str) -> None:
     fig, ax = plt.subplots(1, 2, figsize=(11, 4.2))
 
     ax[0].axhline(th, color="k", ls="--", lw=1, label=f"fire gate $\theta$={th}")
-    ax[0].plot(a, [r["v_hold"] for r in rows], "o-", label="hold (no shaping)")
-    ax[0].plot(a, [r["v_greedy_k4"] for r in rows], "s-",
-               label="optimal 4 limiters (declared N)")
-    ax[0].plot(a, [r["v_greedy_max"] for r in rows], "^-",
-               label=f"optimal up to {K_MAX} limiters")
+    ax[0].plot(a, [r["V_0"] for r in rows], "o-", label="$V_0$ (no shaping)")
+    ax[0].plot(a, [r["G_relaxed_k4"] for r in rows], "s-",
+               label="$G_4$ relaxed greedy (declared N)")
+    ax[0].plot(a, [r["G_relaxed_max"] for r in rows], "^-",
+               label=f"$G_{{{K_MAX}}}$ relaxed greedy")
     ax[0].axvline(d["a_star"], color="r", ls=":", lw=1,
-                  label=f"a* = {d['a_star']} (SHAPING boundary)")
+                  label=f"analytic proxy chi=1 at {d['a_star']}")
     ax[0].set_xlabel("a_att [m/s^2]"); ax[0].set_ylabel("v_shot_soft")
     ax[0].set_ylim(0, 1.02); ax[0].legend(fontsize=7); ax[0].grid(alpha=.3)
 
@@ -232,7 +253,8 @@ def _plot(path: str, out_png: str) -> None:
     ax[1].set_xlabel("a_att [m/s^2]")
     ax[1].set_ylabel(f"N_req to open the gate (>{K_MAX} = nan)")
     ax[1].legend(fontsize=7); ax[1].grid(alpha=.3)
-    fig.suptitle("Shaping-decisive band: geometric ceiling (optimistic)", fontsize=10)
+    fig.suptitle("EXPLORATORY: relaxed static-placement search "
+                 "(NOT a feasibility boundary)", fontsize=10)
     fig.tight_layout()
     fig.savefig(out_png, dpi=140)
     print(f"-> {out_png}")
@@ -271,12 +293,14 @@ def main(argv=None) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(out, indent=1, ensure_ascii=False, default=float),
                  encoding="utf-8")
-    print(f"\na* = {out['a_star']}  결정적 대역(4기로 게이트 개방) = "
-          f"{out['decisive_band_a_att'] or '없음'}")
+    print(f"\n[EXPLORATORY] proxy chi=1 지점 {out['a_star']} · "
+          f"문턱 교차가 관측된 이산 점(relaxed, 4기) = "
+          f"{out['threshold_crossing_points_observed'] or '없음'}")
     for r in out["rows"]:
-        print(f"  a_att={r['a_att']:>5.1f} {r['regime']:>14} r_esc={r['r_escape']:.2f} "
-              f"v_hold={r['v_hold']:.3f} k4={r['v_greedy_k4']} "
-              f"max={r['v_greedy_max']} N_req={r['n_req']}")
+        print(f"  a_att={r['a_att']:>5.1f} proxy={r['regime_proxy']:>14} "
+              f"chi={r['chi']:.2f} V_0={r['V_0']:.3f} "
+              f"G_k4={r['G_relaxed_k4']} G_max={r['G_relaxed_max']} "
+              f"N_req={r['n_req']}")
     print(f"-> {p}")
 
 
