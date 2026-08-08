@@ -1,4 +1,4 @@
-# 73 — 리뷰 10·11·12·13 판정 로그 (방향 전환 심사) + 이행 목록 — r3
+# 73 — 리뷰 10~15 판정 로그 (방향 전환 심사) + 이행 목록 — r3.2
 
 **2026-08-09 · 요청 = `docs/review_prompt_design_map_pivot.md` (리뷰 10) +
 `docs/review_prompt_blueprint.md` (리뷰 11) · 대상 = spine 교체 (학습 이득 증명 →
@@ -17,7 +17,7 @@ r0 §8 의 "19주 축소 일정" 은 폐기하고 `docs/75_blueprint.md` 의 **�
 |---|---|---|---|
 | 1 | Q-A 축 교체 | **CONDITIONAL** | chronology 잠금 = `docs/74_pivot_protocol.md` (오늘 날짜) |
 | 2 | F2 "협력 marginal value = 0" | **REJECT** | **철회.** 표현 하향 + `U_{<=1}` vs `L_{<=N}` bound 로 재설계 (r1) |
-| 3 | 충분경계 upper certificate | **RATIFY (필수)** | r1: **싼 것부터** — unblockable bad mass → finite-candidate exact(MILP) → continuous outer relaxation → reachable constructive lower + 독립 judge cross-check |
+| 3 | 충분경계 upper certificate | **RATIFY (필수)** | r1: 싼 것부터 — unblockable bad mass → finite-candidate exact(MILP) → continuous outer relaxation → reachable constructive lower + 독립 judge cross-check. **★ r3 supersession: finite exact MILP 는 certificate hierarchy 에서 제외** (solver/audit auxiliary) — 후보집합은 continuous 불가능을 certify 하지 않는다 |
 | 4 | Q-B 파라미터 축 승격 | **CONDITIONAL (거의 RATIFY)** | 파라미터를 4 종으로 **분류** + 구간 출처 사전 고정 |
 | 5 | C5 재실행 | **CONDITIONAL** | adaptive two-stage + 결정론적 선택규칙 + **3 regime 동시** |
 | 6 | F1 라벨 반전 | **REJECT — 현 regime 정의** | `0.5aτ²>ρ` 는 **proxy** 로 강등, regime 은 `V_0` + `L/U` bound 로 재정의 |
@@ -57,7 +57,7 @@ r0 §8 의 "19주 축소 일정" 은 폐기하고 `docs/75_blueprint.md` 의 **�
 | # | blocker | 판정 | 이행 (docs/74 r3) |
 |---|---|---|---|
 | 1 | `L^reach` 는 문서에만 있고 알고리즘은 `L^ctrl` 만 계산 | **치명적** | **4A/4B 분리** (§3.7): 4A = 고정 `(e,t)` 에서 `D_i^reach` 안의 배치로 **같은 witness set** 평가 → `L^reach_{<=N,clean}` (certificate) / 4B = 반응형 env rollout → `L^ctrl` (실현 검사, sandwich 에 넣지 않음). 시간축 `(x,T_s)` 폐기 → **reference encounter 시각 `(e,t)`** |
-| 2 | `C_N(x)` 가 episode 인지 state 인지 불명 | **치명적** | state-level `C_N(e,t)` + **전 스텝 스캔**(사후 선택 금지) + **persistence m = ceil((tau_sense+tau_decide)/dt) = 3 tick** + `C_N^ep(e)` + `p_C(z)` = **prevalence under the pre-specified scenario distribution** (§4.1) |
+| 2 | `C_N(x)` 가 episode 인지 state 인지 불명 | **치명적** | state-level `C_N(e,t)` + **전 스텝 sound screen**(사후 선택·stride 금지) + `C_N^ep(e)` + `p_C(z)` = **prevalence under the pre-specified scenario distribution** (§4.1). **★ r3.2: r3 의 persistence `m=3` 은 폐기** — τ 가 이미 sense+decide latency 를 포함해 이중계산이었다 → **m=1(존재) primary + dwell-time 분포 secondary** |
 | 3 | clean-fire 의 `not boxed-in` 이 certificate 에서 누락 | **치명적** | `g_theta = 1[v>=theta AND NOT boxed]`. **constructive lower 는 `g_theta=1` 배치만 유효**, upper 는 boxed 무시가 sound (비대칭 명시) (§3.2) |
 | 4 | adaptive refinement <-> "pre-specified finite grid" 충돌 | **중대** | **master lattice `Z_master` 선봉인 + `lattice_hash`**. adaptive 는 "다음에 어느 master 점을 계산할지"만 (결정론 정책 4 단). Stage-2 점은 `Z_master` 안에서만 → compute allocation 허용 / hypothesis-space 생성 금지 (§3.8) |
 | 5 | interaction 이 통계적 estimand 가 아님 | **중대** | comparator = **같은 N 기의 freeze 된 constructive controller `B_N`** (reachable 1-limiter 아님 — learning x team-size 혼합 방지). `delta_r = p_net^{MARL_N,r} - p_net^{B_N,r}`, **`Gamma = delta_COOP - (delta_FREE+delta_HARD)/2`**, 성공 = `LCB95(Gamma) > 0`. `N=1` 은 secondary mechanistic (§4.4) |
@@ -74,6 +74,22 @@ r0 §8 의 "19주 축소 일정" 은 폐기하고 `docs/75_blueprint.md` 의 **�
 | 13 judge 일치 판정 | **boundary-aware**: signed margin `|m1-m2| <= eps` (1e-6 m / 1e-9). predicate 불일치는 `|m| <= eps` boundary case 에서만 허용, **boundary 에서 먼 불일치 1 건이면 지도 중단** |
 | 14 태그 | **태그 이동 금지** → `PIVOT_LOCK_R2/R3_...` revision 명 분리. **자백: r1 에서 태그를 `-f` 로 한 번 이동시켰다** (`c6e8081`→`3aec425`, Phase III 셀 0) — 이후 없음 |
 
+### 1.4 리뷰 15 (73·74 대조 최종) — 체크리스트 11 항 전부 이행 → RATIFY 조건 충족
+
+| # | 항목 | 이행 |
+|---|---|---|
+| 1 | `stride 4` 가 `m` tick 기회를 놓칠 수 있다 (**실 논리 오류**) | stride 스캔 **금지**. **전 스텝** cheap **sound screen** (`U^cheap_{<=N} >= θ`, 위반 시 `C_N=0` 보장 = false negative 불가) 후 비싼 계산만 선별 (docs/74 §3.1) |
+| 2 | Stage-2 θ 미고정 = 지도 보고 유리한 θ 선택 가능 | **`theta_S2 = 0.90` 고정** (원 시스템 동결값). 다른 θ 는 **sensitivity 전용, 선택·판정 사용 금지** (§4.1) |
+| 3 | matched control 의 N 이 달라질 수 있음 (team-size confound) | `N_FREE = N_HARD = N_B`, θ 도 동일. 거리 최소화는 **같은 N 부분집합 안에서만**, N 은 거리에 넣지 않는다 (§4.3) |
+| 4 | 개별 `D_i^reach` 곱집합 ≠ joint feasibility (충돌) | 4A 성공 조건에 **joint time-parameterized 궤적 N 개 구성 + 전 구간 가속·속도·NK·pairwise 충돌 동시 만족** 추가. 없으면 `L^reach` 가 sound lower 가 아니다 (§3.7) |
+| 5 | parameter cell 의 단일 라벨 규칙 부재 | **단일 색 지도 폐기** → 셀마다 **label prevalence 벡터** `p_FREE/p_SINGLE/p_COOP/p_INF/p_AMB`, 핵심 surface = **`p_C` 와 `p_AMB`** 병기 (§3.9b) |
+| 6 | `m=3` 이 τ 와 latency 이중계산인지 확인 | **이중계산 확인** — `M4_PROVENANCE` 원문: τ=0.30 은 "커밋에서 포획 판정까지의 지연" = flight 0.15 + **sense 0.10 + decide 0.05**. → **m=1 로 교체**, dwell-time 은 secondary |
+| 7 | 73 §5 에 철회된 논리가 현재형으로 남음 | **교체** (r2 패치가 조용히 실패했던 것). §5 + **§5.1 3 분기** 신설 |
+| 8 | 73 §2 의 옛 `N_req` 정의 | bound-certified 정의로 교체 + provisional 정의는 **역사 기록**으로 표기 |
+| 9 | 73 §3.1 escalation rule ↔ 74 r3 §3.9 충돌 | escalation rule **superseded** 로 교체 (full Π-set 선확정 · 결과 후 축 추가 금지) |
+| 10 | 73 §7 C5 요약이 구버전 | `B_N`·`Gamma`·LOCAL 용어·동일 N/θ 로 동기화. **N=1 은 secondary** 명시 |
+| 11 | Phase I primary 와 null 문구 불일치 | docs/63 r2 primary = **overall paired Δ_net** 확인 → 인용문을 **"did not support the preregistered superiority claim on the paired net-capture endpoint"** 로 교체 |
+
 ## 2. 즉시 철회하는 문장 3건 + 1 (오늘 기록에서 하향)
 
 | 철회 | 대체 표현 |
@@ -84,7 +100,14 @@ r0 §8 의 "19주 축소 일정" 은 폐기하고 `docs/75_blueprint.md` 의 **�
 | "그리디이므로 달성가능 하한" | "**relaxed static-placement 문제의 최적에 대한 하한**". 실제 시스템 최적 `V_N^actual` 과는 **순서관계 없음** (teleporting 배치가 1기에 유리하게 편향) |
 
 또한 `N_req` 정의 오류 수정: `v_hold ≥ θ` 인 점(a_att 15/20/30)은 **N_req = 0** 이다.
-정의는 `N_req = min{N ≥ 0 : V_N^* ≥ θ}`.
+당시 적용한 provisional 정의는 `N_req = min{N ≥ 0 : V_N^* ≥ θ}` 였으나 **r2 이후
+bound-certified 정의로 superseded** 되었다 (역사 기록):
+
+```
+N_req = 0            if V_0 >= theta
+N_req = k (k >= 1)   if U^rel_{<=k-1} < theta <= L^reach_{<=k,clean}
+그 외                 UNRESOLVED   (certificate 가 닫히지 않으면 존재하지 않는다)
+```
 
 ## 3. 채택하는 재정의 (새 연구에만 적용 — 동결 블록은 불변)
 
@@ -143,19 +166,17 @@ constructive certificate. 이 둘이 함께 성립하면 "왜 N>1 인가" 가 �
   `mu = a_lim/a_att`. 확장은 §3.1 의 **escalation rule** 로만 (임의 추가 금지).
   6D Cartesian sweep 폐기.
 
-### 3.1 무차원 축 escalation rule (r2 추가)
+### 3.1 무차원 축 — **r3 에서 정책 교체 (escalation rule 폐기)**
 
-**★ 리뷰 12 항목 5 (deterministic escalation rule)**: "필요시 eta" 같은 표현은
-결과를 본 뒤 축을 하나씩 늘리는 자유도를 남긴다. 다음을 **결과 전에 고정**한다.
+r2 의 deterministic escalation rule (`eta -> alpha -> lambda -> ...` 순 축 추가) 은
+**리뷰 13 에서 superseded** 되었다. 현 정책 = `docs/74` r3 §3.9:
 
-1. **candidate Π-set 고정**: `{chi, kappa, mu, eta, nu, lambda, sigma_standby,
-   sigma_detect, sigma_asset, alpha}` (+ 수치검증용 `delta_t = dt/tau`).
-2. **core hypothesis = `(chi, kappa, mu)`** 로 고정.
-3. iso-Π validation 이 **사전 지정 tolerance** 를 통과하면 그 축약을 채택.
-4. 실패하면 **미리 정한 순서**로 conditioning variable 을 하나씩 추가:
-   `eta -> alpha -> lambda -> nu -> sigma_standby -> sigma_detect -> sigma_asset`.
-5. 그래도 collapse 가 안 되면 결론 = **"no low-dimensional collapse supported"**
-   (축을 계속 늘려 억지로 맞추지 않는다).
+- governing equation·기하에서 **full Π-set 을 결과 전에 분석적으로 확정**하고 전부 기록.
+- 그중 **2~3 개만 plotted axes**, 나머지는 **fixed conditioning variables**.
+- iso-Π test 는 **reduction validation** (축 발견법 아님).
+- **결과를 본 뒤 새 축·새 measure 추가 금지.** 필요하면 현 Phase III 를 종료하고
+  **Phase III-B 를 새 protocol hash 로** 사전등록한다.
+
 - **★ 동결 경계**: 진행 중인 docs/71 ablation 은 `regime_of` (기존 정의·기존 이름)
   로 계속 판정한다. 위 재정의는 **새 연구의 언어**이고 동결 블록에 소급 적용하지
   않는다 (그렇게 하면 primary 를 결과 후 바꾸는 것이 된다).
@@ -175,11 +196,27 @@ parametric requirement curve** 로 표기), (v) latency/noise spot-check.
 
 ## 5. 즉시 착수 3 (리뷰 10 지정 · 리뷰 11 이 순위를 재확인)
 
-**리뷰 11 "만약 하나만 고른다면"**: `L_{<=N}(x) <= V_{<=N}(x) <= U_{<=N}(x)` 를 실제
-코드로 계산해 **FREE / SINGLE / CERTIFIED COOP / INFEASIBLE / AMBIGUOUS** 를 구분하는
-**certificate-backed feasibility envelope**. 특히 `U_{<=1} < theta <= L_{<=N}` 셀이
-**실재하는지**. 있으면 "왜 multi-agent 인가"가 처음으로 성립하고, 없으면 "이 메커니즘에서
-왜 multi-agent 가 불필요한가"라는 negative result 가 성립한다 — **어느 쪽이든 연구가 산다.**
+**리뷰 11 "만약 하나만 고른다면" (r3.2 최종 문구 — r2 패치가 조용히 실패해 철회된
+논리가 남아 있었다. 리뷰 15 항목 7 이 잡았다)**: 동일 `(e,t)` fixed-state 에서
+`L^reach_{<=N,clean} <= V^reach_{<=N} <= V^rel_{<=N} <= U^rel_{<=N}` 를 계산하고,
+`L^ctrl` 은 **별도로** 검증한다 (하나의 sandwich 로 섞지 않는다). 그 위에서
+**FREE / LOCAL-SINGLE-NEEDED / LOCAL-COOP-NEEDED / LOCAL-INFEASIBLE-N / AMBIGUOUS**
+의 **prevalence** 를 파라미터 점마다 보고한다 (셀 하나를 한 색으로 칠하지 않는다).
+
+핵심 질문 = `U^rel_{<=1} < theta_S2 <= L^reach_{<=N,clean}` 인 상태가 실재하는가
+(= **local certified cooperative opportunity**, `theta_S2 = 0.90` 고정).
+**COOP cell 부재 시 "협력 불필요" 로 직행하지 않고** 아래 §5.1 세 경우로 분기하며,
+**unresolved 에서는 negative claim 을 하지 않는다.**
+
+### 5.1 협력 셀 부재의 3 분기 (negative claim 규율 — 리뷰 12 항목 2)
+
+| 경우 | 지지 조건 | 허용되는 주장 |
+|---|---|---|
+| **A. single-agent sufficiency** | `V_0 < theta <= L^reach_{<=1,clean}` 가 지배적이고 COOP 부재 | "No certified need for multi-agent interdiction was found; all certified feasible non-FREE cells were single-agent sufficient." (AMBIGUOUS 에 대해서는 **침묵**) |
+| **B. local mechanism infeasibility** | `U^rel_{<=N} < theta` 가 광범위 | "even N cooperative limiters cannot establish the **local** firing condition" (A 와 다른 결론) |
+| **C. unresolved certificate gap** | AMBIGUOUS prevalence 가 높음 | **결론 없음. negative claim 금지** |
+
+negative claim 은 **해당 bound 가 직접 지지하는 경우에만** 한다.
 
 
 1. **`v_shot` measure 고정** — 2000 위트니스 "비율"이 어떤 measure 를 근사하는지
@@ -230,9 +267,15 @@ parametric requirement curve** 로 표기), (v) latency/noise spot-check.
   non-core dimensionless group 은 사전 지정 값으로 고정하고 matched collapse /
   robustness slice 로만 검사한다 (`mu` 가 이미 mobility/capability 축이므로 "mobility
   2~3 층" 이라는 별도 표현은 폐기 — r2). 공격자 분포 적분 포함.
-- **learning (C5)**: FREE / band 내부 / high-difficulty 3 regime, 점당 **시드 5 최소**
-  (8~10 권장), held-out 300 paired, 기준선 = hold · arc scripted · MARL ·
-  **reachable 1-limiter** · oracle envelope. 4기 협력 주장에는 **N=1 대조군 필수**.
+- **learning (C5, r3.2 동기화)**: **LOCAL-COOP-NEEDED / FREE / LOCAL-INFEASIBLE-N**
+  3 matched regime (**동일 N = N_B**, **동일 θ_S2 = 0.90**), 점당 시드 **8~10 권장
+  (5 최소)**, held-out 수백 paired.
+  primary = `Gamma = delta_COOP − (delta_FREE + delta_HARD)/2`, 성공 = `LCB95(Gamma) > 0`,
+  `delta_r = p_net^{MARL_N,r} − p_net^{B_N,r}` (`B_N` = 결과 열람 전 freeze 한
+  **same-N constructive non-learning controller**).
+  기준선 = hold · arc scripted(historical) · `B_N` · **reachable 1-limiter** ·
+  oracle `U^rel` envelope. **`N=1` 은 secondary mechanistic control 이며 primary
+  comparator 가 아니다** (learning × team-size 혼합 금지).
 - **통계**: 시드 최상위 hierarchical CI, paired 차이, effect size + 95% CI,
   0 카운트는 binomial 상한 병기, 지도 경계에도 bootstrap band.
 - **realism**: 대표 3 regime × 2~3 점에서 delay jitter · sensing noise · actuator lag

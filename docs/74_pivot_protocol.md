@@ -1,7 +1,9 @@
-# 74 — PIVOT PROTOCOL r3 (전환 기록·봉인) — 2026-08-09
+# 74 — PIVOT PROTOCOL r3.2 (전환 기록·봉인) — 2026-08-09
 
 **r0 = 리뷰 10 이행 · r1 = 리뷰 11 (A1~A8) · r2 = 리뷰 12 (논리 오류 2 건) ·
-r3 = **리뷰 13 의 blocker 5 + protocol leak 6~14 이행**. 이 문서는 Phase III 지도 셀을
+r3 = 리뷰 13 의 blocker 5 + leak 6~14 · **r3.2 = 리뷰 15 최종 체크리스트 11 항
+(stride false-negative · Stage-2 θ 고정 · same-N matched · joint trajectory feasibility ·
+cell = label prevalence · m 이중계산 제거 · Phase I 문구 정합)**. 이 문서는 Phase III 지도 셀을
 **한 칸도 생성하지 않은 상태**에서 작성·개정됐다 (`phase3_cells_generated_so_far = 0`).
 따라서 r1~r3 의 교정은 골대 이동이 아니라 **결과 생성 전 계약 정의 작업**이다
 (감사 이력 = §0.1).**
@@ -109,9 +111,19 @@ witness set            reference rollout 의 시각 t 상태 x_t 에서 생성
 counterfactual reaction 이 제거된 **local mechanism certificate** 이지만 시간적으로는
 일관된다. `(x, T_s)` 표기는 폐기하고 `(e, t)` 를 쓴다.
 
-**compute 절감 규율** (hypothesis-space 확장 금지): 1 패스는 stride 4 스캔, 그 중
-싼 필요조건(`V_0 < theta` 이고 `U^rel_{<=N} >= theta`)을 만족한 시각의 ±10 tick
-이웃만 **stride 1 재평가**한다. 이는 **계산 배분**이며 선택 가설을 만들지 않는다.
+**compute 절감 규율 (r3.2 — false negative 불가 screening)**: stride 스캔은
+**금지**한다 (`m` tick 짜리 기회를 통째로 놓칠 수 있다). 대신:
+
+```
+모든 step t in T_eval(e) 에서  **cheap sound screen** 을 계산한다:
+    screen(e,t) = 1[ U^cheap_{<=N}(e,t) >= theta ]
+    U^cheap = unblockable-bad-mass 상한 (§3.6-1) = V^rel_{<=N} 의 sound upper bound
+  screen = 0  =>  V^rel_{<=N} < theta  =>  L^reach <= V^reach <= V^rel < theta
+                  =>  C_N(e,t) = 0 이 **보장**된다 (false negative 불가)
+비싼 계산(L^reach / U^rel / solver)은 screen = 1 인 step + 그 ±10 tick 이웃에만 적용
+```
+즉 **필요조건 스크린은 전 스텝**, 비싼 계산만 선별 — 계산 배분이며 선택 가설을
+만들지 않는다.
 
 ## 3.2 clean-fire predicate 를 certificate 안에 넣는다 (blocker 3)
 
@@ -221,6 +233,12 @@ for each (e,t):
   후보 = 예측 escape path 의 blocking tube ∩ D_i^reach
   agent-candidate bipartite assignment → threshold-feasibility 로 center 선택
   **같은 고정 witness set** 에서 v_shot 평가 + not boxed 확인
+  ★ **joint trajectory feasibility 검증 (r3.2 — 필수)**: 선택된 center 들에 대해
+    **시간 매개화된 limiter 궤적 N 개를 실제로 구성**하고, 전 시간구간에서
+    가속·속도 상한 · NK 존 · **limiter-limiter pairwise 충돌**을 **동시에** 만족해야만
+    constructive witness 로 인정한다. (개별 도달가능성 `D_i^reach` 의 곱집합은
+    joint feasibility 를 보장하지 않는다 — 이걸 빼면 `L^reach` 가 sound lower bound 가
+    아니다.)
   성공 시  L^reach_{<=N,clean}(e,t) >= theta
            (= sandwich 의 **constructive lower bound** 이며 동시에
             cooperative-necessity certificate 의 **오른쪽 항**)
@@ -264,6 +282,22 @@ predicate 불일치는 **적어도 한 구현이 `|m| <= eps` 인 boundary case 
 결과가 다른 것은 **당연할 수 있다** — collapse 실패의 근거로 쓰기 전에 conditioning
 변수를 먼저 확인한다.
 
+## 3.9b parameter cell 은 **단일 라벨이 아니다** (r3.2, 리뷰 15 항목 5)
+
+state-level 라벨은 상호배타지만, 한 파라미터 점 `z` 에서는 20~300 개 독립 episode 가
+서로 다른 라벨을 낸다. 따라서 **셀 하나를 한 색으로 칠하는 규칙을 두지 않는다.**
+
+```
+각 z 에서 보고하는 것 = 라벨 **prevalence 벡터**
+    p_FREE(z), p_SINGLE(z), p_COOP(z) (= p_C), p_INF(z), p_AMB(z)
+핵심 surface = **p_C(z)** 와 **p_AMB(z)** (둘을 나란히 보고한다)
+```
+> **State-level labels are mutually exclusive; parameter cells report their prevalence
+> under `D_z^ref`, not a single categorical truth label.**
+
+Fig 6 은 `p_C` surface + `p_AMB` surface (또는 stacked prevalence) 로 그리고, 단일
+카테고리 지도로 그리지 않는다. 분기 판정(§5)도 prevalence 로 한다.
+
 ## 3.10 표본 정책
 
 | 대상 | 독립 realization |
@@ -283,14 +317,24 @@ GPU 학습과 병렬.
 ## 4.1 state → episode 집계 (blocker 2)
 
 ```
-C_N(e,t)   = 1[ U^rel_{<=1}(e,t) < theta <= L^reach_{<=N,clean}(e,t) ]     (state level)
-persistence: m = ceil( (tau_sense + tau_decide) / dt ) = ceil(0.15/0.05) = 3 tick
-             (게이트를 실제로 행동으로 옮길 수 있어야 기회다 — 사전 고정)
-C_N^ep(e)  = 1  iff  T_eval(e) 안에서 C_N(e,t)=1 이 **연속 m tick 이상** 성립
+C_N(e,t)   = 1[ U^rel_{<=1}(e,t) < theta_S2 <= L^reach_{<=N,clean}(e,t) ]  (state level)
+persistence: **m = 1** (= 존재). r3 의 m=3 은 **폐기**한다 — 근거 확인 결과
+             `tau = 0.30` 은 **"커밋에서 포획 판정까지의 지연"** 이고 분해가
+             flight 0.15 + **sense 0.10 + decide 0.05** 이므로 sense/decide latency 가
+             **이미 reachable-set horizon 안에 있다**. 여기에 0.15 s persistence 를
+             더 요구하면 **latency 이중계산**이다 (m4_config.M4_PROVENANCE 원문 확인).
+C_N^ep(e)  = 1  iff  T_eval(e) 안에서 C_N(e,t)=1 인 step 이 **하나 이상** 존재
 p_C(z)     = P_{D_z^ref}( C_N^ep(E) = 1 )
+secondary  : opportunity **dwell-time 분포** (연속 성립 tick 수) — 기술 통계로 보고하며
+             판정에 쓰지 않는다
 ```
 `p_C` 는 **prevalence under the pre-specified scenario distribution** 이며 실세계
 encounter probability 가 아니다.
+
+**★ Stage-2 문턱 고정 (r3.2)**: `theta_S2 = 0.90` — 원 시스템 동결값이다.
+`C_N`·`p_C`·`z_B`·matched control **전부 이 하나의 θ 로만** 계산한다.
+θ ∈ {0.80, 0.85, 0.925, 0.95} 슬라이스는 **sensitivity 보고 전용이며 Stage-2 점 선택·
+라벨 판정에 사용 금지** (지도를 본 뒤 협력 영역이 가장 큰 θ 를 고르는 자유도 제거).
 
 ## 4.2 eligibility 와 점 선택 (leak 10)
 
@@ -306,10 +350,15 @@ tie      = lexicographic (chi, kappa, mu, eta, N)
 ## 4.3 matched controls (leak 11)
 
 ```
-d(z, z_B) = max_k | (z_k - z_B,k) / (z_k,max - z_k,min) |        (normalized L_inf)
-FREE control = FREE 라벨 셀 중 d 최소
-HARD control = CERTIFIED LOCAL-INFEASIBLE-N 셀 중 d 최소
-tie = lexicographic (chi, kappa, mu, eta, N)
+**동일 N · 동일 θ 강제 (r3.2)**: `N_FREE = N_HARD = N_B` 이고 세 regime 모두
+`theta_S2 = 0.90`. 그래야 `Gamma` 에 **team-size-dependent learnability** 가 섞이지 않는다.
+거리 최소화는 **같은 N 부분집합 안에서만** 수행한다.
+
+d(z, z_B) = max_k | (z_k - z_B,k) / (z_k,max - z_k,min) |   (normalized L_inf,
+            k 는 연속 Π 좌표만 — N 은 거리에 넣지 않고 **동일값으로 고정**)
+FREE control = { z : N = N_B, 라벨 prevalence 상 FREE 지배 } 중 d 최소
+HARD control = { z : N = N_B, LOCAL-INFEASIBLE-N 지배 } 중 d 최소
+tie = lexicographic (chi, kappa, mu, eta)
 ```
 **AMBIGUOUS 를 high-difficulty control 로 쓰지 않는다.**
 
@@ -369,10 +418,13 @@ arc scripted(historical) · `B_N` · **reachable 1-limiter** · oracle `U^rel` e
 > Phase II: post-hoc mechanism diagnosis identified a potential feasibility mismatch.
 > Phase III: a prospectively specified parameter study tested that hypothesis.
 
-**Phase I null 인용 원문**
-> Under the original preregistered nominal contract, the intervention failed to
-> produce a statistically supported improvement in the prespecified shaping-regime
-> net-capture rate. This null result is retained as a confirmatory result of Phase I.
+**Phase I 결과 인용 원문** (r3.2: primary 는 **overall paired Δ_net** 이지
+shaping-regime rate 가 아니다 — 종전 문구가 틀렸다. 또한 LL 은 기준선보다 나빴으므로
+"null" 보다 **"did not support the preregistered superiority claim"** 이 정확하다)
+> Under the original preregistered nominal contract, the intervention **did not
+> support the preregistered superiority claim on the prespecified paired net-capture
+> endpoint** (held-out IID set, lexicographic criteria; docs/63 r2). This outcome is
+> retained as a confirmatory result of Phase I.
 > It **motivated, but does not validate**, the subsequent feasibility analysis, whose
 > definitions and hypotheses were specified prospectively after the Phase-I contract
 > had been locked.
