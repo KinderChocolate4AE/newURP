@@ -1,20 +1,22 @@
 {
- "contract_doc": "진단 전용 (판정·사전등록 무관). SHAPING 결정적 대역 존재 여부",
- "note": "v_greedy 는 그리디 최적배치 = 달성가능 하한. 배치 도달가능성(a_lim=0.35·a_att)·NK 존 제약을 걸지 않은 낙관 천장이다. 따라서 'N_req<=4 면 기하적으로 가능' 은 성립하고 'N_req>4 면 불가능' 은 강한 시사이지 증명이 아니다.",
+ "status": "EXPLORATORY DIAGNOSTIC (docs/74 Phase II) -- 판정 사용 금지",
+ "contract_doc": "docs/73 리뷰 10 이행 · docs/74 Phase II",
+ "note": "G_relaxed 는 **relaxed static-placement 문제 최적의 하한**이다 (도달가능성·NK 존 미요구 = teleporting 배치). 실제 시스템 최적과 순서관계 없음. 'N_req<=4' 는 relaxed 기하에서의 존재 증명이고 N_req 미발견은 **불가능의 증명이 아니다** (상한 certificate 필요, docs/74 §3.4). 표본 = a_att 당 에피소드 1 개 (요구 20~30 미달).",
  "bracket": [
   11.0,
   78.0
  ],
  "a_star": 39.33,
  "declared_n_limiters": 4,
- "decisive_band_a_att": [
+ "threshold_crossing_points_observed": [
   36.0,
   39.0
  ],
  "rows": [
   {
    "a_att": 15.0,
-   "regime": "FREE_CAPTURE",
+   "regime_proxy": "FREE_CAPTURE",
+   "chi": 0.381,
    "r_escape": 0.675,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -23,8 +25,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 12,
-   "v_hold": 1.0,
-   "v_greedy": [
+   "V_0": 1.0,
+   "G_relaxed": [
     1.0,
     1.0,
     1.0,
@@ -34,9 +36,9 @@
     1.0,
     1.0
    ],
-   "v_greedy_k4": 1.0,
-   "v_greedy_max": 1.0,
-   "n_req": 1,
+   "G_relaxed_k4": 1.0,
+   "G_relaxed_max": 1.0,
+   "n_req": 0,
    "chosen_r_from_att": [
     1.0,
     1.0,
@@ -61,7 +63,8 @@
   },
   {
    "a_att": 20.0,
-   "regime": "FREE_CAPTURE",
+   "regime_proxy": "FREE_CAPTURE",
+   "chi": 0.508,
    "r_escape": 0.9,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -70,8 +73,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 10,
-   "v_hold": 1.0,
-   "v_greedy": [
+   "V_0": 1.0,
+   "G_relaxed": [
     1.0,
     1.0,
     1.0,
@@ -81,9 +84,9 @@
     1.0,
     1.0
    ],
-   "v_greedy_k4": 1.0,
-   "v_greedy_max": 1.0,
-   "n_req": 1,
+   "G_relaxed_k4": 1.0,
+   "G_relaxed_max": 1.0,
+   "n_req": 0,
    "chosen_r_from_att": [
     1.0,
     1.0,
@@ -108,7 +111,8 @@
   },
   {
    "a_att": 30.0,
-   "regime": "FREE_CAPTURE",
+   "regime_proxy": "FREE_CAPTURE",
+   "chi": 0.763,
    "r_escape": 1.35,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -117,8 +121,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 10,
-   "v_hold": 0.9532747603833865,
-   "v_greedy": [
+   "V_0": 0.9532747603833865,
+   "G_relaxed": [
     1.0,
     1.0,
     1.0,
@@ -128,9 +132,9 @@
     1.0,
     1.0
    ],
-   "v_greedy_k4": 1.0,
-   "v_greedy_max": 1.0,
-   "n_req": 1,
+   "G_relaxed_k4": 1.0,
+   "G_relaxed_max": 1.0,
+   "n_req": 0,
    "chosen_r_from_att": [
     2.2,
     1.0,
@@ -155,7 +159,8 @@
   },
   {
    "a_att": 36.0,
-   "regime": "FREE_CAPTURE",
+   "regime_proxy": "FREE_CAPTURE",
+   "chi": 0.915,
    "r_escape": 1.62,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -164,8 +169,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 10,
-   "v_hold": 0.8123003194888179,
-   "v_greedy": [
+   "V_0": 0.8123003194888179,
+   "G_relaxed": [
     0.9914529914529915,
     1.0,
     1.0,
@@ -175,8 +180,8 @@
     1.0,
     1.0
    ],
-   "v_greedy_k4": 1.0,
-   "v_greedy_max": 1.0,
+   "G_relaxed_k4": 1.0,
+   "G_relaxed_max": 1.0,
    "n_req": 1,
    "chosen_r_from_att": [
     2.2,
@@ -202,7 +207,8 @@
   },
   {
    "a_att": 39.0,
-   "regime": "FREE_CAPTURE",
+   "regime_proxy": "FREE_CAPTURE",
+   "chi": 0.992,
    "r_escape": 1.755,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -211,8 +217,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 10,
-   "v_hold": 0.7360223642172524,
-   "v_greedy": [
+   "V_0": 0.7360223642172524,
+   "G_relaxed": [
     0.9694915254237289,
     0.972,
     0.972,
@@ -222,8 +228,8 @@
     0.972,
     0.972
    ],
-   "v_greedy_k4": 0.972,
-   "v_greedy_max": 0.972,
+   "G_relaxed_k4": 0.972,
+   "G_relaxed_max": 0.972,
    "n_req": 1,
    "chosen_r_from_att": [
     2.2,
@@ -249,7 +255,8 @@
   },
   {
    "a_att": 42.0,
-   "regime": "SHAPING_NEEDED",
+   "regime_proxy": "SHAPING_NEEDED",
+   "chi": 1.068,
    "r_escape": 1.89,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -258,8 +265,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 10,
-   "v_hold": 0.645367412140575,
-   "v_greedy": [
+   "V_0": 0.645367412140575,
+   "G_relaxed": [
     0.8695652173913043,
     0.875,
     0.875,
@@ -269,8 +276,8 @@
     0.875,
     0.875
    ],
-   "v_greedy_k4": 0.875,
-   "v_greedy_max": 0.875,
+   "G_relaxed_k4": 0.875,
+   "G_relaxed_max": 0.875,
    "n_req": null,
    "chosen_r_from_att": [
     2.2,
@@ -296,7 +303,8 @@
   },
   {
    "a_att": 45.0,
-   "regime": "SHAPING_NEEDED",
+   "regime_proxy": "SHAPING_NEEDED",
+   "chi": 1.144,
    "r_escape": 2.025,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -305,8 +313,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 10,
-   "v_hold": 0.5619009584664537,
-   "v_greedy": [
+   "V_0": 0.5619009584664537,
+   "G_relaxed": [
     0.7575757575757576,
     0.7743589743589744,
     0.7743589743589744,
@@ -316,8 +324,8 @@
     0.7743589743589744,
     0.7743589743589744
    ],
-   "v_greedy_k4": 0.7743589743589744,
-   "v_greedy_max": 0.7743589743589744,
+   "G_relaxed_k4": 0.7743589743589744,
+   "G_relaxed_max": 0.7743589743589744,
    "n_req": null,
    "chosen_r_from_att": [
     2.2,
@@ -343,7 +351,8 @@
   },
   {
    "a_att": 50.0,
-   "regime": "SHAPING_NEEDED",
+   "regime_proxy": "SHAPING_NEEDED",
+   "chi": 1.271,
    "r_escape": 2.25,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -352,8 +361,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 10,
-   "v_hold": 0.43929712460063897,
-   "v_greedy": [
+   "V_0": 0.43929712460063897,
+   "G_relaxed": [
     0.5926430517711172,
     0.6261467889908257,
     0.6463917525773196,
@@ -363,8 +372,8 @@
     0.6463917525773196,
     0.6463917525773196
    ],
-   "v_greedy_k4": 0.6463917525773196,
-   "v_greedy_max": 0.6463917525773196,
+   "G_relaxed_k4": 0.6463917525773196,
+   "G_relaxed_max": 0.6463917525773196,
    "n_req": null,
    "chosen_r_from_att": [
     3.0,
@@ -390,7 +399,8 @@
   },
   {
    "a_att": 55.0,
-   "regime": "SHAPING_NEEDED",
+   "regime_proxy": "SHAPING_NEEDED",
+   "chi": 1.398,
    "r_escape": 2.475,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -399,8 +409,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 10,
-   "v_hold": 0.347444089456869,
-   "v_greedy": [
+   "V_0": 0.347444089456869,
+   "G_relaxed": [
     0.5373134328358209,
     0.5895953757225434,
     0.5945945945945946,
@@ -410,8 +420,8 @@
     0.5945945945945946,
     0.5945945945945946
    ],
-   "v_greedy_k4": 0.5945945945945946,
-   "v_greedy_max": 0.5945945945945946,
+   "G_relaxed_k4": 0.5945945945945946,
+   "G_relaxed_max": 0.5945945945945946,
    "n_req": null,
    "chosen_r_from_att": [
     1.0,
@@ -437,7 +447,8 @@
   },
   {
    "a_att": 60.0,
-   "regime": "SHAPING_NEEDED",
+   "regime_proxy": "SHAPING_NEEDED",
+   "chi": 1.525,
    "r_escape": 2.7,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -446,8 +457,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 8,
-   "v_hold": 0.17651757188498401,
-   "v_greedy": [
+   "V_0": 0.17651757188498401,
+   "G_relaxed": [
     0.22625215889464595,
     0.40939597315436244,
     0.46320346320346323,
@@ -457,8 +468,8 @@
     0.4652173913043478,
     0.4652173913043478
    ],
-   "v_greedy_k4": 0.4652173913043478,
-   "v_greedy_max": 0.4652173913043478,
+   "G_relaxed_k4": 0.4652173913043478,
+   "G_relaxed_max": 0.4652173913043478,
    "n_req": null,
    "chosen_r_from_att": [
     1.5,
@@ -484,7 +495,8 @@
   },
   {
    "a_att": 70.0,
-   "regime": "SHAPING_NEEDED",
+   "regime_proxy": "SHAPING_NEEDED",
+   "chi": 1.78,
    "r_escape": 3.15,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -493,8 +505,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 12,
-   "v_hold": 0.1621405750798722,
-   "v_greedy": [
+   "V_0": 0.1621405750798722,
+   "G_relaxed": [
     0.22558537978298115,
     0.2567849686847599,
     0.27539779681762544,
@@ -504,8 +516,8 @@
     0.5454545454545454,
     0.5454545454545454
    ],
-   "v_greedy_k4": 0.5454545454545454,
-   "v_greedy_max": 0.5454545454545454,
+   "G_relaxed_k4": 0.5454545454545454,
+   "G_relaxed_max": 0.5454545454545454,
    "n_req": null,
    "chosen_r_from_att": [
     1.5,
@@ -531,7 +543,8 @@
   },
   {
    "a_att": 78.0,
-   "regime": "SHAPING_NEEDED",
+   "regime_proxy": "SHAPING_NEEDED",
+   "chi": 1.983,
    "r_escape": 3.51,
    "theta_fire": 0.9,
    "kill_radius": 0.75,
@@ -540,8 +553,8 @@
    "judge": "se3_cone",
    "n_segments": 4,
    "step": 12,
-   "v_hold": 0.133546581367453,
-   "v_greedy": [
+   "V_0": 0.133546581367453,
+   "G_relaxed": [
     0.2148817802503477,
     0.2429078014184397,
     0.42424242424242425,
@@ -551,8 +564,8 @@
     0.42424242424242425,
     0.42424242424242425
    ],
-   "v_greedy_k4": 0.42424242424242425,
-   "v_greedy_max": 0.42424242424242425,
+   "G_relaxed_k4": 0.42424242424242425,
+   "G_relaxed_max": 0.42424242424242425,
    "n_req": null,
    "chosen_r_from_att": [
     1.5,
@@ -576,5 +589,18 @@
    ],
    "d_att_asset": 12.8
   }
- ]
+ ],
+ "probe_cfg": {
+  "cand_dirs": 32,
+  "cand_radii": [
+   1.0,
+   1.5,
+   2.2,
+   3.0,
+   4.0
+  ],
+  "n_candidates": 160,
+  "top_k_steps": 3,
+  "k_max": 8
+ }
 }
