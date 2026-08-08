@@ -1,9 +1,9 @@
-# 73 — 리뷰 10·11 판정 로그 (방향 전환 심사) + 이행 목록 — r1
+# 73 — 리뷰 10·11·12 판정 로그 (방향 전환 심사) + 이행 목록 — r2
 
 **2026-08-09 · 요청 = `docs/review_prompt_design_map_pivot.md` (리뷰 10) +
 `docs/review_prompt_blueprint.md` (리뷰 11) · 대상 = spine 교체 (학습 이득 증명 →
 메커니즘 성립 조건). 결과 = **전환 조건부 승인 · 현 서술로는 불승인 → 조건 이행 후
-재승인**. 반론 없이 전부 수용. r0 = 리뷰 10 만, **r1 = 리뷰 11 (A1~A8 + 청사진) 반영.**
+재승인**. 반론 없이 전부 수용. r0 = 리뷰 10 / r1 = 리뷰 11 (A1~A8 + 청사진) / **r2 = 리뷰 12 (r1 심사) 의 수정 5 + 2 반영 — 지도 셀 생성 전 논리 교정.**
 
 **★ r1 최상위 정정 (리뷰 11)**: `2026-12-18` 은 **URP 행정 마일스톤이지 연구의
 종료선이 아니다.** 12/18 에는 "어디까지 완결해 보고할지"만 정하고, 저널 증거 bar 는
@@ -40,6 +40,18 @@ r0 §8 의 "19주 축소 일정" 은 폐기하고 `docs/75_blueprint.md` 의 **�
 | A7 | 표본 20~30 | **CONDITIONAL** | **replicate 를 줄이지 말고 cell 을 줄인다**: coarse 20~30 / boundary 60~100+ / Stage-2 3점 100~300 (docs/74 §3.5) |
 | A8 | 동결 9 런 처리 | **RATIFY** | null 인용 원문 채택 — "**motivated, but does not validate**" · Phase III 는 "mechanism-consistent explanation" 까지만 (docs/74 §6) |
 
+### 1.2 리뷰 12 (r1 심사) — CONDITIONAL → 5+2 수정 후 RATIFY. 전부 이행
+
+| # | 항목 | 판정 | 이행 |
+|---|---|---|---|
+| 1 | §3 ↔ §5 의 `L<=V<=U` **모순** (snapshot certificate ↔ closed-loop 량을 한 sandwich 로 합침) | **REJECT (논리 오류)** | 고정상태 sandwich `L^reach <= V^reach <= V^rel <= U^rel` 와 `L^ctrl` 을 **분리**. 순서관계 주장 금지 (§3, §5, docs/74 §3.1, docs/75 §0) |
+| 2 | `W_{2:N} = ∅` → negative result 직행 | **REJECT (논리 오류)** | **3 분기** (A single-agent sufficiency / B mechanism infeasibility / C unresolved gap). C 는 **결론 없음**. docs/74 반증조건 ① 소급 수정 (§5.1) |
+| 3 | 라벨이 상호배타 아님 (`FREE` ↔ `CERTIFIED SINGLE` 중첩) | **REJECT** | `SINGLE-NEEDED` / `COOP-NEEDED` 로 재명명 + 상호배타 정의. `N_req` 는 닫히지 않으면 **UNRESOLVED** (모든 상태에 존재하지 않는다) |
+| 4 | `Delta_coop` 가 어느 층의 이득인지 모호 | **REJECT** | 층별 표기 `Delta^rel_N` / `Delta^reach_N` / `Delta^ctrl_N (= J(pi_N)-J(pi_1), 경험적 차이)`. 메인 논문은 `U^rel_{<=1} < theta <= L^reach_{<=N}` 한 줄로 밀고 `Delta_coop` 를 앞세우지 않는다 |
+| 5 | "필요시 eta" = 잔여 자유도 | **REJECT** | **deterministic escalation rule** (§3.1): candidate Π-set 사전 고정 · core `(chi,kappa,mu)` · tolerance 통과 시 채택 · 실패 시 `eta -> alpha -> lambda -> nu -> ...` 순서 고정 · 그래도 안 되면 "no low-dimensional collapse supported" |
+| + | "certificate 전 계층 강제" | **수정 권고** | **certificate hierarchy** 로 (§8): 싼 sound bound 로 닫힌 셀엔 상위 solver 미적용, 셀별 사용 수준 공개 |
+| + | Q1 bar 의 "mobility 2~3 층" | **수정 권고** | `mu` 가 이미 mobility 축 → 표현 폐기. core map = validated Π-space + discrete N, non-core 는 사전 지정값 고정 + matched slice (§7) |
+
 ## 2. 즉시 철회하는 문장 3건 + 1 (오늘 기록에서 하향)
 
 | 철회 | 대체 표현 |
@@ -59,25 +71,69 @@ r0 §8 의 "19주 축소 일정" 은 폐기하고 `docs/75_blueprint.md` 의 **�
 쓸 수 없다 (limiter 가 공격자 궤적을 바꾼다). 상세 = `docs/74` §3.1~3.2.
 
 ```
-Layer 1 V^rel_{<=N}(x)         static kill sphere 최대 N 개, 연속 admissible domain (oracle)
-Layer 2 V^reach_{<=N}(x,T_s)   a_lim·v_lim·NK 존·충돌 제약 하 도달가능 center 만
-Layer 3 L^ctrl_{<=N}(x0;pi_c)  반응형 attacker 포함 실제 closed-loop rollout (constructive)
-FREE                   : V_0 >= theta
-CERTIFIED SINGLE       : L_{<=1} >= theta
-CERTIFIED COOP         : U_{<=1} < theta  AND  L_{<=N} >= theta
-CERTIFIED INFEASIBLE-N : U_{<=N} < theta
-AMBIGUOUS              : 그 외 (지도에 그린다 — 숨기지 않는다)
-N_req = k              : U_{<=k-1} < theta <= L_{<=k} 일 때만 선언
-Delta_coop,N = V_{<=N} - V_{<=1}      W_{2:N} = { x : 2 <= N_req(x) <= N }
+Local fixed-state problem  (같은 고정 encounter state x 에서만 정의된다)
+------------------------------------------------------------------------
+V^rel_{<=N}(x)         최대 N 개 static kill sphere, 연속 admissible placement domain
+                       어디든 (mechanism oracle)
+V^reach_{<=N}(x,T_s)   최대 N 개 center 를 shaping horizon T_s 안에 a_lim · v_lim ·
+                       NK 존 · 충돌 제약을 만족해 **도달 가능한 곳**으로 제한
+L^reach_{<=N}(x,T_s)   명시적 실현가능 구성이 달성한 값 (constructive lower)
+U^rel_{<=N}(x)         V^rel_{<=N}(x) 의 sound upper bound
+
+  => 고정 상태 문제에서만:
+     L^reach_{<=N} <= V^reach_{<=N} <= V^rel_{<=N} <= U^rel_{<=N}
+
+Closed-loop problem   (별도 층 — 위 sandwich 와 섞지 않는다)
+------------------------------------------------------------
+L^ctrl_{<=N}(x0; pi_c) 반응형 attacker 가 있는 원 환경에서 명시적 controller 가
+                       달성한 값. **L^ctrl 과 고정상태 relaxed 상한 사이의 순서관계는
+                       주장하지 않는다.**
+
+Certified labels  (상호배타 — Fig 6 에서 한 셀에 한 색)
+-------------------------------------------------------
+FREE                    : V_0 >= theta
+CERTIFIED SINGLE-NEEDED : V_0 < theta <= L^reach_{<=1}
+CERTIFIED COOP-NEEDED   : U^rel_{<=1} < theta <= L^reach_{<=N}
+CERTIFIED INFEASIBLE-N  : U^rel_{<=N} < theta
+AMBIGUOUS               : 그 외 (지도에 그린다 — 숨기지 않는다)
+
+N_req = 0               : V_0 >= theta
+N_req = k (k >= 1)      : U^rel_{<=k-1} < theta <= L^reach_{<=k}
+그 외                   : **N_req = UNRESOLVED** (모든 상태에 N_req 가 존재하지 않는다)
+
+층별 협력 이득 (하나의 Delta_coop 표기 금지)
+--------------------------------------------
+Delta^rel_N   = V^rel_{<=N}   - V^rel_{<=1}
+Delta^reach_N = V^reach_{<=N} - V^reach_{<=1}
+Delta^ctrl_N  = J(pi_N) - J(pi_1)   ← 특정 controller 간 **경험적 차이**일 뿐이며
+                                      "optimal cooperative marginal value" 가 아니다
+W_{2:N} = { x : N_req(x) in [2, N] }   (UNRESOLVED 는 포함하지 않는다)
 ```
-`V^reach <= V^rel` 은 **고정 snapshot 에서만** 성립. closed-loop optimum 을 계산했다고
-주장하지 않고 `L^ctrl` ↔ `U^rel` 의 gap 을 남는 대로 보고한다.
+**핵심 한 줄**: `U^rel_{<=1} < theta <= L^reach_{<=N}` — 왼쪽은 *1 기를 이상적으로
+배치해도 안 된다* 는 상한 certificate, 오른쪽은 *실제 도달 가능한 N 기 배치가 된다* 는
+constructive certificate. 이 둘이 함께 성립하면 "왜 N>1 인가" 가 증명된다.
+메인 논문에서 `Delta_coop` 를 크게 밀지 않는다 — 이 한 줄이 더 직접적이다.
 
 - `chi = a_att·tau^2 / (2·rho_net)` 은 **free-capture analytic proxy** 로 강등.
   **"필요 경계는 닫힌형 a* = 2rho/tau^2" 문장은 삭제**(포획면이 등방 볼이 아니라
   SE(3) 원뿔 + 축방향 밴드이므로 scalar 비교로 clean-fire 필요조건을 정의할 수 없다).
-- 축은 raw 6 knob 대신 **무차원**: `chi`, `kappa = r_kill/rho`, `mu = a_lim/a_att`
-  (필요시 `eta = v_att·tau/rho`). 6D Cartesian sweep 폐기.
+- 축: raw 6 knob 대신 **무차원**. core = `chi`, `kappa = r_kill/rho`,
+  `mu = a_lim/a_att`. 확장은 §3.1 의 **escalation rule** 로만 (임의 추가 금지).
+  6D Cartesian sweep 폐기.
+
+### 3.1 무차원 축 escalation rule (r2 추가)
+
+**★ 리뷰 12 항목 5 (deterministic escalation rule)**: "필요시 eta" 같은 표현은
+결과를 본 뒤 축을 하나씩 늘리는 자유도를 남긴다. 다음을 **결과 전에 고정**한다.
+
+1. **candidate Π-set 고정**: `{chi, kappa, mu, eta, nu, lambda, sigma_standby,
+   sigma_detect, sigma_asset, alpha}` (+ 수치검증용 `delta_t = dt/tau`).
+2. **core hypothesis = `(chi, kappa, mu)`** 로 고정.
+3. iso-Π validation 이 **사전 지정 tolerance** 를 통과하면 그 축약을 채택.
+4. 실패하면 **미리 정한 순서**로 conditioning variable 을 하나씩 추가:
+   `eta -> alpha -> lambda -> nu -> sigma_standby -> sigma_detect -> sigma_asset`.
+5. 그래도 collapse 가 안 되면 결론 = **"no low-dimensional collapse supported"**
+   (축을 계속 늘려 억지로 맞추지 않는다).
 - **★ 동결 경계**: 진행 중인 docs/71 ablation 은 `regime_of` (기존 정의·기존 이름)
   로 계속 판정한다. 위 재정의는 **새 연구의 언어**이고 동결 블록에 소급 적용하지
   않는다 (그렇게 하면 primary 를 결과 후 바꾸는 것이 된다).
@@ -148,7 +204,10 @@ parametric requirement curve** 로 표기), (v) latency/noise spot-check.
   경계 adaptive refinement, witness 수렴(2k/8k/32k spot-check), 가중 민감도,
   greedy ↔ global/upper-bound solver 비교, relaxed ↔ reachable 분리.
   **통계단위 = episode** (위트니스 2000 을 독립표본으로 bootstrap = pseudoreplication).
-- **map**: 무차원 2~3 연속축 + N 이산곡선 + mobility 2~3 층 + 공격자 분포 적분.
+- **map**: **core map = validated low-dimensional Π-space + discrete N**.
+  non-core dimensionless group 은 사전 지정 값으로 고정하고 matched collapse /
+  robustness slice 로만 검사한다 (`mu` 가 이미 mobility/capability 축이므로 "mobility
+  2~3 층" 이라는 별도 표현은 폐기 — r2). 공격자 분포 적분 포함.
 - **learning (C5)**: FREE / band 내부 / high-difficulty 3 regime, 점당 **시드 5 최소**
   (8~10 권장), held-out 300 paired, 기준선 = hold · arc scripted · MARL ·
   **reachable 1-limiter** · oracle envelope. 4기 협력 주장에는 **N=1 대조군 필수**.
@@ -166,9 +225,13 @@ r0 의 "19주 축소판" 은 **폐기**한다 (리뷰 11: 12/18 은 행정 마�
 - 12/18 에 제출하는 것 = URP 보고서 + arXiv snapshot. **미완 부분은 미완으로 명시**하고
   이후 지속한다.
 - 저널 투고 시점은 증거 bar 충족 시점에 따른다 (12/18 과 무관).
-- 유지 = C2 + C3(무차원 축) + C5 + **certificate 전 계층**. **넣지 않음** =
-  optimal stopping · sensing-latency cooperation · multi-shot · 6DOF 재구축
-  (= Paper 2~5, `docs/75_blueprint.md` §4).
+- 유지 = C2 + C3(무차원 축) + C5 + **certificate hierarchy** (r2 정정: "전 계층
+  강제" 폐기). 모든 셀에 모든 certificate 를 강제하지 않는다 — **싼 sound bound 로
+  분류가 닫히는 셀에는 상위 solver/relaxation 을 적용하지 않고**, 어떤 certificate
+  수준을 썼는지 셀별로 지도·metadata 에 공개한다. (예: unblockable bad mass 만으로
+  `U^rel_{<=4} < 0.82 < 0.90` 이 나온 셀에 continuous B&B 를 돌리는 것은 과학적 가치가
+  거의 없다.) **넣지 않음** = optimal stopping · sensing-latency cooperation ·
+  multi-shot · 6DOF 재구축 (= Paper 2~5, `docs/75_blueprint.md` §4).
 
 ## 9. 상위 발견의 재서술 (리뷰어 제안 채택)
 
@@ -179,3 +242,8 @@ r0 의 "19주 축소판" 은 **폐기**한다 (리뷰 11: 12/18 은 행정 마�
 이것이 논문의 상위 주장이다. `[36,39]` · `N_req=1` · "병목은 tau·theta·cone" 을
 확정 사실로 밀면 그 순간 전환이 goalpost moving 으로 보인다 — §2 의 하향 표현을
 모든 산출물·발표에 적용한다.
+
+**★ r2 (리뷰 12) — 두 문장을 절대 합치지 않는다**:
+- "기존 설계에 feasibility question 이 빠져 있었다" = **지금 확정 가능한
+  methodological finding.**
+- "그 feasibility question 이 Phase I 실패를 설명한다" = **아직 hypothesis.**

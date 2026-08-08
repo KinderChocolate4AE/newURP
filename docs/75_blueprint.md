@@ -1,4 +1,4 @@
-# 75 — 청사진 (BLUEPRINT) — 채택본 v1, 2026-08-09
+# 75 — 청사진 (BLUEPRINT) — 채택본 v2, 2026-08-09 (리뷰 12 교정 반영)
 
 **리뷰 11 의 청사진 회신을 채택·확정한 문서. 우리의 실행 계약이다.**
 전제: **12/18 은 URP 행정 마일스톤이지 연구 종료선이 아니다.** 아래 게이트는 전부
@@ -9,8 +9,8 @@
   Interception under Deployment Latency*
 - 핵심 질문: **알고리즘 성능이 아니라 — "협력 요격 메커니즘이 애초에 실현 가능한
   advantage 를 갖는 영역이 존재하는가?"**
-- 정의·계약·certificate·Stage-2 규칙 = `docs/74_pivot_protocol.md` (r1)
-- 판정·철회·폐기 = `docs/73_review10_verdicts.md` (r1)
+- 정의·계약·certificate·Stage-2 규칙 = `docs/74_pivot_protocol.md` (**r2**)
+- 판정·철회·폐기 = `docs/73_review10_verdicts.md` (**r2**)
 
 ---
 
@@ -18,15 +18,19 @@
 
 MARL 재학습도, 6DOF 도 아니다.
 
-> `L_{<=N}(x) <= V_{<=N}(x) <= U_{<=N}(x)` 를 실제 코드로 계산해
-> **FREE / CERTIFIED SINGLE / CERTIFIED COOP / CERTIFIED INFEASIBLE-N / AMBIGUOUS**
-> 를 구분하는 **certificate-backed feasibility envelope**.
+> 같은 고정 encounter state 에서
+> `L^reach_{<=N} <= V^reach_{<=N} <= V^rel_{<=N} <= U^rel_{<=N}` 를 계산하고,
+> **그와 별도로** 반응형 attacker closed-loop 에서 `L^ctrl_{<=N}` 의 실현 가능성을
+> 검증하여 **FREE / SINGLE-NEEDED / COOP-NEEDED / INFEASIBLE-N / AMBIGUOUS** 를
+> 구분하는 **certificate-backed feasibility envelope**.
+> (snapshot certificate 와 closed-loop rollout 값을 **하나의 sandwich 로 섞지 않는다**.)
 
-특히 **`U_{<=1} < theta <= L_{<=N}` 셀이 실재하는가.**
-있으면 "왜 multi-agent 인가"가 처음으로 성립한다. 없으면 "이 메커니즘에서 왜
-multi-agent 가 불필요한가"라는 negative systems result 가 성립한다.
-**어느 쪽이 나와도 연구가 산다.** 이 질문을 답하지 않고 MAPPO 를 더 돌리면 학습 실패와
-물리적 불가능성을 또 구분하지 못한 채 계산량만 늘어난다.
+특히 **`U^rel_{<=1} < theta <= L^reach_{<=N}` 셀이 실재하는가.**
+있으면 "왜 multi-agent 인가" 를 certified 하게 답한다. **없으면 즉시 "협력 불필요" 가
+아니라** (A) single-agent sufficiency / (B) N-agent infeasibility / (C) unresolved
+certificate gap 중 어느 경우인지 분기하고, **해당 bound 가 직접 지지하는 주장만** 한다
+(C 는 결론 없음). 이 질문을 답하지 않고 MAPPO 를 더 돌리면 학습 실패와 물리적
+불가능성을 또 구분하지 못한 채 계산량만 늘어난다.
 
 ## 1. 단계별 계획 (주 번호는 순서 표기일 뿐, 마감 아님)
 
@@ -44,7 +48,7 @@ multi-agent 가 불필요한가"라는 negative systems result 가 성립한다.
 | 10 | **iso-Π collapse 실험** | 같은 Π 인데 paired score 차이가 허용오차 밖 → **빠진 Π 추가** |
 | 11 | core 2D envelope **pilot** | FREE / AMBIGUOUS / COOP / INFEASIBLE 분포 관찰 → §3 분기 결정 |
 | 12 | **boundary adaptive refinement** | 경계 근접 셀 replication 확대 (60~100+) |
-| 13 | `N = 0,1,2,4,…` **cooperation audit** | `U_{<=1} < theta <= L_{<=N}` 셀이 **없으면 협력 C5 금지** |
+| 13 | `N = 0,1,2,4,…` **cooperation audit** | `U^rel_{<=1} < theta <= L^reach_{<=N}` 셀이 **없으면 협력 C5 금지** + (A)/(B)/(C) 중 어느 분기인지 **판정 근거를 셀별로 기록** |
 | 14 | main **certified map** v1 | certificate coverage 비율 + **ambiguity map 동시 생성** |
 | 15 | **Stage-2 점 freeze** (결정론 규칙 실행) | eligible coop point 없으면 **협력 C5 claim 취소** |
 | 16 | C5 training wave (3 regime) | 최종 시드 **8~10** 권장 |
@@ -52,7 +56,8 @@ multi-agent 가 불필요한가"라는 negative systems result 가 성립한다.
 | 18 | jitter / noise / lag + 파라미터 perturbation | qualitative topology 가 깨지면 **context-of-use 축소** |
 | 19 | URP 보고서 / arXiv snapshot | 저널 증거 미완이면 **미완으로 명시하고 지속** |
 
-W11 에서 협력 opportunity 가 0 이어도 **연구 kill 이 아니다 — negative branch 로 이동**.
+W11 에서 협력 opportunity 가 0 이어도 **연구 kill 이 아니다** — §3 의 ①-A/①-B/①-C 중
+어느 분기인지 판정하고, **①-C(AMBIGUOUS 다수)면 negative claim 을 하지 않는다**.
 
 ## 2. 기술 부품
 
@@ -110,9 +115,11 @@ mass `G` 로 `v_max <= G/(G+U)`. θ 미만이면 즉시 certificate.
 
 | 발동 | 대체 산출물 | venue |
 |---|---|---|
-| ① `W_{2:N} = ∅` (전 범위) | *Limits of Cooperative Threat-Space Shaping for Single-Shot Capture under Deployment Latency* — 핵심은 **upper certificate 강도**. "4-agent algorithm failed" 가 아니라 **second-agent marginal mechanism 자체의 부재** | T-AES / AST 유지 가능 |
+| ①-A single-agent sufficiency (`V_0 < theta <= L^reach_{<=1}` 지배 + coop 셀 부재) | "no certified need for multi-agent interdiction; a single reachable limiter suffices wherever a constructive solution exists" | T-AES / AST |
+| ①-B mechanism infeasibility (`U^rel_{<=N} < theta` 광범위) | *Limits of Cooperative Threat-Space Shaping for Single-Shot Capture under Deployment Latency* — 핵심은 **upper certificate 강도**. "4-agent algorithm failed" 가 아니라 **firing condition 자체가 성립 불가** | T-AES / AST |
+| ①-C unresolved (AMBIGUOUS 다수) | **결론 없음 — negative claim 금지.** certificate 강화 또는 문제 정의 단순화로 되돌아간다 | 투고 불가 |
 | ② band 는 열리는데 MARL 이득 0 | `physical feasibility != learnability` 분리 보고. constructive controller 가 band 에서 성공하면 그것이 결과 → **Paper 2 발생** | 동일 |
-| ③ exact/reachable 에서 `N_req >= 2` | **호재.** Phase II F2 관측만 철회. `U_{<=1} < theta <= L_{<=2}` = 진짜 cooperative necessity → N=1 vs N=2/4 가 메인 실험 | 동일 |
+| ③ exact/reachable 에서 `N_req >= 2` | **호재.** Phase II F2 관측만 철회. `U^rel_{<=1} < theta <= L^reach_{<=2}` = 진짜 cooperative necessity → N=1 vs N=2/4 가 메인 실험 | 동일 |
 | ④ `v_shot` 이 allocation 민감 | 지도 **즉시 중단**. (P) branch (실제 uncertainty 분포 정의) 또는 set-based branch (worst-case containment / quantile radius / support-function). 기존 θ map 미사용 | 재설계 후 |
 
 ## 4. 논문 1 편 구조 + 필수 그림 8 장
@@ -121,8 +128,9 @@ mass `G` 로 `v_max <= G/(G+U)`. θ 미만이면 즉시 certificate.
 1 Introduction        — "When does a cooperative interception mechanism admit a
                         realizable advantage at all?"
 2 Problem & provenance— system · Phase I 원 연구 · chronology · 파라미터 출처
-3 Feasibility formulation — R measure · V_0 · L_{<=N} · U_{<=N} · certified classes ·
-                        cooperation-required opportunity
+3 Feasibility formulation — R measure · V_0 · L^reach_{<=N} · U^rel_{<=N} ·
+                        mutually-exclusive certified labels · closed-loop layer 분리 ·
+                        cooperation-required certificate
 4 Certification algorithms — exact finite placement · unblockable mass ·
                         continuous outer relaxation · reachable constructive controller
 5 Dimensionless design space — Π groups · collapse validation
@@ -137,10 +145,10 @@ mass `G` 로 `v_max <= G/(G+U)`. θ 미만이면 즉시 certificate.
 | 1 | system + cone + reachable witnesses + kill tube | "메커니즘이 모호하다" |
 | 2 | Phase I→II→III chronology | "실패 후 스토리를 바꿨다" |
 | 3 | witness 수렴 / allocation 민감도 | "0.9 가 sampling artifact 다" |
-| 4 | `L / V / U` **certificate sandwich** + solver 수렴 | "불가능 주장이 heuristic 이다" |
+| 4 | 고정상태 `L^reach / V / U^rel` **certificate sandwich** + solver 수렴 (closed-loop 값은 별도 패널) | "불가능 주장이 heuristic 이다" · "두 문제를 섞었다" |
 | 5 | **iso-Π collapse** | "축 선택이 arbitrary 하다" |
 | 6 | main certified envelope (FREE/SINGLE/COOP/INFEASIBLE/**AMBIGUOUS**) | 논문의 핵심 |
-| 7 | `N = 0,1,2,4,…` / `W_{2:N}` | "4 기가 왜 필요한가" |
+| 7 | `N = 0,1,2,4,…` / `W_{2:N}` + 셀별 certificate 수준 | "4 기가 왜 필요한가" · "어떤 셀이 어떤 근거로 닫혔나" |
 | 8 | C5 3-regime **interaction** + robustness inset | "좋은 점 골라 RL 돌렸다" |
 
 **Fig 6 에서 AMBIGUOUS 를 숨기지 않는 것**이 매우 중요하다.
@@ -226,7 +234,7 @@ feasibility analysis 가 필요하다** + prospective study 진행 중.
 |---|---|---|
 | 모든 "발견"이 witness generator artifact | allocation 변경 시 `V` shift > 0.05 · 8k→32k 경계 이동 · 독립 judge 불일치 | 다른 작업보다 **먼저 metric 수정** |
 | 실제 multi-agent 영역 부재 | `W_{2:N} ≈ ∅` (넓은 범위) | 편대 접고 negative systems / single-agent optimal interception 으로 분기 |
-| certificate gap 이 안 닫힘 | `L_{<=N} << theta << U_{<=N}` 인 AMBIGUOUS 셀만 가득 | 더 정교한 최적화가 아니라 **문제 정의 단순화** |
+| certificate gap 이 안 닫힘 | `L^reach_{<=N} << theta << U^rel_{<=N}` 인 AMBIGUOUS 셀만 가득 = 분기 ①-C | 더 정교한 최적화가 아니라 **문제 정의 단순화**. negative claim 금지 |
 | realism 넣으면 topology 반전 | jitter/noise/lag 에서 협력 band 소멸 | **"requirement" 언어 금지** |
 | 연구가 코드 수리 프로젝트가 됨 | central figure 가 안 생기는데 reward·COMA·entropy·MAPPO head·scripted baseline 만 만지고 있음 | **즉시 경보** — §0 하나로 복귀 |
 

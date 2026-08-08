@@ -1,13 +1,13 @@
 {
  "schema": "pivot-lock-v1",
  "lock_name": "PIVOT_LOCK_2026-08-09",
- "protocol_hash": "ef9cd4781a095072",
- "code_commit": "c6e80815777ecfba11952660de2bf38d51114708",
+ "protocol_hash": "cb038ee2a2a05892",
+ "code_commit": "3aec4255ab3182ae50a39d52bcb77c019cc4e99c",
  "code_dirty": true,
  "protocol_files": {
-  "docs/73_review10_verdicts.md": "328d0709edf59869dc449178debf6a6312316f1a991edbf03b6d3b7986979e27",
-  "docs/74_pivot_protocol.md": "070e8323ed6bc70a600033492902b29bdaca09f060eda87679b5b8c3b15c4dd8",
-  "docs/75_blueprint.md": "a2def7dd48783f74dbd04e9bb16dc91fee402c42c85b110120ec2ff8c1bd24d6",
+  "docs/73_review10_verdicts.md": "eadee58289641647c7f045881f15ea00fa3cf9720680d6be3f044219e821557d",
+  "docs/74_pivot_protocol.md": "e9bd80affc25e7e8d41f149fc95b3122a0a18e71af68eb2f06c947952253a8a8",
+  "docs/75_blueprint.md": "7bf3979ca19fbf337b02d1bb48765d5c44177d5b4b4f232a88728685883dc583",
   "docs/review_prompt_design_map_pivot.md": "8f9cbeea57d86a86be6d58abf8385855110ccb8eb7517d562dd6bcaf8ddaf4dd",
   "docs/review_prompt_blueprint.md": "04977656739269428dc6777409abb68e579788060ee6a7f66c352c0aca969be0"
  },
@@ -54,5 +54,15 @@
   "map_spec_hash",
   "generated_at"
  ],
- "note": "Phase II artifacts are exploratory records only and are not used for Phase III confirmatory classification or hypothesis testing (docs/74)."
+ "note": "Phase II artifacts are exploratory records only and are not used for Phase III confirmatory classification or hypothesis testing (docs/74).",
+ "revision": "r2",
+ "supersedes": [
+  {
+   "revision": "r1",
+   "protocol_hash": "ef9cd4781a095072",
+   "code_commit_tagged": "c6e8081",
+   "reason": "review 12 identified two pre-result logic errors in r1 (mixing the fixed-state L<=V<=U certificate with the closed-loop quantity; treating W_{2:N}=empty as a negative result). Corrected before any Phase III map cell was generated. r1 manifest/tag are retained, not deleted."
+  }
+ ],
+ "phase3_cells_generated_so_far": 0
 }

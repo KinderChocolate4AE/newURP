@@ -1,7 +1,9 @@
-# 74 — PIVOT PROTOCOL r1 (전환 기록·봉인) — 2026-08-09
+# 74 — PIVOT PROTOCOL r2 (전환 기록·봉인) — 2026-08-09
 
-**r0 = 리뷰 10 이행. r1 = 리뷰 11 (A1~A8) 판정 전면 반영. 이 문서는 Phase III
-지도 셀을 **한 칸도 생성하지 않은 상태**에서 작성·개정됐다.**
+**r0 = 리뷰 10 이행. r1 = 리뷰 11 (A1~A8) 반영. r2 = 리뷰 12 (r1 심사) 의 논리 교정
+5 + 2 반영. 이 문서는 Phase III 지도 셀을 **한 칸도 생성하지 않은 상태**에서 작성·
+개정됐다 — 따라서 r2 의 교정은 골대 이동이 아니라 **결과 생성 전 논리 수정**이다
+(감사 이력 = §0.1).**
 
 **★ r1 최상위 정정: `2026-12-18` 은 URP 행정 마일스톤이며 연구의 종료선이 아니다.**
 12/18 에는 "어디까지 완결해서 보고할지"만 정한다. 저널용 증거 bar (certificate ·
@@ -47,6 +49,19 @@ r0 의 "오늘 이후 생성된 지도만 Phase III" 는 **사람의 진술**이
 > Phase-II outputs are retained solely as exploratory records and are not used for
 > Phase-III confirmatory classification or hypothesis testing.
 
+## 0.1 정정 이력 (r2 — 감사 이력)
+
+| 판 | 날짜 | 계기 | 성격 |
+|---|---|---|---|
+| r0 | 2026-08-09 | 리뷰 10 판정 | 최초 봉인 |
+| r1 | 2026-08-09 | 리뷰 11 (A1~A8) | 감사장치·정의 3층·Stage-2 규칙 교체 |
+| **r2** | 2026-08-09 | 리뷰 12 (r1 심사) | **논리 오류 2 건 교정** (sandwich 혼합 · `W=∅` 해석) + 분류 상호배타화 + Δ 층별화 + Π escalation rule |
+
+r0·r1 의 manifest/tag 는 **삭제하지 않고 보존**한다. r2 의 `protocol_hash` 는 새로
+계산되며(계약 파일 내용이 바뀌었으므로), Phase III 산출물은 r2 hash 를 싣는다.
+**Phase III 지도 셀은 r0~r2 전 구간에서 한 칸도 생성되지 않았다** — 교정 대상은
+결과가 아니라 계약의 논리였다.
+
 ## 1. Phase I — 원 spine 과 그 결과 (변경 금지·소급 재해석 금지)
 
 - **가설**: 동결 TRAIN 위협 분포·동결 학습계약에서 협력 shaping 을 학습한 MARL 팀이
@@ -85,40 +100,58 @@ r0 의 "오늘 이후 생성된 지도만 Phase III" 는 **사람의 진술**이
 
 ## 3. Phase III — 정의·계약 (결과 열람 전 고정)
 
-### 3.1 3 층 분리 (리뷰 11 A4 — `V_N^*` 단일 정의 폐기)
+### 3.1–3.2 정의: 층 분리 + certified labels
+(리뷰 11 A4 · **리뷰 12 항목 1·3·4**)
 
 r0 의 `V_N^*` 는 (i) 정확히 N 기 사용을 강제해 단조성이 깨지고 (ii) snapshot relaxed
-값을 episode-level actual 의 상한처럼 쓸 위험이 있었다. r1 은 **3 층으로 분리**한다.
+값을 episode-level actual 의 상한처럼 쓸 위험이 있었다 → r1 에서 층 분리. **r2 에서는
+고정상태 sandwich 와 closed-loop 값을 명시적으로 분리하고**(항목 1), 라벨을
+**상호배타**로 만들고(항목 3), `Delta_coop` 를 **층별로 쪼갠다**(항목 4).
 
 ```
-Layer 1  V^rel_{<=N}(x)        고정 encounter state x. 최대 N 개 static kill sphere 를
-                               연속 admissible domain 어디든 배치할 때의 최적 (mechanism oracle)
-Layer 2  V^reach_{<=N}(x,T_s)  현재 limiter state 에서 shaping horizon T_s 안에
-                               a_lim · v_lim · NK 존 · 충돌제약을 만족해 도달 가능한
-                               center 만 허용
-Layer 3  L^ctrl_{<=N}(x0; pi_c) 반응형 attacker 를 포함한 **실제 closed-loop rollout** 에서
-                               명시적 controller pi_c 가 달성한 값 = constructive evidence
-```
+Local fixed-state problem  (같은 고정 encounter state x 에서만 정의된다)
+------------------------------------------------------------------------
+V^rel_{<=N}(x)         최대 N 개 static kill sphere, 연속 admissible placement domain
+                       어디든 (mechanism oracle)
+V^reach_{<=N}(x,T_s)   최대 N 개 center 를 shaping horizon T_s 안에 a_lim · v_lim ·
+                       NK 존 · 충돌 제약을 만족해 **도달 가능한 곳**으로 제한
+L^reach_{<=N}(x,T_s)   명시적 실현가능 구성이 달성한 값 (constructive lower)
+U^rel_{<=N}(x)         V^rel_{<=N}(x) 의 sound upper bound
 
-- **"최대 N"** 표기(`<=N`)를 쓴다: 정확히 N 을 강제하면 추가 limiter 가 방해할 수 있고
-  `N_req` 의 단조성 전제가 깨진다. `V_{<=0} <= V_{<=1} <= ...` 가 성립한다.
-- **고정 snapshot 에서만** `V^reach(x_t) <= V^rel(x_t)` 가 성립한다.
-  **full closed-loop 에는 일반적으로 성립하지 않는다** (limiter 가 공격자 궤적 자체를
-  바꾼다). 두 층을 섞어 상한 주장 금지. **closed-loop optimum 을 계산했다고 주장하지
-  않는다** — `L^ctrl` 과 `U^rel` 사이 gap 을 남는 대로 보고한다.
+  => 고정 상태 문제에서만:
+     L^reach_{<=N} <= V^reach_{<=N} <= V^rel_{<=N} <= U^rel_{<=N}
 
-### 3.2 certified classes (정확한 `N_req` 주장 대신 bound 로 분류)
+Closed-loop problem   (별도 층 — 위 sandwich 와 섞지 않는다)
+------------------------------------------------------------
+L^ctrl_{<=N}(x0; pi_c) 반응형 attacker 가 있는 원 환경에서 명시적 controller 가
+                       달성한 값. **L^ctrl 과 고정상태 relaxed 상한 사이의 순서관계는
+                       주장하지 않는다.**
 
+Certified labels  (상호배타 — Fig 6 에서 한 셀에 한 색)
+-------------------------------------------------------
+FREE                    : V_0 >= theta
+CERTIFIED SINGLE-NEEDED : V_0 < theta <= L^reach_{<=1}
+CERTIFIED COOP-NEEDED   : U^rel_{<=1} < theta <= L^reach_{<=N}
+CERTIFIED INFEASIBLE-N  : U^rel_{<=N} < theta
+AMBIGUOUS               : 그 외 (지도에 그린다 — 숨기지 않는다)
+
+N_req = 0               : V_0 >= theta
+N_req = k (k >= 1)      : U^rel_{<=k-1} < theta <= L^reach_{<=k}
+그 외                   : **N_req = UNRESOLVED** (모든 상태에 N_req 가 존재하지 않는다)
+
+층별 협력 이득 (하나의 Delta_coop 표기 금지)
+--------------------------------------------
+Delta^rel_N   = V^rel_{<=N}   - V^rel_{<=1}
+Delta^reach_N = V^reach_{<=N} - V^reach_{<=1}
+Delta^ctrl_N  = J(pi_N) - J(pi_1)   ← 특정 controller 간 **경험적 차이**일 뿐이며
+                                      "optimal cooperative marginal value" 가 아니다
+W_{2:N} = { x : N_req(x) in [2, N] }   (UNRESOLVED 는 포함하지 않는다)
 ```
-FREE                  : V_0 >= theta
-CERTIFIED SINGLE      : L_{<=1} >= theta
-CERTIFIED COOP        : U_{<=1} < theta  AND  L_{<=N} >= theta
-CERTIFIED INFEASIBLE-N: U_{<=N} < theta
-AMBIGUOUS             : 그 외 (숨기지 않고 지도에 그린다)
-N_req = k             : U_{<=k-1} < theta <= L_{<=k} 일 때만 선언
-```
-협력 가치 = `Delta_coop,N = V_{<=N} - V_{<=1}`. 협력 필요 집합 =
-`W_{2:N} = { x : 2 <= N_req(x) <= N }`.
+**핵심 한 줄**: `U^rel_{<=1} < theta <= L^reach_{<=N}` — 왼쪽은 *1 기를 이상적으로
+배치해도 안 된다* 는 상한 certificate, 오른쪽은 *실제 도달 가능한 N 기 배치가 된다* 는
+constructive certificate. 이 둘이 함께 성립하면 "왜 N>1 인가" 가 증명된다.
+메인 논문에서 `Delta_coop` 를 크게 밀지 않는다 — 이 한 줄이 더 직접적이다.
+
 `chi = a_att·tau^2/(2·rho_net)` 은 **free-capture analytic proxy** (필요조건 정의 금지).
 
 ### 3.3 measure (리뷰 11 A5 — RATIFY, 단 θ 를 상수로 취급 금지)
@@ -126,14 +159,18 @@ N_req = k             : U_{<=k-1} < theta <= L_{<=k} 일 때만 선언
 - `v_shot` 은 **(R) robust coverage metric** 으로 선언한다. probability 로 부르지 않는다
   (위트니스가 명시된 분포의 IID 표본이 아니다).
 - **θ 를 방어하지 않는다.** 핵심 산출물은 binary map 이 아니라 **연속 surface**
-  `L_{<=N}(z)`, `U_{<=N}(z)` 이고, θ ∈ {0.80, 0.85, 0.90, 0.925, 0.95} **슬라이스**로
+  `L^reach_{<=N}(z)`, `U^rel_{<=N}(z)` 이고, θ ∈ {0.80, 0.85, 0.90, 0.925, 0.95} **슬라이스**로
   대역이 어떻게 변하는지 보고한다. θ = robustness acceptance level.
 - 검증 필수: witness family 구성비(단일세그먼트 볼 / 경계구 / dogleg) 명시 ·
   **수렴 2k → 8k → 32k** · allocation 민감도 · 동일 snapshot paired 비교.
 - `delta_t = dt/tau` 는 물리 파라미터가 아니라 **numerical verification number** 로
   따로 확인한다.
 
-### 3.4 certificate — 계층형 (싼 것부터)
+### 3.4 certificate — **hierarchy (싼 것부터, 닫힌 셀엔 상위 단계 미적용)**
+
+r2: 모든 셀에 모든 certificate 를 강제하지 않는다. 낮은 비용의 sound bound 로 분류가
+닫히면 거기서 멈추고, **셀별로 사용한 certificate 수준을 지도·metadata 에 공개**한다.
+
 
 1. **unblockable bad mass (최저비용)**: bad witness `j` 의 blocker tube
    `B_j = gamma_j (+) Ball(r_kill)` 이 admissible domain `D` 와 교집합이 없으면 어떤
@@ -224,9 +261,15 @@ z_B    = argmax_z  LCB95{ p_C(z) }  (사전 지정 단측 95% 하한)
 
 ## 5. 반증 조건 (branch, kill 아님)
 
-1. 선언 범위 전역에서 `W_{2:N} = ∅` → **negative systems result** 로 분기
-   (*Limits of Cooperative Threat-Space Shaping for Single-Shot Capture under
-   Deployment Latency*). C5 협력 팔 취소. **핵심은 upper certificate 의 강도.**
+1. 선언 범위 전역에서 `W_{2:N} = ∅` → **곧바로 negative systems result 가 아니다**
+   (r2, 리뷰 12 항목 2). 세 경우로 분기하고 **해당 bound 가 직접 지지하는 주장만** 한다:
+   **(A) single-agent sufficiency** (`V_0 < theta <= L^reach_{<=1}` 지배 + coop 셀 부재)
+   → "no certified need for multi-agent interdiction" ·
+   **(B) mechanism infeasibility** (`U^rel_{<=N} < theta` 광범위) → "even N cooperative
+   limiters cannot establish the firing condition" (A 와 다른 결론) ·
+   **(C) unresolved certificate gap** (AMBIGUOUS 다수) → **결론 없음, negative claim
+   금지**. A 또는 B 에서만 negative-result 논문(*Limits of Cooperative Threat-Space
+   Shaping ...*)으로 분기하고 C5 협력 팔을 취소한다.
 2. band 는 열리는데 MARL 이득 0 → `physical feasibility != learnability` 로 분리 보고.
    constructive controller 가 band 에서 성공하면 그것이 결과다 → Paper 2 로.
 3. exact/reachable 에서 `N_req >= 2` → Phase II 의 "모든 교차가 1 기" 관측 **철회**
