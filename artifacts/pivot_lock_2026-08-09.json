@@ -1,15 +1,15 @@
 {
  "schema": "pivot-lock-v1",
- "lock_name": "PIVOT_LOCK_2026-08-09",
- "protocol_hash": "cb038ee2a2a05892",
- "code_commit": "3aec4255ab3182ae50a39d52bcb77c019cc4e99c",
+ "lock_name": "PIVOT_LOCK_R3_2026-08-09",
+ "protocol_hash": "95f0da98543de31b",
+ "code_commit": "9134aa8ba69451ed2ea2bc4368939904e929fb42",
  "code_dirty": true,
  "protocol_files": {
-  "docs/73_review10_verdicts.md": "eadee58289641647c7f045881f15ea00fa3cf9720680d6be3f044219e821557d",
-  "docs/74_pivot_protocol.md": "e9bd80affc25e7e8d41f149fc95b3122a0a18e71af68eb2f06c947952253a8a8",
-  "docs/75_blueprint.md": "7bf3979ca19fbf337b02d1bb48765d5c44177d5b4b4f232a88728685883dc583",
+  "docs/73_review10_verdicts.md": "0ca7c69469808b8cf1c404162b6533ed6dcab1a4288a12737b0c4d2891f5700e",
+  "docs/74_pivot_protocol.md": "f1f984da962abccccb4466d688c66200ba0b502ebb5e4168afb6c172a1e57c81",
+  "docs/75_blueprint.md": "813932ba9dca35297b6b52872cf15eae4f4a1f0b39ee02191314c7ab19a51b76",
   "docs/review_prompt_design_map_pivot.md": "8f9cbeea57d86a86be6d58abf8385855110ccb8eb7517d562dd6bcaf8ddaf4dd",
-  "docs/review_prompt_blueprint.md": "04977656739269428dc6777409abb68e579788060ee6a7f66c352c0aca969be0"
+  "docs/review_prompt_blueprint.md": "2481b54f6dd2fe40634e0ad1d69055322aae7e86c36fd72f51afd97ae1ee217a"
  },
  "phase_files": {
   "docs/63_scripted_baseline_prereg.md": "02e1de7c5b239992009e0fcebe4c13cd903b4d6584d378311e6bdbe52ff7eb97",
@@ -55,13 +55,20 @@
   "generated_at"
  ],
  "note": "Phase II artifacts are exploratory records only and are not used for Phase III confirmatory classification or hypothesis testing (docs/74).",
- "revision": "r2",
+ "revision": "r3",
+ "tag_policy": "Audit tags are immutable and revision-named (PIVOT_LOCK_R2_..., PIVOT_LOCK_R3_...). DISCLOSURE: during r1 the tag PIVOT_LOCK_2026-08-09 was force-moved once (c6e8081 -> 3aec425) while phase3_cells_generated_so_far == 0; no tag has been moved since, and legacy tags are retained.",
  "supersedes": [
   {
    "revision": "r1",
    "protocol_hash": "ef9cd4781a095072",
-   "code_commit_tagged": "c6e8081",
-   "reason": "review 12 identified two pre-result logic errors in r1 (mixing the fixed-state L<=V<=U certificate with the closed-loop quantity; treating W_{2:N}=empty as a negative result). Corrected before any Phase III map cell was generated. r1 manifest/tag are retained, not deleted."
+   "tag": "PIVOT_LOCK_2026-08-09",
+   "reason": "review 12: two pre-result logic errors (sandwich mixing; W=empty read as negative)."
+  },
+  {
+   "revision": "r2",
+   "protocol_hash": "cb038ee2a2a05892",
+   "tag": "PIVOT_LOCK_2026-08-09b",
+   "reason": "review 13: 5 blockers (L^reach vs L^ctrl algorithm mismatch; C_N state->episode aggregation undefined; clean-fire NOT-boxed missing from certificates; adaptive refinement vs pre-specified grid; interaction not a statistical estimand) plus protocol leaks 6-14. Corrected before any Phase III map cell was generated."
   }
  ],
  "phase3_cells_generated_so_far": 0

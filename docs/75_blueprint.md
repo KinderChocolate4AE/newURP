@@ -1,4 +1,4 @@
-# 75 — 청사진 (BLUEPRINT) — 채택본 v2, 2026-08-09 (리뷰 12 교정 반영)
+# 75 — 청사진 (BLUEPRINT) — 채택본 v3, 2026-08-09 (리뷰 12·13 교정 반영)
 
 **리뷰 11 의 청사진 회신을 채택·확정한 문서. 우리의 실행 계약이다.**
 전제: **12/18 은 URP 행정 마일스톤이지 연구 종료선이 아니다.** 아래 게이트는 전부
@@ -9,8 +9,8 @@
   Interception under Deployment Latency*
 - 핵심 질문: **알고리즘 성능이 아니라 — "협력 요격 메커니즘이 애초에 실현 가능한
   advantage 를 갖는 영역이 존재하는가?"**
-- 정의·계약·certificate·Stage-2 규칙 = `docs/74_pivot_protocol.md` (**r2**)
-- 판정·철회·폐기 = `docs/73_review10_verdicts.md` (**r2**)
+- 정의·계약·certificate·Stage-2 규칙 = `docs/74_pivot_protocol.md` (**r3**)
+- 판정·철회·폐기 = `docs/73_review10_verdicts.md` (**r3**)
 
 ---
 
@@ -18,14 +18,15 @@
 
 MARL 재학습도, 6DOF 도 아니다.
 
-> 같은 고정 encounter state 에서
-> `L^reach_{<=N} <= V^reach_{<=N} <= V^rel_{<=N} <= U^rel_{<=N}` 를 계산하고,
+> reference encounter 의 같은 시각 `(e,t)` 에서
+> `L^reach_{<=N,clean} <= V^reach_{<=N} <= V^rel_{<=N} <= U^rel_{<=N}` 를 계산하고,
 > **그와 별도로** 반응형 attacker closed-loop 에서 `L^ctrl_{<=N}` 의 실현 가능성을
 > 검증하여 **FREE / SINGLE-NEEDED / COOP-NEEDED / INFEASIBLE-N / AMBIGUOUS** 를
 > 구분하는 **certificate-backed feasibility envelope**.
 > (snapshot certificate 와 closed-loop rollout 값을 **하나의 sandwich 로 섞지 않는다**.)
 
-특히 **`U^rel_{<=1} < theta <= L^reach_{<=N}` 셀이 실재하는가.**
+특히 **`U^rel_{<=1} < theta <= L^reach_{<=N,clean}` 셀이 실재하는가**
+(= **local certified cooperative opportunity**).
 있으면 "왜 multi-agent 인가" 를 certified 하게 답한다. **없으면 즉시 "협력 불필요" 가
 아니라** (A) single-agent sufficiency / (B) N-agent infeasibility / (C) unresolved
 certificate gap 중 어느 경우인지 분기하고, **해당 bound 가 직접 지지하는 주장만** 한다
@@ -36,23 +37,23 @@ certificate gap 중 어느 경우인지 분기하고, **해당 bound 가 직접 
 
 | 주 | 핵심 산출물 | Continue / branch 게이트 |
 |---|---|---|
-| 1 | **pivot manifest + git tag + 외부 timestamp**, Phase III definitions v1 | manifest·스탬프 없는 map artifact = **전부 무효** |
+| 1 | **pivot manifest + 불변 태그 + 외부 timestamp** · Phase III definitions r3 · **master lattice `Z_master` 봉인(`lattice_hash`)** · Buckingham-Π 전체 도출 | manifest·`lattice_hash` 스탬프 없는 map artifact = **전부 무효** |
 | 2 | `v_shot` **수렴 하네스** (2k/8k/32k) | 8k→32k 변화 **median ≤ 0.02 · 95% ≤ 0.05**. 초과 시 **지도 중단** |
 | 3 | witness allocation 민감도 + measure **R/P 최종 결정** | allocation 변경으로 주요 score 가 **> 0.05** 변하면 현 R metric 폐기·재설계 |
 | 4 | finite-candidate **exact threshold solver** (MILP/B&B) | synthetic truth 100% 재현 · 실제 인스턴스 **≥ 90%** 에서 certified optimum/gap 확보 |
 | 5 | **greedy ↔ global audit** | greedy saturation 주장의 왜곡 정량화 → Phase II F2 해석 **최종 봉인** |
 | 6 | **unblockable bad mass** certificate | soundness unit test 통과. 값이 약한 것은 실패가 아님 |
 | 7 | **continuous outer relaxation** v1 (voxel/cell) | refinement 시 upper bound 가 **단조 tighten** 되는지 |
-| 8 | **reachable-constrained constructive** planner/controller | constraint violation **0** · 실제 env rollout 에서 target 배치 realizability 확인 |
-| 9 | **독립 judge cross-check** | cone/blocking predicate 불일치 **> 1e-3** → 지도 중지·버그 감사 |
+| 8 | **4A** 고정 `(e,t)` `L^reach_{<=N,clean}` (certificate) → **4B** closed-loop `L^ctrl` (실현 검사) | 4A 없이 4B 로 certificate 주장 **금지** · violation **0** · `not boxed` 확인 |
+| 9 | **독립 judge cross-check (boundary-aware)** | signed margin 비교 `|m1-m2| <= eps`; **boundary 에서 먼 predicate 불일치 1 건** → 지도 중지·버그 감사 |
 | 10 | **iso-Π collapse 실험** | 같은 Π 인데 paired score 차이가 허용오차 밖 → **빠진 Π 추가** |
 | 11 | core 2D envelope **pilot** | FREE / AMBIGUOUS / COOP / INFEASIBLE 분포 관찰 → §3 분기 결정 |
 | 12 | **boundary adaptive refinement** | 경계 근접 셀 replication 확대 (60~100+) |
 | 13 | `N = 0,1,2,4,…` **cooperation audit** | `U^rel_{<=1} < theta <= L^reach_{<=N}` 셀이 **없으면 협력 C5 금지** + (A)/(B)/(C) 중 어느 분기인지 **판정 근거를 셀별로 기록** |
 | 14 | main **certified map** v1 | certificate coverage 비율 + **ambiguity map 동시 생성** |
-| 15 | **Stage-2 점 freeze** (결정론 규칙 실행) | eligible coop point 없으면 **협력 C5 claim 취소** |
+| 15 | **Stage-2 점 freeze** (CP LCB95 `p_C` argmax, `Z_master` 내) | `LCB95 > 0.05` 이고 성공 episode >= 5 인 점이 없으면 **협력 C5 미실시** |
 | 16 | C5 training wave (3 regime) | 최종 시드 **8~10** 권장 |
-| 17 | C5 held-out eval + **interaction** | band benefit 이 대조군 대비 나타나는가 |
+| 17 | C5 held-out eval + **primary estimand `Gamma`** | `Gamma = delta_COOP - (delta_FREE+delta_HARD)/2`, 성공 = `LCB95(Gamma) > 0` (comparator = freeze 된 `B_N`) |
 | 18 | jitter / noise / lag + 파라미터 perturbation | qualitative topology 가 깨지면 **context-of-use 축소** |
 | 19 | URP 보고서 / arXiv snapshot | 저널 증거 미완이면 **미완으로 명시하고 지속** |
 
@@ -72,7 +73,7 @@ W11 에서 협력 opportunity 가 0 이어도 **연구 kill 이 아니다** — 
 | C5 | FREE / BAND / HARD + **N=1** + MARL | GPU 상 | constructive controller validation 만 남김 |
 | robustness | τ jitter · perception noise · actuator lag | 중 | context-of-use 를 명시적으로 좁힘 |
 
-### 2.1 finite-candidate exact solver — formulation (채택)
+### 2.1 finite-candidate exact solver — **solver/audit auxiliary** (certificate 아님)
 
 후보 center `i` 선택 `z_i ∈ {0,1}`, witness `j` 생존 `y_j ∈ {0,1}`,
 `A_ji = 1` iff 후보 `i` 가 witness `j` 를 kill. 분모 > 0 조건에서
@@ -80,6 +81,7 @@ W11 에서 협력 opportunity 가 0 이어도 **연구 kill 이 아니다** — 
 v >= theta   <=>   sum_j w_j (c_j - theta) y_j >= 0        (c_j = cone captured)
 subject to   sum_i z_i <= N,  survivor 관계를 이진 제약으로
 ```
+**주의**: 후보집합 `C ⊂ D` 이므로 θ 미달은 continuous-domain 불가능을 certify 하지 않는다.
 → **fractional objective 를 threshold-feasibility MILP** 로 변환. θ 에 대해 bisection 하면
 finite-candidate optimum 도 얻는다. **동일 candidate-cover signature 위트니스를 묶어
 압축**하는 것이 핵심 (864 후보 × 8k 위트니스는 가능, 32k 는 압축 필수).
@@ -102,14 +104,15 @@ cell refinement 로 optimism 이 줄어드는 구조 → **certificate convergen
 mass `G` 로 `v_max <= G/(G+U)`. θ 미만이면 즉시 certificate.
 **계층형**: 이걸 먼저 → 안 먹히는 셀만 continuous N-limited relaxation 으로 승급.
 
-### 2.4 reachable constructive lower — 절차 (채택)
+### 2.4 reachable constructive lower — **4A(certificate) / 4B(실현 검사) 분리**
 
 최적 controller 를 만들 필요 없다. **하나의 구성적 증인**이면 된다:
 ① 예측 escape path 에서 blocking tube 후보 생성 → ② limiter 별 도달가능성 검사 →
 ③ agent-candidate bipartite assignment → ④ threshold-feasibility 로 target center 선택 →
 ⑤ bang-bang/PD 추종 → ⑥ 5~10 tick replan → ⑦ **반응형 attacker 가 있는 실제 env rollout** →
-⑧ 실제 judge 가 `v >= theta` → `L^ctrl` 성립.
-**★ 이것이 MARL 보다 먼저다.**
+⑧ 실제 judge 가 clean fire → `L^ctrl` (**4B, certificate 아님**).
+**4A** = 같은 후보를 고정 `(e,t)` 의 **같은 witness set** 에 넣고 `not boxed` 까지 확인한
+`L^reach_{<=N,clean}` — **이것이 sandwich 의 오른쪽 항**이다. **★ 4A·4B 모두 MARL 보다 먼저.**
 
 ## 3. 분기 트리 (반증조건 발동 시)
 

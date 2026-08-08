@@ -1,9 +1,9 @@
-# 73 — 리뷰 10·11·12 판정 로그 (방향 전환 심사) + 이행 목록 — r2
+# 73 — 리뷰 10·11·12·13 판정 로그 (방향 전환 심사) + 이행 목록 — r3
 
 **2026-08-09 · 요청 = `docs/review_prompt_design_map_pivot.md` (리뷰 10) +
 `docs/review_prompt_blueprint.md` (리뷰 11) · 대상 = spine 교체 (학습 이득 증명 →
 메커니즘 성립 조건). 결과 = **전환 조건부 승인 · 현 서술로는 불승인 → 조건 이행 후
-재승인**. 반론 없이 전부 수용. r0 = 리뷰 10 / r1 = 리뷰 11 (A1~A8 + 청사진) / **r2 = 리뷰 12 (r1 심사) 의 수정 5 + 2 반영 — 지도 셀 생성 전 논리 교정.**
+재승인**. 반론 없이 전부 수용. r0 = 리뷰 10 / r1 = 리뷰 11 (A1~A8 + 청사진) / r2 = 리뷰 12 의 수정 5+2 / **r3 = 리뷰 13 의 blocker 5 + protocol leak 6~14. 전부 지도 셀 생성 전 (Phase III 셀 0 개).**
 
 **★ r1 최상위 정정 (리뷰 11)**: `2026-12-18` 은 **URP 행정 마일스톤이지 연구의
 종료선이 아니다.** 12/18 에는 "어디까지 완결해 보고할지"만 정하고, 저널 증거 bar 는
@@ -52,6 +52,28 @@ r0 §8 의 "19주 축소 일정" 은 폐기하고 `docs/75_blueprint.md` 의 **�
 | + | "certificate 전 계층 강제" | **수정 권고** | **certificate hierarchy** 로 (§8): 싼 sound bound 로 닫힌 셀엔 상위 solver 미적용, 셀별 사용 수준 공개 |
 | + | Q1 bar 의 "mobility 2~3 층" | **수정 권고** | `mu` 가 이미 mobility 축 → 표현 폐기. core map = validated Π-space + discrete N, non-core 는 사전 지정값 고정 + matched slice (§7) |
 
+### 1.3 리뷰 13 (r2 심사) — CONDITIONAL → blocker 5 + leak 6~14 이행 후 RATIFY
+
+| # | blocker | 판정 | 이행 (docs/74 r3) |
+|---|---|---|---|
+| 1 | `L^reach` 는 문서에만 있고 알고리즘은 `L^ctrl` 만 계산 | **치명적** | **4A/4B 분리** (§3.7): 4A = 고정 `(e,t)` 에서 `D_i^reach` 안의 배치로 **같은 witness set** 평가 → `L^reach_{<=N,clean}` (certificate) / 4B = 반응형 env rollout → `L^ctrl` (실현 검사, sandwich 에 넣지 않음). 시간축 `(x,T_s)` 폐기 → **reference encounter 시각 `(e,t)`** |
+| 2 | `C_N(x)` 가 episode 인지 state 인지 불명 | **치명적** | state-level `C_N(e,t)` + **전 스텝 스캔**(사후 선택 금지) + **persistence m = ceil((tau_sense+tau_decide)/dt) = 3 tick** + `C_N^ep(e)` + `p_C(z)` = **prevalence under the pre-specified scenario distribution** (§4.1) |
+| 3 | clean-fire 의 `not boxed-in` 이 certificate 에서 누락 | **치명적** | `g_theta = 1[v>=theta AND NOT boxed]`. **constructive lower 는 `g_theta=1` 배치만 유효**, upper 는 boxed 무시가 sound (비대칭 명시) (§3.2) |
+| 4 | adaptive refinement <-> "pre-specified finite grid" 충돌 | **중대** | **master lattice `Z_master` 선봉인 + `lattice_hash`**. adaptive 는 "다음에 어느 master 점을 계산할지"만 (결정론 정책 4 단). Stage-2 점은 `Z_master` 안에서만 → compute allocation 허용 / hypothesis-space 생성 금지 (§3.8) |
+| 5 | interaction 이 통계적 estimand 가 아님 | **중대** | comparator = **같은 N 기의 freeze 된 constructive controller `B_N`** (reachable 1-limiter 아님 — learning x team-size 혼합 방지). `delta_r = p_net^{MARL_N,r} - p_net^{B_N,r}`, **`Gamma = delta_COOP - (delta_FREE+delta_HARD)/2`**, 성공 = `LCB95(Gamma) > 0`. `N=1` 은 secondary mechanistic (§4.4) |
+
+| leak | 이행 |
+|---|---|
+| 6 finite MILP 의 지위 | certificate hierarchy 에서 제외 → **solver/audit auxiliary**. "Failure to reach theta in the finite-candidate exact problem does not certify continuous-domain infeasibility" 등재 |
+| 7 witness semantics | **path witness** (완전 궤적 + 종단 상태) → `B_j = gamma_j (+) Ball(r_kill)` 이 의미를 가짐. `v_shot` = feasible **path** witness 의 가중 coverage |
+| 8 Pi 축 | **결과 보고 축 추가 폐기** → Buckingham-Pi 를 **분석적으로 먼저 완성**·전부 기록·2~3 개만 plotted·나머지 conditioning. iso-Pi = **reduction validation**. `lambda=L_axial/rho`·`R_standby/rho` 는 rho 변경 시 자동 변화 |
+| 9 §7 <-> §3.9/§5-4 모순 | 반증조건 발동 = **현 Phase III 종료(falsified)** → 축·measure 변경은 **새 `Phase III-B` protocol 을 새 hash 로 사전등록** 후 재시작 (§5.1) |
+| 10 `p_C` CI·eligibility | **Clopper-Pearson one-sided 95%**, 단위 = episode. eligible = `LCB95 > p_min = 0.05` **AND** 성공 episode >= 5. tie = lexicographic. eligible 없으면 **협력 C5 미실시** |
+| 11 matched control metric | **normalized L_inf** 거리. FREE = 최근접 FREE 셀 / HARD = 최근접 `LOCAL-INFEASIBLE-N`. **AMBIGUOUS 를 HARD 로 쓰지 않는다** |
+| 12 라벨 이름 | **`CERTIFIED LOCAL-SINGLE-NEEDED` / `LOCAL-COOP-NEEDED` / `LOCAL-INFEASIBLE-N`** (LOCAL 생략 금지). 용어 = **local certified cooperative opportunity** |
+| 13 judge 일치 판정 | **boundary-aware**: signed margin `|m1-m2| <= eps` (1e-6 m / 1e-9). predicate 불일치는 `|m| <= eps` boundary case 에서만 허용, **boundary 에서 먼 불일치 1 건이면 지도 중단** |
+| 14 태그 | **태그 이동 금지** → `PIVOT_LOCK_R2/R3_...` revision 명 분리. **자백: r1 에서 태그를 `-f` 로 한 번 이동시켰다** (`c6e8081`→`3aec425`, Phase III 셀 0) — 이후 없음 |
+
 ## 2. 즉시 철회하는 문장 3건 + 1 (오늘 기록에서 하향)
 
 | 철회 | 대체 표현 |
@@ -75,9 +97,9 @@ Local fixed-state problem  (같은 고정 encounter state x 에서만 정의된�
 ------------------------------------------------------------------------
 V^rel_{<=N}(x)         최대 N 개 static kill sphere, 연속 admissible placement domain
                        어디든 (mechanism oracle)
-V^reach_{<=N}(x,T_s)   최대 N 개 center 를 shaping horizon T_s 안에 a_lim · v_lim ·
-                       NK 존 · 충돌 제약을 만족해 **도달 가능한 곳**으로 제한
-L^reach_{<=N}(x,T_s)   명시적 실현가능 구성이 달성한 값 (constructive lower)
+V^reach_{<=N}(e,t)     center 를 D_i^reach(e,t) (reference encounter 시각 t 까지
+                       실제 동역학·NK·충돌 제약으로 도달 가능한 집합) 로 제한
+L^reach_{<=N,clean}(e,t) 도달가능 + **not boxed** 배치가 달성한 값 (constructive)
 U^rel_{<=N}(x)         V^rel_{<=N}(x) 의 sound upper bound
 
   => 고정 상태 문제에서만:
@@ -91,14 +113,14 @@ L^ctrl_{<=N}(x0; pi_c) 반응형 attacker 가 있는 원 환경에서 명시적 
 
 Certified labels  (상호배타 — Fig 6 에서 한 셀에 한 색)
 -------------------------------------------------------
-FREE                    : V_0 >= theta
-CERTIFIED SINGLE-NEEDED : V_0 < theta <= L^reach_{<=1}
-CERTIFIED COOP-NEEDED   : U^rel_{<=1} < theta <= L^reach_{<=N}
-CERTIFIED INFEASIBLE-N  : U^rel_{<=N} < theta
+FREE                          : V_0 >= theta
+CERTIFIED LOCAL-SINGLE-NEEDED : V_0 < theta <= L^reach_{<=1,clean}
+CERTIFIED LOCAL-COOP-NEEDED   : U^rel_{<=1} < theta <= L^reach_{<=N,clean}
+CERTIFIED LOCAL-INFEASIBLE-N  : U^rel_{<=N} < theta
 AMBIGUOUS               : 그 외 (지도에 그린다 — 숨기지 않는다)
 
 N_req = 0               : V_0 >= theta
-N_req = k (k >= 1)      : U^rel_{<=k-1} < theta <= L^reach_{<=k}
+N_req = k (k >= 1)      : U^rel_{<=k-1} < theta <= L^reach_{<=k,clean}
 그 외                   : **N_req = UNRESOLVED** (모든 상태에 N_req 가 존재하지 않는다)
 
 층별 협력 이득 (하나의 Delta_coop 표기 금지)
