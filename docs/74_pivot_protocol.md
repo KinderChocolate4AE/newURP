@@ -221,7 +221,9 @@ for each (e,t):
   후보 = 예측 escape path 의 blocking tube ∩ D_i^reach
   agent-candidate bipartite assignment → threshold-feasibility 로 center 선택
   **같은 고정 witness set** 에서 v_shot 평가 + not boxed 확인
-  성공 시  L^reach_{<=N,clean}(e,t) >= theta        ← 이것이 오른쪽 항의 산출 경로
+  성공 시  L^reach_{<=N,clean}(e,t) >= theta
+           (= sandwich 의 **constructive lower bound** 이며 동시에
+            cooperative-necessity certificate 의 **오른쪽 항**)
 ```
 **4B — closed-loop realizability (external check, certificate 아님)**
 ```

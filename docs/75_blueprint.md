@@ -1,4 +1,4 @@
-# 75 — 청사진 (BLUEPRINT) — 채택본 v3, 2026-08-09 (리뷰 12·13 교정 반영)
+# 75 — 청사진 (BLUEPRINT) — 채택본 v3.1, 2026-08-09 (리뷰 12·13·14 교정 반영)
 
 **리뷰 11 의 청사진 회신을 채택·확정한 문서. 우리의 실행 계약이다.**
 전제: **12/18 은 URP 행정 마일스톤이지 연구 종료선이 아니다.** 아래 게이트는 전부
@@ -33,21 +33,33 @@ certificate gap 중 어느 경우인지 분기하고, **해당 bound 가 직접 
 (C 는 결론 없음). 이 질문을 답하지 않고 MAPPO 를 더 돌리면 학습 실패와 물리적
 불가능성을 또 구분하지 못한 채 계산량만 늘어난다.
 
+## 0.1 Stage-2 primary estimand (정본 = docs/74 r3 §4.4 — 여기 한 줄 고정)
+
+```
+regime r in {FREE, LOCAL-COOP-NEEDED, LOCAL-INFEASIBLE-N}
+delta_r = p_net^{MARL_N, r} - p_net^{B_N, r}
+          B_N = **Stage-2 결과를 보기 전에 freeze 한 same-N constructive non-learning
+                 controller** (reachable 1-limiter 도, arc 도, "best baseline" 도 아니다)
+Gamma   = delta_COOP - ( delta_FREE + delta_HARD ) / 2
+primary success : LCB95(Gamma) > 0   (training seed 최상위 hierarchical bootstrap)
+secondary (mechanistic) : p_net^{N} - p_net^{1}   ← N=1 은 **별도** 대조, primary 아님
+```
+
 ## 1. 단계별 계획 (주 번호는 순서 표기일 뿐, 마감 아님)
 
 | 주 | 핵심 산출물 | Continue / branch 게이트 |
 |---|---|---|
 | 1 | **pivot manifest + 불변 태그 + 외부 timestamp** · Phase III definitions r3 · **master lattice `Z_master` 봉인(`lattice_hash`)** · Buckingham-Π 전체 도출 | manifest·`lattice_hash` 스탬프 없는 map artifact = **전부 무효** |
 | 2 | `v_shot` **수렴 하네스** (2k/8k/32k) | 8k→32k 변화 **median ≤ 0.02 · 95% ≤ 0.05**. 초과 시 **지도 중단** |
-| 3 | witness allocation 민감도 + measure **R/P 최종 결정** | allocation 변경으로 주요 score 가 **> 0.05** 변하면 현 R metric 폐기·재설계 |
+| 3 | witness allocation 민감도 + **R measure validation** (R/P 를 데이터 보고 고르는 것이 아니다 — 현 protocol 의 primary measure 는 R 로 이미 고정) | allocation 변경으로 주요 score 가 **> 0.05** 변하면 **현 R-map protocol 종료** → P 또는 set-based 는 **Phase III-B 새 hash** 로만 |
 | 4 | finite-candidate **exact threshold solver** (MILP/B&B) | synthetic truth 100% 재현 · 실제 인스턴스 **≥ 90%** 에서 certified optimum/gap 확보 |
 | 5 | **greedy ↔ global audit** | greedy saturation 주장의 왜곡 정량화 → Phase II F2 해석 **최종 봉인** |
 | 6 | **unblockable bad mass** certificate | soundness unit test 통과. 값이 약한 것은 실패가 아님 |
 | 7 | **continuous outer relaxation** v1 (voxel/cell) | refinement 시 upper bound 가 **단조 tighten** 되는지 |
 | 8 | **4A** 고정 `(e,t)` `L^reach_{<=N,clean}` (certificate) → **4B** closed-loop `L^ctrl` (실현 검사) | 4A 없이 4B 로 certificate 주장 **금지** · violation **0** · `not boxed` 확인 |
 | 9 | **독립 judge cross-check (boundary-aware)** | signed margin 비교 `|m1-m2| <= eps`; **boundary 에서 먼 predicate 불일치 1 건** → 지도 중지·버그 감사 |
-| 10 | **iso-Π collapse 실험** | 같은 Π 인데 paired score 차이가 허용오차 밖 → **빠진 Π 추가** |
-| 11 | core 2D envelope **pilot** | FREE / AMBIGUOUS / COOP / INFEASIBLE 분포 관찰 → §3 분기 결정 |
+| 10 | **iso-Π collapse 실험** (reduction validation) | 같은 **core Π** 에서 paired 차이가 허용오차 초과 → **현 low-dimensional collapse claim REJECT**. 이미 봉인된 conditioning variable 로 사전 지정 원인 확인까지만 허용. **새 Π·새 map 축이 필요하면 현 정의를 수정하지 않고 Phase III-B 를 새 protocol hash 로 시작** |
+| 11 | core 2D envelope **pilot** | **FREE / LOCAL-SINGLE-NEEDED / LOCAL-COOP-NEEDED / LOCAL-INFEASIBLE-N / AMBIGUOUS** 5 라벨 분포 관찰 (SINGLE-NEEDED 는 negative branch A 판정의 필수 대조군) → §3 분기 결정 |
 | 12 | **boundary adaptive refinement** | 경계 근접 셀 replication 확대 (60~100+) |
 | 13 | `N = 0,1,2,4,…` **cooperation audit** | `U^rel_{<=1} < theta <= L^reach_{<=N}` 셀이 **없으면 협력 C5 금지** + (A)/(B)/(C) 중 어느 분기인지 **판정 근거를 셀별로 기록** |
 | 14 | main **certified map** v1 | certificate coverage 비율 + **ambiguity map 동시 생성** |
@@ -70,7 +82,7 @@ W11 에서 협력 opportunity 가 0 이어도 **연구 kill 이 아니다** — 
 | unblockable bad mass | bad witness blocking-center set 의 emptiness/coverage 상한 | 중 | individual-only certificate |
 | reachable constructive lower | dynamics/NK/충돌 만족 controller rollout | 상 | simpler assignment + receding-horizon scripted controller |
 | dimensionless map | core 2~3 Π 축 · N 이산 · adaptive refinement | 중 | raw parameter slice + collapse 주장 없음 |
-| C5 | FREE / BAND / HARD + **N=1** + MARL | GPU 상 | constructive controller validation 만 남김 |
+| C5 | **FREE / LOCAL-COOP-NEEDED / LOCAL-INFEASIBLE-N** 3 regime + **N=1** + MARL | GPU 상 | constructive controller validation 만 남김 |
 | robustness | τ jitter · perception noise · actuator lag | 중 | context-of-use 를 명시적으로 좁힘 |
 
 ### 2.1 finite-candidate exact solver — **solver/audit auxiliary** (certificate 아님)
@@ -87,6 +99,11 @@ finite-candidate optimum 도 얻는다. **동일 candidate-cover signature 위�
 압축**하는 것이 핵심 (864 후보 × 8k 위트니스는 가능, 32k 는 압축 필수).
 
 ### 2.2 continuous outer relaxation — 구현 형태 (채택)
+
+**witness 의미론**: 각 witness `j` 는 **표본된 admissible 궤적 `gamma_j` + 그 종단 상태**
+(= **path witness**) 다. blocker-tube certificate 는 path witness 위에서 정의되며 종단
+endpoint 만으로 정의되지 않는다 — 그래야 "한 대표 경로를 막았는데 같은 endpoint 로 가는
+다른 경로는?" 문제가 생기지 않는다.
 
 bad witness `j` 의 escape 궤적 `gamma_j` → blocker tube `B_j = gamma_j (+) Ball(r_kill)`.
 center domain `D` 를 voxel/cell `C_q` 로 분할하고 **낙관적 incidence**
@@ -112,13 +129,16 @@ mass `G` 로 `v_max <= G/(G+U)`. θ 미만이면 즉시 certificate.
 ⑤ bang-bang/PD 추종 → ⑥ 5~10 tick replan → ⑦ **반응형 attacker 가 있는 실제 env rollout** →
 ⑧ 실제 judge 가 clean fire → `L^ctrl` (**4B, certificate 아님**).
 **4A** = 같은 후보를 고정 `(e,t)` 의 **같은 witness set** 에 넣고 `not boxed` 까지 확인한
-`L^reach_{<=N,clean}` — **이것이 sandwich 의 오른쪽 항**이다. **★ 4A·4B 모두 MARL 보다 먼저.**
+`L^reach_{<=N,clean}` — 이것은 **fixed-state sandwich 의 constructive lower bound** 이며,
+**cooperative-necessity certificate `U^rel_{<=1} < θ <= L^reach_{<=N,clean}` 의 오른쪽 항**이다
+(sandwich 안에서는 **왼쪽** 항이다 — 방향을 혼동하지 않는다).
+**★ 4A·4B 모두 MARL 보다 먼저.**
 
 ## 3. 분기 트리 (반증조건 발동 시)
 
 | 발동 | 대체 산출물 | venue |
 |---|---|---|
-| ①-A single-agent sufficiency (`V_0 < theta <= L^reach_{<=1}` 지배 + coop 셀 부재) | "no certified need for multi-agent interdiction; a single reachable limiter suffices wherever a constructive solution exists" | T-AES / AST |
+| ①-A single-agent sufficiency (`V_0 < theta <= L^reach_{<=1,clean}` 지배 + coop 셀 부재) | **"No certified need for multi-agent interdiction was found; all certified feasible non-FREE cells were single-agent sufficient."** (AMBIGUOUS 셀에 대해서는 **침묵**한다 — "wherever" 같은 전칭 표현 금지) | T-AES / AST |
 | ①-B mechanism infeasibility (`U^rel_{<=N} < theta` 광범위) | *Limits of Cooperative Threat-Space Shaping for Single-Shot Capture under Deployment Latency* — 핵심은 **upper certificate 강도**. "4-agent algorithm failed" 가 아니라 **firing condition 자체가 성립 불가** | T-AES / AST |
 | ①-C unresolved (AMBIGUOUS 다수) | **결론 없음 — negative claim 금지.** certificate 강화 또는 문제 정의 단순화로 되돌아간다 | 투고 불가 |
 | ② band 는 열리는데 MARL 이득 0 | `physical feasibility != learnability` 분리 보고. constructive controller 가 band 에서 성공하면 그것이 결과 → **Paper 2 발생** | 동일 |
@@ -236,7 +256,7 @@ feasibility analysis 가 필요하다** + prospective study 진행 중.
 | 리스크 | 조기경보 지표 | 대응 |
 |---|---|---|
 | 모든 "발견"이 witness generator artifact | allocation 변경 시 `V` shift > 0.05 · 8k→32k 경계 이동 · 독립 judge 불일치 | 다른 작업보다 **먼저 metric 수정** |
-| 실제 multi-agent 영역 부재 | `W_{2:N} ≈ ∅` (넓은 범위) | 편대 접고 negative systems / single-agent optimal interception 으로 분기 |
+| 실제 multi-agent 영역 부재 | `W_{2:N} ≈ ∅` **이고 ambiguity 가 낮을 때만** (AMBIGUOUS 다수면 원인이 certificate gap 일 수 있다 → 분기 ①-C) | 편대 접고 negative systems / single-agent optimal interception 으로 분기 |
 | certificate gap 이 안 닫힘 | `L^reach_{<=N} << theta << U^rel_{<=N}` 인 AMBIGUOUS 셀만 가득 = 분기 ①-C | 더 정교한 최적화가 아니라 **문제 정의 단순화**. negative claim 금지 |
 | realism 넣으면 topology 반전 | jitter/noise/lag 에서 협력 band 소멸 | **"requirement" 언어 금지** |
 | 연구가 코드 수리 프로젝트가 됨 | central figure 가 안 생기는데 reward·COMA·entropy·MAPPO head·scripted baseline 만 만지고 있음 | **즉시 경보** — §0 하나로 복귀 |
