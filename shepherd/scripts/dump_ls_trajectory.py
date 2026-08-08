@@ -169,12 +169,14 @@ def _scripted_actor(mode: str):
     return actor
 
 
-def _ls_actor(ckpt: str):
+def _ls_actor(ckpt: str, config: str = "configs/l2_mappo.yaml"):
     import torch
     import yaml
 
     from shepherd.scripts.train_m4 import M4Runner
-    run_cfg = yaml.safe_load(open("configs/l2_mappo.yaml"))
+    # LS-off (docs/71) 덤프는 `--config configs/l2_mappo_nocommit.yaml` 로 부른다 --
+    # 체크포인트의 lim_dim 과 러너 폭이 갈라지면 restore 가 크게 죽는다.
+    run_cfg = yaml.safe_load(open(config))
     runner = M4Runner(run_cfg, 0, "cpu", **_world_kw(),
                       attacker=None, spawn=None, finisher_policy="scripted")
     got = runner.restore(pathlib.Path(ckpt), tag="final")
@@ -198,6 +200,8 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="LS 정책 궤적 덤프 (viz-first)")
     ap.add_argument("--arm", choices=["ls", "arc", "hold"])
     ap.add_argument("--ckpt", default="results/m4_v3_train_LS/seed0")
+    ap.add_argument("--config", default="configs/l2_mappo.yaml",
+                    help="LS-off 팔은 configs/l2_mappo_nocommit.yaml (docs/71)")
     ap.add_argument("--eps", type=int, nargs="*", default=None)
     ap.add_argument("--scan", type=int, default=40,
                     help="--eps 없으면 0..N 스캔해 NET/PEN 각 4판 수집")
@@ -220,7 +224,8 @@ def main() -> None:
         return
 
     assert a.arm, "--arm ls|arc|hold 또는 --merge"
-    actor = _ls_actor(a.ckpt) if a.arm == "ls" else _scripted_actor(a.arm)
+    actor = (_ls_actor(a.ckpt, a.config) if a.arm == "ls"
+             else _scripted_actor(a.arm))
     tag = a.arm.upper()
 
     episodes = []

@@ -47,7 +47,7 @@ from shepherd.m4_config import (CAPABILITY_RATIOS, M4_OVERRIDES, TAU_DECOMPOSITI
                                 THREAT_BRACKET, m4_config)
 from shepherd.m4_env import build_m4_env, mission_eval, regime_of
 from shepherd.scripts.mission_rollout import scripted_role_actions
-from shepherd.train.make_env import (M4_LIVE_DIMS, pad_env_action,
+from shepherd.train.make_env import (LIVE_DIMS, M4_LIVE_DIMS, pad_env_action,
                                      unpad_env_action)
 from shepherd.scripts.curve_sweep import BANDS, summarize_bands
 from shepherd.spawn_rand import SpawnSpec
@@ -140,11 +140,21 @@ class M4Runner(MAPPORunner):
         self.rollout_env_steps = int(loop["rollout_env_steps"])
         self.seed = int(seed)
 
+        # ★ docs/71 §0.1 ④ — commit-off 팔(LS-off)의 배선. `limiter_commit=false`
+        #   면 limiter live dims = (0,1,2) 프로파일을 쓰고 `pad_env_action` 이
+        #   idx3(commit)=0 을 결정적으로 채운다 (env 는 항상 commit 0 수신).
+        #   학습기 쪽은 이미 head 자체가 부재다 (mappo.py:312 GaussianActor).
+        #   프로파일이 어댑터·평가 패딩·행동 스케일 세 곳에서 한 몸으로 움직여야
+        #   한다 -- 갈라지면 결함 2 가 반대 방향으로 재발한다. 잠금 = §2.1 테스트.
+        self.limiter_commit = bool(run_cfg["mappo"].get("limiter_commit", True))
+        self.live_dims = M4_LIVE_DIMS if self.limiter_commit else LIVE_DIMS
+        self.lim_live = 4 if self.limiter_commit else 3
+
         st = build_m4_env(seed, 0, **self._m4)              # <-- M4 스택으로 dim 산출
         # ★ docs/65 A4a/A5 — 이 러너가 실제로 사는 세계의 resolved manifest.
         #   save 가 체크포인트 옆에 쓰고, restore 가 hash 불일치를 거부한다.
         self.contract = st.contract
-        ad = ShepherdAdapter(st.env, M4_LIVE_DIMS)         # 커밋 비트 live (결함 2)
+        ad = ShepherdAdapter(st.env, self.live_dims)       # 커밋 비트 live (결함 2)
         self.n = len(ad.limiter_ids)
         self.obs_dim = ad.obs_dim
         lim_low, lim_high = ad.action_bounds(ad.limiter_ids[0])
@@ -170,7 +180,9 @@ class M4Runner(MAPPORunner):
         #   **시드마다 동결값이 달라 시드가 복제가 아니게 된다**(실효 권한 100/72/48%).
         #   `_begin_episode` 가 매 에피소드 갱신한다(아래). 여기 값은 첫 롤아웃 전
         #   부트스트랩일 뿐이다.
-        self.lim_scale = lim_high.astype(np.float32)
+        #   commit-off 팔에서는 정책 출력이 3 축이므로 스케일도 3 축이다
+        #   (4 축을 그대로 두면 (N,3)*(4,) 브로드캐스트에서 죽는다).
+        self.lim_scale = lim_high[:self.lim_live].astype(np.float32)
         self.fin_axis_scale = fin_high[:3].astype(np.float32)
 
         self.norm = RunningNorm(self.obs_dim)
@@ -181,8 +193,7 @@ class M4Runner(MAPPORunner):
                                      # 결함 2 (a): M4 기본은 커밋 live.
                                      # config 로 끄면 docs/29 §15.2 폴백 (b) 의
                                      # 대조군(= 커밋을 정책 손에서 뗀 팔)이 된다.
-                                     "limiter_commit": bool(
-                                         run_cfg["mappo"].get("limiter_commit", True)),
+                                     "limiter_commit": self.limiter_commit,
                                      # docs/48: 동결 역할의 액터는 학습에서 뺀다
                                      "freeze_limiter": "limiter" in self.frozen_roles,
                                      "freeze_finisher": "finisher" in self.frozen_roles,
@@ -211,10 +222,10 @@ class M4Runner(MAPPORunner):
     # --------------------------------------------------------------- 에피소드 ---
     def _begin_episode(self) -> None:
         st = build_m4_env(self.seed, self._ep_idx, **self._m4)
-        self._adapter = ShepherdAdapter(st.env, M4_LIVE_DIMS)
+        self._adapter = ShepherdAdapter(st.env, self.live_dims)
         # ★ P5: 이 에피소드의 실제 권한으로 행동 스케일을 갱신한다 (a_lim = 0.35·a_att).
         self.lim_scale = self._adapter.action_bounds(
-            self._adapter.limiter_ids[0])[1].astype(np.float32)
+            self._adapter.limiter_ids[0])[1][:self.lim_live].astype(np.float32)
         obs_d, _ = self._adapter.reset(seed=self.base_seed + self._ep_idx)
         self._obs = obs_d[self._adapter.limiter_ids[0]]
         self._ep = {"ret": 0.0, "headline": 0.0, "limiter_loss": 0.0,
@@ -374,7 +385,7 @@ class M4Runner(MAPPORunner):
                 if self._adapter is None:
                     self._adapter = ShepherdAdapter(
                         build_m4_env(self.eval_seed0, 0, **self._m4).env,
-                        M4_LIVE_DIMS)
+                        self.live_dims)
                 ids = (self._adapter.limiter_ids, self._adapter.finisher_id)
             lim = lim_fn(obs, flags)
             acts = {lid: np.asarray(lim[i], np.float32)
@@ -589,6 +600,10 @@ def main(argv=None) -> None:
     print(f"[M4] 역할 팔 = {arm_of(args.limiter_policy, args.finisher_policy, args.aim_bc)} "
           f"(limiter={args.limiter_policy}, finisher={args.finisher_policy}, "
           f"aim_bc={args.aim_bc})")
+    # ★ docs/71 — commit-off 팔(LS-off)이면 로그 첫 줄에서 보여야 한다.
+    if not run_cfg["mappo"].get("limiter_commit", True):
+        print("[M4] limiter_commit=false -- LS-off 팔 (commit head 부재, "
+              "env 는 항상 commit 0 수신. docs/71)")
 
     specs = build_specs(args)
     if args.threat_layer:
@@ -689,6 +704,8 @@ def main(argv=None) -> None:
             "seed": s, "w_kill": args.w_kill, "attacker": args.attacker,
             # ★ 역할 분리 팔 (docs/48). 집계기가 이 세 키로 2x2 를 복원한다.
             "arm": runner.arm,
+            # ★ docs/71 — LS-live / LS-off 를 산출물만 보고 구분하는 키.
+            "limiter_commit": bool(runner.limiter_commit),
             "limiter_policy": args.limiter_policy,
             "finisher_policy": args.finisher_policy,
             "aim_bc": args.aim_bc,

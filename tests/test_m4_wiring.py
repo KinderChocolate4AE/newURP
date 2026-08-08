@@ -562,3 +562,135 @@ def test_p49_action_scale_tracks_the_episode_authority():
         assert got[3] == want[3] == 1.0
         r._ep_idx += 1
     assert len(seen) >= 3, f"에피소드마다 권한이 바뀌어야 한다 (관측된 값 {seen})"
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# docs/71 §2.1 — LS-off (commit-off) 잠금 테스트 4항
+#   블록 계약이 "두 팔의 diff = limiter_commit 단 하나" 이므로, commit 이 정말
+#   정책 손에서 떨어졌는지(①)와 연속 3축 경로가 LS-live 와 같은지(④)를 코드가
+#   지켜야 한다. 배선이 갈라지면 결함 2 가 반대 방향으로 재발한다.
+# ─────────────────────────────────────────────────────────────────────────
+def _runner_off(seed=0, steps=256, rollout=64):
+    import yaml
+
+    from shepherd.scripts.train_m4 import (M4Runner, build_parser_defaults,
+                                           build_specs)
+    d = build_parser_defaults()
+    cfg = yaml.safe_load(open(pathlib.Path("configs/l2_mappo_nocommit.yaml")))
+    cfg["loop"]["total_env_steps"] = steps
+    cfg["loop"]["rollout_env_steps"] = rollout
+    return M4Runner(cfg, seed, "cpu", finisher_policy="scripted",
+                    **build_specs(d))
+
+
+def test_p71a_commit_off_config_diff_is_one_key():          # torch 불요
+    """LS-off config = l2_mappo.yaml + limiter_commit 한 줄. 그 외 diff 0."""
+    import yaml
+
+    live = yaml.safe_load(open(pathlib.Path("configs/l2_mappo.yaml")))
+    off = yaml.safe_load(open(pathlib.Path("configs/l2_mappo_nocommit.yaml")))
+    assert off["mappo"].pop("limiter_commit") is False
+    assert off == live, "두 팔의 diff 가 limiter_commit 하나가 아니다 (블록 계약 위반)"
+
+
+@pytest.mark.torch
+def test_p71b_env_never_receives_a_nonzero_commit(monkeypatch):
+    """① env 에 전달되는 limiter commit 성분 == 0 (전 스텝, 결정적).
+
+    학습 롤아웃(adapter.step)과 평가(policy_fn) 두 경로를 **둘 다** 본다 --
+    2026-08-03 결함 1/2 가 정확히 "한 경로만 패딩됐다" 였다.
+    """
+    import shepherd.train.adapter as adapter_mod
+    from shepherd.train.action_dims import LIVE_DIMS
+
+    r = _runner_off()
+    assert r.live_dims is LIVE_DIMS and r.lim_live == 3
+    assert r.tr.lim_dim == 3 == r.buf.lim_dim
+    assert r.lim_scale.shape == (3,), "commit 축 스케일이 남아 있다"
+
+    padded = []
+    orig = adapter_mod.pad_env_action
+
+    def spy(aid, a, dims=None):
+        out = orig(aid, a, dims)
+        padded.append((aid, out))
+        return out
+
+    monkeypatch.setattr(adapter_mod, "pad_env_action", spy)
+    r.collect_rollout()                       # 학습 경로 (에피소드 경계 포함)
+    lim = [o for aid, o in padded if aid.startswith("limiter")]
+    assert len(lim) >= 4 * 64, "limiter 행동이 env 에 안 닿았다"
+    assert all(o.shape == (4,) and o[3] == 0.0 for o in lim), \
+        "commit 자리에 0 이 아닌 값이 들어갔다"
+
+    # 평가 경로: policy_fn 은 어댑터와 같은 프로파일로 패딩해야 한다
+    obs = r._adapter.reset(seed=0)[0][r._adapter.limiter_ids[0]]
+    acts = r.policy_fn()(obs, {})
+    for lid in r._adapter.limiter_ids:
+        assert acts[lid].shape == (4,) and acts[lid][3] == 0.0
+
+
+@pytest.mark.torch
+def test_p71c_commit_head_is_structurally_absent():
+    """②③ commit log-prob · entropy 의 PPO 기여 == 0 (head 부재).
+
+    "계수를 0 으로 뒀다" 가 아니라 **분포 자체가 없다** 를 본다: limiter 액터의
+    logp/entropy 가 3차원 Normal 그 자체와 일치하고, 이산 헤드 파라미터가
+    존재하지 않는다. 진단 지표도 커밋 키를 내지 않아야 한다 (표 오독 방지).
+    """
+    import torch
+    from torch.distributions import Normal
+
+    from shepherd.train.mappo import GaussianActor, MixedActor
+
+    r = _runner_off()
+    act = r.tr.lim_actor
+    assert isinstance(act, GaussianActor) and not isinstance(act, MixedActor)
+    assert not hasattr(act, "fire_logit"), "이산 헤드가 살아 있다"
+    assert act.log_std.shape == (3,)
+
+    x = torch.zeros(5, r.obs_dim + r.n)
+    raw, _ = act.act(x)
+    assert raw.shape == (5, 3)
+    logp, ent = act.evaluate(x, raw)
+    d = Normal(act.mean(x), act.log_std.exp().expand(5, 3))
+    assert torch.allclose(logp, d.log_prob(raw).sum(-1), atol=1e-6), \
+        "logp 에 연속 3축 외의 항이 섞였다"
+    assert torch.allclose(ent, d.entropy().sum(-1), atol=1e-6), \
+        "entropy 에 이산 항이 섞였다"
+
+    r.collect_rollout()
+    stats = r.update()
+    assert not any("commit" in k for k in stats), \
+        f"commit 진단 키가 남아 있다: {sorted(k for k in stats if 'commit' in k)}"
+
+
+@pytest.mark.torch
+def test_p71d_continuous_path_matches_ls_live():
+    """④ 연속 3축 loss 경로 = LS-live 와 동일 (형상·클립·스케일).
+
+    같은 torch 시드에서 두 팔의 **연속 mean MLP 초기값이 같아야** 한다 (두 팔의
+    차이가 정말 이산 헤드 하나뿐이라는 뜻). 클립은 [:3] 만, 스케일은 LS-live 의
+    앞 3축과 같아야 한다.
+    """
+    import torch
+
+    torch.manual_seed(0)
+    live = _runner(steps=256)
+    torch.manual_seed(0)
+    off = _runner_off(steps=256)
+
+    sl, so = live.tr.lim_actor.mean.state_dict(), off.tr.lim_actor.mean.state_dict()
+    assert set(sl) == set(so)
+    for k in sl:
+        assert torch.allclose(sl[k], so[k]), f"연속 mean MLP 초기값이 갈라졌다: {k}"
+    assert torch.allclose(live.tr.lim_actor.log_std[:3], off.tr.lim_actor.log_std)
+
+    # 스케일: LS-live 의 앞 3축과 같다 (4번째 = commit 축은 애초에 없다)
+    live._begin_episode(); off._begin_episode()
+    assert np.allclose(live.lim_scale[:3], off.lim_scale)
+
+    # 클립: 연속 축만 클립되고 폭은 3 이다
+    off.collect_rollout()
+    assert off.buf.lim_raw.shape[-1] == 3 == off.buf.lim_clip.shape[-1]
+    assert np.allclose(off.buf.lim_clip, np.clip(off.buf.lim_raw, -1.0, 1.0))
