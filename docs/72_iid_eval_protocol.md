@@ -85,7 +85,11 @@ python -m shepherd.scripts.analyze_ls_commit --eval-dir results/iid_abl \
 실행된다. 하루짜리 되돌림을 막기 위해 학습 중간 체크포인트로 경로만 미리 깬다:
 
 ```bash
-python -m shepherd.scripts.eval_iid --arm ls-off --training-seed 0     --config configs/l2_mappo_nocommit.yaml     --policy-checkpoint results/m4_v3_train_LS_off/seed0 --ckpt-tag latest     --episode-start 10000 --episodes 300 --shard-n 3     --device cuda --out results/iid_smoke/ls-off_seed0_latest.json
+python -m shepherd.scripts.eval_iid --arm ls-off --training-seed 0 \
+    --config configs/l2_mappo_nocommit.yaml \
+    --policy-checkpoint results/m4_v3_train_LS_off/seed0 --ckpt-tag latest \
+    --episode-start 10000 --episodes 300 --shard-n 3 \
+    --device cuda --out results/iid_smoke/ls-off_seed0_latest.json
 ```
 
 **headline 대역(10000..)** 을 쓴다 — 이미 열람된 대역이라 ablation 대역
