@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>ANDES/newURP — spine 전환 브리핑 (2026-08-09, r3.2)</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm 16mm 14mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Malgun Gothic","맑은 고딕",sans-serif; font-size: 9.4pt;
+         line-height: 1.48; color: #16181d; margin: 0; }
+  code, pre, .mono { font-family: Consolas,"D2Coding",monospace; }
+  h1 { font-size: 19pt; margin: 0 0 2mm; letter-spacing: -.4px; }
+  h2 { font-size: 13pt; margin: 7mm 0 2mm; padding-bottom: 1mm;
+       border-bottom: 1.6px solid #16181d; page-break-after: avoid; }
+  h3 { font-size: 10.6pt; margin: 4.5mm 0 1.5mm; page-break-after: avoid; }
+  h4 { font-size: 9.6pt; margin: 3.5mm 0 1mm; color:#333; page-break-after: avoid; }
+  p { margin: 0 0 2mm; }
+  ul, ol { margin: 0 0 2.5mm; padding-left: 5.2mm; }
+  li { margin-bottom: .9mm; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 3.5mm;
+          font-size: 8.5pt; page-break-inside: avoid; }
+  th, td { border: .6px solid #b9bec8; padding: 1.5mm 2mm; vertical-align: top; text-align: left; }
+  th { background: #eef1f6; font-weight: 700; }
+  td.c, th.c { text-align: center; }
+  pre { background: #f5f6f9; border: .6px solid #ccd2dc; 
+        border-left-color:#4a5568; padding: 2.2mm 3mm; font-size: 8.2pt; line-height: 1.42;
+        white-space: pre-wrap; margin: 1.5mm 0 3mm; page-break-inside: avoid; }
+  .lead { background:#f7f8fb; border:.6px solid #ccd2dc; padding:3mm 3.5mm; margin:0 0 4mm; }
+  .kill { background:#fdf3f3; border-left:3px solid #b03030; padding:2mm 3mm; margin:2mm 0 3mm; }
+  .ok   { background:#f2f8f3; border-left:3px solid #2f7a45; padding:2mm 3mm; margin:2mm 0 3mm; }
+  .warn { background:#fdf9ef; border-left:3px solid #b8860b; padding:2mm 3mm; margin:2mm 0 3mm; }
+  .small { font-size: 8.2pt; color:#4a5568; }
+  .tag { display:inline-block; font-size:7.6pt; padding:.4mm 1.4mm; border-radius:2px;
+         background:#e6e9f0; border:.5px solid #c3c9d4; margin-right:1mm; }
+  .rej { background:#f7dede; border-color:#d9a2a2; }
+  .cond{ background:#fbf1da; border-color:#e0c68b; }
+  .rat { background:#dff0e2; border-color:#a7cdb2; }
+  .page-break { page-break-before: always; }
+  .k { font-weight:700; }
+  .strike { text-decoration: line-through; color:#8a8f98; }
+  .flow { font-size:8.4pt; text-align:center; margin:2mm 0 4mm; }
+  .flow b { display:inline-block; border:.8px solid #16181d; padding:1.2mm 2.4mm; border-radius:3px; }
+  header .sub { color:#4a5568; font-size:9pt; margin-bottom:4mm; }
+  footer.small { margin-top:6mm; border-top:.6px solid #ccd2dc; padding-top:2mm; }
+</style></head><body>
+
+<header>
+<h1>ANDES / newURP — 연구 spine 전환 브리핑</h1>
+<div class="sub">2026-08-09 · PIVOT_LOCK_R32 · <span class="mono">protocol_hash 069cade39836cdd1</span>
+ · Phase III 지도 셀 <b>0 개</b> · 오프라인 정독용</div>
+</header>
+
+<div class="lead">
+<p><span class="k">한 문장</span>: 6 주간 밀어온 “학습이 손설계보다 낫다”는 주장이 <b>전 구간 0 점</b>으로 무너졌고,
+그 원인이 학습이 아니라 <b>메커니즘이 성립할 수 있는 파라미터 영역 자체가 확인된 적이 없다</b>는 데 있음을 발견해,
+논문 축을 <b>“학습 이득 증명” → “협력 요격이 실현 가능한 조건의 인증(certified feasibility envelope)”</b> 으로 옮기고,
+그 전환을 되돌릴 수 없게 <b>해시·태그·사전등록으로 봉인</b>했다.</p>
+<p class="small">이 문서는 무엇이 바뀌었는지(변경점), 왜 그것이 핵심인지(수학·논리), 그리고 어디로 출판하는지(blueprint)를
+한 번에 읽도록 만든 요약이다. 정본은 <span class="mono">docs/73</span>(판정 로그) ·
+<span class="mono">docs/74</span>(계약) · <span class="mono">docs/75</span>(청사진).</p>
+</div>
+
+<h2>1. 지금 상태 — 3 줄</h2>
+<table>
+<tr><th style="width:26%">축</th><th>상태</th></tr>
+<tr><td><b>실험</b></td><td>서버에서 사전등록 ablation <b>9 런 진행 중</b>(미열람). Phase III 지도 셀은 <b>0 개</b>.
+이 세션에서 만든 실험 결과 = 없음(exploratory 진단 1 건 제외).</td></tr>
+<tr><td><b>계약</b></td><td>Phase III 정의·certificate·통계 estimand·감사 장치가 <b>결과 열람 전에 전부 동결</b>.
+외부 리뷰 6 라운드(리뷰 10~15) 전부 수용, r0→r3.2.</td></tr>
+<tr><td><b>다음</b></td><td>구현 착수 순서 고정: <span class="mono">v_shot</span> 수렴 하네스 → 독립 judge cross-check →
+unblockable-mass(=screen) → 4A joint-feasibility. 동시 <span class="mono">Z_master</span>+Π 선확정.</td></tr>
+</table>
+
+<h2>2. 연대기 — 왜 축이 바뀌었나</h2>
+<div class="flow">
+<b>Phase I<br>사전등록 컨트롤러 비교</b> → <b>Phase II<br>post-hoc 진단(exploratory)</b> → <b>Phase III<br>사전명세 파라미터 연구</b>
+</div>
+
+<h3>2.1 Phase I — 무엇이 실패했나 (커밋된 사실, 변경 금지)</h3>
+<table>
+<tr><th style="width:22%">팔</th><th class="c" style="width:22%">결과</th><th>의미</th></tr>
+<tr><td>LL (전부 학습)</td><td class="c"><b>0 / 300</b></td><td>SHAPING 0/164 · FREE 0/136. 학습 곡선 25 회 eval 전부 0</td></tr>
+<tr><td>LS (편대만 학습 + 발사 scripted)</td><td class="c"><b>49 / 300 = 0.163</b></td><td>FREE 49/136 (0.36) · <b>SHAPING 0/164</b></td></tr>
+<tr><td>arc scripted (손설계, TRAIN 선택)</td><td class="c">p_net 0.110</td><td>기준선</td></tr>
+<tr><td>hold (무개입)</td><td class="c">SHAPING <b>0 / 122</b></td><td>사전 측정</td></tr>
+</table>
+<p><b>핵심 관찰</b>: 손설계든 학습이든 <b>SHAPING regime 에서 단 한 번도 포획하지 못했다.</b>
+“학습이 못했다”가 아니라 <b>아무도 못했다</b>는 모양이 특이했다.</p>
+
+<h3>2.2 Phase II — 진단 (exploratory, 어떤 판정에도 사용 금지)</h3>
+<p>실제 judge(SE(3) 원뿔, 보수적 reachable set)로 <span class="mono">a_att</span> 를 훑어,
+무개입 <span class="mono">V_0</span> 와 kill 구를 그리디 최적 배치한 <span class="mono">G_k</span> 를 비교했다.</p>
+<table>
+<tr><th class="c">a_att</th><th class="c">V_0 (무개입)</th><th class="c">G_4 (최적 4기)</th><th class="c">G_8~12</th><th class="c">게이트 0.9</th></tr>
+<tr><td class="c">30</td><td class="c">0.953</td><td class="c">1.000</td><td class="c">1.000</td><td class="c">통과 (N_req 0)</td></tr>
+<tr><td class="c">36</td><td class="c">0.812</td><td class="c"><b>1.000</b></td><td class="c">1.000</td><td class="c">통과</td></tr>
+<tr><td class="c">39</td><td class="c">0.736</td><td class="c"><b>0.972</b></td><td class="c">0.972</td><td class="c">통과</td></tr>
+<tr><td class="c">42</td><td class="c">0.645</td><td class="c">0.875</td><td class="c">0.875</td><td class="c">미달</td></tr>
+<tr><td class="c">45</td><td class="c">0.562</td><td class="c">0.774</td><td class="c">0.774 (조밀후보 0.846)</td><td class="c">미달</td></tr>
+<tr><td class="c">60</td><td class="c">0.177</td><td class="c">0.465</td><td class="c">0.465</td><td class="c">미달</td></tr>
+<tr><td class="c">78</td><td class="c">0.134</td><td class="c">0.424</td><td class="c">0.424</td><td class="c">미달</td></tr>
+</table>
+<div class="kill"><b>여기서 내가 과대주장했고, 전부 철회했다.</b> 아래 4 문장은 이후 산출물·발표에서 사용 금지.
+<table style="margin-top:1.5mm">
+<tr><th style="width:44%">철회</th><th>허용되는 표현</th></tr>
+<tr><td class="strike">결정 대역 = a_att ∈ [36, 39]</td><td>seed 0 의 선택된 스냅샷·테스트된 relaxed 탐색에서 <b>문턱 교차가 관측된 이산 점</b> (연속 구간도, 실제 시스템 feasibility band 도 아니다)</td></tr>
+<tr><td class="strike">N_req = 1 → 협력의 marginal value 가 없다</td><td>발견된 모든 교차가 <b>첫 봉쇄 구</b>로 달성됐고 추가 구에서 표본 이득이 없었다</td></tr>
+<tr><td class="strike">병목은 봉쇄 공급량이 아니다</td><td>후보 조밀화·구 추가가 빠르게 포화 → 요격기 수 단독이 지배적 병목은 <b>아닐 수 있다는 시사</b></td></tr>
+<tr><td class="strike">그리디이므로 달성가능 하한</td><td><b>relaxed static-placement 문제 최적의 하한</b>. 실제 시스템 최적과 <b>순서관계 없음</b> (teleport 배치가 1 기에 유리하게 편향)</td></tr>
+</table>
+<span class="small">자백된 편향 10 종(B1~B10) 중 치명 2: <b>B1</b> 반응형 공격자인데 hold 궤적 상태에 limiter 를 순간이동시켜
+<b>공격자 반응 인과가 끊겼다</b> · <b>B2</b> Phase I 과 <b>같은 judge</b>를 써서 공통모드 편향.</span>
+</div>
+
+<h3>2.3 무엇이 진짜 발견인가</h3>
+<div class="ok">
+<p><b>확정 가능한 방법론적 발견</b> — 기존 설계가 “협력이 필요한 영역”을
+실제 cooperative advantage 존재와 무관한 <b>스칼라 kinematic proxy</b>
+(<span class="mono">0.5·a_att·τ² &gt; ρ_net</span>)로 정의하고 있었고, 그 결과
+<b>정책 학습 전에 확인했어야 할 feasibility 질문이 빠져 있었다.</b></p>
+<p><b>아직 가설</b> — “그 빠진 질문이 Phase I 실패를 설명한다.” <b>두 문장을 절대 합치지 않는다.</b></p>
+</div>
+
+<div class="page-break"></div>
+<h2>3. 새 spine 과 핵심 수학 (변경점의 본체)</h2>
+<p><b>spine</b>: <i>Feasibility-First Design of Cooperative Single-Shot Counter-UAS Interception under Deployment Latency</i><br>
+<b>핵심 질문</b>: 알고리즘 성능이 아니라 — <b>“협력 요격 메커니즘이 애초에 실현 가능한 advantage 를 갖는 영역이 존재하는가?”</b></p>
+
+<h3>3.1 두 문제를 절대 섞지 않는다 (리뷰 12·13 의 최대 교정)</h3>
+<pre>고정상태 문제 (같은 reference encounter 시각 (e,t) 에서만 정의)
+  V^rel_{≤N}(e,t)          최대 N 개 static kill sphere, 연속 admissible domain 어디든 (oracle)
+  V^reach_{≤N}(e,t)        center 를 D_i^reach(e,t) (실제 동역학·NK·충돌로 도달 가능) 로 제한
+  L^reach_{≤N,clean}(e,t)  실현가능 배치 + clean 판정 통과 (constructive lower)
+  U^rel_{≤N}(e,t)          V^rel 의 sound upper bound (boxed 무시 = 낙관 relaxation)
+
+      L^reach_{≤N,clean} ≤ V^reach_{≤N} ≤ V^rel_{≤N} ≤ U^rel_{≤N}     ← 고정상태 안에서만
+
+closed-loop 문제 (별도 층)
+  L^ctrl_{≤N}(x0; π_c)     반응형 attacker 가 있는 원 환경에서 명시적 controller 가 달성한 값
+                           → U^rel 과의 순서관계를 주장하지 않는다</pre>
+<p class="small">이전 판(r1)은 이 둘을 하나의 sandwich 로 합쳐 놓았다. limiter 가 공격자 궤적 자체를 바꾸므로
+closed-loop 값에는 고정상태 상한이 상한으로 성립하지 않는다 — 논리 오류였고 r2 에서 분리했다.</p>
+
+<h3>3.2 clean-fire 를 certificate 안에 넣는다 (리뷰 13 blocker 3)</h3>
+<pre>g_θ(x, P) = 1[ v_shot(x,P) ≥ θ  AND  NOT boxed(x,P) ]
+
+constructive lower 는 g_θ = 1 인 배치에서만 유효          (구를 많이 놓아 비율만 올리면
+upper 는 boxed 제약 무시가 sound (방어측에 유리한 완화)     실제 발사가 금지될 수 있다)</pre>
+
+<h3>3.3 라벨 — 상호배타 · <b>LOCAL</b> 명시 · 셀은 단일 색이 아니다</h3>
+<pre>FREE                            : V_0 ≥ θ
+CERTIFIED LOCAL-SINGLE-NEEDED   : V_0 &lt; θ ≤ L^reach_{≤1,clean}
+CERTIFIED LOCAL-COOP-NEEDED     : U^rel_{≤1} &lt; θ ≤ L^reach_{≤N,clean}   ★ 핵심
+CERTIFIED LOCAL-INFEASIBLE-N    : U^rel_{≤N} &lt; θ
+AMBIGUOUS                       : 그 외 (지도에 그린다 — 숨기지 않는다)
+
+N_req = 0 / k / UNRESOLVED       (certificate 가 닫히지 않으면 N_req 는 존재하지 않는다)
+파라미터 셀 = 단일 라벨 아님 → label prevalence 벡터, 핵심 surface = p_C 와 p_AMB 병기</pre>
+<p><b>“왜 multi-agent 인가”를 한 줄로 증명</b>:
+<span class="mono">U^rel_{≤1} &lt; θ ≤ L^reach_{≤N,clean}</span> —
+왼쪽은 <i>1 기를 이상적으로 배치해도 안 된다</i>는 상한 인증, 오른쪽은 <i>실제 도달 가능하고 clean 한 N 기 배치가 된다</i>는 구성 인증.
+<b>LOCAL</b> 을 붙이는 이유: 이것은 “이 상태의 static shaping 문제”에 대한 진술이며,
+“어떤 1-agent closed-loop 정책도 이 에피소드를 못 푼다”가 아니다. 논문의 핵심 방어선.</p>
+
+<h3>3.4 협력 셀이 없을 때 — 3 분기 (negative claim 규율)</h3>
+<table>
+<tr><th style="width:24%">경우</th><th style="width:34%">지지 조건</th><th>허용 주장</th></tr>
+<tr><td>A. single-agent sufficiency</td><td><span class="mono">V_0 &lt; θ ≤ L^reach_{≤1,clean}</span> 지배 + COOP 부재</td><td>“No certified need for multi-agent interdiction was found; all certified feasible non-FREE cells were single-agent sufficient.” (AMBIGUOUS 에 침묵)</td></tr>
+<tr><td>B. local mechanism infeasibility</td><td><span class="mono">U^rel_{≤N} &lt; θ</span> 광범위</td><td>“even N cooperative limiters cannot establish the <b>local</b> firing condition” (A 와 다른 결론)</td></tr>
+<tr><td>C. unresolved gap</td><td>AMBIGUOUS prevalence 높음</td><td><b>결론 없음 · negative claim 금지 · 투고 불가</b></td></tr>
+</table>
+<p class="small">r1 은 <span class="mono">W_{2:N} = ∅ → negative systems result</span> 로 직행했다. 그러면 지도가 전부 AMBIGUOUS
+로 나와도 protocol 상 negative 를 선언할 수 있게 되어 — 이번에 가장 경계한 “결과에 유리한 해석 공간”과 같은 문제였다. r2 에서 닫았다.</p>
+
+<h3>3.5 학습은 이제 <b>검증 도구</b>다 — Stage-2 primary estimand</h3>
+<pre>regime r ∈ {FREE, LOCAL-COOP-NEEDED, LOCAL-INFEASIBLE-N}     (동일 N = N_B, 동일 θ_S2 = 0.90)
+δ_r   = p_net^{MARL_N, r} − p_net^{B_N, r}
+        B_N = 결과 열람 전 freeze 한 same-N constructive non-learning controller
+              (reachable 1-limiter 도, arc 도, "best baseline" 도 아니다)
+Γ     = δ_COOP − ( δ_FREE + δ_HARD ) / 2                      ← primary
+성공  : LCB95(Γ) &gt; 0     (training seed 최상위 hierarchical bootstrap, nested paired)
+secondary : p_net^{N} − p_net^{1}    (N=1 은 mechanism necessity 대조, primary 아님)</pre>
+<p>즉 얻으려는 결과는 “좋은 점에서 RL 이 이겼다”가 아니라 <b>“RL 이득이 사전 예측된 certified 영역 안에서만 출현한다”</b>는
+<b>interaction</b> 이다. 이것이 “이길 만한 점을 골랐다”는 비판을 견디는 유일한 형태다.</p>
+
+<div class="page-break"></div>
+<h2>4. 리뷰 라운드별 변경점 (판정 → 이행)</h2>
+<h3>리뷰 10 — 전환 자체 심사</h3>
+<table>
+<tr><th style="width:30%">항목</th><th class="c" style="width:14%">판정</th><th>이행</th></tr>
+<tr><td>축 교체가 골대 이동인가</td><td class="c"><span class="tag cond">CONDITIONAL</span></td><td>chronology 잠금(docs/74) + Phase I 결과 논문 보고 의무</td></tr>
+<tr><td>“협력 marginal value = 0”</td><td class="c"><span class="tag rej">REJECT</span></td><td>철회 → bound 기반 재설계</td></tr>
+<tr><td>충분경계 upper certificate</td><td class="c"><span class="tag rat">RATIFY(필수)</span></td><td>싼 것부터 계층: unblockable mass → (MILP 는 certificate 아님) → continuous outer relaxation</td></tr>
+<tr><td>regime 정의</td><td class="c"><span class="tag rej">REJECT</span></td><td><span class="mono">0.5aτ²&gt;ρ</span> 를 <b>analytic proxy</b> 로 강등, 라벨 전면 재정의</td></tr>
+<tr><td>θ 를 miss-risk 로 해석</td><td class="c"><span class="tag cond">CONDITIONAL</span></td><td>금지 — “viability-envelope sensitivity” 로만</td></tr>
+<tr><td>19 주에 전폭</td><td class="c"><span class="tag rej">REJECT</span></td><td>(리뷰 11 에서 재정정: 12/18 은 <b>행정</b> 마일스톤, 시간으로 자르지 않음)</td></tr>
+</table>
+
+<h3>리뷰 11 — 봉인 검증(A1~A8) + 청사진</h3>
+<ul>
+<li><b>A1 감사 가능성</b> <span class="tag cond">CONDITIONAL</span> → pivot manifest(해시들의 해시 = <span class="mono">protocol_hash</span>) + 불변 태그 + 외부 timestamp + 산출물 스탬프 의무. <span class="mono">verified unread</span> 금지 → “not inspected for scientific decision-making”.</li>
+<li><b>A2 Phase II 편향</b> <span class="tag rej">REJECT</span> → <b>B1 반응 인과 절단</b>, <b>B2 공통모드 judge</b> 추가(독립 구현 cross-check 의무).</li>
+<li><b>A3 Stage-2 선택규칙</b> <span class="tag rej">REJECT</span> → “band center” 폐기 → <b>certified opportunity 유병률 p_C 의 LCB95 최대점</b>, primary 중복 해소, eligible 없으면 <b>협력 C5 미실시</b>.</li>
+<li><b>A4 정의</b> → 단일 <span class="mono">V_N^*</span> 폐기, “최대 N(≤N)” 표기 + 층 분리 + bound 기반 분류.</li>
+<li><b>A5 measure</b> <span class="tag rat">RATIFY(조건)</span> → <span class="mono">v_shot</span> 은 확률이 아니라 <b>robust coverage metric</b>, θ 를 상수로 방어하지 않고 <b>연속 surface + θ 슬라이스</b>로 보고.</li>
+<li><b>A6 무차원 축</b> → 후보 확장 + <b>iso-Π collapse test</b>. <b>A7 표본</b> → replicate 를 줄이지 말고 cell 을 줄인다(coarse 20~30 / boundary 60~100+ / Stage-2 100~300). <b>A8</b> → Phase I 결과는 “<b>motivated, but does not validate</b>”.</li>
+</ul>
+
+<h3>리뷰 12 — 논리 오류 2 + 3</h3>
+<ol>
+<li><b>sandwich 혼합</b>(고정상태 인증 ↔ closed-loop 량) → 분리.</li>
+<li><b><span class="mono">W=∅ → negative</span> 직행</b> → A/B/C 3 분기, C 는 결론 없음.</li>
+<li>라벨 상호배타화(<span class="mono">SINGLE-NEEDED</span>/<span class="mono">COOP-NEEDED</span>), <span class="mono">N_req</span> 는 닫히지 않으면 <b>UNRESOLVED</b>.</li>
+<li><span class="mono">Δ_coop</span> 층별화(<span class="mono">Δ^rel/Δ^reach/Δ^ctrl</span>) — <span class="mono">Δ^ctrl</span> 은 “최적 협력 가치”가 아니라 특정 controller 간 경험적 차이.</li>
+<li>“필요시 η 추가” → <b>deterministic escalation rule</b> (뒤에 리뷰 13 이 이것마저 폐기).</li>
+</ol>
+
+<h3>리뷰 13 — blocker 5 + leak 9</h3>
+<table>
+<tr><th style="width:34%">blocker</th><th>이행</th></tr>
+<tr><td><span class="mono">L^reach</span> 가 문서에만 있고 알고리즘은 <span class="mono">L^ctrl</span> 만 냈다</td><td><b>4A/4B 분리</b>: 4A = 같은 <span class="mono">(e,t)</span>·같은 witness set 에서 도달가능 배치 평가(certificate) / 4B = 반응형 rollout(실현 검사). 시간축 <span class="mono">(x,T_s)</span> → <b>reference encounter <span class="mono">(e,t)</span></b>, <span class="mono">π_ref = hold</span></td></tr>
+<tr><td><span class="mono">C_N</span> 이 state 인지 episode 인지 불명</td><td>state <span class="mono">C_N(e,t)</span> + 전 스텝 스캔 + episode 집계 + <span class="mono">p_C(z)</span> = <b>사전 지정 시나리오 분포 하의 유병률</b>(실세계 확률 아님)</td></tr>
+<tr><td>clean-fire 의 <span class="mono">NOT boxed</span> 누락</td><td><span class="mono">g_θ</span> 도입, constructive 에 필수 / upper 에는 완화 허용(비대칭 명시)</td></tr>
+<tr><td>adaptive refinement ↔ 사전지정 격자 충돌</td><td><b><span class="mono">Z_master</span> 선봉인 + <span class="mono">lattice_hash</span></b>. adaptive 는 “다음에 어느 master 점을 계산할지”만 → compute allocation 허용 / <b>가설공간 생성 금지</b></td></tr>
+<tr><td>interaction 이 통계 estimand 가 아님</td><td>comparator = <b>freeze 된 same-N constructive <span class="mono">B_N</span></b>, <span class="mono">Γ</span> 정의, <span class="mono">LCB95(Γ)&gt;0</span></td></tr>
+</table>
+<p class="small"><b>leak</b>: finite MILP 는 certificate 아님(“후보집합에서 θ 미달이 continuous 불가능을 증명하지 않는다”) ·
+witness = <b>path witness</b>(궤적+종단) · Buckingham-Π 를 <b>분석적으로 먼저</b> 완성하고 iso-Π 는 <b>reduction validation</b> ·
+반증조건 발동 = 현 Phase III <b>종료</b> → <b>Phase III-B 새 hash</b>(현 protocol 수정 금지) ·
+<span class="mono">p_C</span> 는 Clopper–Pearson LCB95, eligible = <span class="mono">&gt;0.05</span> ∧ 성공 episode ≥ 5 ·
+matched control 은 normalized L∞, <b>AMBIGUOUS 를 HARD 로 쓰지 않음</b> · 라벨에 <b>LOCAL</b> 명시 ·
+judge 일치는 <b>boundary-aware</b>(signed margin) · <b>감사 태그 이동 금지</b>.</p>
+
+<h3>리뷰 14 — 청사진 확정 (필수 5)</h3>
+<ul>
+<li>W11 pilot 라벨에 <b>SINGLE-NEEDED 복원</b>(negative branch A 판정의 필수 대조군).</li>
+<li><span class="mono">L^reach</span> 는 sandwich 의 <b>왼쪽(lower bound)</b> 이며 협력 인증의 오른쪽 항 — 방향 표현 정정.</li>
+<li>iso-Π 실패 시 <b>축 추가 금지</b> → collapse claim REJECT + 필요시 Phase III-B.</li>
+<li>“R/P 최종 결정” → <b>R measure validation</b>(데이터 보고 고르는 것이 아니다).</li>
+<li><span class="mono">δ_r</span> 정의를 청사진에도 명시 + <span class="mono">N=1</span> 은 secondary.</li>
+</ul>
+
+<h3>리뷰 15 — 73·74 대조 최종 (체크리스트 11)</h3>
+<table>
+<tr><th class="c" style="width:6%">#</th><th style="width:38%">문제</th><th>수정</th></tr>
+<tr><td class="c">1</td><td><span class="mono">stride 4</span> 스캔이 짧은 기회를 통째로 놓칠 수 있다 (실 논리 오류)</td><td>stride 금지 → <b>전 스텝 sound screen</b> <span class="mono">U^cheap_{≤N} ≥ θ</span>(위반 시 <span class="mono">C_N=0</span> 보장 = false negative 불가), 비싼 계산만 선별</td></tr>
+<tr><td class="c">2</td><td>Stage-2 θ 미고정 → 지도 보고 유리한 θ 선택 가능</td><td><b>θ_S2 = 0.90 고정</b>. 나머지 θ 는 sensitivity 전용, 선택·판정 금지</td></tr>
+<tr><td class="c">3</td><td>matched control 의 N 이 달라질 수 있음 → team-size confound</td><td><b>동일 N·동일 θ</b> 강제, 거리 최소화는 같은 N 부분집합 안에서만</td></tr>
+<tr><td class="c">4</td><td>개별 도달가능집합의 곱 ≠ joint feasibility(상호 충돌)</td><td>4A 에 <b>joint 시간매개 궤적 + pairwise 충돌·NK·가속·속도 동시 만족</b> 필수 — 없으면 <span class="mono">L^reach</span> 가 sound 하지 않다</td></tr>
+<tr><td class="c">5</td><td>파라미터 셀의 단일 라벨 규칙 부재</td><td>단일 색 지도 폐기 → <b>label prevalence</b>, 핵심 = <span class="mono">p_C</span> + <span class="mono">p_AMB</span> 병기</td></tr>
+<tr><td class="c">6</td><td>persistence <span class="mono">m=3</span> 이 latency 이중계산인가</td><td><b>이중계산 확인</b>(τ=0.30 이 이미 sense 0.10+decide 0.05 포함) → <b>m=1</b>, dwell-time 은 secondary</td></tr>
+<tr><td class="c">7~10</td><td>docs/73 에 철회된 논리·구정의가 현재형으로 남음</td><td>§5 교체(+3 분기 신설) · 옛 <span class="mono">N_req</span> 교체 · Π escalation superseded · C5 bar 를 <span class="mono">B_N/Γ</span>·LOCAL 로 동기화</td></tr>
+<tr><td class="c">11</td><td>Phase I primary 와 인용 문구 불일치</td><td>primary 는 <b>overall paired Δ_net</b> → “did not support the preregistered superiority claim on the paired net-capture endpoint”</td></tr>
+</table>
+
+<div class="page-break"></div>
+<h2>5. 감사 장치 — 전환을 되돌릴 수 없게 만든 방법</h2>
+<table>
+<tr><th style="width:24%">장치</th><th>내용</th></tr>
+<tr><td>pivot manifest</td><td><span class="mono">artifacts/pivot_lock_2026-08-09.json</span> — docs/73·74·75 + 리뷰 프롬프트의 SHA-256(해시들의 해시 = <span class="mono">protocol_hash</span>), commit, Phase I 계약·결과, Phase II 산출물, judge/env/평가 코드, <b>진행 중 9 런의 config·seed·launcher</b>, <span class="mono">revision</span>/<span class="mono">supersedes</span>/<span class="mono">phase3_cells_generated_so_far</span></td></tr>
+<tr><td>불변 태그</td><td>revision 명 분리 — <span class="mono">PIVOT_LOCK_R3_/R31_/R32_2026-08-09</span>. <b>태그 이동 금지</b></td></tr>
+<tr><td>산출물 스탬프</td><td>모든 Phase III artifact 에 <span class="mono">protocol_hash · code_commit · judge_commit · scenario_manifest_hash · map_spec_hash · lattice_hash · generated_at</span>. 없으면 <b>무효</b></td></tr>
+<tr><td>외부 timestamp</td><td>embargo 가능한 read-only 등록(OSF 등) — <b>유일한 미완 항목</b></td></tr>
+</table>
+<h4>해시 체인 (전부 Phase III 셀 0 상태에서 생성)</h4>
+<pre>r1  ef9cd4781a095072   → 리뷰 12: sandwich 혼합 · W=∅ 해석
+r2  cb038ee2a2a05892   → 리뷰 13: blocker 5 + leak 6~14
+r3  95f0da98543de31b   → 리뷰 14: 청사진 필수 5
+r3.1 3c73d22041a8ab6b  → 리뷰 15: 체크리스트 11
+r3.2 069cade39836cdd1  ← 현재 (PIVOT_LOCK_R32_2026-08-09)</pre>
+<div class="warn"><b>자백 (문서에 기록됨)</b>: r1 단계에서 태그 <span class="mono">PIVOT_LOCK_2026-08-09</span> 를
+<span class="mono">git tag -f</span> 로 <b>한 번 이동</b>시켰다(<span class="mono">c6e8081 → 3aec425</span>, Phase III 셀 0).
+이후 이동 없음. 또한 docs/73 §5 의 r2 패치가 <b>조용히 실패</b>해 철회 논리가 남아 있었고 리뷰 15 가 잡았다.
+“결과를 안 봤다”는 암호학적으로 증명 불가하므로 <b>verified unread 라고 쓰지 않는다</b>.</div>
+
+<h2>6. 출판 blueprint</h2>
+<h3>6.1 논문 1 편 구조 + 필수 그림 8 장 (각 그림이 막는 반박)</h3>
+<table>
+<tr><th class="c" style="width:6%">Fig</th><th style="width:44%">내용</th><th>막는 반박</th></tr>
+<tr><td class="c">1</td><td>시스템 + 포획 원뿔 + reachable path witness + kill tube</td><td>“메커니즘이 모호하다”</td></tr>
+<tr><td class="c">2</td><td>Phase I → II → III chronology</td><td>“실패 후 스토리를 바꿨다”</td></tr>
+<tr><td class="c">3</td><td>witness 수렴(2k/8k/32k) · allocation 민감도</td><td>“0.9 가 sampling artifact 다”</td></tr>
+<tr><td class="c">4</td><td>고정상태 <span class="mono">L^reach / V / U^rel</span> certificate sandwich + solver 수렴 (closed-loop 는 별도 패널)</td><td>“불가능 주장이 heuristic 이다” · “두 문제를 섞었다”</td></tr>
+<tr><td class="c">5</td><td>iso-Π collapse (reduction validation)</td><td>“축 선택이 arbitrary 하다”</td></tr>
+<tr><td class="c">6</td><td><b>main envelope</b> — <span class="mono">p_C</span> surface + <span class="mono">p_AMB</span> surface (AMBIGUOUS 를 숨기지 않는다)</td><td>논문의 핵심</td></tr>
+<tr><td class="c">7</td><td><span class="mono">N = 0,1,2,4,…</span> · <span class="mono">W_{2:N}</span> · 셀별 certificate 수준</td><td>“4 기가 왜 필요한가” · “어떤 셀이 어떤 근거로 닫혔나”</td></tr>
+<tr><td class="c">8</td><td>C5 3-regime <b>interaction</b>(Γ) + robustness inset</td><td>“좋은 점 골라 RL 돌렸다”</td></tr>
+</table>
+<pre>1 Introduction            When does a cooperative interception mechanism admit a realizable advantage at all?
+2 Problem &amp; provenance     시스템 · Phase I 원 연구 · chronology · 파라미터 출처 원장
+3 Feasibility formulation  R measure · V_0 · L^reach · U^rel · 상호배타 라벨 · closed-loop 층 분리
+4 Certification algorithms unblockable mass · continuous outer relaxation · 4A constructive · (MILP = audit)
+5 Dimensionless design     Buckingham-Π · collapse validation
+6 Certified envelope       ★ 본체 (p_C, p_AMB)
+7 Prospective validation   Stage-2 (Γ)
+8 Robustness &amp; context of use
+9 Discussion               nominal null 설명 · 무엇이 requirement 가 아닌지 · limitations</pre>
+
+<h3>6.2 게이트 (시간이 아니라 숫자로 발동)</h3>
+<table>
+<tr><th style="width:34%">단계</th><th>Continue / branch 조건</th></tr>
+<tr><td>manifest·태그·<span class="mono">Z_master</span>·Π 선확정</td><td>스탬프 없는 map artifact = <b>전부 무효</b></td></tr>
+<tr><td><span class="mono">v_shot</span> 수렴 하네스</td><td>8k→32k 변화 median ≤ 0.02 · 95% ≤ 0.05, 초과 시 <b>지도 중단</b></td></tr>
+<tr><td>allocation 민감도 / R validation</td><td>주요 score 변동 &gt; 0.05 → <b>현 R-map protocol 종료</b>(P/set-based 는 새 hash)</td></tr>
+<tr><td>독립 judge cross-check</td><td>boundary 에서 먼 predicate 불일치 <b>1 건</b> → 지도 중단·버그 감사</td></tr>
+<tr><td>iso-Π collapse</td><td>core Π 에서 허용오차 초과 → collapse claim <b>REJECT</b>(축 추가 금지)</td></tr>
+<tr><td>cooperation audit</td><td><span class="mono">U^rel_{≤1} &lt; θ ≤ L^reach_{≤N,clean}</span> 셀 부재 → <b>협력 C5 금지</b> + A/B/C 분기 기록</td></tr>
+<tr><td>Stage-2 점 freeze</td><td>CP LCB95 &gt; 0.05 ∧ 성공 episode ≥ 5 인 점 없으면 <b>협력 C5 미실시</b></td></tr>
+<tr><td>C5 판정</td><td><span class="mono">LCB95(Γ) &gt; 0</span></td></tr>
+<tr><td>robustness</td><td>jitter/noise/lag 에서 topology 붕괴 → <b>context-of-use 축소</b>(“requirement” 언어 금지)</td></tr>
+</table>
+
+<h3>6.3 분기별 산출물 (실패해도 논문이 남는다)</h3>
+<table>
+<tr><th style="width:30%">발동</th><th>산출물</th><th class="c" style="width:16%">venue</th></tr>
+<tr><td>①-A single-agent sufficiency</td><td>“no certified need for multi-agent interdiction” (전칭 표현 금지)</td><td class="c">T-AES / AST</td></tr>
+<tr><td>①-B local infeasibility</td><td><i>Limits of Cooperative Threat-Space Shaping for Single-Shot Capture under Deployment Latency</i> — 핵심은 upper certificate 강도</td><td class="c">T-AES / AST</td></tr>
+<tr><td>①-C unresolved (AMBIGUOUS 다수)</td><td><b>결론 없음</b> — certificate 강화 또는 문제 정의 단순화</td><td class="c">투고 불가</td></tr>
+<tr><td>② 대역은 열리나 MARL 이득 0</td><td><span class="mono">local feasibility ≠ learnability</span> 분리 보고. <span class="mono">B_N</span> 이 성공하면 그것이 결과 → Paper 2</td><td class="c">동일</td></tr>
+<tr><td>③ <span class="mono">N_req ≥ 2</span> 확인</td><td><b>호재</b> — 진짜 cooperative necessity, N=1 vs N≥2 가 메인 실험</td><td class="c">동일</td></tr>
+<tr><td>④ measure 불안정</td><td>지도 즉시 중단 → Phase III-B 새 protocol</td><td class="c">재설계 후</td></tr>
+</table>
+
+<h3>6.4 venue 와 단기 산출물</h3>
+<ul>
+<li><b>1 순위 IEEE T-AES</b> — systems design + verification + collaborative autonomy 프레이밍. “새 MAPPO” 로 쓰면 약해진다.</li>
+<li><b>2 순위 Aerospace Science and Technology</b> — interception mechanics · 무차원 설계 · latency/capability trade 를 앞세움.</li>
+<li>조건부 <b>JGCD</b> — certificate·reachable controller 비중이 커지고 RL 비중이 줄면 매력 증가.</li>
+<li>투고 시점 = <b>증거 bar 충족 시점</b>(12/18 과 무관). 12/18 에는 URP 보고서 + arXiv snapshot, 미완은 미완으로 명시.</li>
+<li><b>KSAS 추계 초록</b>(마감 임박): Phase II 를 <b>preliminary diagnostic</b> 으로만. 금지 문장 — “결정대역은 36–39 였다” / “1 기면 충분함을 발견” / “MARL 실패 원인은 전개지연”.</li>
+</ul>
+
+<h3>6.5 5 년 논문 라인 (C-UAS 한 문제를 5 년 파지 않는다)</h3>
+<table>
+<tr><th class="c" style="width:8%">#</th><th style="width:30%">논문</th><th style="width:34%">기여</th><th>선행조건 / 성격</th></tr>
+<tr><td class="c">P1</td><td>Feasibility envelope</td><td>협력 메커니즘의 <b>certified existence/absence</b></td><td>현재 연구 · aerospace systems</td></tr>
+<tr><td class="c">P2</td><td>Certificate-guided cooperative control</td><td>envelope 안으로 state 를 <b>몰아가는</b> controller/RL</td><td>P1 의 L/U framework · robotics/control</td></tr>
+<tr><td class="c">P3</td><td>Finite-shot optimal stopping</td><td>θ gate 를 <b>기대효용/정지시각</b>으로 제거</td><td>P1 + 통계 · stochastic control</td></tr>
+<tr><td class="c">P4</td><td>Cooperative latency reduction</td><td>협력을 물리적 봉쇄 → <b>감지·조준 지연 단축</b>(정보적 협력)</td><td>P2/P3 · multi-robot autonomy</td></tr>
+<tr><td class="c">P5</td><td>6DOF + hardware/HIL</td><td>model hierarchy + sim-to-real</td><td>P2/P4 · robotics systems</td></tr>
+</table>
+<p class="small">공개 자산 우선순위: ① certificate/feasibility <b>benchmark</b>(application-agnostic) ② reproducible experiment contract(seed manifest·hash·paired harness) ③ simulator(공개하되 자산의 중심으로 만들지 않는다).
+하드웨어는 P2/P3 의 알고리즘 기여 이후 — point mass → actuator lag/noise → 6DOF → SIL/PIL → benchtop → 비행.</p>
+
+<h2>7. 다음 착수 순서 · 미완</h2>
+<ol>
+<li><span class="mono">v_shot</span> 수렴·allocation 하네스 (path-witness 의미론, 2k/8k/32k)</li>
+<li>독립 judge cross-check (boundary-aware signed margin)</li>
+<li>unblockable-mass upper = <b>전 스텝 cheap screen 과 같은 코드</b> (screen soundness 가 지도 전체의 전제)</li>
+<li>4A joint-feasibility constructive (충돌·NK 포함) → 그 다음에야 4B, 그 다음에야 MARL</li>
+<li>동시: <span class="mono">Z_master</span> + Buckingham-Π 전체 선확정(<span class="mono">lattice_hash</span>)</li>
+</ol>
+<div class="kill"><b>미완·주의</b>
+<ul style="margin-bottom:0">
+<li><b>OSF 외부 timestamp</b> — 유일하게 남은 감사 항목(manifest r3.2 업로드).</li>
+<li>서버 9 런은 완주시키고 <b>기존 primary·기존 라벨</b>로만 판정. Phase III 와 섞지 않는다. 인용은 “motivated, but does not validate”.</li>
+<li><b>리뷰 루프 중단</b> — 다음 외부 검증은 첫 산출물(하네스 + cross-check)을 들고 간다. 정의를 더 늘리는 것이 지금은 위험하다.</li>
+<li>상시 감시 자기기만 2 건: “certificate 만 만들면 Phase I 실패 원인이 밝혀진다”(아니다) · “무차원 지도가 곧 systems requirement 다”(실물 anchor 없으면 model-conditional design envelope 다).</li>
+</ul></div>
+
+<h2>부록 A — 문서·산출물 지도</h2>
+<table>
+<tr><th style="width:34%">파일</th><th>내용</th></tr>
+<tr><td class="mono">docs/73_review10_verdicts.md (r3.2)</td><td>리뷰 10~15 판정 로그 · 철회 4 문장 · 폐기 8 · 자기기만 2</td></tr>
+<tr><td class="mono">docs/74_pivot_protocol.md (r3.2)</td><td><b>정본 계약</b> — Phase I/II/III · 정의 · certificate · Stage-2 estimand · 반증조건 · 금지사항</td></tr>
+<tr><td class="mono">docs/75_blueprint.md (v3.1)</td><td>청사진 — 게이트 19 · 부품표 · 그림 8 · venue · KSAS · 5 년 라인 · 리스크</td></tr>
+<tr><td class="mono">artifacts/pivot_lock_2026-08-09.json</td><td>manifest (protocol_hash · supersedes · 셀 0)</td></tr>
+<tr><td class="mono">shepherd/scripts/pivot_manifest.py</td><td>manifest 생성기</td></tr>
+<tr><td class="mono">shepherd/scripts/shaping_ceiling.py</td><td>Phase II exploratory 진단 (status = EXPLORATORY)</td></tr>
+<tr><td class="mono">shepherd/scripts/eval_iid.py · analyze_ls_commit.py</td><td>IID paired 평가 러너 · Δ_shape 판정기 (Phase I 블록)</td></tr>
+<tr><td class="mono">docs/71 · 72</td><td>ablation 사전등록 · IID 평가 프로토콜 (Phase I 계약)</td></tr>
+<tr><td class="mono">temp_research_note/2026-08-09_*.md</td><td>세션 로그 2 건 (배선 / 봉인)</td></tr>
+</table>
+
+<h2>부록 B — 용어 20 초 정리</h2>
+<table>
+<tr><td class="mono" style="width:30%">v_shot</td><td>공격자의 τ-reachable <b>path witness</b> 중 feasible 한 것에서 포획되는 <b>가중 coverage 비율</b>. 확률이 아니다</td></tr>
+<tr><td class="mono">θ (θ_S2 = 0.90)</td><td>robustness acceptance level. Stage-2 는 이 하나로만 판정, 나머지는 sensitivity</td></tr>
+<tr><td class="mono">boxed</td><td>공격자를 완전히 가둔 상태 — 비율은 올라가지만 clean fire 가 금지된다</td></tr>
+<tr><td class="mono">D_i^reach(e,t)</td><td>limiter i 가 reference encounter 시각 t 까지 실제 동역학·NK·충돌 하에 도달 가능한 center 집합</td></tr>
+<tr><td class="mono">p_C(z) / p_AMB(z)</td><td>파라미터 점 z 에서 <b>협력 기회</b> / <b>미결</b> 의 episode 유병률 (셀은 단일 라벨이 아니다)</td></tr>
+<tr><td class="mono">B_N</td><td>결과 열람 전 freeze 한 same-N <b>비학습</b> constructive controller — RL 이득의 유일한 비교 대상</td></tr>
+<tr><td class="mono">Γ</td><td><span class="mono">δ_COOP − (δ_FREE + δ_HARD)/2</span> — “이득이 예측된 영역에서만 나오는가” 를 재는 primary</td></tr>
+</table>
+
+<footer class="small">
+ANDES / newURP · 2026-08-09 · PIVOT_LOCK_R32_2026-08-09 · protocol_hash 069cade39836cdd1 ·
+Phase III cells generated: 0 · 이 브리핑은 요약이며 계약의 정본은 docs/74 다.
+</footer>
+</body></html>
