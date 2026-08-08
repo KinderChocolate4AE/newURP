@@ -1,151 +1,240 @@
-# 74 — PIVOT PROTOCOL (전환 기록·봉인) — 2026-08-09
+# 74 — PIVOT PROTOCOL r1 (전환 기록·봉인) — 2026-08-09
 
-**리뷰 10 (docs/73) 항목 1 의 이행. 이 문서는 지도 셀을 **한 칸이라도 더 보기 전에**
-작성됐다. 목적은 chronology 를 숨기지 않고 못박는 것이다: Phase I 의 실패,
-Phase II 의 post-hoc 진단, Phase III 의 사전등록 파라미터 연구를 서로 섞지 않는다.**
+**r0 = 리뷰 10 이행. r1 = 리뷰 11 (A1~A8) 판정 전면 반영. 이 문서는 Phase III
+지도 셀을 **한 칸도 생성하지 않은 상태**에서 작성·개정됐다.**
 
-기준 커밋 = `a1a784e` (2026-08-09T01:56+09:00). 이 시점 이후의 모든 지도 산출물은
-아래 §3~§4 계약 하에서 생성된다.
+**★ r1 최상위 정정: `2026-12-18` 은 URP 행정 마일스톤이며 연구의 종료선이 아니다.**
+12/18 에는 "어디까지 완결해서 보고할지"만 정한다. 저널용 증거 bar (certificate ·
+표본 수 · robustness) 는 기간과 무관하게 유지하며, 시간 때문에 C3/C5/certificate 를
+잘라내지 않는다. 아래 게이트는 전부 **과학적 kill/branch 게이트**이고 시간 게이트가
+아니다.
+
+기준 커밋 = `a1a784e` (2026-08-09T01:56+09:00). 감사 장치 = §0.
 
 ---
 
+## 0. 감사 가능성 (리뷰 11 A1 — CONDITIONAL 이행)
+
+r0 의 "오늘 이후 생성된 지도만 Phase III" 는 **사람의 진술**이었다. r1 에서 다음 4 개를
+추가한다.
+
+1. **pivot manifest**: `shepherd/scripts/pivot_manifest.py` → `artifacts/
+   pivot_lock_2026-08-09.json`. 내용 = docs/73·74·75 + 리뷰 프롬프트 2 건의 SHA-256
+   (이들의 해시의 해시 = **`protocol_hash`**), 현재 commit, Phase I 계약·결과 기록,
+   Phase II exploratory 산출물, judge/env/평가·판정 코드, **진행 중 9 런의 config·
+   seed list·launcher 명령**, 분포·계약 해시.
+2. **git tag** `PIVOT_LOCK_2026-08-09` (manifest 커밋 위에).
+3. **외부 timestamp**: embargo 가능한 read-only 등록(OSF registration 등)으로
+   같은 manifest 를 봉인한다. 즉시 공개하지 않아도 "이 시점에 이 계약이 존재했다"가
+   나중에 검증된다.
+4. **모든 Phase III 산출물에 스탬프 필수**:
+   `protocol_hash · code_commit · judge_commit · scenario_manifest_hash ·
+   map_spec_hash · generated_at`. 스탬프 없는 map artifact 는 **무효**로 취급한다.
+
+**표현 규율**: 사람이 결과를 보지 않았다는 것은 암호학적으로 증명 불가하다.
+따라서 다음 문구만 쓴다 (`verified unread` 금지):
+
+> "Results had not been inspected for scientific decision-making as of the
+> Phase-III lock."
+
+**논문용 원문 (그대로 사용)**
+
+> **Phase-transition provenance.** Before any Phase-III feasibility-map output was
+> generated, we archived the Phase-I contract, Phase-II exploratory artifacts, all
+> active training configurations, seed manifests, analysis code, and the Phase-III
+> protocol in an immutable time-stamped registration. Every subsequent Phase-III
+> artifact records the corresponding protocol hash and source-code revision.
+> Phase-II outputs are retained solely as exploratory records and are not used for
+> Phase-III confirmatory classification or hypothesis testing.
+
 ## 1. Phase I — 원 spine 과 그 결과 (변경 금지·소급 재해석 금지)
 
-- **가설**: 동결된 TRAIN 위협 분포·동결 학습계약에서, 협력 shaping 을 학습한
-  MARL 팀이 손설계 기준선보다 비파괴 net 포획률(p_net)을 높인다.
-- **primary metric**: held-out **IID 10000..10299 (n=300) paired**, lexicographic
+- **가설**: 동결 TRAIN 위협 분포·동결 학습계약에서 협력 shaping 을 학습한 MARL 팀이
+  손설계 기준선보다 비파괴 net 포획률을 높인다.
+- **primary**: held-out **IID 10000..10299 (n=300) paired**, lexicographic
   Δ_net = p_net^MARL − p_net^scripted (docs/63 r2).
-- **기준선**: hold(무개입) / bearing-aware arc scripted (TRAIN 선택 c5, p_net 0.110).
-- **결과 (커밋된 사실)**:
-  - LL (전부 학습) 무력화 **0/300** — SHAPING 0/164 · FREE 0/136.
-  - LS (편대만 학습 + 발사 scripted) **49/300 = 0.163** — FREE 49/136 (0.36) ·
-    **SHAPING 0/164**.
-  - hold SHAPING 사전측정 **0/122**.
-- **현재 진행 중이며 미열람인 것**: docs/71 r1 LS-COMMIT ABLATION 9 런
-  (LS-live seeds 1..4 · LS-off seeds 0..4), primary = ablation IID 10300..10599
-  paired Δ_shape, confirmatory seeds {1,2,3,4}, 판정식 two-sided 95% CI 하한 > 0,
-  stop rule = 실패 시 본편 rescue 종료.
-  **이 블록의 primary 식·대역·라벨·판정식은 이 전환으로 일절 변경하지 않는다.**
-  완주 후 판정하고 **결과(특히 null)를 보고**한다. 그 판정은 `regime_of` 의
-  기존 정의·기존 이름으로 수행된다.
+- **기준선**: hold / bearing-aware arc scripted (TRAIN 선택 c5, p_net 0.110).
+- **결과(커밋된 사실)**: LL **0/300** (SHAPING 0/164 · FREE 0/136) ·
+  LS **49/300 = 0.163** (FREE 49/136 = 0.36 · **SHAPING 0/164**) ·
+  hold SHAPING 사전측정 **0/122**.
+- **진행 중·미열람**: docs/71 r1 LS-COMMIT ABLATION 9 런. primary·대역·라벨·판정식
+  **불변**, 기존 `regime_of` 로 완주·판정하고 **null 도 보고**한다.
 
 ## 2. Phase II — 전환 trigger (exploratory 로 봉인)
 
-- **날짜**: 2026-08-09. **산출물**: `shepherd/scripts/shaping_ceiling.py`,
-  `results/shaping_ceiling.json`, `results/shaping_ceiling.png` (커밋 `d090280`).
-- **지위**: **탐색적 진단 (exploratory diagnostic)**. confirmatory 아님. 어떤
-  판정에도 쓰지 않는다. 다음 한계를 그대로 기록한다:
-  - seed 0, **a_att 당 에피소드 1 개**, hold 롤아웃의 **상위 3 스냅샷**만.
-  - 배치 탐색 = **그리디 + 유한 후보 껍질** (160점, 조밀판 864점).
-  - **limiter 도달가능성(a_lim)·no-kinetic 존 미요구** = teleporting 배치 =
-    **relaxed static-placement** 문제. 실제 시스템 최적 `V_N^actual` 과 순서관계 없음.
-  - reachable set 은 보수적 superset 이나 **유한 위트니스 표본**(2000).
-  - judge 에 센서 잡음·지연 stochasticity 없음.
-- **관측된 것 (하향된 표현으로만)**:
-  - hold 는 a_att≈33 부근에서 발사 문턱을 하향 통과.
-  - **문턱 교차가 관측된 이산 점** = a_att 36, 39 (연속 구간도, 실제 시스템
-    feasibility band 도 아니다). 42 이상에서는 테스트된 탐색으로 교차 미발견.
-  - 발견된 모든 교차는 **첫 번째 봉쇄 구**로 달성됐고 추가 구의 표본 이득 없음.
-  - 후보 27배 조밀화(a_att 45)에서 0.774 → 0.846, 여전히 문턱 미달·k=3 포화 →
-    **요격기 수 단독이 지배적 병목은 아닐 수 있다는 시사**.
-- **철회된 문장** (docs/73 §2): "결정 대역 = [36,39]" · "협력의 marginal value 가
-  기하적으로 존재하지 않는다" · "병목은 봉쇄 공급량이 아니다" · "그리디이므로
-  달성가능 하한". 이후 산출물·발표에서 사용 금지.
+- 산출물: `shepherd/scripts/shaping_ceiling.py` · `results/shaping_ceiling.{json,png}`
+  (커밋 `d090280`, 재생성 `ff9dfc7`). **status = EXPLORATORY DIAGNOSTIC**.
+- **지위**: hypothesis generator **이상으로 사용 금지**. confirmatory 인용 금지.
+- **자백된 한계 (r1 에서 2 건 추가 — 리뷰 11 A2 REJECT 이행)**
 
-## 3. Phase III — 새 가설과 지도 구성 계약 (결과 열람 전 고정)
+  | # | 편향 | 내용 |
+  |---|---|---|
+  | **B1 ★** | **counterfactual trajectory inconsistency** | 공격자는 **반응형**인데 hold 궤적으로 만든 상태 `x_t^hold` 에 limiter 를 teleport 했다. 실제로 그 위치에 limiter 가 있었다면 공격자는 **그 전에 이미 다른 궤적**을 탔다. reachability 무시보다 심각한 결함 — **attacker response causality 가 끊겨 있다.** |
+  | **B2 ★** | **common-mode bias (같은 judge)** | Phase I 에서 문제가 된 reachable-set/judge 와 **같은 구현·같은 모델링 가정**을 공유한다. → Phase III 핵심 predicate (cone containment · witness killed/not · threshold feasibility) 는 **독립 구현 cross-check 필수**. |
+  | B3 | snapshot 선택 편향 | top-`V_0` 는 cooperative synergy 가 큰 시각이 아니라 **finisher-alone 기하가 좋은 시각**을 고른다 |
+  | B4 | 후보 껍질 제한 | 공격자 중심 1~4 m 껍질이 **future choke point** 를 배제할 수 있다 |
+  | B5 | scripted aiming | favorable oracle 로 작동 |
+  | B6 | max over time/snapshot | 그 자체가 optimistic selection |
+  | B7 | witness family 구성비 | 결과를 만든다 (§3.3) |
+  | B8 | 선언된 (τ, r_kill, θ) | Phase II 의 구조 자체를 만든다 |
+  | B9 | 유한 위트니스·무잡음 judge | 2000 표본, judge 에 센서잡음·지연 없음 |
+  | B10 | teleporting 배치 | 도달가능성·NK 존 미요구 = **relaxed static-placement** |
 
-### 3.1 정의 (동결 블록에는 소급 적용하지 않음)
+- **철회된 문장 4 건** (docs/73 §2): "결정 대역 [36,39]" · "협력 marginal value = 0" ·
+  "병목은 공급 아님" · "그리디 = 달성가능 하한". 이후 산출물·발표에서 사용 금지.
+
+## 3. Phase III — 정의·계약 (결과 열람 전 고정)
+
+### 3.1 3 층 분리 (리뷰 11 A4 — `V_N^*` 단일 정의 폐기)
+
+r0 의 `V_N^*` 는 (i) 정확히 N 기 사용을 강제해 단조성이 깨지고 (ii) snapshot relaxed
+값을 episode-level actual 의 상한처럼 쓸 위험이 있었다. r1 은 **3 층으로 분리**한다.
 
 ```
-V_0(x)              무개입 (standby hold) v_shot
-V_1^*(x)            1 기 최적            ← 논문의 필수 대조군
-V_N^*(x)            admissible N-agent 최적
-FREE                V_0 >= theta
-COOP DECISION BAND  V_0 < theta <= V_N^*
-INFEASIBLE FOR N    V_N^* < theta   ← **certified upper bound 가 있을 때만** 이 이름
-NO_SOLUTION_FOUND   상한 없이 못 찾은 경우 (기본 이름)
-Delta_coop,N        V_N^* - V_1^*
-W_{2:N}             { x : 2 <= N_req(x) <= N },  N_req = min{N>=0 : V_N^* >= theta}
+Layer 1  V^rel_{<=N}(x)        고정 encounter state x. 최대 N 개 static kill sphere 를
+                               연속 admissible domain 어디든 배치할 때의 최적 (mechanism oracle)
+Layer 2  V^reach_{<=N}(x,T_s)  현재 limiter state 에서 shaping horizon T_s 안에
+                               a_lim · v_lim · NK 존 · 충돌제약을 만족해 도달 가능한
+                               center 만 허용
+Layer 3  L^ctrl_{<=N}(x0; pi_c) 반응형 attacker 를 포함한 **실제 closed-loop rollout** 에서
+                               명시적 controller pi_c 가 달성한 값 = constructive evidence
 ```
 
-`chi = a_att·tau^2/(2·rho_net)` = **free-capture analytic proxy** (필요조건 정의로
-사용 금지). 포획면은 SE(3) 원뿔 + 축방향 밴드다.
+- **"최대 N"** 표기(`<=N`)를 쓴다: 정확히 N 을 강제하면 추가 limiter 가 방해할 수 있고
+  `N_req` 의 단조성 전제가 깨진다. `V_{<=0} <= V_{<=1} <= ...` 가 성립한다.
+- **고정 snapshot 에서만** `V^reach(x_t) <= V^rel(x_t)` 가 성립한다.
+  **full closed-loop 에는 일반적으로 성립하지 않는다** (limiter 가 공격자 궤적 자체를
+  바꾼다). 두 층을 섞어 상한 주장 금지. **closed-loop optimum 을 계산했다고 주장하지
+  않는다** — `L^ctrl` 과 `U^rel` 사이 gap 을 남는 대로 보고한다.
 
-### 3.2 축 (무차원. raw 6D Cartesian sweep 폐기)
+### 3.2 certified classes (정확한 `N_req` 주장 대신 bound 로 분류)
 
-핵심 연속축 = `chi`, `kappa = r_kill/rho_net`, `mu = a_lim/a_att` (필요시
-`eta = v_att·tau/rho_net`), 이산 = `N`. 파라미터 분류:
+```
+FREE                  : V_0 >= theta
+CERTIFIED SINGLE      : L_{<=1} >= theta
+CERTIFIED COOP        : U_{<=1} < theta  AND  L_{<=N} >= theta
+CERTIFIED INFEASIBLE-N: U_{<=N} < theta
+AMBIGUOUS             : 그 외 (숨기지 않고 지도에 그린다)
+N_req = k             : U_{<=k-1} < theta <= L_{<=k} 일 때만 선언
+```
+협력 가치 = `Delta_coop,N = V_{<=N} - V_{<=1}`. 협력 필요 집합 =
+`W_{2:N} = { x : 2 <= N_req(x) <= N }`.
+`chi = a_att·tau^2/(2·rho_net)` 은 **free-capture analytic proxy** (필요조건 정의 금지).
 
-| 분류 | 항목 |
+### 3.3 measure (리뷰 11 A5 — RATIFY, 단 θ 를 상수로 취급 금지)
+
+- `v_shot` 은 **(R) robust coverage metric** 으로 선언한다. probability 로 부르지 않는다
+  (위트니스가 명시된 분포의 IID 표본이 아니다).
+- **θ 를 방어하지 않는다.** 핵심 산출물은 binary map 이 아니라 **연속 surface**
+  `L_{<=N}(z)`, `U_{<=N}(z)` 이고, θ ∈ {0.80, 0.85, 0.90, 0.925, 0.95} **슬라이스**로
+  대역이 어떻게 변하는지 보고한다. θ = robustness acceptance level.
+- 검증 필수: witness family 구성비(단일세그먼트 볼 / 경계구 / dogleg) 명시 ·
+  **수렴 2k → 8k → 32k** · allocation 민감도 · 동일 snapshot paired 비교.
+- `delta_t = dt/tau` 는 물리 파라미터가 아니라 **numerical verification number** 로
+  따로 확인한다.
+
+### 3.4 certificate — 계층형 (싼 것부터)
+
+1. **unblockable bad mass (최저비용)**: bad witness `j` 의 blocker tube
+   `B_j = gamma_j (+) Ball(r_kill)` 이 admissible domain `D` 와 교집합이 없으면 어떤
+   배치로도 못 지운다. 그 총 mass `U` 와 captured-good mass `G` 로
+   `v_max <= G/(G+U)`. 이 값이 θ 미만이면 즉시 certificate.
+2. **finite-candidate exact**: 후보집합 안에서 **global optimum** (greedy 아님).
+   ratio 를 threshold-feasibility 로 변환: 분모 > 0 에서
+   `v >= theta  <=>  sum_j w_j (c_j - theta) y_j >= 0`. `sum_i z_i <= N` 과 survivor
+   관계를 이진 제약으로 → MILP/B&B, θ 에 대해 bisection.
+   **동일 candidate-cover signature 위트니스를 묶어 압축**(32k 는 solver 투입 전 필수).
+3. **continuous outer relaxation**: center domain 을 voxel/cell 로 쪼개고
+   `A^outer_{jq} = 1 if C_q ∩ B_j != empty` (한 cell 이 서로 다른 위치에서 tube 를
+   건드려도 "한 center 로 둘 다 봉쇄 가능"으로 과도 인정 = 낙관) + good witness 는
+   절대 안 지워진다고 추가 낙관 → `U_{<=N} = G / (G + B - B_removable,N)`.
+   cell refinement 로 optimism 이 줄어드는 구조라 **certificate convergence figure** 가 나온다.
+4. **reachable constructive lower**: 최적 controller 가 아니라 **하나의 구성적 증인**.
+   escape path → blocking tube 후보 → limiter 별 도달가능성 검사 → agent-candidate
+   bipartite assignment → threshold-feasibility 로 target 선택 → bang-bang/PD 추종 →
+   5~10 tick replan → **반응형 attacker 가 있는 실제 env rollout** → 실제 judge 가
+   `v >= theta` 를 내면 `L^ctrl` 성립.
+   **★ 이것이 MARL 보다 먼저다. scripted constructive controller 가 못 만드는
+   cooperative opportunity 를 RL 에게 만들라고 요구하지 않는다.**
+5. **독립 judge cross-check** (B2 대응): cone containment · witness killed/not ·
+   threshold feasibility 를 독립 구현으로 재계산. 불일치 > 1e-3 이면 지도 중단·버그 감사.
+
+### 3.5 표본 정책 (리뷰 11 A7 — replicate 를 줄이지 말고 cell 을 줄인다)
+
+| 대상 | 독립 realization |
 |---|---|
-| epistemic / hardware-dependent | `tau_sense`, `tau_decide`, `r_kill` 일부 |
-| design / decision | `N`, `theta_fire` |
-| environmental / aleatory | `a_att`, 공격자 기동 realization |
-| physical geometry + model unc. | `rho_net`, 원뿔 기하 |
-| interceptor capability / design | `mu = a_lim/a_att`, `v_lim/v_att` |
+| coarse cells | 20~30 |
+| boundary candidate cells | **순차 60~100+** |
+| Stage-2 최종 3 점 | **100~300** geometry realization |
+| MARL 평가 | 기존대로 수백 paired episodes |
 
-**구간의 출처는 결과와 독립으로 먼저 선언한다** (sensing/compute/deployment budget
-근거). "돌려보니 좋았다" 로 범위를 정하지 않는다.
+full Cartesian grid 금지 → **adaptive boundary refinement**. **통계단위 = episode**
+(위트니스 2000 을 독립표본으로 bootstrap = pseudoreplication). CPU geometry 는 GPU
+학습과 병렬화한다.
 
-### 3.3 `v_shot` measure 고정 (착수 1 — 이것 없이는 지도를 쓰지 않는다)
+### 3.6 무차원 축 (리뷰 11 A6 — CONDITIONAL: 아직 모른다)
 
-2000 위트니스의 "비율"이 근사하는 measure 를 명시하고, witness allocation(단일
-세그먼트 볼 / 경계구 / dogleg 의 혼합비) · 수렴(2k / 8k / 32k spot-check) ·
-가중 민감도를 검증한다. 해석은 둘 중 **하나로 선언**한다:
-- **(R) robust**: `v_shot` = 수치 coverage metric, `theta` = robustness acceptance
-  threshold. (miss 확률·탄약 경제 주장 금지)
-- **(P) probabilistic**: reachable uncertainty 에 실제 measure P 를 정의하여
-  `v = P(X_tau in C | feasible)`. 이때만 theta 를 hit-confidence 와 연결.
+핵심 후보: `chi = a_att·tau^2/(2·rho)`, `eta = v_att·tau/rho`, `kappa = r_kill/rho`,
+`mu = a_lim/a_att`. **추가 후보(미검증)**: `nu = v_lim/v_att`,
+`lambda = L_axial/rho`, `R_standby/rho`, `R_detect/rho`, `D_asset/rho`,
+cone half-angle `alpha` (그 자체로 무차원), 공격자 회피 gain 의 무차원화.
 
-현 단계 기본값 = **(R)**. `theta` 축은 "viability-envelope sensitivity" 로만 보고한다.
+**어떤 수가 핵심 축이라고 먼저 믿지 않는다** → **iso-Π collapse test**: 서로 다른
+차원 파라미터 조합 두 개가 같은 (chi, kappa, mu, eta) 를 갖도록 만들고 `V` 를 비교.
+같은 Π 인데 결과가 허용오차 밖으로 다르면 **빠진 무차원 수가 있다** → 축 추가.
+이 실험은 그림으로 낸다.
 
-### 3.4 certificate 분리 (착수 2)
+## 4. Stage-2 (C5) confirmatory 계약 — r1 전면 교체 (리뷰 11 A3 REJECT 이행)
 
-- **feasible 주장**: 실제 도달가능성을 만족하는 constructive configuration/controller
-  로 `V_N^actual >= theta` 를 직접 보인다.
-- **impossible 주장**: `V_N^actual <= V_N^relaxed <= U_N < theta` 형태의 상한.
-  3층 순서: (A) 후보집합 내 **global optimum** (MILP/B&B — greedy 대체),
-  (B) continuous placement **outer relaxation**, (C) 최저비용 certificate =
-  **unblockable bad mass**: `v_max <= G/(G+U)`.
-- 상한이 없는 셀은 `NO_SOLUTION_FOUND` 로만 표기한다.
+r0 의 "결정 대역 중앙 + minimum normalized distance" 는 잔여 자유도가 많았고(정규화
+metric · interpolated vs grid boundary · CI 선택 · 비연결 성분 · 연속축과 이산 N 의
+혼합 거리 · 성분 measure 계산), 게다가 **primary 가 두 개**였다(Phase I 지표 유지 ↔
+interaction). r1 은 다음으로 대체한다.
 
-### 3.5 표본·통계 (지도)
+**certified multi-agent opportunity** — episode `x` 에 대해
+```
+C_N(x) = 1[ U_{<=1}(x) < theta  AND  L_{<=N}(x) >= theta ]
+p_C(z) = P( C_N(X) = 1 | z )        (파라미터 점 z 에서의 유병률)
+z_B    = argmax_z  LCB95{ p_C(z) }  (사전 지정 단측 95% 하한)
+```
 
-조건당 **독립 attacker realization 20~30**, 경계 adaptive refinement,
-**통계단위 = episode** (위트니스를 독립표본으로 bootstrap 금지), 경계에도 bootstrap band.
+> The Stage-2 cooperative operating point is selected from the pre-specified finite
+> parameter grid before any Stage-2 learning result is observed. For each grid point
+> z, we estimate the prevalence of certified cooperative opportunities,
+> p_C(z) = P[U_{<=1}(X) < theta <= L_{<=N}(X) | z]. The cooperative test point is the
+> grid point maximizing the pre-specified one-sided 95% lower confidence bound of
+> p_C(z). All parameter coordinates used for matching are normalized by the
+> pre-specified domain endpoints. Ties are resolved lexicographically in the order
+> (chi, kappa, mu, eta, N). No interpolation, axis reweighting, or post-hoc boundary
+> modification is permitted. **If no grid point satisfies the pre-specified
+> certification criterion, the cooperative Stage-2 learning experiment is not
+> conducted.**
 
-## 4. Stage-2 (C5) confirmatory 계약 — 결과 열람 전 고정
+- 마지막 문장이 핵심이다: **협력 필요 셀이 없는데 억지로 C5 를 돌리지 않는다.**
+- **대조점**: FREE / high-difficulty 는 같은 nuisance 변수에서 **가장 가까운 matched
+  control** 로 잡는다 (3 regime 동시).
+- **primary 는 하나다**: Stage-2 의 primary contrast = **interaction** (RL benefit 이
+  사전 예측된 certified band 안에서만 출현하는가). Phase I 의 평가 계약(대역 생성 ·
+  paired 구조 · p_net 정의)은 유지하되, Phase III 의 hypothesis test 는 Stage-2 자신의
+  primary 로 새로 사전등록한다 — **두 개를 동시에 primary 라 부르지 않는다.**
+- 점당 학습 시드 **8~10 권장(5 최소)**, held-out 수백 paired, 기준선 = hold ·
+  arc scripted(historical) · MARL · **reachable 1-limiter(필수)** · oracle `U_{<=N}` envelope.
+- 통계: 시드 최상위 hierarchical CI · paired 차이 · effect size 95% CI ·
+  0 카운트 binomial 상한 병기 · 지도 경계에도 bootstrap band.
 
-> Stage-2 operating point will be selected **exclusively** from the completed
-> geometric feasibility map using a **deterministic rule fixed before any Stage-2
-> training result is observed**. Among certified feasible decision-band components,
-> we choose the point maximizing the **minimum normalized distance to the necessity
-> and sufficiency boundaries**; ties broken by (1) larger component measure,
-> (2) smaller `chi`, (3) smaller `N_req`, all fixed prospectively. The training
-> budget, seed list, evaluation-set generation, baselines, and the primary paired
-> difference in net-capture probability remain identical to the original contract.
+## 5. 반증 조건 (branch, kill 아님)
 
-- **3 regime 동시 실행** (한 점만 돌리지 않는다): `FREE` / `decision band 내부` /
-  `high-difficulty (certified INFEASIBLE 또는 NO_SOLUTION_FOUND)`.
-- **primary 결과는 점수가 아니라 interaction**: *RL benefit 이 사전 예측된
-  feasibility envelope 안에서만 출현하는가.*
-- 점당 학습 시드 **5 최소** (8~10 권장), held-out 300 paired, 기준선 = hold ·
-  arc scripted · MARL · **reachable 1-limiter** · oracle envelope.
-- 통계: 시드 최상위 hierarchical CI + paired 차이 + effect size 95% CI,
-  0 카운트는 binomial 상한 병기.
-
-## 5. 반증 조건 (이것도 지금 고정)
-
-1. 선언된 무차원 축 전 범위에서 `W_{2:N} = 공집합` → **협력 무가치**가 결론이고,
-   논문은 requirements 가 아니라 **negative systems result** 가 된다
-   ("single-shot 비파괴 포획에서 협력 interdiction 이 실질 이득을 갖는 조건이
-   극도로 제한된다").
-2. band 가 넓게 열린 셀에서도 학습 이득 0 → C2 는 필요조건만 주고 학습 계약이
-   별도 병목 → 논문은 지도 + 학습가능성 분리 보고로 축소.
-3. 조밀 후보·비근시안 최적화에서 `N_req >= 2` 가 나오면 Phase II 의 "모든 교차가
-   1 기로 달성" 관측을 **철회**한다.
-4. `v_shot` 이 witness allocation·해상도에 유의하게 의존하면 (§3.3 수렴 실패)
-   지도 자체를 발표하지 않는다.
+1. 선언 범위 전역에서 `W_{2:N} = ∅` → **negative systems result** 로 분기
+   (*Limits of Cooperative Threat-Space Shaping for Single-Shot Capture under
+   Deployment Latency*). C5 협력 팔 취소. **핵심은 upper certificate 의 강도.**
+2. band 는 열리는데 MARL 이득 0 → `physical feasibility != learnability` 로 분리 보고.
+   constructive controller 가 band 에서 성공하면 그것이 결과다 → Paper 2 로.
+3. exact/reachable 에서 `N_req >= 2` → Phase II 의 "모든 교차가 1 기" 관측 **철회**
+   (호재: `U_{<=1} < theta <= L_{<=2}` 가 진짜 cooperative necessity 를 준다).
+4. `v_shot` 이 witness allocation/해상도에 유의 의존 → **지도 즉시 중단**.
+   (P) branch (실제 reachable uncertainty 분포 정의) 또는 set-based branch
+   (fraction 폐기 → worst-case containment / quantile radius / support-function score).
+   이 경우 기존 θ map 은 사용하지 않는다.
 
 ## 6. 논문 서술 규칙 (chronology 은닉 금지)
 
@@ -153,17 +242,28 @@ W_{2:N}             { x : 2 <= N_req(x) <= N },  N_req = min{N>=0 : V_N^* >= the
 > Phase II: post-hoc mechanism diagnosis identified a potential feasibility mismatch.
 > Phase III: a prospectively specified parameter study tested that hypothesis.
 
-- Phase I 의 원 가설·primary·결과를 논문에 **명시적으로** 보고한다.
-- Phase II 는 exploratory 로 표기한다.
-- "requirement" 표기는 hardware/context-of-use anchor 를 최소 1 개 확보한 뒤에만
-  사용하고, 그 전에는 **design envelope / parametric requirement curve** 로 쓴다.
-- spine (리뷰 10 §8 채택): *Feasibility-First Design of Cooperative Single-Shot
-  Counter-UAS Interception under Deployment Latency*.
+**Phase I null 인용 원문 (리뷰 11 A8 RATIFY — 그대로 사용)**
 
-## 7. 이 문서 이후 금지 사항
+> Under the original preregistered nominal contract, the intervention failed to
+> produce a statistically supported improvement in the prespecified shaping-regime
+> net-capture rate. This null result is retained as a confirmatory result of Phase I.
+> It **motivated, but does not validate**, the subsequent feasibility analysis, whose
+> definitions and hypotheses were specified prospectively after the Phase-I contract
+> had been locked.
 
-- 지도 결과를 본 뒤 §3 정의·§3.2 축·§3.3 measure 선언·§4 선택규칙·§5 반증조건을
-  변경하는 것.
-- Phase II 산출물을 confirmatory 로 인용하는 것.
-- docs/71 블록의 primary·대역·라벨·판정식 변경, 또는 그 결과를 Phase III 로
-  재해석하는 것.
+Phase III 가 성공해도 "Phase I null 의 원인이 feasibility mismatch 였음이 증명됐다"로
+쓰지 않는다. 정확히는 **"Phase III offers a mechanism-consistent explanation of the
+Phase-I null."**
+
+"requirement" 표기는 hardware/context-of-use anchor 확보 후에만. 그 전에는
+**model-conditional design envelope / parametric requirement curve**.
+spine = *Feasibility-First Design of Cooperative Single-Shot Counter-UAS
+Interception under Deployment Latency*.
+
+## 7. 이후 금지 사항
+
+- 지도 결과를 본 뒤 §3 정의·§3.6 축·§3.3 measure 선언·§4 선택규칙·§5 반증조건 변경.
+- Phase II 산출물을 confirmatory 로 인용.
+- docs/71 블록의 primary·대역·라벨·판정식 변경, 또는 그 결과를 Phase III 로 재해석.
+- `protocol_hash` 스탬프 없는 Phase III 산출물을 결과로 사용.
+- 시간(12/18) 을 이유로 certificate·표본 수·robustness bar 를 낮추는 것.
