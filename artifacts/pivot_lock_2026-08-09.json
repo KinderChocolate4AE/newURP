@@ -2,7 +2,7 @@
  "schema": "pivot-lock-v1",
  "lock_name": "PIVOT_LOCK_2026-08-09",
  "protocol_hash": "ef9cd4781a095072",
- "code_commit": "ff9dfc7dc38baf137228894129c3808bc1b28406",
+ "code_commit": "c6e80815777ecfba11952660de2bf38d51114708",
  "code_dirty": true,
  "protocol_files": {
   "docs/73_review10_verdicts.md": "328d0709edf59869dc449178debf6a6312316f1a991edbf03b6d3b7986979e27",
