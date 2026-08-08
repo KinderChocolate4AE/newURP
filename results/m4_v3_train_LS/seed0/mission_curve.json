@@ -1,0 +1,2727 @@
+[
+  {
+    "step": 20480,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 25.0,
+    "regime/free/captured": 0.44,
+    "regime/free/penetrated": 0.56,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.6,
+    "regime/shape/n": 34.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 40960,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 40.0,
+    "regime/free/captured": 0.375,
+    "regime/free/penetrated": 0.625,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.525,
+    "regime/shape/n": 74.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 61440,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 62.0,
+    "regime/free/captured": 0.3870967741935484,
+    "regime/free/penetrated": 0.6129032258064516,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5161290322580645,
+    "regime/shape/n": 108.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 81920,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 79.0,
+    "regime/free/captured": 0.3291139240506329,
+    "regime/free/penetrated": 0.6708860759493671,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.4936708860759494,
+    "regime/shape/n": 121.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 102400,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 79.0,
+    "regime/free/captured": 0.3037974683544304,
+    "regime/free/penetrated": 0.6962025316455697,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.4810126582278481,
+    "regime/shape/n": 121.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 122880,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 87.0,
+    "regime/free/captured": 0.3333333333333333,
+    "regime/free/penetrated": 0.6781609195402298,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.4942528735632184,
+    "regime/shape/n": 113.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 143360,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 87.0,
+    "regime/free/captured": 0.39080459770114945,
+    "regime/free/penetrated": 0.6206896551724138,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5632183908045977,
+    "regime/shape/n": 113.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 163840,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 83.0,
+    "regime/free/captured": 0.42168674698795183,
+    "regime/free/penetrated": 0.5903614457831325,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5421686746987951,
+    "regime/shape/n": 117.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 184320,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 83.0,
+    "regime/free/captured": 0.4578313253012048,
+    "regime/free/penetrated": 0.5542168674698795,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5903614457831325,
+    "regime/shape/n": 117.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 204800,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 83.0,
+    "regime/free/captured": 0.37349397590361444,
+    "regime/free/penetrated": 0.6265060240963856,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5662650602409639,
+    "regime/shape/n": 117.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 225280,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 81.0,
+    "regime/free/captured": 0.35802469135802467,
+    "regime/free/penetrated": 0.6419753086419753,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5308641975308642,
+    "regime/shape/n": 119.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 245760,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 85.0,
+    "regime/free/captured": 0.2823529411764706,
+    "regime/free/penetrated": 0.7176470588235294,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.47058823529411764,
+    "regime/shape/n": 115.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 266240,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 84.0,
+    "regime/free/captured": 0.3333333333333333,
+    "regime/free/penetrated": 0.6666666666666666,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.47619047619047616,
+    "regime/shape/n": 116.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 286720,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 80.0,
+    "regime/free/captured": 0.325,
+    "regime/free/penetrated": 0.675,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5125,
+    "regime/shape/n": 120.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 307200,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 77.0,
+    "regime/free/captured": 0.2987012987012987,
+    "regime/free/penetrated": 0.7012987012987013,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5064935064935064,
+    "regime/shape/n": 123.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 327680,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 78.0,
+    "regime/free/captured": 0.34615384615384615,
+    "regime/free/penetrated": 0.6538461538461539,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5897435897435898,
+    "regime/shape/n": 122.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 348160,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 75.0,
+    "regime/free/captured": 0.38666666666666666,
+    "regime/free/penetrated": 0.6133333333333333,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.64,
+    "regime/shape/n": 125.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 368640,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 70.0,
+    "regime/free/captured": 0.45714285714285713,
+    "regime/free/penetrated": 0.5571428571428572,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.6428571428571429,
+    "regime/shape/n": 130.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 389120,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 66.0,
+    "regime/free/captured": 0.4393939393939394,
+    "regime/free/penetrated": 0.5757575757575758,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5909090909090909,
+    "regime/shape/n": 134.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 409600,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 62.0,
+    "regime/free/captured": 0.46774193548387094,
+    "regime/free/penetrated": 0.5483870967741935,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.6290322580645161,
+    "regime/shape/n": 138.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 430080,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 68.0,
+    "regime/free/captured": 0.4264705882352941,
+    "regime/free/penetrated": 0.5882352941176471,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.6176470588235294,
+    "regime/shape/n": 132.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 450560,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 75.0,
+    "regime/free/captured": 0.41333333333333333,
+    "regime/free/penetrated": 0.5866666666666667,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.6,
+    "regime/shape/n": 125.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 471040,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 71.0,
+    "regime/free/captured": 0.3380281690140845,
+    "regime/free/penetrated": 0.6619718309859155,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5633802816901409,
+    "regime/shape/n": 129.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 491520,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 72.0,
+    "regime/free/captured": 0.3611111111111111,
+    "regime/free/penetrated": 0.6388888888888888,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5833333333333334,
+    "regime/shape/n": 128.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  },
+  {
+    "step": 499712,
+    "n": 20,
+    "penetrated_rate": 0.8,
+    "neutralized_rate": 0.2,
+    "spent_fail_rate": 0.0,
+    "truncated_rate": 0.0,
+    "nondestructive_frac": 1.0,
+    "counts": {
+      "NET_CAPTURE": 4,
+      "CAPTURE_WITH_CONTACT": 0,
+      "HARD_KILL": 0,
+      "PENETRATED": 16,
+      "SPENT_FAIL": 0,
+      "TRUNCATED": 0
+    },
+    "by_regime": {
+      "SHAPING_NEEDED": {
+        "n": 10,
+        "penetrated_rate": 1.0,
+        "neutralized_rate": 0.0,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 0.0
+      },
+      "FREE_CAPTURE": {
+        "n": 10,
+        "penetrated_rate": 0.6,
+        "neutralized_rate": 0.4,
+        "spent_fail_rate": 0.0,
+        "truncated_rate": 0.0,
+        "nondestructive_frac": 1.0
+      }
+    },
+    "contract": {
+      "schema": "resolved-contract-v1",
+      "system": {
+        "tau_kill": 0.15,
+        "p_kill": 1.0,
+        "r_nk": 6.0,
+        "a_lim_max": null,
+        "commit_threshold": 0.5,
+        "enabled": true,
+        "contact_resolver": true,
+        "r_commit": null,
+        "r_contact": null,
+        "miss_terminates": false,
+        "seed_ns": "m4_hardkill"
+      },
+      "reward": {
+        "b_net": 1.0,
+        "w_kill": 0.5,
+        "c_pen": 1.0,
+        "c_trunc": 1.0,
+        "c_lim": 0.1,
+        "dense_scale": 1.0,
+        "terminal_scale": 1.0,
+        "enabled": true
+      },
+      "attacker": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "spawn": {
+        "dx": 0.0,
+        "r_lat": 5.0,
+        "psi": 0.0,
+        "speed_frac": 0.0,
+        "r_range": [
+          250.0,
+          350.0
+        ],
+        "azimuth": 0.7853981633974483,
+        "enabled": true,
+        "seed_ns": "m4_spawn"
+      },
+      "standby": {
+        "threat_layer": "train",
+        "distribution_hash": "efeffcbf2e24d807"
+      },
+      "randomize_threat": true,
+      "threat_obs": true,
+      "extra_cfg": {
+        "train.episode_len": 1100,
+        "train.layout.adversary_start_x": 300.0,
+        "train.layout.ring_center": [
+          50.0,
+          0.0,
+          0.0
+        ]
+      },
+      "episode_len": 1100,
+      "judge": "se3_cone",
+      "n_segments": 4,
+      "hash": "e275ca1cea074bc8"
+    },
+    "regime/free/n": 73.0,
+    "regime/free/captured": 0.3698630136986301,
+    "regime/free/penetrated": 0.6301369863013698,
+    "regime/free/hard_kill": 0.0,
+    "regime/free/limiter_loss": 0.0,
+    "regime/free/fire_events": 0.5753424657534246,
+    "regime/shape/n": 127.0,
+    "regime/shape/captured": 0.0,
+    "regime/shape/penetrated": 1.0,
+    "regime/shape/hard_kill": 0.0,
+    "regime/shape/limiter_loss": 0.0,
+    "regime/shape/fire_events": 0.0
+  }
+]
