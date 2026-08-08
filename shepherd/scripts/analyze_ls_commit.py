@@ -70,6 +70,9 @@ def load_arm(eval_dir: str, arm: str) -> Dict[int, List[dict]]:
             raise ValueError(f"{f}: arm={d.get('arm')} != {arm}")
         if int(d.get("training_seed", -1)) != int(m.group(1)):
             raise ValueError(f"{f}: 파일명 seed 와 training_seed 불일치")
+        if d.get("ckpt_tag", "final") != "final":
+            raise ValueError(f"{f}: ckpt_tag={d['ckpt_tag']} -- 판정은 final "
+                             f"체크포인트만 쓴다 (latest 는 경로 스모크용)")
         by_seed.setdefault(int(m.group(1)), []).extend(d["rows"])
     if not by_seed:
         raise SystemExit(f"{eval_dir} 에 {arm}_seed*.json 이 없다")

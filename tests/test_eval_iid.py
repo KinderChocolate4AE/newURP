@@ -161,3 +161,14 @@ def test_p72g_p_net_definition_is_shared_with_label_rates():
               "PENETRATED": 4, "SPENT_FAIL": 0, "TRUNCATED": 0}
     assert label_rates(counts)["p_net"] == 5 / 10
     assert set(A.CAPTURE) == {"NET_CAPTURE", "CAPTURE_WITH_CONTACT"}
+
+
+def test_p72h_non_final_ckpt_tag_cannot_enter_the_verdict(tmp_path):
+    """`--ckpt-tag latest` 스모크 산출물이 판정에 섞이면 안 된다."""
+    _campaign(tmp_path, effect=0.0, seeds=(1, 2, 3, 4))
+    p = tmp_path / "ls-off_seed2.json"
+    d = json.loads(p.read_text(encoding="utf-8"))
+    d["ckpt_tag"] = "latest"
+    p.write_text(json.dumps(d), encoding="utf-8")
+    with pytest.raises(ValueError, match="ckpt_tag"):
+        A.analyze(str(tmp_path))

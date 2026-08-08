@@ -121,7 +121,8 @@ def world_hash(ep: int, st=None) -> str:
                                      default=str).encode()).hexdigest()[:16]
 
 
-def _policy_runner(config: str, ckpt: str, training_seed: int, device: str):
+def _policy_runner(config: str, ckpt: str, training_seed: int, device: str,
+                   tag: str = "final"):
     """학습 ckpt -> (policy callable, meta). 세계는 **학습 계약**으로 조립한다.
 
     ckpt 의 contract hash 는 TRAIN layer 세계의 것이므로 러너도 train layer 로
@@ -138,16 +139,18 @@ def _policy_runner(config: str, ckpt: str, training_seed: int, device: str):
     specs.update(attacker=None, spawn=None)          # layer draw 가 구성한다
     runner = M4Runner(run_cfg, int(training_seed), device, threat_layer="train",
                       finisher_policy="scripted", **specs)
-    steps = runner.restore(pathlib.Path(ckpt), tag="final")
+    # tag 기본 "final" = 판정용. "latest" 는 **학습 중간** 체크포인트로 평가
+    # 경로를 미리 깨보는 스모크 전용이다 (산출물에 ckpt_tag 로 남는다).
+    steps = runner.restore(pathlib.Path(ckpt), tag=tag)
     if steps <= 0:
-        raise SystemExit(f"체크포인트 복원 실패 (tag=final): {ckpt}")
-    ck = pathlib.Path(ckpt) / "ckpt_mappo_final.pt"
+        raise SystemExit(f"체크포인트 복원 실패 (tag={tag}): {ckpt}")
+    ck = pathlib.Path(ckpt) / f"ckpt_mappo_{tag}.pt"
     meta = dict(
         action_profile=("accel3+commit" if runner.limiter_commit else "accel3"),
         limiter_commit=bool(runner.limiter_commit),
         train_contract_hash=runner.contract["hash"],
         checkpoint_hash=hashlib.sha256(ck.read_bytes()).hexdigest()[:16],
-        checkpoint_steps=int(steps),
+        checkpoint_steps=int(steps), ckpt_tag=tag,
         arm_role=runner.arm)
     return runner, meta, torch
 
@@ -185,7 +188,8 @@ def eval_episodes(eps, *, policy=None, scripted_roles=(), ep_kw=None,
 def run_band(arm: str, ep0: int, n: int, *, config: str = "configs/l2_mappo.yaml",
              ckpt: Optional[str] = None, training_seed: Optional[int] = None,
              device: str = "cpu", shard_offset: int = 0,
-             shard_n: Optional[int] = None, log=print) -> dict:
+             shard_n: Optional[int] = None, ckpt_tag: str = "final",
+             log=print) -> dict:
     """한 팔 x 한 대역(또는 그 샤드) 평가. 반환 dict 그대로 JSON 으로 쓴다.
 
     샤딩은 long-run 정책(서버 병렬)용이다 -- 대역 자체는 여전히 선언된 것만
@@ -207,7 +211,8 @@ def run_band(arm: str, ep0: int, n: int, *, config: str = "configs/l2_mappo.yaml
     if arm in POLICY_ARMS:
         if ckpt is None or training_seed is None:
             raise SystemExit(f"{arm} 은 --policy-checkpoint 와 --training-seed 필수")
-        runner, meta, torch = _policy_runner(config, ckpt, training_seed, device)
+        runner, meta, torch = _policy_runner(config, ckpt, training_seed,
+                                             device, ckpt_tag)
         if meta["limiter_commit"] is not POLICY_ARMS[arm]:
             raise SystemExit(
                 f"arm={arm} 인데 ckpt/config 의 limiter_commit="
@@ -266,6 +271,9 @@ def main(argv=None) -> None:
                     help="대역 안 부분구간 시작 오프셋 (서버 병렬 샤딩)")
     ap.add_argument("--shard-n", type=int, default=None,
                     help="샤드 판수 (기본 = 대역 전체)")
+    ap.add_argument("--ckpt-tag", default="final",
+                    help="판정은 final. latest = 학습 중간 ckpt 로 평가 경로만 "
+                         "깨보는 스모크 (산출물 ckpt_tag 에 기록된다)")
     ap.add_argument("--out", required=True)
     ap.add_argument("--quiet", action="store_true")
     a = ap.parse_args(argv)
@@ -273,7 +281,8 @@ def main(argv=None) -> None:
     out = run_band(a.arm, a.episode_start, a.episodes, config=a.config,
                    ckpt=a.policy_checkpoint, training_seed=a.training_seed,
                    device=a.device, shard_offset=a.shard_offset,
-                   shard_n=a.shard_n, log=None if a.quiet else print)
+                   shard_n=a.shard_n, ckpt_tag=a.ckpt_tag,
+                   log=None if a.quiet else print)
     p = pathlib.Path(a.out)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")

@@ -79,6 +79,19 @@ python -m shepherd.scripts.analyze_ls_commit --eval-dir results/iid_abl \
     --out results/iid_abl/primary_delta_shape.json
 ```
 
+### 5.1 평가 경로 사전 스모크 (`--ckpt-tag latest`)
+
+정책 팔 평가는 `tag=final` 을 읽으므로 LS-off 경로는 5 런 완주 후에야 처음
+실행된다. 하루짜리 되돌림을 막기 위해 학습 중간 체크포인트로 경로만 미리 깬다:
+
+```bash
+python -m shepherd.scripts.eval_iid --arm ls-off --training-seed 0     --config configs/l2_mappo_nocommit.yaml     --policy-checkpoint results/m4_v3_train_LS_off/seed0 --ckpt-tag latest     --episode-start 10000 --episodes 300 --shard-n 3     --device cuda --out results/iid_smoke/ls-off_seed0_latest.json
+```
+
+**headline 대역(10000..)** 을 쓴다 — 이미 열람된 대역이라 ablation 대역
+(10300..)의 열람 0 을 유지한다. `ckpt_tag != "final"` 산출물은
+`analyze_ls_commit` 이 판정에서 거부한다 (P72h).
+
 ## 6. 미결 (열지 않은 것)
 
 - headline 대역(10000..10299) 재평가는 이 러너로 **가능**하지만 docs/63 headline
