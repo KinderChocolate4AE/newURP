@@ -20,7 +20,7 @@ import json
 import pathlib
 import subprocess
 
-__all__ = ["PROTOCOL_FILES", "PHASE_FILES", "sha256_of", "build_manifest"]
+__all__ = ["PROTOCOL_FILES", "PHASE_FILES", "sha256_of", "build_manifest", "stamp"]
 
 # 전환 계약 본체 (이 파일들의 해시가 protocol_hash 를 만든다)
 PROTOCOL_FILES = (
@@ -122,6 +122,43 @@ def build_manifest(*, in_flight: dict | None = None) -> dict:
                  "used for Phase III confirmatory classification or hypothesis "
                  "testing (docs/74)."),
     }
+
+
+# ── Phase III 산출물 스탬프 (docs/74 §0-4) ──────────────────────────────────
+JUDGE_FILES = ("shepherd/game/viability.py", "shepherd/env.py", "shepherd/env_sys.py")
+
+
+def stamp(**extra) -> dict:
+    """모든 Phase III artifact 가 실어야 하는 provenance 스탬프.
+
+    docs/74 §0-4: `protocol_hash · code_commit · judge_commit ·
+    scenario_manifest_hash · map_spec_hash · lattice_hash · generated_at`.
+    아직 존재하지 않는 항목(map_spec/lattice)은 None 으로 남기고 호출자가 채운다 --
+    **스탬프 없는 artifact 는 무효**이므로 빈 값이라도 키는 반드시 실린다.
+    """
+    import datetime
+
+    lock = pathlib.Path("artifacts/pivot_lock_2026-08-09.json")
+    protocol_hash = None
+    if lock.exists():
+        protocol_hash = json.loads(lock.read_text(encoding="utf-8")).get("protocol_hash")
+    judge = hashlib.sha256()
+    for f in JUDGE_FILES:
+        fp = pathlib.Path(f)
+        if fp.exists():
+            judge.update(fp.read_bytes())
+    out = {
+        "protocol_hash": protocol_hash,
+        "code_commit": _git("rev-parse", "HEAD"),
+        "code_dirty": bool(_git("status", "--porcelain")),
+        "judge_commit": judge.hexdigest()[:16],
+        "scenario_manifest_hash": None,
+        "map_spec_hash": None,
+        "lattice_hash": None,
+        "generated_at": datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
+    }
+    out.update(extra)
+    return out
 
 
 def main(argv=None) -> None:
