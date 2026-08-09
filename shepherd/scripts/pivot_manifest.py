@@ -54,6 +54,9 @@ PHASE_FILES = (
     "shepherd/scripts/shaping_ceiling.py",
     "results/shaping_ceiling.json",
     "results/shaping_ceiling.png",
+    # 협력 채널 분해 실측 (r3.3 — docs/74 §3.0 채널 대장이 인용하는 자료)
+    "docs/46_channel_split.md",
+    "shepherd/scripts/channel_split.py",
     # Phase I 결과 기록 (있는 것만)
     "temp_research_note/2026-08-08_ll_zero.md",
     "temp_research_note/2026-08-08_ready_for_marl.md",
@@ -86,6 +89,17 @@ def _hashes(names) -> dict:
     return out
 
 
+# ── revision 메타 (docs/74 §0-1 이 manifest 에 요구하는 필드) ────────────────
+# ★ 이전 판은 이 넷을 JSON 에 손으로 넣어 두었다 -- 스크립트가 emit 하지 않았으므로
+#   재실행하면 **조용히 소실**된다 (docs/73 §1.5 항목 6). 코드가 생성하게 옮긴다.
+#   판을 올릴 때 REVISION/SUPERSEDES 만 바꾼다. 태그는 **절대 이동시키지 않는다**.
+REVISION = "r3.3"
+SUPERSEDES = "r3.2 (PIVOT_LOCK_R32_2026-08-09, protocol_hash 069cade39836cdd1)"
+TAG_POLICY = ("Tags are never moved. Each revision gets its own tag name "
+              "(PIVOT_LOCK_R32_..., PIVOT_LOCK_R33_..., ...). docs/74 §0-2.")
+PHASE3_CELLS_GENERATED_SO_FAR = 0
+
+
 def build_manifest(*, in_flight: dict | None = None) -> dict:
     protocol = _hashes(PROTOCOL_FILES)
     # protocol_hash = 계약 파일 해시들의 해시 (이후 산출물이 이 값을 싣는다)
@@ -93,7 +107,11 @@ def build_manifest(*, in_flight: dict | None = None) -> dict:
         json.dumps(protocol, sort_keys=True).encode()).hexdigest()[:16]
     return {
         "schema": "pivot-lock-v1",
-        "lock_name": "PIVOT_LOCK_2026-08-09",
+        "lock_name": f"PIVOT_LOCK_{REVISION.upper().replace('.', '')}_2026-08-09",
+        "revision": REVISION,
+        "supersedes": SUPERSEDES,
+        "tag_policy": TAG_POLICY,
+        "phase3_cells_generated_so_far": PHASE3_CELLS_GENERATED_SO_FAR,
         "protocol_hash": protocol_hash,
         "code_commit": _git("rev-parse", "HEAD"),
         "code_dirty": bool(_git("status", "--porcelain")),

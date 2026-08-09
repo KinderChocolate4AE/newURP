@@ -182,8 +182,8 @@ def _informative(rows) -> bool:
     """0 < v < 1 인 값이 하나라도 있으면 informative (선언된 규칙)."""
     for r in rows:
         for f in ("V_hold", "V_nolim", "V_probe"):
-            v = r[f]
-            if INFORMATIVE_EPS < v < 1.0 - INFORMATIVE_EPS:
+            v = r.get(f)
+            if v is not None and INFORMATIVE_EPS < v < 1.0 - INFORMATIVE_EPS:
                 return True
     return False
 
@@ -289,7 +289,14 @@ def run_harness(episodes, *, n_grid=N_GRID, stride=STATE_STRIDE, log=print) -> d
                "pass": gate3_pass},
         verdict=("PASS -- 지도 생성 가능" if (gate2_pass and gate3_pass) else
                  "FAIL -- 지도 중단 (docs/74 §5-4 / docs/75 게이트 2·3)"),
-        **stamp(artifact="phase3_measure_harness"))
+        **stamp(artifact="phase3_measure_harness", lattice_hash=_lattice_hash()))
+
+
+def _lattice_hash() -> str | None:
+    p = pathlib.Path("artifacts/phase3/lattice_spec.json")
+    if not p.exists():
+        return None
+    return json.loads(p.read_text(encoding="utf-8")).get("lattice_hash")
 
 
 def _shares(sc: dict) -> dict:

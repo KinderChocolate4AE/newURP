@@ -1,15 +1,5 @@
 # 외부 리뷰 요청 11 — (A) 전환 봉인 문서 2 건 검증 + (B) 거대 청사진 요청
 
-> **★ 답신 도착·반영 완료 (2026-08-09).** 판정 = 요청 A 는 A1 CONDITIONAL /
-> **A2 REJECT(편향 2 건 누락)** / **A3 REJECT(선택규칙 미봉인)** / A4 CONDITIONAL /
-> A5 RATIFY(조건) / A6 CONDITIONAL / A7 CONDITIONAL / A8 RATIFY.
-> **최상위 정정: 12/18 은 URP 행정 마일스톤이지 연구 종료선이 아니다** — 시간 때문에
-> C3/C5/certificate 를 자르지 않는다.
-> 이행 = `docs/73` r1 (판정·철회·폐기) · `docs/74` r1 (봉인 전면 개정) ·
-> **`docs/75_blueprint.md` (청사진 채택본)** · `shepherd/scripts/pivot_manifest.py`.
-> 이 파일은 **요청 원문 보존용**이며 아래 내용은 답신 전 상태다 (§0 자원 제약의
-> "19주" 표현도 원문 그대로 남긴다 — 답신이 그 전제를 기각했다).
-
 > 그대로 붙여 넣어 쓴다. 리뷰어는 리포 접근이 없으므로 두 문서의 내용을 여기에
 > 옮겨 담았다. 요청은 **두 가지**다: ① 봉인이 충분한지 구멍을 찾아라
 > ② 그 위에 **19주판 + 5년판 청사진**을 설계해 달라.
@@ -23,8 +13,6 @@ docs/74 계약 하에서만 생성된다. 아래 §2~§3 이 그 내용이다.
 
 ## 0. 자원·제약 (청사진은 이 안에서 짜야 한다)
 
-- **인력**: 학부 2학년 1명(주 연구자) + 코딩 보조 AI. 상시 지도교수 없음
-  (희망 랩 컨펌 대기 중). 실험 실행·판단은 전부 1인.
 - **계산**: 랩 서버 GPU 1~2 대(현재 MARL 9 런이 점유 중, tmux). CPU 진단은 로컬 가능.
   1 MARL 런 ≈ 수 시간~24 시간. 하드웨어 실험·비행시험 **불가**.
 - **기간**: 오늘 2026-08-09. **URP 종료·보고서 마감 2026-12-18 (약 19 주).**
@@ -48,7 +36,7 @@ sense 0.10 + decide 0.05**, 포획 판정 = SE(3) 원뿔 half-angle ≈ 12.1°,
 축 밴드 [0, 8.22] m).
 
 발사 게이트: `v_shot ≥ θ_fire = 0.9`. `v_shot` = 공격자 τ-reachable **위트니스
-2000개** 중 *feasible* 한 것에서 원뿔에 포획되는 **비율**. limiter kill 구를
+2000개** 중 _feasible_ 한 것에서 원뿔에 포획되는 **비율**. limiter kill 구를
 지나는 회피 경로는 infeasible 로 빠진다 = **협력 shaping 의 유일한 물리 채널**.
 
 **Phase I 결과(커밋된 사실)**: LL(전부 학습) 무력화 **0/300**. LS(편대만 학습 +
@@ -75,6 +63,7 @@ REJECT(축소하면 가능) / desk-reject 문장 RATIFY.
 ## 2. docs/73 (판정 로그) 이행 내용
 
 **철회한 문장 4 건 → 대체 표현**
+
 1. "결정 대역 = a_att ∈ [36,39]" → "seed 0 의 선택된 스냅샷·테스트된 relaxed
    탐색에서 **문턱 교차가 관측된 이산 점들**" (연속 구간도, 실제 시스템
    feasibility band 도 아님)
@@ -90,6 +79,7 @@ REJECT(축소하면 가능) / desk-reject 문장 RATIFY.
 (종전 1 로 표기 → 수정·코드 반영·검증 완료).
 
 **채택한 재정의 (새 연구에만, 동결 블록 불변)**
+
 ```
 V_0(x)  무개입 | V_1^*(x) 1기 최적(필수 대조군) | V_N^*(x) N기 최적
 FREE               : V_0 >= theta
@@ -98,6 +88,7 @@ INFEASIBLE FOR N   : V_N^* < theta   ← certified upper bound 가 있을 때만
 NO_SOLUTION_FOUND  : 상한 없이 못 찾은 경우 (기본값)
 Delta_coop,N = V_N^* - V_1^*     W_{2:N} = { x : 2 <= N_req(x) <= N }
 ```
+
 `chi = a_att·tau^2/(2·rho_net)` 은 **free-capture analytic proxy** 로 강등.
 "필요 경계는 닫힌형" 주장 **삭제**(포획면이 등방 볼이 아니라 SE(3) 원뿔+축밴드).
 축은 raw 6 knob 대신 무차원 `chi`, `kappa = r_kill/rho`, `mu = a_lim/a_att`
@@ -123,6 +114,7 @@ solver 비교 · relaxed ↔ reachable 분리 · C5 는 3 regime × 시드 5 최
 어떤 판정에도 인용 금지. 철회 문장 4 건 사용 금지.
 
 **Phase III** 지도 계약을 결과 열람 전 고정:
+
 - **v_shot measure 고정 (착수 1)**: 위트니스 구성비·수렴(2k/8k/32k)·가중 민감도
   검증. 해석은 **(R) robust** = 수치 coverage metric + θ = robustness acceptance
   threshold, 또는 **(P) probabilistic** = reachable uncertainty 에 measure P 정의
@@ -136,6 +128,7 @@ solver 비교 · relaxed ↔ reachable 분리 · C5 는 3 regime × 시드 5 최
 - 표본: 조건당 20~30 독립 realization, 경계 adaptive refinement, 통계단위=episode.
 
 **Stage-2 (C5) confirmatory 계약 (원문 고정)**
+
 > Stage-2 operating point will be selected exclusively from the completed geometric
 > feasibility map using a deterministic rule fixed before any Stage-2 training
 > result is observed. Among certified feasible decision-band components, we choose
@@ -145,10 +138,10 @@ solver 비교 · relaxed ↔ reachable 분리 · C5 는 3 regime × 시드 5 최
 > evaluation-set generation, baselines, and the primary paired difference in
 > net-capture probability remain identical to the original contract.
 
-+ **3 regime 동시**(FREE / band 내부 / high-difficulty), 점당 시드 5 최소(8~10 권장),
-기준선 = hold · arc scripted · MARL · **reachable 1-limiter** · oracle envelope.
-**primary 결과는 점수가 아니라 interaction** (RL benefit 이 사전 예측된 envelope
-안에서만 출현하는가).
+- **3 regime 동시**(FREE / band 내부 / high-difficulty), 점당 시드 5 최소(8~10 권장),
+  기준선 = hold · arc scripted · MARL · **reachable 1-limiter** · oracle envelope.
+  **primary 결과는 점수가 아니라 interaction** (RL benefit 이 사전 예측된 envelope
+  안에서만 출현하는가).
 
 **반증조건 4**: ① 전 범위에서 `W_{2:N} = ∅` → negative systems result
 ② band 열린 셀에서도 학습 이득 0 → 지도 + 학습가능성 분리 보고로 축소
@@ -158,8 +151,8 @@ solver 비교 · relaxed ↔ reachable 분리 · C5 는 3 regime × 시드 5 최
 **논문 서술 규칙**: Phase I(null) → Phase II(post-hoc 진단) → Phase III(사전명세
 파라미터 연구) 를 본문에 명시. "requirement" 는 hardware/context anchor 확보 후에만,
 그 전엔 **design envelope / parametric requirement curve**.
-spine = *Feasibility-First Design of Cooperative Single-Shot Counter-UAS
-Interception under Deployment Latency*.
+spine = _Feasibility-First Design of Cooperative Single-Shot Counter-UAS
+Interception under Deployment Latency_.
 
 **이후 금지**: 지도 결과를 본 뒤 정의·축·measure 선언·선택규칙·반증조건 변경 /
 Phase II 를 confirmatory 로 인용 / 동결 블록 재해석.

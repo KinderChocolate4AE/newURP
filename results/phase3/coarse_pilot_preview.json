@@ -1,0 +1,1558 @@
+{
+ "contract_doc": "docs/75 게이트 11 · docs/77 [E] (coarse pilot)",
+ "declarations": "모듈 docstring 1~5 (결과 열람 전 고정)",
+ "theta": 0.9,
+ "pilot_grid": {
+  "chi": [
+   0.4,
+   0.8,
+   1.2,
+   1.6,
+   2.0
+  ],
+  "kappa": [
+   0.2,
+   0.5,
+   0.8,
+   1.1
+  ],
+  "mu": 0.4,
+  "N": [
+   1,
+   4
+  ]
+ },
+ "episodes": 1,
+ "cells": [
+  {
+   "z": {
+    "chi": 0.4,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 375,
+   "n_engaged": 12,
+   "prevalence": {
+    "p_FREE": 0.0026666666666666666,
+    "p_SINGLE": 0.0026666666666666666,
+    "p_COOP": 0.0,
+    "p_INF": 0.9893333333333333,
+    "p_AMB": 0.005333333333333333,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.08333333333333333,
+    "p_SINGLE": 0.08333333333333333,
+    "p_COOP": 0.0,
+    "p_INF": 0.6666666666666666,
+    "p_AMB": 0.16666666666666666,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 375,
+     "n_engaged": 12,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 1.0,
+   "LN_max": 1.0
+  },
+  {
+   "z": {
+    "chi": 0.4,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 375,
+   "n_engaged": 12,
+   "prevalence": {
+    "p_FREE": 0.005333333333333333,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9866666666666667,
+    "p_AMB": 0.008,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.16666666666666666,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5833333333333334,
+    "p_AMB": 0.25,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 375,
+     "n_engaged": 12,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 1.0,
+   "LN_max": 1.0
+  },
+  {
+   "z": {
+    "chi": 0.4,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 375,
+   "n_engaged": 12,
+   "prevalence": {
+    "p_FREE": 0.0026666666666666666,
+    "p_SINGLE": 0.0026666666666666666,
+    "p_COOP": 0.0,
+    "p_INF": 0.9893333333333333,
+    "p_AMB": 0.005333333333333333,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.08333333333333333,
+    "p_SINGLE": 0.08333333333333333,
+    "p_COOP": 0.0,
+    "p_INF": 0.6666666666666666,
+    "p_AMB": 0.16666666666666666,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 375,
+     "n_engaged": 12,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 1.0,
+   "LN_max": 1.0
+  },
+  {
+   "z": {
+    "chi": 0.4,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 375,
+   "n_engaged": 12,
+   "prevalence": {
+    "p_FREE": 0.005333333333333333,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9866666666666667,
+    "p_AMB": 0.008,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.16666666666666666,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5833333333333334,
+    "p_AMB": 0.25,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 375,
+     "n_engaged": 12,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 1.0,
+   "LN_max": 1.0
+  },
+  {
+   "z": {
+    "chi": 0.4,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 375,
+   "n_engaged": 12,
+   "prevalence": {
+    "p_FREE": 0.0026666666666666666,
+    "p_SINGLE": 0.0026666666666666666,
+    "p_COOP": 0.0,
+    "p_INF": 0.9893333333333333,
+    "p_AMB": 0.005333333333333333,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.08333333333333333,
+    "p_SINGLE": 0.08333333333333333,
+    "p_COOP": 0.0,
+    "p_INF": 0.6666666666666666,
+    "p_AMB": 0.16666666666666666,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 375,
+     "n_engaged": 12,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 1.0,
+   "LN_max": 1.0
+  },
+  {
+   "z": {
+    "chi": 0.4,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 375,
+   "n_engaged": 12,
+   "prevalence": {
+    "p_FREE": 0.005333333333333333,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9866666666666667,
+    "p_AMB": 0.008,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.16666666666666666,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5833333333333334,
+    "p_AMB": 0.25,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 375,
+     "n_engaged": 12,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 1.0,
+   "LN_max": 1.0
+  },
+  {
+   "z": {
+    "chi": 0.4,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 375,
+   "n_engaged": 12,
+   "prevalence": {
+    "p_FREE": 0.0026666666666666666,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9893333333333333,
+    "p_AMB": 0.008,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.08333333333333333,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.6666666666666666,
+    "p_AMB": 0.25,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 375,
+     "n_engaged": 12,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 1.0,
+   "LN_max": 1.0
+  },
+  {
+   "z": {
+    "chi": 0.4,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 375,
+   "n_engaged": 12,
+   "prevalence": {
+    "p_FREE": 0.005333333333333333,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9866666666666667,
+    "p_AMB": 0.008,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.16666666666666666,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5833333333333334,
+    "p_AMB": 0.25,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 375,
+     "n_engaged": 12,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 1.0,
+   "LN_max": 1.0
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 447,
+   "n_engaged": 72,
+   "prevalence": {
+    "p_FREE": 0.0022371364653243847,
+    "p_SINGLE": 0.0044742729306487695,
+    "p_COOP": 0.0,
+    "p_INF": 0.9530201342281879,
+    "p_AMB": 0.040268456375838924,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.013888888888888888,
+    "p_SINGLE": 0.027777777777777776,
+    "p_COOP": 0.0,
+    "p_INF": 0.7083333333333334,
+    "p_AMB": 0.25,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 447,
+     "n_engaged": 72,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 0.9029552715654952,
+   "LN_max": 0.9451765946230891
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 13,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9865951742627346,
+    "p_AMB": 0.013404825737265416,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.6153846153846154,
+    "p_AMB": 0.38461538461538464,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.7068690095846646,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 447,
+   "n_engaged": 72,
+   "prevalence": {
+    "p_FREE": 0.0022371364653243847,
+    "p_SINGLE": 0.0044742729306487695,
+    "p_COOP": 0.0,
+    "p_INF": 0.9530201342281879,
+    "p_AMB": 0.040268456375838924,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.013888888888888888,
+    "p_SINGLE": 0.027777777777777776,
+    "p_COOP": 0.0,
+    "p_INF": 0.7083333333333334,
+    "p_AMB": 0.25,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 447,
+     "n_engaged": 72,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 0.9029552715654952,
+   "LN_max": 0.9494747373686844
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 13,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9865951742627346,
+    "p_AMB": 0.013404825737265416,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.6153846153846154,
+    "p_AMB": 0.38461538461538464,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.7060702875399361,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 447,
+   "n_engaged": 72,
+   "prevalence": {
+    "p_FREE": 0.0022371364653243847,
+    "p_SINGLE": 0.0044742729306487695,
+    "p_COOP": 0.0,
+    "p_INF": 0.9530201342281879,
+    "p_AMB": 0.040268456375838924,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.013888888888888888,
+    "p_SINGLE": 0.027777777777777776,
+    "p_COOP": 0.0,
+    "p_INF": 0.7083333333333334,
+    "p_AMB": 0.25,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 447,
+     "n_engaged": 72,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 0.9029552715654952,
+   "LN_max": 0.9452887537993921
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 13,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9865951742627346,
+    "p_AMB": 0.013404825737265416,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.6153846153846154,
+    "p_AMB": 0.38461538461538464,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.7052715654952076,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 447,
+   "n_engaged": 72,
+   "prevalence": {
+    "p_FREE": 0.0022371364653243847,
+    "p_SINGLE": 0.0044742729306487695,
+    "p_COOP": 0.0,
+    "p_INF": 0.9530201342281879,
+    "p_AMB": 0.040268456375838924,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.013888888888888888,
+    "p_SINGLE": 0.027777777777777776,
+    "p_COOP": 0.0,
+    "p_INF": 0.7083333333333334,
+    "p_AMB": 0.25,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 447,
+     "n_engaged": 72,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 0.9029552715654952,
+   "LN_max": 0.9378084896347483
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 13,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9865951742627346,
+    "p_AMB": 0.013404825737265416,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.6153846153846154,
+    "p_AMB": 0.38461538461538464,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.7048722044728435,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 419,
+   "n_engaged": 59,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9665871121718377,
+    "p_AMB": 0.03341288782816229,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.7627118644067796,
+    "p_AMB": 0.23728813559322035,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 419,
+     "n_engaged": 59,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.4968051118210863,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 14,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9839142091152815,
+    "p_AMB": 0.0160857908847185,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5714285714285714,
+    "p_AMB": 0.42857142857142855,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 14,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.26198083067092653,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 419,
+   "n_engaged": 59,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.964200477326969,
+    "p_AMB": 0.03579952267303103,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.7457627118644068,
+    "p_AMB": 0.2542372881355932,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 419,
+     "n_engaged": 59,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.4968051118210863,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 14,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9839142091152815,
+    "p_AMB": 0.0160857908847185,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5714285714285714,
+    "p_AMB": 0.42857142857142855,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 14,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.2615814696485623,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 419,
+   "n_engaged": 59,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9594272076372315,
+    "p_AMB": 0.0405727923627685,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.711864406779661,
+    "p_AMB": 0.288135593220339,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 419,
+     "n_engaged": 59,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.4968051118210863,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 14,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9839142091152815,
+    "p_AMB": 0.0160857908847185,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5714285714285714,
+    "p_AMB": 0.42857142857142855,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 14,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.2615814696485623,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 419,
+   "n_engaged": 59,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9570405727923628,
+    "p_AMB": 0.04295942720763723,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.6949152542372882,
+    "p_AMB": 0.3050847457627119,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 419,
+     "n_engaged": 59,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.4968051118210863,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 14,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9839142091152815,
+    "p_AMB": 0.0160857908847185,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5714285714285714,
+    "p_AMB": 0.42857142857142855,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 14,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.2615814696485623,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 392,
+   "n_engaged": 33,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9821428571428571,
+    "p_AMB": 0.017857142857142856,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.7878787878787878,
+    "p_AMB": 0.21212121212121213,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 392,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.1785143769968051,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 14,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9839142091152815,
+    "p_AMB": 0.0160857908847185,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5714285714285714,
+    "p_AMB": 0.42857142857142855,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 14,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.11421725239616613,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 392,
+   "n_engaged": 33,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9795918367346939,
+    "p_AMB": 0.02040816326530612,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.7575757575757576,
+    "p_AMB": 0.24242424242424243,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 392,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.1785143769968051,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 14,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9839142091152815,
+    "p_AMB": 0.0160857908847185,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5714285714285714,
+    "p_AMB": 0.42857142857142855,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 14,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.1134185303514377,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 392,
+   "n_engaged": 33,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9770408163265306,
+    "p_AMB": 0.02295918367346939,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.7272727272727273,
+    "p_AMB": 0.2727272727272727,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 392,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.1785143769968051,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 14,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9839142091152815,
+    "p_AMB": 0.0160857908847185,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5714285714285714,
+    "p_AMB": 0.42857142857142855,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 14,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.11381789137380191,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.6,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 392,
+   "n_engaged": 33,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9770408163265306,
+    "p_AMB": 0.02295918367346939,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.7272727272727273,
+    "p_AMB": 0.2727272727272727,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 392,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.1785143769968051,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.6,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 373,
+   "n_engaged": 14,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9839142091152815,
+    "p_AMB": 0.0160857908847185,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5714285714285714,
+    "p_AMB": 0.42857142857142855,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 14,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.11421725239616613,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 2.0,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 390,
+   "n_engaged": 31,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9846153846153847,
+    "p_AMB": 0.015384615384615385,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.8064516129032258,
+    "p_AMB": 0.1935483870967742,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 390,
+     "n_engaged": 31,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.08985623003194888,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 2.0,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 374,
+   "n_engaged": 15,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9812834224598931,
+    "p_AMB": 0.01871657754010695,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5333333333333333,
+    "p_AMB": 0.4666666666666667,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 374,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.03154952076677316,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 2.0,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 390,
+   "n_engaged": 31,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9846153846153847,
+    "p_AMB": 0.015384615384615385,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.8064516129032258,
+    "p_AMB": 0.1935483870967742,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 390,
+     "n_engaged": 31,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.08985623003194888,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 2.0,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 374,
+   "n_engaged": 15,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9812834224598931,
+    "p_AMB": 0.01871657754010695,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5333333333333333,
+    "p_AMB": 0.4666666666666667,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 374,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.03154952076677316,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 2.0,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 390,
+   "n_engaged": 31,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.982051282051282,
+    "p_AMB": 0.017948717948717947,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.7741935483870968,
+    "p_AMB": 0.22580645161290322,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 390,
+     "n_engaged": 31,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.08985623003194888,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 2.0,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 374,
+   "n_engaged": 15,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9812834224598931,
+    "p_AMB": 0.01871657754010695,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5333333333333333,
+    "p_AMB": 0.4666666666666667,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 374,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.03154952076677316,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 2.0,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 390,
+   "n_engaged": 31,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9794871794871794,
+    "p_AMB": 0.020512820512820513,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.7419354838709677,
+    "p_AMB": 0.25806451612903225,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 390,
+     "n_engaged": 31,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.08985623003194888,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 2.0,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 374,
+   "n_engaged": 15,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9812834224598931,
+    "p_AMB": 0.01871657754010695,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5333333333333333,
+    "p_AMB": 0.4666666666666667,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 374,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.03154952076677316,
+   "LN_max": 0.0
+  }
+ ],
+ "note": "p_COOP = 0 은 구조적(도구 한계 — U^rel_{<=1} 은 게이트 7). coop_candidate 를 참조. 단일 색 지도 금지 (docs/77 [E]).",
+ "protocol_hash": "e69dab93fb712694",
+ "code_commit": "993cc5b7ab53854b8581afdf243bb5f01a298863",
+ "code_dirty": true,
+ "judge_commit": "73d3325a7cd52ded",
+ "scenario_manifest_hash": null,
+ "map_spec_hash": null,
+ "lattice_hash": "bd9ffa741d7b79ee",
+ "generated_at": "2026-08-09T19:31:18+09:00",
+ "artifact": "phase3_coarse_pilot"
+}

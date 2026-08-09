@@ -90,6 +90,27 @@ r0 §8 의 "19주 축소 일정" 은 폐기하고 `docs/75_blueprint.md` 의 **�
 | 10 | 73 §7 C5 요약이 구버전 | `B_N`·`Gamma`·LOCAL 용어·동일 N/θ 로 동기화. **N=1 은 secondary** 명시 |
 | 11 | Phase I primary 와 null 문구 불일치 | docs/63 r2 primary = **overall paired Δ_net** 확인 → 인용문을 **"did not support the preregistered superiority claim on the paired net-capture endpoint"** 로 교체 |
 
+### 1.5 자체 감사 (2026-08-09b) — **r3.3**. 외부 리뷰 아님, docs/76 조사 중 발견
+
+docs/76 선행연구 조사에서 "협력 채널이 kill-sphere removal 하나뿐" 이라는 자기서술의
+근거를 확인하다가 **`docs/46_channel_split.md` (2026-08-01) 를 재발견**했다. 그 문서는
+채널을 이미 **분리 계측**해 두었고, 결론이 현 계약 문구와 **충돌**했다.
+
+| # | 발견 | 판정 | 이행 (docs/74 r3.3) |
+|---|---|---|---|
+| 1 | docs/75 §7 · docs/74 §3.0 의 "협력 채널 하나뿐" 이 **사실과 다르다.** docs/46 이 채널 3 종을 계측했다 (봉쇄 / 횡압 / 체류) | **부정확 — 교체** | §3.0 을 **채널 대장**으로 교체. 정확한 진술 = "fixed-state certificate 가 정의상 채널 (i) 만 측정한다" (**항등식**: `V^rel_{<=N} − V_0` ≡ docs/46 의 채널 (i) 을 배치 최적화한 값) |
+| 2 | 우리가 certificate 를 세운 채널 (i) 이 **선언 운용점 `r_kill=0.75` 에서 Δbest = 0.0000** 으로 실측됐다 | **중대 — 그러나 kill 아님** | docs/46 은 **손튜닝 배치**(hold/ring)로 쟀고 Phase III 는 **배치를 최적화**한다. 또 `kappa` 가 core 축이다 → §3.0.3 에 **사전 예측**(낮은 `kappa` `p_INF` 지배 / 높은 `kappa` 에서 발현)을 셀 생성 전에 기록 |
+| 3 | 채널 (ii) 횡압이 **실측 음수**다 (`v⊥` 0.44→7.27, `ψ` 0.6°→28°, 평균 `v_shot` 0.394→0.036, ring 이 24 판 중 20 판 패) | **계약에 반영** | (a) `L^ctrl < L^reach` 가 **정상**임을 §3.3 에 명시 — 층 분리의 *물리적* 근거 (종전엔 규칙 선언뿐) · (b) §7 에 "이 관측을 `L^reach` 버그로 처리 금지" 추가 |
+| 4 | `U^rel_{<=N} < θ` 를 채널 한정 없이 산문으로 쓰면 **docs/46 실측과 자가모순** | **금지 규칙 신설** | §3.4 채널 상속 규칙 + §5-1B 문구에 `via the static blockade channel` 강제 + §7 금지 문장 4 종. 라벨 개명은 **기각**(churn) 하고 **5 군데 중복 배치**로 대체 (항목 7 의 "조용히 실패" 재발 방지) |
+| 5 | docs/46 §4.2 가 **결과 전에** 학습 목표·실패기준을 선언해 두었는데 Phase III 계약에 배선돼 있지 않았다 | **승계** | §4.4 에 `secondary (channel)` 신설 — `ch_i` / `ch_ii` / `dwell` 을 regime 별 병기. **판정 사용 금지**, `v_shot` 기준과 `p_net` 기준 `Gamma` 를 합치지 않는다 |
+| 6 | `pivot_manifest.py` 가 `revision`·`tag_policy`·`supersedes`·`phase3_cells_generated_so_far` 를 **emit 하지 않는데 JSON 에는 있다** → 재실행 시 **조용히 소실** | **코드 버그 — 수정** | 스크립트가 네 필드를 생성하도록 수정 + `docs/46`·`channel_split.py` 를 `PHASE_FILES` 에 추가 (채널 증거가 이제 계약이 인용하는 자료) |
+
+**성격**: 전부 **Phase III 셀 0 개 상태**에서의 정정이다 (`phase3_cells_generated_so_far = 0`).
+결과를 보고 정의를 바꾼 것이 아니라 **결과 생성 전에 자기서술을 자료와 일치시킨 것**이다.
+방향성 자기점검: 항목 2 는 **우리에게 불리한** 발견이고 (certificate 채널이 선언점에서 0),
+그것을 숨기지 않고 사전 예측으로 등재했다 — 유리한 방향의 변경이 아니므로 선언 위험 없음
+(docs/46 §5 규율과 동일 기준).
+
 ## 2. 즉시 철회하는 문장 3건 + 1 (오늘 기록에서 하향)
 
 | 철회 | 대체 표현 |
@@ -213,7 +234,7 @@ parametric requirement curve** 로 표기), (v) latency/noise spot-check.
 | 경우 | 지지 조건 | 허용되는 주장 |
 |---|---|---|
 | **A. single-agent sufficiency** | `V_0 < theta <= L^reach_{<=1,clean}` 가 지배적이고 COOP 부재 | "No certified need for multi-agent interdiction was found; all certified feasible non-FREE cells were single-agent sufficient." (AMBIGUOUS 에 대해서는 **침묵**) |
-| **B. local mechanism infeasibility** | `U^rel_{<=N} < theta` 가 광범위 | "even N cooperative limiters cannot establish the **local** firing condition" (A 와 다른 결론) |
+| **B. local mechanism infeasibility** | `U^rel_{<=N} < theta` 가 광범위 | "even N cooperative limiters cannot establish the **local** firing condition **via the static blockade channel**" (A 와 다른 결론). **채널 한정 필수 — r3.3.** 빼면 docs/46 실측 채널 (ii)·(iii) 과 자가모순 |
 | **C. unresolved certificate gap** | AMBIGUOUS prevalence 가 높음 | **결론 없음. negative claim 금지** |
 
 negative claim 은 **해당 bound 가 직접 지지하는 경우에만** 한다.

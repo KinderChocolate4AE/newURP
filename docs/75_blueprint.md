@@ -211,8 +211,13 @@ feasibility analysis 가 필요하다** + prospective study 진행 중.
 | **P5** | 6DOF + hardware/HIL | model hierarchy + sim-to-real | P2/P4 | robotics systems | 대학원 |
 
 - **α optimal stopping** → **P3**. 지금 넣으면 P1 의 질문이 퍼진다.
-- **β sensing/aim latency 협력** → **P4, 강하게 추천**. 현재 협력 채널이 kill-sphere
-  removal 하나뿐인 것이 인공적 위험이므로, 정보적 협력으로 가면 robotics/MARL relevance 가 커진다.
+- **β sensing/aim latency 협력** → **P4, 강하게 추천**.
+  **(r3.3 정정 — 종전 문구 "현재 협력 채널이 kill-sphere removal 하나뿐" 은 사실과
+  다르다.)** docs/46 실측 기준 시스템에는 협력 채널이 **셋** 있다 — (i) 봉쇄 ·
+  (ii) 횡압(실측 **음수**) · (iii) 체류(6배). 정확한 진술은 **"fixed-state certificate 가
+  정의상 채널 (i) 만 측정한다"** 이다 (docs/74 §3.0). β 를 P4 로 미는 이유는 채널 부족이
+  아니라, **(iv) 정보 채널만이 실제로 미구현**이고 그것이 robotics/MARL relevance 를
+  키우기 때문이다.
 - **γ multi-shot/reload** → 독립 우선순위 낮음. P3 의 finite-ammunition 에 흡수.
   질적으로 다른 cooperative allocation 문제를 만들면 독립 가능.
 - **δ SE(3)/6DOF/hardware** → P1 직후 아님. **P2/P3 의 algorithmic 기여 이후.**
@@ -260,6 +265,8 @@ feasibility analysis 가 필요하다** + prospective study 진행 중.
 | certificate gap 이 안 닫힘 | `L^reach_{<=N} << theta << U^rel_{<=N}` 인 AMBIGUOUS 셀만 가득 = 분기 ①-C | 더 정교한 최적화가 아니라 **문제 정의 단순화**. negative claim 금지 |
 | realism 넣으면 topology 반전 | jitter/noise/lag 에서 협력 band 소멸 | **"requirement" 언어 금지** |
 | 연구가 코드 수리 프로젝트가 됨 | central figure 가 안 생기는데 reward·COMA·entropy·MAPPO head·scripted baseline 만 만지고 있음 | **즉시 경보** — §0 하나로 복귀 |
+| **채널 (i) 이 `kappa` 전 구간에서 죽어 있음** (r3.3) | docs/46 실측: 선언 `r_kill=0.75` 에서 `Δbest = 0.0000`. **coarse pilot 에서 높은 `kappa` 에서도 `p_COOP·p_SINGLE ≈ 0`** 이면 certificate 가 붙잡을 신호 자체가 없다 | 분기 ①-B 로 가되 **반드시 채널 한정**해서 보고 (docs/74 §5-1B). 이때의 결과물은 **"차단 채널의 세기(`kappa`)를 키워도 발사조건이 서지 않는다"** 는 design requirement curve — negative 지만 실재하는 결과 |
+| **결과가 채널 (ii) 부호에 지배됨** (r3.3) | `L^ctrl << L^reach` 가 광범위 · C5 에서 `ch_ii` (조준오차) 가 regime 무관하게 큼 | 분기 ② (`physical feasibility != learnability`) 로 보고. **"MARL 이 못 배웠다" 가 아니라 "협력의 지배적 채널이 구조적으로 조준을 깨뜨린다"** 가 결론 → Paper 2 (certificate-guided control) 의 문제 정의가 된다 |
 
 ## 12. 자기기만 감시 2 건 (docs/73 §6.2 와 동일 — 상시 게시)
 

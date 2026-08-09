@@ -1,11 +1,13 @@
-# 74 — PIVOT PROTOCOL r3.2 (전환 기록·봉인) — 2026-08-09
+# 74 — PIVOT PROTOCOL r3.3 (전환 기록·봉인) — 2026-08-09
 
 **r0 = 리뷰 10 이행 · r1 = 리뷰 11 (A1~A8) · r2 = 리뷰 12 (논리 오류 2 건) ·
-r3 = 리뷰 13 의 blocker 5 + leak 6~14 · **r3.2 = 리뷰 15 최종 체크리스트 11 항
+r3 = 리뷰 13 의 blocker 5 + leak 6~14 · r3.2 = 리뷰 15 최종 체크리스트 11 항
 (stride false-negative · Stage-2 θ 고정 · same-N matched · joint trajectory feasibility ·
-cell = label prevalence · m 이중계산 제거 · Phase I 문구 정합)**. 이 문서는 Phase III 지도 셀을
+cell = label prevalence · m 이중계산 제거 · Phase I 문구 정합) ·
+**r3.3 = 협력 채널 scope 선언 (§3.0 신설) — docs/46 실측 채널 분해를 계약에 배선하고
+모든 fixed-state 량이 *차단 채널* 량임을 명시**. 이 문서는 Phase III 지도 셀을
 **한 칸도 생성하지 않은 상태**에서 작성·개정됐다 (`phase3_cells_generated_so_far = 0`).
-따라서 r1~r3 의 교정은 골대 이동이 아니라 **결과 생성 전 계약 정의 작업**이다
+따라서 r1~r3.3 의 교정은 골대 이동이 아니라 **결과 생성 전 계약 정의 작업**이다
 (감사 이력 = §0.1).**
 
 **★ 최상위 정정 (r1)**: `2026-12-18` 은 URP 행정 마일스톤이며 연구 종료선이 아니다.
@@ -53,9 +55,11 @@ cell = label prevalence · m 이중계산 제거 · Phase I 문구 정합)**. �
 | r0 | 리뷰 10 | 최초 봉인 | (manifest 이전) |
 | r1 | 리뷰 11 A1~A8 | 감사장치 · 정의 층분리 · Stage-2 규칙 교체 | `ef9cd4781a095072` |
 | r2 | 리뷰 12 | 논리 오류 2 (sandwich 혼합 · `W=∅` 해석) + 라벨 상호배타 + Δ 층별화 | `cb038ee2a2a05892` |
-| **r3** | **리뷰 13** | **blocker 5 (L^reach 알고리즘 · C_N 집계 · not-boxed · lattice · interaction estimand) + leak 6~14** | 아래 manifest |
+| **r3** | **리뷰 13** | **blocker 5 (L^reach 알고리즘 · C_N 집계 · not-boxed · lattice · interaction estimand) + leak 6~14** | (r3 manifest) |
+| r3.2 | 리뷰 15 | 최종 체크리스트 11 항 (stride 금지 · θ_S2 고정 · same-N · joint feasibility · label prevalence · m=1) | `069cade39836cdd1` |
+| **r3.3** | **자체 감사 (docs/76 선행연구 조사 중 docs/46 재발견)** | **협력 채널 scope 선언 §3.0 정밀화 — 측정된 채널 3 종 대장, fixed-state 량의 채널 귀속 명시, negative claim 에 채널 한정 강제, docs/46 §4.2 사전선언을 Stage-2 secondary 로 승계** | 아래 manifest |
 
-r0~r2 의 manifest·태그는 삭제하지 않는다. **Phase III 셀은 전 구간에서 0 개.**
+r0~r3.2 의 manifest·태그는 삭제하지 않는다. **Phase III 셀은 전 구간에서 0 개.**
 
 ## 1. Phase I — 원 spine 과 결과 (변경 금지·소급 재해석 금지)
 
@@ -91,6 +95,65 @@ r0~r2 의 manifest·태그는 삭제하지 않는다. **Phase III 셀은 전 구
 ---
 
 # 3. Phase III — 정의·계약 (결과 열람 전 고정)
+
+## 3.0 협력 채널 scope 선언 (셀 생성 전 고정 — docs/77 [B], r3.3 정밀화)
+
+**r3.3 정정**: 이전 문구 "협력 채널은 **하나**" 는 부정확했다. 시스템에는 협력 채널이
+**최소 셋** 있고 **셋 다 이미 계측됐다** (`docs/46_channel_split.md`, 2026-08-01,
+`shepherd/scripts/channel_split.py`). 정확한 진술은 —
+
+> **fixed-state certificate 는 정의상 채널 (i) 만 측정한다.**
+
+이건 근사가 아니라 **항등식**이다. docs/46 의 채널 (i) 정의는 *"같은 상태·같은 CRN seed 에서
+limiter 유/무로 `v_shot` 을 두 번 호출한 차이"* 이고, `V^rel_{<=N}(e,t) − V_0(e,t)` 는
+**그것을 배치에 대해 최적화한 값**이다. 상태를 고정하는 순간 (ii)·(iii) 은 원리적으로
+측정 불가능하다 — 둘 다 공격자가 시간에 걸쳐 반응해야 발생하는 효과이므로.
+
+### 3.0.1 협력 채널 대장 (measured — docs/46)
+
+| 채널 | 기전 | docs/46 실측 | 부호 | fixed-state (§3.3 sandwich) | 4B closed-loop | C5 MARL |
+|---|---|---|---|---|---|---|
+| **(i) 봉쇄 blockade** | kill-sphere 가 공격자 도달 가속집합에서 탈출 방향을 제거 | 선언 `r_kill=0.75` 에서 **Δbest = 0.0000** (차단률 중앙값 0) · `r_kill=3.0` hold 에서 **+0.0101** | + | **credit — 이것만** | credit | credit |
+| **(ii) 횡압 lateral push** | 반응형 공격자가 옆으로 밀리며 `v⊥`·조준오차 증가 | `v⊥` 0.44→**7.27 m/s** · `ψ` 0.6°→**28°** · 평균 `v_shot` 0.394→**0.036** | **−** | **측정 불가** (상태 고정) | credit | credit |
+| **(iii) 체류 dwell** | 공격자를 발사 밴드 안에 오래 붙잡음 | 밴드 체류 9→**55 스텝 (6배)** | + (원리상) | **측정 불가** (시간 고정) | credit | credit |
+| (iv) 정보 information | 조준/감지 지연 단축 | **미구현** | — | 없음 | 없음 | 없음 (docs/75 §7 P4) |
+
+**채널 (i) 은 단조롭지 않다**: 과봉쇄로 `n_feasible = 0` 이 되면 `boxed_in` 이 서고
+`g_theta = 0` (clean fire 금지) 이다 (§3.2). 즉 containment 는 **의도적으로 성공으로
+치지 않는다** — 이것도 scope 선언이며, 논문에 명시한다.
+
+### 3.0.2 계약에 미치는 귀결 (4 항)
+
+1. **sandwich 전체가 blockade-channel 량이다.** `V_0 · V^rel · V^reach ·
+   L^reach_{<=N,clean} · U^rel` 은 전부 채널 (i) 에 대한 값이다.
+2. **`L^reach` 는 협력 가치의 보수적 하한이다.** (ii)·(iii) 을 credit 하지 않으므로
+   실제 시스템이 달성 가능한 값보다 낮다 → **COOP certificate
+   `U^rel_{<=1} < θ <= L^reach_{<=N,clean}` 는 그대로 sound 하며 오히려 강해진다.**
+3. **`U^rel_{<=N} < θ` 는 closed-loop 불가능을 함의하지 않는다.** 채널 (i) 에 대한
+   상한일 뿐이다. → `LOCAL` 한정이 필요한 **두 번째 이유**이며, 여기에 **채널 한정**도
+   필요하다 (§3.4·§5·§6·§7).
+4. **`L^ctrl < L^reach` 가 정상적으로 발생할 수 있다.** 채널 (ii) 가 실측 음수이므로
+   (i)+(ii)+(iii) 의 합이 (i) 단독보다 나쁠 수 있다. 이것이 §3.3 "순서관계 주장 금지" 의
+   **물리적 근거**다 (종전엔 규칙으로만 선언했다).
+
+### 3.0.3 사전 예측 (셀 생성 전 기록 — 사후 합리화 방지)
+
+docs/46 은 채널 (i) 이 `r_kill≈0.75` 에서 0, `≈3.0` 에서 발현된다고 계측했다.
+`kappa = r_kill/rho` 가 core 축이므로 **지도는 `kappa` 축을 따라 구조를 가질 것으로
+예측한다** — 낮은 `kappa` 에서 `p_INF` 지배, 높은 `kappa` 에서 `p_COOP`/`p_SINGLE` 출현.
+이 예측이 빗나가도 정의·축·판정식은 바꾸지 않는다 (§7). **채널이 켜지는 `kappa` 좌표가
+곧 kill radius 에 대한 model-conditional design requirement curve 다.**
+
+### 3.0.4 읽는 법 (강제)
+
+COOP 셀 부재는 **"협력이 불가능하다" 가 아니라 "차단 채널에서 협력이 certifiably
+필요한 영역이 없다"** 로만 읽는다. 채널이 셋인 것은 결과가 아니라 **시스템의 사실**이고,
+certificate 가 하나만 보는 것은 **scope 선언**이다. (결과 후에 붙이면 변명이 된다 —
+셀 생성 전에 넣는다.)
+
+부분 실증 가능 범위: `kappa` 가 core 축이므로 **"채널을 강화해도 안 열린다"** 는 보일 수
+있다 — 채널의 *종류*가 아니라 *세기*에 대한 강건성이다. 채널 *종류*에 대한 일반화는
+**할 수 없다**.
 
 ## 3.1 reference encounter 와 시간축 (blocker 1·2 — `T_s` 모호성 제거)
 
@@ -161,7 +224,13 @@ L^ctrl_{<=N}(x0; pi_c)    반응형 attacker 가 있는 원 환경에서 명시�
                           달성한 값. **U^rel 과의 순서관계 주장 금지.**
 ```
 
-## 3.4 라벨 (상호배타 · **LOCAL** 명시 — leak 12)
+**채널 귀속 (r3.3 — §3.0.2)**: 위 fixed-state 량 `V_0 · V^rel · V^reach · L^reach · U^rel`
+은 **전부 채널 (i) 봉쇄** 에 대한 값이다. `L^ctrl` 만이 (i)+(ii)+(iii) 을 함께 반영한다.
+docs/46 이 채널 (ii) 를 **음수**로 실측했으므로 `L^ctrl < L^reach` 는 정상적으로 발생할 수
+있다 — 이것이 두 층을 하나의 sandwich 로 섞지 않는 **물리적 근거**다 (종전엔 규칙으로만
+선언했다). `L^ctrl < L^reach` 관측을 `L^reach` 계산의 버그 신호로 읽지 않는다.
+
+## 3.4 라벨 (상호배타 · **LOCAL** 명시 — leak 12 · **채널 상속** r3.3)
 
 ```
 FREE                            : V_0 >= theta
@@ -182,6 +251,24 @@ W_{2:N} = { (e,t) : N_req in [2,N] }   (UNRESOLVED 불포함)
 **LOCAL 을 붙이는 이유**: `U^rel_{<=1}(e,t) < theta` 는 *"이 상태의 static shaping
 문제를 1 기로 못 푼다"* 이고, *"어떤 1-agent closed-loop 정책도 이 에피소드를 못 푼다"*
 가 아니다. 이 구분이 논문의 핵심 방어선이다.
+
+**채널 상속 (r3.3 — 라벨 이름을 늘리지 않는 대신 강제 규칙으로 둔다)**: 위 라벨은 전부
+§3.0 의 **채널 (i) 봉쇄 scope** 를 상속한다. 라벨을 **산문으로 옮기는 순간 채널 한정을
+반드시 함께 쓴다.**
+
+```
+LOCAL-INFEASIBLE-N  를 문장으로 쓸 때:
+  ✅ "even N cooperative limiters cannot establish the local firing condition
+      **via the static blockade channel**"
+  ❌ "N 기로는 불가능하다"            (채널·상태 한정 둘 다 누락)
+  ❌ "협력이 불가능하다"               (금지 — §7)
+```
+
+**명명 결정 기록**: `LOCAL-BLOCKADE-INFEASIBLE-N` 으로 개명하는 안을 검토했으나
+**기각**했다 — 이름 길이와 문서·코드 교차참조 churn 대비 이득이 작다. 대신 (a) 정의부
+§3.0, (b) 이 상속 규칙, (c) §5 분기 문구, (d) §6 서술 규칙, (e) §7 금지문장의 **다섯
+군데에 중복 배치**해 한 곳이 조용히 실패해도 남게 했다 (r2 패치가 조용히 실패한 전례 —
+docs/73 §1.4 항목 7).
 
 **핵심 한 줄**: `U^rel_{<=1} < theta <= L^reach_{<=N,clean}` — 왼쪽은 1 기를 이상적으로
 배치해도 안 된다는 상한 certificate, 오른쪽은 실제 도달 가능하고 clean 한 N 기 배치가
@@ -382,6 +469,28 @@ secondary (mechanistic) : p_net^{N} - p_net^{1}    (N=1 대조)
 arc scripted(historical) · `B_N` · **reachable 1-limiter** · oracle `U^rel` envelope.
 0 카운트는 binomial 상한 병기. 지도 경계에도 bootstrap band.
 
+**secondary (channel) — docs/46 §4.2 사전선언 승계 (r3.3)**
+
+docs/46 §4.2 는 **결과를 보기 전에** 학습 목표와 실패 기준을 선언해 두었다. 그 선언을
+Phase III Stage-2 의 **기전 secondary** 로 그대로 승계한다 (재선언이 아니라 승계 —
+원문 날짜 2026-08-01).
+
+```
+ch_i (e,t)  = v_shot(with limiters) - v_shot(no limiters)     동일 (e,t) · 동일 CRN seed
+              (= 채널 (i) 봉쇄 이득. shepherd/scripts/channel_split.py 의 d_cut)
+              boxed_in 스텝은 평균에서 제외한다 (docs/46 §1 규율).
+ch_ii       = psi (finisher 조준 오차) · v_perp — 짝지은 롤아웃에서 hold 대비
+              (= 채널 (ii) 횡압 손실)
+dwell       = 발사 밴드 내 체류 스텝 수                        (= 채널 (iii))
+
+보고 형식   세 값을 regime 별로 **함께** 보고한다. 협력 이득의 부호가 어느 채널에서
+            왔는지 분해되지 않으면 Gamma 의 해석이 불가능하다.
+```
+> **판정 사용 금지**: 위 세 값은 **기술 통계·기전 해석 전용**이며 primary `Gamma` 판정에
+> 넣지 않는다. docs/46 §4.2 의 "hold 대비 최선·평균을 둘 다 개선 못하면 협력 순이득
+> 없음" 기준은 **`v_shot` 위에서 선언된 docs/46 의 기준**이고, Phase III primary 는
+> `p_net` 위의 `Gamma` 다. **두 기준을 합치거나 유리한 쪽을 골라 쓰지 않는다.**
+
 **primary 는 하나다** (`Gamma`). Phase I 의 평가 계약(대역 생성·paired 구조·p_net
 정의)은 유지하되 Phase III 의 hypothesis test 는 이 estimand 다.
 
@@ -394,7 +503,9 @@ arc scripted(historical) · `B_N` · **reachable 1-limiter** · oracle `U^rel` e
    **(A) single-agent sufficiency** (`V_0 < theta <= L^reach_{<=1,clean}` 지배 + coop
    셀 부재) → "no certified need for multi-agent interdiction" ·
    **(B) local mechanism infeasibility** (`U^rel_{<=N} < theta` 광범위) → "even N
-   cooperative limiters cannot establish the local firing condition" ·
+   cooperative limiters cannot establish the local firing condition **via the static
+   blockade channel**" (**채널 한정 필수 — r3.3 §3.0.2-3.** 이 한정을 빼면 docs/46 이
+   실측한 채널 (ii)·(iii) 의 존재와 **우리 자신의 자료가 모순된다**) ·
    **(C) unresolved certificate gap** (AMBIGUOUS 다수) → **결론 없음, negative claim
    금지.** A/B 에서만 negative-result 논문으로 분기하고 협력 C5 를 취소한다.
 2. band 는 열리는데 MARL 이득 0 (`LCB95(Gamma) <= 0`) → `local feasibility !=
@@ -434,6 +545,19 @@ Phase III 성공 시에도 "Phase I null 의 원인이 증명됐다" 로 쓰지 
 용어는 **local certified cooperative opportunity** 를 쓴다 (LOCAL 생략 금지).
 "requirement" 는 hardware/context anchor 확보 후에만, 그 전엔 **model-conditional
 design envelope / parametric requirement curve**.
+
+**채널 서술 규칙 (r3.3)**: 논문은 **협력 채널 분해를 방어가 아니라 기여로** 제시한다.
+
+> We decompose cooperative influence on the firing condition into a **static blockade
+> channel**, a **lateral-push channel** that degrades the shooter's aim, and a **dwell
+> channel**, and we measure all three (docs/46). The fixed-state certificate is exact
+> for the blockade channel and, by construction, blind to the other two. Consequently
+> our constructive lower bound is **conservative** with respect to cooperative value,
+> while our upper certificate bounds **only** the blockade channel.
+
+`certificate 가 채널 하나만 본다` 는 사실을 **먼저 우리가** 말한다. 리뷰어가 먼저
+말하면 한계이고, 우리가 먼저 말하면 설계다.
+
 spine = *Feasibility-First Design of Cooperative Single-Shot Counter-UAS
 Interception under Deployment Latency*.
 
@@ -449,3 +573,11 @@ Interception under Deployment Latency*.
 - 시간(12/18) 을 이유로 certificate·표본 수·robustness bar 를 낮추는 것.
 - `L^ctrl` 을 fixed-state sandwich 에 넣는 것 / `L^reach` 를 closed-loop rollout 으로
   대체하는 것 (blocker 1 재발).
+- **채널 한정 없이 negative claim 을 하는 것 (r3.3)**. 금지 문장 —
+  "협력이 불가능하다" · "N 기로는 불가능하다" · "cooperation provides no advantage" ·
+  "협력 채널은 하나뿐이다". `U^rel_{<=N} < theta` 가 지지하는 것은 **차단 채널에 한한
+  local 불가능**뿐이다 (§3.0.2-3 · §3.4 · §5-1B).
+- **`L^ctrl < L^reach` 관측을 `L^reach` 의 버그로 처리하는 것** — 채널 (ii) 가 음수인
+  이상 정상 현상이다 (§3.3 채널 귀속).
+- docs/46 §4.2 의 `v_shot` 기준과 Phase III 의 `p_net` 기준 `Gamma` 를 **합치거나
+  유리한 쪽을 골라 쓰는 것** (§4.4 secondary(channel)).

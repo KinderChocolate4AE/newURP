@@ -1,0 +1,61 @@
+{
+ "contract_doc": "docs/75 게이트 9 · docs/77 [C] (독립 judge cross-check)",
+ "eps": {
+  "length_m": 1e-06,
+  "dimensionless": 1e-09
+ },
+ "theta": 0.9,
+ "n_states": 123,
+ "episodes": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9
+ ],
+ "stride": 25,
+ "checks": {
+  "cone": {
+   "n": 307992,
+   "max_dm": 2.989921643603566e-10,
+   "margin_ok": true,
+   "n_predicate_mismatch": 0,
+   "n_boundary_mismatch": 0,
+   "n_fatal_mismatch": 0
+  },
+  "kill_hold": {
+   "n": 307992,
+   "max_dm": 1.1368683772161603e-13,
+   "margin_ok": true,
+   "n_predicate_mismatch": 0,
+   "n_boundary_mismatch": 0,
+   "n_fatal_mismatch": 0
+  },
+  "kill_probe": {
+   "n": 307992,
+   "max_dm": 6.064406754546781e-10,
+   "margin_ok": true,
+   "n_predicate_mismatch": 0,
+   "n_boundary_mismatch": 0,
+   "n_fatal_mismatch": 0
+  }
+ },
+ "threshold_failures": [],
+ "fatal_examples": [],
+ "n_fatal_total": 0,
+ "verdict": "PASS -- 세 판정 모두 독립 구현과 일치 (boundary 내)",
+ "protocol_hash": "e69dab93fb712694",
+ "code_commit": "993cc5b7ab53854b8581afdf243bb5f01a298863",
+ "code_dirty": true,
+ "judge_commit": "73d3325a7cd52ded",
+ "scenario_manifest_hash": null,
+ "map_spec_hash": null,
+ "lattice_hash": "bd9ffa741d7b79ee",
+ "generated_at": "2026-08-09T19:03:31+09:00",
+ "artifact": "phase3_judge_crosscheck"
+}

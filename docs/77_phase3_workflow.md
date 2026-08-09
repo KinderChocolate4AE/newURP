@@ -1,28 +1,44 @@
 # 77 — Phase III 실행 워크플로 (다른 세션에서 그대로 이어받는 문서) — 2026-08-09
 
 **이 문서 하나로 다음 세션이 대화 없이 이어갈 수 있게 쓴다.**
-계약 정본 = `docs/74` r3.2 · 판정 로그 = `docs/73` r3.2 · 청사진 = `docs/75` v3.1 ·
+계약 정본 = `docs/74` **r3.3** · 판정 로그 = `docs/73` **r3.3** · 청사진 = `docs/75` v3.1 ·
 선행연구 = `docs/76` v2. 이 문서는 **실행 순서와 명령어**만 담는다.
 
-- 봉인: `PIVOT_LOCK_R32_2026-08-09` · `protocol_hash 069cade39836cdd1`
+- 봉인: `PIVOT_LOCK_R33_2026-08-09` · `protocol_hash e69dab93fb712694`
+  (r3.2 = `069cade39836cdd1`, manifest 보존 = `artifacts/pivot_lock_r32_2026-08-09.json`)
+- **r3.3 변경**: 협력 채널 scope 선언 정밀화 (docs/74 §3.0 채널 대장 · docs/73 §1.5).
+  `U^rel < θ` 를 산문으로 옮길 때 **`via the static blockade channel` 한정 강제**.
 - 격자: `lattice_hash bd9ffa741d7b79ee` (Z_master 8415 점)
 - **Phase III 지도 셀 = 0 개** (아직 지도 없음)
 
 ---
 
-## 0. 지금 상태 (2026-08-09 기준)
+## 0. 지금 상태 (2026-08-09 저녁 갱신 — [A]~[E] 이행 세션)
 
 | 항목 | 상태 |
 |---|---|
 | 게이트 1 (Z_master + Π 선봉인) | ✅ `artifacts/phase3/lattice_spec.json` |
-| 게이트 2·3 (measure 수렴/allocation) | 🔄 **수정판 재실행 중** (30 ep · stride 5) → `results/phase3/measure_harness.json` |
-| 게이트 2·3 1 차 (probe 없음) | ✅ PASS, 감사 보존 `results/phase3/measure_harness_v1_noprobe.json` |
+| **[A] 게이트 2·3 수정판 (probe 포함)** | ✅ **PASS** (30 ep · stride 5) → `results/phase3/measure_harness.json` (r3.3 스탬프) |
+| 게이트 2·3 1 차 (probe 없음) | ✅ 감사 보존 `results/phase3/measure_harness_v1_noprobe.json` |
+| **[B] scope 선언** | ✅ docs/74 §3.0 (r3.3 채널 대장 포함) |
+| **[B] τ anchor** | ✅ **확보** — Huang et al. 2022 (arXiv 2207.14420) 원문 정독: 20 m 급 우주 net 20 m/s 사출 전개 **0.6–1.5 s** (Fig 9·10) → τ=0.30 s 문헌 bracket 내. `docs/76` Tier 4-7a |
+| **[C] 게이트 9 독립 judge** | ✅ **PASS** — `shepherd/scripts/judge_crosscheck.py` · 123 상태 × 307,992 witness × 3 판정, max\|m1−m2\| ≤ 6e-10 m (eps 1e-6), 불일치 0 → `results/phase3/judge_crosscheck.json` |
+| **[D] 게이트 6 unblockable + screen** | ✅ — `shepherd/scripts/cert_unblockable.py` + soundness test 8/8 (`tests/test_cert_unblockable.py`). **G=0 ⇒ 상한 0 조임** 포함. screen=0 = 95.1% (117/123) → `results/phase3/cert_unblockable.json` |
+| **[E] coarse pilot** | 🔶 스크립트 완성 (`shepherd/scripts/coarse_pilot.py`, 전 스텝 + 해석적 교전 pre-screen) · 로컬 preview 1 ep → `coarse_pilot_preview.json`. **본실행 (20~30 ep) = 서버 샤딩** (§2[E]) |
 | 서버 MARL 9 런 (Phase I ablation) | 🔄 진행 중 · **미열람** |
-| scope 선언 · τ anchor · OSF timestamp | ❌ 미완 (§2 에 배치) |
+| OSF timestamp (r3.3 manifest) | ❌ 유일 잔여 감사 항목 + **커밋·태그 `PIVOT_LOCK_R33_2026-08-09` 미생성** (사용자 트랙) |
 
-**1 차 실측 (참고, 수정판으로 대체 예정)**: `V_hold` 8k→32k median 0.0020 / p95 0.0058
-(기준 0.02/0.05) · allocation worst p95 0.0088 (기준 0.05) · 결정 뒤집힘 0 ·
-informative 78/2129 (3.7%).
+**[A] 수정판 실측 (확정)**: `V_hold` 8k→32k median 0.0020 / p95 0.0058 · **`V_probe`
+median 0.0038 / p95 0.0099** (기준 0.02/0.05) · allocation worst p95 **0.0141**
+(seed_shift-probe; 기준 0.05) · 결정 뒤집힘 0 · informative 78/2129 (3.7%).
+probe 에서 `substep_2x` 비영 (0.0025) 확인 — 공허 변이 함정 해소. `seg_1` 은 probe
+에서도 ~0.0001 → **dogleg 가중 한계 기록 유지** (§4-3).
+
+**[E] 교훈 2 건 (preview 2 회 실패에서)**: (i) G=0 상태에서 unblockable 상한이 1.0
+으로 공허해져 전셀 AMB — G=0 ⇒ 상한 0 으로 조임 (sound tightening, test 로 봉인).
+(ii) stride 표집은 접근 구간이 지배해 전셀 INF 단일색 — stride 폐기, 전 스텝 +
+해석적 교전 pre-screen (`|p_att−apex| > range_max·sec θ + |v|τ + aτ²/2 ⇒ INF 공짜`)
+으로 교체. 본실행도 이 방식.
 
 ---
 
@@ -60,13 +76,20 @@ python -m shepherd.scripts.measure_harness --episodes 30 --stride 5 \
   (0 이면 그 변이는 공허 — §4 함정 참조).
 
 ### [B] scope 선언 + τ anchor (계산 0)
-1. **scope 선언 한 줄** — `docs/74 §3.0` 신설(정의부 **맨 앞**):
-   > 이 envelope 는 **kill-sphere 기반 회피집합 봉쇄라는 단일 협력 채널**에 대한 것이다.
-   > 채널이 하나인 것은 결과가 아니라 **scope 선언**이며, COOP 셀 부재는 "협력이
-   > 불가능하다" 가 아니라 "이 채널에서 협력이 certifiably 필요한 영역이 없다" 로만
-   > 읽는다. (결과 후에 붙이면 변명이 된다 — **셀 생성 전에** 넣는다.)
+1. **scope 선언 — ✅ 완료 (r3.3, `docs/74 §3.0`).** 최초 초안의 "단일 협력 채널" 문구는
+   **사실과 달라 폐기**했다. docs/46 이 채널 3 종을 이미 계측했으므로 §3.0 은
+   **채널 대장 + 항등식 + 사전 예측 + 읽는 법** 으로 확장됐다. 핵심:
+   > 시스템의 협력 채널은 **셋** — (i) 봉쇄 · (ii) 횡압(실측 **음수**) · (iii) 체류(6배).
+   > **fixed-state certificate 는 정의상 채널 (i) 만 측정한다** (`V^rel_{<=N} − V_0`
+   > ≡ docs/46 채널 (i) 의 배치 최적화값 — 근사가 아니라 **항등식**).
+   > 따라서 `L^reach` 는 협력 가치의 **보수적** 하한이고 (COOP certificate 는 그대로
+   > sound), `U^rel_{<=N} < θ` 는 **차단 채널에 한한** 불가능만 지지한다.
+   - **negative claim 시 `via the static blockade channel` 강제** (docs/74 §3.4·§5-1B·§7).
+   - **사전 예측 등재** (docs/74 §3.0.3): 채널 (i) 은 `r_kill≈0.75` 에서 0, `≈3.0` 에서
+     발현 → 지도는 `kappa` 축을 따라 구조를 가질 것. 낮은 `kappa` `p_INF` 지배 예상.
+     **[E] pilot 에서 이 예측을 먼저 확인한다.** 빗나가도 정의는 안 바꾼다 (§7).
    - 부분 실증: `kappa = r_kill/rho` 가 core 축이므로 **"채널을 강화해도 안 열린다"**
-     는 보일 수 있다 (채널 종류가 아니라 세기에 대한 강건성).
+     는 보일 수 있다 (채널 *종류*가 아니라 *세기*에 대한 강건성). 종류에 대한 일반화 불가.
 2. **τ anchor 문헌 1 편** (docs/76 §6-10 을 **우선순위 2 로 승격**):
    우주 tethered-net 전개시간 모델 또는 공개 C-UAS 의 sense→decide latency.
    - 성공 시: τ 가 "저자가 고른 값" → **문헌 bracket** 이 되고 `chi` 축 전체의 지위가
@@ -89,10 +112,21 @@ python -m shepherd.scripts.measure_harness --episodes 30 --stride 5 \
 - 신규 파일 제안: `shepherd/scripts/cert_unblockable.py`.
 
 ### [E] ★ coarse pilot — 분기 판정
+- 구현: `shepherd/scripts/coarse_pilot.py` (선언 = 모듈 docstring 1~5. 전 스텝 스캔 +
+  해석적 교전 pre-screen — stride 아님). **본실행은 서버 샤딩** (셀당 1 ep ≈ 1.5~2 분):
+  ```bash
+  # 40 셀 x 20 ep -> 4 샤드 (tmux + ntfy, long-run policy)
+  python -m shepherd.scripts.coarse_pilot --episodes 20 --cells 0:10  --out results/phase3/coarse_pilot_0_10.json
+  python -m shepherd.scripts.coarse_pilot --episodes 20 --cells 10:20 --out results/phase3/coarse_pilot_10_20.json
+  python -m shepherd.scripts.coarse_pilot --episodes 20 --cells 20:30 --out results/phase3/coarse_pilot_20_30.json
+  python -m shepherd.scripts.coarse_pilot --episodes 20 --cells 30:40 --out results/phase3/coarse_pilot_30_40.json
+  ```
 - `Z_master` 부분집합(core 2D slice, N ∈ {1, 4}) × 에피소드 20~30.
 - 계산은 **[D] 상한 + 값싼 constructive 하한**만. 라벨 5 종의 **prevalence** 보고
   (`p_FREE / p_SINGLE / p_COOP / p_INF / p_AMB`) — **단일 색 지도 금지**.
-- **읽는 법**:
+- **읽는 법** (★ cheap 도구 한계: `U^rel_{<=1}` 이 없으므로 **p_COOP 는 구조적으로 0**
+  — COOP 신호는 `p_coop_candidate` (1 구 후보 불가 & N 구 constructive 가능) 로 읽고,
+  확정은 [F] 게이트 7 이후):
   - `p_COOP > 0` 인 셀 존재 → 분기 정상, [F] 로 (그 좌표에 비싼 계산 집중)
   - `p_INF` 지배 → 분기 ①-B (negative systems result 가능)
   - `p_SINGLE` 지배 + COOP 부재 → 분기 ①-A
