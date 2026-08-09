@@ -25,6 +25,12 @@ witness family (`build_reachable_union` 블록 순서 그대로)
 추적 score (모두 같은 (e,t) 에서 paired)
   V_hold     limiter 가 실제 위치(무개입 standby)에 있을 때의 v_shot   = 지도의 V_0
   V_nolim    limiter 가 없을 때 (봉쇄 0) 의 v_shot
+  V_probe    ★ **결정론적 probe 배치**(공격자 주변 고정 오프셋 N 개)에서의 v_shot.
+             hold/nolim 만 보면 `n_t`(경로 서브스텝)·dogleg family 가 **봉쇄 판정에만**
+             쓰이므로 아무것도 안 막는 상태에서 변이가 공허하게 0 이 된다 —
+             지도가 실제로 쓰는 것은 "구가 막는" 영역이므로 거기서 검증해야 한다.
+             (2026-08-09 1 차 실행에서 seg_1·substep_2x 가 정확히 0.0000 으로 나온
+              원인이 이것이었다. probe 는 지도 셀이 아니라 measure 검증용 고정 배치다.)
   g_hold     clean-fire 판정 1[V_hold >= theta AND not boxed]  -> **결정 뒤집힘률**
              (지도가 실제로 쓰는 것은 실수값이 아니라 이 이진 판정이다)
 
@@ -79,6 +85,36 @@ ALLOC_VARIANTS = {
 }
 
 
+# probe 배치 (결정론·선언) — **부분 봉쇄**가 목표다.
+#   시도 1) 공격자 중심 정사면체(1.2*rho): 진행방향과 어긋나 경로 튜브를 못 지남
+#           -> blocked 0% (변이가 공허해짐)
+#   시도 2) 공칭 경로 위 정확히: 전부 막아 boxed_in -> v_shot 1.0 인공값
+#   채택)   공칭 경로에서 **옆으로 1.2*r_kill** 띄운 4 점 -> blocked 평균 0.59,
+#           테스트 상태 100% 가 partial(0.02~0.98). 두 집합(caught/uncaught) 모두 비자명.
+PROBE_FRACS = (0.6, 1.0)                 # tau 대비 시각 분할
+PROBE_LATERAL_OVER_RKILL = 1.2
+
+
+def _frame(v):
+    """진행방향 e 와 그에 수직인 단위벡터 하나."""
+    v = np.asarray(v, float)
+    n = float(np.linalg.norm(v))
+    e = v / n if n > 1e-9 else np.array([1.0, 0.0, 0.0])
+    a = np.array([0.0, 0.0, 1.0]) if abs(e[2]) < 0.9 else np.array([1.0, 0.0, 0.0])
+    p1 = np.cross(e, a)
+    return e, p1 / np.linalg.norm(p1)
+
+
+def probe_placement(base, s, k: int = 4):
+    """공칭 경로 옆 `1.2*r_kill` 의 4 점 (부분 봉쇄). 지도 셀이 아니라 measure 검증용."""
+    _, p1 = _frame(s["v_att"])
+    off = PROBE_LATERAL_OVER_RKILL * float(base.kill_radius)
+    tau = float(base.tau_deploy)
+    pts = [s["p_att"] + s["v_att"] * (tau * f) + off * d
+           for f in PROBE_FRACS for d in (p1, -p1)]
+    return pts[:k]
+
+
 def _world_kw() -> dict:
     """하네스 상태 풀의 세계 = **계약 세계** (v3 TRAIN layer draw).
 
@@ -129,17 +165,23 @@ def scores_at(base, s, *, n, n_dir, n_segments, n_t, seed_off=0) -> dict:
         seed=int(s["t"]) + int(seed_off), **kw)
     r_hold = V.eval_union_with_limiters(union, s["lim"], base.kill_radius)
     r_free = V.eval_union_with_limiters(union, [], base.kill_radius)
+    r_prb = V.eval_union_with_limiters(union, probe_placement(base, s),
+                                       base.kill_radius)
     boxed = bool(getattr(r_hold, "boxed_in", False)) or r_hold.n_feasible == 0
+    boxed_p = bool(getattr(r_prb, "boxed_in", False)) or r_prb.n_feasible == 0
     return dict(
         V_hold=float(r_hold.v_shot_soft), V_nolim=float(r_free.v_shot_soft),
+        V_probe=float(r_prb.v_shot_soft),
+        blocked_frac_probe=float(1.0 - r_prb.n_feasible / max(union.n_total, 1)),
         g_hold=int((r_hold.v_shot_soft >= THETA) and not boxed),
+        g_probe=int((r_prb.v_shot_soft >= THETA) and not boxed_p),
         n_total=int(union.n_total), block_sizes=list(union.block_sizes))
 
 
 def _informative(rows) -> bool:
     """0 < v < 1 인 값이 하나라도 있으면 informative (선언된 규칙)."""
     for r in rows:
-        for f in ("V_hold", "V_nolim"):
+        for f in ("V_hold", "V_nolim", "V_probe"):
             v = r[f]
             if INFORMATIVE_EPS < v < 1.0 - INFORMATIVE_EPS:
                 return True
@@ -190,14 +232,18 @@ def run_harness(episodes, *, n_grid=N_GRID, stride=STATE_STRIDE, log=print) -> d
     hi, mid = n_grid[-1], n_grid[-2] if len(n_grid) >= 2 else n_grid[-1]
     lo = n_grid[0]
     S = set(idx_info)
-    for field in ("V_hold", "V_nolim"):
+    for field in ("V_hold", "V_nolim", "V_probe"):
         conv[f"{field}|{mid}->{hi}"] = _per_episode(diff_by_ep(mid, hi, field, S))
         conv[f"{field}|{lo}->{mid}"] = _per_episode(diff_by_ep(lo, mid, field, S))
         conv_all[f"{field}|{mid}->{hi}"] = _per_episode(diff_by_ep(mid, hi, field))
     flips = sum(vals[mid][k]["g_hold"] != vals[hi][k]["g_hold"] for k in idx_info)
     conv["g_flip_rate|%d->%d" % (mid, hi)] = flips / max(len(idx_info), 1)
+    # 판정은 V_hold 와 **V_probe 둘 다** 통과해야 한다 (봉쇄 비활성/활성 양쪽)
     g2 = conv.get(f"V_hold|{mid}->{hi}", {})
-    gate2_pass = bool(g2 and g2["median"] <= GATE2["median"] and g2["p95"] <= GATE2["p95"])
+    g2p = conv.get(f"V_probe|{mid}->{hi}", {})
+    gate2_pass = bool(g2 and g2p
+                      and max(g2["median"], g2p["median"]) <= GATE2["median"]
+                      and max(g2["p95"], g2p["p95"]) <= GATE2["p95"])
 
     # ── 게이트 3: allocation 민감도 ──────────────────────────────────────────
     alloc = {}
@@ -208,20 +254,26 @@ def run_harness(episodes, *, n_grid=N_GRID, stride=STATE_STRIDE, log=print) -> d
             base_scores = sc
             alloc[name] = {"family_shares": _shares(sc[0]), "shift": None}
             continue
-        d: dict = {}
+        d, dp = {}, {}
         for k in idx_info:                    # informative 부분집합에서 판정
             d.setdefault(states[k]["ep"], []).append(
                 abs(sc[k]["V_hold"] - base_scores[k]["V_hold"]))
+            dp.setdefault(states[k]["ep"], []).append(
+                abs(sc[k]["V_probe"] - base_scores[k]["V_probe"]))
         flip = sum(sc[k]["g_hold"] != base_scores[k]["g_hold"] for k in idx_info)
+        flip_p = sum(sc[k]["g_probe"] != base_scores[k]["g_probe"] for k in idx_info)
         alloc[name] = {"family_shares": _shares(sc[0]),
                        "shift_V_hold": _per_episode(d),
-                       "g_flip_rate": flip / max(len(idx_info), 1)}
+                       "shift_V_probe": _per_episode(dp),     # ★ 봉쇄 활성 영역
+                       "g_flip_rate": flip / max(len(idx_info), 1),
+                       "g_probe_flip_rate": flip_p / max(len(idx_info), 1)}
         if log:
-            log(f"  alloc {name}: median {alloc[name]['shift_V_hold']['median']:.4f} "
-                f"p95 {alloc[name]['shift_V_hold']['p95']:.4f} "
-                f"flip {alloc[name]['g_flip_rate']:.3f}", flush=True)
-    worst = max((v["shift_V_hold"]["p95"] for k, v in alloc.items() if k != "base"),
-                default=float("nan"))
+            a_ = alloc[name]
+            log(f"  alloc {name}: hold p95 {a_['shift_V_hold']['p95']:.4f} · "
+                f"probe p95 {a_['shift_V_probe']['p95']:.4f} · "
+                f"flip {a_['g_flip_rate']:.3f}/{a_['g_probe_flip_rate']:.3f}", flush=True)
+    worst = max((max(v["shift_V_hold"]["p95"], v["shift_V_probe"]["p95"])
+                 for k, v in alloc.items() if k != "base"), default=float("nan"))
     gate3_pass = bool(worst <= GATE3["max_shift"])
 
     return dict(
@@ -265,7 +317,10 @@ def main(argv=None) -> None:
     key = [k for k in g2 if k.startswith("V_hold|") and "->" in k][0]
     print(f"\n[게이트 2] {key}: median {g2[key]['median']:.4f} · p95 {g2[key]['p95']:.4f} "
           f"-> {'PASS' if out['gate2']['pass'] else 'FAIL'}")
-    print(f"[게이트 3] worst p95 shift {out['gate3']['worst_p95']:.4f} "
+    gp = out["gate2"]["result"].get(f"V_probe|8000->32000")
+    if gp:
+        print(f"[게이트 2] V_probe (봉쇄 활성): median {gp['median']:.4f} · p95 {gp['p95']:.4f}")
+    print(f"[게이트 3] worst p95 shift (hold·probe 중 최대) {out['gate3']['worst_p95']:.4f} "
           f"-> {'PASS' if out['gate3']['pass'] else 'FAIL'}")
     print(out["verdict"])
     print(f"-> {p}")
