@@ -24,9 +24,9 @@
 | **[B] τ anchor** | ✅ **확보** — Huang et al. 2022 (arXiv 2207.14420) 원문 정독: 20 m 급 우주 net 20 m/s 사출 전개 **0.6–1.5 s** (Fig 9·10) → τ=0.30 s 문헌 bracket 내. `docs/76` Tier 4-7a |
 | **[C] 게이트 9 독립 judge** | ✅ **PASS** — `shepherd/scripts/judge_crosscheck.py` · 123 상태 × 307,992 witness × 3 판정, max\|m1−m2\| ≤ 6e-10 m (eps 1e-6), 불일치 0 → `results/phase3/judge_crosscheck.json` |
 | **[D] 게이트 6 unblockable + screen** | ✅ — `shepherd/scripts/cert_unblockable.py` + soundness test 8/8 (`tests/test_cert_unblockable.py`). **G=0 ⇒ 상한 0 조임** 포함. screen=0 = 95.1% (117/123) → `results/phase3/cert_unblockable.json` |
-| **[E] coarse pilot** | 🔶 스크립트 완성 (`shepherd/scripts/coarse_pilot.py`, 전 스텝 + 해석적 교전 pre-screen) · 로컬 preview 1 ep → `coarse_pilot_preview.json`. **본실행 (20~30 ep) = 서버 샤딩** (§2[E]) |
+| **[E] coarse pilot** | ✅ **본실행 완료 (2026-08-10, 40 셀 × 20 ep, 서버 4 샤드)** → `coarse_pilot_{0_10,10_20,20_30,30_40}.json`. **chi 경계 0.8↔1.2** (chi≥1.2: ep_FREE·ep_L1·ep_LN 전부 0/20 · V0max 0.53→0.14 붕괴 · LNmax 0) · kappa 전 구간 불감 · coop_candidate ≈ 0. **분기 ①-B 우세 — 단 engaged AMB 0.35~0.47 은 게이트 7 만이 닫는다** (판정 노트 = `temp_research_note/2026-08-10_ablation_null_stoprule_pilot_chi_boundary.md`) |
 | 게이트 10 판정 기준 (iso-Π tolerance) | ✅ **선봉인** (2026-08-11, `docs/78` — r3.4) — Tier 1 eps 1e-6 · Tier 2 = 게이트 2·3 bar 재사용 (median 0.02 / p95 0.05, CRN paired, informative union) · 실패 경로 사전 선언 |
-| 서버 MARL 9 런 (Phase I ablation) | 🔄 진행 중 · **미열람** |
+| 서버 MARL 9 런 (Phase I ablation) | ✅ **완주 + 판정 완료 (2026-08-10)** — primary **Δ_shape = 0.0 전 confirmatory seed** (SHAPING p_net 0.000/0.000, n=185×4, CI [0,0]) → **docs/71 §3 stop rule 발동: rescue 종료 · headline 교체 금지**. `results/iid_abl/analyze_ls_commit.json`. 인용 한도 = *"motivated, but does not validate"* |
 | OSF timestamp | ✅ **완료 (2026-08-11)** — r3.3 + r3.4 manifest 업로드 + read-only registration: **https://osf.io/39gxw/** (커밋 `1e1a3a9` · 태그 `PIVOT_LOCK_R34_2026-08-11`) |
 
 **[A] 수정판 실측 (확정)**: `V_hold` 8k→32k median 0.0020 / p95 0.0058 · **`V_probe`
@@ -50,12 +50,15 @@ probe 에서 `substep_2x` 비영 (0.0025) 확인 — 공허 변이 함정 해소
 바꾼다 (docs/74 §7 위반 아님 — 정의·축·규칙은 불변).
 
 ```
-[A] 게이트 2·3 마무리          ← 지금 돌고 있음
-[B] scope 선언 + τ anchor      ← 계산 0, publishability 에 가장 큰 레버
-[C] 게이트 9 독립 judge         ← pilot 신뢰의 전제
-[D] 게이트 6 unblockable mass   ← 이게 곧 전 스텝 cheap screen (1석 2조)
-[E] ★ coarse pilot             ← **여기서 분기가 보인다 (A/B/C 중 어디인지)**
-[F] 비싼 것들 (7 relaxation · 4·5 MILP · 8 joint 4A) — pilot 이 지목한 좌표에만
+[A] 게이트 2·3 마무리          ✅ PASS
+[B] scope 선언 + τ anchor      ✅
+[C] 게이트 9 독립 judge         ✅ PASS
+[D] 게이트 6 unblockable mass   ✅
+[E] ★ coarse pilot             ✅ 분기 신호 = ①-B 우세 (chi 경계 0.8↔1.2 · COOP 0)
+[F] 비싼 것들 (7 relaxation · 4·5 MILP · 8 joint 4A) ← **지금 여기.**
+    pilot 지목 좌표 = chi ∈ {0.8, 1.2} 경계대역 + 전 셀 engaged AMB 질량.
+    게이트 7 (N-limited outer relaxation) 이 분기 확정의 열쇠 —
+    AMB → INF 붕괴면 ①-B 확정, 일부 열리면 COOP 재검토.
 [G] 게이트 10 iso-Π → 12 refinement → 13 cooperation audit → 14 certified map
 [H] 15 Stage-2 freeze → 16·17 C5 (Gamma) → 18 robustness → 19 보고서/arXiv
 ```
