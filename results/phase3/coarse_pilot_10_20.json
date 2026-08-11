@@ -1,0 +1,1938 @@
+{
+ "contract_doc": "docs/75 게이트 11 · docs/77 [E] (coarse pilot)",
+ "declarations": "모듈 docstring 1~5 (결과 열람 전 고정)",
+ "theta": 0.9,
+ "pilot_grid": {
+  "chi": [
+   0.4,
+   0.8,
+   1.2,
+   1.6,
+   2.0
+  ],
+  "kappa": [
+   0.2,
+   0.5,
+   0.8,
+   1.1
+  ],
+  "mu": 0.4,
+  "N": [
+   1,
+   4
+  ]
+ },
+ "episodes": 20,
+ "cells": [
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 6969,
+   "n_engaged": 699,
+   "prevalence": {
+    "p_FREE": 0.0018654039316975176,
+    "p_SINGLE": 0.0014349261013057828,
+    "p_COOP": 0.0,
+    "p_INF": 0.9657052661787918,
+    "p_AMB": 0.030994403788204908,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.01859799713876967,
+    "p_SINGLE": 0.01430615164520744,
+    "p_COOP": 0.0,
+    "p_INF": 0.6580829756795422,
+    "p_AMB": 0.3090128755364807,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 447,
+     "n_engaged": 72,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "n_engaged": 17,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 2,
+     "n_steps": 292,
+     "n_engaged": 37,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 3,
+     "n_steps": 338,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 4,
+     "n_steps": 362,
+     "n_engaged": 41,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 5,
+     "n_steps": 359,
+     "n_engaged": 69,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 6,
+     "n_steps": 345,
+     "n_engaged": 41,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 7,
+     "n_steps": 329,
+     "n_engaged": 40,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 8,
+     "n_steps": 255,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 9,
+     "n_steps": 306,
+     "n_engaged": 42,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 10,
+     "n_steps": 360,
+     "n_engaged": 42,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 11,
+     "n_steps": 293,
+     "n_engaged": 18,
+     "ep_FREE": 0,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 12,
+     "n_steps": 339,
+     "n_engaged": 41,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 13,
+     "n_steps": 343,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 14,
+     "n_steps": 355,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 15,
+     "n_steps": 360,
+     "n_engaged": 19,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 16,
+     "n_steps": 362,
+     "n_engaged": 40,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 17,
+     "n_steps": 486,
+     "n_engaged": 29,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 18,
+     "n_steps": 361,
+     "n_engaged": 37,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 19,
+     "n_steps": 385,
+     "n_engaged": 40,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 0.9736421725239617,
+   "LN_max": 0.9794132784354092
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 6627,
+   "n_engaged": 403,
+   "prevalence": {
+    "p_FREE": 0.0016598762637694282,
+    "p_SINGLE": 0.0001508978421608571,
+    "p_COOP": 0.0,
+    "p_INF": 0.9707258186207938,
+    "p_AMB": 0.02746340727327599,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.02729528535980149,
+    "p_SINGLE": 0.0024813895781637717,
+    "p_COOP": 0.0,
+    "p_INF": 0.5186104218362283,
+    "p_AMB": 0.45161290322580644,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "n_engaged": 17,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 2,
+     "n_steps": 257,
+     "n_engaged": 14,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 3,
+     "n_steps": 338,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 4,
+     "n_steps": 338,
+     "n_engaged": 17,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 5,
+     "n_steps": 329,
+     "n_engaged": 38,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 6,
+     "n_steps": 322,
+     "n_engaged": 17,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 7,
+     "n_steps": 330,
+     "n_engaged": 42,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 8,
+     "n_steps": 255,
+     "n_engaged": 13,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 9,
+     "n_steps": 280,
+     "n_engaged": 16,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 10,
+     "n_steps": 328,
+     "n_engaged": 15,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 11,
+     "n_steps": 293,
+     "n_engaged": 17,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 12,
+     "n_steps": 316,
+     "n_engaged": 18,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 13,
+     "n_steps": 382,
+     "n_engaged": 38,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 14,
+     "n_steps": 309,
+     "n_engaged": 12,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 15,
+     "n_steps": 360,
+     "n_engaged": 19,
+     "ep_FREE": 0,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 16,
+     "n_steps": 329,
+     "n_engaged": 14,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 17,
+     "n_steps": 486,
+     "n_engaged": 27,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 18,
+     "n_steps": 346,
+     "n_engaged": 22,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 19,
+     "n_steps": 364,
+     "n_engaged": 19,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 0.9817295980511571,
+   "LN_max": 0.9903357070193286
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 6934,
+   "n_engaged": 689,
+   "prevalence": {
+    "p_FREE": 0.002163253533314104,
+    "p_SINGLE": 0.001442169022209403,
+    "p_COOP": 0.0,
+    "p_INF": 0.9648110758580906,
+    "p_AMB": 0.031583501586385926,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.02177068214804064,
+    "p_SINGLE": 0.01451378809869376,
+    "p_COOP": 0.0,
+    "p_INF": 0.6458635703918723,
+    "p_AMB": 0.3178519593613933,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 447,
+     "n_engaged": 72,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "n_engaged": 17,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 2,
+     "n_steps": 292,
+     "n_engaged": 37,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 3,
+     "n_steps": 338,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 4,
+     "n_steps": 362,
+     "n_engaged": 41,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 5,
+     "n_steps": 359,
+     "n_engaged": 69,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 6,
+     "n_steps": 345,
+     "n_engaged": 41,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 7,
+     "n_steps": 329,
+     "n_engaged": 40,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 8,
+     "n_steps": 255,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 9,
+     "n_steps": 306,
+     "n_engaged": 42,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 10,
+     "n_steps": 360,
+     "n_engaged": 42,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 11,
+     "n_steps": 293,
+     "n_engaged": 18,
+     "ep_FREE": 0,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 12,
+     "n_steps": 339,
+     "n_engaged": 41,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 13,
+     "n_steps": 343,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 14,
+     "n_steps": 320,
+     "n_engaged": 23,
+     "ep_FREE": 1,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 15,
+     "n_steps": 360,
+     "n_engaged": 19,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 16,
+     "n_steps": 362,
+     "n_engaged": 40,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 17,
+     "n_steps": 486,
+     "n_engaged": 29,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 18,
+     "n_steps": 361,
+     "n_engaged": 37,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 19,
+     "n_steps": 385,
+     "n_engaged": 40,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 1.0,
+   "LN_max": 0.9801462904911181
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 6627,
+   "n_engaged": 404,
+   "prevalence": {
+    "p_FREE": 0.0018107741059302852,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9699713294099894,
+    "p_AMB": 0.02821789648408028,
+    "p_coop_candidate": 0.0001508978421608571
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0297029702970297,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5074257425742574,
+    "p_AMB": 0.4628712871287129,
+    "p_coop_candidate": 0.0024752475247524753
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "n_engaged": 17,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 2,
+     "n_steps": 257,
+     "n_engaged": 14,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 3,
+     "n_steps": 338,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 4,
+     "n_steps": 338,
+     "n_engaged": 17,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 5,
+     "n_steps": 329,
+     "n_engaged": 39,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 6,
+     "n_steps": 322,
+     "n_engaged": 17,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 7,
+     "n_steps": 330,
+     "n_engaged": 42,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 8,
+     "n_steps": 255,
+     "n_engaged": 13,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 9,
+     "n_steps": 280,
+     "n_engaged": 16,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 10,
+     "n_steps": 328,
+     "n_engaged": 15,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 11,
+     "n_steps": 293,
+     "n_engaged": 17,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 12,
+     "n_steps": 316,
+     "n_engaged": 18,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 13,
+     "n_steps": 382,
+     "n_engaged": 38,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 14,
+     "n_steps": 309,
+     "n_engaged": 12,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 15,
+     "n_steps": 360,
+     "n_engaged": 19,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 16,
+     "n_steps": 329,
+     "n_engaged": 14,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 17,
+     "n_steps": 486,
+     "n_engaged": 27,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 1
+    },
+    {
+     "ep": 18,
+     "n_steps": 346,
+     "n_engaged": 22,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 19,
+     "n_steps": 364,
+     "n_engaged": 19,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 0.978035143769968,
+   "LN_max": 0.9893911439114391
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 6907,
+   "n_engaged": 669,
+   "prevalence": {
+    "p_FREE": 0.0030403938033878673,
+    "p_SINGLE": 0.0013030259157376576,
+    "p_COOP": 0.0,
+    "p_INF": 0.9638048356739539,
+    "p_AMB": 0.031851744606920515,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.03139013452914798,
+    "p_SINGLE": 0.013452914798206279,
+    "p_COOP": 0.0,
+    "p_INF": 0.6263079222720478,
+    "p_AMB": 0.32884902840059793,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 447,
+     "n_engaged": 72,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "n_engaged": 17,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 2,
+     "n_steps": 292,
+     "n_engaged": 37,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 3,
+     "n_steps": 338,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 4,
+     "n_steps": 362,
+     "n_engaged": 41,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 5,
+     "n_steps": 359,
+     "n_engaged": 69,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 6,
+     "n_steps": 345,
+     "n_engaged": 41,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 7,
+     "n_steps": 329,
+     "n_engaged": 40,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 8,
+     "n_steps": 248,
+     "n_engaged": 6,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 9,
+     "n_steps": 306,
+     "n_engaged": 42,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 10,
+     "n_steps": 360,
+     "n_engaged": 42,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 11,
+     "n_steps": 293,
+     "n_engaged": 18,
+     "ep_FREE": 0,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 12,
+     "n_steps": 339,
+     "n_engaged": 41,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 13,
+     "n_steps": 343,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 14,
+     "n_steps": 319,
+     "n_engaged": 22,
+     "ep_FREE": 1,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 15,
+     "n_steps": 360,
+     "n_engaged": 19,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 16,
+     "n_steps": 343,
+     "n_engaged": 28,
+     "ep_FREE": 1,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 17,
+     "n_steps": 486,
+     "n_engaged": 29,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 18,
+     "n_steps": 361,
+     "n_engaged": 37,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 19,
+     "n_steps": 385,
+     "n_engaged": 40,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 1.0,
+   "LN_max": 0.9805527123848515
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 6591,
+   "n_engaged": 368,
+   "prevalence": {
+    "p_FREE": 0.0018206645425580337,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9708693673190715,
+    "p_AMB": 0.027309968138370506,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.03260869565217391,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.4782608695652174,
+    "p_AMB": 0.4891304347826087,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "n_engaged": 17,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 2,
+     "n_steps": 257,
+     "n_engaged": 14,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 3,
+     "n_steps": 338,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 4,
+     "n_steps": 338,
+     "n_engaged": 17,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 5,
+     "n_steps": 329,
+     "n_engaged": 39,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 6,
+     "n_steps": 322,
+     "n_engaged": 17,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 7,
+     "n_steps": 308,
+     "n_engaged": 20,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 8,
+     "n_steps": 255,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 9,
+     "n_steps": 280,
+     "n_engaged": 16,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 10,
+     "n_steps": 328,
+     "n_engaged": 15,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 11,
+     "n_steps": 293,
+     "n_engaged": 17,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 12,
+     "n_steps": 316,
+     "n_engaged": 18,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 13,
+     "n_steps": 382,
+     "n_engaged": 38,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 14,
+     "n_steps": 309,
+     "n_engaged": 12,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 15,
+     "n_steps": 346,
+     "n_engaged": 5,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 16,
+     "n_steps": 329,
+     "n_engaged": 14,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    },
+    {
+     "ep": 17,
+     "n_steps": 486,
+     "n_engaged": 27,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 18,
+     "n_steps": 346,
+     "n_engaged": 22,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 19,
+     "n_steps": 364,
+     "n_engaged": 19,
+     "ep_FREE": 1,
+     "ep_L1": 1,
+     "ep_LN": 1
+    }
+   ],
+   "V0_max": 1.0,
+   "LN_max": 0.9883897021706209
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 6830,
+   "n_engaged": 629,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9676427525622254,
+    "p_AMB": 0.032357247437774524,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.6486486486486487,
+    "p_AMB": 0.35135135135135137,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 419,
+     "n_engaged": 59,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "n_engaged": 18,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 2,
+     "n_steps": 280,
+     "n_engaged": 37,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 3,
+     "n_steps": 339,
+     "n_engaged": 16,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 4,
+     "n_steps": 354,
+     "n_engaged": 34,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 5,
+     "n_steps": 314,
+     "n_engaged": 38,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 6,
+     "n_steps": 337,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 7,
+     "n_steps": 317,
+     "n_engaged": 29,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 8,
+     "n_steps": 254,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 9,
+     "n_steps": 297,
+     "n_engaged": 34,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 10,
+     "n_steps": 348,
+     "n_engaged": 36,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 11,
+     "n_steps": 308,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 12,
+     "n_steps": 332,
+     "n_engaged": 32,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 13,
+     "n_steps": 368,
+     "n_engaged": 39,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 14,
+     "n_steps": 338,
+     "n_engaged": 34,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 15,
+     "n_steps": 363,
+     "n_engaged": 20,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 16,
+     "n_steps": 350,
+     "n_engaged": 36,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 17,
+     "n_steps": 496,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 18,
+     "n_steps": 358,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 19,
+     "n_steps": 366,
+     "n_engaged": 22,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.5279552715654952,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 6722,
+   "n_engaged": 525,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9693543588217792,
+    "p_AMB": 0.03064564117822077,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.6076190476190476,
+    "p_AMB": 0.3923809523809524,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 14,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "n_engaged": 18,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 2,
+     "n_steps": 258,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 3,
+     "n_steps": 338,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 4,
+     "n_steps": 354,
+     "n_engaged": 34,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 5,
+     "n_steps": 316,
+     "n_engaged": 40,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 6,
+     "n_steps": 322,
+     "n_engaged": 18,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 7,
+     "n_steps": 327,
+     "n_engaged": 39,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 8,
+     "n_steps": 254,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 9,
+     "n_steps": 281,
+     "n_engaged": 18,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 10,
+     "n_steps": 348,
+     "n_engaged": 36,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 11,
+     "n_steps": 294,
+     "n_engaged": 19,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 12,
+     "n_steps": 320,
+     "n_engaged": 20,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 13,
+     "n_steps": 387,
+     "n_engaged": 58,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 14,
+     "n_steps": 309,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 15,
+     "n_steps": 363,
+     "n_engaged": 20,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 16,
+     "n_steps": 350,
+     "n_engaged": 36,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 17,
+     "n_steps": 503,
+     "n_engaged": 35,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 18,
+     "n_steps": 367,
+     "n_engaged": 43,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 19,
+     "n_steps": 366,
+     "n_engaged": 21,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.5335463258785943,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "n_states": 6830,
+   "n_engaged": 629,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9670571010248902,
+    "p_AMB": 0.03294289897510981,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.6422893481717011,
+    "p_AMB": 0.35771065182829886,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 419,
+     "n_engaged": 59,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "n_engaged": 18,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 2,
+     "n_steps": 280,
+     "n_engaged": 37,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 3,
+     "n_steps": 339,
+     "n_engaged": 16,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 4,
+     "n_steps": 354,
+     "n_engaged": 34,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 5,
+     "n_steps": 314,
+     "n_engaged": 38,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 6,
+     "n_steps": 337,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 7,
+     "n_steps": 317,
+     "n_engaged": 29,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 8,
+     "n_steps": 254,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 9,
+     "n_steps": 297,
+     "n_engaged": 34,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 10,
+     "n_steps": 348,
+     "n_engaged": 36,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 11,
+     "n_steps": 308,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 12,
+     "n_steps": 332,
+     "n_engaged": 32,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 13,
+     "n_steps": 368,
+     "n_engaged": 39,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 14,
+     "n_steps": 338,
+     "n_engaged": 34,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 15,
+     "n_steps": 363,
+     "n_engaged": 20,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 16,
+     "n_steps": 350,
+     "n_engaged": 36,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 17,
+     "n_steps": 496,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 18,
+     "n_steps": 358,
+     "n_engaged": 33,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 19,
+     "n_steps": 366,
+     "n_engaged": 22,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.5279552715654952,
+   "LN_max": 0.0
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 6723,
+   "n_engaged": 526,
+   "prevalence": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.9681689721850364,
+    "p_AMB": 0.03183102781496356,
+    "p_coop_candidate": 0.0
+   },
+   "prevalence_engaged": {
+    "p_FREE": 0.0,
+    "p_SINGLE": 0.0,
+    "p_COOP": 0.0,
+    "p_INF": 0.5931558935361216,
+    "p_AMB": 0.4068441064638783,
+    "p_coop_candidate": 0.0
+   },
+   "episode_stats": [
+    {
+     "ep": 0,
+     "n_steps": 373,
+     "n_engaged": 14,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "n_engaged": 18,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 2,
+     "n_steps": 258,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 3,
+     "n_steps": 338,
+     "n_engaged": 15,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 4,
+     "n_steps": 354,
+     "n_engaged": 34,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 5,
+     "n_steps": 315,
+     "n_engaged": 39,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 6,
+     "n_steps": 322,
+     "n_engaged": 18,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 7,
+     "n_steps": 327,
+     "n_engaged": 39,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 8,
+     "n_steps": 254,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 9,
+     "n_steps": 281,
+     "n_engaged": 18,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 10,
+     "n_steps": 348,
+     "n_engaged": 36,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 11,
+     "n_steps": 295,
+     "n_engaged": 20,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 12,
+     "n_steps": 320,
+     "n_engaged": 20,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 13,
+     "n_steps": 387,
+     "n_engaged": 58,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 14,
+     "n_steps": 309,
+     "n_engaged": 13,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 15,
+     "n_steps": 363,
+     "n_engaged": 20,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 16,
+     "n_steps": 351,
+     "n_engaged": 37,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 17,
+     "n_steps": 503,
+     "n_engaged": 35,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 18,
+     "n_steps": 367,
+     "n_engaged": 43,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    },
+    {
+     "ep": 19,
+     "n_steps": 366,
+     "n_engaged": 21,
+     "ep_FREE": 0,
+     "ep_L1": 0,
+     "ep_LN": 0
+    }
+   ],
+   "V0_max": 0.5335463258785943,
+   "LN_max": 0.0
+  }
+ ],
+ "note": "p_COOP = 0 은 구조적(도구 한계 — U^rel_{<=1} 은 게이트 7). coop_candidate 를 참조. 단일 색 지도 금지 (docs/77 [E]).",
+ "protocol_hash": "e69dab93fb712694",
+ "code_commit": "8da6e4317de11b1fd995bd6e5442ec379324a101",
+ "code_dirty": true,
+ "judge_commit": "73d3325a7cd52ded",
+ "scenario_manifest_hash": null,
+ "map_spec_hash": null,
+ "lattice_hash": "bd9ffa741d7b79ee",
+ "generated_at": "2026-08-11T14:02:07+09:00",
+ "artifact": "phase3_coarse_pilot"
+}

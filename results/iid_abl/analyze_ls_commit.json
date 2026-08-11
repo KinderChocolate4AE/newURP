@@ -1,0 +1,73 @@
+{
+ "contract_doc": "docs/71 §1.1/§1.2 primary — Δ_shape",
+ "band": "ablation",
+ "episodes": [
+  10300,
+  300
+ ],
+ "seeds_available": [
+  0,
+  1,
+  2,
+  3,
+  4
+ ],
+ "primary": {
+  "confirmatory_seeds": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "index_seed_excluded": 0,
+  "delta_shape_per_seed": {
+   "1": 0.0,
+   "2": 0.0,
+   "3": 0.0,
+   "4": 0.0
+  },
+  "p_net_shaping_per_seed": {
+   "1": {
+    "ls_live": 0.0,
+    "ls_off": 0.0,
+    "n_shaping": 185
+   },
+   "2": {
+    "ls_live": 0.0,
+    "ls_off": 0.0,
+    "n_shaping": 185
+   },
+   "3": {
+    "ls_live": 0.0,
+    "ls_off": 0.0,
+    "n_shaping": 185
+   },
+   "4": {
+    "ls_live": 0.0,
+    "ls_off": 0.0,
+    "n_shaping": 185
+   }
+  },
+  "delta_shape_point": 0.0,
+  "ci95": [
+   0.0,
+   0.0
+  ],
+  "lower95_one_sided": 0.0,
+  "b_boot": 10000,
+  "rng_seed": 7,
+  "decision_statistic": "two-sided 95% CI lower bound (ci95[0]) > 0",
+  "positive_evidence": false
+ },
+ "index_seed": {
+  "seed": 0,
+  "status": "이 ablation 을 촉발한 index seed. mechanistic 증거로만 보고하며 primary CI 에서 제외된다 (docs/71 §1.1)",
+  "p_net_shaping": {
+   "ls_live": 0.0,
+   "ls_off": 0.0
+  },
+  "delta_shape": 0.0,
+  "n_shaping": 185
+ },
+ "verdict": "disabling commit did not recover measurable SHAPING-regime net-capture gain under the frozen learning contract -> 본편 rescue search 종료 (docs/71 §3 stop rule)"
+}
