@@ -25,6 +25,7 @@
 | **[C] 게이트 9 독립 judge** | ✅ **PASS** — `shepherd/scripts/judge_crosscheck.py` · 123 상태 × 307,992 witness × 3 판정, max\|m1−m2\| ≤ 6e-10 m (eps 1e-6), 불일치 0 → `results/phase3/judge_crosscheck.json` |
 | **[D] 게이트 6 unblockable + screen** | ✅ — `shepherd/scripts/cert_unblockable.py` + soundness test 8/8 (`tests/test_cert_unblockable.py`). **G=0 ⇒ 상한 0 조임** 포함. screen=0 = 95.1% (117/123) → `results/phase3/cert_unblockable.json` |
 | **[E] coarse pilot** | 🔶 스크립트 완성 (`shepherd/scripts/coarse_pilot.py`, 전 스텝 + 해석적 교전 pre-screen) · 로컬 preview 1 ep → `coarse_pilot_preview.json`. **본실행 (20~30 ep) = 서버 샤딩** (§2[E]) |
+| 게이트 10 판정 기준 (iso-Π tolerance) | ✅ **선봉인** (2026-08-11, `docs/78` — r3.4) — Tier 1 eps 1e-6 · Tier 2 = 게이트 2·3 bar 재사용 (median 0.02 / p95 0.05, CRN paired, informative union) · 실패 경로 사전 선언 |
 | 서버 MARL 9 런 (Phase I ablation) | 🔄 진행 중 · **미열람** |
 | OSF timestamp (r3.3 manifest) | ❌ 유일 잔여 감사 항목 + **커밋·태그 `PIVOT_LOCK_R33_2026-08-09` 미생성** (사용자 트랙) |
 

@@ -27,6 +27,7 @@ PROTOCOL_FILES = (
     "docs/73_review10_verdicts.md",
     "docs/74_pivot_protocol.md",
     "docs/75_blueprint.md",
+    "docs/78_gate10_isopi_prereg.md",
     "docs/review_prompt_design_map_pivot.md",
     "docs/review_prompt_blueprint.md",
 )
@@ -93,8 +94,9 @@ def _hashes(names) -> dict:
 # ★ 이전 판은 이 넷을 JSON 에 손으로 넣어 두었다 -- 스크립트가 emit 하지 않았으므로
 #   재실행하면 **조용히 소실**된다 (docs/73 §1.5 항목 6). 코드가 생성하게 옮긴다.
 #   판을 올릴 때 REVISION/SUPERSEDES 만 바꾼다. 태그는 **절대 이동시키지 않는다**.
-REVISION = "r3.3"
-SUPERSEDES = "r3.2 (PIVOT_LOCK_R32_2026-08-09, protocol_hash 069cade39836cdd1)"
+REVISION = "r3.4"
+LOCK_DATE = "2026-08-11"
+SUPERSEDES = "r3.3 (PIVOT_LOCK_R33_2026-08-09, protocol_hash e69dab93fb712694)"
 TAG_POLICY = ("Tags are never moved. Each revision gets its own tag name "
               "(PIVOT_LOCK_R32_..., PIVOT_LOCK_R33_..., ...). docs/74 §0-2.")
 PHASE3_CELLS_GENERATED_SO_FAR = 0
@@ -107,7 +109,7 @@ def build_manifest(*, in_flight: dict | None = None) -> dict:
         json.dumps(protocol, sort_keys=True).encode()).hexdigest()[:16]
     return {
         "schema": "pivot-lock-v1",
-        "lock_name": f"PIVOT_LOCK_{REVISION.upper().replace('.', '')}_2026-08-09",
+        "lock_name": f"PIVOT_LOCK_{REVISION.upper().replace('.', '')}_{LOCK_DATE}",
         "revision": REVISION,
         "supersedes": SUPERSEDES,
         "tag_policy": TAG_POLICY,

@@ -1,0 +1,65 @@
+{
+ "schema": "pivot-lock-v1",
+ "lock_name": "PIVOT_LOCK_R34_2026-08-11",
+ "revision": "r3.4",
+ "supersedes": "r3.3 (PIVOT_LOCK_R33_2026-08-09, protocol_hash e69dab93fb712694)",
+ "tag_policy": "Tags are never moved. Each revision gets its own tag name (PIVOT_LOCK_R32_..., PIVOT_LOCK_R33_..., ...). docs/74 §0-2.",
+ "phase3_cells_generated_so_far": 0,
+ "protocol_hash": "5126f7e325025b73",
+ "code_commit": "8da6e4317de11b1fd995bd6e5442ec379324a101",
+ "code_dirty": true,
+ "protocol_files": {
+  "docs/73_review10_verdicts.md": "1013b18974db55bc5809c24cd31f94a4a58e2f8dd480df6ddc1cba5b4c876a68",
+  "docs/74_pivot_protocol.md": "c20379c0e5ecce823b0799f8a5779ac7ad924ab49aec7870fcfa253b7d1106b9",
+  "docs/75_blueprint.md": "eebc4ab849dbfd2a733da88d2c083ded260ec34e8bc1788e2701c50cf5c2606a",
+  "docs/78_gate10_isopi_prereg.md": "d9fdf2e30791e39ab93c7b63b10744ddf7fbf7857b6dc8021d091e99dfd196f6",
+  "docs/review_prompt_design_map_pivot.md": "8f9cbeea57d86a86be6d58abf8385855110ccb8eb7517d562dd6bcaf8ddaf4dd",
+  "docs/review_prompt_blueprint.md": "2481b54f6dd2fe40634e0ad1d69055322aae7e86c36fd72f51afd97ae1ee217a"
+ },
+ "phase_files": {
+  "docs/63_scripted_baseline_prereg.md": "02e1de7c5b239992009e0fcebe4c13cd903b4d6584d378311e6bdbe52ff7eb97",
+  "docs/69_train_final_freeze.md": "b4342f2a7744bdeb77267bcc276439b2c2092815a4d196e5843725123998f2ea",
+  "docs/71_ls_commit_ablation_prereg.md": "0abb7c16548ad7acd5e80fc6d70af1f9f3905777934e4270f7ca315e68d85d84",
+  "docs/72_iid_eval_protocol.md": "ce138cf815f88b8b64de2f81e096d49d99760809fdc64d48ccba36099e592955",
+  "configs/l2_mappo.yaml": "871ad37449cd82933229087ef6e0aa35deb043f2ae7c29db9d2f3f01b14b1391",
+  "configs/l2_mappo_nocommit.yaml": "67563c3ffbcf483f04fdd1857f9baec7e4cd5b7eda3d90e381a263406819f7e2",
+  "shepherd/game/viability.py": "866f7e2863f765b662b1e25cb55659e39c14c9e17e145208bb60726a40a7f5d8",
+  "shepherd/env.py": "479acb596b76b5ffc825457fffc2f4b8e2dcf2fb33872f64b63b18aae25f3ce9",
+  "shepherd/env_sys.py": "c2c8a2131e707b6580d1e58e26ba96423846793a756e7e41ec9a46a3e4fb63ea",
+  "shepherd/m4_env.py": "9b6372ffdbf0cbcd7f592c9e22c03c544f774459775ac4613d8d86a268fc7549",
+  "shepherd/m4_config.py": "d6600ae1f5a1442da17cb638869f232a13f9d254bb5e82563d2c74fd7a4a1bfd",
+  "shepherd/scale_v2.py": "5c81bb958e35cdac47c5bf22d24add4de04ae6c6e228c71fe2c7a8ace7c76980",
+  "shepherd/scripts/train_m4.py": "66fc4ce6172ba8f4bf0e4986f5a02b2a2350c9715ae432a1c414825f29e688f3",
+  "shepherd/scripts/eval_iid.py": "da0fb918108666c5bbcefcd7d1b85e9d3a7e1590a1cf078384675ea4bcb4cb59",
+  "shepherd/scripts/analyze_ls_commit.py": "440c873c2828ea28091191b4f5ee9e6199ded01134df5bc0a31936ce344dda06",
+  "shepherd/scripts/shaping_ceiling.py": "f4847c75f53b67982327d5871568cf7ec8643e689849f3c61307e1208a7c7575",
+  "results/shaping_ceiling.json": "25b0b553142040d15701ed18c5d5cfca60ddd985b7cf232c82b1d0e746ba72e1",
+  "results/shaping_ceiling.png": "080a9541d9e83b3a61fd720e2c15576fb809395531cb26ba11f9d8aa4046ca4b",
+  "docs/46_channel_split.md": "7aca921a5bb82cec89b64ac1fc956d06b22beeaf529e6598191f1e78287c808e",
+  "shepherd/scripts/channel_split.py": "a5ccaa99a87810797f6e66b0f07a3106422cc490edb7ec24ec3a888139f4fe20",
+  "temp_research_note/2026-08-08_ll_zero.md": "9cd641e51bd3829b541dc943b487d4bf814a579f8f3c19498447c08f12e3bca0",
+  "temp_research_note/2026-08-08_ready_for_marl.md": "3ec4af4ceccf0c06927c5047b27b024e92ad8791def8f34d11148c814108c80e",
+  "temp_research_note/2026-08-09_ls_off_wired.md": "9d1840628aebbefa8f6ab1670825172cd7ee51ec9fc5b24efaccad88cab10fc0"
+ },
+ "in_flight": {
+  "block": "docs/71 r1 LS-COMMIT ABLATION",
+  "runs": [
+   "LS-live seeds 1..4 (results/m4_v3_train_LS)",
+   "LS-off seeds 0..4 (results/m4_v3_train_LS_off)"
+  ],
+  "launcher": "CUBLAS_WORKSPACE_CONFIG=:4096:8 python -m shepherd.scripts.train_m4 [--config configs/l2_mappo_nocommit.yaml] --threat-layer train --seeds ... --finisher-policy scripted --device cuda --output results/m4_v3_train_LS[_off]",
+  "primary": "ablation IID 10300..10599 paired Delta p_net in the pre-treatment SHAPING label; confirmatory training seeds {1,2,3,4}; two-sided 95% bootstrap CI lower > 0",
+  "distribution_hash": "efeffcbf2e24d807",
+  "train_contract_hash": "e275ca1cea074bc8"
+ },
+ "unread_claim": "Results of the in-flight preregistered ablation had not been inspected for scientific decision-making as of this lock. No stronger claim (e.g. 'verified unread') is made -- that is not cryptographically provable.",
+ "stamp_required_on_phase3_artifacts": [
+  "protocol_hash",
+  "code_commit",
+  "judge_commit",
+  "scenario_manifest_hash",
+  "map_spec_hash",
+  "generated_at"
+ ],
+ "note": "Phase II artifacts are exploratory records only and are not used for Phase III confirmatory classification or hypothesis testing (docs/74)."
+}
