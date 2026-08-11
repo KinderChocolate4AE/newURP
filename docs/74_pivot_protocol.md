@@ -57,9 +57,10 @@ cell = label prevalence · m 이중계산 제거 · Phase I 문구 정합) ·
 | r2 | 리뷰 12 | 논리 오류 2 (sandwich 혼합 · `W=∅` 해석) + 라벨 상호배타 + Δ 층별화 | `cb038ee2a2a05892` |
 | **r3** | **리뷰 13** | **blocker 5 (L^reach 알고리즘 · C_N 집계 · not-boxed · lattice · interaction estimand) + leak 6~14** | (r3 manifest) |
 | r3.2 | 리뷰 15 | 최종 체크리스트 11 항 (stride 금지 · θ_S2 고정 · same-N · joint feasibility · label prevalence · m=1) | `069cade39836cdd1` |
-| **r3.3** | **자체 감사 (docs/76 선행연구 조사 중 docs/46 재발견)** | **협력 채널 scope 선언 §3.0 정밀화 — 측정된 채널 3 종 대장, fixed-state 량의 채널 귀속 명시, negative claim 에 채널 한정 강제, docs/46 §4.2 사전선언을 Stage-2 secondary 로 승계** | 아래 manifest |
+| **r3.3** | **자체 감사 (docs/76 선행연구 조사 중 docs/46 재발견)** | **협력 채널 scope 선언 §3.0 정밀화 — 측정된 채널 3 종 대장, fixed-state 량의 채널 귀속 명시, negative claim 에 채널 한정 강제, docs/46 §4.2 사전선언을 Stage-2 secondary 로 승계** | `e69dab93fb712694` |
+| r3.4 | 자체 감사 (2026-08-10 게이트 10 허용오차 미봉인 발견) | 게이트 10 iso-Π 판정 기준 선봉인 (**docs/78** — Tier 1/2 통계량·bar·교란 설계·실패 경로. iso-Π 런 0 회 상태) | (r3.4 manifest) |
 
-r0~r3.2 의 manifest·태그는 삭제하지 않는다. **Phase III 셀은 전 구간에서 0 개.**
+r0~r3.3 의 manifest·태그는 삭제하지 않는다. **Phase III 셀은 전 구간에서 0 개.**
 
 ## 1. Phase I — 원 spine 과 결과 (변경 금지·소급 재해석 금지)
 
