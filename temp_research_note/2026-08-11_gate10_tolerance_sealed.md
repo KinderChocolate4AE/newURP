@@ -29,10 +29,15 @@
   **protocol_hash `5126f7e325025b73`** → `artifacts/pivot_lock_2026-08-11.json`
 - docs/74 §0.1 r3.4 행 · docs/77 §0 상태표 갱신. 계약 테스트 14/14 PASS.
 
+## 감사 체인 완결 (같은 날 완료)
+
+- 커밋 `1e1a3a9` + 태그 `PIVOT_LOCK_R34_2026-08-11` ✅
+- **OSF 외부 timestamp ✅ — https://osf.io/39gxw/** (r3.3 + r3.4 manifest 업로드 +
+  read-only registration, CC0). 지도 셀 0 개 · pilot 본실행 열람 전 시점 확보.
+  이후 revision 은 새 파일로 추가 업로드 (덮어쓰기 금지).
+
 ## 남은 것 (사용자 트랙)
 
-- 커밋 + 태그 `PIVOT_LOCK_R34_2026-08-11` (기존 태그 이동 금지) + OSF 업로드
-  (r3.3 manifest 도 미업로드 — 같이)
-- 서버: coarse pilot 본실행 4 샤드 (docs/77 §2[E]) — 크리티컬 패스
+- 서버: coarse pilot 본실행 4 샤드 + MARL 9 런 결과 처리 → 통합 파일 수령 예정
 - 조교 답신 발송 (mu 어순 · "임의로" 보정 2건 — 8/10 note)
 - KSAS 초록 트랙에서 Grossmann 3편 정독 (tolerance 와 무관, 프레임용)

@@ -27,7 +27,7 @@
 | **[E] coarse pilot** | 🔶 스크립트 완성 (`shepherd/scripts/coarse_pilot.py`, 전 스텝 + 해석적 교전 pre-screen) · 로컬 preview 1 ep → `coarse_pilot_preview.json`. **본실행 (20~30 ep) = 서버 샤딩** (§2[E]) |
 | 게이트 10 판정 기준 (iso-Π tolerance) | ✅ **선봉인** (2026-08-11, `docs/78` — r3.4) — Tier 1 eps 1e-6 · Tier 2 = 게이트 2·3 bar 재사용 (median 0.02 / p95 0.05, CRN paired, informative union) · 실패 경로 사전 선언 |
 | 서버 MARL 9 런 (Phase I ablation) | 🔄 진행 중 · **미열람** |
-| OSF timestamp (r3.3 manifest) | ❌ 유일 잔여 감사 항목 + **커밋·태그 `PIVOT_LOCK_R33_2026-08-09` 미생성** (사용자 트랙) |
+| OSF timestamp | ✅ **완료 (2026-08-11)** — r3.3 + r3.4 manifest 업로드 + read-only registration: **https://osf.io/39gxw/** (커밋 `1e1a3a9` · 태그 `PIVOT_LOCK_R34_2026-08-11`) |
 
 **[A] 수정판 실측 (확정)**: `V_hold` 8k→32k median 0.0020 / p95 0.0058 · **`V_probe`
 median 0.0038 / p95 0.0099** (기준 0.02/0.05) · allocation worst p95 **0.0141**
@@ -181,8 +181,9 @@ Phase II 산출물을 confirmatory 인용 / docs/71 블록 재해석 / **감사 
   *"mechanism-consistent explanation"* 까지만 (docs/74 §6).
 - **KSAS 추계 초록**: docs/75 §6 구조. 금지 문장 3 개 — "결정대역은 36–39 였다" /
   "1 기면 충분함을 발견" / "MARL 실패 원인은 전개지연".
-- **OSF 외부 timestamp**: `artifacts/pivot_lock_2026-08-09.json` (r3.2) 업로드.
-  남은 유일한 감사 미완 항목.
+- **OSF 외부 timestamp**: ✅ 완료 (2026-08-11) — r3.3·r3.4 manifest 업로드 +
+  registration **https://osf.io/39gxw/**. 이후 revision 은 새 파일로 추가 업로드
+  (덮어쓰기 금지).
 
 ---
 
