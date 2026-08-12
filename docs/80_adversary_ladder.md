@@ -22,12 +22,55 @@
 이 규율을 지키면 T0 → T4 는 연구를 흔드는 원인이 아니라 **논문의 robustness
 ladder** 가 된다.
 
+**★ 순서의 의미 (오독 방지)**:
+
+> **T0–T4 are ordered by adversary sophistication and available response
+> structure, not by guaranteed monotonic difficulty; each higher class is a
+> robustness challenge, not a formal dominance relation.**
+
+잘못 학습된 T4 는 T2 보다 약할 수 있고, horizon/objective 에 따라 T3(MPC) 가 특정
+기하에서 T1 보다 못할 수도 있다. 따라서 "adversary **strength** ladder" 가 아니라
+**"sophistication / information-and-decision ladder"** 다. 논문의 "robust up to T3"
+도 *"T3 가 T0–T2 를 dominate 한다"* 가 아니라 *"질적으로 더 풍부한 adversary
+class 에서도 시험했다"* 로만 읽는다.
+
+**정보구조 상승 (역할 인지)**: T2 = generic defenders 만 관측 (역할 구분 없음) →
+T3 = defender role inference/knowledge 허용 → T4 = learned response. "적은
+net-capturer 를 모른다" 는 영구적 현실가정이 아니다 — 반복 교전으로 학습하거나
+기체 형상으로 역할을 구분할 수 있으므로, 역할 비공개는 **T2 한정 가정**이다.
+
 ## 2. 클래스 정의
 
 | 클래스 | 정의 | 구현 상태 | 용도 |
 |---|---|---|---|
 | **T0** non-reactive | 목표 방향 전진 + open-loop 사인파 횡진동 (jink). **방어자 미관측** | ✅ `AttackerSpec(level="A2", jink_amp=0.6, route_gain=0)` = legacy | analytic mechanism isolation · 겨냥 병목 설명 · legacy 비교 |
-| **T1** reactive-local | T0 + **감지 반경 내 limiter 위치 관측 → 가장 넓은 각도 틈으로 횡가속 편향** (고정 이득). 유일한 사전-커밋 전략 반응이 **단일 모드** | ✅ `route_gain=0.5, sense_range=30.0` (2026-08-13 curve_sweep 재실행) | **KSAS primary** · defender-aware baseline · B2 discovery |
+| **T1** reactive-local | T0 + **감지 반경 내 limiter 위치 관측 → 가장 넓은 각도 틈으로 횡가속 편향** (고정 이득). 유일한 사전-커밋 전략 반응이 **단일 모드** | ✅ `route_gain=0.5, sense_range=30.0` (2026-08-13 curve_sweep 재실행) — **단일 점 설정** | **KSAS primary** · defender-aware baseline · B2 discovery |
+
+**★ T1 은 "family" 가 아니라 "configuration" 이다 (문구 규율)**: 이번 KSAS 재실행은
+`route_gain = 0.5`, `sense_range = 30.0` **고정 단일 점**이다 (Phase III 캠페인은
+`route_gain ~ U[0.2,0.8]`, `sense_range ~ U[15,45]` 의 **분포**를 썼다 — 다른 물건).
+따라서 논문 표현은 *"tested local reactive threat **family**"* 가 아니라
+**"tested local reactive threat model"** 또는 **"tested angular-gap reactive
+configuration"**. 여러 gain/sense-range 를 ensemble 로 돌린 뒤에야 "family" 가
+자연스럽다.
+
+**★ T1 의 두 번째 제한 — 시간적 제한 (2026-08-13 측정으로 발견)**: 감지 반경은
+시나리오 규모와 함께 읽어야 한다.
+
+| | KSAS 곡선 | Phase III |
+|---|---|---|
+| 공격자 시작 | x = 24 m | 250–350 m |
+| limiter 링 | x = 8 (반경 5) | x = 50 |
+| sense_range | 30 m | 15–45 m |
+| 함의 | **회랑 전체 < 감지 반경 ⇒ t=0 부터 전 limiter 관측 (사실상 무제한)** | **접근 구간 200–300 m 동안 방어자 미관측 ⇒ 반응이 종말 구간에서만 활성** |
+
+⇒ KSAS 재실행에서 30 m 는 제약이 아니다. 그러나 **Phase III 의 T1 은 "단일 반응
+모드" 일 뿐 아니라 "종말 한정 반응" 이기도 하다** — 이전에 H3a("무반응 공격자")
+기각 근거로 "route_gain ≥ 0.2 가 전 에피소드" 를 든 것은 **기각 자체는 유효하나
+불완전한 서술**이었다 (certificate 가 평가한 engaged 상태는 종말 구간이라 거기선
+실제로 limiter 가 보인다). 이 시간적 제한은 **pre-commit shaping (T_lead/B2) 질문에
+직접 걸린다**: 공격자가 보지 못하는 구간의 shaping 에는 반응이 없고, 보이기
+시작하면 이미 종말이다. B2 설계 시 **sense_range 를 명시적 실험 변수로 둘 것**.
 | **T2** richer reactive | 압력 크기에 **연속 비례**하는 heading **+ speed** 조절. scripted, 비학습 | ⬜ 미구현 (게이트7 F-0c 용 설계만 존재, 조건 미충족 보류) | **arXiv robustness** · B2 mechanism stress test |
 | **T3** planning | MPC/궤적 최적화 adversary | ⬜ | 국제학회·저널 robustness |
 | **T4** learned | self-play 학습 adversary | ⬜ | learned defender 의 robustness 주장 시 |

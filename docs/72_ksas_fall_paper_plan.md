@@ -77,9 +77,19 @@ limited-basis adversary. 없는 것: 속도 변조(sprint/slowdown 은 asset 거
 커밋 이후라 전략적으로는 route_gain 하나.)
 
 - **KSAS 범위 = T1 까지.** T2 를 넣으면 2페이지가 attacker design paper 가 된다.
-- **표현**: "성립" 금지, "반응형 위협 일반" 금지 → **"tested local reactive threat
-  family"**. 재실행은 "안 보는 표적으로 하계를 주장한다" 는 비판만 제거하며,
+- **표현**: "성립" 금지, "반응형 위협 일반" 금지, **"family" 도 금지** (이번은
+  `route_gain=0.5, sense_range=30` **고정 단일 점**이지 분포가 아니다) →
+  **"tested local reactive threat model"** / **"tested angular-gap reactive
+  configuration"**. 재실행은 "안 보는 표적으로 하계를 주장한다" 는 비판만 제거하며,
   **간극을 좁힐 뿐 닫지 않는다** (속도 변조·예측 공격자는 더 잘 피한다).
+- **감지 반경 30 m 는 이 회랑에서 제약이 아니다**: 공격자 시작 x=24, limiter 링
+  x=8 ⇒ 회랑 전장(24 m) < 감지 반경 ⇒ **t=0 부터 전 limiter 관측**. 반응 항이 교전
+  내내 활성이다. (대조: Phase III 는 스폰 250–350 m 라 같은 15–45 m 가 **종말 한정
+  반응**이 된다 — docs/80 §2.)
+- **★ 스코프에 명시할 것**: 이 곡선의 구성적 하계는 `limiter_mode='hold'` —
+  **limiter 가 설계상 정지**한 구성에서 net 드론 단독으로 낸 성적이다. 논문 주장
+  (단발 net 포획의 성립성)과는 정합하나, "협력 방어의 성능" 으로 오독되지 않도록
+  기준선 구성을 본문에 한 줄로 명시한다.
 - **★ null 해석 함정**: 결과가 legacy 와 비슷해도 "reactivity does not matter" 금지.
   최대 허용 = *"the tested angular-gap reactive mode did not materially shift the
   observed boundary under this configuration."* 근거: 30판 예비에서 궤적은
