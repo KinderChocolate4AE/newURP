@@ -80,3 +80,13 @@ whether cooperation can get you there beforehand.** KSAS 원고는 이 논쟁으
 - FREE positive control 표본 확대 (n=1 → 수십) 는 서버 확장에 끼워 넣기 (비용 미미).
 
 파일: `results/phase3/gate7_pilot_r2_{chi08,chi12,chi16}.json` (+ .log, r3.3 스탬프) · `gate7_unitgates.json`.
+
+## 5. (2026-08-13 추가) 서버 full 20셀 확장 완료 — B1 은 map-wide · FREE control 102 상태 전부 sound
+
+`gate7_full_{0_5,5_10,10_15,15_20}.json` (서버 4샤드, CPU, ep 20..39, free-control).
+
+- **유효성**: 전 20셀 invalid 0 · FREE positive control **102 상태 (chi0.4 셀당 20 + chi0.8 셀당 5–6) 전부 sound_viol 0 · n_closed 0** — "전부 INF 로 만드는 장치" 반증이 n=1 → n=102 로 확대.
+- **B1 은 map-wide**: closed@h4 0.93–1.00 (전 20셀) · n_sigs=0 69–98% · U4 중앙값이 chi 에 단조 (0.43–0.48 → 0.29–0.46 → 0.20–0.23 → 0.09–0.12 → 0.07–0.08). reachability-limited regime 이 격자 전체에서 유지.
+- **ΔU 최초 비영**: chi 2.0 · kappa {0.8, 1.1} 에서 dU_max 0.001/0.003 — 존재하나 무시 가능 (θ 회복 요구량 ~0.8 대비). B1 판정 불변.
+- **재현성 판정**: 로컬↔서버 중복 6셀 중 집계치 5셀 상이 → 조사 결과 **rng 소비 순서 인공물** (프로세스 내 셀 위치에 따라 같은 AMB 풀에서 다른 100개 표집 — `rng.choice` 가 선행 셀 수에 의존). **공통 (ep,t) 상태 131개에서 U4/U1/n_sigs 값 불일치 0** — 물리·certificate 는 플랫폼 간 bit-재현. 교훈: 집계 재현성 비교는 상태 단위로 할 것 (per-cell fresh rng 파생이 더 나은 설계였음 — 결과 무영향이라 코드 불변경).
+- 다음 = [G] 게이트 10 iso-Π. T_lead probe 는 그 뒤 (§3.5).

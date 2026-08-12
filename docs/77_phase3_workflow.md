@@ -75,7 +75,11 @@ probe 에서 `substep_2x` 비영 (0.0025) 확인 — 공허 변이 함정 해소
     내부 control 3종 (미폐쇄 10 상태 = 사전배치 limiter, U=1 / FREE 상태
     U=V0=0.918 soundness 등호 / baseline 의 chi 단조 0.29→0.20→0.11).
     판정 노트 = `temp_research_note/2026-08-12_gate7_r2_reachability_limited_INF_confirmed.md`
-    **다음 = 서버 확장** (40셀 AMB-only adaptive, tmux+ntfy) **→ [G] 게이트 10.**
+    **서버 full 20셀 확장 ✅ (2026-08-13, `gate7_full_*.json`)**: 전 셀 invalid 0 ·
+    FREE control 102 상태 sound_viol 0/n_closed 0 · **B1 map-wide** (closed@h4
+    0.93–1.00, n_sigs=0 69–98%, U4 med chi-단조 0.48→0.07) · 로컬↔서버 공통 상태
+    131개 값 불일치 0 (집계 차이는 rng 순서 표집 인공물 — 노트 §5).
+    **다음 = [G] 게이트 10 iso-Π → 12 → 13 → 14. 이후 T_lead probe (노트 §3.5).**
     순서: G7-A~D unit gates 전부 PASS → chi{0.8,1.2,1.6}×kappa{0.2,1.1} AMB-only pilot
     → AMB-only adaptive 서버 확장. 분기 규칙 G7-1~4 는 docs/79 §5 가 정본
     (기존 "AMB→INF 면 ①-B 확정" 폐기). 판세: ①-B ~80 : 재설계 ~20.
