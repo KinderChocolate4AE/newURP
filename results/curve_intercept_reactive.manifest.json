@@ -1,0 +1,72 @@
+{
+ "sidecar_for": "results/curve_intercept_reactive.json",
+ "note": "docs/81 P0 — 산출물 JSON 이 route_gain/sense_range 를 기록하지 않아 사후 sidecar 로 보완 (원본 무수정).",
+ "git_commit": "edf34d9a643e34fb557830537dbe8e5991efb2cb",
+ "campaign_id": "ksas_t1_intercept_2026-08-13",
+ "threat_class": "T1 (docs/80) — reactive-local, single configuration (not a family)",
+ "attacker": {
+  "level": "A2 (AttackerSpec.level — 코드 명칭, docs/80 T 표기와 별개)",
+  "jink_amp": 0.6,
+  "jink_freq_hz": 1.5,
+  "route_gain": 0.5,
+  "sense_range_m": 30.0,
+  "sprint": "off",
+  "slowdown": "off",
+  "bait": "off"
+ },
+ "defender": {
+  "limiter_mode": "intercept (limiter 충돌 요격 허용)",
+  "fire_mode": "baseline",
+  "baseline_commit": true,
+  "w_kill": 0.5,
+  "controller": "rule-based (non-learning)"
+ },
+ "physics": {
+  "tau_deploy": 0.3,
+  "net_radius": 1.77,
+  "kill_radius": 0.75,
+  "dt": 0.05,
+  "a_att_bracket": [
+   11.0,
+   78.0
+  ],
+  "att_speed_bracket": [
+   8.0,
+   30.0
+  ]
+ },
+ "scenario": {
+  "episode_len": 160,
+  "adversary_start_x": 24.0,
+  "ring_center": [
+   8.0,
+   0.0,
+   0.0
+  ],
+  "ring_radius": 5.0,
+  "target": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "corridor_note": "회랑 전장 24 m < sense_range 30 m ⇒ t=0 부터 전 limiter 관측"
+ },
+ "cone": {
+  "half_angle": 0.2121,
+  "range_min": 0.0,
+  "range_max": 8.22
+ },
+ "run": {
+  "mode": "intercept",
+  "seed0": 0,
+  "n_done": 2700,
+  "n_target": 2700,
+  "sharding": "none (단일 프로세스, 체크포인트 100판)"
+ },
+ "termination_labels": {
+  "PENETRATED": 1729,
+  "NET_CAPTURE": 426,
+  "HARD_KILL": 545
+ },
+ "lineage_caveat": "legacy(T0) 곡선과 계약이 다르다 — 같은 곡선·같은 주장에 수치 혼합 금지 (docs/72 결정 ①)."
+}
