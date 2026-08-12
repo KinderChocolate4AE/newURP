@@ -1,0 +1,12 @@
+tier2 chi 0.8 kappa 0.5 eps 10..14:
+  ep 10: states 44
+  ep 11: states 61
+  ep 12: states 79
+  ep 13: states 120
+    alpha [P]         FAIL n_inf  53 drop   0 | med {'V0': 0.11302, 'U_cheap': 0.0, 'L1': 0.0, 'LN': 0.0} flip 4
+      lam [P]         FAIL n_inf  53 drop   0 | med {'V0': 0.00679, 'U_cheap': 0.0, 'L1': 0.0, 'LN': 0.0} flip 10
+       nu [P]         PASS n_inf  53 drop   0 | med {'V0': 0.0, 'U_cheap': 0.0, 'L1': 0.0, 'LN': 0.0} flip 0
+   sig_as [P]         FAIL n_inf  53 drop   0 | med {'V0': 0.0, 'U_cheap': 0.0, 'L1': 0.0, 'LN': 0.0} flip 4
+      eta [Z] INCONCLUSIVE n_inf  38 drop  24 | med {'V0': 0.21526, 'U_cheap': 0.0, 'L1': 0.0, 'LN': 0.0} flip 14
+   sig_sb [Z]         PASS n_inf  53 drop   0 | med {'V0': 0.0, 'U_cheap': 0.0, 'L1': 0.0, 'LN': 0.0} flip 0
+-> results\phase3\gate10_tier2_chi08.json

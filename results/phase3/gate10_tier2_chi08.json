@@ -1,0 +1,378 @@
+{
+ "contract_doc": "docs/78 r3 addendum §C-3 (Tier 2, P/Z 부류)",
+ "note": "6군 전체 단일 PASS/FAIL headline 금지 — 결론은 '어느 좌표가 conditional viability map 을 충분히 매개변수화하는가'. sig_dt(G)는 게이트 11 소관. tranche = shared frozen validation (ep10..14); no Tier-2 outcomes inspected before r3 freeze.",
+ "bar": {
+  "median": 0.02,
+  "p95": 0.05,
+  "min_informative": 50
+ },
+ "perturbations": [
+  0.8,
+  1.25
+ ],
+ "episodes": [
+  10,
+  11,
+  12,
+  13,
+  14
+ ],
+ "cells": [
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 120,
+   "groups": [
+    {
+     "group": "alpha",
+     "cls": "P",
+     "verdict": "FAIL",
+     "n_informative": 53,
+     "per_factor": {
+      "0.8": {
+       "n_informative": 53,
+       "n_eval": 120,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.11302,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.19569,
+        "U_cheap": 0.46781,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 4,
+       "mean_sign": {
+        "V0": -0.962,
+        "U_cheap": -0.151,
+        "L1": -0.019,
+        "LN": -0.019
+       }
+      },
+      "1.25": {
+       "n_informative": 53,
+       "n_eval": 120,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.11182,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.20423,
+        "U_cheap": 0.04201,
+        "L1": 0.96134,
+        "LN": 0.96134
+       },
+       "flip": 7,
+       "mean_sign": {
+        "V0": 0.906,
+        "U_cheap": 0.094,
+        "L1": 0.151,
+        "LN": 0.151
+       }
+      }
+     }
+    },
+    {
+     "group": "lam",
+     "cls": "P",
+     "verdict": "FAIL",
+     "n_informative": 53,
+     "per_factor": {
+      "0.8": {
+       "n_informative": 53,
+       "n_eval": 120,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.00679,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.59249,
+        "U_cheap": 1.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 10,
+       "mean_sign": {
+        "V0": -0.528,
+        "U_cheap": -0.17,
+        "L1": -0.019,
+        "LN": -0.019
+       }
+      },
+      "1.25": {
+       "n_informative": 55,
+       "n_eval": 120,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.82468,
+        "U_cheap": 0.0,
+        "L1": 0.99672,
+        "LN": 0.99672
+       },
+       "flip": 13,
+       "mean_sign": {
+        "V0": 0.364,
+        "U_cheap": 0.036,
+        "L1": 0.2,
+        "LN": 0.2
+       }
+      }
+     }
+    },
+    {
+     "group": "nu",
+     "cls": "P",
+     "verdict": "PASS",
+     "n_informative": 53,
+     "per_factor": {
+      "0.8": {
+       "n_informative": 53,
+       "n_eval": 120,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 0,
+       "mean_sign": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       }
+      },
+      "1.25": {
+       "n_informative": 53,
+       "n_eval": 120,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 0,
+       "mean_sign": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       }
+      }
+     }
+    },
+    {
+     "group": "sig_as",
+     "cls": "P",
+     "verdict": "FAIL",
+     "n_informative": 53,
+     "per_factor": {
+      "0.8": {
+       "n_informative": 53,
+       "n_eval": 120,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.0,
+        "U_cheap": 0.26295,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 4,
+       "mean_sign": {
+        "V0": 0.0,
+        "U_cheap": 0.075,
+        "L1": 0.038,
+        "LN": 0.038
+       }
+      },
+      "1.25": {
+       "n_informative": 53,
+       "n_eval": 120,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.0,
+        "U_cheap": 0.38187,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 5,
+       "mean_sign": {
+        "V0": 0.0,
+        "U_cheap": -0.094,
+        "L1": -0.019,
+        "LN": -0.019
+       }
+      }
+     }
+    },
+    {
+     "group": "eta",
+     "cls": "Z",
+     "verdict": "INCONCLUSIVE",
+     "n_informative": 38,
+     "per_factor": {
+      "0.8": {
+       "n_informative": 50,
+       "n_eval": 96,
+       "n_dropped": 24,
+       "med": {
+        "V0": 0.21526,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.48323,
+        "U_cheap": 1.0,
+        "L1": 0.95068,
+        "LN": 0.95068
+       },
+       "flip": 14,
+       "mean_sign": {
+        "V0": 0.64,
+        "U_cheap": 0.22,
+        "L1": 0.16,
+        "LN": 0.16
+       }
+      },
+      "1.25": {
+       "n_informative": 38,
+       "n_eval": 83,
+       "n_dropped": 37,
+       "med": {
+        "V0": 0.22185,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.54275,
+        "U_cheap": 1.0,
+        "L1": 0.13694,
+        "LN": 0.13694
+       },
+       "flip": 9,
+       "mean_sign": {
+        "V0": -0.684,
+        "U_cheap": -0.263,
+        "L1": 0.0,
+        "LN": 0.0
+       }
+      }
+     }
+    },
+    {
+     "group": "sig_sb",
+     "cls": "Z",
+     "verdict": "PASS",
+     "n_informative": 53,
+     "per_factor": {
+      "0.8": {
+       "n_informative": 53,
+       "n_eval": 120,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 0,
+       "mean_sign": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       }
+      },
+      "1.25": {
+       "n_informative": 53,
+       "n_eval": 120,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 0,
+       "mean_sign": {
+        "V0": 0.0,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       }
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "protocol_hash": "e69dab93fb712694",
+ "code_commit": "264f57ab1e8a2de0dd2338aab08145bbb8cc7651",
+ "code_dirty": true,
+ "judge_commit": "73d3325a7cd52ded",
+ "scenario_manifest_hash": null,
+ "map_spec_hash": null,
+ "lattice_hash": "bd9ffa741d7b79ee",
+ "generated_at": "2026-08-13T05:11:53+09:00",
+ "artifact": "phase3_gate10_tier2"
+}
