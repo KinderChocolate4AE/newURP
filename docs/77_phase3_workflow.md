@@ -101,7 +101,16 @@ probe 에서 `substep_2x` 비영 (0.0025) 확인 — 공허 변이 함정 해소
               최소 좌표계 ⊇ (chi,kappa,mu,N,cone-shape,eta) + 성분별 sig_as·T̃_reach.
               *"chi 는 governing 좌표 중 하나"* 까지만 허용 (유일·충분 아님).
               판정 노트 = `temp_research_note/2026-08-13_gate10_tier2_r4_verdict.md`
-  III-D 신설  **게이트 11 — closed-loop (scripted) system similarity 복원**:
+  III-D ✅완료 **게이트 11 (2026-08-13) — PASS**: `attacker_ladder.FWD_GAIN` 승격
+              (리터럴 4.0 → 명명 상수, 기본값 동일) → ① baseline regression
+              **bit-exact** (게이트10 --tier1 재실행 전 수치 동일) → ② S-L 회귀
+              6/6 exact PASS → ③ **S-T 재falsify 6/6 exact PASS**
+              (state_dev 0.0 · dv 0.0 · mask/engaged 불일치 0).
+              ⇒ **Level 2 registered scripted encounter similarity 확보** —
+              k_f·τ 가 유일한 숨은 시간상수였음이 확인됨 (추가 FAIL 없음).
+              게이트10 T1-T.system FAIL 은 보존 (수리 기록이지 은폐 아님).
+              산출물 `gate11_system.json` · `gate11_baseline_regression.json`
+  (원안) **게이트 11 — closed-loop (scripted) system similarity 복원**:
               `fwd_gain` 을 explicit dimensional param 으로 승격 (기본값 4.0 1/s
               유지 = 물리 불변) → full-rollout S-L 회귀 · **S-T 재falsify** →
               추가 hidden 상수 발견 시 동일 절차 반복 (매 FAIL 누적 기록).

@@ -50,6 +50,13 @@ _EPS = 1e-12
 _LADDER_ONLY_KW = ("t", "phase", "v_shot_soft", "v_max")
 
 # 현행 env.py 가 하드코딩으로 넘기는 값 (docs/28 §3). lambda 의 기준점.
+# 전진 P-drive 게인 [1/s]. 값 4.0 은 params.py `adversary.fwd_gain` 과 동일 —
+# 원래 `_general_action` 본문에 리터럴로 박혀 있던 것을 **값 변경 없이** 이름만
+# 승격한 것이다 (docs/78 게이트 11: hidden dimensional constant k_f·tau 의
+# explicit parameterization). 기본값이 같으므로 기존 거동은 bit-exact 하게 보존되고,
+# 시간 상사변환 (t' = beta·t) 에서만 FWD_GAIN' = FWD_GAIN/beta 로 스케일한다.
+FWD_GAIN = 4.0
+
 _REF_LAM_GAIN = 1.0     # 반발 크기 배수: a_rep = a_att_max * lam_gain * (1 + strength)
 _REF_LAM_RANGE = 1.0    # 반발 발동 거리 배수 (= env 가 넘기는 repel_margin)
 _REF_DODGE_AMP = 1.8    # 커밋 후 횡회피 진폭 (adversary.py 기본)
@@ -381,7 +388,7 @@ def _general_action(spec, p_att, v_att, *, target, net_center, finisher_p, limit
 
     # --- A1: 전진 P-drive (원본과 동일 순서; v3 off 면 v_ref == v_nominal) ----
     v_fwd = float(v_att @ fwd)
-    a_fwd = 4.0 * (v_ref - v_fwd) * fwd
+    a_fwd = FWD_GAIN * (v_ref - v_fwd) * fwd
 
     # --- A1: 커밋 후 횡회피 ---------------------------------------------------
     to_net = _unit(net_center - p_att, fwd)

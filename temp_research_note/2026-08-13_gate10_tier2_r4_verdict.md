@@ -40,9 +40,11 @@
 효과 크기가 chi 에 **단조 감소**한다: shape med 0.144 → 0.130 → 0.030,
 eta med 0.378 → 0.228 → 0.032. 즉 **chi 가 클수록 conditioning 민감도가 사라진다.**
 해석: high-chi 에서는 이미 대부분 상태가 infeasible 쪽으로 붕괴해 있어(게이트 7/B1)
-어떤 좌표를 흔들어도 Q 가 바뀔 여지가 적다 — **floor 효과**. 따라서 이 결과는
-"경계 근방에서만 민감" (boundary-local secondary coordinate) 이 **아니라**,
-"저-chi feasible 영역에서 민감, 고-chi 붕괴 영역에서 둔감" 이다.
+어떤 좌표를 흔들어도 Q 가 바뀔 여지가 적다 — **floor 효과와 정합(consistent with)**.
+단 **"floor 효과를 입증했다" 고 쓰지 않는다** (baseline V_0 대 교란 크기의 관계를
+기존 데이터로 diagnostic plot 할 수는 있으나 별도 캠페인은 불필요).
+확실한 것은 이 결과가 "경계 근방에서만 민감"(boundary-local secondary coordinate)
+**은 아니라는 것** — 방향이 반대다.
 
 ## 4. 게이트 10 최종 답 — 성분별 sufficient coordinate set
 
@@ -54,8 +56,39 @@ C_{L_1,L_N}: 위와 같음 + T̃_reach = T_reach/tau (미등록 상태좌표, Π
 C_{U_cheap}: core + **sig_as** (= R_NK)                                  (r3)
 ```
 
-⇒ **core-only 매개변수화는 불충분함이 확정**되었다. 최소 좌표계는 적어도
-`(chi, kappa, mu, N, cone-shape, eta)` 이며 성분별로 sig_as·T̃_reach 가 추가된다.
+⇒ **core-only 매개변수화는 불충분함이 확정**되었다.
+
+**정본 표현 (2026-08-13 정정 — "최소 sufficient set" 표현 금지)**:
+> The conditional certificate requires **at least** (chi, kappa, mu, N, cone shape,
+> eta) **over the tested perturbations**; additional component-specific coordinates
+> remain (σ_as for U_cheap; T̃_reach for L_1/L_N), and unregistered Π-groups stay
+> frozen at nominal.
+
+"최소" 라고 부를 수 없는 이유: 미등록 Π 가 nominal 동결 상태이고, T̃_reach 처럼
+구조적으로 들어가지만 아직 sweep 하지 않은 좌표가 있다.
+
+### 4.1 성분별 표 (게이트 10 의 최종 산출물 — 단일 PASS/FAIL 대체)
+
+| Q 성분 | 확인된 추가 governing | inactive / non-identifiable | unresolved / scope |
+|---|---|---|---|
+| V_0 | **cone shape, eta** | — | 미등록 동결 Π |
+| L_1 | (추가 clean governing 미확정) | nu | T̃_reach · shape/eta 의 성분별 효과 |
+| L_N | (추가 clean governing 미확정) | nu, sig_sb (tested regime) | T̃_reach |
+| U_cheap | **sig_as (= R_NK)** | — | 기타 frozen geometry |
+
+### 4.2 eta support 보고 의무 (정정)
+
++25% arm 의 estimand 는 전체 상태분포가 아니라 **support 제한 효과**다:
+`Z_+ = {z : 1.25‖v(z)‖ ≤ 28.5}` ⇔ `‖v‖ ≤ 22.8`. 따라서 eta 결과에는 항상
+`n_base / n_− / n_+` 를 병기한다 (본 tranche: 145/134/49 · 238/225/137 ·
+245/232/137). `n_common = |Z_− ∩ Z_+|` 는 **해석용 diagnostic** 이며 판정 기준이
+아니다 (본 실행은 미저장 — Z_+ ⊂ Z_− 가 근사 성립하므로 n_+ 가 하한).
+정본 문장:
+> η is governing **in the tested physically admissible support** at chi = 0.8 and
+> 1.6; the positive perturbation at chi = 0.4 remains unresolved because of
+> upper-speed censoring.
+
+"η 는 전체 map 에서 governing" 이라는 무제한 일반화 금지.
 
 ## 5. claim 규율 (갱신 — 이전 금지 유지 + 신규)
 

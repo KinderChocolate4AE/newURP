@@ -1,0 +1,335 @@
+{
+ "contract_doc": "docs/78 r2 addendum §A · docs/77 III-D (게이트 11)",
+ "note": "게이트 10 의 T1-T.system FAIL 은 보존된다. 이 게이트는 그 실패의 dimensional-consistency repair 기록이다. 상사성 '보장' 이 아니라 tested transformations · registered ranges 에서의 검증.",
+ "step1_baseline_regression": "results/phase3/gate11_baseline_regression.json (bit-exact)",
+ "transforms": {
+  "S-L": [
+   2.0,
+   1.0
+  ],
+  "S-T": [
+   1.0,
+   2.0
+  ]
+ },
+ "z_points": [
+  {
+   "chi": 0.8,
+   "kappa": 0.5,
+   "mu": 0.4,
+   "N": 4
+  },
+  {
+   "chi": 1.6,
+   "kappa": 0.5,
+   "mu": 0.4,
+   "N": 4
+  }
+ ],
+ "episodes": [
+  0,
+  1,
+  2
+ ],
+ "tol_v": 1e-06,
+ "results": [
+  {
+   "n_steps_base": 387,
+   "n_steps_scaled": 387,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 16,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-L",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 0,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 4.0
+  },
+  {
+   "n_steps_base": 292,
+   "n_steps_scaled": 292,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 17,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-L",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 1,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 4.0
+  },
+  {
+   "n_steps_base": 258,
+   "n_steps_scaled": 258,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 14,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-L",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 2,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 4.0
+  },
+  {
+   "n_steps_base": 388,
+   "n_steps_scaled": 388,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 18,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-L",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 0,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 4.0
+  },
+  {
+   "n_steps_base": 293,
+   "n_steps_scaled": 293,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 20,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-L",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 1,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 4.0
+  },
+  {
+   "n_steps_base": 275,
+   "n_steps_scaled": 275,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 31,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-L",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 2,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 4.0
+  },
+  {
+   "n_steps_base": 387,
+   "n_steps_scaled": 387,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 16,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-T",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 0,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 2.0
+  },
+  {
+   "n_steps_base": 292,
+   "n_steps_scaled": 292,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 17,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-T",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 1,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 2.0
+  },
+  {
+   "n_steps_base": 258,
+   "n_steps_scaled": 258,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 14,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-T",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 2,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 2.0
+  },
+  {
+   "n_steps_base": 388,
+   "n_steps_scaled": 388,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 18,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-T",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 0,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 2.0
+  },
+  {
+   "n_steps_base": 293,
+   "n_steps_scaled": 293,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 20,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-T",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 1,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 2.0
+  },
+  {
+   "n_steps_base": 275,
+   "n_steps_scaled": 275,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 31,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "S-T",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 2,
+   "fwd_gain_base": 4.0,
+   "fwd_gain_scaled": 2.0
+  }
+ ],
+ "gate11_pass": true,
+ "protocol_hash": "e69dab93fb712694",
+ "code_commit": "0d4ec90c8c75e204aba2b01d753062812cab4194",
+ "code_dirty": true,
+ "judge_commit": "73d3325a7cd52ded",
+ "scenario_manifest_hash": null,
+ "map_spec_hash": null,
+ "lattice_hash": "bd9ffa741d7b79ee",
+ "generated_at": "2026-08-13T05:45:34+09:00",
+ "artifact": "phase3_gate11_system"
+}
