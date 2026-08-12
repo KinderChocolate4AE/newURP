@@ -119,6 +119,53 @@ r1 §2.1 의 Tier 2 는 "conditioning group 을 교란해 **fresh rollout** 후 
   정확한 표기 = *"shared frozen validation tranche; no Tier-2 perturbation outcomes
   were inspected before the r3 freeze"* (outcome-adaptive contamination 아님).
 
+### C-4. r4 addendum (2026-08-13, 재실행 전 봉인) — r3 의 무효/오류 2건만 수리
+
+r3 실행이 드러낸 것: ① alpha/lam 교란이 core 를 ±25% 이동 (ρ = R_max·tan θ_half
+= 1.7701 실측 일치 ⇒ 등록 Π 의 **overparameterization**) ② eta 의 admissibility
+gate 가 **파라미터 draw support (8,30) 를 순간 상태량에 오적용** (실측 engaged
+|v_att| 는 0.85–28.50 이라 base 상태 자체가 범위 밖 → ×0.8 arm 의 32건 하한 탈락은
+**treatment 가 유발한 인공 censoring**). r4 는 **이 둘만** 수리하고 범위를 넓히지
+않는다. **effect bar·판정식·검사점은 r1 그대로 불변.**
+
+- **R4-A — cone scale/shape 분리**: `ρ_eff = R_max·tan(α)` 를 **고정**한 채
+  독립 shape 자유도 하나만 교란: `R_max' = f·R_max`, `α' = arctan(tan α / f)`
+  (f = 0.8, 1.25). 실행 시 **exact assert**: `|ρ_eff' − ρ_eff| ≤ 1e-12` **및**
+  chi'/kappa'/mu' 기계적 동일. alpha·lam 2군을 **shape 1군**으로 대체한다
+  (r3 의 alpha/lam 판정은 INVALID 로 보존, 삭제 금지).
+  이 조건에서 Q 가 움직이면 그때만: *"cone shape is an independent governing
+  coordinate beyond capture scale."*
+- **R4-B — eta 재검증**: admissibility 를 물리 상태공간 조건으로 교체 —
+  `0 ≤ ‖v'‖ ≤ v_max(ep)` (= 등록 `adversary_v_max` = 1.5 × att_speed; 본 tranche
+  는 att_speed pin 19.0 ⇒ 28.5, 실측 base max 28.50 과 일치하여 교차검증됨).
+  **한 스텝 도달가능성은 요구하지 않는다** — 질문이 조건부 certificate 의 상태좌표
+  의존성이므로 hard state-space admissibility 로 충분하다.
+  **CAP 확대 (120 → 300, ep 10..19)**: 정정된 admissibility 하에서 arm 별 valid
+  paired n ≥ 50 을 확보하기 위한 것이며, **bar·판정식은 변경하지 않는다.**
+- **R4-C — nu 는 r4 에서 손대지 않는다**: 활성화하려면 `T_reach` 정의/regime 자체를
+  바꿔야 하므로 새 과학 질문이다. r3 판정을 *"inactive under the current
+  lower-bound reachability regime"* 로 종료하고 **별도 사전등록**으로 이관.
+
+**판정 어휘 4종 (r4 부터 적용, r3 결과도 이 어휘로 재표기)**:
+`GOVERNING` / `NUISANCE-SUPPORTED` / `INACTIVE·NON-IDENTIFIABLE` / `INVALID·CONFOUNDED`.
+r3 결과의 재표기: sig_as = **GOVERNING (U_cheap 한정)** · nu, sig_sb =
+**INACTIVE·NON-IDENTIFIABLE** · alpha, lam = **INVALID·CONFOUNDED** · eta =
+INCONCLUSIVE(설계 censoring) · sig_dt = 게이트 11 소관.
+
+**Q 별 좌표계 분리 (이번에 드러난 구조)**: certificate 는 벡터값
+`C(z) = (V_0, L_1, L_N, U_cheap)` 이고 **충분좌표 집합이 성분마다 다르다**
+(예: `C_U` 는 sig_as 의존, `C_{V_0}` 는 비의존). 따라서 목표 진술을
+*"C 전체가 core 로 매개변수화되는가"* 에서 *"각 성분 Q 의 sufficient coordinate
+set 을 식별한다"* 로 교체한다.
+
+**interim claim (r4 완료 전까지의 정본)**:
+> The registered core coordinates define the primary map axes, but sufficiency of
+> the core-only parameterization remains unresolved. Tier 2 has identified at least
+> one certificate-component-specific governing coordinate (σ_as for U_cheap), two
+> inactive/non-identifiable conditioning axes in the tested regime, and a redundant
+> cone parameterization requiring scale–shape separation. All unregistered Π-groups
+> remain fixed at nominal values.
+
 ### D. 최종 claim 한정 (승격 규율 갱신)
 
 - 검증 가능: *"Conditional capture-viability certificate exhibits iso-Π collapse

@@ -424,13 +424,55 @@ def _tier2_state(base, s, *, asset, lim0, v_lim, a_lim, dt, r_kill, r_nk,
     return qb, out
 
 
-def run_tier2_cell(z, episodes, *, log=print):
+# ── r4 (docs/78 r4 addendum §C-4) — shape + eta 만, 나머지 정의 불변 ─────────
+R4_GROUPS = {"shape": "P", "eta": "Z"}
+R4_CAP, R4_EPISODES = 300, range(10, 20)
+V_MAX_STATE = 1.5 * ATT_SPEED0              # 등록 adversary_v_max (att_speed pin)
+
+
+def _r4_state(base, s, *, asset, lim0, v_lim, a_lim, dt, r_kill, r_nk,
+              union_base, tau0, a0, rho_eff0, checked):
+    kwargs0 = dict(asset=asset, lim0=lim0, v_lim=v_lim, a_lim=a_lim, dt=dt,
+                   r_kill=r_kill, r_nk=r_nk)
+    qb = _label_with_union(base, s, union_base, **kwargs0)
+    if not checked[0]:
+        ref = CP.label_state(base, s, asset=asset, lim0=lim0, v_lim=v_lim,
+                             a_lim=a_lim, dt=dt)
+        assert all(abs(qb[k] - ref[k]) < 1e-12 for k in Q_KEYS), (qb, ref)
+        checked[0] = True
+    out = {}
+    for f in PERT:
+        # --- R4-A: cone shape, rho_eff 고정 ---
+        old = (base.cone_half_angle, base.cone_range_max)
+        base.cone_range_max = old[1] * f
+        base.cone_half_angle = float(np.arctan(np.tan(old[0]) / f))
+        rho_eff = base.cone_range_max * np.tan(base.cone_half_angle)
+        assert abs(rho_eff - rho_eff0) <= 1e-12, (rho_eff, rho_eff0)   # 봉인 assert
+        kw = base._vshot_kwargs(s["p_att"], s["v_att"], s["fin"])
+        u = _union_of(base, s["p_att"], s["v_att"], kw, tau=tau0, a_att=a0,
+                      seed=s["t"])
+        out[("shape", f)] = (_label_with_union(base, s, u, **kwargs0), True)
+        base.cone_half_angle, base.cone_range_max = old
+        # --- R4-B: eta, 물리 상태공간 admissibility ---
+        v2 = s["v_att"] * f
+        nv = float(np.linalg.norm(v2))
+        s2 = dict(s, v_att=v2)
+        adm = (0.0 <= nv <= V_MAX_STATE) and bool(_engaged(base, s2))
+        kw2 = base._vshot_kwargs(s2["p_att"], v2, s2["fin"])
+        u2 = _union_of(base, s2["p_att"], v2, kw2, tau=tau0, a_att=a0, seed=s["t"])
+        out[("eta", f)] = (_label_with_union(base, s2, u2, **kwargs0), adm)
+    return qb, out
+
+
+def run_tier2_cell(z, episodes, *, log=print, r4=False):
+    groups = R4_GROUPS if r4 else GROUP_CLASS
+    cap = R4_CAP if r4 else CAP_STATES
     base_lay = _resolved_base_layout(draw_threat_v3(0, 0, "train")["cfg"])
-    acc = {(g, f): [] for g in GROUP_CLASS for f in PERT}
-    drop = {(g, f): 0 for g in GROUP_CLASS for f in PERT}
+    acc = {(g, f): [] for g in groups for f in PERT}
+    drop = {(g, f): 0 for g in groups for f in PERT}
     n_states, checked = 0, [False]
     for ep in episodes:
-        if n_states >= CAP_STATES:
+        if n_states >= cap:
             break
         st = build_world(z, ep, 1.0, 1.0, base_lay)
         env, base = st.env, _base_env(st.env)
@@ -449,14 +491,19 @@ def run_tier2_cell(z, episodes, *, log=print):
                      v_att=base._v(att).copy(),
                      fin=np.asarray(fin, float).copy(),
                      lim=[base._p(x).copy() for x in lims])
-            if _engaged(base, s) and n_states < CAP_STATES:
+            if _engaged(base, s) and n_states < cap:
                 kw0 = base._vshot_kwargs(s["p_att"], s["v_att"], s["fin"])
                 ub = _union_of(base, s["p_att"], s["v_att"], kw0, tau=tau0,
                                a_att=a0, seed=t)
-                qb, pert = _tier2_state(
-                    base, s, asset=asset, lim0=lim0, v_lim=v_lim, a_lim=a_lim,
-                    dt=dt, r_kill=rk0, r_nk=CP.R_NK, union_base=ub, kw0=kw0,
-                    tau0=tau0, a0=a0, checked=checked)
+                common = dict(asset=asset, lim0=lim0, v_lim=v_lim, a_lim=a_lim,
+                              dt=dt, r_kill=rk0, r_nk=CP.R_NK, union_base=ub,
+                              tau0=tau0, a0=a0, checked=checked)
+                if r4:
+                    rho_eff0 = float(base.cone_range_max
+                                     * np.tan(base.cone_half_angle))
+                    qb, pert = _r4_state(base, s, rho_eff0=rho_eff0, **common)
+                else:
+                    qb, pert = _tier2_state(base, s, kw0=kw0, **common)
                 n_states += 1
                 for key, (q, adm) in pert.items():
                     if not adm:
@@ -477,7 +524,7 @@ def run_tier2_cell(z, episodes, *, log=print):
         log(f"  ep {ep}: states {n_states}", flush=True)
 
     rows = []
-    for g in GROUP_CLASS:
+    for g in groups:
         stat = {}
         for f in PERT:
             rs = [r for r in acc[(g, f)] if r["informative"]]
@@ -503,7 +550,7 @@ def run_tier2_cell(z, episodes, *, log=print):
             verdict = "PASS"
         else:
             verdict = "FAIL"
-        rows.append(dict(group=g, cls=GROUP_CLASS[g], verdict=verdict,
+        rows.append(dict(group=g, cls=groups[g], verdict=verdict,
                          n_informative=n_inf, per_factor=stat))
     return dict(z=z, n_states=n_states, groups=rows)
 
@@ -515,16 +562,19 @@ def main(argv=None) -> None:
                     help="docs/78 r2 addendum §C — 조건부 certificate similarity")
     ap.add_argument("--tier2", action="store_true",
                     help="docs/78 r3 addendum §C-3 — P/Z 부류 conditioning 교란")
+    ap.add_argument("--r4", action="store_true",
+                    help="docs/78 r4 addendum §C-4 — shape(rho_eff 고정) + eta(정정)")
     ap.add_argument("--chi", type=float, default=None, help="tier2 샤딩 (단일 chi)")
     ap.add_argument("--out", default="results/phase3/gate10_tier1.json")
     a = ap.parse_args(argv)
     if a.tier2:
         zs = [z for z in TIER2_Z if a.chi is None or abs(z["chi"] - a.chi) < 1e-9]
+        eps = R4_EPISODES if a.r4 else TIER2_EPISODES
         cells = []
         for z in zs:
-            print(f"tier2 chi {z['chi']} kappa {z['kappa']} eps "
-                  f"{TIER2_EPISODES.start}..{TIER2_EPISODES.stop - 1}:", flush=True)
-            r = run_tier2_cell(z, TIER2_EPISODES)
+            print(f"tier2{'-r4' if a.r4 else ''} chi {z['chi']} kappa {z['kappa']} "
+                  f"eps {eps.start}..{eps.stop - 1}:", flush=True)
+            r = run_tier2_cell(z, eps, r4=a.r4)
             cells.append(r)
             for g in r["groups"]:
                 f0 = g["per_factor"][PERT[0]]
@@ -532,7 +582,8 @@ def main(argv=None) -> None:
                       f"n_inf {g['n_informative']:>3} drop "
                       f"{f0['n_dropped']:>3} | med {f0['med']} flip {f0['flip']}",
                       flush=True)
-        out = dict(contract_doc="docs/78 r3 addendum §C-3 (Tier 2, P/Z 부류)",
+        out = dict(contract_doc=("docs/78 r4 addendum §C-4 (shape+eta 수리)" if a.r4
+                                 else "docs/78 r3 addendum §C-3 (Tier 2, P/Z 부류)"),
                    note=("6군 전체 단일 PASS/FAIL headline 금지 — 결론은 "
                          "'어느 좌표가 conditional viability map 을 충분히 "
                          "매개변수화하는가'. sig_dt(G)는 게이트 11 소관. "

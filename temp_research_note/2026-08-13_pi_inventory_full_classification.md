@@ -34,10 +34,13 @@ attitude.omega_max · limiter_omega · adversary_omega · omega_att_max(dead)
 **속도 [L/T]** (3): att_speed · limiter_v_max · adversary_v_max
 **가속 [L/T²]** (2): a_att_max · a_lim_max
 
-Buckingham: 차원량 36개 − 차원 2개(L,T) ⇒ **원리적으로 34개의 독립 무차원군**.
-등록된 12군은 그 중 **지도 위에서 변화시키기로 선언한 것**이고, 나머지는 전부
-nominal 동결 (= scope 한정)이거나 certificate 입력이 아니다. "34개를 다 시험한다"
-가 목표였던 적은 없다 — 다만 **어떤 것이 동결됐는지**는 명시돼야 한다.
+**표현 정정 (2026-08-13, Tier 2 이후)**: raw dimensional inventory 는 36개이고
+차원행렬만 기준으로 하면 **최대 약 34개의 Π-coordinate 후보**가 생기지만,
+**구조적·대수적 의존성을 제거하면 실제 독립군 수는 더 작다**. "34개의 독립
+무차원군이 존재한다" 는 과한 표현이다 — 실증 사례: `ρ = R_max·tan(α)` (Tier 2 가
+적발), dead parameter (omega_att_max), 고정 controller 비, 파생량.
+등록 12군은 그 중 **지도 위에서 변화시키기로 선언한 것**이고, 나머지는 nominal
+동결 (= scope 한정)이거나 certificate 입력이 아니다.
 
 ## C. Certificate C(z;θ) 만 보면 등록 목록이 거의 완비
 
@@ -67,9 +70,15 @@ layout 파생비 — spawn/standby 는 등록됐지만 **layout 기하비는 미
 
 ## F. 결론 (표현 규율)
 
-- "7군" 은 conditioning 부분집합. 등록 Π = **12**.
-- 원리적 독립군은 **~34**. 지도 주장의 정확한 형태는
-  *"C 는 등록 12군 중 core (chi,kappa,mu,N) 로 매개변수화되며, 나머지 8군은
-  시험된 교란 범위에서 nuisance 이고, **그 밖의 무차원군은 nominal 에 동결**"*.
+- "7군" 은 conditioning 부분집합. 등록 Π = **12** (단 alpha/lam 중복 발견 ⇒ 실질
+  자유도는 더 적다 — scale ρ_eff + shape).
+- 후보 상한 ~34, **실제 독립군 수는 그보다 작다** (구조 의존성 제거 후).
+- **지도 주장 (Tier 2 r3 반영 정본, r4 전까지)**: core 좌표가 primary 축이지만
+  **core-only 충분성은 미해결**. 확인된 것 = σ_as 는 U_cheap 의 governing 좌표 ·
+  nu/sig_sb 는 이 regime 에서 inactive·non-identifiable · cone 매개변수화는 중복
+  (scale–shape 분리 필요). 미등록 Π 는 전부 nominal 동결.
 - 미등록 3건은 숨기지 않고 명시: k_f·τ (게이트 11 대상) · r_lat/ρ (해소) ·
-  T_reach/τ (지도 인자 caveat).
+  **T_reach/τ** — 상사성 위반은 아니나 (β 변환에서 비 유지), L1/LN 의 **effective
+  state coordinate** 라 "동일 chi 에서 L_N 이 하나의 map surface 를 이룬다" 류
+  진술에 caveat 필요. 정규화 상태좌표 목록에 `T̃_reach = T_reach/τ` 로 명시하고,
+  축 sweep 은 별도 사전등록 (r4 범위 밖).
