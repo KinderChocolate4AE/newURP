@@ -94,9 +94,13 @@ probe 에서 `substep_2x` 비영 (0.0025) 확인 — 공허 변이 함정 해소
 ★ 연구 단계 로드맵 (2026-08-13 확정 — Gate 11 신설·B2 앞에 배치):
   III-A 완료  feasibility map (chi 경계 · pre-screen 독립 · 3-구간)
   III-B 완료  게이트 7 / **B1** terminal-blockade infeasibility (map-wide)
-  III-C 현재  **게이트 10** — C(z;Π) 상사성. Tier1 cert PASS(bit-exact) /
-              Tier2 = docs/78 r3 (P/Z/G 부류 분해) → chi 를 *certificate-map*
-              similarity coordinate 로 승격 가능한지 판정
+  III-C ✅완료 **게이트 10** — Tier1: L 상사 bit-exact PASS · T 상사는 full-system
+              FAIL(hidden k_f·τ) / conditional-cert PASS. **Tier2 r4 판정:
+              core-only 매개변수화 REJECT** — cone shape(ρ_eff 고정 하에서도
+              GOVERNING) · eta(missing state coordinate) · sig_as(U_cheap 한정).
+              최소 좌표계 ⊇ (chi,kappa,mu,N,cone-shape,eta) + 성분별 sig_as·T̃_reach.
+              *"chi 는 governing 좌표 중 하나"* 까지만 허용 (유일·충분 아님).
+              판정 노트 = `temp_research_note/2026-08-13_gate10_tier2_r4_verdict.md`
   III-D 신설  **게이트 11 — closed-loop (scripted) system similarity 복원**:
               `fwd_gain` 을 explicit dimensional param 으로 승격 (기본값 4.0 1/s
               유지 = 물리 불변) → full-rollout S-L 회귀 · **S-T 재falsify** →

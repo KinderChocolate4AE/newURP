@@ -1,0 +1,154 @@
+{
+ "contract_doc": "docs/78 r4 addendum §C-4 (shape+eta 수리)",
+ "note": "6군 전체 단일 PASS/FAIL headline 금지 — 결론은 '어느 좌표가 conditional viability map 을 충분히 매개변수화하는가'. sig_dt(G)는 게이트 11 소관. tranche = shared frozen validation (ep10..14); no Tier-2 outcomes inspected before r3 freeze.",
+ "bar": {
+  "median": 0.02,
+  "p95": 0.05,
+  "min_informative": 50
+ },
+ "perturbations": [
+  0.8,
+  1.25
+ ],
+ "episodes": [
+  10,
+  11,
+  12,
+  13,
+  14
+ ],
+ "cells": [
+  {
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_states": 245,
+   "groups": [
+    {
+     "group": "shape",
+     "cls": "P",
+     "verdict": "FAIL",
+     "n_informative": 130,
+     "per_factor": {
+      "0.8": {
+       "n_informative": 130,
+       "n_eval": 245,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.03035,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.11034,
+        "U_cheap": 1.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 23,
+       "mean_sign": {
+        "V0": -0.023,
+        "U_cheap": 0.008,
+        "L1": 0.0,
+        "LN": 0.0
+       }
+      },
+      "1.25": {
+       "n_informative": 138,
+       "n_eval": 245,
+       "n_dropped": 0,
+       "med": {
+        "V0": 0.03415,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.14054,
+        "U_cheap": 1.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 11,
+       "mean_sign": {
+        "V0": -0.167,
+        "U_cheap": -0.051,
+        "L1": 0.0,
+        "LN": 0.0
+       }
+      }
+     }
+    },
+    {
+     "group": "eta",
+     "cls": "Z",
+     "verdict": "FAIL",
+     "n_informative": 69,
+     "per_factor": {
+      "0.8": {
+       "n_informative": 149,
+       "n_eval": 232,
+       "n_dropped": 13,
+       "med": {
+        "V0": 0.03235,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.11973,
+        "U_cheap": 1.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 27,
+       "mean_sign": {
+        "V0": 0.49,
+        "U_cheap": 0.195,
+        "L1": 0.0,
+        "LN": 0.0
+       }
+      },
+      "1.25": {
+       "n_informative": 69,
+       "n_eval": 137,
+       "n_dropped": 108,
+       "med": {
+        "V0": 0.02676,
+        "U_cheap": 0.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "p95": {
+        "V0": 0.10879,
+        "U_cheap": 1.0,
+        "L1": 0.0,
+        "LN": 0.0
+       },
+       "flip": 16,
+       "mean_sign": {
+        "V0": -0.565,
+        "U_cheap": -0.348,
+        "L1": 0.0,
+        "LN": 0.0
+       }
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "protocol_hash": "e69dab93fb712694",
+ "code_commit": "4733511bf971616b62c69d22561d5592125633b5",
+ "code_dirty": true,
+ "judge_commit": "73d3325a7cd52ded",
+ "scenario_manifest_hash": null,
+ "map_spec_hash": null,
+ "lattice_hash": "bd9ffa741d7b79ee",
+ "generated_at": "2026-08-13T05:28:13+09:00",
+ "artifact": "phase3_gate10_tier2"
+}

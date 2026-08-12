@@ -1,0 +1,14 @@
+tier2-r4 chi 0.4 kappa 0.5 eps 10..19:
+  ep 10: states 14
+  ep 11: states 30
+  ep 12: states 46
+  ep 13: states 59
+  ep 14: states 72
+  ep 15: states 89
+  ep 16: states 103
+  ep 17: states 118
+  ep 18: states 132
+  ep 19: states 145
+    shape [P]         FAIL n_inf  59 drop   0 | med {'V0': 0.14377, 'U_cheap': 0.0, 'L1': 0.0, 'LN': 0.0} flip 27
+      eta [Z] INCONCLUSIVE n_inf  29 drop  11 | med {'V0': 0.37819, 'U_cheap': 0.0, 'L1': 0.07519, 'LN': 0.07519} flip 51
+-> results\phase3\gate10_tier2r4_chi04.json
