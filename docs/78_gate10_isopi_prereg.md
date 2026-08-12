@@ -79,8 +79,8 @@ r1 §2.1 의 Tier 2 는 "conditioning group 을 교란해 **fresh rollout** 후 
 
 | 부류 | group | C 안에서의 지위 | Tier 2 시험 형태 |
 |---|---|---|---|
-| **P — certificate 파라미터** | `alpha` (cone 반각) · `lam` (cone range/ρ) · `nu` (limiter_v_max/att_speed → L1/LN reachability) | z 가 아니라 θ 에 들어간다 | **고정 상태 · θ 교란 · paired 비교** (가장 깨끗) |
-| **Z — 상태 좌표** | `eta` (att_speed·τ/ρ = ‖v‖ 좌표) · `sig_sb` (R_standby/ρ = limiter 위치) · `sig_as` (D_asset/ρ = asset 위치, r_nk admissibility 경유) | **z 의 성분 자체** — 교란하면 상태가 바뀐다 | **core (chi,kappa,mu,N) 고정 · 해당 좌표만 해석적으로 이동 · Q 비교** (reduction claim = "Q 는 core 로만 결정" 의 직접 시험) |
+| **P — certificate 파라미터** | `alpha` (cone 반각) · `lam` (cone range/ρ) · `nu` (limiter_v_max/att_speed → L1/LN reachability) · **`sig_as`** (D_asset/ρ → `R_NK` admissibility) | z 가 아니라 θ 에 들어간다 | **고정 상태 · θ 교란 · paired 비교** (가장 깨끗) |
+| **Z — 상태 좌표** | `eta` (att_speed·τ/ρ = ‖v‖ 좌표) · `sig_sb` (R_standby/ρ = limiter 위치) | **z 의 성분 자체** — 교란하면 상태가 바뀐다 | **core (chi,kappa,mu,N) 고정 · 해당 좌표만 해석적으로 이동 · Q 비교** (reduction claim = "Q 는 core 로만 결정" 의 직접 시험) |
 | **G — 생성기 전용** | `sig_dt` (sense_range/ρ — attacker 감지 반경) | C 의 입력이 아니다 | 고정 상태에서 **구조적으로 무변화 = 공허** → **Tier 2 에서 제외하고 게이트 11 (system similarity) 로 이관** |
 
 - **Z 부류 교란의 정의** (결과 전 고정): `eta` = ‖v‖ 를 방향 유지한 채 ×0.8/×1.25 ·
@@ -92,10 +92,32 @@ r1 §2.1 의 Tier 2 는 "conditioning group 을 교란해 **fresh rollout** 후 
   이면 INCONCLUSIVE. 검사점도 r1 그대로 chi ∈ {0.4, 0.8, 1.6} × kappa 0.5 × mu 0.4
   × N 4. 상태는 **untouched tranche ep 10..14** (T1-cert 와 동일 — 이미 cert
   parity 만 봤고 Q 값 분포는 미열람).
-- **실패 경로**: r1 §3 승계 (범인 group 은 conditioning 한정으로 명시). 추가:
-  **P 부류 FAIL 은 지도 정의의 문제**(certificate 가 그 파라미터에 의존)이고,
-  **Z 부류 FAIL 은 core 축 불충분**(그 상태 좌표가 실질 축)이라 해석이 다르다.
-  둘을 한 문장으로 합치지 않는다.
+- **sig_as 분류 정정 (실행 전, 2026-08-13)**: r3 초안은 sig_as 를 Z 로 뒀으나,
+  certificate 가 asset 을 소비하는 경로는 `|배치 − asset| > R_NK` (admissibility)
+  **하나뿐**이다 ⇒ θ 파라미터 = **P 부류**. 교란 = `R_NK` ×0.8/×1.25.
+- **실패 해석 (정정 — "지도 정의 문제" 표현 폐기)**:
+  - **P 부류 FAIL** = *"해당 파라미터는 nuisance 가 아니며 core 좌표만으로는
+    certificate map 을 collapse 시킬 수 없다 ⇒ 추가 governing Π-coordinate 필요."*
+    (그 파라미터가 certificate 에 실제로 들어가므로 값이 변하는 것 자체는 버그가
+    아니다. "구현 결함" 은 **이론상 scale-equivalent 라 사라져야 하는데 남은 경우**
+    에만 쓴다.)
+  - **Z 부류 FAIL** = *"동일 preregistered core 를 유지했는데 그 상태 좌표를 바꾸자
+    Q 가 체계적으로 변했다 ⇒ **missing state coordinate**."*
+  - 둘을 한 문장으로 합치지 않는다.
+- **Z 부류 admissibility gate (필수)**: 해석적 교란 상태 z' 는 primary 집계 전
+  `z' ∈ Z_admissible` 검사를 통과해야 한다 — (i) ‖v'‖ ∈ THREAT_BRACKET att_speed
+  (8, 30) (ii) 전 limiter 가 Ball(asset, R_NK) 밖 (iii) registered judge domain =
+  base·교란 양쪽 모두 engaged (pre-screen). **탈락률을 산출물에 기록**한다
+  (unreachable artificial states 비판 차단).
+- **headline 금지**: 6군 전체를 하나의 PASS/FAIL 로 합치지 않는다. 게이트 10 의
+  결론은 *"Which coordinates are sufficient to parameterize the conditional
+  viability map?"* 이며, 결과표는 group × class × chi 로 분해해 보고한다
+  (median/p95 + **chi 별 부호와 label-flip 분리 저장** — χ=0.8 근방에서만 커지면
+  global governing axis 가 아니라 **boundary-local secondary coordinate** 일 수
+  있다).
+- **tranche 표기**: ep 10..14 는 T1-cert 와 공유하므로 "untouched" 라 부르지 않는다.
+  정확한 표기 = *"shared frozen validation tranche; no Tier-2 perturbation outcomes
+  were inspected before the r3 freeze"* (outcome-adaptive contamination 아님).
 
 ### D. 최종 claim 한정 (승격 규율 갱신)
 

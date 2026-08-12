@@ -324,13 +324,231 @@ def run_cert_tranche(z, episodes, base_lay, *, log=print):
     return out
 
 
+# ── Tier 2 (docs/78 r3 addendum §C-3) ───────────────────────────────────────
+import itertools
+
+from shepherd.scripts import coarse_pilot as CP
+
+TIER2_Z = [dict(chi=c, kappa=0.5, mu=0.4, N=4) for c in (0.4, 0.8, 1.6)]
+TIER2_EPISODES = range(10, 15)
+PERT = (0.8, 1.25)                          # r1 §2.1 교란 크기 승계
+CAP_STATES = 120                            # z 당 상태 상한 (episode 순 결정론)
+Q_KEYS = ("V0", "U_cheap", "L1", "LN")
+BAR_MED, BAR_P95, MIN_INFORMATIVE = 0.02, 0.05, 50
+GROUP_CLASS = {"alpha": "P", "lam": "P", "nu": "P", "sig_as": "P",
+               "eta": "Z", "sig_sb": "Z"}   # sig_dt = G → 게이트 11
+
+
+def _admissible_r(points, asset, r_nk):
+    return all(float(np.linalg.norm(np.asarray(p) - asset)) > r_nk for p in points)
+
+
+def _label_with_union(base, s, union, *, asset, lim0, v_lim, a_lim, dt,
+                      r_kill, r_nk):
+    """coarse_pilot.label_state 를 union 재사용 형태로 mirror (정의 동일 —
+    base arm 에서 label_state 와 값 일치를 assert 로 봉인)."""
+    from shepherd.scripts.cert_unblockable import unblockable_from_union
+    T = float(s["t"]) * dt
+    v0, _ = CP._g_eval(union, [s["lim"]], r_kill)[0]
+    m = unblockable_from_union(union, asset=asset, r_nk=r_nk, r_kill=r_kill)
+    probes = CP.probe_placement(base, s)
+    singles = [[p] for p in probes] + [[l] for l in s["lim"]]
+    singles = [ly for ly in singles if _admissible_r(ly, asset, r_nk)
+               and CP._assignable(ly, lim0, T, v_lim, a_lim)]
+    L1 = max((v for v, g in CP._g_eval(union, singles, r_kill) if g), default=0.0) \
+        if singles else 0.0
+    quads = [ly for ly in (probes, list(s["lim"]))
+             if _admissible_r(ly, asset, r_nk)
+             and CP._assignable(ly, lim0, T, v_lim, a_lim)]
+    LN = max([L1] + [v for v, g in CP._g_eval(union, quads, r_kill) if g]) \
+        if quads else L1
+    lab = ("FREE" if v0 >= CP.THETA else
+           "INF" if m["v_max"] < CP.THETA else
+           "SINGLE" if L1 >= CP.THETA else "AMB")
+    return dict(V0=v0, U_cheap=m["v_max"], L1=L1, LN=LN, label=lab)
+
+
+def _union_of(base, p, v, kw, *, tau, a_att, seed):
+    return V.build_reachable_union(p, v, tau=tau, a_att_max=a_att, n=2000,
+                                   n_segments=4, n_dir=32, seed=int(seed), **kw)
+
+
+def _tier2_state(base, s, *, asset, lim0, v_lim, a_lim, dt, r_kill, r_nk,
+                 union_base, kw0, tau0, a0, checked):
+    """한 상태의 base + 6군×2교란 Q. 반환 (base_Q, {(group,f): (Q, admissible)})."""
+    kwargs0 = dict(asset=asset, lim0=lim0, v_lim=v_lim, a_lim=a_lim, dt=dt,
+                   r_kill=r_kill, r_nk=r_nk)
+    qb = _label_with_union(base, s, union_base, **kwargs0)
+    if not checked[0]:                       # 정의 동일성 봉인 (1회)
+        ref = CP.label_state(base, s, asset=asset, lim0=lim0, v_lim=v_lim,
+                             a_lim=a_lim, dt=dt)
+        assert all(abs(qb[k] - ref[k]) < 1e-12 for k in Q_KEYS), (qb, ref)
+        checked[0] = True
+    out = {}
+    a_lo, a_hi = 8.0, 30.0                   # THREAT_BRACKET att_speed
+    for g, f in itertools.product(GROUP_CLASS, PERT):
+        adm = True
+        if g in ("alpha", "lam"):            # judge 파라미터 → union 재생성
+            old = (base.cone_half_angle, base.cone_range_max)
+            if g == "alpha":
+                base.cone_half_angle = old[0] * f
+            else:
+                base.cone_range_max = old[1] * f
+            kw = base._vshot_kwargs(s["p_att"], s["v_att"], s["fin"])
+            u = _union_of(base, s["p_att"], s["v_att"], kw, tau=tau0, a_att=a0,
+                          seed=s["t"])
+            q = _label_with_union(base, s, u, **kwargs0)
+            base.cone_half_angle, base.cone_range_max = old
+        elif g == "nu":                      # reachability 속도 한계
+            q = _label_with_union(base, s, union_base,
+                                  **dict(kwargs0, v_lim=v_lim * f))
+        elif g == "sig_as":                  # R_NK admissibility
+            q = _label_with_union(base, s, union_base,
+                                  **dict(kwargs0, r_nk=r_nk * f))
+        elif g == "eta":                     # 상태 좌표 ‖v‖
+            v2 = s["v_att"] * f
+            adm = (a_lo <= float(np.linalg.norm(v2)) <= a_hi)
+            s2 = dict(s, v_att=v2)
+            adm = adm and bool(_engaged(base, s2))
+            kw = base._vshot_kwargs(s2["p_att"], v2, s2["fin"])
+            u = _union_of(base, s2["p_att"], v2, kw, tau=tau0, a_att=a0, seed=s["t"])
+            q = _label_with_union(base, s2, u, **kwargs0)
+        else:                                # sig_sb — limiter 배치 반경
+            c = np.mean(np.asarray(s["lim"], float), axis=0)
+            lim2 = [c + f * (np.asarray(l, float) - c) for l in s["lim"]]
+            adm = _admissible_r(lim2, asset, r_nk)
+            s2 = dict(s, lim=lim2)
+            q = _label_with_union(base, s2, union_base,
+                                  **dict(kwargs0, lim0=[np.asarray(l) for l in lim2]))
+        out[(g, f)] = (q, adm)
+    return qb, out
+
+
+def run_tier2_cell(z, episodes, *, log=print):
+    base_lay = _resolved_base_layout(draw_threat_v3(0, 0, "train")["cfg"])
+    acc = {(g, f): [] for g in GROUP_CLASS for f in PERT}
+    drop = {(g, f): 0 for g in GROUP_CLASS for f in PERT}
+    n_states, checked = 0, [False]
+    for ep in episodes:
+        if n_states >= CAP_STATES:
+            break
+        st = build_world(z, ep, 1.0, 1.0, base_lay)
+        env, base = st.env, _base_env(st.env)
+        asset = np.asarray(st.lay.target, float)
+        dt = float(base.dt) if hasattr(base, "dt") else 0.05
+        v_lim = ATT_SPEED0
+        a_lim = z["mu"] * z["chi"] * 2.0 * RHO / TAU ** 2
+        tau0, a0, rk0 = float(base.tau_deploy), float(base.a_att_max), \
+            float(base.kill_radius)
+        env.reset(seed=0)
+        lims, fin, att = base._states()
+        lim0 = [base._p(x).copy() for x in lims]
+        for t in range(1200):
+            lims, fin, att = base._states()
+            s = dict(ep=int(ep), t=int(t), p_att=base._p(att).copy(),
+                     v_att=base._v(att).copy(),
+                     fin=np.asarray(fin, float).copy(),
+                     lim=[base._p(x).copy() for x in lims])
+            if _engaged(base, s) and n_states < CAP_STATES:
+                kw0 = base._vshot_kwargs(s["p_att"], s["v_att"], s["fin"])
+                ub = _union_of(base, s["p_att"], s["v_att"], kw0, tau=tau0,
+                               a_att=a0, seed=t)
+                qb, pert = _tier2_state(
+                    base, s, asset=asset, lim0=lim0, v_lim=v_lim, a_lim=a_lim,
+                    dt=dt, r_kill=rk0, r_nk=CP.R_NK, union_base=ub, kw0=kw0,
+                    tau0=tau0, a0=a0, checked=checked)
+                n_states += 1
+                for key, (q, adm) in pert.items():
+                    if not adm:
+                        drop[key] += 1
+                        continue
+                    inf = (0.0 < qb["V0"] < 1.0) or (0.0 < q["V0"] < 1.0)
+                    acc[key].append(dict(
+                        informative=inf,
+                        d={k: abs(qb[k] - q[k]) for k in Q_KEYS},
+                        sgn={k: float(np.sign(q[k] - qb[k])) for k in Q_KEYS},
+                        flip=(qb["label"] != q["label"])))
+            acts = scripted_role_actions(env, st.scn, st.lay, roles=ROLES,
+                                         limiter_mode="hold", fire_mode="never",
+                                         prev_clean=False, states=(lims, fin, att))
+            _, _, te, tr, _ = env.step(acts)
+            if any(te.values()) or any(tr.values()):
+                break
+        log(f"  ep {ep}: states {n_states}", flush=True)
+
+    rows = []
+    for g in GROUP_CLASS:
+        stat = {}
+        for f in PERT:
+            rs = [r for r in acc[(g, f)] if r["informative"]]
+            if rs:
+                med = {k: float(np.median([r["d"][k] for r in rs])) for k in Q_KEYS}
+                p95 = {k: float(np.quantile([r["d"][k] for r in rs], 0.95))
+                       for k in Q_KEYS}
+            else:
+                med = p95 = {k: 0.0 for k in Q_KEYS}
+            stat[f] = dict(n_informative=len(rs), n_eval=len(acc[(g, f)]),
+                           n_dropped=drop[(g, f)],
+                           med={k: round(v, 5) for k, v in med.items()},
+                           p95={k: round(v, 5) for k, v in p95.items()},
+                           flip=sum(r["flip"] for r in rs),
+                           mean_sign={k: round(float(np.mean(
+                               [r["sgn"][k] for r in rs])), 3) for k in Q_KEYS}
+                           if rs else {})
+        n_inf = min(stat[f]["n_informative"] for f in PERT)
+        if n_inf < MIN_INFORMATIVE:
+            verdict = "INCONCLUSIVE"
+        elif all(stat[f]["med"][k] <= BAR_MED and stat[f]["p95"][k] <= BAR_P95
+                 for f in PERT for k in Q_KEYS):
+            verdict = "PASS"
+        else:
+            verdict = "FAIL"
+        rows.append(dict(group=g, cls=GROUP_CLASS[g], verdict=verdict,
+                         n_informative=n_inf, per_factor=stat))
+    return dict(z=z, n_states=n_states, groups=rows)
+
+
 def main(argv=None) -> None:
     ap = argparse.ArgumentParser(description="Gate 10 iso-Pi Tier 1")
     ap.add_argument("--tier1", action="store_true")
     ap.add_argument("--tier1-cert", action="store_true",
                     help="docs/78 r2 addendum §C — 조건부 certificate similarity")
+    ap.add_argument("--tier2", action="store_true",
+                    help="docs/78 r3 addendum §C-3 — P/Z 부류 conditioning 교란")
+    ap.add_argument("--chi", type=float, default=None, help="tier2 샤딩 (단일 chi)")
     ap.add_argument("--out", default="results/phase3/gate10_tier1.json")
     a = ap.parse_args(argv)
+    if a.tier2:
+        zs = [z for z in TIER2_Z if a.chi is None or abs(z["chi"] - a.chi) < 1e-9]
+        cells = []
+        for z in zs:
+            print(f"tier2 chi {z['chi']} kappa {z['kappa']} eps "
+                  f"{TIER2_EPISODES.start}..{TIER2_EPISODES.stop - 1}:", flush=True)
+            r = run_tier2_cell(z, TIER2_EPISODES)
+            cells.append(r)
+            for g in r["groups"]:
+                f0 = g["per_factor"][PERT[0]]
+                print(f"  {g['group']:>7} [{g['cls']}] {g['verdict']:>12} "
+                      f"n_inf {g['n_informative']:>3} drop "
+                      f"{f0['n_dropped']:>3} | med {f0['med']} flip {f0['flip']}",
+                      flush=True)
+        out = dict(contract_doc="docs/78 r3 addendum §C-3 (Tier 2, P/Z 부류)",
+                   note=("6군 전체 단일 PASS/FAIL headline 금지 — 결론은 "
+                         "'어느 좌표가 conditional viability map 을 충분히 "
+                         "매개변수화하는가'. sig_dt(G)는 게이트 11 소관. "
+                         "tranche = shared frozen validation (ep10..14); "
+                         "no Tier-2 outcomes inspected before r3 freeze."),
+                   bar=dict(median=BAR_MED, p95=BAR_P95,
+                            min_informative=MIN_INFORMATIVE),
+                   perturbations=list(PERT), episodes=list(TIER2_EPISODES),
+                   cells=cells,
+                   **stamp(artifact="phase3_gate10_tier2",
+                           lattice_hash=_lattice_hash()))
+        p = pathlib.Path(a.out)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")
+        print(f"-> {p}")
+        return
     if a.tier1_cert:
         d0 = draw_threat_v3(0, 0, "train")
         base_lay = _resolved_base_layout(d0["cfg"])
