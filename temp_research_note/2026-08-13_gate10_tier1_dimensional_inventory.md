@@ -64,5 +64,37 @@ n_dir/n_t · SHA 기반 u draw (무차원 [0,1) → lerp — **lerp 대역이 �
    → `results/phase3/gate10_tier1.json` (스탬프 + docs/78 해시).
 4. Tier 1 PASS 후 Tier 2 (7 group × 3 chi × 20 ep, CRN paired — 서버 샤딩).
 
-미해결 확인 항목 (구현 중 코드로 확정): 센서 노이즈/계측 지연의 절대 단위 여부 ·
-lite_sim 적분기의 dt 스케일 정합 · judge 내부의 절대 eps 상수 유무.
+## (같은 날 2차 — dimensional audit 완료. 이 표를 구현 입력표로 동결)
+
+**변환 공식 (코드 주석 첫머리에 명시)**: 길이 α, 시간 β ⇒ x'=αx, t'=βt,
+v'=(α/β)v, a'=(α/β²)a, f'=f/β, ω'=ω/β. T1-L = (α,β)=(2,1) · T1-T = (1,2).
+
+1. **dt — 확정**: physics.dt = 0.05 s (m4_config). T1-T 에서 **dt'=β·dt**, step
+   count (episode_len 160/1100 등) 는 무차원이라 불변 → 물리 지평선이 β배로 정합.
+   τ/dt = 6 (τ 가 dt 격자 위) 은 두 변환 모두에서 보존 ✓. **pairing 의 t = step
+   index** (coarse_pilot 루프 인덱스 — artifact 에 step_idx 로 명시). attacker
+   내부 dt 사용 1건 (`a_cmd * dt`) 은 cfg dt 를 받아 자동 스케일 ✓.
+2. **noise — 본 파이프라인에 가산 센서 노이즈 없음** (env 계측 경로 deterministic;
+   grep 결과 noise 언급은 CRN 주석뿐). 난수는 전부 SHA-u latent × 대역 lerp
+   (시나리오) + seeded witness 표본 (∝ a_max) — **대역 endpoint 를 스케일하면 CRN
+   자동 충족**. rejection/clip 형 draw 없음 확인. 원칙 명문화: "same seed" 가
+   아니라 **same latent (ep, draw-index)** — pairing mismatch 시 첫 용의자.
+3. **judge eps — 전부 numerical guard 로 분류 (스케일 금지)**: viability `_EPS =
+   1e-12` 의 전 용례 = 정규화 분모 가드·zero-벡터 판정·containment tie-break.
+   물리 tolerance 아님. 1e-6 판정 bar 대비 6자릿수 아래라 스케일 불변으로 둬도
+   T1 에 영향 없음. "차원량 + dimensionless-looking 상수" 형 위험 패턴은 발견 0
+   (sphere_containment 의 `net_radius + _EPS` 1건도 1e-12 급 tie-break — guard 분류).
+4. **각속도 [1/T] — 인벤토리 추가 (audit 의 최대 수확)**: attitude.omega_max = 2.0
+   rad/s (net 지향 slew) · train.limits.limiter_omega = 2.5 · adversary_omega ·
+   AttackerSpec omega_att_max (params registry 상 dead-param 표기 — witness
+   turn-curve 에 attacker_turn_limited 로 들어가는지 구현 시 1줄 확인). T1-T 에서
+   전부 ÷β. jink_freq 와 함께 시간축 변환의 최다 실패 후보군.
+5. **route_gain 등 무차원 gain 은 불변** (a_lat_max 만 스케일 — gain×a_lat 구조 확인).
+6. **디버깅 진단 저장 의무**: PASS 기준은 봉인된 |Δv_shot|≤1e-6 그대로 두고,
+   보조로 normalized state (p/ρ, v·τ/ρ, a·τ²/ρ) · witness count · G/B ·
+   normalized margin (m/ρ) 을 저장 — 실패 시 state-generation vs judge 를 즉시
+   분리. boundary predicate 비교는 무차원 margin 으로.
+
+**실패 처리 순서 (선언)**: Δv_shot 실패 → normalized state 비교 → witness 비교 →
+judge 비교 순으로 localization. T1 실패 자체는 나쁜 결과 아님 (숨은 차원 상수
+폭로가 존재 이유) — 단 위 1–4 는 이미 알고 닫은 상태로 구현에 진입한다.
