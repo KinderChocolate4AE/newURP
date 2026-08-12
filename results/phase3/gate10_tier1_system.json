@@ -1,0 +1,590 @@
+{
+ "contract_doc": "docs/78 §1 (Tier 1) · 선언 = 모듈 docstring 1~5",
+ "transforms": {
+  "T1L": [
+   2.0,
+   1.0
+  ],
+  "T1T": [
+   1.0,
+   2.0
+  ]
+ },
+ "z_points": [
+  {
+   "chi": 0.8,
+   "kappa": 0.5,
+   "mu": 0.4,
+   "N": 4
+  },
+  {
+   "chi": 1.6,
+   "kappa": 0.5,
+   "mu": 0.4,
+   "N": 4
+  }
+ ],
+ "episodes": [
+  0,
+  1,
+  2
+ ],
+ "tol": {
+  "state": 1e-09,
+  "v": 1e-06
+ },
+ "results": [
+  {
+   "n_steps_base": 387,
+   "n_steps_scaled": 387,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 16,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "T1L",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 0
+  },
+  {
+   "n_steps_base": 292,
+   "n_steps_scaled": 292,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 17,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "T1L",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 1
+  },
+  {
+   "n_steps_base": 258,
+   "n_steps_scaled": 258,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 14,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "T1L",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 2
+  },
+  {
+   "n_steps_base": 388,
+   "n_steps_scaled": 388,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 18,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "T1L",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 0
+  },
+  {
+   "n_steps_base": 293,
+   "n_steps_scaled": 293,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 20,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "T1L",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 1
+  },
+  {
+   "n_steps_base": 275,
+   "n_steps_scaled": 275,
+   "len_mismatch": false,
+   "max_state_dev": 0.0,
+   "engaged_mismatch": 0,
+   "n_engaged": 31,
+   "max_dv": 0.0,
+   "mask_mismatch": 0,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [],
+   "pass": true,
+   "transform": "T1L",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 2
+  },
+  {
+   "n_steps_base": 387,
+   "n_steps_scaled": 387,
+   "len_mismatch": false,
+   "max_state_dev": 0.550485652072858,
+   "engaged_mismatch": 0,
+   "n_engaged": 16,
+   "max_dv": 0.17691693290734825,
+   "mask_mismatch": 8,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [
+    {
+     "t": 371,
+     "dv": 0.02036741214057508,
+     "mask_eq": false
+    },
+    {
+     "t": 372,
+     "dv": 0.17691693290734825,
+     "mask_eq": false
+    },
+    {
+     "t": 373,
+     "dv": 0.1014376996805112,
+     "mask_eq": false
+    },
+    {
+     "t": 374,
+     "dv": 0.052316293929712376,
+     "mask_eq": false
+    },
+    {
+     "t": 375,
+     "dv": 0.07068690095846641,
+     "mask_eq": false
+    },
+    {
+     "t": 376,
+     "dv": 0.064297124600639,
+     "mask_eq": false
+    },
+    {
+     "t": 377,
+     "dv": 0.04432907348242812,
+     "mask_eq": false
+    },
+    {
+     "t": 378,
+     "dv": 0.025159744408945688,
+     "mask_eq": false
+    }
+   ],
+   "pass": false,
+   "transform": "T1T",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 0
+  },
+  {
+   "n_steps_base": 292,
+   "n_steps_scaled": 292,
+   "len_mismatch": false,
+   "max_state_dev": 0.0808260508676526,
+   "engaged_mismatch": 1,
+   "n_engaged": 17,
+   "max_dv": 0.030351437699680517,
+   "mask_mismatch": 10,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [
+    {
+     "t": 274,
+     "why": "engaged"
+    },
+    {
+     "t": 275,
+     "dv": 0.030351437699680517,
+     "mask_eq": false
+    },
+    {
+     "t": 276,
+     "dv": 0.02635782747603832,
+     "mask_eq": false
+    },
+    {
+     "t": 277,
+     "dv": 0.0019968051118210983,
+     "mask_eq": false
+    },
+    {
+     "t": 278,
+     "dv": 0.007587859424920129,
+     "mask_eq": false
+    },
+    {
+     "t": 279,
+     "dv": 0.012380191693290743,
+     "mask_eq": false
+    },
+    {
+     "t": 280,
+     "dv": 0.014376996805111841,
+     "mask_eq": false
+    },
+    {
+     "t": 281,
+     "dv": 0.017571884984025565,
+     "mask_eq": false
+    },
+    {
+     "t": 282,
+     "dv": 0.007587859424920129,
+     "mask_eq": false
+    },
+    {
+     "t": 283,
+     "dv": 0.005990415335463253,
+     "mask_eq": false
+    }
+   ],
+   "pass": false,
+   "transform": "T1T",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 1
+  },
+  {
+   "n_steps_base": 258,
+   "n_steps_scaled": 257,
+   "len_mismatch": true,
+   "max_state_dev": 0.4568386804432323,
+   "engaged_mismatch": 0,
+   "n_engaged": 13,
+   "max_dv": 0.36900958466453676,
+   "mask_mismatch": 7,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [
+    {
+     "t": 244,
+     "dv": 0.11301916932907348,
+     "mask_eq": false
+    },
+    {
+     "t": 245,
+     "dv": 0.36900958466453676,
+     "mask_eq": false
+    },
+    {
+     "t": 246,
+     "dv": 0.06988817891373811,
+     "mask_eq": false
+    },
+    {
+     "t": 247,
+     "dv": 0.1545527156549521,
+     "mask_eq": false
+    },
+    {
+     "t": 248,
+     "dv": 0.11980830670926518,
+     "mask_eq": false
+    },
+    {
+     "t": 249,
+     "dv": 0.09864217252396167,
+     "mask_eq": false
+    },
+    {
+     "t": 250,
+     "dv": 0.010383386581469648,
+     "mask_eq": false
+    }
+   ],
+   "pass": false,
+   "transform": "T1T",
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 2
+  },
+  {
+   "n_steps_base": 388,
+   "n_steps_scaled": 388,
+   "len_mismatch": false,
+   "max_state_dev": 0.86826227274328,
+   "engaged_mismatch": 1,
+   "n_engaged": 17,
+   "max_dv": 0.0299520766773163,
+   "mask_mismatch": 12,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [
+    {
+     "t": 370,
+     "why": "engaged"
+    },
+    {
+     "t": 371,
+     "dv": 0.01597444089456869,
+     "mask_eq": false
+    },
+    {
+     "t": 372,
+     "dv": 0.0299520766773163,
+     "mask_eq": false
+    },
+    {
+     "t": 373,
+     "dv": 0.024760383386581472,
+     "mask_eq": false
+    },
+    {
+     "t": 374,
+     "dv": 0.012380191693290729,
+     "mask_eq": false
+    },
+    {
+     "t": 375,
+     "dv": 0.0019968051118210844,
+     "mask_eq": false
+    },
+    {
+     "t": 376,
+     "dv": 0.009584664536741214,
+     "mask_eq": false
+    },
+    {
+     "t": 377,
+     "dv": 0.008785942492012776,
+     "mask_eq": false
+    },
+    {
+     "t": 378,
+     "dv": 0.00718849840255591,
+     "mask_eq": false
+    },
+    {
+     "t": 379,
+     "dv": 0.001597444089456869,
+     "mask_eq": false
+    }
+   ],
+   "pass": false,
+   "transform": "T1T",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 0
+  },
+  {
+   "n_steps_base": 293,
+   "n_steps_scaled": 292,
+   "len_mismatch": true,
+   "max_state_dev": 0.29112402848193186,
+   "engaged_mismatch": 0,
+   "n_engaged": 19,
+   "max_dv": 0.03394568690095846,
+   "mask_mismatch": 15,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [
+    {
+     "t": 273,
+     "dv": 0.003194888178913738,
+     "mask_eq": false
+    },
+    {
+     "t": 274,
+     "dv": 0.03394568690095846,
+     "mask_eq": false
+    },
+    {
+     "t": 275,
+     "dv": 0.01317891373801916,
+     "mask_eq": false
+    },
+    {
+     "t": 276,
+     "dv": 0.013178913738019188,
+     "mask_eq": false
+    },
+    {
+     "t": 277,
+     "dv": 0.009984025559105436,
+     "mask_eq": false
+    },
+    {
+     "t": 278,
+     "dv": 0.015575079872204467,
+     "mask_eq": false
+    },
+    {
+     "t": 279,
+     "dv": 0.017571884984025538,
+     "mask_eq": false
+    },
+    {
+     "t": 280,
+     "dv": 0.017971246006389774,
+     "mask_eq": false
+    },
+    {
+     "t": 281,
+     "dv": 0.025559105431309903,
+     "mask_eq": false
+    },
+    {
+     "t": 282,
+     "dv": 0.01996805111821086,
+     "mask_eq": false
+    }
+   ],
+   "pass": false,
+   "transform": "T1T",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 1
+  },
+  {
+   "n_steps_base": 275,
+   "n_steps_scaled": 277,
+   "len_mismatch": true,
+   "max_state_dev": 1.8638684650309443,
+   "engaged_mismatch": 1,
+   "n_engaged": 31,
+   "max_dv": 0.1481629392971246,
+   "mask_mismatch": 12,
+   "wit_mismatch": 0,
+   "boxed_mismatch": 0,
+   "worst": [
+    {
+     "t": 243,
+     "why": "engaged"
+    },
+    {
+     "t": 244,
+     "dv": 0.022763578274760384,
+     "mask_eq": false
+    },
+    {
+     "t": 245,
+     "dv": 0.1481629392971246,
+     "mask_eq": false
+    },
+    {
+     "t": 246,
+     "dv": 0.0902555910543131,
+     "mask_eq": false
+    },
+    {
+     "t": 247,
+     "dv": 0.04512779552715657,
+     "mask_eq": false
+    },
+    {
+     "t": 248,
+     "dv": 0.05431309904153353,
+     "mask_eq": false
+    },
+    {
+     "t": 249,
+     "dv": 0.10702875399361023,
+     "mask_eq": false
+    },
+    {
+     "t": 250,
+     "dv": 0.06669329073482427,
+     "mask_eq": false
+    },
+    {
+     "t": 251,
+     "dv": 0.026357827476038338,
+     "mask_eq": false
+    },
+    {
+     "t": 271,
+     "dv": 0.038338658146964855,
+     "mask_eq": false
+    }
+   ],
+   "pass": false,
+   "transform": "T1T",
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "ep": 2
+  }
+ ],
+ "tier1_pass": false,
+ "protocol_hash": "e69dab93fb712694",
+ "code_commit": "6008c934c86252c4dcf2ebf0c10eef4b7a439921",
+ "code_dirty": true,
+ "judge_commit": "73d3325a7cd52ded",
+ "scenario_manifest_hash": null,
+ "map_spec_hash": null,
+ "lattice_hash": "bd9ffa741d7b79ee",
+ "generated_at": "2026-08-13T04:56:50+09:00",
+ "artifact": "phase3_gate10_tier1"
+}

@@ -1,4 +1,84 @@
-# 78 — 게이트 10 iso-Π reduction validation 판정 기준 선봉인 — 2026-08-11
+# 78 — 게이트 10 iso-Π reduction validation 판정 기준 선봉인 — 2026-08-11 (**r2 addendum 2026-08-13**)
+
+---
+
+## r2 ADDENDUM (2026-08-13) — Tier 1 이 노출한 분해: generator similarity ≠ certificate similarity
+
+**소급 재해석 금지**: 아래는 원 protocol 의 "원래 뜻" 이 아니라 **새 tranche 의 추가
+사전등록**이다. r1 의 full-rollout 판정과 그 실패는 영구 보존한다.
+
+### A. 실행 결과 (r1 protocol 그대로, dev tranche ep 0..2 · chi {0.8,1.6})
+
+- **T1-L.system = PASS** — max_state_dev **0.0** · max|Δv_shot| **0.0** · witness
+  mask 불일치 0 · engaged mask 불일치 0. 전 파이프라인(상태생성+witness+judge)이
+  길이 스케일에 대해 **기계정밀도 정확 불변**. (사전 스모크가 숨은 길이상수 1건
+  적발·수정: `SpawnSpec.r_lat = 5.0 m` — 인벤토리 미등재였다. 수정 후 정확 통과.)
+- **T1-T.system = FAIL (정당한 실패 — 보존)** — normalized state 가 t=2 부터 점진
+  drift (t=59 에 |Δp|/ρ ≈ 2.1e-3), 그 결과 witness mask flip 8건.
+  **원인 = 동결 scripted attacker 의 하드코딩 전진 P-gain**
+  `a_fwd = 4.0 * (v_ref − v_fwd) * fwd` (`attacker_ladder.py:377`;
+  params.py `adversary.fwd_gain = 4.0 "1/s"`). AttackerSpec/config 밖 리터럴이라
+  β 로 스케일 불가 → **숨은 무차원군 k_f·τ 가 시간변환에서 2배**가 된다.
+  즉 **동결 attacker 를 포함한 closed-loop 시뮬레이터는 time-similar 하지 않다.**
+  이 caveat 는 영구 유지한다. (homing_gain 은 spec 필드라 이미 스케일됨.)
+
+### B. 분해 (새 사전등록)
+
+두 명제가 r1 에서 한 문장으로 묶여 있었다:
+
+```
+A. generator similarity :  G_{φ'}(u) =? S_β G_φ(u)      ← T1-*.system (위 A)
+B. certificate similarity: C_{θ'}(S_β z) =? C_θ(z)      ← T1-*.cert (신규, 미실행)
+```
+
+T1-T 가 깬 것은 **A** 이고, **B 는 아직 시험조차 되지 않았다.** 게이트 10 의
+과학적 질문(지도 C(z) 가 무차원 상태의 함수인가)은 B 이며, attacker 가 z 에
+**어떻게 도달했는지**는 조건부 certificate 정의에 들어가지 않는다 (nuisance
+generator). 따라서 B 를 별도 tranche 로 시험한다.
+
+### C. T1-*.cert 설계 (결과 열람 전 고정)
+
+1. **오염 통제**: dev tranche (ep 0..2) 는 full-rollout drift·localization 에 이미
+   노출 → **primary = untouched ep 10..14**.
+2. **절차**: base 월드 1회 rollout (α=β=1) → engaged 상태를 **해석적으로 변환**
+   (attacker 재적분 없음 ⇒ k_f 오염 원천 제거) → 양 표현에서 certificate 평가.
+   변환: T1-L(α=2,β=1) p·limiter·net_apex·range·ρ·r_kill ×2 ·
+   T1-T(α=1,β=2) v÷2 · a÷4 · τ×2 (길이·각도 불변).
+3. **판정** (r1 §1 bar 승계): 상태별 `|Δv_shot| ≤ 1e-6` · witness 수 일치 ·
+   (caught∧turn_feasible) mask bit 일치 · boxed 일치. 사전 assert:
+   normalized invariants (p/ρ, vτ/ρ, aτ²/ρ, apex/ρ) 일치 ≤ 1e-9.
+4. **표기 규율**: PASS 해도 "T1-T PASS" 라고 쓰지 않는다. 정본 표기 =
+   ***"full-system T1-T failed (hidden k_f·τ); conditional-certificate T1-T passed."***
+5. **Tier 2 도 같은 구조로 간다** (동일 base 상태 → 차원변환 → certificate 비교).
+   fresh rollout 을 다시 쓰면 C(z) 불변성과 D(z) 분포이동이 다시 섞인다.
+
+### C-2. T1-*.cert 실행 결과 (2026-08-13, untouched ep 10..14)
+
+| tranche | n 상태 | max\|Δv_shot\| | witness mask 불일치 | boxed 불일치 | 판정 |
+|---|---|---|---|---|---|
+| **T1-L.cert** (chi 0.8 / 1.6) | 160 / 108 | **0.0 / 0.0** | 0 / 0 | 0 / 0 | **PASS** |
+| **T1-T.cert** (chi 0.8 / 1.6) | 160 / 108 | **0.0 / 0.0** | 0 / 0 | 0 / 0 | **PASS** |
+
+normalized invariants 사전 assert: max dev **0.0** (bar 1e-9). 즉 조건부 certificate
+(witness 생성 + judge + v_shot) 는 길이·시간 두 축 모두에서 **bit-exact 상사불변**.
+숨은 절대-시간/절대-길이 상수가 certificate 경로에는 없다는 뜻이다.
+
+**정본 표기 (§C-4 규율)**: *"full-system T1-T failed (hidden k_f·τ in the frozen
+scripted attacker); conditional-certificate T1-T passed (bit-exact)."*
+산출물: `results/phase3/gate10_tier1_system.json` (T1-L PASS 6/6 · T1-T FAIL 6/6,
+dev tranche 보존) · `gate10_tier1_cert.json` (신규 tranche).
+
+### D. 최종 claim 한정 (승격 규율 갱신)
+
+- 검증 가능: *"Conditional capture-viability certificate exhibits iso-Π collapse
+  within the tested Π-set."* / *"chi is a governing similarity coordinate of the
+  conditional capture-feasibility map."*
+- **금지 (이번 발견으로 확정)**: *"the complete attacker–defense closed-loop system
+  exhibits iso-Π collapse"* · *"chi governs the full encounter dynamics"* —
+  full encounter 에는 실제로 k_f·τ 같은 controller-response group 이 존재한다.
+
+---
+
 
 **지위**: docs/75 게이트 10 의 "허용오차" 가 미봉인이었다 (2026-08-10 세션에서 발견).
 이 문서가 그 **판정 통계량·허용오차·교란 설계·실패 경로**를 iso-Π 런 0 회 상태에서

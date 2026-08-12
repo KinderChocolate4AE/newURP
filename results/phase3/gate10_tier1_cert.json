@@ -1,0 +1,217 @@
+{
+ "contract_doc": "docs/78 r2 addendum §C (conditional certificate)",
+ "note": "표기 규율: PASS 여도 'T1-T PASS' 금지 — 정본 = 'full-system T1-T failed (hidden k_f·tau); conditional-certificate T1-T passed'.",
+ "episodes": [
+  10,
+  11,
+  12,
+  13,
+  14
+ ],
+ "z_points": [
+  {
+   "chi": 0.8,
+   "kappa": 0.5,
+   "mu": 0.4,
+   "N": 4
+  },
+  {
+   "chi": 1.6,
+   "kappa": 0.5,
+   "mu": 0.4,
+   "N": 4
+  }
+ ],
+ "cells": [
+  {
+   "T1L": {
+    "n": 160,
+    "max_dv": 0.0,
+    "mask_mismatch": 0,
+    "wit_mismatch": 0,
+    "boxed_mismatch": 0,
+    "worst": [
+     {
+      "ep": 10,
+      "t": 315,
+      "dv": 0.0,
+      "v0": 0.0
+     },
+     {
+      "ep": 10,
+      "t": 316,
+      "dv": 0.0,
+      "v0": 0.3266773162939297
+     },
+     {
+      "ep": 10,
+      "t": 317,
+      "dv": 0.0,
+      "v0": 0.8154952076677316
+     },
+     {
+      "ep": 10,
+      "t": 318,
+      "dv": 0.0,
+      "v0": 0.7635782747603834
+     },
+     {
+      "ep": 10,
+      "t": 319,
+      "dv": 0.0,
+      "v0": 0.5499201277955271
+     }
+    ],
+    "pass": true
+   },
+   "T1T": {
+    "n": 160,
+    "max_dv": 0.0,
+    "mask_mismatch": 0,
+    "wit_mismatch": 0,
+    "boxed_mismatch": 0,
+    "worst": [
+     {
+      "ep": 10,
+      "t": 315,
+      "dv": 0.0,
+      "v0": 0.0
+     },
+     {
+      "ep": 10,
+      "t": 316,
+      "dv": 0.0,
+      "v0": 0.3266773162939297
+     },
+     {
+      "ep": 10,
+      "t": 317,
+      "dv": 0.0,
+      "v0": 0.8154952076677316
+     },
+     {
+      "ep": 10,
+      "t": 318,
+      "dv": 0.0,
+      "v0": 0.7635782747603834
+     },
+     {
+      "ep": 10,
+      "t": 319,
+      "dv": 0.0,
+      "v0": 0.5499201277955271
+     }
+    ],
+    "pass": true
+   },
+   "max_norm_invariant_dev": 0.0,
+   "invariants_ok": true,
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   }
+  },
+  {
+   "T1L": {
+    "n": 108,
+    "max_dv": 0.0,
+    "mask_mismatch": 0,
+    "wit_mismatch": 0,
+    "boxed_mismatch": 0,
+    "worst": [
+     {
+      "ep": 10,
+      "t": 314,
+      "dv": 0.0,
+      "v0": 0.00039936102236421724
+     },
+     {
+      "ep": 10,
+      "t": 315,
+      "dv": 0.0,
+      "v0": 0.09384984025559105
+     },
+     {
+      "ep": 10,
+      "t": 316,
+      "dv": 0.0,
+      "v0": 0.17092651757188498
+     },
+     {
+      "ep": 10,
+      "t": 317,
+      "dv": 0.0,
+      "v0": 0.1880990415335463
+     },
+     {
+      "ep": 10,
+      "t": 318,
+      "dv": 0.0,
+      "v0": 0.19568690095846644
+     }
+    ],
+    "pass": true
+   },
+   "T1T": {
+    "n": 108,
+    "max_dv": 0.0,
+    "mask_mismatch": 0,
+    "wit_mismatch": 0,
+    "boxed_mismatch": 0,
+    "worst": [
+     {
+      "ep": 10,
+      "t": 314,
+      "dv": 0.0,
+      "v0": 0.00039936102236421724
+     },
+     {
+      "ep": 10,
+      "t": 315,
+      "dv": 0.0,
+      "v0": 0.09384984025559105
+     },
+     {
+      "ep": 10,
+      "t": 316,
+      "dv": 0.0,
+      "v0": 0.17092651757188498
+     },
+     {
+      "ep": 10,
+      "t": 317,
+      "dv": 0.0,
+      "v0": 0.1880990415335463
+     },
+     {
+      "ep": 10,
+      "t": 318,
+      "dv": 0.0,
+      "v0": 0.19568690095846644
+     }
+    ],
+    "pass": true
+   },
+   "max_norm_invariant_dev": 0.0,
+   "invariants_ok": true,
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   }
+  }
+ ],
+ "tier1_cert_pass": true,
+ "protocol_hash": "e69dab93fb712694",
+ "code_commit": "6008c934c86252c4dcf2ebf0c10eef4b7a439921",
+ "code_dirty": true,
+ "judge_commit": "73d3325a7cd52ded",
+ "scenario_manifest_hash": null,
+ "map_spec_hash": null,
+ "lattice_hash": "bd9ffa741d7b79ee",
+ "generated_at": "2026-08-13T04:51:19+09:00",
+ "artifact": "phase3_gate10_tier1_cert"
+}
