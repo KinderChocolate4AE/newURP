@@ -1,0 +1,195 @@
+{
+ "contract_doc": "docs/77 [F] F-0b · third_party_feedback.md §19.4",
+ "declarations": "모듈 docstring 1~5 (결과 열람 전 고정)",
+ "theta": 0.9,
+ "grid": {
+  "chi": 1.2,
+  "kappa": [
+   0.2,
+   0.5,
+   0.8,
+   1.1
+  ],
+  "mu": 0.4,
+  "N": 4
+ },
+ "episodes": 5,
+ "base_per_ep": 5,
+ "cells": [
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.2,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_evals": 325,
+   "n_base": 25,
+   "n_island": 0,
+   "islands": [],
+   "n_LN_ge_theta_but_INF": 0,
+   "LN_max": 0.0,
+   "by_axis": {
+    "base": {
+     "n": 25,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "speed": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "heading": {
+     "n": 150,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "lateral": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "phase": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    }
+   }
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_evals": 325,
+   "n_base": 25,
+   "n_island": 0,
+   "islands": [],
+   "n_LN_ge_theta_but_INF": 0,
+   "LN_max": 0.0,
+   "by_axis": {
+    "base": {
+     "n": 25,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "speed": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "heading": {
+     "n": 150,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "lateral": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "phase": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    }
+   }
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.8,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_evals": 325,
+   "n_base": 25,
+   "n_island": 0,
+   "islands": [],
+   "n_LN_ge_theta_but_INF": 0,
+   "LN_max": 0.0,
+   "by_axis": {
+    "base": {
+     "n": 25,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "speed": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "heading": {
+     "n": 150,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "lateral": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "phase": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    }
+   }
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 1.1,
+    "mu": 0.4,
+    "N": 4
+   },
+   "n_evals": 325,
+   "n_base": 25,
+   "n_island": 0,
+   "islands": [],
+   "n_LN_ge_theta_but_INF": 0,
+   "LN_max": 0.0,
+   "by_axis": {
+    "base": {
+     "n": 25,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "speed": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "heading": {
+     "n": 150,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "lateral": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    },
+    "phase": {
+     "n": 50,
+     "island": 0,
+     "LN_max": 0.0
+    }
+   }
+  }
+ ],
+ "n_island_total": 0,
+ "reading": "island 0 -> H3 급락·①-B 실질 강화 (근방에 협력이 열 상태 부재). island > 0 -> F-0c 2x2 reachability probe 로 진행 — 도달가능성 확인 전 ①-B 서술 금지 (§19.4).",
+ "protocol_hash": "e69dab93fb712694",
+ "code_commit": "e6e33e86ea452c153b70b5c97b82087c26f71161",
+ "code_dirty": true,
+ "judge_commit": "73d3325a7cd52ded",
+ "scenario_manifest_hash": null,
+ "map_spec_hash": null,
+ "lattice_hash": "bd9ffa741d7b79ee",
+ "generated_at": "2026-08-12T02:33:14+09:00",
+ "artifact": "phase3_f0b_offmanifold_probe"
+}

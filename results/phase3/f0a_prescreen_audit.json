@@ -1,0 +1,334 @@
+{
+ "contract_doc": "docs/77 [F] F-0a · third_party_feedback.md §19.3-2",
+ "declarations": "모듈 docstring 1~5 (결과 열람 전 고정)",
+ "theta": 0.9,
+ "slice": {
+  "kappa": 0.5,
+  "mu": 0.4,
+  "N": 1
+ },
+ "episodes": 3,
+ "quota": {
+  "rejected": 14,
+  "delta": 7
+ },
+ "cells": [
+  {
+   "z": {
+    "chi": 0.4,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "episodes": [
+    {
+     "ep": 0,
+     "n_steps": 375,
+     "pass_P1": 12,
+     "pass_P2": 12,
+     "n_delta": 0
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "pass_P1": 17,
+     "pass_P2": 16,
+     "n_delta": 1
+    },
+    {
+     "ep": 2,
+     "n_steps": 258,
+     "pass_P1": 13,
+     "pass_P2": 13,
+     "n_delta": 0
+    }
+   ],
+   "n_states": 925,
+   "pass_rate_P1": 0.04540540540540541,
+   "pass_rate_P2": 0.04432432432432432,
+   "n_delta": 1,
+   "rejected_sampled": 42,
+   "false_INF": 0,
+   "false_INF_G": [],
+   "false_INF_rate": 0.0,
+   "rejected_labels": {
+    "FREE": 0,
+    "SINGLE": 0,
+    "INF": 42,
+    "AMB": 0
+   },
+   "delta_sampled": 1,
+   "delta_labels": {
+    "FREE": 0,
+    "SINGLE": 0,
+    "INF": 0,
+    "AMB": 1
+   },
+   "delta_LN": [
+    0.0
+   ]
+  },
+  {
+   "z": {
+    "chi": 0.8,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "episodes": [
+    {
+     "ep": 0,
+     "n_steps": 447,
+     "pass_P1": 72,
+     "pass_P2": 62,
+     "n_delta": 10
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "pass_P1": 17,
+     "pass_P2": 16,
+     "n_delta": 1
+    },
+    {
+     "ep": 2,
+     "n_steps": 292,
+     "pass_P1": 37,
+     "pass_P2": 34,
+     "n_delta": 3
+    }
+   ],
+   "n_states": 1031,
+   "pass_rate_P1": 0.12221144519883609,
+   "pass_rate_P2": 0.10863239573229874,
+   "n_delta": 14,
+   "rejected_sampled": 42,
+   "false_INF": 0,
+   "false_INF_G": [],
+   "false_INF_rate": 0.0,
+   "rejected_labels": {
+    "FREE": 0,
+    "SINGLE": 0,
+    "INF": 42,
+    "AMB": 0
+   },
+   "delta_sampled": 11,
+   "delta_labels": {
+    "FREE": 0,
+    "SINGLE": 0,
+    "INF": 6,
+    "AMB": 5
+   },
+   "delta_LN": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "z": {
+    "chi": 1.2,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "episodes": [
+    {
+     "ep": 0,
+     "n_steps": 419,
+     "pass_P1": 59,
+     "pass_P2": 53,
+     "n_delta": 6
+    },
+    {
+     "ep": 1,
+     "n_steps": 292,
+     "pass_P1": 18,
+     "pass_P2": 16,
+     "n_delta": 2
+    },
+    {
+     "ep": 2,
+     "n_steps": 280,
+     "pass_P1": 37,
+     "pass_P2": 35,
+     "n_delta": 2
+    }
+   ],
+   "n_states": 991,
+   "pass_rate_P1": 0.11503531786074672,
+   "pass_rate_P2": 0.10494450050454086,
+   "n_delta": 10,
+   "rejected_sampled": 42,
+   "false_INF": 0,
+   "false_INF_G": [],
+   "false_INF_rate": 0.0,
+   "rejected_labels": {
+    "FREE": 0,
+    "SINGLE": 0,
+    "INF": 42,
+    "AMB": 0
+   },
+   "delta_sampled": 10,
+   "delta_labels": {
+    "FREE": 0,
+    "SINGLE": 0,
+    "INF": 5,
+    "AMB": 5
+   },
+   "delta_LN": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "z": {
+    "chi": 1.6,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "episodes": [
+    {
+     "ep": 0,
+     "n_steps": 392,
+     "pass_P1": 33,
+     "pass_P2": 31,
+     "n_delta": 2
+    },
+    {
+     "ep": 1,
+     "n_steps": 293,
+     "pass_P1": 20,
+     "pass_P2": 17,
+     "n_delta": 3
+    },
+    {
+     "ep": 2,
+     "n_steps": 276,
+     "pass_P1": 32,
+     "pass_P2": 30,
+     "n_delta": 2
+    }
+   ],
+   "n_states": 961,
+   "pass_rate_P1": 0.08844953173777315,
+   "pass_rate_P2": 0.08116545265348596,
+   "n_delta": 7,
+   "rejected_sampled": 42,
+   "false_INF": 0,
+   "false_INF_G": [],
+   "false_INF_rate": 0.0,
+   "rejected_labels": {
+    "FREE": 0,
+    "SINGLE": 0,
+    "INF": 42,
+    "AMB": 0
+   },
+   "delta_sampled": 7,
+   "delta_labels": {
+    "FREE": 0,
+    "SINGLE": 0,
+    "INF": 1,
+    "AMB": 6
+   },
+   "delta_LN": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "z": {
+    "chi": 2.0,
+    "kappa": 0.5,
+    "mu": 0.4,
+    "N": 1
+   },
+   "episodes": [
+    {
+     "ep": 0,
+     "n_steps": 390,
+     "pass_P1": 31,
+     "pass_P2": 29,
+     "n_delta": 2
+    },
+    {
+     "ep": 1,
+     "n_steps": 293,
+     "pass_P1": 20,
+     "pass_P2": 16,
+     "n_delta": 4
+    },
+    {
+     "ep": 2,
+     "n_steps": 276,
+     "pass_P1": 32,
+     "pass_P2": 30,
+     "n_delta": 2
+    }
+   ],
+   "n_states": 959,
+   "pass_rate_P1": 0.08654848800834203,
+   "pass_rate_P2": 0.07820646506777894,
+   "n_delta": 8,
+   "rejected_sampled": 42,
+   "false_INF": 0,
+   "false_INF_G": [],
+   "false_INF_rate": 0.0,
+   "rejected_labels": {
+    "FREE": 0,
+    "SINGLE": 0,
+    "INF": 42,
+    "AMB": 0
+   },
+   "delta_sampled": 8,
+   "delta_labels": {
+    "FREE": 0,
+    "SINGLE": 0,
+    "INF": 1,
+    "AMB": 7
+   },
+   "delta_LN": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ ],
+ "reading": "false_INF_rate = 0 전셀 -> 스크린 soundness 실측 -> chi 경계는 스크린 주입이 아니라 certificate 와 동치 (Case 1). > 0 -> 크기 보고 후 경계 서술에 스크린 caveat 필수 (Case 2/3).",
+ "protocol_hash": "e69dab93fb712694",
+ "code_commit": "e6e33e86ea452c153b70b5c97b82087c26f71161",
+ "code_dirty": true,
+ "judge_commit": "73d3325a7cd52ded",
+ "scenario_manifest_hash": null,
+ "map_spec_hash": null,
+ "lattice_hash": "bd9ffa741d7b79ee",
+ "generated_at": "2026-08-12T02:28:02+09:00",
+ "artifact": "phase3_f0a_prescreen_audit"
+}

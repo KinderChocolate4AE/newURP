@@ -1,0 +1,45 @@
+cell chi 0.8 kappa 0.2 N 4 eps 20..39:
+  ep 20: engaged-seen 18, AMB so far 11
+  ep 21: engaged-seen 31, AMB so far 17
+  ep 22: engaged-seen 49, AMB so far 27
+  ep 23: engaged-seen 91, AMB so far 37
+  ep 24: engaged-seen 131, AMB so far 47
+  ep 25: engaged-seen 144, AMB so far 54
+  ep 26: engaged-seen 158, AMB so far 61
+  ep 27: engaged-seen 202, AMB so far 73
+  ep 28: engaged-seen 214, AMB so far 78
+  ep 29: engaged-seen 244, AMB so far 92
+  ep 30: engaged-seen 263, AMB so far 104
+  ep 31: engaged-seen 276, AMB so far 108
+  ep 32: engaged-seen 290, AMB so far 115
+  ep 33: engaged-seen 308, AMB so far 126
+  ep 34: engaged-seen 327, AMB so far 134
+  ep 35: engaged-seen 344, AMB so far 143
+  ep 36: engaged-seen 362, AMB so far 154
+  ep 37: engaged-seen 373, AMB so far 158
+  ep 38: engaged-seen 391, AMB so far 166
+  ep 39: engaged-seen 409, AMB so far 174
+  -> AMB 100 scored 100 invalid 0 | p_close h/h2/h4 0.96/1.00/1.00 | U4 med 0.2859 U1 med 0.2859 dU med 0.0
+cell chi 0.8 kappa 1.1 N 4 eps 20..39:
+  ep 20: engaged-seen 18, AMB so far 11
+  ep 21: engaged-seen 31, AMB so far 17
+  ep 22: engaged-seen 49, AMB so far 27
+  ep 23: engaged-seen 91, AMB so far 44
+  ep 24: engaged-seen 131, AMB so far 54
+  ep 25: engaged-seen 144, AMB so far 61
+  ep 26: engaged-seen 158, AMB so far 68
+  ep 27: engaged-seen 202, AMB so far 83
+  ep 28: engaged-seen 214, AMB so far 89
+  ep 29: engaged-seen 244, AMB so far 104
+  ep 30: engaged-seen 263, AMB so far 116
+  ep 31: engaged-seen 276, AMB so far 120
+  ep 32: engaged-seen 290, AMB so far 126
+  ep 33: engaged-seen 308, AMB so far 137
+  ep 34: engaged-seen 327, AMB so far 145
+  ep 35: engaged-seen 344, AMB so far 155
+  ep 36: engaged-seen 362, AMB so far 165
+  ep 37: engaged-seen 373, AMB so far 169
+  ep 38: engaged-seen 391, AMB so far 177
+  ep 39: engaged-seen 409, AMB so far 185
+  -> AMB 100 scored 100 invalid 0 | p_close h/h2/h4 0.75/0.92/0.95 | U4 med 0.3914 U1 med 0.3914 dU med 0.0
+-> results\phase3\gate7_pilot_r2_chi08.json

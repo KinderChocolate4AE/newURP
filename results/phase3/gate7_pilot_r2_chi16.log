@@ -1,0 +1,45 @@
+cell chi 1.6 kappa 0.2 N 4 eps 20..39:
+  ep 20: engaged-seen 20, AMB so far 14
+  ep 21: engaged-seen 55, AMB so far 24
+  ep 22: engaged-seen 75, AMB so far 37
+  ep 23: engaged-seen 109, AMB so far 49
+  ep 24: engaged-seen 145, AMB so far 64
+  ep 25: engaged-seen 160, AMB so far 73
+  ep 26: engaged-seen 176, AMB so far 84
+  ep 27: engaged-seen 208, AMB so far 91
+  ep 28: engaged-seen 243, AMB so far 97
+  ep 29: engaged-seen 278, AMB so far 115
+  ep 30: engaged-seen 312, AMB so far 129
+  ep 31: engaged-seen 361, AMB so far 136
+  ep 32: engaged-seen 377, AMB so far 145
+  ep 33: engaged-seen 400, AMB so far 158
+  ep 34: engaged-seen 422, AMB so far 173
+  ep 35: engaged-seen 442, AMB so far 186
+  ep 36: engaged-seen 481, AMB so far 198
+  ep 37: engaged-seen 514, AMB so far 210
+  ep 38: engaged-seen 538, AMB so far 220
+  ep 39: engaged-seen 560, AMB so far 230
+  -> AMB 100 scored 100 invalid 0 | p_close h/h2/h4 0.93/1.00/1.00 | U4 med 0.1136 U1 med 0.1136 dU med 0.0
+cell chi 1.6 kappa 1.1 N 4 eps 20..39:
+  ep 20: engaged-seen 20, AMB so far 15
+  ep 21: engaged-seen 55, AMB so far 27
+  ep 22: engaged-seen 75, AMB so far 40
+  ep 23: engaged-seen 109, AMB so far 52
+  ep 24: engaged-seen 145, AMB so far 70
+  ep 25: engaged-seen 160, AMB so far 79
+  ep 26: engaged-seen 176, AMB so far 90
+  ep 27: engaged-seen 208, AMB so far 97
+  ep 28: engaged-seen 243, AMB so far 105
+  ep 29: engaged-seen 278, AMB so far 126
+  ep 30: engaged-seen 312, AMB so far 142
+  ep 31: engaged-seen 375, AMB so far 153
+  ep 32: engaged-seen 391, AMB so far 162
+  ep 33: engaged-seen 414, AMB so far 175
+  ep 34: engaged-seen 436, AMB so far 191
+  ep 35: engaged-seen 456, AMB so far 204
+  ep 36: engaged-seen 495, AMB so far 220
+  ep 37: engaged-seen 528, AMB so far 233
+  ep 38: engaged-seen 560, AMB so far 243
+  ep 39: engaged-seen 582, AMB so far 253
+  -> AMB 100 scored 100 invalid 0 | p_close h/h2/h4 0.79/0.93/0.97 | U4 med 0.1044 U1 med 0.1044 dU med 0.0
+-> results\phase3\gate7_pilot_r2_chi16.json

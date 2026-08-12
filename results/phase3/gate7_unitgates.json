@@ -1,0 +1,221 @@
+{
+ "contract_doc": "docs/79 r1 §3",
+ "results": {
+  "G7A": {
+   "ok": true,
+   "rows": [
+    {
+     "fixture": "blockable",
+     "level": 0,
+     "u": "1",
+     "vstar": "1",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "blockable",
+     "level": 1,
+     "u": "1",
+     "vstar": "1",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "blockable",
+     "level": 2,
+     "u": "1",
+     "vstar": "1",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "unblockable",
+     "level": 0,
+     "u": "5/6",
+     "vstar": "1/2",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "unblockable",
+     "level": 1,
+     "u": "5/9",
+     "vstar": "1/2",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "unblockable",
+     "level": 2,
+     "u": "1/2",
+     "vstar": "1/2",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "trap",
+     "level": 0,
+     "u": "1",
+     "vstar": "1/2",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "trap",
+     "level": 1,
+     "u": "1/2",
+     "vstar": "1/2",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "trap",
+     "level": 2,
+     "u": "1/2",
+     "vstar": "1/2",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "n1_vs_n2(N=1)",
+     "level": 0,
+     "u": "1/2",
+     "vstar": "1/2",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "n1_vs_n2(N=1)",
+     "level": 1,
+     "u": "1/2",
+     "vstar": "1/2",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "n1_vs_n2(N=1)",
+     "level": 2,
+     "u": "1/2",
+     "vstar": "1/2",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "n1_vs_n2(N=2)",
+     "level": 0,
+     "u": "1",
+     "vstar": "1",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "n1_vs_n2(N=2)",
+     "level": 1,
+     "u": "1",
+     "vstar": "1",
+     "status": "OPTIMAL",
+     "ok": true
+    },
+    {
+     "fixture": "n1_vs_n2(N=2)",
+     "level": 2,
+     "u": "1",
+     "vstar": "1",
+     "status": "OPTIMAL",
+     "ok": true
+    }
+   ]
+  },
+  "G7A_trap": {
+   "us": [
+    "1",
+    "1/2",
+    "1/2"
+   ],
+   "ok": true
+  },
+  "G7B": {
+   "ok": true,
+   "rows": [
+    {
+     "fixture": "blockable",
+     "us": [
+      "1",
+      "1",
+      "1"
+     ],
+     "ok": true
+    },
+    {
+     "fixture": "unblockable",
+     "us": [
+      "5/6",
+      "5/9",
+      "1/2"
+     ],
+     "ok": true
+    },
+    {
+     "fixture": "trap",
+     "us": [
+      "1",
+      "1/2",
+      "1/2"
+     ],
+     "ok": true
+    }
+   ]
+  },
+  "G7D": {
+   "ok": true,
+   "rows": [
+    {
+     "level": 0,
+     "us": [
+      "1/2",
+      "1"
+     ],
+     "ok": true
+    },
+    {
+     "level": 1,
+     "us": [
+      "1/2",
+      "1"
+     ],
+     "ok": true
+    },
+    {
+     "level": 2,
+     "us": [
+      "1/2",
+      "1"
+     ],
+     "ok": true
+    }
+   ]
+  },
+  "G7C": {
+   "ok": true,
+   "n_samples": 5839
+  },
+  "G7E": {
+   "ok": true,
+   "n_samples": 500
+  },
+  "G7F": {
+   "ok": true,
+   "u": "1"
+  },
+  "all_pass": true
+ },
+ "protocol_hash": "e69dab93fb712694",
+ "code_commit": "e6e33e86ea452c153b70b5c97b82087c26f71161",
+ "code_dirty": true,
+ "judge_commit": "73d3325a7cd52ded",
+ "scenario_manifest_hash": null,
+ "map_spec_hash": null,
+ "lattice_hash": "bd9ffa741d7b79ee",
+ "generated_at": "2026-08-12T05:00:19+09:00",
+ "artifact": "phase3_gate7_unitgates"
+}

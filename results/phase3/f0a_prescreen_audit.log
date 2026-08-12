@@ -1,0 +1,6 @@
+chi 0.4: pass P1 0.045 P2 0.044 delta 1 | rejected sampled 42 false-INF 0 (0.000) | delta labels {'FREE': 0, 'SINGLE': 0, 'INF': 0, 'AMB': 1}
+chi 0.8: pass P1 0.122 P2 0.109 delta 14 | rejected sampled 42 false-INF 0 (0.000) | delta labels {'FREE': 0, 'SINGLE': 0, 'INF': 6, 'AMB': 5}
+chi 1.2: pass P1 0.115 P2 0.105 delta 10 | rejected sampled 42 false-INF 0 (0.000) | delta labels {'FREE': 0, 'SINGLE': 0, 'INF': 5, 'AMB': 5}
+chi 1.6: pass P1 0.088 P2 0.081 delta 7 | rejected sampled 42 false-INF 0 (0.000) | delta labels {'FREE': 0, 'SINGLE': 0, 'INF': 1, 'AMB': 6}
+chi 2.0: pass P1 0.087 P2 0.078 delta 8 | rejected sampled 42 false-INF 0 (0.000) | delta labels {'FREE': 0, 'SINGLE': 0, 'INF': 1, 'AMB': 7}
+-> results\phase3\f0a_prescreen_audit.json

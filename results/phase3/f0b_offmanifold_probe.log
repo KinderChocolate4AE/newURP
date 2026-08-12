@@ -1,0 +1,29 @@
+cell chi 1.2 kappa 0.2 N 4:
+  ep 0: engaged 14, base picked 5
+  ep 1: engaged 18, base picked 5
+  ep 2: engaged 15, base picked 5
+  ep 3: engaged 15, base picked 5
+  ep 4: engaged 34, base picked 5
+  -> evals 325 islands 0 LNmax 0.000 LN>=theta-but-INF 0 | islands by axis {base:0, speed:0, heading:0, lateral:0, phase:0}
+cell chi 1.2 kappa 0.5 N 4:
+  ep 0: engaged 14, base picked 5
+  ep 1: engaged 18, base picked 5
+  ep 2: engaged 15, base picked 5
+  ep 3: engaged 15, base picked 5
+  ep 4: engaged 34, base picked 5
+  -> evals 325 islands 0 LNmax 0.000 LN>=theta-but-INF 0 | islands by axis {base:0, speed:0, heading:0, lateral:0, phase:0}
+cell chi 1.2 kappa 0.8 N 4:
+  ep 0: engaged 14, base picked 5
+  ep 1: engaged 18, base picked 5
+  ep 2: engaged 15, base picked 5
+  ep 3: engaged 15, base picked 5
+  ep 4: engaged 34, base picked 5
+  -> evals 325 islands 0 LNmax 0.000 LN>=theta-but-INF 0 | islands by axis {base:0, speed:0, heading:0, lateral:0, phase:0}
+cell chi 1.2 kappa 1.1 N 4:
+  ep 0: engaged 14, base picked 5
+  ep 1: engaged 18, base picked 5
+  ep 2: engaged 15, base picked 5
+  ep 3: engaged 15, base picked 5
+  ep 4: engaged 34, base picked 5
+  -> evals 325 islands 0 LNmax 0.000 LN>=theta-but-INF 0 | islands by axis {base:0, speed:0, heading:0, lateral:0, phase:0}
+-> results\phase3\f0b_offmanifold_probe.json | islands total 0

@@ -1,0 +1,45 @@
+cell chi 1.2 kappa 0.2 N 4 eps 20..39:
+  ep 20: engaged-seen 18, AMB so far 13
+  ep 21: engaged-seen 77, AMB so far 27
+  ep 22: engaged-seen 95, AMB so far 38
+  ep 23: engaged-seen 129, AMB so far 48
+  ep 24: engaged-seen 165, AMB so far 64
+  ep 25: engaged-seen 179, AMB so far 71
+  ep 26: engaged-seen 195, AMB so far 80
+  ep 27: engaged-seen 230, AMB so far 86
+  ep 28: engaged-seen 265, AMB so far 97
+  ep 29: engaged-seen 295, AMB so far 115
+  ep 30: engaged-seen 328, AMB so far 129
+  ep 31: engaged-seen 365, AMB so far 140
+  ep 32: engaged-seen 403, AMB so far 148
+  ep 33: engaged-seen 423, AMB so far 161
+  ep 34: engaged-seen 444, AMB so far 171
+  ep 35: engaged-seen 462, AMB so far 183
+  ep 36: engaged-seen 482, AMB so far 194
+  ep 37: engaged-seen 542, AMB so far 209
+  ep 38: engaged-seen 562, AMB so far 218
+  ep 39: engaged-seen 582, AMB so far 228
+  -> AMB 100 scored 100 invalid 0 | p_close h/h2/h4 0.97/1.00/1.00 | U4 med 0.2015 U1 med 0.2015 dU med 0.0
+cell chi 1.2 kappa 1.1 N 4 eps 20..39:
+  ep 20: engaged-seen 18, AMB so far 14
+  ep 21: engaged-seen 77, AMB so far 31
+  ep 22: engaged-seen 95, AMB so far 42
+  ep 23: engaged-seen 129, AMB so far 52
+  ep 24: engaged-seen 165, AMB so far 72
+  ep 25: engaged-seen 179, AMB so far 79
+  ep 26: engaged-seen 195, AMB so far 88
+  ep 27: engaged-seen 230, AMB so far 96
+  ep 28: engaged-seen 243, AMB so far 101
+  ep 29: engaged-seen 273, AMB so far 123
+  ep 30: engaged-seen 306, AMB so far 136
+  ep 31: engaged-seen 343, AMB so far 149
+  ep 32: engaged-seen 380, AMB so far 159
+  ep 33: engaged-seen 400, AMB so far 172
+  ep 34: engaged-seen 421, AMB so far 182
+  ep 35: engaged-seen 439, AMB so far 194
+  ep 36: engaged-seen 459, AMB so far 206
+  ep 37: engaged-seen 490, AMB so far 217
+  ep 38: engaged-seen 510, AMB so far 226
+  ep 39: engaged-seen 530, AMB so far 235
+  -> AMB 100 scored 100 invalid 0 | p_close h/h2/h4 0.76/0.89/0.98 | U4 med 0.2079 U1 med 0.2079 dU med 0.0
+-> results\phase3\gate7_pilot_r2_chi12.json
