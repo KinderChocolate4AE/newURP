@@ -90,3 +90,8 @@ whether cooperation can get you there beforehand.** KSAS 원고는 이 논쟁으
 - **ΔU 최초 비영**: chi 2.0 · kappa {0.8, 1.1} 에서 dU_max 0.001/0.003 — 존재하나 무시 가능 (θ 회복 요구량 ~0.8 대비). B1 판정 불변.
 - **재현성 판정**: 로컬↔서버 중복 6셀 중 집계치 5셀 상이 → 조사 결과 **rng 소비 순서 인공물** (프로세스 내 셀 위치에 따라 같은 AMB 풀에서 다른 100개 표집 — `rng.choice` 가 선행 셀 수에 의존). **공통 (ep,t) 상태 131개에서 U4/U1/n_sigs 값 불일치 0** — 물리·certificate 는 플랫폼 간 bit-재현. 교훈: 집계 재현성 비교는 상태 단위로 할 것 (per-cell fresh rng 파생이 더 나은 설계였음 — 결과 무영향이라 코드 불변경).
 - 다음 = [G] 게이트 10 iso-Π. T_lead probe 는 그 뒤 (§3.5).
+- (2026-08-13 확정) **게이트 7 완전 종료·코드 동결** — B1 쪽 추가 tightening/실험
+  금지 (정보이득 < researcher df 재개방). 서술 강등: "map-wide" 대신 **"across all
+  tested registered cells and sampled AMB states"** (셀당 100 표집이지 전수 인증
+  아님). sampled state ID 요구는 rows 의 (ep,t) 로 이미 충족. chi-단조 U4 곡선은
+  게이트 10 전까지 descriptive observation 지위 유지.
