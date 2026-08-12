@@ -67,6 +67,26 @@
 
 ---
 
+## ★ 위협 범위 = T1 까지 (adversary ladder = `docs/80`, 2026-08-13 봉인)
+
+재실행 공격자의 정확한 범주 = **T1 reactive-local** — "reactive, but not strategic":
+방어자 위치를 보고 궤적은 바꾸지만 **lateral avoidance reflex 하나뿐**인
+limited-basis adversary. 없는 것: 속도 변조(sprint/slowdown 은 asset 거리 트리거지
+방어자 압력 무관) · 경로 재계획 · 체류/후퇴 · net-capturer 와 limiter 구분 · 예측 ·
+압력 비례 이득. (closed-loop 항 3개 중 lam repel 은 0.75 m 접촉반사, commit dodge 는
+커밋 이후라 전략적으로는 route_gain 하나.)
+
+- **KSAS 범위 = T1 까지.** T2 를 넣으면 2페이지가 attacker design paper 가 된다.
+- **표현**: "성립" 금지, "반응형 위협 일반" 금지 → **"tested local reactive threat
+  family"**. 재실행은 "안 보는 표적으로 하계를 주장한다" 는 비판만 제거하며,
+  **간극을 좁힐 뿐 닫지 않는다** (속도 변조·예측 공격자는 더 잘 피한다).
+- **★ null 해석 함정**: 결과가 legacy 와 비슷해도 "reactivity does not matter" 금지.
+  최대 허용 = *"the tested angular-gap reactive mode did not materially shift the
+  observed boundary under this configuration."* 근거: 30판 예비에서 궤적은
+  갈라졌는데(19→41 스텝) 레이블은 동일했다.
+- T2(richer reactive)는 **arXiv v0 robustness** 로 이관 (docs/80 §5). 확인 2항목:
+  성립/겨냥 경계 유지 여부 · 종말-창 결론(①-B1) 유지 여부.
+
 ## ★ A안 전환 조건 (반드시 지킬 것)
 
 학습 결과를 **수치로** 탑재하려면 (슬롯 A) 아래가 **선행 필수**다.
