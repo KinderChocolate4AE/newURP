@@ -90,6 +90,26 @@ probe 에서 `substep_2x` 비영 (0.0025) 확인 — 공허 변이 함정 해소
       ("등록된 fixed-state static-blockade + V3 상태분포 한정, N 1→4 회복 불가") 까지.
       "협력으로도 안 열린다" 는 F-0b/0c 로 H3 를 닫기 전 금지.
 [G] 게이트 10 iso-Π → 12 refinement → 13 cooperation audit → 14 certified map
+
+★ 연구 단계 로드맵 (2026-08-13 확정 — Gate 11 신설·B2 앞에 배치):
+  III-A 완료  feasibility map (chi 경계 · pre-screen 독립 · 3-구간)
+  III-B 완료  게이트 7 / **B1** terminal-blockade infeasibility (map-wide)
+  III-C 현재  **게이트 10** — C(z;Π) 상사성. Tier1 cert PASS(bit-exact) /
+              Tier2 = docs/78 r3 (P/Z/G 부류 분해) → chi 를 *certificate-map*
+              similarity coordinate 로 승격 가능한지 판정
+  III-D 신설  **게이트 11 — closed-loop (scripted) system similarity 복원**:
+              `fwd_gain` 을 explicit dimensional param 으로 승격 (기본값 4.0 1/s
+              유지 = 물리 불변) → full-rollout S-L 회귀 · **S-T 재falsify** →
+              추가 hidden 상수 발견 시 동일 절차 반복 (매 FAIL 누적 기록).
+              **B2 전에 반드시 닫는다** — 안 닫으면 T_lead 를 바꿀 때 k_f·T_lead
+              가 함께 변해 "lead-time 효과 vs attacker 응답동역학 변화" 분리 불가.
+  III-E       **T_lead / B2** — pre-commit shaping horizon (scripted cooperative
+              controller, primary = commit-state 분포 이동)
+  III-F       **MARL** — B2 에서 기회 존재가 확인된 뒤에만. 실패 시 "기회 부재"
+              와 "학습 실패" 를 구분 가능해진다.
+  상사성 주장 3단계: L1 certificate similarity (확보) → L2 registered scripted
+  encounter similarity (게이트 11) → L3 learned-policy similarity (후속 robustness,
+  Paper 1 필수 아님). 표현은 항상 "tested transformations · registered ranges 에서".
 [H] 15 Stage-2 freeze → 16·17 C5 (Gamma) → 18 robustness → 19 보고서/arXiv
 ```
 

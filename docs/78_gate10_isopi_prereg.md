@@ -68,6 +68,35 @@ scripted attacker); conditional-certificate T1-T passed (bit-exact)."*
 산출물: `results/phase3/gate10_tier1_system.json` (T1-L PASS 6/6 · T1-T FAIL 6/6,
 dev tranche 보존) · `gate10_tier1_cert.json` (신규 tranche).
 
+### C-3. Tier 2 재설계 (r3 addendum, 2026-08-13 — 실행 전 봉인)
+
+r1 §2.1 의 Tier 2 는 "conditioning group 을 교란해 **fresh rollout** 후 (e,t) paired
+비교" 였다. r2 분해 이후 이 구조는 C(z) 불변성과 D(z) 분포이동을 다시 섞는다
+(§C-5). 재설계하되 **r1 판정식·bar·교란크기·검사점은 전부 승계**하고 비교 구조만
+"동일 base 상태 → 해석적 교란 → certificate 비교" 로 바꾼다.
+
+**핵심 발견 — conditioning 7군은 동질적이지 않다.** C(z;θ) 관점에서 세 부류다:
+
+| 부류 | group | C 안에서의 지위 | Tier 2 시험 형태 |
+|---|---|---|---|
+| **P — certificate 파라미터** | `alpha` (cone 반각) · `lam` (cone range/ρ) · `nu` (limiter_v_max/att_speed → L1/LN reachability) | z 가 아니라 θ 에 들어간다 | **고정 상태 · θ 교란 · paired 비교** (가장 깨끗) |
+| **Z — 상태 좌표** | `eta` (att_speed·τ/ρ = ‖v‖ 좌표) · `sig_sb` (R_standby/ρ = limiter 위치) · `sig_as` (D_asset/ρ = asset 위치, r_nk admissibility 경유) | **z 의 성분 자체** — 교란하면 상태가 바뀐다 | **core (chi,kappa,mu,N) 고정 · 해당 좌표만 해석적으로 이동 · Q 비교** (reduction claim = "Q 는 core 로만 결정" 의 직접 시험) |
+| **G — 생성기 전용** | `sig_dt` (sense_range/ρ — attacker 감지 반경) | C 의 입력이 아니다 | 고정 상태에서 **구조적으로 무변화 = 공허** → **Tier 2 에서 제외하고 게이트 11 (system similarity) 로 이관** |
+
+- **Z 부류 교란의 정의** (결과 전 고정): `eta` = ‖v‖ 를 방향 유지한 채 ×0.8/×1.25 ·
+  `sig_sb` = limiter 위치를 hold 중심 기준 반경 ×0.8/×1.25 · `sig_as` = asset 위치를
+  ρ 단위 거리 ×0.8/×1.25 (r_nk 동반). core Π 는 정의상 불변 (chi·kappa·mu 는 v·
+  limiter 위치·asset 을 포함하지 않는다).
+- **판정 bar·집계**: r1 §2.2 그대로 — Q ∈ {V_0, U_cheap, L1, LN}, informative 상태
+  (0<v<1) union, `median(D_Q) ≤ 0.02 AND p95(D_Q) ≤ 0.05`, pooled informative < 50
+  이면 INCONCLUSIVE. 검사점도 r1 그대로 chi ∈ {0.4, 0.8, 1.6} × kappa 0.5 × mu 0.4
+  × N 4. 상태는 **untouched tranche ep 10..14** (T1-cert 와 동일 — 이미 cert
+  parity 만 봤고 Q 값 분포는 미열람).
+- **실패 경로**: r1 §3 승계 (범인 group 은 conditioning 한정으로 명시). 추가:
+  **P 부류 FAIL 은 지도 정의의 문제**(certificate 가 그 파라미터에 의존)이고,
+  **Z 부류 FAIL 은 core 축 불충분**(그 상태 좌표가 실질 축)이라 해석이 다르다.
+  둘을 한 문장으로 합치지 않는다.
+
 ### D. 최종 claim 한정 (승격 규율 갱신)
 
 - 검증 가능: *"Conditional capture-viability certificate exhibits iso-Π collapse
