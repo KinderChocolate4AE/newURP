@@ -140,17 +140,27 @@ def bin_edges(lo: float, hi: float, boundary: float, per_side: int = 4) -> List[
 
 
 # ----------------------------------------------------------------------- 계측
-def _default_kw(w_kill: float, level: str, jink: float) -> dict:
+def _default_kw(w_kill: float, level: str, jink: float,
+                route_gain: float = 0.0, sense_range: float = float("inf")) -> dict:
     # docs/65 A2 — 학습·평가·스윕과 같은 비준 계약. docs/45 의 곡선(50% 교차
     # 24.06 등)은 legacy 구계약 실측이므로 재실행 수치와 병치할 때 한정 병기.
+    #
+    # route_gain/sense_range (2026-08-13 추가): 공격자를 **반응형**으로 만드는
+    # 유일한 항 — 감지 반경 안의 limiter 위치를 보고 가장 넓은 각도 틈으로
+    # 횡가속을 편향한다 (docs/60 §3.2). **기본값 (0.0, inf) = legacy 비반응형
+    # 그대로라 기존 곡선은 bit-exact 재현된다.** 반응형 재실행은 등록된 v3
+    # nominal 값 (route_gain 0.5, sense_range 30.0) 을 명시적으로 넘겨서 한다.
     return dict(system=ratified_system(),
                 reward=RewardSpec(w_kill=w_kill, enabled=True),
-                attacker=AttackerSpec(level=level, jink_amp=jink, seed=0),
+                attacker=AttackerSpec(level=level, jink_amp=jink, seed=0,
+                                      route_gain=route_gain,
+                                      sense_range=sense_range),
                 spawn=SpawnSpec())
 
 
 def run_curve(seed0: int, episodes: int, *, mode: str = "hold",
               w_kill: float = 0.5, level: str = "A2", jink: float = 0.6,
+              route_gain: float = 0.0, sense_range: float = float("inf"),
               out: Optional[str] = None, checkpoint_every: int = 100,
               log: Optional[Callable[[str], None]] = None) -> dict:
     """판마다 위협 draw + 라벨을 기록한다.
@@ -164,7 +174,7 @@ def run_curve(seed0: int, episodes: int, *, mode: str = "hold",
     if mode not in MODES:
         raise ValueError(f"unknown mode {mode!r}; allowed: {MODES}")
     commit = (mode == "intercept")     # ★ 정정 8 -- 모듈 독스트링 참조
-    kw = _default_kw(w_kill, level, jink)
+    kw = _default_kw(w_kill, level, jink, route_gain, sense_range)
 
     records: List[dict] = []
     if out and os.path.exists(out):                       # 이어 돌기
@@ -303,6 +313,10 @@ def main(argv=None):
     ap.add_argument("--w-kill", type=float, default=0.5)
     ap.add_argument("--level", default="A2", choices=("A1", "A2", "A3"))
     ap.add_argument("--jink-amp", type=float, default=0.6)
+    ap.add_argument("--route-gain", type=float, default=0.0,
+                    help="반응형 회피 이득 (0 = legacy 비반응형, v3 nominal 0.5)")
+    ap.add_argument("--sense-range", type=float, default=float("inf"),
+                    help="limiter 감지 반경 m (inf = legacy, v3 nominal 30.0)")
     ap.add_argument("--out", default=None, help="체크포인트 겸 결과 (절대경로 권장)")
     ap.add_argument("--summarize", default=None, metavar="JSON",
                     help="계측 없이 기존 파일만 집계")
@@ -315,8 +329,9 @@ def main(argv=None):
             data = json.load(f)
     else:
         data = run_curve(a.seed, a.episodes, mode=a.mode, w_kill=a.w_kill,
-                         level=a.level, jink=a.jink_amp, out=a.out,
-                         log=lambda m: print(m, flush=True))
+                         level=a.level, jink=a.jink_amp,
+                         route_gain=a.route_gain, sense_range=a.sense_range,
+                         out=a.out, log=lambda m: print(m, flush=True))
 
     s = summarize_curve(data)
     if a.psi_deg is not None:
