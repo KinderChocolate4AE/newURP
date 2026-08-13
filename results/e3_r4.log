@@ -1,0 +1,28 @@
+[E3 · docs/83 §18] n=300 · 세계 = curve_sweep/E2-A 동일 (ratified + T1 + intercept + commit)
+  25/300    27.8s (1.11 s/ep, ETA   306s)
+  50/300    59.6s (1.19 s/ep, ETA   298s)
+  75/300    93.2s (1.24 s/ep, ETA   280s)
+  100/300   139.1s (1.39 s/ep, ETA   278s)
+  125/300   181.5s (1.45 s/ep, ETA   254s)
+  150/300   223.6s (1.49 s/ep, ETA   224s)
+  175/300   264.9s (1.51 s/ep, ETA   189s)
+  200/300   313.9s (1.57 s/ep, ETA   157s)
+  225/300   356.1s (1.58 s/ep, ETA   119s)
+  250/300   403.4s (1.61 s/ep, ETA    81s)
+  275/300   443.0s (1.61 s/ep, ETA    40s)
+  300/300   485.5s (1.62 s/ep, ETA     0s)
+
+=== Primary (§18.3) ===
+  P(d_actual <= 0.75) = 0.190 (0.1496348500478597, 0.23820379223345578)
+  P(d_oracle <= 0.75) = 0.883 (0.8420668563116871, 0.9149068655985141)
+  paired Delta_d median -1.177 m  CI95 [-1.286, -1.073]
+  최근접 med  actual 1.433 · oracle 0.000
+
+=== per-limiter 분해 (§18.1b) ===
+  std(t_min) med 0.056 s · range(t_min) med 0.150 s
+  std(d_min) med 1.225 m
+  angular spread med 123.1 deg
+  커밋 limiter 수 med 0.0 / 4
+  oracle 로 닿을 수 있었던 limiter 수 med 4.0 / 4 (실제 0.0)
+
+  -> results/e3_oracle_r4.json
