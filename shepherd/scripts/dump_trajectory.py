@@ -71,9 +71,15 @@ def _build_t1(ep: int):
 
 def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
                  t1: bool = False, limiter_mode: str = "hold",
-                 commit: bool = False) -> dict:
-    env, scn, lay = (_build_t1(ep) if t1 else _build_v3(ep) if v3
-                     else _build_v2(ep) if v2 else _build(ep))
+                 commit: bool = False, lead=None) -> dict:
+    # lead: 리드타임 진단(docs/83 §17) 재생 -- lead_time_diag._build 와 동일 세계
+    if lead is not None:
+        from shepherd.scripts.lead_time_diag import _build as _build_lead
+        st = _build_lead(ep, float(lead))
+        env, scn, lay = st.env, st.scn, st.lay
+    else:
+        env, scn, lay = (_build_t1(ep) if t1 else _build_v3(ep) if v3
+                         else _build_v2(ep) if v2 else _build(ep))
     d = _Driver(env, scn, lay, ep)
     se = d.se
     inner = se.inner
@@ -192,6 +198,8 @@ def main() -> None:
     ap.add_argument("--v2", action="store_true", help="스케일 v2 (docs/59)")
     ap.add_argument("--v3", action="store_true",
                     help="위협 v3 NOMINAL FULL (docs/60 -- standby·방위 스폰)")
+    ap.add_argument("--lead", type=float, default=None,
+                    help="리드타임 진단 재생 (start_x 값). docs/83 §17 과 동일 세계")
     ap.add_argument("--t1", action="store_true",
                     help="curve_sweep 과 동일 세계 (ratified + T1 route 0.5/sense 30)")
     ap.add_argument("--limiter-mode", default="hold",
@@ -217,20 +225,20 @@ def main() -> None:
     episodes = []
     if a.eps is not None:
         for ep in a.eps:
-            e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1,
+            e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1, lead=a.lead,
                              limiter_mode=a.limiter_mode, commit=a.commit)
             e["group"] = e["label"]
             episodes.append(e)
             print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
     else:
         for ep in CAPTURE_EPISODES:
-            e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1,
+            e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1, lead=a.lead,
                              limiter_mode=a.limiter_mode, commit=a.commit)
             e["group"] = "CAPTURE"
             episodes.append(e)
             print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
         for ep in MISS_EPISODES:
-            e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1,
+            e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1, lead=a.lead,
                              limiter_mode=a.limiter_mode, commit=a.commit)
             e["group"] = "MISS"
             episodes.append(e)
