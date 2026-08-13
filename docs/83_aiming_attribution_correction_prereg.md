@@ -1566,4 +1566,96 @@ n=300/arm. 물리·ring·contact radius·PIP family·limiter 수·sensing 전부
 
 ---
 
+---
+
+# 25. E4-1b 판정 — **M4**: dispersion 확립, 그러나 HK **악화**
+
+산출물: `results/e4b_matched.json` · `.log` (n=300/arm).
+
+| | control (δ=0.125×4) | diverse ({0,⅓D,⅔D,D}) | paired Δ |
+|---|---|---|---|
+| **range(t_min)** *(primary, MEAN)* | 0.1335 s | 0.1757 s | **+0.0422** CI95 [+0.0240, +0.0615] |
+| **P_HK** | 0.3633 | 0.2967 | **−0.0667** CI95 [−0.1167, −0.0133] |
+| P_net | 0.1167 | 0.1167 | +0.0000 CI95 [−0.0167, +0.0167] |
+| clamp | 0.000 | 0.000 | §24.2 구조적 예측 확인 |
+
+secondary: Δ>0 50.0% / =0 33.0% / <0 17.0%.
+
+## 25.1 정본 문구 (범위 한정)
+
+> **At the registered mean lead and dispersion pattern, increasing temporal
+> dispersion reduced physical interception.**
+
+**금지**: *"temporal diversity 는 일반적으로 나쁘다"*.
+
+## 25.2 E3 진단의 처방이 반증됐다
+
+> **temporal synchronization 은 관찰된 failure phenotype 이지 causal bottleneck 이
+> 아니었다.**
+
+조작(`Δrange = +0.0422`, CI 가 0 배제)은 **성공**했는데 결과는 반대로 갔다. 따라서
+E3 의 *"single temporal layer → layer 를 벌리면 해결"* 이라는 처방은 **반증**이다.
+E3 의 §19.3 최대 표현(unused pathwise opportunity)은 여전히 유효하다 — 기회가 있다는
+관찰과, 그 기회를 시간 분산으로 회수할 수 있다는 처방은 별개다.
+
+## 25.3 ★ 새 가설 (결과를 본 뒤 생김 — confirmatory 아님)
+
+E4-1b **control** (δ=0.125 균일, 분산 0) 의 HK 가 **0.363** 으로, E4-1 baseline
+(δ=0 균일) **0.190** 보다 크게 높다. 또 E4-1 의 sym arm 은 명목 평균 δ=0 이지만
+음수 쪽 clamp 때문에 **실효 horizon 평균이 양수로 밀렸을** 가능성이 있다.
+
+⇒ 지금까지 결과가 일관되게 가리키는 방향:
+> **"여러 시점으로 분산" 보다 "조금 더 앞을 본다"**
+
+**단 이것은 cross-campaign 비교이므로 causal evidence 가 아니다.** §26 이 이를 닫는다.
+
+---
+
+# 26. E4-1c 사전등록 — uniform lead sweep (동결본, 미실행)
+
+## 26.1 질문
+
+> **Does uniformly increasing prediction horizon improve physical interception under
+> otherwise identical pursuit control?**
+
+`δ_i = δ ∀i` 이므로 **temporal dispersion 이 구조적으로 0** 이고, 변하는 것은
+prediction horizon 하나뿐이다.
+
+## 26.2 설계
+
+```
+delta_i = delta  (4 기 동일),  delta in {0, 0.125, 0.25} s
+```
+- δ ≥ 0 이므로 clamp 구조적 불가 (그래도 계수해 0 확인).
+- permutation 불필요 (전부 동일).
+- 세계·물리·attacker·ring·contact radius·PIP family 전부 §20.2 와 동일.
+
+**★ fresh seed block 규율**: 이 가설은 **E4-1b 결과를 본 뒤** 생겼다. 따라서 기존
+E4-1b control 을 재사용해 confirmatory 라고 부르지 않는다. **세 arm 모두 새 실행** 하고
+**미사용 에피소드 대역 `30000..30299`** 를 쓴다 (기존 0.. / 10000.. IID 와 분리).
+
+## 26.3 Primary / Secondary
+
+**Primary = paired `P_HK`** (mechanism proxy 검정이 아니라 **lead horizon 자체의 causal
+axis** 검정이므로). paired + bootstrap CI95.
+Secondary: `d_min_best` 분포 · `P_PEN` · 실효 조준 horizon 평균 · `P_net`.
+
+## 26.4 판정 (결과 전 동결)
+
+| # | 조건 | 판정 |
+|---|---|---|
+| **U1** | `P_HK(0.125) > P_HK(0)` (CI 0 배제) | **under-leading hypothesis supported** — 기존 PIP 가 너무 가까운 미래를 겨냥하고 있었다 |
+| **U2** | `P_HK(0.25) > P_HK(0.125) > P_HK(0)` | 검정 범위에서 **longer lead benefit** |
+| **U3** | `P_HK(0.125) > P_HK(0)` **且** `P_HK(0.25) ≤ P_HK(0.125)` | **intermediate optimum / over-leading** |
+| **U4** | 세 arm 차이 없음 (CI 전부 0 포함) | E4-1b 의 0.363 은 **campaign effect 또는 다른 구조적 차이** |
+
+## 26.5 이후 연결
+
+U1~U3 이면 최적 δ 를 **frozen strong pursuit baseline** 으로 고정하고, E4-2 의
+**control** 로 쓴다. 그래야 E4-2 가 *"naive 19% 를 이겼다"* 가 아니라
+**"이미 30%대인 competent pursuit 을 spatial role separation 이 추가로 이기는가"** 를
+묻게 된다.
+
+---
+
 *연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*

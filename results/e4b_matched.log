@@ -1,0 +1,26 @@
+[E4-1b · docs/83 §24] n=300 · D=0.25 · control δ=0.125 vs diverse {0,D/3,2D/3,D} (평균 동일)
+    [control] 50/300    86.7s (ETA   434s)
+    [control] 100/300   162.5s (ETA   325s)
+    [control] 150/300   230.5s (ETA   231s)
+    [control] 200/300   313.9s (ETA   157s)
+    [control] 250/300   389.5s (ETA    78s)
+    [control] 300/300   456.8s (ETA     0s)
+    [diverse] 50/300    77.1s (ETA   385s)
+    [diverse] 100/300   157.5s (ETA   315s)
+    [diverse] 150/300   231.9s (ETA   232s)
+    [diverse] 200/300   320.6s (ETA   160s)
+    [diverse] 250/300   395.1s (ETA    79s)
+    [diverse] 300/300   473.5s (ETA     0s)
+
+=== Primary (§24.3) — paired MEAN ===
+  range(t_min)  control 0.1335s -> diverse 0.1757s
+  Δ(mean) = +0.0422 s   CI95 [+0.0240, +0.0615]
+  secondary: >0 0.500 · =0 0.330 · <0 0.170
+
+=== Outcome ===
+  P_HK  0.3633 -> 0.2967 · Δ -0.0667 CI95 [-0.1167, -0.0133]
+  P_net 0.1167 -> 0.1167 · Δ +0.0000 CI95 [-0.0167, +0.0167]
+  clamp: control 0.000 · diverse 0.000  (§24.2: 구조적으로 0 이어야)
+
+★ 판정 (§24.4 동결): M4 (dispersion ↑ 이나 HK 악화)
+  -> results\e4b_matched.json
