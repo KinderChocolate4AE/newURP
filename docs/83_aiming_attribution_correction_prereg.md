@@ -1110,7 +1110,32 @@ limiter 의 원래 역할은 **길목 차단(route occupation / zone defense)** 
 | **E3-1** | **cutoff / inside-line** — 공격자를 따라가지 않고 asset 쪽 통과 경로·미래 crossing point 를 선점 (route occupation 의 최단순 scripted 구현) | 정책 개선 여지 |
 | **E3-2** | **offline optimal-control upper bound (oracle)** | ★ 판별자 |
 
-## 18.2 Oracle 정의 (닫힌 형태 — 최적화 불필요)
+## 18.1b per-limiter 분해 (결과 전 추가, 2026-08-13)
+
+관찰: *"4 기가 같은 PIP 로 같이 달려들고 같이 놓친다"* — 그러면
+`4 limiters ≠ 4 independent chances` 이고 실질적으로 **한 번의 추격을 4 대가 복제**
+하는 것에 가깝다. 실패가 **완전히 상관**되면 "4 기인데 왜 20% 인가" 가 이상하지 않다.
+
+에피소드마다 limiter `i = 0..3` 별로 저장:
+
+| 값 | 의미 |
+|---|---|
+| `d_min,i` · `t_min,i` | 개별 최근접과 그 시각 |
+| `t_commit,i` | 커밋 시각 (있으면) |
+| `d_oracle,i` | §18.2 의 hindsight 도달 (개별) |
+
+에피소드 요약:
+`std(t_min,i)` **arrival layering** · `max−min t_min` 시간차 범위 ·
+`std(d_min,i)` 공간 다양성 · 커밋 limiter 수 · 커밋 시각 spread ·
+접근 방위 angular spread.
+
+`t_min,1 ≈ t_min,2 ≈ t_min,3 ≈ t_min,4` 이고 `d_min` 도 비슷하면 시각 인상이
+**숫자로 확정**된다.
+
+**★ 이것은 아직 "학습 필요성" 이 아니라 `role/assignment structure 필요성` 의 후보
+증거다.**
+
+## 18.2 Oracle 정의 — **hindsight pathwise reachability** (닫힌 형태)
 
 기록된 공격자 궤적 `p_A(t)` 와 limiter 초기 상태 `(p_L0, v_L0)`, 동일 한계
 `(a_max, v_max)` 에 대해 이중적분기의 도달집합은 중심 `p_L0 + v_L0·t`, 반경 `R(t)`
@@ -1125,20 +1150,55 @@ limiter 4 기 중 **최솟값**을 취한다. 최적화 없이 궤적만으로 �
 **★ 낙관 방향 (의도적)**: 드리프트-중심 근사는 `v_L0 + Δv ≤ v_max` 결합을 무시하므로
 실제보다 **관대**하다. 따라서 **oracle 이 못 닿으면** capability 한계 주장이 강해진다.
 
-**★ 필수 caveat**: 기록 궤적은 공격자가 **당시 limiter 배치에 반응한** 결과다.
-limiter 가 다르게 움직였다면 궤적도 달라진다. 즉 이 oracle 은 *"고정된 그 궤적에
-대한 천리안"* 이지 closed-loop 최적 방어가 아니다. 결과 문장에 반드시 병기한다.
+### ★ 정본 명칭과 해석 한계 (필수)
 
-## 18.3 판정 (결과 전 동결)
+이 양의 이름은 **`hindsight pathwise reachability on the realized attacker
+trajectory`** 다. T1 공격자는 방어자를 보고 반응하므로 `π_L` 을 바꾸면 궤적도 바뀐다.
+따라서:
 
-**Primary**: `P(d_min^oracle ≤ 0.75)` vs `P(d_min^actual ≤ 0.75)` (실측 0.043~0.057),
-그리고 paired `Δd = d_min^oracle − d_min^actual` 의 중앙값 + bootstrap CI95.
-**임의 문턱을 새로 만들지 않는다.** 방향으로 해석한다:
-
-| 결과 | 판정 |
+| 보여주는 것 | 보여주지 **못하는** 것 |
 |---|---|
-| oracle 접촉률이 실측보다 **크게 높다** | **controller-limited** 방향 — 24% 는 능력 상한이 아니라 현행 pursuit 의 구조적 한계 |
-| oracle 접촉률이 실측과 **비슷하다** | **capability-limited** 방향 (단 기록 궤적 한정) |
+| **vehicle dynamics alone do not explain the miss on that realized path** | ~~a realizable causal role-assignment policy would necessarily succeed~~ |
+
+*"oracle 이 0.4 m 까지 갔다"* 가 *"실제 causal controller 도 0.4 m 까지 갈 수 있다"*
+를 뜻하지 **않는다.** 결과 문장에 반드시 병기한다.
+
+## 18.3 판정 (결과 전 동결) — 3 갈래
+
+**Primary**: `P(d_oracle ≤ 0.75)` vs `P(d_actual ≤ 0.75)` (실측 0.043~0.057),
+paired `Δd = d_oracle − d_actual` 중앙값 + bootstrap CI95.
+**임의 문턱 신설 금지**, 방향으로 해석.
+
+| # | 조건 | 판정 |
+|---|---|---|
+| **A** | actual 이 전부 동시 접근 **且** oracle 도 대부분 `> 0.75` | assignment 만으로 설명 어려움 → **registered vehicle capability 제한** 가능성. 다음은 μ 등 capability axis |
+| **B** | actual 은 4 기 동시 miss (~1.5 m) **但** oracle 이 `< 0.75` 인 limiter 가 자주 존재 | **현행 pursuit 가 available geometric opportunity 를 활용하지 못한다.** 다음은 **scripted role separation** — 아직 MARL 아님 |
+| **C** | oracle margin 이 크고 **且** 이후 scripted role separation 까지 성공 | `naive pursuit < structured role assignment` 확인. 그때 학습 질문이 정의됨 |
+
+## 18.3b ★ 학습 근거의 형태 (사다리 수정)
+
+```
+① 무할당 추격  →  ② scripted 역할분리  →  ③ 학습
+```
+**②가 실패해야만 ③으로 가는 것이 아니다.** 오히려 ②가 성공하면 학습 질문이 더 잘
+정의된다: scripted arc assignment 가 T1 에서 성공해도, **T2 연속반응에서 fixed role
+pattern 이 깨지고 누가 blocker/closer 인지 동적으로 바뀌어야 한다면** —
+
+> 학습의 근거 = ~~"scripted 가 실패했다"~~ →
+> **"role assignment mechanism 은 존재하지만 fixed heuristic 으로는 adaptation 이
+> 부족하다"**
+
+## 18.3c 역할 분리의 목표 = **시간차 요격 기회**
+
+현행 all-chase 는 `t_1 ≈ t_2 ≈ t_3 ≈ t_4`. 좋은 role separation 은 의도적으로
+`t_1 < t_2 < t_3 < t_4` 를 만들거나 서로 다른 angular sector 를 덮어서,
+**공격자가 첫 번째를 피하면 두 번째의 기하로 들어가게** 한다.
+
+기능 후보 (이름보다 **staggered opportunity** 가 본질):
+chaser/pressure · cutoff (inner chord 선점) · reserve (다음 escape 방향) ·
+rear/asset-side (breakthrough insurance).
+
+현행 all-chase 는 사실 *limiter* 라는 이름과도 잘 맞지 않는다.
 
 ## 18.4 눈으로 볼 것 (뷰어)
 
@@ -1155,6 +1215,125 @@ pursuit  ->  route occupation / cutoff  ->  cooperative shaping
 ```
 
 으로 자연히 연결된다. limiter 의 원래 개념(길목 차단)과도 정합한다.
+
+---
+
+---
+
+# 19. E3 판정 — **B: controller-limited on the realized attacker path**
+
+산출물: `results/e3_oracle.json` · `.log` (n=300, 세계 = curve_sweep/E2-A 동일).
+
+## 19.1 Primary (§18.3)
+
+| | 값 |
+|---|---|
+| `P(d_actual ≤ 0.75)` | **0.043** [0.025, 0.073] |
+| `P(d_oracle ≤ 0.75)` | **0.883** [0.842, 0.915] |
+| paired `Δd` 중앙값 | **−1.262 m**, CI95 [−1.389, −1.201] |
+| 최근접 중앙값 | actual **1.482** vs oracle **0.000** |
+
+**두 층 (§18.1b)**:
+`P(∃i: d_oracle,i ≤ 0.75) = 0.883` · `E[Σ 1(d_oracle,i ≤ 0.75)] = **2.84 / 4**`
+(분포: 4 대 전부 가능 173 · 2 대 59 · 1 대 29 · 0 대 35 · 3 대 4).
+실제 접촉 limiter 수 평균 **0.053**. **침투 203 건에서는 oracle 가능 중앙값 4.0/4.**
+
+## 19.2 시간 동기화 — 확정
+
+```
+range(t_min)   중앙값 0.125 s · p90 0.250 s · <0.3 s 비율 93.7%
+angular spread 중앙값 115.8 deg
+```
+
+⇒ 정본: **spatially diversified but temporally synchronized.**
+*"4 대가 하나를 복제한다"* 는 표현은 **폐기** (방위는 116° 벌어져 있다).
+원인 후보는 초기 배치가 아니라 **`shared interception timing induced by the pursuit
+law`**.
+
+## 19.3 판정 = **B** · 최대 표현 (동결)
+
+> **There is substantial unused pathwise interception opportunity, but the baseline
+> concentrates those opportunities into a single temporal layer.**
+
+**금지**: *"a realizable causal role-assignment policy would succeed"* /
+*"assignment 가 causal solution 이다"* / *"학습이 필요하다"*.
+근거는 **hindsight pathwise reachability on the realized attacker trajectory** 이고
+T1 은 반응하므로 `π_L` 을 바꾸면 궤적도 바뀐다. 드리프트-중심 근사도 낙관 방향이다.
+
+## 19.4 secondary (exploratory)
+
+- **CAPTURED 40 건은 정반대 패턴**: oracle 가능 limiter 중앙값 **0.0/4**, 실제 최근접
+  2.27 m. net 이 잡는 판은 limiter 가 애초에 닿을 수 없는 기하다.
+  ⇒ 데이터가 점점 **`net-friendly geometry ≠ kinetic-friendly geometry`** 를 지지한다.
+  **함의**: 하드킬을 높인다고 net capture 가 함께 오른다는 보장이 없다.
+- **C033 대규모 확인**: 커밋 발생 57/300 (19.0%), 커밋 수 평균 0.223, 하드킬도 정확히
+  57 건 — 커밋은 하드킬 판에서만 발생한다. `margin` 0.22~0.42 m 도달은 이미 접촉권에
+  들어간 뒤이므로 커밋은 **선행 결정이 아니라 사후 기록**에 가깝다.
+
+---
+
+# 20. E4-1 사전등록 — **temporal stagger only** (동결본, 미실행)
+
+## 20.1 질문 (좁게)
+
+> **Does temporal staggering alone recover interception opportunity when spatial
+> deployment, vehicle capability, attacker model, and pursuit geometry are held fixed?**
+
+지역수비 전체 구현이 **아니다**. 오직 `동시 4 대 추격 → 시간층이 분리된 4 대 추격`.
+
+## 20.2 고정 (변경 금지)
+
+T1 attacker · initial ring · `(a_lim, v_lim)` · contact radius · PIP/intercept 기하 ·
+limiter 수 · sensing · 모든 terminal 계약.
+**바뀌는 것은 limiter 별 intended interception timing 하나뿐.**
+
+## 20.3 개입 방식
+
+기존 `intercept_limiter` 의 PIP 를 그대로 쓰되 조준 시점만 이동:
+
+```
+aim_i = p_att + v_att * (t_lead + delta_i)      (t_lead = 기존 해석해)
+delta_i in { -Δ, -Δ/3, +Δ/3, +Δ }               (limiter index 순, 고정 배정)
+```
+각 limiter 가 공격자 경로의 **서로 다른 미래 점**을 겨냥 → 요격 시각이 갈라진다.
+그 외 로직·게인 무변경 (자유 게인 여전히 0).
+
+**Δ 사전 선언 (튜닝 금지)** — E3 관측 자연 spread 에 앵커:
+```
+Δ ∈ { 0,  0.125,  0.25 } s
+  0      : baseline. **bit-exact 회귀 대상** (실패 시 즉시 중단)
+  0.125  : 총 spread 2Δ = 0.25 s = 관측 range(t_min) 0.125 s 의 **2 배**
+  0.25   : 총 spread 0.5 s = **4 배**
+```
+상한 근거: 공격자가 링 영역(폭 ~10 m)을 19 m/s 로 통과하는 시간 ~0.5 s.
+*"잘 나오는 Δ"* 를 찾는 탐색은 하지 않는다.
+
+## 20.4 Primary = **mechanism**, 그 다음 outcome
+
+**HK 를 headline 으로 두지 않는다.** 먼저 개입이 실제로 걸렸는지 본다.
+
+1. **Primary (mechanism)**: `range(t_min,i)` — baseline 0.125 s 대비 유의하게 증가?
+   (paired, bootstrap CI95)
+2. Secondary (outcome): `P(HK)` · `P(PENETRATED)` · `P(d_min ≤ 0.75)`
+3. Tertiary: net capture 변화 (§19.4 의 상보성 때문에 **함께 오른다는 보장 없음**)
+
+## 20.5 판정표 (결과 전 동결)
+
+| # | 조건 | 판정 |
+|---|---|---|
+| **S1** | `Δt_min` 이 baseline 과 거의 동일 | **controller implementation/parameterization 실패.** scientific conclusion 금지, 재구현 |
+| **S2** | stagger 성공 **且** HK 증가 | *"Temporal diversification converts unused pathwise opportunity into additional physical interception."* → "single temporal layer" 진단이 **causal mechanism 으로 승격** |
+| **S3** | stagger 성공 **但** HK 불변 | 시간 동기화는 문제였으나 **충분한 원인은 아님** → 다음은 spatial cutoff / inner-chord |
+| **S4** | stagger 성공 **但** HK 악화 | temporal depth 가 공격자에게 더 나은 escape sequencing 을 줄 수 있다 — **그대로 수용** |
+
+## 20.6 위치
+
+```
+4 independent chasers -> scripted temporal/spatial roles -> reactive reassignment -> learning
+```
+E4-1 은 두 번째 칸의 **첫 조각**이다. 아직 MARL 을 부를 단계가 아니다.
+또한 E4 는 하드킬 개선 실험이면서 동시에 **"역할 분리가 실제로 state geometry 를
+바꿀 수 있는가"** 를 보는 첫 scripted mechanism test 다.
 
 ---
 
