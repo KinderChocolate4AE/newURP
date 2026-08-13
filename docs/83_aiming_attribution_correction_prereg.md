@@ -1659,3 +1659,148 @@ U1~U3 이면 최적 δ 를 **frozen strong pursuit baseline** 으로 고정하�
 ---
 
 *연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*
+
+---
+
+# 27. E4-1c 판정 — **U3 (intermediate optimum / over-leading)** [§26.4 동결 규칙 적용]
+
+실행: `bdd5931` · `results/e4c_uniform.json` (+ `.log`) · fresh seed `30000..30299` · n=300/arm.
+판정은 스크립트가 §26.4 표를 그대로 적용해 산출했다 (`verdict` 필드).
+
+## 27.1 결과
+
+| δ (uniform) | P_HK | Wilson 95% | P_net | P_PEN | paired ΔP_HK vs 0 | clamp |
+|---|---|---|---|---|---|---|
+| 0.000 | 0.1767 | [0.138, 0.224] | 0.1767 | 0.6467 | — | 0.000 |
+| **0.125** | **0.3667** | [0.314, 0.423] | 0.1267 | 0.5067 | **+0.1900 [+0.1333, +0.2467]** | 0.000 |
+| 0.250 | 0.3133 | [0.263, 0.368] | 0.1000 | 0.5867 | +0.1367 [+0.0633, +0.2067] | 0.000 |
+
+paired 0.250 vs 0.125: **−0.0533 CI95 [−0.1200, +0.0100]** — 0 포함.
+→ U1 충족 **且** `P_HK(0.25) ≤ P_HK(0.125)` → **U3**.
+
+clamp 는 세 arm 모두 정확히 0 (δ ≥ 0 이므로 **구조적으로 불가**). E4-1 의 Amendment A
+오염(16.7% / 98%)이 이 실험에는 존재하지 않는다.
+
+## 27.2 기전 귀속 — E4-1b 와 합쳐 읽는다
+
+주입된 temporal dispersion 은 **구조적으로 0** 이다 (네 limiter 가 동일 δ). 잔존
+`range(t_min)` 중앙값 0.100~0.150 s 는 공간 배치에서 오는 **내생적** 산포이지 처치가
+아니다. 그럼에도 P_HK 가 0.177 → 0.367 로 **거의 두 배**가 된다.
+
+E4-1b 는 mean 을 맞춘 상태에서 dispersion 을 넣었을 때 **ΔP_HK −0.0667** [−0.1167,
+−0.0133] 로 오히려 악화됨을 보였다 (§25, M4). 두 결과를 합치면 귀속은 하나로 좁혀진다:
+
+> **E4-1 계열의 이득은 temporal dispersion 이 아니라 평균 lead horizon 의 이동에서
+> 온다. 동결 baseline 의 constant-bearing PIP 해는 jinking 표적에 대해 체계적으로
+> under-lead 하고 있었다.**
+
+## 27.3 modality trade (secondary)
+
+δ 가 커질수록 P_net 은 단조 감소한다 (0.177 → 0.127 → 0.100). 방어 성공 합계
+(P_HK + P_net) 는 0.353 / **0.493** / 0.413 로 δ=0.125 가 두 축 모두에서 최적.
+
+## 27.4 허용 / 금지 표현
+
+- 정본: *"A one-dimensional recalibration of the pursuit lead horizon (δ = 0.125 s,
+  applied uniformly with zero injected temporal dispersion) nearly doubled hard-kill,
+  0.177 → 0.367. Combined with the matched-mean result of E4-1b, the effect is
+  attributable to the mean lead horizon, not to temporal diversification."*
+- **금지**: "학습된 정책" / "temporal staggering 이 유효했다" / "지역수비를 구현했다".
+  δ 는 **고정 휴리스틱의 스칼라 하이퍼파라미터**이지 학습 산물이 아니다.
+- **자기신고 한계 (중요)**: 이전 모든 baseline (C034·C035 포함) 은 **자기 튜닝
+  최적점이 아닌 운용점**에서 측정됐다. "19% 는 능력 상한" 류 서술은 이 사실만으로도
+  약화된다. 반대로 E4-2 는 이 δ=0.125 arm 을 control 로 써야 하며, naive 0.19 를
+  이겼다는 서술은 금지한다 (§26.5).
+
+## 27.5 다음 연결 (동결)
+
+**frozen strong pursuit baseline := uniform δ = 0.125 s, P_HK 0.367 [0.314, 0.423]**
+(seed block 30000..30299). E4-2 의 control 은 이것이다.
+
+---
+
+# 28. E1d 판정 — **primary 예측 REFUTED (방향 반대)** [§15.5 동결 규칙 적용]
+
+실행: `bdd5931` · `results/e1d.json` (+ `.log`) · n=300/arm · 제외 0 · 발사 300/300 (세 arm).
+
+## 28.1 동결 primary
+
+> `a*₅₀(D-b) > a*₅₀(D-a)`
+
+| arm | target ax | ideal aim | ax_realized med | ψ@commit med | P(capture) | **a*₅₀** | reference benchmark |
+|---|---|---|---|---|---|---|---|
+| D-a | 6.5 | ✓ | 6.4913 | 0.00° | 0.240 [0.195, 0.291] | **29.95** | 31.06 |
+| D-b | 8.0 | ✓ | 7.8914 | 0.00° | 0.040 [0.023, 0.069] | **정의 불가** | 37.76 |
+| D-c | 8.0 | ✗ (ω=∞) | 7.9185 | 3.50° | 0.040 [0.023, 0.069] | **정의 불가** | 37.89 |
+
+D-b 의 `cross50` 은 `nan` 인데, 이는 결측이 아니라 **어느 a-bin 에서도 포획률이 0.5 에
+도달하지 않기 때문**이다 (bin별 [0.385, 0.077, 0, 0, 0, 0, 0, 0]). 축방향 footprint 를
+6.49 → 7.89 m 로 키우자 포획이 **0.240 → 0.040 으로 6 배 붕괴**했다.
+
+→ **primary 예측 REFUTED.** 방향이 예측과 반대이며, 경계가 넓어진 게 아니라 소멸했다.
+
+## 28.2 D-a 는 benchmark 와 일치한다
+
+D-a 의 a*₅₀ 29.95 vs reference benchmark `2·ax·tanθ/τ²` = 31.06 (**−3.6%**). 즉 국소
+cone 기하는 **현 운용점 근처에서는 맞는다**. 실패한 것은 그 식의 **외삽**이다.
+
+## 28.3 지배 제약 규명 (**사후 — 결과를 본 뒤 도출**)
+
+포획 조건은 도달집합 ⊂ (cone ∩ [range_min, range_max]) 이다. benchmark 식은 **측방
+(각도) 항만** 담고 **축방향 far-edge 절단을 누락**한다.
+
+| arm | 측방여유 `ax·tanθ` | **축방향여유 `R_max − ax`** | 도달반경 `½aτ²` | 축방향 binding 비율 |
+|---|---|---|---|---|
+| D-a | 1.398 m | 1.729 m | 2.038 m | 0.610 |
+| D-b | 1.699 m | **0.329 m** | 2.038 m | **0.963** |
+| D-c | 1.705 m | **0.302 m** | 2.038 m | **0.963** |
+
+개입이 ax 를 R_max = 8.22 m 쪽으로 밀면서 축방향 여유가 1.73 → 0.33 m 로 줄었고,
+지배 제약이 **측방 → 축방향**으로 갈아탔다. 보정 법칙:
+
+> **a\* = 2·min(ax·tanθ, R_max − ax) / τ²**,  내부 최적 **ax\* = R_max/(1+tanθ) = 6.764 m**
+> (그 지점의 상한 a\*_max = **32.37**)
+
+에피소드 단위 예측 정확도 (`captured` 대비):
+
+| arm | 기존 식 | **보정 식** |
+|---|---|---|
+| D-a | 0.987 | **0.993** |
+| D-b | 0.670 | **0.997** |
+| D-c | 0.663 | **0.997** |
+
+D-b 의 보정 a*₅₀ 중앙값은 **7.30** — THREAT_BRACKET 하한 11 보다 낮다. 그래서 전 구간
+포획 ≈ 0 이 되고 `cross50` 이 정의되지 않는다. 관측된 잔여 0.040 은 `ax_realized` 가
+작게 실현된 에피소드들이다 (포획군 ax med 7.38 · 축방향여유 0.840 vs 비포획군 7.91 ·
+0.313).
+
+## 28.4 D-c 는 **설계상 무효** — pointing 비용의 null 증거가 아니다
+
+D-c(ψ 3.50°) 와 D-b(ψ 0°) 는 **300/300 라벨 동일 · 포획 에피소드 집합 동일**이다
+(`ax_realized` 는 98/300 에서 다르므로 궤적 자체는 갈렸다). 원인은 §28.3 이다: ψ=3.50°
+가 만드는 측방 편차는 약 0.48 m 인데, 축방향으로 이미 1.7 m 부족한 상태라 **축방향
+실패가 포화되어 측방 차이를 가려버린다**.
+
+따라서 D-c 로부터 *"slew cap 을 없애도 남는 pointing 비용은 0"* 을 읽으면 **안 된다**.
+정확한 진술은 *"이 운용점에서는 pointing 축이 binding 축이 아니었다"* 이다. E1b 의
+결론과 방향은 같지만 **이유가 다르다** (E1b = fire gate 차폐, E1d = 축방향 포화).
+
+## 28.5 허용 / 금지 표현
+
+- 정본: *"The registered directional prediction was refuted: moving the forced commit to
+  a larger axial footprint collapsed net capture (0.240 → 0.040) rather than widening the
+  boundary. The local cone-geometry benchmark reproduced the boundary at the near
+  operating point (29.95 vs 31.06) but failed to extrapolate, because it omits the
+  far-edge range truncation that becomes binding as ax → R_max."*
+- **금지**: "ax 가 유일한 원인" / D-b·D-c 의 낮은 포획률을 **시스템 성능**으로 읽기
+  (perfect aim 은 실현 불가능한 반사실) / D-c 를 "pointing 비용 없음" 의 증거로 쓰기 /
+  보정 법칙을 **확립된 결과**로 서술하기.
+- **보정 법칙의 지위 = 사후 가설.** 세 arm 모두에서 0.99+ 로 맞지만, 이 데이터에서
+  도출됐으므로 **fresh seed 확인 실험 전에는 승격 금지**.
+
+## 28.6 다음 연결
+
+**E1e (미실행 · 사전등록 필요)**: 보정 법칙의 내부 최적 예측을 새 seed 대역에서 검정.
+`ax ∈ {5.5, 6.76, 7.5}` 3 arm, ideal aim 고정, primary = *"a*₅₀ 가 ax=6.76 에서 최대이고
+양쪽에서 감소한다"* (역U자). 예측 상한 32.37. 이건 **결과를 본 뒤 만든 가설**이므로
+seed 대역 `31000..31299` 를 쓴다.
