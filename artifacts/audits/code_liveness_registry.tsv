@@ -1,0 +1,123 @@
+Path/symbol	Type	References	Docs refs	Evidence role	Runtime status	Classification	Reason	Action
+shepherd/scripts/threat_v3_gates.py	script	scale_v3_baseline 이 import; 테스트 없음	docs/60 §5.1 (P87~P91), docs/61 P94 — 게이트 ID 로 참조 (모듈명 미기재)	P87~P94 게이트 결과 (results/threat_v3_*.json) 생성기	현 체인 러너 (커밋 abc56db·f5c75b6)	LIVE	★ 에이전트 분류(weak) 교정: docs 가 게이트 ID 로만 참조해 grep 누락	유지
+shepherd/scripts/scale_v2_baseline.py	script	tests/make_golden_p87.py 언급	docs/59 §3 (V4)	V4/V4-800 baseline (results/scale_v2_baseline*)	현 체인 러너	LIVE	동일 교정	유지
+shepherd/scripts/scale_v3_baseline.py	script	threat_v3_gates import	docs/60 §5.2 (V6), 커밋 33165ed	V6 nested baseline (results/v6_*)	현 체인 러너	LIVE	동일 교정	유지
+shepherd/scripts/dump_trajectory.py	script	0	HANDOFF 08-07, temp_research_note; 커밋 949ba7a·8ec8710	V7 뷰어 덤프 (artifact 0a31f6b9)	현 체인 (뷰어 육안 검사)	LIVE	viz-first 정책의 현행 도구	유지
+shepherd/scripts/mission_rollout.py	module	25 importers + 11 test files	docs/26~54 다수	라벨·롤아웃 정본	핵심	LIVE	—	유지
+shepherd/scripts/train_m4.py	script	tests 3종 + CK	docs/32~50	M4 학습 러너	legacy 계약 (Task 2 blocker)	LIVE	재배선 대상이지 dead 아님	유지
+shepherd/scripts/train_mappo.py	script	tests	docs/09,48	2C 러너 + M4 부모 클래스	LIVE (상속 경유)	LIVE	—	유지
+shepherd/scripts/train_ippo.py	script	5 importers(T)	docs/09*	2B 러너 + eval_bundle 등 공용 헬퍼	train_mappo 가 import	LIVE	—	유지
+shepherd/scripts/train_m3a.py	script	11 importers(T)	docs/09,48	M3a 러너 (notify 단일정의 소비)	tests 참조	LIVE	—	유지
+shepherd/scripts/roles_split.py	script	tests(test_role_split)	docs/32*,48*,49*	2x2/BC 실행·집계기	LIVE	LIVE	—	유지
+shepherd/scripts/fire_audit.py	script	tests(test_fire_audit)	docs/48*,49*	발사 진단 [A][B][C] 정본	LIVE	LIVE	—	유지
+shepherd/scripts/sweep_m4.py	script	tests 3종 + CK	docs/32*,47*,48*	기저선·스윕 (hold_baseline.json)	LIVE (단 bare SystemSpec — legacy 계약)	LIVE	—	유지
+shepherd/scripts/curve_sweep.py	script	tests + CK	docs/32*,47	포획 확률 곡선	LIVE	LIVE	wilson 이름 shadow 는 duplicate 후보	유지
+shepherd/scripts/op_gate.py	script	CK	docs/40~47	운용점 게이트	LIVE	LIVE	—	유지
+shepherd/scripts/channel_split.py	script	tests + CK	docs/32,46,47	채널 분리 감사	LIVE	LIVE	private import (duplicate 후보)	유지
+shepherd/scripts/signal_audit.py	script	CK	docs/32,48,49,50	보상 기울기 부재 실측 (사슬 링크)	LIVE	LIVE	inline finisher (duplicate 후보)	유지
+shepherd/scripts/slew_audit.py	script	CK	docs/32,45,47	slew 경계 감사	LIVE	LIVE	—	유지
+shepherd/scripts/scale_smoke.py	script	tests + CK	docs/41,43	스케일 스모크	LIVE	LIVE	ring 모드 발산 주석 (duplicate 후보)	유지
+shepherd/scripts/spawn_sweep.py	script	CK	docs/37,43	스폰 랜덤화 스윕	LIVE	LIVE	기본 limiter_mode="ring" (legacy 값) 주의	유지
+shepherd/scripts/mobility_factorial.py	script	tests(test_mobility)	docs/51	이동성 2x2 (재현)	LIVE	LIVE	—	유지
+shepherd/scripts/recoverability_probe.py	script	tests(test_recoverability_probe)	docs/56	2x2 recoverability (재현)	LIVE	LIVE	—	유지
+shepherd/scripts/rollout_gif.py	script	tests(test_coma,test_make_env)	docs/06,08*,09*	GIF 렌더 루트 (lenient — 학습 금지 root)	LIVE (렌더 전용)	LIVE	★ n_segments=1·episode_len 70·_zero_commit 미사용 — M4 스택 재사용 금지 트랩 (§7)	유지+문서화
+shepherd/scripts/boxed_arm_audit.py	script	contact_exact_audit 가 _kw import	docs/53*,54	boxed 3-arm 증거 (V2/C2R)	완료 감사	ARCHIVE_ONLY	docs/53-54 재현 명령	삭제 금지
+shepherd/scripts/contact_exact_audit.py	script	0	docs/54 §3.2(A)	보간 규약 비교 증거	완료 감사	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/pk_sweep_audit.py	script	0	docs/54 §3.2(B)	Pk sweep 증거	완료 감사	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/handoff_audit.py	script	0	docs/54 V3b, 56	miss 7판 원천	완료 감사	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/coupling_gate.py	script	0	docs/58 §7 (P84)	P84 manipulation check 증거	완료 감사	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/contact_reachability.py	script	4 (archive chain)	docs/52*	111/122 접촉 도달성 증거	완료 감사	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/coverage_oracle.py	script	0	docs/52*	2a/2a-E 증거	완료 감사	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/selective_snapshot_oracle.py	script	1	docs/52	2b witness 증거	완료 감사	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/witness_margin_audit.py	script	0	HANDOFF 08-06 (docs 미기재)	knife-edge margin 증거 (docs/52 §8.1c 수치 원천)	완료 감사	ARCHIVE_ONLY	docs 에 모듈명 없음 — 재현 추적성 주의 (§8 권고)	삭제 금지
+shepherd/scripts/temporal_support.py	script	0	HANDOFF 08-06	§8.1e 시각별 재최적화 증거	완료 감사	ARCHIVE_ONLY	동일	삭제 금지
+shepherd/scripts/oracle_capture.py	script	0	docs/43	oracle 상한 (legacy)	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/rho_v_band.py	script	0	docs/43	rho-v 대역 (legacy)	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/a2_fire_mode_diagnosis.py	script	0	docs/09*,12*	A 캠페인 진단	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/a3b_fire_oracle.py	script	0	docs/09*	A3b oracle	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/a3c_recoverability_oracle.py	script	1(text)	docs/09*,16	A3c oracle	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/a3d_null_baseline.py	script	0	docs/09,18	A3d null 증거	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/a3d_v16_refine.py	script	0	docs/09	A3d refine	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/a3d_witness_freeze.py	script	0	docs/09	A3d freeze	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/a3e_harvest.py	script	0	docs/09	A3e harvest	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/a3e_hybrid_eval.py	script	0	docs/09	A3e eval	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/a3e_nominal_probe.py	script	0	results 로그만	A3e probe	종료 라인	ARCHIVE_ONLY(약)	—	삭제 금지
+shepherd/scripts/analyze_gate_a.py	script	0	docs/09,12,13	Gate A 분석	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/train_ppo_toy.py	script	0 (ppo_toy.yaml 주석)	docs/09	Phase1 toy	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/spike_throughput.py	script	0	docs/09	처리량 스파이크	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/p4_clean_probe.py	script	2(text)	docs/09	P4 probe	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/p4_fire_geometry.py	script	0	docs/09	P4 기하	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/n1_temporal.py	script	1(text)	docs/09,a1	N1 temporal 증거	종료 라인	ARCHIVE_ONLY	—	삭제 금지
+shepherd/scripts/a3_robust_witness_probe.py	script	2(tests)	docs/09*	A3 probe	tests 참조	LIVE	—	유지
+shepherd/scripts/a3d_bankv2_validate.py	script	1(test)	docs/09	Gate-B bank 검증	tests 참조	LIVE	—	유지
+shepherd/scripts/a3d_bundle_gen.py	script	2(tests)	docs/09,18	—	tests 참조	LIVE	—	유지
+shepherd/scripts/a3d_calibration.py	script	10(tests+conftest)	docs/09*,18	—	tests 참조	LIVE	—	유지
+shepherd/scripts/a3d_gain_scan.py	script	test	docs/09	—	tests 참조	LIVE	—	유지
+shepherd/scripts/a3d_sbe_bank.py	script	5(tests)	docs/09,17,18	—	tests 참조	LIVE	—	유지
+shepherd/scripts/a3d_sbe_bank_v2.py	script	2(tests)	docs/09,19	—	tests 참조	LIVE	—	유지
+shepherd/scripts/a3e_bundle_gen.py	script	3(tests)	docs/09	—	tests 참조	LIVE	—	유지
+shepherd/scripts/a3e_rewind_validate.py	script	1(test)	docs/09	—	tests 참조	LIVE	—	유지
+shepherd/scripts/a3e_sealed_judgment.py	script	2(tests)	docs/09	—	tests 참조	LIVE	—	유지
+shepherd/scripts/analyze_m3a_playin.py	script	1(test)	docs/09	—	tests 참조	LIVE	—	유지
+shepherd/scripts/analyze_p1.py	script	1(test)	docs/09	—	tests 참조	LIVE	—	유지
+shepherd/scripts/eval_heldout.py	script	3(tests)	docs/09	—	tests 참조	LIVE	—	유지
+shepherd/scripts/eval_heldout_m3.py	script	7(tests)	docs/09,12,13	—	tests 참조	LIVE	—	유지
+shepherd/scripts/c1_corridor_probe.py	script	52 + tests	docs/09*,24	C1 회랑 정본	tests 참조	LIVE	—	유지
+shepherd/scripts/c1_g3_deploy.py	script	4 + tests	docs/09	—	tests 참조	LIVE	—	유지
+shepherd/scripts/c1_persistence.py	script	tests	docs/09,a1	—	tests 참조	LIVE	—	유지
+shepherd/scripts/c1_* (나머지 46개: a1_connectivity·amax_sweep·controller_gap·deconflict·dissect·envelope·escape_geometry·exact_clearance·falsifier_v2 계열4·friendly_fire·governance·heldout_conditions·interval_certificate·invariant_tests·moveA0_probe·moveA_codesign·net_silhouette·phase1d·phase1e·phase1g 계열3·phase1i·phase1k·phase1l·phase1m·phase1n·phase1p 계열17·plant_bound·plant_bound_plot·replan_falsifier·replan_verify·response_probe·seal_law·v2c 계열8)	script cluster	상호 import 폐쇄 성분 (test/runner 미도달)	docs/09 (연구 로그 언급)	C1 캠페인 증거 사슬 (docs/23~25 결과의 원천)	종료 라인	ARCHIVE_ONLY	c1 클러스터는 폐쇄 성분이지만 docs/09·23~25 의 결과 재현 사슬 — 일괄 보존	삭제 금지
+shepherd/scripts/c1_moveA0_plot.py	script	0 (ZERO-REF)	없음	c1_moveA0_probe 결과의 그림 생성기 추정	미참조	UNCERTAIN	그림 원천 여부 미확증 — SAFE_DELETE 조건 5·10 미충족	삭제 금지 (다음 세션: 그림 출처 확인 후 재분류)
+shepherd/scripts/c1_persistence_plot.py	script	0 (ZERO-REF)	없음	c1_persistence 그림 생성기 추정	미참조	UNCERTAIN	동일	삭제 금지
+shepherd/scripts/n1_temporal_plot.py	script	0 (ZERO-REF)	없음	n1_temporal 그림 생성기 추정	미참조	UNCERTAIN	동일	삭제 금지
+shepherd/env.py	module	36 test files	다수	동결 env	핵심	LIVE	—	유지
+shepherd/env_sys.py	module	39 + 12 tests	다수	M4 래퍼 (R1/R2)	핵심	LIVE	—	유지
+shepherd/env_adv.py	module	5 + tests	docs/27~43	공격자 주입 — m4_env.py:60 매 빌드 호출	핵심	LIVE	—	유지
+shepherd/env_m3.py	module	8 (전부 a3*/m3a 계열 + tests)	docs/09,16,27,29,32	M3 레인 전용 (n_segments 블록 사본 보유)	legacy 레인 (v2/v3 체인 미사용)	LIVE(legacy-lane)	tests 가 지키므로 LIVE — 단 현 체인과 무관함을 명시	유지
+shepherd/m4_env.py	module	34 + 9 tests	다수	M4 조립 루트	핵심 — 단 mission_eval 이 standby/extra_cfg 미전달 (§7)	LIVE	—	유지
+shepherd/m4_config.py	module	12 + 4 tests	다수	위협 브래킷·비율	핵심	LIVE	SWEEP_AXES·PENDING 은 런타임 소비자 없음 (문서·테스트 전용)	유지
+shepherd/scale_v2.py	module	7 + tests	docs/59,60,61	v2/v3 overlay 선언	현 체인	LIVE	draw_threat_v3 (docs/61 P92) 는 미구현 — 존재하지 않음	유지
+shepherd/spawn_rand.py	module	33 + 10 tests	docs/32,37,43,60	스폰·standby	핵심	LIVE	randomized_config 함수는 비테스트 호출자 0	유지
+shepherd/params.py	module	12 + 11 tests	다수	파라미터 레지스트리	핵심	LIVE	stale 항목 4건 (§6 zombie 표 참조)	유지 (정정은 다음 세션)
+shepherd/stats.py	module	7 + tests	—	Wilson 정본	핵심	LIVE	—	유지
+shepherd/notify.py	module	5 + test	docs/32,48	ntfy 단일 정의	LIVE	LIVE	—	유지
+shepherd/obs_threat.py	module	2 + test	docs/32,41,43	위협 관측 래퍼	LIVE	LIVE	—	유지
+shepherd/agents/adversary.py	module	5 + 12 tests	다수	동결 A2	핵심	LIVE	omega_att_max 인자 미사용 (params DEAD 등재)	유지
+shepherd/agents/attacker_ladder.py	module	36 + 11 tests	docs/27~43,60	A1/A2/A3 + v3 route/sprint	핵심	LIVE	A3 bait 필드는 프로덕션 setter 0 (test-only lane)	유지
+shepherd/agents/baselines.py	module	13 + 5 tests	docs/04,08,09,49	스크립트 정책	핵심	LIVE	pressure=1.0 기록 — M4 에선 _zero_commit 이 유일한 방어 (§6)	유지
+shepherd/agents/mobile_finisher.py	module	4 + test	docs/51	이동성 배선 (기본 0 = 고정)	LIVE (기본 off)	LIVE	—	유지
+shepherd/sim/analytic.py	module	6 + 6 tests	다수	backend	핵심	LIVE	—	유지
+shepherd/sim/interface.py	module	3	docs/05,08	backend ABC	핵심	LIVE	—	유지
+shepherd/train/* (a3e·action_dims·adapter·attacker_rand·bc_aim·gae·ippo·make_env·make_env_m3·mappo·obs_norm·pfc·phi_potential·ppo·spawn_bank·value_norm)	module group	각 2~26 importers + tests	docs/09 외	학습 스택	핵심	LIVE	전 모듈 tests 참조	유지
+shepherd/eval/fire_gate_calibration.py	module	1 + test	docs/09,10	theta_fire 보정 근거	LIVE	LIVE	point_mass judge 사용처 (의도된 보정용)	유지
+configs/l2_coma.yaml, l2_coma_mix05.yaml	config	run 스크립트 주석	docs/09 2D	COMA 2D 실험 재현	legacy 라인	ARCHIVE_ONLY	coma_mix>0 유일 산지	삭제 금지
+configs/m2_default.yaml, m2_clean_viability_demo.yaml	config	rollout_gif 기본	docs/06,08	렌더 루트 (n_segments=1 legacy)	렌더 전용	LIVE(렌더)	학습 사용 금지 명시 (docs/09 SS2)	유지
+configs/m3a_*.yaml (7)	config	train_m3a/a3* 계열	docs/09	M3a 재현	legacy 라인	ARCHIVE_ONLY	—	삭제 금지
+configs/l2_ippo.yaml, ppo_toy.yaml	config	train_ippo/train_ppo_toy	docs/09	2B/Phase1 재현	legacy 라인	ARCHIVE_ONLY	—	삭제 금지
+configs/l2_mappo.yaml, m2_l2_train.yaml	config	train_mappo/train_m4	docs/09,32	현 학습 config	LIVE	LIVE	randomize 블록은 M4 경로에서 무시됨 (§6)	유지
+viability.turn_limited (+sampler.n_azimuth/turn_safety)	config-flag	env 경로 소비자 0 (tests 만)	params RESERVED	—	선언-미독	ZOMBIE(선언-미독)	roles.py:147 파싱 후 미사용; env 는 항상 False	수정 금지 — 등재만
+env.capture_thresh	config-flag	미독	params DEAD	—	선언-미독	ZOMBIE	env.py:89 저장만	등재만
+env_frozen.adversary_omega_att_max	config-flag	수신 함수 미사용	params DEAD	—	선언-미독	ZOMBIE	—	등재만
+scripted.limiter_pressure (params:276)	config-flag	★ 서술이 낡음	params RESERVED (오기)	—	★ idx3 은 M4 에서 커밋 비트로 재사용됨	ZOMBIE(오기)	baselines 가 1.0 을 쓰고 _zero_commit 만이 방어 — 레지스트리 재분류 필요	등재만 (다음 세션 정정)
+scripted.finisher_slew_cmd	config-flag	unpad 가 폐기	params RESERVED	—	선언-미독	ZOMBIE	—	등재만
+LimiterSpec.loss_cost	dataclass field	독자 0	—	—	미독	ZOMBIE	λ3 는 raw count 사용	등재만
+FinisherSpec.e_net (attitude.e_net_init)	dataclass field	독자 0	params ASSUMED	—	미독 — make_env.py:109 가 (1,0,0) 하드코딩	ZOMBIE	레지스트리 값 변경이 조용히 무효	등재만
+ScenarioSpec.n_adversaries	dataclass field	독자 0	—	—	미독 (1기 하드코딩)	ZOMBIE	—	등재만
+ScenarioSpec.headline_u0 / coma_u0	dataclass field	독자 0	params:184-187 소비자 서술 오기	—	미독 — env 는 layout.limiter_p0 직접 사용	ZOMBIE(오기)	레지스트리 정정 필요	등재만
+ViabilitySpec.seed	dataclass field	env 미독 (step_seed 사용)	params:144 오기	—	미독	ZOMBIE(오기)	—	등재만
+FireGate.B_capture / c_fire	dataclass field	자기일관 assert 만	params	—	assert 전용	ZOMBIE(준)	행동 소비자 없음	등재만
+FinisherSpec.a_max	dataclass field	env.py:338 getattr — config 미설정, apply_mobility 만 기록	docs/51	이동성 실험 전용	조건부 LIVE	LIVE(조건부)	mobility_factorial 경유만	유지
+AttackerSpec bait_* (A3)	dataclass field	프로덕션 setter 0 (tests 만)	docs/27	A3 사다리 예비	test-only lane	DORMANT	—	등재만
+SpawnSpec.psi / speed_frac	dataclass field	비영 setter = tests 만	spawn_rand docstring	—	DORMANT	DORMANT	선언 축 열려 있음	등재만
+SystemSpec.r_commit / r_contact	dataclass field	tests + contact_exact_audit 만 비-None	docs/55 (반경 키 분리)	의미 분리 배선	기본 None(=0.75)	LIVE(기본값 경유)	분리 자체가 목적 — 정상	유지
+RewardSpec.b_net/c_pen/c_trunc/c_lim/dense_scale	dataclass field	override 호출자 0 (scale_smoke 진단 제외)	docs/29 §15	선언값	기본값으로 소비됨	LIVE(기본값)	sweep 축 후보로 보존	유지
+m4_config.SWEEP_AXES / PENDING / TAU_OMITTED / *_PROVENANCE	config dict	런타임 소비자 0 (tests·__main__ 만)	docs/31,38	선언 문서화	문서 전용	ZOMBIE(문서용)	의도된 prose-as-code — 등재만	등재만
+M4_OVERRIDES["train.layout.x_fire"]=16	config key	fire_mode="x_fire" 전용 — 프로덕션 미사용	docs/59 §1 인지 기록	—	도달 불가	ZOMBIE	—	등재만
+fire_mode="x_fire" 분기 (mission_rollout:219)	branch	CLI --fire + tests 만	docs/59	—	프로덕션 도달 불가	UNREACHABLE(현행)	—	유지 (CLI 진단용)
+limiter_mode "brake"/"lam20" (mission_rollout:178-182)	branch	산지 0 (CLI choices 만)	docs 참조 0	results 의 brake/lam* 는 a3d bank 의 별개 표	도달 불가	UNREACHABLE(현행)	—	유지 (혼동 주의 등재)
+limiter_mode "ring"/"intercept"	branch	spawn_sweep 기본 / sweep_m4·contact_exact	docs/43,47	legacy 스윕	legacy 경로에서만 도달	LIVE(legacy)	—	유지
+train_m4.py:125 limiter_mode 항등식	branch	—	—	—	"hold" if ... else "hold" 동어반복	ZOMBIE(경미)	--limiter-policy 가 hold 외 스크립트를 선택 불가	등재만
+viability judge="point_mass" 기본값 (roles.py:76)	default	YAML 전부 se3_cone; fire_gate_calibration 만 의도 사용	params:133	ablation judge	잠재 트랩 (직접 생성 시 조용히 ablation judge)	LATENT-TRAP	—	등재만
+n_segments 기본 1 (roles.py:150)	default	m2_default/m2_clean_demo 경유 rollout_gif 만	docs/09 SS2	legacy 낙관 신호	렌더 루트에서만 살아있음	LIVE(렌더 한정)	학습·평가 경로는 전부 4	등재만
+env_sys.RewardSpec.enabled 기본 False	default	slew_audit·channel_split 은 off 로 굴림	docs/29	—	의도된 기본	LIVE	—	유지
+train.randomize 블록 (l2_mappo.yaml)	config	M4 runner 가 rand_cfg=None 으로 무시	—	2C 전용	M4 경로 DEAD	ZOMBIE(M4 한정)	—	등재만
+spawn_rand.randomized_config	function	비테스트 호출자 0	docstring	config 축 폴백	미사용	DORMANT	선언된 폴백	유지
