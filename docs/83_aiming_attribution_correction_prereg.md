@@ -1514,4 +1514,56 @@ condition) 이고, `0 net vs 24.3% HK` 는 closed-loop outcome separation 이다
 
 ---
 
+---
+
+# 24. E4-1b 사전등록 — matched-mean temporal dispersion (동결본, 미실행)
+
+§21 이 남긴 문제 둘을 **동시에** 제거한다: (a) zero-horizon clamp, (b) 양자화된
+endpoint 에 paired **median** 을 primary 로 둔 설계 결함.
+**이번 실패를 본 뒤이므로 새 데이터에 대해 새로 prereg 한다.**
+
+## 24.1 질문
+
+> **평균 lead 는 같은데 시간 분산만 늘리면 physical interception 이 올라가는가?**
+
+## 24.2 설계 — same mean lead, different temporal dispersion
+
+```
+D = 0.25 s (고정)
+control  : delta_i = D/2 = 0.125          (4 기 동일)
+diverse  : delta_i in {0, D/3, 2D/3, D}   (평균 = 0.125 로 **동일**)
+```
+- 모든 δ ≥ 0 이므로 `t_lead + δ ≥ 0` → **clamp 가 구조적으로 발생하지 않는다**
+  (Amendment A 발동 불가). 그래도 clamp 계수를 보고해 0 임을 확인한다.
+- diverse 의 slot 배정은 §20 Amendment B 그대로 **balanced permutation**
+  `PERMS[ep % 24]`. control 은 배정 자체가 무의미(전부 동일).
+- **평균 horizon 이 같으므로** arm 차이는 **temporal dispersion 하나**다.
+
+## 24.3 Primary (신규 — 양자화 대응)
+
+```
+primary = E[ range(t_min)_diverse − range(t_min)_control ]     ★ paired MEAN (초)
+          + bootstrap CI95 (에피소드 재표집, 20000, seed 0)
+```
+**양자화 변수에 paired median 을 다시 쓰지 않는다** (§21.3 결함의 직접 대응).
+
+Secondary (기록 의무): `P(Δrange > 0)` · `P(= 0)` · `P(< 0)`.
+Outcome: `ΔP_HK` (paired + CI). Tertiary: `ΔP_net`.
+
+## 24.4 판정 (결과 전 동결)
+
+| # | 조건 | 판정 |
+|---|---|---|
+| **M1** | primary CI 가 0 제외(>0) **且** ΔP_HK CI 가 0 제외(>0) | ★ *"Temporal diversification causally improves physical interception under the tested T1 configuration."* — **temporal layering 이 causal mechanism 으로 확립** |
+| **M2** | primary >0 **但** ΔP_HK CI 가 0 포함 | 분산은 만들었으나 **성능 이득 미확립** → 다음은 spatial cutoff (E4-2) |
+| **M3** | primary CI 가 0 포함 | 개입이 실제 dispersion 을 만들지 못함 → **구현/파라미터 실패**, scientific conclusion 금지 |
+| **M4** | primary >0 **且** ΔP_HK <0 (CI 가 0 제외) | temporal depth 가 공격자에게 순차 회피 여지를 준다 — **그대로 수용** |
+
+## 24.5 고정
+
+세계 = E2-A 동일 (ratified · T1 route 0.5/sense 30 · intercept · baseline_commit).
+n=300/arm. 물리·ring·contact radius·PIP family·limiter 수·sensing 전부 불변.
+
+---
+
 *연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*
