@@ -108,6 +108,14 @@ class SystemSpec:
     # R2 net-miss handoff (docs/54 §1). 기본 True = 현행(miss -> SPENT_FAIL 종료).
     # False 면 spent-fail 종료만 억제하고 에피소드가 계속된다 (FALLBACK).
     miss_terminates: bool = True
+    # ★ R3 sham-net counterfactual (docs/83 §10.2). 기본 True = 현행(capture -> 종료).
+    #   False 면 **성공한 net capture 의 종료와 무력화 효과만** 억제하고
+    #   commit · 공격자 commit-응답(dodge ON / jink OFF / route 유지) ·
+    #   finisher SPENT/K=0 · 하드킬 · 침투 · 절단 · RNG stream 은 전부 보존한다.
+    #   근거(§12A.1 trace): 동결 env 에서 capture 는 **순수 terminal label** 이고
+    #   백엔드 상태(p,v,e)를 바꾸지 않는다 -> R2 와 동일한 기계로 충분하다.
+    #   E2-B 전용이며 miss_terminates=False (ratified) 와 함께 쓰는 것이 전제다.
+    capture_terminates: bool = True
     seed_ns: str = "m4_hardkill"
 
 
@@ -258,6 +266,8 @@ class ModeSystemEnv:
         self.veto_events = 0
         self.net_spent = False            # R2: net miss 후 FALLBACK 진입 여부
         self.net_spent_step: Optional[int] = None
+        self.sham_capture = False         # R3: capture 종료가 억제됐는가 (docs/83 §10.2)
+        self.sham_capture_step: Optional[int] = None
         self._step_i = 0
         self._seed = 0
 
@@ -331,6 +341,29 @@ class ModeSystemEnv:
                     self.net_spent = True
                     self.net_spent_step = self._step_i
                     handoff_now = True
+                terms = {a: False for a in terms}
+                inner.agents = list(inner.possible_agents)
+                if self._step_i >= int(self.layout.episode_len):
+                    truncs = {a: True for a in truncs}   # 동결 env 와 같은 지평선
+
+        # --- 3c. R3 sham-net (docs/83 §10.2) -- 기본 off ---------------------
+        # **성공한 capture 의 종료만** 억제한다. capture 는 동결 env 에서 순수
+        # terminal label 이고 백엔드 상태를 바꾸지 않으므로(§12A.1 trace) R2 와
+        # 같은 기계로 충분하다. 조건에 `not penetrated` 를 넣어 동시 발생 시
+        # **침투 종료가 우선**하게 한다.
+        # 다음 스텝부터는 resolved=False -> captured=False 이고 fsm 은 SPENT 이므로
+        # **비준된 R2 억제 조건에 그대로 걸린다** -- 신규 코드는 이 한 스텝만 담당.
+        sham_now = False
+        if not spec.capture_terminates and any(terms.values()):
+            fi = next(iter(infos.values()), {})
+            if fi.get("captured") and not fi.get("penetrated"):
+                if not self.sham_capture:
+                    self.sham_capture = True
+                    self.sham_capture_step = self._step_i
+                    sham_now = True
+                if not self.net_spent:        # 네트는 **실제로** 소모됐다 (K=0 유지)
+                    self.net_spent = True
+                    self.net_spent_step = self._step_i
                 terms = {a: False for a in terms}
                 inner.agents = list(inner.possible_agents)
                 if self._step_i >= int(self.layout.episode_len):
@@ -420,6 +453,12 @@ class ModeSystemEnv:
                       for r in contact_events],
             net_spent=self.net_spent,           # R2 provenance ("net spent before failure")
             net_miss_handoff=handoff_now,       # 전이 스텝에만 True. terminal 집계 금지
+            # R3 provenance (docs/83 §10.2). would_capture 는 **억제가 일어난 그
+            # 스텝에만** True -- terminal 로 집계하지 말고 "포획이 성립했었다" 는
+            # 사실의 기록으로만 쓴다.
+            would_capture=sham_now,
+            sham_capture=self.sham_capture,
+            sham_capture_step=self.sham_capture_step,
         )
         for a in infos:
             infos[a] = {**infos[a], **sysinfo}
