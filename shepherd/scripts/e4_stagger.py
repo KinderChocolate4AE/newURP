@@ -57,7 +57,10 @@ def deltas_for(ep: int, D: float, design: str = "sym") -> List[float]:
     design="sym"     : {-D, -D/3, +D/3, +D}          (E4-1, §20)
     design="diverse" : {0, D/3, 2D/3, D}             (E4-1b, §24 — clamp 구조적 불가)
     design="control" : {D/2, D/2, D/2, D/2}          (E4-1b matched mean)
+    design="uniform" : {D, D, D, D}                  (E4-1c §26 — dispersion 구조적 0)
     """
+    if design == "uniform":
+        return [D] * 4
     if design == "control":
         return [D / 2.0] * 4
     base = ([0.0, D / 3.0, 2 * D / 3.0, D] if design == "diverse"

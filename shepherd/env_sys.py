@@ -116,6 +116,15 @@ class SystemSpec:
     #   백엔드 상태(p,v,e)를 바꾸지 않는다 -> R2 와 동일한 기계로 충분하다.
     #   E2-B 전용이며 miss_terminates=False (ratified) 와 함께 쓰는 것이 전제다.
     capture_terminates: bool = True
+    # ★ E1d commit geometry intervention (docs/83 §15). 기본 None/False = 무동작.
+    #   force_commit_step: 그 스텝에서 발사 자격 술어를 **정확히 1 발** 우회한다
+    #     (do(F=1)). theta_fire 를 영구히 0 으로 두는 것이 아니라 그 한 스텝만
+    #     교체 후 복원하며, fire_cmd 도 함께 세운다 -- 나머지 파라미터 불변.
+    #   perfect_aim_at_commit: 그 스텝 판정 **직전** finisher heading 을
+    #     unit(p_coast - p_fin) 로 설정해 psi=0 을 만든다 (mechanism isolation).
+    #     env.py 는 vfull 을 스텝 시작 상태로 계산하므로 여기서 쓰면 판정에 반영된다.
+    force_commit_step: Optional[int] = None
+    perfect_aim_at_commit: bool = False
     seed_ns: str = "m4_hardkill"
 
 
@@ -324,8 +333,32 @@ class ModeSystemEnv:
             self.commits.append(rec)
             self.pending[i] = rec
 
+        # --- 2b. E1d 강제 커밋 (docs/83 §15) -- 기본 off ---------------------
+        forced_now = (spec.force_commit_step is not None
+                      and self._step_i == int(spec.force_commit_step))
+        _saved_sc = None
+        if forced_now:
+            from dataclasses import replace as _replace
+            if spec.perfect_aim_at_commit:
+                lims_f, fin_f, att_f = inner._states()
+                p_a, v_a = inner._p(att_f), inner._v(att_f)
+                r = (p_a + v_a * float(inner.tau_deploy)) - inner._p(fin_f)
+                rn = float(np.linalg.norm(r))
+                if rn > 1e-9:
+                    inner.backend.by_name(inner.finisher_id).e = r / rn
+            fa = np.asarray(actions.get(inner.finisher_id, np.zeros(5)), float).copy()
+            if fa.size >= 5:
+                fa[4] = 1.0                      # do(F=1)
+                actions = dict(actions)
+                actions[inner.finisher_id] = fa.astype(np.float32)
+            _saved_sc = inner.sc                 # 자격 술어 우회 (한 스텝만)
+            inner.sc = _replace(inner.sc, fire_gate=_replace(
+                inner.sc.fire_gate, theta_fire=0.0, c_fire=0.0))
+
         # --- 3. 동결 env 를 그대로 한 스텝 -----------------------------------
         obs, rew, terms, truncs, infos = inner.step(actions)
+        if _saved_sc is not None:
+            inner.sc = _saved_sc                 # 즉시 복원
 
         # --- 3b. net-miss handoff (R2, docs/54 §1) -- 기본 off ---------------
         # spent-fail 종료(= 종료 ∧ ¬captured ∧ ¬penetrated ∧ fsm SPENT)만 억제.
@@ -456,6 +489,7 @@ class ModeSystemEnv:
             # R3 provenance (docs/83 §10.2). would_capture 는 **억제가 일어난 그
             # 스텝에만** True -- terminal 로 집계하지 말고 "포획이 성립했었다" 는
             # 사실의 기록으로만 쓴다.
+            forced_commit=forced_now,            # E1d provenance (그 스텝에만 True)
             would_capture=sham_now,
             sham_capture=self.sham_capture,
             sham_capture_step=self.sham_capture_step,
