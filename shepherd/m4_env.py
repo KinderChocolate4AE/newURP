@@ -213,7 +213,8 @@ def mission_eval(seed0: int, episodes: int, *,
                  records: Optional[list] = None,
                  scripted_roles: Sequence[str] = (),
                  mobility: float = 0.0,
-                 omega_max: float | None = None) -> dict:
+                 omega_max: float | None = None,
+                 telemetry: Optional[list] = None) -> dict:
     """2층 임무 지표 (docs/29 §4) — regime 별로 쪼개서 낸다.
 
     **`interdiction_rate = 1 - PENETRATED` 를 그대로 쓰지 않는다.**
@@ -257,10 +258,20 @@ def mission_eval(seed0: int, episodes: int, *,
             apply_mobility(st.env, a_max=mobility)
         if omega_max is not None:                  # 무한 슬루 반사실 (docs/51 §9)
             apply_slew_limit(st.env, omega_max)
+        tel = [] if telemetry is not None else None      # docs/83 §12A (기본 None)
         r = run_episode(st.env, st.scn, st.lay, seed=seed0 + ep,
                         limiter_mode=limiter_mode, fire_mode=fire_mode,
                         policy=policy, baseline_commit=baseline_commit,
-                        scripted_roles=scripted_roles, limiter_kw=limiter_kw)
+                        scripted_roles=scripted_roles, limiter_kw=limiter_kw,
+                        telemetry=tel)
+        if telemetry is not None:
+            telemetry.append({"episode": ep, "label": r.label,
+                              "fire_step": r.fire_step, "steps": r.steps,
+                              "a_att": st.threat["a_att"],
+                              "att_speed": st.threat["att_speed"],
+                              "regime": regime_of(st.threat["a_att"], st.threat["tau"],
+                                                  st.threat["net_radius"]),
+                              "rows": tel})
         counts[r.label] += 1
         reg = regime_of(st.threat["a_att"], st.threat["tau"], st.threat["net_radius"])
         by_regime.setdefault(reg, {lab: 0 for lab in LABELS})[r.label] += 1

@@ -251,7 +251,8 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
                 attacker_name: str = "", policy=None,
                 baseline_commit: bool = False,
                 scripted_roles: Sequence[str] = (),
-                limiter_kw=None) -> MissionResult:
+                limiter_kw=None,
+                telemetry: Optional[list] = None) -> MissionResult:
     """한 에피소드. env.step / env termination 을 그대로 호출한다 (술어 복제 금지).
 
     fire_mode:
@@ -288,6 +289,15 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
     for t in range(horizon):
         lims, fin, att = env._states()
         p_att = env._p(att)          # v_att / p_fin 은 scripted_role_actions 안에서 뽑는다
+
+        # --- 선택적 조준 telemetry (docs/83 §12A) ----------------------------
+        # 기본 None = 아무 일도 안 한다 (bit-identical, REG-2). 켜면 **이동 전**
+        # 상태를 그대로 적재하고, psi 계산은 분석 단계에서 slew_audit.aim_geometry
+        # (단일 정의원) 로 한다 -- 여기서 재계산하지 않는 이유가 그것이다.
+        if telemetry is not None:
+            telemetry.append({"t": t,
+                              "p_att": env._p(att).tolist(), "v_att": env._v(att).tolist(),
+                              "p_fin": env._p(fin).tolist(), "e_fin": env._e(fin).tolist()})
 
         # --- 접촉 집계: env L353 과 동일 술어 · 동일(이동 전) 상태 -------------
         for i, s in enumerate(lims):

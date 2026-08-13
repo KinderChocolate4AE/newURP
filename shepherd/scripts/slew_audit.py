@@ -40,7 +40,7 @@ from shepherd.m4_config import M4_OVERRIDES, m4_config
 from shepherd.m4_env import build_m4_env, regime_of
 from shepherd.spawn_rand import SpawnSpec
 
-__all__ = ["audit_episode", "audit", "summarize"]
+__all__ = ["aim_geometry", "audit_episode", "audit", "summarize"]
 
 
 def _unit(v):
@@ -48,9 +48,44 @@ def _unit(v):
     return (v / n) if n > 1e-9 else np.zeros_like(v)
 
 
+def aim_geometry(p_att, v_att, p_fin, e_fin, *, tau: float, range_max: float):
+    """★ ψ 의 **단일 정의원** (docs/83 §12A). 순수 함수 — 상태를 바꾸지 않는다.
+
+    2026-08-13 추출: 수식은 `audit_episode` 안에 있던 것을 **그대로** 옮겼다
+    (연산 순서까지 동일 -> float-exact). 목적은 metric 재정의가 아니라
+    **측정기를 production rollout 에도 이식**하는 것이다 — 기존 audit 경로와
+    E1b telemetry 경로가 같은 함수를 호출하게 만들어 "같은 ψ 냐" 문제를 없앤다.
+
+    `d < 1e-6` 이면 `None` (측정 불가). 호출부의 기존 `continue` 의미를 보존한다.
+    """
+    p_att = np.asarray(p_att, float); v_att = np.asarray(v_att, float)
+    p_fin = np.asarray(p_fin, float); e_fin = np.asarray(e_fin, float)
+    # 조준해야 하는 점 = 표류점 (net 이 열리는 시각의 등속 예측 위치)
+    p_coast = p_att + v_att * tau
+    r_now, r_coast = p_att - p_fin, p_coast - p_fin
+    d = float(np.linalg.norm(r_now))
+    if d < 1e-6:
+        return None
+    u = r_now / d
+
+    v_perp = float(np.linalg.norm(v_att - float(v_att @ u) * u))
+    omega_req = v_perp / d
+    e_hat = _unit(e_fin)
+    psi = float(np.arccos(np.clip(e_hat @ _unit(r_coast), -1.0, 1.0)))
+    # cone judge 의 밴드 검정과 동일한 정의: 축방향 좌표 (viability._caught_se3_cone)
+    ax = float(r_coast @ e_hat)
+    return dict(d=d, v_perp=v_perp, omega_req=omega_req, psi=psi,
+                ax=ax, in_band=bool(0.0 <= ax <= range_max))
+
+
 def audit_episode(env, scn, lay, *, seed: int, tau: float, range_max: float,
                   limiter_mode: str = "hold", max_steps: Optional[int] = None) -> dict:
-    """한 에피소드에서 시선 기하만 기록한다. env.step 은 기존 경로 그대로."""
+    """한 에피소드에서 시선 기하만 기록한다. env.step 은 기존 경로 그대로.
+
+    ★ 이 rollout 은 **발사가 없다** (`_zero_commit` + `clean_threshold_crossed=False`)
+    -- docs/83 §12A.1. 따라서 여기서 나온 ψ 는 no-fire audit world 의 값이고,
+    E1/E1b 의 ratified fire 세계 값과 직접 비교하지 않는다.
+    """
     from shepherd.agents.baselines import scripted_finisher
     from shepherd.scripts.mission_rollout import _limiter_actions, _zero_commit
 
@@ -62,22 +97,10 @@ def audit_episode(env, scn, lay, *, seed: int, tau: float, range_max: float,
         p_att, v_att = env._p(att), env._v(att)
         p_fin, e_fin = env._p(fin), env._e(fin)
 
-        # 조준해야 하는 점 = 표류점 (net 이 열리는 시각의 등속 예측 위치)
-        p_coast = p_att + v_att * tau
-        r_now, r_coast = p_att - p_fin, p_coast - p_fin
-        d = float(np.linalg.norm(r_now))
-        if d < 1e-6:
+        g = aim_geometry(p_att, v_att, p_fin, e_fin, tau=tau, range_max=range_max)
+        if g is None:
             continue
-        u = r_now / d
-
-        v_perp = float(np.linalg.norm(v_att - float(v_att @ u) * u))
-        omega_req = v_perp / d
-        e_hat = _unit(e_fin)
-        psi = float(np.arccos(np.clip(e_hat @ _unit(r_coast), -1.0, 1.0)))
-        # cone judge 의 밴드 검정과 동일한 정의: 축방향 좌표 (viability._caught_se3_cone)
-        ax = float(r_coast @ e_hat)
-        rows.append(dict(t=t, d=d, v_perp=v_perp, omega_req=omega_req, psi=psi,
-                         ax=ax, in_band=bool(0.0 <= ax <= range_max)))
+        rows.append(dict(t=t, **g))
 
         acts = _limiter_actions(env, scn, lay, limiter_mode, lims, p_att, v_att)
         _zero_commit(acts)
