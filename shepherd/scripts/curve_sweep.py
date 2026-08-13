@@ -141,7 +141,8 @@ def bin_edges(lo: float, hi: float, boundary: float, per_side: int = 4) -> List[
 
 # ----------------------------------------------------------------------- 계측
 def _default_kw(w_kill: float, level: str, jink: float,
-                route_gain: float = 0.0, sense_range: float = float("inf")) -> dict:
+                route_gain: float = 0.0, sense_range: float = float("inf"),
+                capture_terminates: bool = True) -> dict:
     # docs/65 A2 — 학습·평가·스윕과 같은 비준 계약. docs/45 의 곡선(50% 교차
     # 24.06 등)은 legacy 구계약 실측이므로 재실행 수치와 병치할 때 한정 병기.
     #
@@ -150,7 +151,10 @@ def _default_kw(w_kill: float, level: str, jink: float,
     # 횡가속을 편향한다 (docs/60 §3.2). **기본값 (0.0, inf) = legacy 비반응형
     # 그대로라 기존 곡선은 bit-exact 재현된다.** 반응형 재실행은 등록된 v3
     # nominal 값 (route_gain 0.5, sense_range 30.0) 을 명시적으로 넘겨서 한다.
-    return dict(system=ratified_system(),
+    # capture_terminates (R3, docs/83 §10.2): 기본 True = 현행. False 는 E2-B
+    # sham-net 반사실 전용 -- 성공한 net capture 의 **종료만** 억제하고 commit ·
+    # 공격자 응답 · SPENT/K=0 · 하드킬 · 침투 · 절단은 보존한다.
+    return dict(system=ratified_system(capture_terminates=capture_terminates),
                 reward=RewardSpec(w_kill=w_kill, enabled=True),
                 attacker=AttackerSpec(level=level, jink_amp=jink, seed=0,
                                       route_gain=route_gain,
@@ -161,6 +165,7 @@ def _default_kw(w_kill: float, level: str, jink: float,
 def run_curve(seed0: int, episodes: int, *, mode: str = "hold",
               w_kill: float = 0.5, level: str = "A2", jink: float = 0.6,
               route_gain: float = 0.0, sense_range: float = float("inf"),
+              capture_terminates: bool = True,
               out: Optional[str] = None, checkpoint_every: int = 100,
               log: Optional[Callable[[str], None]] = None) -> dict:
     """판마다 위협 draw + 라벨을 기록한다.
@@ -174,7 +179,8 @@ def run_curve(seed0: int, episodes: int, *, mode: str = "hold",
     if mode not in MODES:
         raise ValueError(f"unknown mode {mode!r}; allowed: {MODES}")
     commit = (mode == "intercept")     # ★ 정정 8 -- 모듈 독스트링 참조
-    kw = _default_kw(w_kill, level, jink, route_gain, sense_range)
+    kw = _default_kw(w_kill, level, jink, route_gain, sense_range,
+                     capture_terminates)
 
     records: List[dict] = []
     if out and os.path.exists(out):                       # 이어 돌기
@@ -191,6 +197,10 @@ def run_curve(seed0: int, episodes: int, *, mode: str = "hold",
         payload = {"mode": mode, "seed0": seed0, "n_done": done,
                    "n_target": episodes, "baseline_commit": commit,
                    "w_kill": w_kill, "level": level, "jink_amp": jink,
+                   # ★ 수치감사 §G-② 대응: 캠페인을 정의하는 값은 아티팩트 자체에
+                   #   남긴다 (파일명·노트로만 구분하던 사고 재발 방지).
+                   "route_gain": route_gain, "sense_range": sense_range,
+                   "capture_terminates": capture_terminates,
                    "records": records}
         tmp = out + ".tmp"
         with open(tmp, "w", encoding="utf-8") as f:
@@ -317,6 +327,9 @@ def main(argv=None):
                     help="반응형 회피 이득 (0 = legacy 비반응형, v3 nominal 0.5)")
     ap.add_argument("--sense-range", type=float, default=float("inf"),
                     help="limiter 감지 반경 m (inf = legacy, v3 nominal 30.0)")
+    ap.add_argument("--sham-net", action="store_true",
+                    help="R3 capture_terminates=False (docs/83 §10.2 E2-B 전용). "
+                         "성공한 net capture 의 종료만 억제한다")
     ap.add_argument("--out", default=None, help="체크포인트 겸 결과 (절대경로 권장)")
     ap.add_argument("--summarize", default=None, metavar="JSON",
                     help="계측 없이 기존 파일만 집계")
@@ -331,6 +344,7 @@ def main(argv=None):
         data = run_curve(a.seed, a.episodes, mode=a.mode, w_kill=a.w_kill,
                          level=a.level, jink=a.jink_amp,
                          route_gain=a.route_gain, sense_range=a.sense_range,
+                         capture_terminates=not a.sham_net,
                          out=a.out, log=lambda m: print(m, flush=True))
 
     s = summarize_curve(data)
