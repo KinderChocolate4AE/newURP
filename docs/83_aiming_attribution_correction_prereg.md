@@ -799,4 +799,112 @@ E1c 는 exploratory 였고 여기서 E1d 로 바로 파고들면 KSAS freeze 가
 
 ---
 
+---
+
+# 15. E1d 사전등록 — **commit geometry intervention** (동결본, 미실행)
+
+**성격**: "forced early fire" 실험이 **아니다**. `ax` 만의 순수 causal intervention 이라고
+부르지도 않는다. 정확히는 **ax-targeted commit-timing intervention** 이고,
+**terminal geometry mechanism-isolation experiment** 이지 controller performance
+실험이 아니다. 이 라벨을 결과 보고에도 유지한다.
+
+## 15.1 질문
+
+> **Does moving the forced commit to a larger realized axial footprint shift the
+> net-capture boundary as predicted by local cone geometry?**
+
+동기(§14.6): a ≥ 32.2 에서 `P(C|F,a)` 를 관측할 수 없어 *"net 물리상 실패"* 와
+*"controller 의 보수적 거절"* 을 분리하지 못한다.
+
+## 15.2 ★ 설계 정정 3 건 (초안 폐기)
+
+**(1) ω=∞ 는 조준 교란을 제거하지 못한다.** E1b 실측: ω=∞ 에서도 pre-commit ψ
+중앙값 **7.85°**. 게이트가 없는 forced-fire 세계에서는 그 오차를 안고 일찍 쏜다.
+ψ=7.85° 를 그대로 넣으면 `s = ax(tanθ − tanψ)` 가 크게 줄어 perfect-aim 기준
+a\*≈38 이 성립하지 않는다. ⇒ primary 팔에는 **perfect-aim-at-commit counterfactual**
+(commit 스텝에 cone axis 를 coast point 에 정확히 정렬, ψ=0)이 필요하다.
+
+**(2) 온라인 `first ax ≤ target` 트리거 폐기.** dt=0.05 · v≤30 이면 한 스텝에 축방향
+최대 ~1.5 m 이동 → 8.0 을 처음 통과한 순간 realized ax 가 6.5–8 로 크게 undershoot
+한다. 8.0 은 R_max=8.22 에 붙어 있어 특히 위험. ⇒ **two-pass replay** 로 교체.
+
+**(3) `θ_fire=0, c_fire=0` 대신 명시적 force-commit hook.** 원하는 개입은
+`do(F=1)` 이지 `do(θ_fire=0)` 가 아니다 (후자는 게이트 관련 다른 semantics 까지
+바꿀 수 있다). 계약 문구:
+> at the registered forced-commit step, **bypass the eligibility predicate for exactly
+> one irreversible shot**; all other system parameters remain unchanged.
+
+## 15.3 two-pass replay 절차
+
+```
+Pass 1 (reference, 팔 간 공유)  fire 없이 롤아웃 · 각 스텝 기하(ax, psi, ...) 저장
+                                -> target ax 에 가장 가까운 스텝을 commit step 으로 선택
+Pass 2 (replay)                 동일 seed/CRN 재생 · **사전 선택된 그 스텝에서만** force commit
+```
+트리거 로직이 dynamics 에 영향을 주지 않는다. Pass 1 은 target 과 무관하므로
+**세 팔이 공유**한다 (비용 절감).
+
+**스텝 선택 규칙 (동결)**: `|ax − target|` 최소. 동률이면 이른 스텝.
+밴드 밖(`ax > range_max` 또는 `ax < 0`) 스텝은 후보에서 제외.
+후보가 없는 에피소드는 **제외**하고 `n_excluded` 를 보고한다.
+
+## 15.4 팔 구성
+
+| arm | target ax | aiming | 역할 |
+|---|---|---|---|
+| **D-a** | 6.5 (E1c 실측 6.41) | **ideal** (ψ=0 at commit) | 현 운용점 근처 기준 |
+| **D-b** | 8.0 | **ideal** (ψ=0 at commit) | larger-footprint 반사실 |
+| **D-c** | 8.0 | **actual controller, ω=∞** | slew cap 을 없애도 남는 pointing 비용 |
+
+분해: `D-b − D-a` = larger commit geometry 효과 · `D-c − D-b` = 잔여
+controller/prediction pointing imperfection 비용.
+(ω=2 forced-early arm 은 우선순위 낮음 — E1b 가 이미 slew 의 acquisition 지연을 보였다.)
+
+## 15.5 예측 (결과 전 동결)
+
+**Primary (방향성)**:
+$$a^*_{50}(\text{D-b}) \;>\; a^*_{50}(\text{D-a})$$
+
+**Reference benchmark (pass/fail 아님)**: `2·ax_realized·tanθ / τ²`.
+D-b 가 정확히 38 에서 교차해야 가설 통과라는 규칙은 **쓰지 않는다** — attacker
+가속 방향 · 이산 타이밍 · 예측 모델 등이 남아 있다.
+
+**보고 의무**: nominal target 이 아니라 **realized ax 분포**로 분석한다. 각 팔의
+`ax_realized` (med/p25/p75) 와 `psi_at_commit` 을 반드시 병기한다.
+*"8.0 arm 의 모든 에피소드가 정확히 8.0"* 이라고 쓰지 않는다.
+
+## 15.6 계약 추가 (기본값 off + bit-exact 회귀)
+
+| 필드 | 의미 |
+|---|---|
+| `force_commit_step: Optional[int] = None` | 그 스텝에서 발사 자격 술어를 **정확히 1 발** 우회 |
+| `perfect_aim_at_commit: bool = False` | 그 스텝 직전 finisher heading 을 `unit(p_coast − p_fin)` 로 설정 (ψ=0) |
+
+구현 경로: `AgentKin` 은 non-frozen dataclass → `e` 직접 기록 가능.
+`FireGate` 는 frozen 이나 `dataclasses.replace` 로 한 스텝만 교체 후 **복원**.
+
+**회귀 게이트 (4/4 통과 전 실행 금지)**:
+| # | 내용 |
+|---|---|
+| **D-A** | 두 필드 기본값에서 기존 결과 **bit-exact** (최우선; 실패 시 즉시 중단) |
+| **D-B** | replay 무결성 — Pass 2 의 commit 스텝 직전 상태가 Pass 1 기록과 **bit-exact** (공격자는 commit 전까지 반응하지 않고 finisher 는 이동하지 않으므로 성립해야 한다) |
+| **D-C** | `perfect_aim_at_commit=True` 에서 실제로 `psi_at_commit ≈ 0` (수치 허용오차 내) |
+| **D-D** | force commit 이 **정확히 1 발** (K=0 소모, 이후 재발사 없음) · 하드킬·침투·절단 종료 유지 |
+
+## 15.7 규모·순서
+
+n=1500/팔. Pass 1 공유 → 롤아웃 총 1500 + 4500 = **6000** (~3.5–4 h).
+순서: **본 prereg 커밋 → 코드 + D-A~D 회귀 → science 커밋 → 실행 → results 커밋.**
+(E2-B 에서 절차를 어긴 경험 반영 — 실행 코드는 결과 이전에 git 고정.)
+
+## 15.8 해석 규율
+
+- 이것은 **mechanism-isolation** 이다. D-b 의 높은 포획률을 "시스템 성능" 으로 읽지 않는다
+  (perfect-aim 은 실현 불가능한 반사실이다).
+- `ax` 가 유일 원인이라고 쓰지 않는다. 최대 표현 = *"moving the commit to a larger
+  realized axial footprint shifted the boundary in the predicted direction"*.
+- D-b 가 D-a 와 차이 없으면 **기하 가설 기각** → 예측 오차 등 다음 후보로 이동.
+
+---
+
 *연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*
