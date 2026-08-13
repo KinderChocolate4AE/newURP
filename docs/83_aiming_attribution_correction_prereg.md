@@ -230,4 +230,133 @@ E2 (전용 HK pursuit)      ─┴→ 문서 정정 4곳 → KSAS 기록 4건 �
                                     필요 시 omega_max 를 B2 capability 축으로 재도입
 ```
 
-*연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md*
+---
+
+# 10. 개정 A1 — E2 재설계: sham-net counterfactual + R3 계약
+
+**개정 시점: 2026-08-13, E1 결과 열람 전 · E2 미실행.** 본 개정은 researcher degree of
+freedom 을 **줄이는(tightening)** 방향이다 — 자유 게인을 0 으로 확정하고, 임의
+equivalence threshold 를 제거하며, 증거 등급을 낮춘다. 느슨하게 하는 개정이 아니다.
+
+## 10.1 Blocker 해소 — capture 는 순수 terminal label 이다 (trace 완료)
+
+`fire_mode="never"` 를 primary 로 두려던 §5 초안은 **폐기**한다. 이유: commit 은
+dodge ON **+ jink OFF + route 유지**의 묶음이므로(감사 §7 타임라인), net 을 끄면
+"순수 dodge 효과"가 아니라 commit-conditioned 응답 전체가 사라진다. 부호조차 예단
+불가.
+
+대신 **sham-net** 이 필요하다. 구현 가능성의 blocker 는 "capture 가 inner env 에서
+neutralizing state mutation 을 일으키는가" 였고, trace 결과 **일으키지 않는다**:
+
+| 단계 | env.py | 성격 |
+|---|---|---|
+| fire | `_pending_capture = (not boxed_in) and v_shot_worst >= 1.0` (:320) | bool 동결 |
+| FSM | `step_fsm(..., capture=_pending_capture)` (:312) | `last_capture` 기록 |
+| lock 종료 | `captured = resolved and fsm.last_capture is True` (:324) | **순수 파생 bool** |
+| 종료 | `terminated_flag = captured or penetrated or spent_fail` (:357) | 플래그 |
+| 정리 | `if terminated_flag or truncated_flag: self.agents = []` (:398) | 에이전트 목록 |
+
+**공격자 neutralization·제거·freeze·위치 변경 없음.** 백엔드 물리 적분은 종료 판정
+**이전**(:346-350)에 끝나므로 capture 는 사후 라벨로만 작용한다. 상태 변이는 `terms`
+와 `self.agents=[]` 둘뿐이고, 후자는 **기존 R2 가 이미 되돌리는 그것**이다
+(`inner.agents = list(inner.possible_agents)`, env_sys.py:335).
+
+**추가 소득**: sham 억제 다음 스텝에서 `resolved` 가 False → `captured=False` 인데
+FSM 은 SPENT 이므로 `spent_fail=True` 가 되어 **이미 비준된 R2 억제 조건에 정확히
+걸린다.** ⇒ 신규 코드는 capture 가 resolve 되는 **한 스텝**만 처리하면 되고 이후는
+기존 계약이 담당한다. 즉 `capture_terminates=False` 는 비준된 `miss_terminates=False`
+의 구조적 대칭이다.
+
+## 10.2 R3 계약 (env_sys.py — 동결 대상 아님, docs/54 R1/R2 전례)
+
+**기본값 `capture_terminates = True`** — 기존 모든 science path 의미 불변.
+
+`False` 일 때, capture 가 resolve 되는 스텝에 한해:
+
+| 보존 | 억제 |
+|---|---|
+| commit 발생·타이밍 | capture 로 인한 **종료** |
+| commit-conditioned attacker 응답 (dodge ON / jink OFF / route 유지) | capture 의 **neutralizing 효과** |
+| finisher **SPENT / K=0 유지** (READY 복귀 금지) | — |
+| hard-kill · penetration · truncation 종료 | — |
+| RNG stream (불필요한 draw 추가 금지) | — |
+
+조건은 `captured and not penetrated` (동시 발생 시 penetration 종료 우선).
+기록 의무: `would_capture=True` · `sham_capture_step`.
+
+**의미 정의**: *A would-be successful net capture is recorded, but its neutralizing
+state transition and episode termination are suppressed; all commit-conditioned
+attacker dynamics and all non-net terminal channels remain unchanged.*
+
+## 10.3 E2 3-arm 재정의 (증거 등급 분리)
+
+| Arm | 설정 | 증거 등급 |
+|---|---|---|
+| **E2-A** | intercept + net ON | **FROZEN HISTORICAL / DEPLOYED-SYSTEM OBSERVATION** — 이미 결과를 봤다(0.243). **confirmatory 로 재명명 금지** |
+| **E2-B** | intercept + commit ON + attacker 응답 ON + **capture_terminates=False** | **PRIMARY PROSPECTIVE COUNTERFACTUAL** (신규 confirmatory) |
+| **E2-C** | intercept + fire/commit never | OPTIONAL, arXiv diagnostic — commit-응답 자체를 제거 |
+
+분해: `B−A` = competing-risk 제거 · `C−B` = commit-conditioned 응답 효과.
+비용상 하나만 돌리면 **B**.
+
+표기 정본: *"a previously frozen deployed-system arm paired with a prospectively
+registered net-disabled counterfactual"* — 전체를 "preregistered two-arm experiment"
+라고 부르지 않는다.
+
+## 10.4 컨트롤러 — 자유 게인 0 (§5 튜닝 프로토콜 대체)
+
+`intercept_limiter` (mission_rollout.py:114) 는 이미 해석적 lead-collision 유도이고
+**자유 게인이 없다**: `a_max` = 능력비 고정, `margin` = `r_kill + 0.5(a_lim−a_att)τ_kill²`
+(docs/29 §2.1 유도), `t_lead` = 해석해. ⇒ **§5 의 dev-seed 튜닝 프로토콜은 불필요하며
+수행하지 않는다.** "hard-kill 곡선을 높이려 튜닝했다" 는 researcher DOF 가 구조적으로
+소멸한다 (§5 의 의도를 더 강하게 달성).
+
+정본 명칭: **gain-free constant-bearing intercept baseline under the registered
+vehicle limits.** `margin` 유도식은 manifest 에 명시한다.
+
+## 10.5 Estimand + 구간별 해석 (결과 전 고정)
+
+**임의 equivalence threshold 를 만들지 않는다.** 사전등록 estimand:
+
+```
+Delta_comp = P_HK^B − P_HK^A        (paired, CRN)
+보고: paired difference · CI95 · 구간별 분해 (그대로)
+```
+
+| 구간 | net 성공 | E2-B 의 역할 |
+|---|---|---|
+| low-χ (baseline-achievable) | 0.763 | **정보 최대** — severe competing risk. A 의 HK 0.063 을 "물리 요격 능력" 으로 읽으면 안 되는 이유를 직접 해소 |
+| aiming-limited | 0.016 | competition 작지만 존재. paired difference 그대로 보고 |
+| high-χ | **0/1598** | **effect estimation 영역이 아니라 implementation invariance control** |
+
+**high-χ 는 exact wiring oracle**: capture 가 한 번도 발생하지 않으므로 intervention
+이 활성화되지 않는다 ⇒ 같은 CRN 에서 **A 와 B 가 bit-exact** 여야 한다 (states ·
+actions · commit steps · hard-kill steps · termination labels). `Δ_high ≠ 0` 은
+과학적 결과가 아니라 **R3 구현 실패**다.
+
+⇒ modality-gap 의 high-χ 주장은 E2-B 없이 이미 성립한다(`P_net=0`, `P_HK^A=0.243`).
+E2-B 의 본체 기여는 **low/mid-χ 의 물리 요격 곡선을 competing risk 없이 복원**하는 것.
+
+**결과 명명 규율**: E2-B 의 P_HK 를 "true physical interception probability" 라고
+부르지 않는다. 정본 = *physical-interception incidence under matched
+commit-conditioned threat response with net capture removed as a competing terminal
+event.*
+
+## 10.6 R3 회귀 게이트 — 4/4 통과 전 E2-B 실행 금지
+
+| 게이트 | 내용 |
+|---|---|
+| **R3-A** default regression | `capture_terminates=True` 에서 과거 고정 seed 결과와 **bit-exact**. 최우선 |
+| **R3-B** high-χ no-op invariance | capture 미발생 등록 T1 상태에서 A=B **bit-exact** |
+| **R3-C** synthetic capture fixture | capture 가 확정 발생하는 결정적 상태: A=CAPTURED 종료 / B=`would_capture` 기록 후 계속 · 공격자 생존 · finisher SPENT |
+| **R3-D** terminal isolation | B 에서도 hard-kill → 종료, penetration → 종료 유지 |
+
+## 10.7 실행 순서 (개정)
+
+```
+[본 개정 커밋]  ← 지금 (E1 결과 열람 전, E2 미실행)
+   → E1 → E1b (결과 별도 기록)
+   → R3 구현 → R3-A~D 회귀 → E2-B
+```
+
+*연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*
