@@ -113,7 +113,9 @@ def _select_step(ref: dict, target: float) -> Optional[int]:
 def forced_pass(ep: int, step: int, *, ideal: bool, omega: Optional[float],
                 tau: float, rmax: float) -> dict:
     """Pass 2 — 동일 CRN 재생 + 사전 선택 스텝에서 강제 커밋."""
-    st = _build(ep, force_step=step, ideal=ideal, omega=omega)
+    # ★ env_sys.force_commit_step 은 _step_i 규약 (1-based). 여기 `step` 은
+    #   reference pass 의 0-based t 이므로 +1 로 변환한다 (회귀 D-B/D-C).
+    st = _build(ep, force_step=step + 1, ideal=ideal, omega=omega)
     env, scn, lay = st.env, st.scn, st.lay
     d = _Driver(env, scn, lay, ep)
     d.fire_mode = "never"                 # 게이트 우회가 유일한 발사 경로

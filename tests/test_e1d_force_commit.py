@@ -68,7 +68,7 @@ def test_db_replay_integrity():
     assert ep is not None, "밴드 안 후보가 있는 에피소드를 찾지 못했다"
     ref_ax = {r["t"]: r["ax"] for r in ref["rows"]}
 
-    st = _build(ep, force_step=s, ideal=False, omega=None)
+    st = _build(ep, force_step=s + 1, ideal=False, omega=None)
     env, scn, lay = st.env, st.scn, st.lay
     d = _Driver(env, scn, lay, ep)
     d.fire_mode = "never"
@@ -92,7 +92,7 @@ def test_dc_perfect_aim_gives_zero_psi():
     """D-C — perfect_aim_at_commit=True 에서 판정 시점 psi ~ 0."""
     ep, ref, s = _first_with_band()
     assert ep is not None
-    st = _build(ep, force_step=s, ideal=True, omega=None)
+    st = _build(ep, force_step=s + 1, ideal=True, omega=None)
     env, scn, lay = st.env, st.scn, st.lay
     d = _Driver(env, scn, lay, ep)
     d.fire_mode = "never"
@@ -119,7 +119,7 @@ def test_dd_exactly_one_shot_and_other_terminals():
     """D-D — 강제 커밋이 **정확히 1 발** (K=0 소모) · 다른 종말 채널 유지."""
     ep, ref, s = _first_with_band()
     assert ep is not None
-    st = _build(ep, force_step=s, ideal=False, omega=None)
+    st = _build(ep, force_step=s + 1, ideal=False, omega=None)
     env, scn, lay = st.env, st.scn, st.lay
     d = _Driver(env, scn, lay, ep)
     d.fire_mode = "never"

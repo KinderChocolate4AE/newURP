@@ -117,7 +117,11 @@ class SystemSpec:
     #   E2-B 전용이며 miss_terminates=False (ratified) 와 함께 쓰는 것이 전제다.
     capture_terminates: bool = True
     # ★ E1d commit geometry intervention (docs/83 §15). 기본 None/False = 무동작.
-    #   force_commit_step: 그 스텝에서 발사 자격 술어를 **정확히 1 발** 우회한다
+    #   force_commit_step: ★ **`_step_i` 규약 (1-based)** -- step() 진입 시 먼저
+    #     증가하므로 롤아웃 루프의 0-based `t` 에 대해 `_step_i == t + 1` 이다
+    #     (CommitRecord.commit_step 과 동일 규약). 호출부가 0-based 인덱스를
+    #     쓰면 **한 스텝 일찍** 발동한다 -- 회귀 D-B/D-C 가 이를 잡았다.
+    #     그 스텝에서 발사 자격 술어를 **정확히 1 발** 우회한다
     #     (do(F=1)). theta_fire 를 영구히 0 으로 두는 것이 아니라 그 한 스텝만
     #     교체 후 복원하며, fire_cmd 도 함께 세운다 -- 나머지 파라미터 불변.
     #   perfect_aim_at_commit: 그 스텝 판정 **직전** finisher heading 을
