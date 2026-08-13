@@ -1,0 +1,8 @@
+[슬루 반사실] n=500 paired CRN, a_max=15.413, ω∞=1e+06, threat=T1 (route_gain=0.5, sense_range=30.0)
+  고정·ω2.0    전체 0.1680  비손실 1.000  SHAPING_NEEDED 0.0000 (n=297)
+  고정·ω∞      전체 0.1700  비손실 1.000  SHAPING_NEEDED 0.0000 (n=297)
+
+  paired 비교 (기준 -> 대상):
+  고정·ω2.0    -> 고정·ω∞      SHAPING_NEEDED  0.0000 -> 0.0000 (+0.0000) 구제   0 / 망침   0   ★ 슬루가 고정 조건의 병목인가
+                           ALL             0.1680 -> 0.1700 (+0.0020) 구제   1 / 망침   0
+  -> results/e1_t1_slew_counterfactual.json

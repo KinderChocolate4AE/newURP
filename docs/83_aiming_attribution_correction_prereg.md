@@ -359,4 +359,84 @@ event.*
    → R3 구현 → R3-A~D 회귀 → E2-B
 ```
 
+---
+
+# 11. E1 판정 — **INCONCLUSIVE** (2026-08-13 실행·기록)
+
+산출물: `results/e1_t1_slew_counterfactual.json` · `.log`.
+**이 판정은 E1b 결과가 무엇이든 변경하지 않는다.**
+
+## 11.1 결과
+
+| 지표 | 값 |
+|---|---|
+| ω 2.0 → 10⁶ (ALL, n=500 paired CRN) | 84 → 85 captures |
+| Δ | **+0.0020**, CI95 **[0.000, 0.006]** |
+| rescued `n01` / broken `n10` | **1 / 0** |
+| `passes` (lo > 0) | **False** |
+| SHAPING_NEEDED (n=297) | 0 → 0, flip **0**, CI [0, 0] |
+
+## 11.2 동결 규칙(§4) 적용
+
+- `rescued = 0` → 기각 : **해당 없음** (1 건 발생)
+- `rescued ≥ 1` 且 CI 가 0 제외 → 활성화 : **해당 없음** (CI 하한이 정확히 0.000)
+- ✅ **`rescued ≥ 1` 但 CI 가 0 포함 → INCONCLUSIVE, 격상 금지**
+
+T0 의 0/500 을 근거로 1/500 을 "사실상 0" 으로 반올림해 기각 판정으로 끌어오지 않는다.
+사전등록이 이 경우를 명시적으로 INCONCLUSIVE 로 지정해 두었다.
+
+## 11.3 정본 문장 (이 이상 금지)
+
+> **A T0 counterfactual showed zero capture changes after removing the nominal
+> slew-rate cap, whereas the registered T1 extension produced one rescue in 500
+> paired episodes. Under the preregistered rule, evidence for a slew-sensitive
+> capture channel is inconclusive; the nominal slew cap is therefore not supported
+> as the dominant explanation of the practical boundary.**
+
+high-χ 는 **registered E1 high-χ sample (n=297) 에서 0 rescue** 로 한정 표기한다
+("모든 high-χ" 로 일반화 금지). modality-gap / 운동학 논증과 충돌하지 않는다.
+
+## 11.4 ★ 금지 표현 (2026-08-13 자기 정정)
+
+> ~~"95% 상한 0.6% 이므로 observed boundary displacement 를 설명하기엔 far too small"~~
+
+**단위 불일치로 금지.** 0.6% 는 **포획확률 차이의 CI** 이고, 22.45 → 39.33 은
+**가속도축 상의 boundary displacement** 다. 두 양은 직접 비교할 수 없다.
+"경계를 설명할 만큼 작은가" 는 E1b 에서 rescue 1 건의 위치를 확인하고, 가능하면
+ω=∞ 곡선의 50% 교차를 재계산한 뒤에 판단한다.
+
+## 11.5 부수 관측 — Case B 보강 증거로 쓰지 않는다
+
+동일 CRN 에서 T0 91 → T1 84 captures. 그러나 T0 아티팩트는 `SPENT_FAIL=32`,
+E1 T1 은 `0` — **종료 계약이 다르다** (T0 런은 R2 이전). 따라서:
+
+> numerically consistent with Case B, **but not interpretable as an attacker-only
+> contrast because the termination contracts differ.**
+
+## 11.6 아티팩트 결함 (기록)
+
+`--out` JSON 이 **cell 요약만 저장하고 per-episode records 를 저장하지 않는다**
+(`out[name] = sm`). 그 결과 **rescue 1 건의 위치(경계 부근인가 무작위인가)를 이
+아티팩트만으로 특정할 수 없다.** §10 freeze stamp 가 manifest 필드는 의무화했으나
+records 영속화는 명시하지 않았고, 그 공백이 그대로 드러났다 — 수치감사가 지적한
+것과 같은 부류다.
+
+해결: E1b 가 두 팔을 어차피 재실행하므로 records 를 함께 저장한다 (한계비용 0).
+**단 그 위치 분석의 증거 등급은 `post-result diagnostic localization of the
+preregistered E1 outcome` 이며 confirmatory 로 승격하지 않는다** — `n01=1` 이라는
+사실을 이미 보고 나서 찾는 것이기 때문이다.
+
+## 11.7 provenance
+
+| 항목 | 값 |
+|---|---|
+| 판정규칙 동결 | `eea7180` (11:16:08) |
+| 실행 시작 | 11:23:45 (동결 +6분 38초) ⇒ git-stamped prereg 요건 충족 |
+| 실행 시점 HEAD | `2d4f748` + **dirty** (harness 미커밋; 이후 `690a294` 로 고정) |
+| manifest `code_commit` | `690a294` — **JSON 쓰기 시점**의 HEAD 이지 실행 시작 시점이 아니다 |
+| 실행 중 착지한 커밋 | `0d85d26` (docs/83 1 파일, 코드 무변경) |
+| `code_dirty` | True (위 사유) |
+
+---
+
 *연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*

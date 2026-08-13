@@ -1,0 +1,329 @@
+{
+  "declared": {
+    "n": 500,
+    "a_max": 15.413175542581453,
+    "omega_unlimited": 1000000.0
+  },
+  "manifest": {
+    "protocol_hash": "e69dab93fb712694",
+    "code_commit": "690a2944cdb0def0b04b7227b015e7b1df14545b",
+    "code_dirty": true,
+    "judge_commit": "73d3325a7cd52ded",
+    "scenario_manifest_hash": null,
+    "map_spec_hash": null,
+    "lattice_hash": null,
+    "generated_at": "2026-08-13T11:53:29+09:00",
+    "artifact": "docs83_E1_slew_counterfactual",
+    "prereg_commit": "eea71806828fed02e9670e4fcab2c8d0099c906f",
+    "prereg_doc": "docs/83_aiming_attribution_correction_prereg.md §4 (E1)",
+    "threat_class": "T1",
+    "attacker": {
+      "level": "A2",
+      "jink_amp": 0.6,
+      "seed": 0,
+      "route_gain": 0.5,
+      "sense_range": 30.0
+    },
+    "limiter_mode": "hold",
+    "contract": {
+      "enabled": true,
+      "contact_resolver": true,
+      "miss_terminates": false,
+      "p_kill": 1.0,
+      "tau_kill": 0.15,
+      "r_nk": 6.0
+    },
+    "finisher_mobility": 0.0,
+    "omega_max_arms": [
+      2.0,
+      1000000.0
+    ],
+    "n": 500,
+    "seed0": 0,
+    "crn_episode_range": [
+      0,
+      499
+    ],
+    "geometry": {
+      "rho": 1.77,
+      "tau": 0.3,
+      "cone_range_max": 8.22,
+      "cone_half_angle": 0.2121,
+      "kill_radius": 0.75,
+      "dt": 0.05,
+      "episode_len": 160
+    }
+  },
+  "cells": {
+    "고정·ω2.0": {
+      "n": 500,
+      "p_net": 0.168,
+      "penetrated_rate": 0.832,
+      "neutralized_rate": 0.168,
+      "spent_fail_rate": 0.0,
+      "truncated_rate": 0.0,
+      "nondestructive_frac": 1.0,
+      "counts": {
+        "NET_CAPTURE": 84,
+        "CAPTURE_WITH_CONTACT": 0,
+        "HARD_KILL": 0,
+        "PENETRATED": 416,
+        "SPENT_FAIL": 0,
+        "TRUNCATED": 0
+      },
+      "by_regime": {
+        "SHAPING_NEEDED": {
+          "n": 297,
+          "p_net": 0.0,
+          "penetrated_rate": 1.0,
+          "neutralized_rate": 0.0,
+          "spent_fail_rate": 0.0,
+          "truncated_rate": 0.0,
+          "nondestructive_frac": 0.0
+        },
+        "FREE_CAPTURE": {
+          "n": 203,
+          "p_net": 0.41379310344827586,
+          "penetrated_rate": 0.5862068965517241,
+          "neutralized_rate": 0.41379310344827586,
+          "spent_fail_rate": 0.0,
+          "truncated_rate": 0.0,
+          "nondestructive_frac": 1.0
+        }
+      },
+      "contract": {
+        "schema": "resolved-contract-v1",
+        "system": {
+          "tau_kill": 0.15,
+          "p_kill": 1.0,
+          "r_nk": 6.0,
+          "a_lim_max": null,
+          "commit_threshold": 0.5,
+          "enabled": true,
+          "contact_resolver": true,
+          "r_commit": null,
+          "r_contact": null,
+          "miss_terminates": false,
+          "seed_ns": "m4_hardkill"
+        },
+        "reward": {
+          "b_net": 1.0,
+          "w_kill": 0.5,
+          "c_pen": 1.0,
+          "c_trunc": 1.0,
+          "c_lim": 0.1,
+          "dense_scale": 1.0,
+          "terminal_scale": 1.0,
+          "enabled": true
+        },
+        "attacker": {
+          "level": "A2",
+          "lam_gain": 1.0,
+          "lam_range": 1.0,
+          "jink_amp": 0.6,
+          "jink_freq": 1.5,
+          "jink_terminal_r": 3.0,
+          "route_gain": 0.5,
+          "homing_gain": 4.0,
+          "sprint_range": 0.0,
+          "sprint_frac": 1.0,
+          "slowdown_range": [
+            0.0,
+            0.0
+          ],
+          "slowdown_frac": 1.0,
+          "sense_range": 30.0,
+          "bait_gain": 0.0,
+          "bait_privileged": false,
+          "bait_threshold": 0.5,
+          "bait_range": [
+            4.0,
+            16.0
+          ],
+          "bait_enclosure_r": 3.0,
+          "seed": 0,
+          "label": ""
+        },
+        "spawn": {
+          "dx": 2.0,
+          "r_lat": 5.0,
+          "psi": 0.0,
+          "speed_frac": 0.0,
+          "r_range": null,
+          "azimuth": 0.0,
+          "enabled": true,
+          "seed_ns": "m4_spawn"
+        },
+        "standby": null,
+        "randomize_threat": true,
+        "threat_obs": true,
+        "extra_cfg": {},
+        "episode_len": 160,
+        "judge": "se3_cone",
+        "n_segments": 4,
+        "hash": "e37cb467d3ef2383"
+      }
+    },
+    "고정·ω∞": {
+      "n": 500,
+      "p_net": 0.17,
+      "penetrated_rate": 0.83,
+      "neutralized_rate": 0.17,
+      "spent_fail_rate": 0.0,
+      "truncated_rate": 0.0,
+      "nondestructive_frac": 1.0,
+      "counts": {
+        "NET_CAPTURE": 85,
+        "CAPTURE_WITH_CONTACT": 0,
+        "HARD_KILL": 0,
+        "PENETRATED": 415,
+        "SPENT_FAIL": 0,
+        "TRUNCATED": 0
+      },
+      "by_regime": {
+        "SHAPING_NEEDED": {
+          "n": 297,
+          "p_net": 0.0,
+          "penetrated_rate": 1.0,
+          "neutralized_rate": 0.0,
+          "spent_fail_rate": 0.0,
+          "truncated_rate": 0.0,
+          "nondestructive_frac": 0.0
+        },
+        "FREE_CAPTURE": {
+          "n": 203,
+          "p_net": 0.4187192118226601,
+          "penetrated_rate": 0.5812807881773399,
+          "neutralized_rate": 0.4187192118226601,
+          "spent_fail_rate": 0.0,
+          "truncated_rate": 0.0,
+          "nondestructive_frac": 1.0
+        }
+      },
+      "contract": {
+        "schema": "resolved-contract-v1",
+        "system": {
+          "tau_kill": 0.15,
+          "p_kill": 1.0,
+          "r_nk": 6.0,
+          "a_lim_max": null,
+          "commit_threshold": 0.5,
+          "enabled": true,
+          "contact_resolver": true,
+          "r_commit": null,
+          "r_contact": null,
+          "miss_terminates": false,
+          "seed_ns": "m4_hardkill"
+        },
+        "reward": {
+          "b_net": 1.0,
+          "w_kill": 0.5,
+          "c_pen": 1.0,
+          "c_trunc": 1.0,
+          "c_lim": 0.1,
+          "dense_scale": 1.0,
+          "terminal_scale": 1.0,
+          "enabled": true
+        },
+        "attacker": {
+          "level": "A2",
+          "lam_gain": 1.0,
+          "lam_range": 1.0,
+          "jink_amp": 0.6,
+          "jink_freq": 1.5,
+          "jink_terminal_r": 3.0,
+          "route_gain": 0.5,
+          "homing_gain": 4.0,
+          "sprint_range": 0.0,
+          "sprint_frac": 1.0,
+          "slowdown_range": [
+            0.0,
+            0.0
+          ],
+          "slowdown_frac": 1.0,
+          "sense_range": 30.0,
+          "bait_gain": 0.0,
+          "bait_privileged": false,
+          "bait_threshold": 0.5,
+          "bait_range": [
+            4.0,
+            16.0
+          ],
+          "bait_enclosure_r": 3.0,
+          "seed": 0,
+          "label": ""
+        },
+        "spawn": {
+          "dx": 2.0,
+          "r_lat": 5.0,
+          "psi": 0.0,
+          "speed_frac": 0.0,
+          "r_range": null,
+          "azimuth": 0.0,
+          "enabled": true,
+          "seed_ns": "m4_spawn"
+        },
+        "standby": null,
+        "randomize_threat": true,
+        "threat_obs": true,
+        "extra_cfg": {},
+        "episode_len": 160,
+        "judge": "se3_cone",
+        "n_segments": 4,
+        "hash": "e37cb467d3ef2383"
+      }
+    }
+  },
+  "paired": {
+    "고정·ω2.0 -> 고정·ω∞ [SHAPING_NEEDED]": {
+      "regime": "SHAPING_NEEDED",
+      "n_paired": 297,
+      "fixed_k": 0,
+      "fixed_rate": 0.0,
+      "fixed_wilson": [
+        0.0,
+        0.012769047509544676
+      ],
+      "mobile_k": 0,
+      "mobile_rate": 0.0,
+      "mobile_wilson": [
+        0.0,
+        0.012769047509544676
+      ],
+      "diff": 0.0,
+      "diff_ci95": [
+        0.0,
+        0.0
+      ],
+      "rescued_n01": 0,
+      "broken_n10": 0,
+      "R_move": 0.0,
+      "passes": false
+    },
+    "고정·ω2.0 -> 고정·ω∞ [ALL]": {
+      "regime": "ALL",
+      "n_paired": 500,
+      "fixed_k": 84,
+      "fixed_rate": 0.168,
+      "fixed_wilson": [
+        0.13778823275863694,
+        0.20327432938709056
+      ],
+      "mobile_k": 85,
+      "mobile_rate": 0.17,
+      "mobile_wilson": [
+        0.139620365884346,
+        0.20541169889905783
+      ],
+      "diff": 0.0020000000000000018,
+      "diff_ci95": [
+        0.0,
+        0.006000000000000005
+      ],
+      "rescued_n01": 1,
+      "broken_n10": 0,
+      "R_move": 0.002,
+      "passes": false
+    }
+  }
+}
