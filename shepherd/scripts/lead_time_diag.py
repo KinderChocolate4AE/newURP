@@ -141,8 +141,19 @@ def episode_metrics(ep: int, start_x: float) -> dict:
             "horizon_s": round(_horizon(start_x) * dt, 2)}
 
 
-def run_arm(n: int, start_x: float) -> List[dict]:
-    return [episode_metrics(ep, start_x) for ep in range(n)]
+def run_arm(n: int, start_x: float, *, every: int = 25) -> List[dict]:
+    """진행 로그 포함 (장기런 정책: flush 하는 진행 로그 + arm 별 incremental 저장)."""
+    import time
+    rows, t0 = [], time.time()
+    for ep in range(n):
+        rows.append(episode_metrics(ep, start_x))
+        if (ep + 1) % every == 0 or ep + 1 == n:
+            el = time.time() - t0
+            hk = sum(1 for r in rows if r["label"] == "HARD_KILL")
+            print(f"    [x={start_x:.0f}] {ep+1}/{n}  {el:6.1f}s  "
+                  f"({el/(ep+1):.2f} s/ep, ETA {el/(ep+1)*(n-ep-1):5.0f}s)  "
+                  f"HK {hk/(ep+1):.3f}", flush=True)
+    return rows
 
 
 def _stat(v):
@@ -165,8 +176,10 @@ def main() -> None:
 
     base = float(m4_config()["train"]["layout"]["adversary_start_x"])
     print(f"[리드타임 진단 · EXPLORATORY] n={a.n}/arm · T1(route {ROUTE}, sense {SENSE}) "
-          f"· intercept + commit · 기준 start_x={base}")
+          f"· intercept + commit · 기준 start_x={base}", flush=True)
     arms = {}
+    p_out = pathlib.Path(a.out)
+    p_out.parent.mkdir(parents=True, exist_ok=True)
     for X in a.start_x:
         rows = run_arm(a.n, X)
         n = len(rows)
@@ -199,7 +212,7 @@ def main() -> None:
         }
         A = arms[str(X)]
         print(f"\n  start_x={X:5.1f}  HK {hk/n:.3f} [{wl:.3f},{wh:.3f}] · net {nc/n:.3f} "
-              f"· pen {pen/n:.3f}")
+              f"· pen {pen/n:.3f}", flush=True)
         print(f"    T_terminal med {A['T_terminal']['med']:.2f}s · "
               f"T_HK med {A['T_HK']['med'] if A['T_HK'] else float('nan')} · "
               f"코스형성 {A['n_course_formed']}/{n}"
@@ -209,7 +222,11 @@ def main() -> None:
         print(f"    지평선 {A['horizon_s']:.1f}s · TRUNCATED {trunc/n:.3f} · "
               f"초기 이격 max med {A['sep0_max']['med']:.1f} m")
         print(f"    (참고) 등록 T1 sense=30 이었다면 전-limiter 가시 비율 "
-              f"{vis_full/n:.3f} — 본 진단은 무제한이라 해석에 쓰지 않음")
+              f"{vis_full/n:.3f} — 본 진단은 무제한이라 해석에 쓰지 않음", flush=True)
+        # arm 완료마다 부분 저장 (중단 내성)
+        p_out.write_text(json.dumps({"partial": True, "done_arms": list(arms),
+                                     "arms": arms}, ensure_ascii=False, indent=1),
+                         encoding="utf-8")
 
     out = {"declared": {"n": a.n, "start_x": a.start_x, "sense_range": SENSE,
                         "route_gain": ROUTE, "limiter_mode": "intercept",
