@@ -534,4 +534,91 @@ rescue 에피소드가 **등록된 regime label 중 어디에 속하는지만** 
 
 ---
 
+---
+
+# 12-A. §12.3 개정 — ψ 측정 세계 명시 (결과 열람 전, E1b 미실행)
+
+**구현 착수 중 발견한 blocker 에 대한 정정.** metric 을 새로 만드는 것이 아니라
+**측정기를 production rollout 으로 이식**하는 것이다 (instrumentation repair).
+
+## 12A.1 발견 — `audit_episode` 는 E1 과 다른 세계다
+
+[slew_audit.py:82-88] 은 `_zero_commit(acts)` 로 limiter 커밋을 막고
+`scripted_finisher(..., clean_threshold_crossed=False)` 로 **발사를 영원히 막는다.**
+`audit()` 는 `SystemSpec()` 기본값(구계약)을 쓴다(:96).
+
+| | E1 (outcome) | audit_episode (ψ) |
+|---|---|---|
+| 계약 | `ratified_system()` | `SystemSpec()` |
+| limiter commit | 팔별 설정 | 항상 0 |
+| **finisher 발사** | `fire_mode="clean"` | **없음** (하드코딩) |
+| commit 후 dodge | 발동 | 미발동 |
+
+⇒ §12.3 을 문자 그대로 구현하면 포획 결과와 ψ 가 **다른 dynamical world** 에서
+나오므로 `Δψ` 를 rescue 와 연결하는 질문 자체가 성립하지 않는다.
+
+## 12A.2 정본 개정 문구
+
+> **E1b measures the preregistered aiming-error geometry within the same ratified
+> rollout that generates the E1 capture outcome. The geometric ψ computation is
+> extracted from `slew_audit` without changing its mathematical definition and is
+> shared by both the legacy audit path and the E1b telemetry path. Eligibility is
+> evaluated on each arm's own realized pre-fire trajectory. Absolute E1b ψ values
+> are not treated as reproductions of the historical `PSI_MED_DEG = 4.26`, because
+> that quantity was measured under a different no-fire rollout contract.**
+
+구조 변경:
+```
+before:  slew_audit rollout ── ψ geometry
+after:   shared ψ geometry ──┬── slew_audit rollout   (동작 불변)
+                             └── E1/E1b ratified rollout
+```
+불변: ψ 의 수학적 정의 · angle convention · eligibility predicate · aggregation rule.
+변경: **measurement host rollout 만.**
+
+## 12A.3 `PSI_MED_DEG = 4.26` 지위 하향
+
+**historical no-fire audit metric; not directly comparable to E1b absolute ψ.**
+
+파급 — KSAS 문구도 한 단계 조심해야 한다. 기존의 *"경계와 잔여 조준각이 둘 다
+불변"* 은 **두 값의 lineage 가 다르다**(곡선 = ratified fire 세계, ψ = no-fire audit
+세계). 정본:
+
+> the empirical boundary remained approximately stable, while **a separate no-fire
+> aiming audit** reported the same median residual angle **under its registered
+> audit configuration**.
+
+"동일 rollout 에서 독립적으로 측정됐다" 는 표현 **금지**. E1b 가 처음으로 capture
+outcome 과 ψ telemetry 를 **같은 세계에 묶는다** — E1b 의 가치가 그만큼 커졌다.
+
+## 12A.4 pre-fire 창 정의 (보존할 기존 semantics 가 없으므로 신규 선언)
+
+`audit_episode` 의 실제 창은 `in_band` 뿐이고 "발사 전" 은 발사가 없어 공허하게
+참이었다. 따라서 E1b 에서 새로 정의한다. ψ_t 는 `env.step` **이전** 상태로 계산된다.
+`t_fire` = fire_event(LOADED→DEPLOYING) 가 일어나는 스텝 index.
+
+| | 정의 | 지위 |
+|---|---|---|
+| **Primary** | `in_band ∧ t < t_fire` — **commit 스텝 자체를 제외**한 엄격 pre-commit | §12.3 의 estimand `Δψ_i` 는 이 창으로 계산 |
+| **Secondary (지금 선언)** | `psi_at_commit` = t_fire 스텝의 ψ 단일값 | 포획을 실제로 결정한 조준각. 에피소드당 1 개 |
+
+발사가 없는 에피소드는 `t_fire` 미정의 → `psi_at_commit` 없음, 별도 집계.
+두 창 모두 결과 전에 고정했으므로 사후 선택 여지가 없다.
+
+## 12A.5 E1b 질문 재정식화
+
+- **Primary**: *Within the same outcome-generating T1 rollout, does removing the
+  nominal slew cap reduce **pre-commit** aiming error?*
+- **Secondary diagnostic**: *Is the lone rescued episode associated with an
+  unusually negative `Δψ`?* — 12A.1 수정 이후에야 의미를 갖는다.
+
+## 12A.6 회귀 2 층 (둘 다 통과해야 E1b 실행)
+
+| 층 | 내용 |
+|---|---|
+| **REG-1 legacy audit metric** | 함수 추출 전후 `slew_audit` 의 ψ 가 **float-exact** 동일. 역사적 audit metric 이 refactor 로 바뀌지 않았음을 보장 |
+| **REG-2 telemetry no-op** | 동일 고정 seed 에서 telemetry OFF/ON 의 state · action · terminal label · capture count · RNG progression 이 **bit-exact** 동일 |
+
+---
+
 *연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*
