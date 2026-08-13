@@ -71,7 +71,9 @@ def _build_t1(ep: int):
 
 def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
                  t1: bool = False, limiter_mode: str = "hold",
-                 commit: bool = False, lead=None) -> dict:
+                 commit: bool = False, lead=None, lead_delta=None) -> dict:
+    # lead_delta: E4-1c uniform lead (docs/83 §27). 네 limiter 에 동일 delta.
+    #   frozen strong pursuit baseline = 0.125 s. limiter_mode="intercept" 에서만 의미.
     # lead: 리드타임 진단(docs/83 §17) 재생 -- lead_time_diag._build 와 동일 세계
     if lead is not None:
         from shepherd.scripts.lead_time_diag import _build as _build_lead
@@ -115,9 +117,15 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
         finisher_p0=list(map(float, lay.finisher_p0)),
         threat=dict(a_att=float(env.a_att_max), speed=float(env.v_nominal)),
         limiter_mode=limiter_mode, baseline_commit=bool(commit),
+        lead_delta=None if lead_delta is None else float(lead_delta),
     )
 
     steps = []
+    # 소진 limiter 는 env_sys §5 에서 [0,0,60] 으로 **주차**된다. post-step 좌표를
+    # 그대로 적으면 접촉이 일어난 바로 그 스텝이 63 m 로 기록돼 결정적 프레임이
+    # 사라진다 (2026-08-14 발견). 주차된 limiter 는 **마지막 실좌표**로 고정해
+    # 그린다. 측정이 아니라 표기 교정이며, 라벨/확률에는 영향이 없다.
+    last_real = [None] * len(env.limiter_ids)
     fire_step = None
     net_center = None
     resolve_step = None
@@ -127,7 +135,9 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
     for t in range(int(lay.episode_len)):
         lims, fin, att = env._states()
         prev_state = inner.fsm.state.value
-        fi = d.step(limiter_mode=limiter_mode, baseline_commit=commit)
+        fi = d.step(limiter_mode=limiter_mode, baseline_commit=commit,
+                    limiter_kw=(None if lead_delta is None else
+                                {"lead_deltas": [float(lead_delta)] * len(env.limiter_ids)}))
         lims2, fin2, att2 = env._states()
         if fi.get("fire_event") and fire_step is None:
             fire_step = t
@@ -143,11 +153,20 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
                   for r in se.commits[n_events:]]
         n_events = len(se.commits)
         p_att = env._p(att2)
+        lim_pos = []
+        for i, st_i in enumerate(lims2):
+            q = env._p(st_i)
+            if i in se.retired and last_real[i] is not None:
+                q = last_real[i]                      # 주차 좌표 대신 마지막 실좌표
+            else:
+                last_real[i] = np.asarray(q, float).copy()
+            lim_pos.append(list(map(float, q)))
         steps.append(dict(
             t=t,
             att=list(map(float, p_att)),
             att_v=list(map(float, env._v(att2))),
-            lims=[list(map(float, env._p(s))) for s in lims2],
+            lims=lim_pos,
+            att_pre=list(map(float, env._p(att))),
             retired=sorted(se.retired),
             fin=list(map(float, env._p(fin2))),
             fin_e=list(map(float, env._e(fin2))),
@@ -162,8 +181,8 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
             clean=bool(fi.get("clean_net_threshold_crossed", False)),
             d_asset=round(float(np.linalg.norm(
                 p_att - np.asarray(lay.target, float))), 3),
-            d_lim_min=round(min(float(np.linalg.norm(p_att - env._p(s)))
-                                for s in lims2), 3),
+            d_lim_min=round(min(float(np.linalg.norm(p_att - np.asarray(q, float)))
+                                for q in lim_pos), 3),
             events=new_ev,
         ))
         if hard_kill_step is None and bool(fi.get("hard_kill", False)):
@@ -200,6 +219,9 @@ def main() -> None:
                     help="위협 v3 NOMINAL FULL (docs/60 -- standby·방위 스폰)")
     ap.add_argument("--lead", type=float, default=None,
                     help="리드타임 진단 재생 (start_x 값). docs/83 §17 과 동일 세계")
+    ap.add_argument("--lead-delta", type=float, default=None,
+                    help="E4-1c uniform lead delta (docs/83 §27). "
+                         "frozen strong pursuit baseline = 0.125")
     ap.add_argument("--t1", action="store_true",
                     help="curve_sweep 과 동일 세계 (ratified + T1 route 0.5/sense 30)")
     ap.add_argument("--limiter-mode", default="hold",
@@ -226,20 +248,23 @@ def main() -> None:
     if a.eps is not None:
         for ep in a.eps:
             e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1, lead=a.lead,
-                             limiter_mode=a.limiter_mode, commit=a.commit)
+                             limiter_mode=a.limiter_mode, commit=a.commit,
+                             lead_delta=a.lead_delta)
             e["group"] = e["label"]
             episodes.append(e)
             print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
     else:
         for ep in CAPTURE_EPISODES:
             e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1, lead=a.lead,
-                             limiter_mode=a.limiter_mode, commit=a.commit)
+                             limiter_mode=a.limiter_mode, commit=a.commit,
+                             lead_delta=a.lead_delta)
             e["group"] = "CAPTURE"
             episodes.append(e)
             print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
         for ep in MISS_EPISODES:
             e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1, lead=a.lead,
-                             limiter_mode=a.limiter_mode, commit=a.commit)
+                             limiter_mode=a.limiter_mode, commit=a.commit,
+                             lead_delta=a.lead_delta)
             e["group"] = "MISS"
             episodes.append(e)
             print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)

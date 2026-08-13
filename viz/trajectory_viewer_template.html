@@ -141,7 +141,8 @@ const sel = $("epsel");
 for (const [i, e] of eps.entries()) {
   const o = document.createElement("option");
   o.value = i;
-  o.textContent = `${e.group === "CAPTURE" ? "성공" : "미스"} · ep ${e.static.episode} — ${e.label}`;
+  const g = e.group === "CAPTURE" ? "성공" : e.group === "MISS" ? "미스" : e.group;
+  o.textContent = `${g} · ep ${e.static.episode} — ${e.label}`;
   sel.appendChild(o);
 }
 sel.onchange = () => { cur = +sel.value; t = 0; refit(); draw(); };
