@@ -1,0 +1,39 @@
+[E1d · docs/83 §15] n=300 · tau 0.3 · R_max 8.22 · theta 12.15deg · arms ['D-a', 'D-b', 'D-c']
+    [pass1] 50/300    68.5s (ETA   342s)
+    [pass1] 100/300   139.3s (ETA   279s)
+    [pass1] 150/300   206.1s (ETA   206s)
+    [pass1] 200/300   280.1s (ETA   140s)
+    [pass1] 250/300   349.1s (ETA    70s)
+    [pass1] 300/300   417.9s (ETA     0s)
+    [D-a] 50/300    79.7s (ETA   399s)
+    [D-a] 100/300   159.8s (ETA   320s)
+    [D-a] 150/300   238.6s (ETA   239s)
+    [D-a] 200/300   318.2s (ETA   159s)
+    [D-a] 250/300   390.6s (ETA    78s)
+    [D-a] 300/300   471.0s (ETA     0s)
+
+  D-a (target ax 6.5, ideal_aim True, omega None): n=300 제외 0 발사 300
+    ax_realized med 6.4913 [6.33315, 6.621675] · psi_at_commit med 0.0 deg
+    P(capture) 0.240 · **cross50 29.95** · reference benchmark 31.06
+    [D-b] 50/300    89.5s (ETA   447s)
+    [D-b] 100/300   167.4s (ETA   335s)
+    [D-b] 150/300   245.8s (ETA   246s)
+    [D-b] 200/300   330.2s (ETA   165s)
+    [D-b] 250/300   409.8s (ETA    82s)
+    [D-b] 300/300   486.2s (ETA     0s)
+
+  D-b (target ax 8.0, ideal_aim True, omega None): n=300 제외 0 발사 300
+    ax_realized med 7.8914 [7.621449999999999, 8.061025] · psi_at_commit med 0.0 deg
+    P(capture) 0.040 · **cross50 nan** · reference benchmark 37.76
+    [D-c] 50/300    80.1s (ETA   400s)
+    [D-c] 100/300   151.5s (ETA   303s)
+    [D-c] 150/300   223.3s (ETA   223s)
+    [D-c] 200/300   308.6s (ETA   154s)
+    [D-c] 250/300   388.5s (ETA    78s)
+    [D-c] 300/300   465.0s (ETA     0s)
+
+  D-c (target ax 8.0, ideal_aim False, omega 1000000.0): n=300 제외 0 발사 300
+    ax_realized med 7.91845 [7.642099999999999, 8.1001] · psi_at_commit med 3.501631564942026 deg
+    P(capture) 0.040 · **cross50 nan** · reference benchmark 37.89
+
+  -> results/e1d.json
