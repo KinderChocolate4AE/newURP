@@ -907,4 +907,81 @@ n=1500/팔. Pass 1 공유 → 롤아웃 총 1500 + 4500 = **6000** (~3.5–4 h).
 
 ---
 
+---
+
+# 16. E2-B 판정 — **Δ_comp = 정확히 0** (2026-08-13 실행·기록)
+
+산출물: `results/e2b_intercept_shamnet.json` · `.log`.
+execution_commit = `80eefa0` (실행 전 봉인, clean tree). 분석 순서는 §10.5 그대로.
+
+## 16.1 ① high-χ exact oracle — PASS
+
+| 검사 | n | 불일치 |
+|---|---|---|
+| a ≥ 39.33 | 1,598 | **0** |
+| **강화**: A 가 NET_CAPTURE 가 **아닌** 전 에피소드 | 2,274 | **0** |
+
+비교 필드 = `episode · label · regime · a_att · att_speed · net_radius · tau`.
+정본 문구: **bit-exact over all persisted paired outcome/event fields**
+(궤적은 저장돼 있지 않으므로 *"trajectory bit-exact"* 라고 쓰지 않는다).
+⇒ 개입 분기가 정확히 426 개 포획 에피소드에만 닿았다. **R3 배선 확증.**
+
+## 16.2 ②③④ 결과
+
+| | NET | HK | PEN |
+|---|---|---|---|
+| A (net ON) | 426 | **545** | 1,729 |
+| B (sham) | 0 | **545** | 2,155 |
+
+```
+Delta_comp = P_HK^B - P_HK^A = 0.2019 - 0.2019 = +0.0000   CI95 [0.000, 0.000]
+n01 = 0 · n10 = 0
+A 의 NET_CAPTURE 426 건 중 B 에서 HARD_KILL 로 전환 = 0
+```
+
+구간별로도 전부 Δ = 0:
+
+| band | n | A:net | A:HK | B:HK | Δ |
+|---|---|---|---|---|---|
+| EASY | 590 | 0.717 | 0.063 | 0.063 | +0.0000 |
+| BAND_AIM | 512 | 0.006 | 0.234 | 0.234 | +0.0000 |
+| SHAPING | 1,598 | 0.000 | 0.243 | 0.243 | +0.0000 |
+
+## 16.3 ★ 사전 예상이 반증됐다 (자기 정정)
+
+§10.5 는 *"low-a 에서 net 이 0.717 로 먼저 종료시키므로 E2-B 정보가 가장 크다"* 고
+예상했다. **그 구간에서도 정확히 0 이었다.**
+
+⇒ 이전 기술 **"현재 24.3% 는 경쟁위험 때문에 하한"** 은 **틀렸다.**
+경쟁위험 censoring 이 존재하지 않으며, E2-A 의 하드킬 수치는 이미 uncensored 다.
+보정 없이 그대로 쓴다.
+
+## 16.4 그래서 modality gap 은 오히려 깨끗해진다
+
+| 구간 | net capture | physical intercept |
+|---|---|---|
+| EASY | **0.717** | 0.063 |
+| BAND_AIM | 0.006 | **0.234** |
+| SHAPING (χ≥1) | 0.000 | **0.243** |
+
+두 modality 의 유능 구간이 **부분적으로 상보적**이다 — 저-a 는 net, 고-a 는 물리
+요격. *"물리 요격이 항상 낫다"* 보다 정확한 서술이다.
+
+**결과 명명 (동결)**: E2-B 의 P_HK 를 *"true physical interception probability"* 라고
+부르지 않는다. 정본 = *physical-interception incidence under matched
+commit-conditioned threat response with net capture removed as a competing terminal
+event.*
+
+## 16.5 미해결 — 왜 0/426 인가
+
+`n01 = n10 = 0` 이라는 **정확한** 0 은 통계적 우연이 아니라 구조적 이유를 시사한다.
+후보: ① NK veto (`r_nk = 6.0`) — 포획이 성립하는 시점엔 이미 무-kinetic 구역 안이라
+기폭이 거부됨 ② limiter 가 이미 소모됨 ③ 기하상 접촉 불가.
+
+**판별 불가**: 현 records 에 `veto_events` 가 에피소드별로 저장돼 있지 않다.
+값싼 진단이므로 후속에서 확인한다 (이유가 ① 이면 *"net 이 되는 순간은 이미 kinetic
+이 금지된 순간"* 이라는 강한 문장이 된다).
+
+---
+
 *연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*
