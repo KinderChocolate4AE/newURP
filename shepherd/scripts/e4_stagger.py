@@ -51,20 +51,28 @@ PERMS = list(itertools.permutations(range(4)))
 assert len(PERMS) == 24
 
 
-def deltas_for(ep: int, D: float) -> List[float]:
-    """episode 별 balanced permutation 으로 timing slot 을 배정."""
-    base = [-D, -D / 3.0, +D / 3.0, +D]
+def deltas_for(ep: int, D: float, design: str = "sym") -> List[float]:
+    """episode 별 balanced permutation 으로 timing slot 을 배정.
+
+    design="sym"     : {-D, -D/3, +D/3, +D}          (E4-1, §20)
+    design="diverse" : {0, D/3, 2D/3, D}             (E4-1b, §24 — clamp 구조적 불가)
+    design="control" : {D/2, D/2, D/2, D/2}          (E4-1b matched mean)
+    """
+    if design == "control":
+        return [D / 2.0] * 4
+    base = ([0.0, D / 3.0, 2 * D / 3.0, D] if design == "diverse"
+            else [-D, -D / 3.0, +D / 3.0, +D])
     perm = PERMS[ep % len(PERMS)]
     return [base[perm[i]] for i in range(4)]
 
 
-def episode_e4(ep: int, D: float) -> dict:
+def episode_e4(ep: int, D: float, design: str = "sym") -> dict:
     env, scn, lay = _build_t1(ep)
     d = _Driver(env, scn, lay, ep)
     se = d.se
     dt = float(env.dt)
     n_lim = len(env.limiter_ids)
-    dl = deltas_for(ep, D)
+    dl = deltas_for(ep, D, design)
     v_lim = float(env.backend.by_name(env.limiter_ids[0]).limits.v_max)
 
     dmin = np.full(n_lim, np.inf)
@@ -97,7 +105,7 @@ def episode_e4(ep: int, D: float) -> dict:
             break
 
     tmin_s = tmin * dt
-    return {"episode": ep, "D": D, "label": d.label,
+    return {"episode": ep, "D": D, "design": design, "label": d.label,
             "a_att": float(env.a_att_max), "att_speed": float(env.v_nominal),
             "deltas": [round(x, 4) for x in dl],
             "d_min": [round(float(x), 3) for x in dmin],
