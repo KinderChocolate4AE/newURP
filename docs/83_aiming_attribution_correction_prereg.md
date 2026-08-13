@@ -1,6 +1,29 @@
 # 83 — 조준 병목의 **인과 귀속 정정** + E1/E2 사전등록 (동결본)
 
 - **일자**: 2026-08-13 (3차 세션) · 성격: **claim 정정 + 신규 실험 2건 사전등록 (결과 열람 전 동결)**
+
+> **▣ PREREG FREEZE STAMP** (내용 무변경 — 아래 §0~§9 는 freeze 커밋 그대로)
+>
+> | 항목 | 값 |
+> |---|---|
+> | **prereg freeze commit** | `eea71806828fed02e9670e4fcab2c8d0099c906f` (`eea7180`) |
+> | harness code revision (freeze 시점) | `3087615` — `mobility_factorial.py` · `attacker_ladder.py` |
+> | 직전 science commit | `43acc39` (T1 rerun Case B) |
+>
+> 이 블록은 freeze 직후 **provenance 스탬프로만** 추가됐다 (가설·설정·판정규칙 무수정).
+> E1/E2 결과가 나온 뒤 사전등록이 작성된 것처럼 보이지 않도록, freeze 커밋이 결과
+> 커밋보다 **앞선다는 사실을 git object 로 고정**하는 것이 목적이다.
+>
+> **결과 아티팩트에 반드시 기록할 manifest 필드** (감사 §G-② 재발 방지 — reactive
+> rerun JSON 이 route_gain/sense_range 를 안 남겨 파일명으로만 T0/T1 을 구분해야 했던
+> 사고의 직접 대응):
+> ```
+> prereg_commit · execution_commit · code_revision
+> threat_class (T0/T1) · level · jink_amp · route_gain · sense_range
+> limiter_mode · contract (ratified_system flags) · finisher mobility
+> omega_max (2.0 / 1e6) · n · seed0 · CRN episode range
+> rho · tau · cone(range_max, half_angle) · r_kill · p_kill · dt · episode_len
+> ```
 - **트리거**: 산출물 감사 중 `results/slew_counterfactual.json`(docs/51 §9, 08-05)이 docs/45 §9(08-01)의 인과 귀속을 반증함을 발견. 두 문서가 지금까지 연결된 적 없음.
 - **규율**: docs/45 의 당시 결론은 **보존**한다 (역사 삭제 금지). 본 문서가 그 위에 DOWNGRADE 를 얹는다.
 
