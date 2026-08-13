@@ -97,7 +97,8 @@ class _Driver:
 
     def step(self, limiter_override: Optional[Dict[str, np.ndarray]] = None,
              limiter_mode: str = "hold",
-             baseline_commit: bool = False) -> dict:
+             baseline_commit: bool = False,
+             limiter_kw=None) -> dict:
         # baseline_commit (2026-08-13 추가): 기본 False = 기존과 bit-identical
         # (scripted_role_actions 가 _zero_commit 을 걸어 limiter 가 커밋하지 않는다).
         # True 면 하드킬 arm -- 궤적 뷰어에서 커밋/SPENT 를 보려면 필요하다.
@@ -111,6 +112,7 @@ class _Driver:
                                      fire_mode=self.fire_mode,
                                      prev_clean=self.prev_clean,
                                      baseline_commit=baseline_commit,
+                                     limiter_kw=limiter_kw,
                                      states=(lims, fin, att))
         if limiter_override is not None:
             acts.update(limiter_override)

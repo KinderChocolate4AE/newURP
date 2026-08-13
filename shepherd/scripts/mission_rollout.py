@@ -112,7 +112,7 @@ def intercept_lead_time(rel_p, v_att, v_lim_max):
 
 
 def intercept_limiter(i, p_lim, v_lim, p_att, v_att, *, tau_kill, a_max, margin,
-                      v_max=None):
+                      v_max=None, lead_delta=0.0):
     """하드킬 baseline arm: 선도 충돌점으로 최대 가속 + 기하 충족 시 커밋.
 
     "그냥 박는다" arm 이다. 네트 없이 limiter 만으로 막는 경우의 대조군이며
@@ -123,7 +123,11 @@ def intercept_limiter(i, p_lim, v_lim, p_att, v_att, *, tau_kill, a_max, margin,
     p_att = np.asarray(p_att, float); v_att = np.asarray(v_att, float)
     rel_p = p_att - p_lim
     t_lead = intercept_lead_time(rel_p, v_att, v_max if v_max else a_max)
-    aim = p_att + v_att * (t_lead if t_lead is not None else tau_kill)
+    # lead_delta (docs/83 §20, 2026-08-13): 기본 0.0 = **bit-identical**.
+    # 0 이 아니면 조준 시점만 옮겨 요격 시각을 갈라놓는다 (temporal stagger).
+    # Amendment A — 음의 lead time 은 공격자의 **과거** 위치를 겨냥하게 되므로 0 에서 clamp.
+    t_base = t_lead if t_lead is not None else tau_kill
+    aim = p_att + v_att * max(0.0, float(t_base) + float(lead_delta))
     err = aim - p_lim
     n = float(np.linalg.norm(err))
     a_cmd = (err / n) * a_max if n > 1e-12 else np.zeros(3)
@@ -186,10 +190,14 @@ def _limiter_actions(env, scn, lay, mode, lims, p_att, v_att, limiter_kw=None):
         tau_k = 0.1 if spec is None else spec.tau_kill
         a_lim = getattr(env, "a_lim_max", scn.limiter.a_max)
         margin = env.kill_radius + 0.5 * (a_lim - env.a_att_max) * tau_k ** 2
+        # lead_deltas: limiter 별 조준 시점 오프셋 (docs/83 §20 E4-1).
+        # 없으면 전부 0.0 -> 기존 경로와 bit-identical.
+        dl = (limiter_kw or {}).get("lead_deltas")
         return {lid: intercept_limiter(
                     i, env._p(lims[i]), env._v(lims[i]), p_att, v_att,
                     tau_kill=tau_k, a_max=scn.limiter.a_max, margin=margin,
-                    v_max=_limiter_v_max(env, scn))
+                    v_max=_limiter_v_max(env, scn),
+                    lead_delta=(0.0 if dl is None else float(dl[i])))
                 for i, lid in enumerate(env.limiter_ids)}
     # ★ 제4병목 계측 arm (docs/20 §6). 관측 전용 단순 컨트롤러 -- 학습이
     #   이것들을 못 넘으면 "RL 이 필요하다" 를 주장할 수 없다.

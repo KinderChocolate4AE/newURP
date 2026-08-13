@@ -1298,6 +1298,37 @@ delta_i in { -Δ, -Δ/3, +Δ/3, +Δ }               (limiter index 순, 고정 �
 각 limiter 가 공격자 경로의 **서로 다른 미래 점**을 겨냥 → 요격 시각이 갈라진다.
 그 외 로직·게인 무변경 (자유 게인 여전히 0).
 
+### ★ Amendment A — `t_lead + δ < 0` 처리 (결과 전 동결)
+
+`δ` 가 −0.25 s 까지 가므로 근접 상황(`t_lead < 0.25`)에서 **음의 lead time** 이 나올
+수 있다. 그러면 "더 이른 요격 층" 이 아니라 **공격자의 과거 위치를 겨냥하는** 이상한
+컨트롤러가 된다. 규칙:
+
+```
+t_i^eff = max(0,  t_lead + delta_i)
+```
+
+**보고 의무**: arm 마다 ① clamp 발생 episode 비율 ② limiter-level clamp 비율.
+clamp 가 잦으면 *"±Δ 의 대칭적 temporal staggering"* 이라고 부르지 않고
+**`horizon staggering with a zero lower bound`** 로 해석·표기한다.
+
+### ★ Amendment B — `δ_i` 를 limiter ID 에 고정하지 않는다 (결과 전 동결)
+
+limiter 0 이 링의 특정 방위에 늘 있는데 거기 항상 `−Δ` 를 주면 *"북쪽 = early
+pressure, 남쪽 = reserve"* 처럼 **공간 역할까지 동시에 추가**된다. 그러면 HK 가
+올라가도 **temporal diversity 때문인지 특정 spatial slot 에 특정 timing 을 준
+것 때문인지 분리되지 않는다.**
+
+규칙: 네 timing slot `{−Δ, −Δ/3, +Δ/3, +Δ}` 를 **에피소드마다 사전 고정된 balanced
+permutation** 으로 4 기에 배정한다.
+
+- 24 개 permutation 을 **episode index 로 순환** (`PERMS[ep % 24]`)
+- **같은 에피소드에서 Δ=0.125 와 0.25 는 동일 permutation** 을 쓴다
+- 캠페인 전체에서 모든 spatial limiter 가 early/mid/late/reserve 를 거의 같은 횟수
+- permutation 규칙은 **결과와 무관하게 사전 고정** (본 문서가 그 고정이다)
+
+⇒ arm 사이에서 실질적으로 변하는 것은 **temporal-spread amplitude Δ 하나**가 된다.
+
 **Δ 사전 선언 (튜닝 금지)** — E3 관측 자연 spread 에 앵커:
 ```
 Δ ∈ { 0,  0.125,  0.25 } s
