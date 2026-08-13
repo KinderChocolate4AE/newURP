@@ -102,6 +102,8 @@ claim registry 총계: **ACTIVE 19 · DOWNGRADED 5 · RETRACTED 3 · PENDING 2**
 | (e) | **pre-commit shaping 필요성** | DECLARED + PILOT 목격자 1건 | "①-B1이 pre-commit 개입을 **동기화**한다" (필요성 '증명' 아님) | ①-B2 미확정 — B2 실험이 바로 이것 |
 | (f) | **route 채널 인과 실존** (P94) | PILOT (n=50) | "채널이 존재하고 측정 가능" — 학습이 이를 **쓰는지는** 미검정 | MARL 재개의 전제이지 근거 아님 |
 | (g) | **반응형 T1이 경계를 파괴하지 않음** | MEASURED — **Case B 봉인** (08-13) | "reactive avoidance reduced baseline attainability (0.83→0.76) while the boundary remained approximately stable" — "반응성 무관/결정적" 양쪽 금지 | T1 = 단일 구성(0.5, 30 m)이지 family 아님; Phase III 스케일에선 terminal-only reactive |
+| (i) | **all-chase가 pathwise 요격 기회를 못 쓴다** (E3) | MEASURED (hindsight oracle) | "There is substantial unused pathwise interception opportunity, but the baseline concentrates those opportunities into a single temporal layer." | P(oracle≤0.75)=0.883 vs 실측 0.043 · E[가능 limiter]=2.84/4 · range(t_min) 0.125 s(93.7%가 0.3 s 내). **금지**: "causal policy가 성공한다"/"학습이 필요"/"capability 부족" — realized path 한정 |
+| (j) | **timing만 바꿔도 하드킬이 오른다** (E4-1) | outcome MEASURED / **기전 UNRESOLVED** | "registered physical capability만으로 19%가 고정되는 것은 아니다" — 0.190→0.253 (paired +0.063, CI [+0.017,+0.110]) | 동결 mechanism endpoint가 양자화로 gate 미충족(자기신고). Δ=0.25는 clamp 98%라 격리. **금지**: "S2"/"temporal staggering 성공"/dose-response |
 | (h) | **MARL null** (LL 0/300 등) | MEASURED (등록된 해석 동결) | "사전등록 우월성 주장을 지지하지 않았다"; Phase III는 이 null의 "mechanism-consistent explanation" — **원인 증명 아님** | 학습이 hold를 못 넘은 원인은 조준 축으로 특정(C003)·BC로 매개 확인(C004) |
 
 ### 핵심 명제 원문 요지 (미팅 참조용)
@@ -125,12 +127,31 @@ claim registry 총계: **ACTIVE 19 · DOWNGRADED 5 · RETRACTED 3 · PENDING 2**
 
 ## 4. 논문 라인 현황
 
-### KSAS 2026 추계 2p — 동결 직전이었으나 **실험 2건 추가** (P1 개정, docs/83)
-- **스파인 (개정)**: modality gap — 요격 가능 ≠ 비파괴 포획 가능. τ → χ → residual aiming geometry → net vs physical 두 곡선. **T1까지만** (ladder 규율).
-- **T1 재실행 완료·Case B**: T1을 primary lineage로, T0는 mechanism-isolation으로 강등. attainability 0.763 / crossing 22.45 / ψ 불변 / 경계 위 0.
-- **수치 전수감사 판정: PASS WITH SCOPE CAVEATS** (FATAL 0). 기록 잔여 4건: ① **78 m/s² bracket 상한 출처** (유일 무인용 인쇄 숫자 — 미확보 시 "declared" 격하) ② legacy↔rerun 계약 차이 caveat 1문장 ③ pooled 분모 재확인 ④ stale docstring 2건. (manifest는 완료.)
-- **★ 신규 추가 (08-13, docs/83)**: **E1** T1 ω=∞ paired 반사실 (1,000판 — 인과 귀속 판정) · **E2** 전용 hard-kill pursuit baseline (2,900판 — modality gap 상단 곡선). 취소: ω_max 3점 sweep(∞조차 null이라 중복).
-- Gate 7은 본문 제외, Discussion 1문장만.
+### KSAS 2026 추계 2p — **실험 완료, 본문 정정 대기** (P1)
+- **스파인 (개정)**: modality gap — 요격 가능 ≠ 비파괴 포획 가능. **T1까지만** (ladder 규율).
+- **T1 재실행 Case B**: T1 primary lineage, T0는 mechanism-isolation. attainability 0.763 / crossing 22.45 / ψ 불변 / 경계 위 0.
+- **수치 전수감사: PASS WITH SCOPE CAVEATS** (FATAL 0).
+- **08-13 실험 6건 완료** (전부 사전등록·봉인): E1(INCONCLUSIVE) · E1b(분기 B) · E1c(경우 ③) · E2-B(Δ_comp=0) · 리드타임(가설 기각) · E3(controller-limited) · E4-1(outcome POSITIVE/기전 UNRESOLVED).
+
+**제출 전 남은 것 — 이것만 하면 freeze**
+
+| # | 항목 | 성격 |
+|---|---|---|
+| 1 | **78 m/s² 출처** 확정 or "declared upper threat bracket" 격하 | 서지 (교수님 확인 요청) |
+| 2 | legacy↔rerun 계약 차이 caveat 1문장 | 기록 |
+| 3 | pooled 분모 재확인 (1,635 / 518 / 904) | 기록 |
+| 4 | stale docstring 2건 (a\*=44.4→39.3, 24.06→22.45) | 기록 |
+| **5** | **★ 본문 정정 6곳** (오늘 발생) | 아래 |
+
+**본문 정정 6곳** (docs/83 근거):
+1. spine 문장 → modality gap (§12A·§23)
+2. *"finite slew binds first"* **삭제** — ω=∞ 반사실 0/500 flip (§2, C031)
+3. *"0/1598이 경계를 실측 검증"* → **censoring 문구** (§14.2, C032)
+4. **ψ lineage caveat** — 4.26°는 no-fire audit world 값, 곡선과 lineage 다름 (§12A.3)
+5. modality gap을 **Level 1/2/3**로 표기, `C_net ⊊ C_physical` state-wise 서술 금지 (§23, C036)
+6. 3구간 이름 = baseline-achievable / aiming-limited / kinematically-infeasible
+
+Gate 7은 본문 제외, Discussion 1문장만.
 
 ### arXiv v0 — 10월 초중 목표 (가속 결정 08-11)
 - 3부 구성: **I** feasibility (τ·χ·T1 실측·aiming·다좌표 caveat) / **II** why terminal cooperation is too late (Gate 7) / **III** ⇒ 협력은 commit 전에 작동해야 한다. **B2 결과를 기다리지 않음** — v0의 역할은 "왜 B2인가"까지.
@@ -145,11 +166,12 @@ claim registry 총계: **ACTIVE 19 · DOWNGRADED 5 · RETRACTED 3 · PENDING 2**
 
 ## 5. 미팅 합의 요청 항목 (우선순위순)
 
-### A. KSAS (이번 주 결정 필요)
-0. **★ spine 교체 + 조준 기전 정정 승인 (신규·최우선)** — ㉠ "유한 조준 각속도가 먼저 구속"이라는 인과 서술을 철회하고 "잔여 조준 오차(원인 미해결)"로 하향. 근거: ω=2.0→∞ paired 반사실이 500판 중 **0건** 변화 (docs/51 §9 아티팩트, 08-05에 이미 존재했으나 docs/45와 미연결). ㉡ 그 대신 spine을 **modality gap**(요격 가능 ≠ 포획 가능)으로 올림 — a≥39.3에서 net 0/1,598 vs 물리 요격 24.3%. ㉢ 이에 따라 E1·E2 두 실험을 제출 전에 수행 (docs/83 사전등록 완료, 판정규칙 동결).
-1. **Case B 스파인 승인** — T1 primary·T0 강등, attainability 0.763, 겨냥 headline "consistent with, 12.4%" 유지. (T0의 더 좋은 숫자로 회귀하지 않는 규율 확인.)
-2. **78 m/s² 상한 출처** — 5-inch FPV 급 가속 상한의 citable 문헌을 아시는지. 없으면 "선언된 위협 bracket 상한"으로 인쇄.
-3. **저자·순서·과제 표기 + 마감 확인** (8/29 가정) — docs/72 계획서에 "교수님 상의" 플래그 그대로.
+### A. KSAS (최우선 — 8/15 이후 바로 제출 준비)
+0. **★ spine 교체 + 인과 정정 3건 승인 (최우선)** — 오늘 실험 6건이 **인과 주장 4개를 내렸습니다.** ㉠ *"유한 조준 각속도가 먼저 구속"* 철회 (ω=∞ 반사실 0/500 flip) ㉡ *"0/1598이 경계를 실측 검증"* → censoring (a≥32.2 발사 0/350) ㉢ *"짧은 교전이 하드킬을 억제"* 기각 (리드타임 2배에도 HK 평평). 그 대신 spine을 **modality gap**으로 올림. **본문 §2.2–2.3 상당 부분 재작성이 필요합니다** (정정 6곳, §4 참조).
+1. **Case B 스파인 승인** — T1 primary·T0 강등, attainability 0.763, 겨냥 headline은 *"consistent with"* + 편차 **12.4%** 병기. T0의 더 좋은 숫자로 회귀하지 않는 규율 확인.
+2. **78 m/s² 상한 출처** — 5-inch FPV급 가속 상한의 citable 문헌을 아시는지. **인쇄 숫자 중 유일하게 무인용**입니다. 없으면 *"declared upper threat bracket"* 으로 격하해서 인쇄.
+3. **저자·순서·과제 표기 + 마감 확인** (8/29 가정) — docs/72의 "교수님 상의" 플래그 그대로.
+4. **modality gap을 어느 level로 인쇄할지** — Level 1·2는 확립, **Level 3(state-wise `C_net ⊊ C_physical`)는 미확립**. 본문에서 포함관계로 쓰지 않고 *"modality separation"* 으로 쓰는 데 동의하시는지.
 
 ### B. arXiv (방향 합의)
 4. **일정**: 10월 초중 가속안 유지 여부. KSAS 동결 → repo 정리(R1~R3) → arXiv 순서(docs/81) 승인.
