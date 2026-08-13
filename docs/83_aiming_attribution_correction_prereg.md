@@ -1033,14 +1033,50 @@ event.*
 0/215). ⇒ limiter 는 **제때 도착한다.** 따라붙어 1.5 m 까지 접근한 뒤 **거기서 못
 좁히고** 공격자가 통과한다. 실패는 도착 시각이 아니라 **종말 근접**이다.
 
-## 17.5 판정
+## 17.5 판정 (★ 2026-08-13 하향 정정)
 
-> **짧은 교전이 하드킬을 낮추는 것이 아니다.** 리드타임은 요격 코스 형성률을
-> 37% → 100% 로 올리지만 최종 결과를 바꾸지 않는다. 병목은 **종말 기동 차이**다 —
-> limiter 는 `a_lim = 0.35·a_att` (Pliska 실측 비율) 로 가속 열세이고 공격자의
-> jink 는 `0.6·a_att` 라 마지막 미터에서 limiter 의 보정 능력을 초과한다.
+**데이터가 확실히 말하는 것은 두 가지뿐이다:**
 
-임의 파라미터가 아니라 **문헌 앵커 자체가 만드는 결과**다.
+> ① **리드타임 부족은 아니다.**
+> ② **현재 intercept controller 에서 terminal miss distance 가 약 1.4~1.7 m 에
+>    고정된다.**
+
+여기까지다. **왜 1.5 m 벽이 생기는지는 controller 와 capability 가 아직 분리되지
+않았다.**
+
+### 취소된 문구 (과잉)
+
+> ~~"병목은 종말 기동 차이다 — `a_lim = 0.35·a_att` 대 jink `0.6·a_att` 라 마지막
+> 미터에서 보정 능력을 초과한다"~~
+> ~~"문헌 앵커 자체가 만드는 결과"~~
+
+**`0.35 < 0.6` 만으로 물리적 infeasibility 가 나오지 않는다.** 요격은 상대의
+순간 기동을 그대로 맞받는 문제가 아니라 **intercept set 을 선점하는 문제**다.
+공격자가 바깥 arc 를 돌면 방어자는 같은 arc 를 따라갈 필요가 없고, 안쪽
+chord/inner-radius 를 타면 `L_defender < L_attacker` 가 되어 순간 가속이 열세여도
+반드시 불리하지 않다. 따라서 위 문장은 **mechanism hypothesis** 로만 남긴다.
+
+### 오히려 이 조합이 핵심이다
+
+```
+course formation  37% -> 100%      (리드타임이 코스는 확실히 만들어준다)
+P_HK              19% ->  18%      (그런데 결과가 안 바뀐다)
+d_min            ~1.5 m 고정        (최근접 분포가 통째로 안 움직인다)
+```
+
+⇒ **"시간만 더 주면 같은 pursuit law 가 해결할 문제는 아니다"** 는 강한 증거.
+다음 질문은 곧바로:
+
+> **같은 기체 성능에서 pursuit law 만 바꾸면 1.5 m barrier 를 깰 수 있는가?**
+
+### 현행 controller 의 성격
+
+`intercept_limiter` (mission_rollout.py:114) 는 예측 요격점(PIP)으로 **최대가속
+추격**이다. 구조적으로 공격자가 간 길을 뒤따르는 man-to-man 에 가깝다. 반면
+limiter 의 원래 역할은 **길목 차단(route occupation / zone defense)** 에 가깝다.
+
+⇒ 현재 24% 하드킬이 physical interception capability 의 상한인지, 아니면
+**현행 pursuit baseline 의 구조적 한계**인지 아직 모른다. (§18 이 이를 가른다.)
 
 ## 17.6 ★ 범위 한정 (과잉 일반화 금지)
 
@@ -1052,6 +1088,73 @@ event.*
 - **24 m 코리도 문제 자체가 해소된 것은 아니다.** 캠페인 계약 차이(감사 §E)는 그대로.
 - `sense = ∞` 변형이므로 등록 T1 과 병치 금지. 36 arm 부터는 등록 T1(sense 30)
   이었다면 전-limiter 가시 비율이 0.717 → 0.000 으로 무너졌을 조건이다.
+
+---
+
+---
+
+# 18. E3 사전등록 — **controller-limited vs capability-limited** 판별 (동결본, 미실행)
+
+§17 이 남긴 질문: 1.5 m barrier 가 **현행 pursuit law 의 한계**인가, **기체 성능의
+한계**인가. 새 heuristic controller 를 하나 더 돌리는 것보다 **oracle 로 가르는
+것**이 판별력이 높다.
+
+> **미래를 다 아는 oracle 도 못 잡으면 물리 문제. oracle 은 잡는데 현행 pursuit 만
+> 못 잡으면 정책 문제.**
+
+## 18.1 arm 구성
+
+| arm | 내용 | 역할 |
+|---|---|---|
+| **E3-0** | 현행 `intercept_limiter` (PIP 최대가속 추격) | 기준선 (§17 = 1.5 m) |
+| **E3-1** | **cutoff / inside-line** — 공격자를 따라가지 않고 asset 쪽 통과 경로·미래 crossing point 를 선점 (route occupation 의 최단순 scripted 구현) | 정책 개선 여지 |
+| **E3-2** | **offline optimal-control upper bound (oracle)** | ★ 판별자 |
+
+## 18.2 Oracle 정의 (닫힌 형태 — 최적화 불필요)
+
+기록된 공격자 궤적 `p_A(t)` 와 limiter 초기 상태 `(p_L0, v_L0)`, 동일 한계
+`(a_max, v_max)` 에 대해 이중적분기의 도달집합은 중심 `p_L0 + v_L0·t`, 반경 `R(t)`
+(램프식, `contact_reachability.reach_radius` **재사용** — 새 정의 금지) 이므로
+
+```
+d_min^oracle = min_t  max(0,  |p_A(t) − (p_L0 + v_L0·t)|  −  R(t) )
+```
+
+limiter 4 기 중 **최솟값**을 취한다. 최적화 없이 궤적만으로 계산된다.
+
+**★ 낙관 방향 (의도적)**: 드리프트-중심 근사는 `v_L0 + Δv ≤ v_max` 결합을 무시하므로
+실제보다 **관대**하다. 따라서 **oracle 이 못 닿으면** capability 한계 주장이 강해진다.
+
+**★ 필수 caveat**: 기록 궤적은 공격자가 **당시 limiter 배치에 반응한** 결과다.
+limiter 가 다르게 움직였다면 궤적도 달라진다. 즉 이 oracle 은 *"고정된 그 궤적에
+대한 천리안"* 이지 closed-loop 최적 방어가 아니다. 결과 문장에 반드시 병기한다.
+
+## 18.3 판정 (결과 전 동결)
+
+**Primary**: `P(d_min^oracle ≤ 0.75)` vs `P(d_min^actual ≤ 0.75)` (실측 0.043~0.057),
+그리고 paired `Δd = d_min^oracle − d_min^actual` 의 중앙값 + bootstrap CI95.
+**임의 문턱을 새로 만들지 않는다.** 방향으로 해석한다:
+
+| 결과 | 판정 |
+|---|---|
+| oracle 접촉률이 실측보다 **크게 높다** | **controller-limited** 방향 — 24% 는 능력 상한이 아니라 현행 pursuit 의 구조적 한계 |
+| oracle 접촉률이 실측과 **비슷하다** | **capability-limited** 방향 (단 기록 궤적 한정) |
+
+## 18.4 눈으로 볼 것 (뷰어)
+
+실패 에피소드에서 limiter 가 **공격자 뒤/바깥에서 쫓는지**, 아니면 공격자–asset
+사이의 **안쪽 chord 를 선점할 수 있었는데 PIP 때문에 바깥으로 끌려나가는지**.
+후자가 반복되면 controller-limited 의 시각적 증거다.
+
+## 18.5 연구 프로그램에서의 위치
+
+controller-limited 로 판명되면 B2 의 방향이 *"limiter 가속을 높인다"* 가 아니라
+
+```
+pursuit  ->  route occupation / cutoff  ->  cooperative shaping
+```
+
+으로 자연히 연결된다. limiter 의 원래 개념(길목 차단)과도 정합한다.
 
 ---
 
