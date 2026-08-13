@@ -621,4 +621,80 @@ outcome 과 ψ telemetry 를 **같은 세계에 묶는다** — E1b 의 가치�
 
 ---
 
+---
+
+# 13. E1b 판정 — **분기 B** (2026-08-13 실행·기록)
+
+산출물: `results/e1b_aim_diag.json` · `.log`. 판정 순서는 §12.6 그대로.
+
+## 13.1 결과
+
+| 단계 | 결과 |
+|---|---|
+| **1) I1 integrity** | 84 → 85, `n01=1`, `n10=0` — E1 과 정확히 일치 **PASS** |
+| **2) eligibility** | both 500 · 제외 0. `psi_at_commit` 정의: fixed 117 / inf 122 |
+| **3) primary Δψ** | median **−24.99°**, CI95 **[−28.42, −20.34]** |
+| **4) 동결 규칙** | `CI upper < 0` ⇒ **ψ 감소 ESTABLISHED** |
+| **5) rescue** | ep224 · **BAND_AIM** · a_att 28.13 · Δψ 백분위 **41.6 (전형적)** |
+| **6) crossing (진단)** | 22.89 → 22.94 (n=500, diagnostic only) |
+
+pre-commit ψ: ω=2.0 median **33.94°** (IQR 9.88–50.24) → ω=∞ **7.85°** (5.44–9.91).
+판정 원뿔 반각 = 12.15°.
+
+## 13.2 선언된 secondary 가 기전을 특정했다
+
+`psi_at_commit` (포획을 실제로 결정하는 조준각):
+
+| | median |
+|---|---|
+| ω=2.0 | **2.320°** |
+| ω=∞ | **2.320°** |
+| paired Δ | **+0.000, CI95 [0.000, 0.000]** |
+
+양쪽 발사한 **117 쌍이 100% bit-identical** (`fire_step` 까지 동일).
+
+⇒ **slew cap 은 종말 정확도가 아니라 획득(acquisition) 시간을 소모한다.** fire gate
+가 `v_shot_soft ≥ 0.9` 를 요구하므로 조준이 좋아질 때까지 쏘지 않고, 그 시점에는 두
+세계가 이미 수렴해 있다. pre-commit 의 34° 는 **초기 획득 과도구간**이며 게이트가
+그것을 걸러낸다 — docs/45 의 "hold 에서 ω 구속 0.0%"(정상상태 추적 미포화)와 정합.
+
+**selection effect**: `P(good aim | fire)` 가 두 팔에서 같아진다.
+
+rescue ep224 가 확증: ω=2.0 은 **끝내 발사 못 함**(`fire_step=None`, PENETRATED),
+ω=∞ 는 41 스텝 발사 후 포획. "더 잘 조준" 이 아니라 **"아예 쏠 수 있었는가"**.
+ω=∞ 에서만 발사한 에피소드 5 건(35·71·219·224·229) 중 포획은 **1 건**뿐 —
+`fire opportunity 증가 ≠ capture success 증가`. 뒤에 더 큰 병목이 남아 있다.
+
+## 13.3 판정 = 분기 B (+ 프로토콜 결함 기록)
+
+**최대 표현 (동결)**:
+
+> residual aiming error is correlated with the practical boundary, but **reducing its
+> slew-induced component did not materially recover capture.**
+
+⇒ `docs/45` 의 인과 귀속(§2)에 이어 **"residual aiming error binds first" 도 causal
+claim 으로 하향**한다. ψ 는 실재하고 slew 가 실제로 그것을 지배하지만(25° 감소),
+없애도 포획은 회복되지 않는다. 경계를 만드는 것은 조준 오차가 아니다.
+
+**★ 프로토콜 결함 (자기 신고)**: §12.6 의 분기 **B 와 C 가 상호배타적이 아니었다.**
+C 의 서술적 전제("rescue 가 등록 band 안")는 충족된다. 그러나 ① E1 이 rescue 를
+**INCONCLUSIVE 로 동결**했고 그 판정은 불변이며 ② **사전 선언된** secondary 진단
+질문(*"rescue 가 비정상적으로 음인 Δψ 와 결부되는가?"*)의 답이 **NO**(41.6 백분위)
+이므로, 이 **사전 선언 판별자**로 B 를 택했다. 사후 기준이 아니다. ep224 의
+"발사 자체 불가" 기전은 **diagnostic 관찰로만** 기록하고 격상하지 않는다.
+
+## 13.4 남은 원인 후보 (§12A.1 잔여)
+
+`psi_at_commit` 중앙값이 **2.32°** 로 이미 매우 작은데도 경계가 22.45 에 있다.
+⇒ 조준 정확도는 원인이 아니다. 남은 후보:
+
+1. **단거리 원뿔 기하** — 판정 원뿔은 apex 에서 벌어지므로 유효 횡반경이
+   `ax·tanθ` 다. 공칭 ρ=1.77 은 `ax = R_max = 8.22` 에서만 얻는 값이고, 실제
+   발사 상태의 `ax` 가 그보다 작으면 footprint 가 줄어든다.
+2. **예측 오차** — 등속 조준 `p+vτ` vs 실제 `p+vτ+½aτ²` (estimator/guidance 문제).
+
+**우선순위: 1 → 2** (1 은 기존 telemetry 로 거의 공짜, 2 는 별도 설계 필요).
+
+---
+
 *연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*

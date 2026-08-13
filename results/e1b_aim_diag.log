@@ -1,0 +1,10 @@
+[E1b] n=500 paired CRN · T1(route 0.5, sense 30.0) · tau 0.3 · range_max 8.22
+
+1) I1 integrity : 84 -> 85, n01=1, n10=0  [E1 기대 84 -> 85, 1, 0]  => PASS
+2) eligibility  : both 500 · fixed-only 0 · inf-only 0 · neither 0
+                  psi_at_commit 정의됨: fixed 117 / inf 122
+3) Delta_psi    : median -24.9931 deg  CI95 [-28.4212, -20.3437] deg
+4) 동결 규칙     : CI upper < 0 ?  => 감소 ESTABLISHED
+5) rescue 위치   : ep224 band=BAND_AIM (a_att=28.13, dpsi_pct=41.6)
+6) crossing(진단) : omega2.0 22.89 · omega_inf 22.94  [n=500, 곡선 n=2700 의 약 1/5 -- diagnostic only, 22.45 와 병치 금지]
+  -> results\e1b_aim_diag.json
