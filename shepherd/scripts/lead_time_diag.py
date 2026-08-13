@@ -103,13 +103,13 @@ def episode_metrics(ep: int, start_x: float) -> dict:
         fi = d.step(limiter_mode="intercept", baseline_commit=True)
         lims2, _, att2 = env._states()
         p_att, v_att = env._p(att2), env._v(att2)
-        # 살아있는 limiter 중 최근접
+        # 최근접 거리(best)는 R4 권위 측정(docs/83 §29)에서 읽는다 -- 여기서
+        # post-step 좌표로 재면 소진 limiter 주차([0,0,60])를 잡아 접촉 스텝이
+        # 소실된다. `cand` 는 LOS rate 용 최근접 limiter **선택**에만 남긴다.
         cand = [(float(np.linalg.norm(p_att - env._p(lims2[i]))), i)
                 for i in range(len(lims2)) if i not in se.retired]
         if cand:
             dmin, imin = min(cand)
-            if dmin < best[0]:
-                best = (dmin, t)
             # LOS rate: 최근접 limiter 기준 시선각속도
             rel = p_att - env._p(lims2[imin])
             rv = v_att - env._v(lims2[imin])
@@ -127,6 +127,9 @@ def episode_metrics(ep: int, start_x: float) -> dict:
             break
 
     term = d.t
+    # R4 권위 최근접 (docs/83 §29): per-limiter swept 최소의 argmin
+    _i = int(np.argmin(d.d_min))
+    best = (float(d.d_min[_i]), (None if d.t_min[_i] < 0 else int(d.t_min[_i])))
     return {"episode": ep, "start_x": float(start_x), "label": d.label,
             "a_att": float(env.a_att_max), "att_speed": float(env.v_nominal),
             "T_terminal": round(term * dt, 3),

@@ -1955,3 +1955,95 @@ R4 에서 `_Driver.step` 도 같은 결함이었다는 발견과 합쳐서 원�
 대칭 가정도 마찬가지다. "코드를 읽어보니 대칭 같다" 는 근거가 되지 못하며, 메타모픽
 회귀로 고정해야 한다 — 실제로 이번에도 **점별 위반 800/800** 이라는 겉보기 결과가
 gauge 였고, 진짜 breaker 는 1/800 짜리 tie-break 였다.
+
+---
+
+# 30. R4 정정 기록 (§29.6 규율: 소급 수정 없이 **새로** 기록)
+
+실행 `7f1a925` · 결과 `13aad22` · 원 seed/원 n 그대로 재측정 (`results/*_r4.json`).
+
+## 30.0 §29.5 게이트 — **PASS**
+
+2400 에피소드 (E3 300 · E4-1 900 · E4-1b 600 · E4-1c 900) 전부 **라벨 불일치 0**.
+결과확률이 원 값과 완전히 일치한다. 수리가 물리에 개입하지 않았음이 캠페인 수준에서
+확인됐다 (회귀 R4-A 의 캠페인 확장).
+
+## 30.1 C034 — 숫자 정정 (질적 방향은 생존)
+
+| | 원본 | **R4** |
+|---|---|---|
+| `P(d_actual ≤ 0.75)` | 0.0433 | **0.1900** |
+| 하드킬 중 `d_min_best > 0.75` | **44/57** (논리적 불가) | **0/57** |
+| `P(d_oracle ≤ 0.75)` | 0.8833 | 0.8833 (무영향) |
+| `E[reachable]` | 2.837 | 2.837 (무영향) |
+
+oracle 은 `p_L0 + v_L0·t` 로 계산돼 주차와 무관하므로 **격차는 actual 쪽에서만 과장**돼
+있었다. 정정 후 격차 = **0.190 vs 0.883**. 4.4 배 차이지만 **결론은 바뀌지 않는다** —
+사용되지 않은 pathwise 요격 기회가 여전히 크다.
+
+## 30.2 E3 temporal synchronization — 생존 (약간 강화)
+
+`range(t_min)` 중앙값 0.125 → **0.150 s**, `≤ 0.3 s` 비율 0.953 (양쪽 동일).
+*"spatially diversified but temporally synchronized"* 는 **유지**된다.
+
+## 30.3 E4-1 등록 primary — 판정 무변화
+
+| | 원본 | R4 |
+|---|---|---|
+| paired median Δrange(t_min), D=0.125 | +0.0000 CI [0,0] | **+0.0000 CI [0,0]** |
+| (참고) paired mean | +0.0253 | +0.0232 |
+
+**mechanism gate 는 여전히 NOT MET.** 원인은 주차 오염이 아니라 **dt 양자화** 였고 (기존
+자기신고), R4 가 이를 구제하지 않는다. §21 판정 *"gate NOT MET / outcome POSITIVE /
+attribution UNRESOLVED"* 는 **그대로 유효**하다.
+
+## 30.4 E4-1b M4 — **완전 복원** (PENDING 해제)
+
+| | 원본 | **R4** |
+|---|---|---|
+| paired mean Δrange(t_min) (diverse − control) | +0.0422 [+0.0240, +0.0615] | **+0.0442 [+0.0248, +0.0643]** |
+| ΔP_HK | −0.0667 | **−0.0667** (무영향) |
+
+등록 primary 가 R4 후에도 **strictly > 0** 이므로, §29.4 에서 강등했던 기전 문장
+*"actual temporal dispersion 을 성공적으로 늘렸는데 HK 가 떨어졌다"* 를 **복원**한다.
+**M4 판정 전체가 유효**하다.
+
+## 30.5 `p_reach` 모순 해소
+
+| 실험 | 원본 (reach / P_HK) | R4 |
+|---|---|---|
+| E4-1c δ=0 / .125 / .25 | 0.050/0.177 · 0.077/0.367 · 0.120/0.313 | **0.177/0.177 · 0.367/0.367 · 0.327/0.313** |
+| E4-1 D=0 / .125 / .25 | 0.043/0.190 · 0.033/0.253 · 0.073/0.273 | **0.190/0.190 · 0.250/0.253 · 0.277/0.273** |
+| E4-1b control / diverse | 0.057/0.363 · 0.073/0.297 | **0.357/0.363 · 0.300/0.297** |
+
+잔여 3 건 (`reach < P_HK`) 은 **결함이 아니다** — 커밋 경로 킬이다. 커밋은 접촉을 요구하지
+않고 예측으로 해소되므로 `r_contact` 안에 들어오지 않아도 성립한다. 검증: E4-1 D=0.125
+ep228 = `source='commit'`, `d_nom` 0.162 (커밋 시점 **예측** 미스), 실현 swept `d_min`
+0.775, `n_unmeasured = 1` — §29.2 가 측정 불가로 선언한 바로 그 경우다.
+
+**부수 관측 (과대해석 금지)**: C033 의 *"커밋 경로는 사실상 죽어 있다"* 는 **완전히 죽은
+것은 아니다** — 커밋 킬이 실재한다. 단 관측 3 건이므로 C033 을 뒤집는 증거로 쓰지 않는다.
+
+## 30.6 lead-time — **미교정 (자기신고)**
+
+§29.5 재실행 목록에 넣었으나 **`lead_time_diag.py` 를 배선하지 않았다** (e3_oracle 과
+e4_stagger 만 수정). 따라서 `results/lead_time_r4.json` 은 원본과 **유효숫자 6 자리까지
+동일**하며, 재실행이 아니라 no-op 이었다. `closest` 의 `≤0.75` 비율이 0.043 으로 E3 원본과
+같은 결함 지문을 그대로 보인다.
+
+배선 완료 (본 커밋). 스모크: arm 24.0 ep3 HARD_KILL `closest` 0.851 → **0.423**
+(`r_contact` 0.75 이하로 정상화), 라벨 불변.
+
+> **§17 "closest approach 1.4–1.7 m 로 고정" 은 여전히 미정정 상태다.**
+> lead-time 재실행 전까지 이 문장을 인용하지 않는다.
+
+## 30.7 정정 후 유효한 문장 (정본)
+
+- C034: *"There is substantial unused pathwise interception opportunity (P(oracle ≤ 0.75)
+  = 0.883 vs P(actual ≤ 0.75) = **0.190**), but the baseline concentrates those
+  opportunities into a single temporal layer."*
+- E4-1: 판정 무변화 (gate NOT MET / outcome POSITIVE / attribution UNRESOLVED).
+- E4-1b: **M4 전체 유효** — *"at matched mean lead, increasing temporal dispersion
+  succeeded as an intervention (Δmean range(t_min) = +0.0442 s, CI95 strictly positive)
+  yet reduced hard-kill (ΔP_HK = −0.0667)."*
+- E4-1c: **무영향** — U3 판정과 P_HK 전부 그대로.
