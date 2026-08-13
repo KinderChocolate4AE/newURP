@@ -74,8 +74,13 @@ def aim_geometry(p_att, v_att, p_fin, e_fin, *, tau: float, range_max: float):
     psi = float(np.arccos(np.clip(e_hat @ _unit(r_coast), -1.0, 1.0)))
     # cone judge 의 밴드 검정과 동일한 정의: 축방향 좌표 (viability._caught_se3_cone)
     ax = float(r_coast @ e_hat)
+    # 2026-08-13 추가(순수 additive — psi 정의·기존 필드 불변, REG-1 재확인됨):
+    # 원뿔은 apex 에서 벌어지므로 유효 횡반경이 ax*tan(theta) 다. 그 검정을 소각
+    # 근사 없이 하려면 **횡편차 자체**가 필요하다. ax = |r|cos(psi),
+    # r_perp = |r|sin(psi) 이므로 r_perp = ax*tan(psi) 가 정확히 성립한다.
+    r_perp = float(np.linalg.norm(r_coast - ax * e_hat))
     return dict(d=d, v_perp=v_perp, omega_req=omega_req, psi=psi,
-                ax=ax, in_band=bool(0.0 <= ax <= range_max))
+                ax=ax, r_perp=r_perp, in_band=bool(0.0 <= ax <= range_max))
 
 
 def audit_episode(env, scn, lay, *, seed: int, tau: float, range_max: float,

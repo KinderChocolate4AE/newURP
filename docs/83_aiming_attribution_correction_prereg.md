@@ -697,4 +697,106 @@ C 의 서술적 전제("rescue 가 등록 band 안")는 충족된다. 그러나 
 
 ---
 
+---
+
+# 14. E1c 진단 — **경우 ③ (compounded)** + `0/1598` 해석 정정 (EXPLORATORY)
+
+산출물: `results/e1c_fire_decomp.json` · `.log` · `shepherd/scripts/e1c_fire_decomp.py`.
+**증거 등급 = exploratory / post-result diagnostic** (E1b §13 을 본 뒤 세운 가설).
+KSAS confirmatory mechanism claim 으로 **승격 금지** — "diagnostic suggests" 수준.
+
+## 14.1 분해 `P(C|a) = P(F|a) · P(C|F,a)` (T1 · hold · ω=2.0 · n=500)
+
+| a_att | n | **P(F\|a)** | **P(C\|F,a)** | P(C\|a) |
+|---|---|---|---|---|
+| 11.0–18.1 | 52 | 1.000 | 1.000 | 1.000 |
+| 18.1–25.2 | 50 | 0.920 | 0.652 | 0.600 |
+| 25.2–32.2 | 49 | **0.388** | **0.105** | 0.041 |
+| 32.2–39.3 | 52 | **0.000** [0, 0.069] | — | 0 |
+| ≥39.3 | 297 | **0.000** | — | 0 |
+
+⇒ **경우 ③**: 22–32 부근의 practical collapse 는 "쏜 다음 실패" 하나가 아니라
+**commit-eligibility 붕괴 + conditional terminal failure 의 합성**이다.
+
+## 14.2 ★ `0/1598` 해석 정정 (claim-registry 급)
+
+**a_att ≥ 32.2 에서 발사 0/350** (발사한 최대 a_att = 32.15). 따라서 a ≥ 39.33 의
+zero 들은 **net 을 쏴서 실패한 것이 아니라 게이트가 기권한 것**이다.
+
+증거 구조를 다시 쓰면:
+- **ANALYTIC**: stated unassisted single-shot model 에서 χ ≥ 1 은 necessary-condition 위반
+- **MEASURED**: registered closed-loop controller 는 그 영역에서 net capture 0
+- **그러나**: 그 measured zero 는 **gate abstention 때문에 terminal physics 를 독립
+  검증하지 못한다** (censored)
+
+**금지**: *"analytic boundary above which 0/1598 shots failed"* / *"0/1598 이 analytic
+경계를 실측 검증했다"*.
+
+**정본**:
+> No net captures were observed above the analytic outer bound; **however, the
+> registered fire gate issued no shots in this regime, so these outcomes do not
+> constitute an independent empirical test of post-commit net failure.**
+
+## 14.3 국소 기하 예산 (기술통계)
+
+| a_att bin | nF | ax | ρ_local=ax·tanθ | r_perp | slack | 2·slack/τ² |
+|---|---|---|---|---|---|---|
+| 11.0–18.1 | 52 | 6.47 | 1.394 | 0.218 | 1.148 | 25.51 |
+| 18.1–25.2 | 46 | 6.38 | 1.374 | 0.359 | 1.034 | 22.98 |
+| 25.2–32.2 | 19 | 6.37 | 1.372 | 0.308 | 1.103 | 24.52 |
+| 전체 | 117 | **6.408** | 1.380 | — | **1.103** | **24.52** |
+
+`ρ_nominal 1.770 → (ax 6.41 ≠ R_max 8.22) → 1.380 → (ψ 2–3°) → 1.103`.
+관측 50% 교차 = 22.4–22.9.
+
+**최대 표현**:
+> The realized commit geometry **diagnostically reconciles much of the gap** between
+> the nominal 39.3 m/s² outer bound and the observed practical transition.
+
+**금지**: *"22.45 의 원인을 거의 전부 설명했다"*. 이유 — ① 기하가 fired episodes 에
+조건부이고 ② fire gate 자체가 feasibility 관련량으로 selection 하며 ③ 24.5 와 22.4
+사이 잔차가 있고 ④ 예측 오차 등 후보가 남아 있다.
+
+## 14.4 ★ `ax` 안정성 해석 하향 (자기 정정)
+
+*"selection effect 라면 a 에 따라 움직여야 한다"* 는 제 논리는 **성립하지 않는다**.
+`F=1` 인 episode 만 보면 **게이트가 유리한 기하를 골라내므로 ax 가 좁은 범위에
+pin 될 수 있다.**
+
+**최대 표현**:
+> Among episodes admitted by the fire gate, the realized controller–gate **operating
+> point** is tightly concentrated around ax ≈ 6.4 m.
+
+"selection artifact 가 아니다" 는 **아직 주장 불가**.
+
+## 14.5 드러난 3 단 병목
+
+```
+Acquisition            slew 가 여기에 영향 (E1b: pre-commit psi 33.9 -> 7.9 deg)
+   ↓
+Commit eligibility     gate 가 favorable state 를 기다림. 고-a 에서는 끝내 못 얻어 **미발사**
+   ↓
+Conditional capture    쏴도 끝이 아님 (25–32 구간 P(C|F) = 0.105)
+```
+
+"0.30 s terminal physics" 보다 훨씬 풍부하다.
+
+## 14.6 미해결 — 왜 E1d 가 필요한가 (지금 실행하지 않음)
+
+a ≥ 32.2 에서 `P(C|F,a)` 를 **관측할 수 없다** (F=0). 따라서 현 데이터로는
+*"32 이상은 net 물리상 실패"* 와 *"controller 가 보수적으로 거절"* 을 **경험적으로
+분리할 수 없다.** analytic bound 는 있으나 closed-loop empirical validation 은 censored.
+
+**E1d 개념 (설계만, 미실행)**: 발사 threshold 를 낮추면 pre-commit 궤적과 selection 이
+함께 바뀐다 → 더 깨끗한 것은 **state-conditioned forced-commit counterfactual**.
+실제 방문한 pre-commit state `z_t` 를 저장하고 동일 snapshot 에서 clone 하여
+**정확히 한 번 강제 commit** (`do(F=1)`), 이후 attacker 응답·τ·net 기하·물리·
+limiter hold·CRN 을 모두 동일 유지 → `P(C | do(F=1), z)` 직접 측정.
+a 층 20–25 / 25–32 / 32–39.3 / ≥39.3 포함, ax·ψ 기록.
+
+**순서 규율**: E1c 봉인 → **E2-B** → modality-gap 판정 → 필요 시 E1d 사전등록.
+E1c 는 exploratory 였고 여기서 E1d 로 바로 파고들면 KSAS freeze 가 계속 밀린다.
+
+---
+
 *연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*
