@@ -439,4 +439,99 @@ preregistered E1 outcome` 이며 confirmatory 로 승격하지 않는다** — `
 
 ---
 
+---
+
+# 12. E1b 프로토콜 — paired 조준오차 진단 (동결본, 결과 열람 전)
+
+**E1 판정(§11 INCONCLUSIVE)은 본 진단 결과와 무관하게 변경하지 않는다.**
+E1b 는 원인 규명 실험이 아니라 **"무한 slew 에서 ψ 가 어떻게 변하는가"** 하나를
+보는 diagnostic 이다.
+
+증거 구조:
+```
+Integrity  ->  Does unlimited slew change psi?  ->  Does that change align with the lone rescue?
+ (gate)          (prospective diagnostic)              (post-result localization)
+```
+
+## 12.1 세 역할과 증거 등급 (혼동 금지)
+
+| 역할 | 내용 | 증거 등급 |
+|---|---|---|
+| **Integrity gate** | E1 재현 확인 | 통과 조건 (실패 시 중단) |
+| **Primary diagnostic** | ψ 의 paired 비교 | **prospective diagnostic** (판정규칙을 결과 전에 고정하므로) |
+| **Telemetry recovery** | records 영속화 + rescue 1 건 위치 | **post-result diagnostic localization** — confirmatory 승격 **금지** |
+
+## 12.2 Integrity gate (I1~I3) — ★ 한계 명시
+
+| # | 검사 | E1 과 대조 가능? |
+|---|---|---|
+| **I1** | aggregate 재현: 84 → 85, `n01=1`, `n10=0` | **가능** — E1 JSON 에 있음 |
+| **I2** | episode-wise label identity `capture_fixed[i]`, `capture_inf[i]` | **불가능** |
+| **I3** | rescue episode ID 일치 | **불가능** |
+
+**★ 정정**: E1 아티팩트는 cell 요약만 저장했으므로(§11.6) **I2·I3 를 E1 과 대조할 수
+없다.** episode-wise identity 와 rescue ID 는 E1b 에서 **새로 수립되는 기준선**이며,
+E1 에 대한 재현 검증이 아니다. 이는 §11.6 에 기록한 아티팩트 결함의 직접적 대가이고,
+숨기지 않는다.
+
+⇒ 실제 통과 조건은 **I1 뿐**이다. I1 불일치 시 → 분기 **D**, ψ 해석 전에 중단.
+I2·I3 는 E1b 이후 모든 재실행의 기준선으로 저장한다.
+
+## 12.3 Primary diagnostic — ψ 정의·estimand·판정 (전부 동결)
+
+**ψ 정의**: `slew_audit.audit_episode` 의 `psi` 를 그대로 쓴다 (재정의 금지) —
+`psi = arccos( ê_fin · unit(p_att + v_att·tau − p_fin) )`.
+**측정창**: 각 팔 자신의 *cone 밴드 안(`0 ≤ ax ≤ range_max`) 이면서 발사 전* 스텝.
+두 팔의 궤적 길이가 다를 수 있으므로 **각 팔의 창을 각자 적용**한다.
+
+**에피소드 스칼라**: `psi_i^arm` = 그 에피소드 창 안 ψ 의 **중앙값**.
+자격 스텝이 0 인 에피소드는 **paired ψ 분석에서 제외**하고 `n_excluded` 를 보고한다.
+
+**Primary estimand**:
+```
+Delta_psi_i = psi_i^inf - psi_i^2.0          (paired, per episode)
+보고 = median(Delta_psi) + paired bootstrap CI95
+       (에피소드 단위 재표집, boot=20000, seed=0 -- paired_compare 와 동일 기계)
+```
+
+**판정 (결과 전 고정)**: **"ψ 감소" = CI95 upper < 0.** 그 외는 전부
+*"not established"* 로 적는다. 다른 유의성 검정을 추가하지 않는다.
+
+## 12.4 Rescue 위치 정의 (사후해석 방지)
+
+rescue 에피소드가 **등록된 regime label 중 어디에 속하는지만** 보고한다:
+`band_of` (curve_sweep) 의 `EASY` / `BAND_AIM` / `SHAPING_NEEDED`,
+경계 = `a*(psi_med)=25.75` 와 `a*=39.33`.
+
+**임의 폭(예: "22.45 ± w")을 새로 만들지 않는다.** 정확한 `a_att` 값과 그 에피소드의
+`Delta_psi_i` 가 전체 분포 어디에 있는지는 **diagnostic 출력**으로만 낸다
+(등급: post-result localization).
+
+## 12.5 ω=∞ 50% 교차 (재계산 시) — estimator 동결
+
+22.45 를 만든 것과 **동일 방법**만 쓴다: `_cross50` (0.5 하향 교차 선형보간) 을
+`bin_edges(11, 78, a_star=39.33, per_side=4)` 8 구간 위에서.
+
+**단 E1b 는 n=500 (곡선은 n=2700)** 이라 구간당 표본이 약 1/5 이다. 따라서 산출값은
+**diagnostic estimate 로만** 표기하고 22.45 와 confirmatory 수준으로 병치하지 않는다.
+구간별 표본수를 반드시 병기한다.
+
+## 12.6 4 분기 판정표 (결과 전 고정)
+
+| 분기 | 조건 | 판정 |
+|---|---|---|
+| **A** | outcome 거의 불변 **且** ψ 감소 not established | nominal slew cap attribution **추가 하향**. 원인 후보는 prediction / short-range cone / timing 으로 이동 |
+| **B** | ψ 감소 확립 (CI upper < 0) **但** outcome 거의 불변 | ★ **"residual aiming error binds first" 도 causal claim 으로는 하향.** 최대 표현 = *"residual aiming error is correlated with the practical boundary, but reducing its slew-induced component did not materially recover capture."* |
+| **C** | ψ 감소 확립 **且** rescue 가 등록 band 안 | **local slew-sensitive contribution 만** 인정. E1 이 INCONCLUSIVE 였으므로 *"slew contributes locally"* 까지이고 *"slew explains the boundary"* 는 여전히 금지 |
+| **D** | I1 실패 또는 ψ 비정상 증가 등 telemetry 이상 | instrumentation/semantic 문제. **science 해석 중단** |
+
+## 12.7 실행 요구사항
+
+- 두 팔 모두 **per-episode records 영속화** (label · a_att · regime · psi 통계 · 종료 스텝).
+- manifest 는 §10 freeze stamp 필드 전부 + `psi_definition="slew_audit.audit_episode"` +
+  `n_excluded` 를 싣는다.
+- 코드 변경은 `science:` 커밋으로 분리하고, 본 프로토콜 커밋보다 **뒤에** 온다.
+
+---
+
 *연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*
