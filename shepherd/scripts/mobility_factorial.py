@@ -62,23 +62,29 @@ def _check_labels() -> None:
         raise ValueError(f"LABELS 에 없는 이름: {sorted(unknown)} (실제 {LABELS})")
 
 
-def _kw() -> dict:
+def _kw(attacker: Optional[AttackerSpec] = None) -> dict:
     # docs/65 A2 — 비준 계약으로 파생. docs/51 의 factorial 결과는 legacy
     # 구계약 실측 (재실행 수치와 병치 시 한정 병기).
+    #
+    # attacker=None 이면 T0 (route_gain 0 · sense_range inf) — docs/51 결과와
+    # bit-exact. docs/83 E1 은 T1 (route_gain 0.5 · sense_range 30.0) 을
+    # 명시적으로 넘겨서 돈다 (curve_sweep.py:144-152 와 같은 규율).
     return dict(system=ratified_system(),
                 reward=RewardSpec(w_kill=0.5, enabled=True),
-                attacker=AttackerSpec(level="A2", jink_amp=0.6, seed=0),
+                attacker=attacker or AttackerSpec(level="A2", jink_amp=0.6, seed=0),
                 spawn=SpawnSpec())
 
 
 def run_cell(n: int, seed0: int = 0, *, mobility: float = 0.0,
              omega_max: Optional[float] = None,
-             limiter_mode: str = "hold") -> dict:
-    """한 칸. `mobility=0, omega_max=None` 이면 기존 기저선과 bit-identical (P72)."""
+             limiter_mode: str = "hold",
+             attacker: Optional[AttackerSpec] = None) -> dict:
+    """한 칸. `mobility=0, omega_max=None, attacker=None` 이면 기존 기저선과
+    bit-identical (P72)."""
     _check_labels()
     recs: List[dict] = []
     r = mission_eval(seed0, n, limiter_mode=limiter_mode, records=recs,
-                     mobility=mobility, omega_max=omega_max, **_kw())
+                     mobility=mobility, omega_max=omega_max, **_kw(attacker))
     # ★ 자기 점검: 라벨로 센 성공 수가 요약 통계와 맞는가. 안 맞으면 라벨
     #   집합이 틀린 것이고, 그건 조용한 0 으로 나타난다 (2026-08-05 실제 사고).
     k_lab = sum(1 for d in recs if d["label"] in SUCCESS)
@@ -169,6 +175,57 @@ def travel_stats(n: int = 50, seed0: int = 0,
             "net_displacement_max": float(np.max(mx))}
 
 
+# ── docs/83 E1 — T1 주입 + 필수 manifest ────────────────────────────────────
+#: docs/83 을 동결한 커밋. 결과가 사전등록보다 앞서 보이지 않도록 아티팩트에 싣는다.
+PREREG_COMMIT = "eea71806828fed02e9670e4fcab2c8d0099c906f"
+
+
+def _threat_class(args) -> str:
+    """docs/80 명명. route_gain>0 이면 T1(reactive-local), 아니면 T0."""
+    return "T1" if float(args.route_gain) > 0.0 else "T0"
+
+
+def _attacker_from_args(args) -> AttackerSpec:
+    return AttackerSpec(level="A2", jink_amp=0.6, seed=0,
+                        route_gain=float(args.route_gain),
+                        sense_range=float(args.sense_range))
+
+
+def _manifest(args) -> dict:
+    """docs/83 freeze stamp 가 의무화한 필드. 파일명·노트가 아니라 **아티팩트
+    자체**로 세계를 재구성할 수 있어야 한다 (수치감사 §G-② 재발 방지)."""
+    from shepherd.m4_config import m4_config
+    from shepherd.scripts.pivot_manifest import stamp
+
+    cfg = m4_config()
+    ph, cone = cfg["physics"], cfg["viability"]["cone"]
+    sysspec = ratified_system()
+    return dict(
+        stamp(artifact="docs83_E1_slew_counterfactual"),
+        prereg_commit=PREREG_COMMIT,
+        prereg_doc="docs/83_aiming_attribution_correction_prereg.md §4 (E1)",
+        threat_class=_threat_class(args),
+        attacker=dict(level="A2", jink_amp=0.6, seed=0,
+                      route_gain=float(args.route_gain),
+                      sense_range=float(args.sense_range)),
+        limiter_mode="hold",
+        contract=dict(enabled=sysspec.enabled,
+                      contact_resolver=sysspec.contact_resolver,
+                      miss_terminates=sysspec.miss_terminates,
+                      p_kill=sysspec.p_kill, tau_kill=sysspec.tau_kill,
+                      r_nk=sysspec.r_nk),
+        finisher_mobility=0.0 if args.fixed_only else [0.0, args.a_max],
+        omega_max_arms=[float(cfg["attitude"]["omega_max"]), SLEW_UNLIMITED],
+        n=args.n, seed0=args.seed0,
+        crn_episode_range=[args.seed0, args.seed0 + args.n - 1],
+        geometry=dict(rho=ph["net_radius"], tau=ph["tau_deploy"],
+                      cone_range_max=cone["range_max"],
+                      cone_half_angle=cone["half_angle"],
+                      kill_radius=ph["kill_radius"], dt=ph["dt"],
+                      episode_len=cfg["train"]["episode_len"]),
+    )
+
+
 def _slew_counterfactual(args) -> None:
     """★ {고정,이동} x {omega 2.0, inf}. 같은 CRN 이므로 네 칸이 전부 짝지어진다.
 
@@ -178,13 +235,18 @@ def _slew_counterfactual(args) -> None:
     2 가 크면 docs/48 사슬이 통째로 놓친 축이다 -- 조준 *방향* 만 봤고 *속도* 는
     안 봤다.
     """
+    att = _attacker_from_args(args)
     grid = [("고정·ω2.0", 0.0, None), ("고정·ω∞", 0.0, SLEW_UNLIMITED),
             ("이동·ω2.0", args.a_max, None), ("이동·ω∞", args.a_max, SLEW_UNLIMITED)]
+    if args.fixed_only:          # docs/83 E1 = 고정 2 칸만 (사전등록 범위 그대로)
+        grid = grid[:2]
     print(f"[슬루 반사실] n={args.n} paired CRN, a_max={args.a_max:.3f}, "
-          f"ω∞={SLEW_UNLIMITED:g}")
+          f"ω∞={SLEW_UNLIMITED:g}, threat={_threat_class(args)} "
+          f"(route_gain={args.route_gain}, sense_range={args.sense_range})")
     cells, out = {}, {}
     for name, mob, om in grid:
-        c = cells[name] = run_cell(args.n, args.seed0, mobility=mob, omega_max=om)
+        c = cells[name] = run_cell(args.n, args.seed0, mobility=mob, omega_max=om,
+                                   attacker=att)
         sm = c["summary"]; reg = sm["by_regime"].get(SHAPE, {})
         out[name] = sm
         print(f"  {name:10s} 전체 {sm['neutralized_rate']:.4f}  비손실 "
@@ -196,6 +258,7 @@ def _slew_counterfactual(args) -> None:
              ("이동·ω2.0", "이동·ω∞", "슬루가 이동 악화의 매개인가"),
              ("고정·ω2.0", "이동·ω2.0", "(재확인) 현재 ω 에서 이동 효과"),
              ("고정·ω∞", "이동·ω∞", "무한 슬루에서도 이동이 해로운가")]
+    pairs = [p for p in pairs if p[0] in cells and p[1] in cells]
     res = {}
     for a, b, why in pairs:
         for reg in (SHAPE, None):
@@ -216,7 +279,9 @@ def _slew_counterfactual(args) -> None:
         pathlib.Path(args.out).write_text(json.dumps(
             {"declared": {"n": args.n, "a_max": args.a_max,
                           "omega_unlimited": SLEW_UNLIMITED},
-             "cells": out, "paired": res}, indent=2, ensure_ascii=False))
+             "manifest": _manifest(args),
+             "cells": out, "paired": res}, indent=2, ensure_ascii=False),
+            encoding="utf-8")
         print(f"  -> {args.out}")
 
 
@@ -231,6 +296,13 @@ def main() -> None:
                     help="{고정,이동} x {omega_max=2.0, inf} 4칸 (docs/51 §9). "
                          "이동 악화가 슬루 제한 때문인지, 그리고 고정 조건에서도 "
                          "슬루가 병목인지를 같은 CRN 으로 가른다")
+    # docs/83 E1: 기본값 (0.0, inf) = T0 이므로 기존 결과는 bit-exact 재현된다.
+    ap.add_argument("--route-gain", type=float, default=0.0,
+                    help="공격자 angular-gap 횡편향 이득. T1 = 0.5 (docs/80 §2)")
+    ap.add_argument("--sense-range", type=float, default=float("inf"),
+                    help="공격자 limiter 감지 반경 [m]. T1 = 30.0")
+    ap.add_argument("--fixed-only", action="store_true",
+                    help="고정 finisher 2 칸만 (docs/83 E1 사전등록 범위)")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
