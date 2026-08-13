@@ -2,6 +2,29 @@
 
 **2026-08-01 · 도달집합에 초기속도가 빠졌다는 지적에서 출발한 실측**
 
+> ## ⚠ 2026-08-13 DOWNGRADE — 이 문서의 **인과 귀속**은 이후 반증됐다 (본문은 보존)
+>
+> §0 요약과 §9 의 *"두 번째 경계가 예측→검증까지 닫혔다"* 는 **당시 evidence 기준 결론으로
+> 보존**하되, 그 뒤(08-05) `docs/51 §9` 의 paired 반사실
+> (`results/slew_counterfactual.json`)이 인과 귀속을 반증했다:
+>
+> **동일 조건**(`ratified_system`, A2 jink 0.6 = T0, hold, 고정 finisher, 동일 CRN, n=500)에서
+> `omega_max` 를 2.0 → 10⁶ 으로 풀어도 **rescued 0 · broken 0 · Δ = 0 (CI [0,0])**.
+> FREE_CAPTURE 구간도 0.4483 → 0.4483 으로 소수점까지 동일.
+>
+> ⇒ **`omega_max = 2.0` 이라는 actuator slew cap 은 관측된 T0 경계의 원인이 아니다.**
+> 잔여 조준 오차 ψ = 4.26° 는 여전히 관측되나 **원인 미해결**(예측 오차 / 발사거리 기하 /
+> 명령 지연이 남은 후보). 단 *"slew dynamics 가 무관하다"* 까지 말하면 과하다 — 명령
+> 방향 자체가 틀리면 무한 authority 도 못 구한다.
+>
+> **정본 문구**: *"The nominal slew-rate cap is not causally responsible for the observed
+> T0 boundary; the residual pointing error remains, but its source is unresolved."*
+> `aiming-limited` 는 유지, **`slew-limited` 는 금지.**
+>
+> 정정·후속 사전등록 = **`docs/83`** · registry = `claim_registry.tsv` **C031** ·
+> §6 이 신설한 `SWEEP_AXES["attitude.omega_max"] {1.5,2.0,3.0}` **3 점 sweep 은 취소**
+> (∞ 조차 null 이므로 더 약한 중복 실험) → 대체 = docs/83 **E1** (T1 ω=∞ 반사실).
+
 ---
 
 ## 0. 요약
