@@ -1804,3 +1804,77 @@ D-c(ψ 3.50°) 와 D-b(ψ 0°) 는 **300/300 라벨 동일 · 포획 에피소�
 `ax ∈ {5.5, 6.76, 7.5}` 3 arm, ideal aim 고정, primary = *"a*₅₀ 가 ax=6.76 에서 최대이고
 양쪽에서 감소한다"* (역U자). 예측 상한 32.37. 이건 **결과를 본 뒤 만든 가설**이므로
 seed 대역 `31000..31299` 를 쓴다.
+
+---
+
+# 29. R4 계약 — 근접거리 측정계 수리 (사전등록 · 결과 전 동결)
+
+발견 경로: E4-1c 궤적 뷰어(§27 후속). 상세 = `temp_research_note/2026-08-14_...md` §4.
+
+## 29.1 결함 (확정)
+
+소진 limiter 는 `env_sys` §5 에서 **`[0,0,60]` 으로 주차**된다. 진단 루프들이 **주차 직후**
+post-step 좌표로 거리를 재므로, **접촉이 일어난 바로 그 스텝의 최소거리가 63 m 로
+대체**된다. 결정적 프레임이 계통적으로 소실된다.
+
+`_Driver.step` 의 자체 swept 진단(`recoverability_probe.py:134-143`)도 **같은 결함**을
+갖는다 — (i) `i in self.se.retired` 를 스텝 **이후**에 판정해 접촉한 바로 그 limiter 를
+제외하고, (ii) `env._p(lims2[i])` 가 이미 주차 좌표다. 따라서 "이미 올바른 구현이
+있다" 는 §4 서술은 **부정확**하며, 수리는 driver 를 포함한다.
+
+**모순 증거 (이미 관측)**
+- E3: 하드킬 57 건 중 **44 건**이 `d_min_best > r_contact` — 접촉 킬은 정의상 불가능
+- E4-1c: `p_reach < P_HK` 가 **세 팔 전부**
+
+## 29.2 계약
+
+**권위 측정은 하나다.** `_resolve_contacts` 가 쓰는 것과 **동일한 술어·동일 입력**:
+
+    d_swept[i] = _seg_min_dist(p_att_pre - lims_pre[i], p_att_post_raw - lims_post_raw[i])
+
+- `*_raw` = **주차 이전** post-step 좌표. `env_sys` §4 (`lims2/att2` 취득 직후, §5 주차
+  **이전**) 에서 `self.lims_post_raw` / `self.p_att_post_raw` 로 기록한다. 순수 기록이며
+  물리·순서·난수에 개입하지 않는다.
+- 제외 대상은 **스텝 시작 시점에 이미 retired 인 limiter** (`retired_pre` 스냅샷).
+  이번 스텝에 retire 된 limiter 는 **포함**한다 — 바로 그게 측정 목표다.
+- `_Driver` 가 per-limiter `d_min[i]` / `t_min[i]` 를 보유하고, 호출부는 **자체 거리
+  루프를 만들지 않고** 이를 읽는다 (재발 방지).
+- 커밋 경로로 해소·주차되는 limiter 는 접촉 record 가 없어 권위값이 없다. 해당 스텝은
+  그 limiter 에 한해 **측정 불가로 표기하고 카운트를 보고**한다 (무언의 절단 금지).
+
+## 29.3 회귀 게이트 (4/4 통과 전 재실행 금지)
+
+| # | 게이트 | 취지 |
+|---|---|---|
+| **R4-A** | **기본 동작 bit-exact** — 라벨·`P_HK`·`P_net`·`P_PEN` 및 records JSON 이 수리 전후 완전 동일 | 수리가 **결과를 바꾸지 않음**을 먼저 증명. 실패 시 즉시 중단 |
+| **R4-B** | `source="contact"` 인 모든 record 에서 `d_swept[i] ≤ r_contact + ε` (ε=1e-9), 그리고 그 값이 `rec.d_nom` 과 **부동소수 동일** | 권위 측정이 해소기와 같은 수를 낸다 |
+| **R4-C** | **retirement 가 없는 에피소드**에서 구 diagnostic 과 R4 diagnostic 이 bit-exact | 수리가 **주차 오염만** 제거했음을 증명 (범위 한정) |
+| **R4-D** | 캠페인 수준 `p_reach ≥ P_HK_contact` | §29.1 의 모순이 실제로 해소됐는지 |
+
+R4-A 가 최우선이다. 실패하면 수리가 물리에 샌 것이므로 중단한다.
+
+## 29.4 영향 claim (재평가 대상 · 결과 전 목록 동결)
+
+**살아 있음 (재검증 불필요)**: 모든 라벨·결과확률. 따라서 E1·E1b·E1c·E2-B·E1d 의 primary,
+그리고 **E4-1c 의 primary `P_HK`** (U3 판정 포함) 는 영향 없다.
+
+| claim / 판정 | 조치 |
+|---|---|
+| **C034** `P(d_actual≤0.75)=0.043` vs oracle 0.883 | **숫자 정정 필수.** 참값 ≥ 0.190. oracle 측은 `p_L0+v_L0·t` 라 무영향 → 격차가 **actual 쪽에서만** 과장됐다 |
+| **E3 paired Δd · `t_min` synchronization** (§19) | 재계산. "spatially diversified but temporally synchronized" 재평가 |
+| **E4-1 primary `range(t_min)`** (§21, C035) | 재계산. 기존 양자화 결함 위에 중첩 |
+| **E4-1b M4** (§25) | **`PENDING R4 REVALIDATION` 으로 강등.** outcome `ΔP_HK = −0.0667` [−0.1167,−0.0133] 은 살아 있으나, *"dispersion 을 성공적으로 늘렸는데 HK 가 떨어졌다"* 는 **기전 문장**은 등록 primary 가 `range(t_min)` 이었으므로 R4 후에만 재확정 가능. R4 후 `ΔE[range(t_min)] > 0` 유지 → M4 완전 복원, 아니면 outcome-negative 만 남기고 기전 귀속 철회 |
+| **lead-time §17 "closest approach 1.4–1.7 m"** | **철회 또는 정정.** ep30008 의 접촉 직전값이 정확히 1.509 |
+| E4-1b/E4-1c `d_min_best`·`p_reach` secondary | 재계산 |
+
+## 29.5 재실행 목록 (동결)
+
+**E3 · E4-1 · E4-1b · E4-1c · lead-time diagnostic.** 각 실험의 **원 seed 대역·원 n** 을
+그대로 쓴다 (새 표본이 아니라 **같은 표본의 재측정**이다). R4-A 가 라벨 불변을 보장하므로
+결과확률은 기존 값과 일치해야 하며, **불일치는 그 자체로 실패**다.
+
+## 29.6 금지
+
+- 이 계약을 이유로 **동결된 판정을 소급 수정하지 않는다**. 정정은 §30 에 **새로** 기록한다.
+- 재측정 결과가 서술을 강화하는 방향이어도 **원 문장을 고쳐 쓰지 않고** 정정 항목으로 남긴다.
+- 수리 과정에서 물리·순서·난수·기본값을 건드리지 않는다 (R4-A 가 강제).
