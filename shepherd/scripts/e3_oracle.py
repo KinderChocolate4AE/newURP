@@ -57,22 +57,19 @@ def episode_e3(ep: int) -> dict:
     v_lim = float(env.backend.by_name(env.limiter_ids[0]).limits.v_max)
 
     traj: List[np.ndarray] = []                      # p_A(t) (이동 후)
-    dmin = np.full(n_lim, np.inf)
-    tmin = np.full(n_lim, -1, int)
+    # R4 (docs/83 §29): 근접거리는 _Driver 권위 측정을 읽는다. 자체 루프 금지.
     hk_step = None
     for t in range(int(lay.episode_len)):
         fi = d.step(limiter_mode="intercept", baseline_commit=True)
         lims2, _, att2 = env._states()
         p_att = env._p(att2)
         traj.append(p_att.copy())
-        for i in range(n_lim):
-            dd = float(np.linalg.norm(p_att - env._p(lims2[i])))
-            if dd < dmin[i]:
-                dmin[i], tmin[i] = dd, t
         if hk_step is None and bool(fi.get("hard_kill", False)):
             hk_step = t
         if d.done:
             break
+
+    dmin, tmin = d.d_min, d.t_min          # R4 권위 측정 (docs/83 §29)
 
     # --- oracle: hindsight pathwise reachability -----------------------------
     P = np.asarray(traj, float)                       # (T,3)

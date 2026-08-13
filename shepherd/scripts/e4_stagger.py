@@ -78,8 +78,8 @@ def episode_e4(ep: int, D: float, design: str = "sym") -> dict:
     dl = deltas_for(ep, D, design)
     v_lim = float(env.backend.by_name(env.limiter_ids[0]).limits.v_max)
 
-    dmin = np.full(n_lim, np.inf)
-    tmin = np.full(n_lim, -1, int)
+    # R4 (docs/83 §29): 근접거리는 _Driver 의 권위 측정(d.d_min/d.t_min)을 읽는다.
+    # 자체 거리 루프 금지 -- 소진 limiter 주차 좌표를 잡아 접촉 스텝이 소실됐다.
     hk_step = None
     n_clamp = 0                      # limiter-step 단위 clamp 횟수
     n_steps_seen = 0
@@ -96,17 +96,12 @@ def episode_e4(ep: int, D: float, design: str = "sym") -> dict:
 
         fi = d.step(limiter_mode="intercept", baseline_commit=True,
                     limiter_kw={"lead_deltas": dl})
-        lims2, _, att2 = env._states()
-        p_att2 = env._p(att2)
-        for i in range(n_lim):
-            dd = float(np.linalg.norm(p_att2 - env._p(lims2[i])))
-            if dd < dmin[i]:
-                dmin[i], tmin[i] = dd, t
         if hk_step is None and bool(fi.get("hard_kill", False)):
             hk_step = t
         if d.done:
             break
 
+    dmin, tmin = d.d_min, d.t_min          # R4 권위 측정
     tmin_s = tmin * dt
     return {"episode": ep, "D": D, "design": design, "label": d.label,
             "a_att": float(env.a_att_max), "att_speed": float(env.v_nominal),

@@ -94,6 +94,12 @@ class _Driver:
         # 그 시점 margin. NK-안 접근은 여기 기여하지 않는다.
         self.min_out_swept: float = np.inf
         self.margin_at_best: float = -np.inf
+        # --- R4 (docs/83 §29) 권위 근접거리 -------------------------------
+        # 호출부는 자체 거리 루프를 만들지 말고 이 둘을 읽는다.
+        n_lim = len(env.limiter_ids)
+        self.d_min = np.full(n_lim, np.inf)      # per-limiter swept 최소
+        self.t_min = np.full(n_lim, -1, int)     # 그 스텝 index
+        self.n_unmeasured = 0                    # 커밋 해소 주차로 측정 불가한 (i,step) 수
 
     def step(self, limiter_override: Optional[Dict[str, np.ndarray]] = None,
              limiter_mode: str = "hold",
@@ -107,6 +113,10 @@ class _Driver:
         lims, fin, att = env._states()
         pre_lims = [env._p(s).copy() for s in lims]
         p_att_pre = env._p(att).copy()
+        # R4: **스텝 시작 시점** 스냅샷. 이번 스텝에 retire 되는 limiter 는
+        # 포함해야 한다 -- 바로 그 접촉이 측정 목표다.
+        retired_pre = set(self.se.retired)
+        pending_pre = set(self.se.pending)
 
         acts = scripted_role_actions(env, scn, lay, limiter_mode=limiter_mode,
                                      fire_mode=self.fire_mode,
@@ -132,14 +142,27 @@ class _Driver:
         if fi.get("net_miss_handoff"):
             self.handoff_step = self.t
 
-        # 진단: swept 최소거리 (retired 제외, resolver 와 같은 술어)
+        # --- R4 권위 근접거리 (docs/83 §29) --------------------------------
+        # 해소기 `_resolve_contacts` 와 **동일 술어·동일 입력**: 주차 이전 post
+        # 좌표를 쓰고, 제외는 `retired_pre` (스텝 시작 시점) 기준이다.
         lims2, _, att2 = env._states()
+        raw_l = getattr(self.se, "lims_post_raw", None)
+        raw_a = getattr(self.se, "p_att_post_raw", None)
+        if raw_l is None:                                     # pragma: no cover
+            raw_l = [env._p(s) for s in lims2]
+            raw_a = env._p(att2)
         step_min = np.inf
         for i in range(len(lims2)):
-            if i in self.se.retired:
+            if i in retired_pre:
                 continue
-            d = _seg_min_dist(p_att_pre - pre_lims[i],
-                              env._p(att2) - env._p(lims2[i]))
+            # 커밋 해소로 이번 스텝에 주차된 limiter 는 접촉 record 가 없어
+            # 권위값이 없다 -- 무언의 절단 대신 카운트한다 (§29.2).
+            if i in pending_pre and i in self.se.retired:
+                self.n_unmeasured += 1
+                continue
+            d = _seg_min_dist(p_att_pre - pre_lims[i], raw_a - raw_l[i])
+            if d < self.d_min[i]:
+                self.d_min[i], self.t_min[i] = d, self.t
             step_min = min(step_min, d)
         self.min_swept = min(self.min_swept, step_min)
         # NK-밖 스텝만 (P2', docs/58 §4)

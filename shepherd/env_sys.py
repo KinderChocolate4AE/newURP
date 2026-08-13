@@ -275,6 +275,8 @@ class ModeSystemEnv:
         self._charged: int = 0
         self.retired: set = set()
         self.pending: Dict[int, CommitRecord] = {}
+        self.lims_post_raw = None       # R4 (docs/83 §29)
+        self.p_att_post_raw = None
         self.hard_kill = False
         self.veto_events = 0
         self.net_spent = False            # R2: net miss 후 FALLBACK 진입 여부
@@ -409,6 +411,12 @@ class ModeSystemEnv:
         # --- 4. 만료 커밋 해소: 가드 -> 기하 -> Pk ---------------------------
         lims2, _, att2 = inner._states()
         p_att2 = inner._p(att2)
+        # R4 (docs/83 §29): §5 에서 소진 limiter 가 [0,0,60] 으로 **주차**되므로
+        # 진단이 post-step 좌표를 나중에 읽으면 접촉 스텝의 최소거리가 소실된다.
+        # 주차 **이전** 좌표를 여기서 기록한다 -- 순수 기록이며 물리/순서/난수에
+        # 개입하지 않는다 (회귀 R4-A 가 강제).
+        self.lims_post_raw = [inner._p(s_).copy() for s_ in lims2]
+        self.p_att_post_raw = p_att2.copy()
         d_asset = float(np.linalg.norm(p_att2 - np.asarray(self.layout.target, float)))
         resolved_now: List[CommitRecord] = []
         for i, rec in list(self.pending.items()):
