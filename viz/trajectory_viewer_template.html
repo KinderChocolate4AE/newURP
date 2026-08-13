@@ -97,7 +97,9 @@
     <div class="pane"><h2>옆에서 (x–z)</h2><canvas id="side"></canvas></div>
     <div class="pane"><div id="legend">
       <span style="--dot:var(--c-att)">공격자 A2</span>
-      <span style="--dot:var(--c-lim)">limiter ×4 (+kill 반경 0.75)</span>
+      <span style="--dot:var(--c-lim)">limiter 대기 (실선 = 접촉반경 r_contact, 점선 = 커밋 margin)</span>
+      <span style="--dot:var(--c-crit)">limiter 커밋중 ⟶ (채운 점)</span>
+      <span style="--dot:var(--axis)">limiter SPENT (소모)</span>
       <span style="--dot:var(--c-fin)">finisher</span>
       <span style="--dot:var(--c-net)">net (발사→전개 비행은 보간 표시, 동결 net_center 로)</span>
       <span style="--dot:var(--c-fin)">판정 cone (점선, 조준축 실시간)</span>
@@ -172,8 +174,13 @@ function refit() {
   $("verdict").className = "chip " + (e.label === "CAPTURED" ? "cap" : "miss");
   $("meta").textContent =
     `a_att=${e.static.threat.a_att.toFixed(0)} m/s² · v=${e.static.threat.speed.toFixed(0)} m/s`
-    + ` · fire@${e.fire_step ?? "–"} · 해소@${e.resolve_step ?? "–"}`
-    + (e.handoff_step != null ? ` · miss@${e.handoff_step}` : "");
+    + ` · net fire@${e.fire_step ?? "–"} · 해소@${e.resolve_step ?? "–"}`
+    + (e.handoff_step != null ? ` · miss@${e.handoff_step}` : "")
+    + (e.hard_kill_step != null ? ` · HK@${e.hard_kill_step}` : "")
+    + ` · 종료@${e.terminal_step ?? "–"}`
+    + ` · 커밋 ${(e.commits || []).length}건`
+    + ` · r_contact=${(e.static.r_contact ?? e.static.kill_radius).toFixed(2)}`
+    + ` margin=${e.static.commit_margin != null ? e.static.commit_margin.toFixed(2) : "–"}`;
   buildLog(); drawTimeline();
 }
 
@@ -308,13 +315,22 @@ function drawView(cv, view) {
   g.lineTo(ap[0]+av[0]*vsc, ap[1]-av[1]*vsc);
   g.strokeStyle = css("--c-att"); g.lineWidth = 1.2; g.stroke();
 
-  // limiters
+  // limiters — 상태 3분: 대기 / 커밋(비행중) / SPENT
+  const spent = s.spent || s.retired || [];
+  const committed = s.committed || [];
   s.lims.forEach((p, i) => {
-    const q = map(p); const dead = s.retired.includes(i);
-    circle(g, q, st.kill_radius*sc, dead ? css("--axis") : css("--c-lim"));
-    circle(g, q, 4, null, dead ? css("--axis") : css("--c-lim"));
+    const q = map(p);
+    const isSpent = spent.includes(i), isCommitted = committed.includes(i);
+    const col = isSpent ? css("--axis") : isCommitted ? css("--c-crit") : css("--c-lim");
+    // (1) 접촉 반경 r_contact — 실제 접촉 event 반경
+    circle(g, q, (st.r_contact ?? st.kill_radius)*sc, col);
+    // (2) 커밋 기하 판정 반경 margin — 점선. 음수면 그리지 않는다(기하 미충족)
+    if (!isSpent && st.commit_margin > 0)
+      circle(g, q, st.commit_margin*sc, col+"", null, [3,3]);
+    // (3) 본체. 커밋 중이면 채워서 "날아가는 중" 을 구분
+    circle(g, q, 4, isCommitted ? null : col, isCommitted ? col : null);
     g.fillStyle = css("--ink-2"); g.font = "10px system-ui";
-    g.fillText(String(i), q[0]+6, q[1]-5);
+    g.fillText(String(i) + (isSpent ? " SPENT" : isCommitted ? " ⟶" : ""), q[0]+6, q[1]-5);
   });
 
   // finisher + 조준축
@@ -358,10 +374,25 @@ function drawTimeline() {
     g.fillText(ch, X(i)-3, 8);
     g.fillRect(X(i)-0.5, 9, 1.5, 6);
   };
+  // limiter 커밋 → 해소 구간을 띠로 (커밋 스텝과 해소 스텝이 다르다)
+  for (const c of (e.commits || [])) {
+    const x0 = X(c.commit_step), x1 = X(Math.min(c.resolve_step, n));
+    g.fillStyle = (c.outcome === "KILL" ? css("--c-crit")
+                 : c.outcome === "VETO_NO_KINETIC" ? css("--c-warn")
+                 : css("--axis")) + "55";
+    g.fillRect(x0, 11, Math.max(1.5, x1-x0), 4);
+  }
   mark(e.fire_step, "F", css("--c-fin"));
   mark(e.resolve_step, "R", css("--c-net"));
   mark(e.handoff_step, "M", css("--c-crit"));
-  e.steps.forEach((s,i) => { if (s.events.some(v=>v.outcome==="KILL")) mark(i,"K",css("--c-crit")); });
+  for (const c of (e.commits || [])) mark(c.commit_step, "c", css("--c-lim"));
+  mark(e.hard_kill_step, "HK", css("--c-crit"));
+  // 종말 스텝 (NET_CAPTURE / HARD_KILL / PENETRATED 등 실제 종료 지점)
+  if (e.terminal_step != null) {
+    g.fillStyle = css("--ink"); g.fillRect(X(e.terminal_step)-1, 6, 2, 12);
+    g.font = "600 10px system-ui"; g.textAlign = "right";
+    g.fillText("종료", X(e.terminal_step)-3, 7); g.textAlign = "left";
+  }
 }
 
 function buildLog() {
@@ -372,12 +403,21 @@ function buildLog() {
     d.onclick = () => { t = i; draw(); };
     log.appendChild(d);
   };
-  if (e.fire_step != null) add(e.fire_step, "🕸 net 발사");
+  if (e.fire_step != null) add(e.fire_step, "🕸 net 발사 (commit)");
   if (e.resolve_step != null)
-    add(e.resolve_step, e.label === "CAPTURED" ? "✅ net 포획" : "❌ net 해소(빗나감)");
+    add(e.resolve_step, e.label === "CAPTURED" ? "✅ NET_CAPTURE" : "❌ net 해소(빗나감)");
   if (e.handoff_step != null) add(e.handoff_step, "⚠ NET_MISS → FALLBACK");
-  e.steps.forEach((s,i) => s.events.forEach(v =>
-    add(i, `${v.outcome === "KILL" ? "✕ KILL" : v.outcome === "VETO_NO_KINETIC" ? "▲ NK VETO" : v.outcome} lim${v.limiter} d=${v.d}`)));
+  // limiter 커밋 원장: 커밋 스텝과 해소 스텝을 각각 남긴다
+  for (const c of (e.commits || [])) {
+    add(c.commit_step,
+        `▶ lim${c.limiter} 커밋 (d_nom=${c.d_nom} / margin=${c.margin}` +
+        `${c.geometric_ok ? "" : " · 기하 미충족"}${c.source === "contact" ? " · 접촉" : ""})`);
+    add(c.resolve_step,
+        `${c.outcome === "KILL" ? "✕ HARD_KILL" : c.outcome === "VETO_NO_KINETIC"
+          ? "▲ NK VETO (미소모)" : "· " + (c.outcome || "미해소")} lim${c.limiter}`);
+  }
+  if (e.hard_kill_step != null) add(e.hard_kill_step, "💥 HARD_KILL 성립");
+  if (e.terminal_step != null) add(e.terminal_step, `■ 종료 — ${e.label}`);
   e.steps.forEach((s,i) => { if (s.clean && !(e.steps[i-1]||{}).clean) add(i, "· clean 게이트 개방"); });
   if (!log.children.length) add(0, "(이벤트 없음)");
 }
@@ -392,7 +432,11 @@ function readout() {
     ["boxed", s.boxed ? "예" : "—"],
     ["clean 게이트", s.clean ? "개방" : "—"],
     ["자산까지 (m)", s.d_asset.toFixed(2) + (s.d_asset <= e.static.r_nk ? "  (NK 안)" : "")],
-    ["최근접 limiter (m)", s.d_lim_min.toFixed(2)],
+    ["최근접 limiter (m)", s.d_lim_min.toFixed(2)
+      + (s.d_lim_min <= (e.static.r_contact ?? e.static.kill_radius) ? "  (접촉권)" : "")],
+    ["limiter 커밋중", (s.committed || []).length ? (s.committed).join(",") : "—"],
+    ["limiter SPENT", (s.spent || s.retired || []).length
+      ? (s.spent || s.retired).join(",") + ` (${(s.spent||s.retired).length}/${s.lims.length})` : "—"],
   ];
   $("readout").innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
 }

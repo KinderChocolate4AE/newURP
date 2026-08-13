@@ -48,8 +48,31 @@ def _build_v3(ep: int):
     return st.env, st.scn, st.lay
 
 
-def dump_episode(ep: int, *, v2: bool = False, v3: bool = False) -> dict:
-    env, scn, lay = (_build_v3(ep) if v3
+def _build_t1(ep: int):
+    """★ curve_sweep._default_kw 와 **동일한 세계** (E2-A/E2-B 캠페인 재생용).
+
+    ratified_system + T1 (route_gain 0.5 / sense_range 30.0) + 기본 SpawnSpec.
+    이 빌더로 덤프해야 results/curve_intercept_reactive.json 의 에피소드 라벨과
+    1:1 대응한다.
+    """
+    from shepherd.agents.attacker_ladder import AttackerSpec
+    from shepherd.env_sys import RewardSpec, ratified_system
+    from shepherd.m4_env import build_m4_env
+    from shepherd.spawn_rand import SpawnSpec
+    st = build_m4_env(
+        0, ep,
+        system=ratified_system(),
+        reward=RewardSpec(w_kill=0.5, enabled=True),
+        attacker=AttackerSpec(level="A2", jink_amp=0.6, seed=0,
+                              route_gain=0.5, sense_range=30.0),
+        spawn=SpawnSpec())
+    return st.env, st.scn, st.lay
+
+
+def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
+                 t1: bool = False, limiter_mode: str = "hold",
+                 commit: bool = False) -> dict:
+    env, scn, lay = (_build_t1(ep) if t1 else _build_v3(ep) if v3
                      else _build_v2(ep) if v2 else _build(ep))
     d = _Driver(env, scn, lay, ep)
     se = d.se
@@ -61,6 +84,22 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False) -> dict:
         target_radius=float(lay.target_radius),
         r_nk=float(se.spec.r_nk),
         kill_radius=float(env.kill_radius),
+        # --- R1 하드킬/접촉 기하 (2026-08-13 추가) -------------------------
+        # 반경 3종은 SystemSpec 에서 키가 분리돼 있고 기본값이 전부 kill_radius
+        # 로 폴백한다 (env_sys.py:99-107). 값이 같아도 **의미가 다르므로**
+        # 뷰어에서 따로 그린다.
+        r_commit=float(se.spec.r_commit if se.spec.r_commit is not None
+                       else env.kill_radius),
+        r_contact=float(se.spec.r_contact if se.spec.r_contact is not None
+                        else env.kill_radius),
+        tau_kill=float(se.spec.tau_kill),
+        n_kill=int(max(round(se.spec.tau_kill / env.dt), 1)),
+        p_kill=float(se.spec.p_kill),
+        # 커밋 기하 판정 반경 (env_sys.py:314-315 과 동일 식).
+        # a_lim < a_att 면 **음수**가 될 수 있다 -- 그때는 커밋해도 기하 미충족.
+        commit_margin=float(
+            (se.spec.r_commit if se.spec.r_commit is not None else env.kill_radius)
+            + 0.5 * (se.a_lim_max - env.a_att_max) * se.spec.tau_kill ** 2),
         net_radius=float(env.net_radius),
         tau_deploy=float(env.tau_deploy),
         cone_half_angle=float(env.cone_half_angle),
@@ -69,17 +108,20 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False) -> dict:
         ring_p0=[list(map(float, p)) for p in lay.limiter_p0],
         finisher_p0=list(map(float, lay.finisher_p0)),
         threat=dict(a_att=float(env.a_att_max), speed=float(env.v_nominal)),
+        limiter_mode=limiter_mode, baseline_commit=bool(commit),
     )
 
     steps = []
     fire_step = None
     net_center = None
     resolve_step = None
+    hard_kill_step = None          # 하드킬이 성립한 스텝 (2026-08-13)
+    terminal_step = None           # 에피소드가 실제로 끝난 스텝
     n_events = 0
     for t in range(int(lay.episode_len)):
         lims, fin, att = env._states()
         prev_state = inner.fsm.state.value
-        fi = d.step()
+        fi = d.step(limiter_mode=limiter_mode, baseline_commit=commit)
         lims2, fin2, att2 = env._states()
         if fi.get("fire_event") and fire_step is None:
             fire_step = t
@@ -104,6 +146,10 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False) -> dict:
             fin=list(map(float, env._p(fin2))),
             fin_e=list(map(float, env._e(fin2))),
             fsm=inner.fsm.state.value,
+            # limiter 상태 3분 (2026-08-13): 미커밋 / 커밋했으나 미해소 / 소모완료.
+            # `retired` 만으로는 "지금 날아가는 중" 을 볼 수 없었다.
+            committed=sorted(se.pending.keys()),
+            spent=sorted(se.retired),
             v_soft=round(float(fi.get("v_shot_soft", 0.0)), 3),
             v_worst=round(float(fi.get("v_shot_worst", 0.0)), 3),
             boxed=bool(fi.get("boxed_in", False)),
@@ -114,12 +160,27 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False) -> dict:
                                 for s in lims2), 3),
             events=new_ev,
         ))
+        if hard_kill_step is None and bool(fi.get("hard_kill", False)):
+            hard_kill_step = t
         if d.done:
+            terminal_step = t
             break
+
+    # 커밋 원장 (2026-08-13): 커밋 스텝과 해소 스텝을 **따로** 싣는다.
+    # 기존 steps[].events 는 record 가 생긴 스텝에 outcome 을 읽었는데,
+    # outcome 은 n_kill 틱 뒤 해소 때 채워지므로 그 시점엔 비어 있었다.
+    commits = [dict(limiter=r.limiter_index, commit_step=r.commit_step,
+                    resolve_step=r.resolve_step, outcome=r.outcome,
+                    d_nom=round(float(r.d_nom), 3),
+                    margin=round(float(r.margin), 3),
+                    geometric_ok=bool(r.geometric_ok), source=r.source)
+               for r in se.commits]
 
     return dict(static=static, steps=steps, label=d.label,
                 fire_step=fire_step, net_center=net_center,
                 resolve_step=resolve_step, handoff_step=d.handoff_step,
+                hard_kill_step=hard_kill_step, terminal_step=terminal_step,
+                commits=commits,
                 net_spent=bool(se.net_spent), group=None)
 
 
@@ -131,6 +192,13 @@ def main() -> None:
     ap.add_argument("--v2", action="store_true", help="스케일 v2 (docs/59)")
     ap.add_argument("--v3", action="store_true",
                     help="위협 v3 NOMINAL FULL (docs/60 -- standby·방위 스폰)")
+    ap.add_argument("--t1", action="store_true",
+                    help="curve_sweep 과 동일 세계 (ratified + T1 route 0.5/sense 30)")
+    ap.add_argument("--limiter-mode", default="hold",
+                    help="hold | intercept | ring | arc ...")
+    ap.add_argument("--commit", action="store_true",
+                    help="limiter 하드킬 커밋 허용 (baseline_commit). "
+                         "끄면 _zero_commit 이 걸려 커밋/SPENT 가 안 보인다")
     ap.add_argument("--eps", type=int, nargs="*", default=None,
                     help="에피소드 목록 override (그룹 = 실측 라벨)")
     ap.add_argument("--from-json", default=None,
@@ -149,18 +217,21 @@ def main() -> None:
     episodes = []
     if a.eps is not None:
         for ep in a.eps:
-            e = dump_episode(ep, v2=a.v2, v3=a.v3)
+            e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1,
+                             limiter_mode=a.limiter_mode, commit=a.commit)
             e["group"] = e["label"]
             episodes.append(e)
             print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
     else:
         for ep in CAPTURE_EPISODES:
-            e = dump_episode(ep, v2=a.v2, v3=a.v3)
+            e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1,
+                             limiter_mode=a.limiter_mode, commit=a.commit)
             e["group"] = "CAPTURE"
             episodes.append(e)
             print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
         for ep in MISS_EPISODES:
-            e = dump_episode(ep, v2=a.v2, v3=a.v3)
+            e = dump_episode(ep, v2=a.v2, v3=a.v3, t1=a.t1,
+                             limiter_mode=a.limiter_mode, commit=a.commit)
             e["group"] = "MISS"
             episodes.append(e)
             print(f"ep{ep:>3} {e['label']:>11} steps={len(e['steps'])}", flush=True)
