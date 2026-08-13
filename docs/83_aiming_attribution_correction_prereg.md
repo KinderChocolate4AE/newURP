@@ -1368,4 +1368,150 @@ E4-1 은 두 번째 칸의 **첫 조각**이다. 아직 MARL 을 부를 단계�
 
 ---
 
+---
+
+# 21. E4-1 판정 — mechanism gate **NOT MET** / outcome **POSITIVE** / attribution **UNRESOLVED**
+
+산출물: `results/e4_stagger.json` · `.log` (n=300/arm). **S2 로 쓰지 않는다.**
+
+## 21.1 정본 판정 문구 (동결)
+
+> **E4-1 produced a positive physical-interception effect at the interpretable
+> Δ=0.125 arm (0.190 → 0.253; paired Δ = +0.063, 95% CI [+0.017, +0.110]). However,
+> the preregistered mechanism criterion was not met because the paired median change
+> in the quantized `range(t_min)` endpoint was exactly zero. Post-hoc distributional
+> diagnostics suggest the endpoint was insensitive to heterogeneous timing shifts,
+> but these diagnostics do not retroactively establish the temporal-diversification
+> mechanism. The Δ=0.25 arm is excluded from pure-stagger interpretation because the
+> zero-horizon clamp activated in 98% of episodes.**
+
+## 21.2 결과
+
+| Δ | range(t_min) med | **HK** | net | pen | clamp(ep) |
+|---|---|---|---|---|---|
+| 0 | 0.125 | 0.190 [0.150, 0.238] | 0.133 | 0.677 | 0.000 |
+| **0.125** | 0.150 | **0.253** [0.207, 0.305] | 0.123 | 0.623 | 0.167 |
+| 0.25 | 0.200 | 0.273 [0.226, 0.326] | 0.123 | 0.603 | **0.980** |
+
+paired vs baseline:
+
+| Δ | Δrange(t_min) *(동결 primary)* | ΔP_HK | ΔP_net |
+|---|---|---|---|
+| 0.125 | **+0.000** CI [0.000, 0.000] | **+0.0633** CI [+0.0167, +0.1100] | −0.0100 CI [−0.0233, +0.0000] |
+| 0.25 | +0.050 CI [+0.050, +0.100] | +0.0833 CI [+0.0300, +0.1367] | −0.0100 CI [−0.0233, +0.0000] |
+
+## 21.3 ★ endpoint sensitivity failure (자기신고)
+
+`range(t_min)` 은 `dt=0.05` 로 **양자화**돼 있어 이산량에 paired **중앙값** 을
+primary 로 둔 것이 설계 결함이다. Δ=0.125 의 paired 중앙값 0 은 33.7% 가 정확히
+0 차이이기 때문이지 개입이 안 걸려서가 아니다.
+
+**post-hoc descriptive (승격 금지)**: 증가 44.0% / 불변 33.7% / 감소 22.3%,
+paired mean **+0.0253 s**, arm 평균 0.160 → 0.185 → 0.251 s.
+
+> *"median = 0 이므로 temporal spread 가 전혀 바뀌지 않았다"* 로 읽어서도 **안 된다.**
+> 정확한 기록 = **endpoint sensitivity failure 가 드러났다.**
+
+## 21.4 clamp 격리 (Amendment A 발동)
+
+Δ=0.25 는 **98.0% 에피소드에서 clamp**(limiter-step 8.8%). clamp 시 `t_eff = 0` 이라
+조준점이 `p_att` 자체 = **pure pursuit** 성분이 섞인다.
+⇒ **`horizon staggering with a zero lower bound`** 로 별도 표기하고,
+**0.190 → 0.253 → 0.273 을 dose-response 로 읽지 않는다** (0.25 는 mixed intervention).
+
+**unclamped n=250 분석은 descriptive 이상으로 올리지 않는다** — `unclamped` 여부는
+**treatment 적용 후 결정되는 변수**이므로 treatment-induced subset 조건부 분석이다.
+최대 표현: *"The positive HK difference is also present descriptively among episodes
+in which the intervention did not encounter the zero-horizon clamp."* (0.180 → 0.248)
+
+## 21.5 net
+
+`ΔP_net = −0.010` CI95 [−0.0233, +0.0000]. 최대 표현:
+> **The physical-interception gain was not accompanied by an observed increase in net
+> capture.**
+
+*"trade-off 를 증명했다"* 는 **아직 아니다.** §19.4 의 상보성 관찰과 **consistent** 까지.
+
+## 21.6 과학적 소득
+
+같은 기체·attacker·ring·contact radius·PIP family 에서 **timing target 만** 바꿔
+`19.0% → 25.3%`. 따라서 최소한:
+
+> **registered physical capability 만으로 19% 가 고정되는 것은 아니다.**
+
+⇒ *"`a_lim = 0.35·a_att` 라 마지막 거리를 물리적으로 못 좁힌다"* 는 단순 capability
+설명은 **더 약해졌다.** 다만 **왜** 25.3% 로 올랐는지는 confirmatory 하게 temporal
+diversification 이라고 못 박지 못했다.
+
+---
+
+# 22. 후속 사다리 (E4-1b 이후, 설계만)
+
+## 22.1 E4-1b — temporal mechanism confirm (clamp·endpoint 문제 동시 제거)
+
+비음수 slot 으로 clamp 를 없애고, **평균 lead 를 맞춘 control** 을 둔다:
+
+```
+control  : delta_i = D/2                    (4 기 동일)
+diverse  : delta_i in {0, D/3, 2D/3, D}     (동일 평균, 분산만 증가)
+```
+⇒ **same mean lead, different temporal dispersion** 만 비교된다.
+
+**Primary (신규 prereg 필요 — 이번 실패를 본 뒤이므로 새 데이터에 대해)**:
+`E[range(t_min)_diverse − range(t_min)_control]` = **paired mean difference (초)**.
+양자화 변수에 paired median 을 다시 쓰지 않는다.
+Secondary: `P(Δrange>0)`, `P(=0)`, `P(<0)`. Outcome: `ΔP_HK`.
+
+둘 다 confirm 되면 그때 *"Temporal diversification causally improves physical
+interception under the tested T1 configuration."* 까지 갈 수 있다.
+
+## 22.2 E4-2 → E4-3 → T2 → MARL → B2
+
+```
+E4-2  spatial role separation / cutoff (pressure · inner-chord cutoff · second cutoff · reserve)
+      질문: 간 길을 따라가는 대신 길목을 선점하면 동일 capability 에서 추가 이득이 생기는가
+E4-3  temporal + spatial 조합 = **strong scripted cooperative baseline**
+      ★ MARL 이 반드시 넘어야 할 기준선. naive all-chase 를 MARL baseline 으로 쓰면 안 된다
+T2    동일 scripted defender · attacker 만 T1 -> T2. fixed role 이 깨지는가
+      안 깨짐 -> 학습 필요성 약함 / 깨짐 -> **adaptive role allocation** 문제 발생
+MARL  목표 = "4 기가 협력해서 잡아라" 가 아니라 **online role allocation / reassignment**
+      순서 (D_scripted,T1) -> (D_MARL,T1) -> (D_MARL,T2)
+B2    net track — outcome 을 HK 로 두지 않는다. P(F) · P(C|F) · ax · cone slack ·
+      commit-state certificate. limiter 의 목적은 하드킬이 아니라 z_encounter -> C_net
+```
+
+**우선순위**: `E4-1b → E4-2 → T2` 까지만 먼저. 여기서 scripted mechanism 이 안 서면
+MARL 은 다시 미룬다. **KSAS 는 이 사다리를 기다리지 않는다** — 현재 modality-gap /
+commit-feasibility 선에서 닫고, 사다리는 arXiv/AIAA 의 cooperative-control 절반이 된다.
+
+---
+
+# 23. modality gap — claim level 3 분
+
+| Level | 내용 | 상태 |
+|---|---|---|
+| **1** | `P_net(a) ≠ P_HK(a)` 이고 두 성공곡선의 regime 의존성이 크게 다르다 | **확립** |
+| **2** | net 이 붕괴한 BAND/high-χ 에서도 physical interception 이 상당수 존재 (BAND 0.6% vs 23.4%) | **강하게 지지** (E2-B prospective counterfactual 포함) |
+| **3** | 동일 commit state `z` 에서 `z ∉ C_net ∧ z ∈ C_physical` | **미확립** — state-conditioned counterfactual 필요 |
+
+**정본 표현**:
+> **A pronounced modality gap was observed: as target maneuverability increased,
+> non-destructive net capture collapsed while physical contact interception remained
+> substantial. A prospective sham-net counterfactual showed that this separation was
+> not caused by net capture censoring subsequent hard-kill opportunities.**
+
+**금지**: *"We prove that every state outside the net-capture set remains kinetically
+interceptable."* / `C_net ⊊ C_physical` 을 **state-wise 명제**로 서술.
+
+**용어**: `set inclusion` 이 아니라 **modality separation / modality gap**.
+E3 (CAPTURED 40 건 oracle 가능 0/4 vs 침투 4/4) 때문에 최종 그림은 포함관계보다
+**부분적으로 상보적인 operating regions** 쪽이다.
+
+**χ≥1 은 별도**: analytic claim (stated single-shot escape model 의 necessary
+condition) 이고, `0 net vs 24.3% HK` 는 closed-loop outcome separation 이다.
+**둘을 합치되 동일 증거라고 하지 않는다.** `0/1598` 을 물리적 불가능성의 실측 검증으로
+읽는 것은 금지 (C032 gate censoring).
+
+---
+
 *연관: 반증 아티팩트 = results/slew_counterfactual.json · 원 주장 = docs/45 §9 · 반사실 출처 = docs/51 §9 · 순서 규율 = docs/81 · 미팅 브리핑 = docs/82 · 감사 = artifacts/audits/environment_numeric_audit_2026-08-13.md · R1/R2 계약 전례 = docs/54*

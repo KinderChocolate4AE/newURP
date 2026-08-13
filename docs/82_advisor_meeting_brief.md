@@ -32,6 +32,10 @@
 
 ⇒ 논리 귀결 둘: **(i) 요격 능력과 비파괴 포획 능력은 같지 않다** (3의 gap이 논문의 문제). **(ii) 유효한 협력은 commit 이전에 작동해야 한다** (4로부터) — 이것이 B2 이후의 연구 프로그램.
 
+**★ 용어 규율 (docs/83 §23)**: `set inclusion`이 아니라 **modality separation / modality gap**. Level 1(성공곡선 regime 의존성 상이) 확립 · Level 2(net 붕괴 구간에서 물리 요격 존속) 강하게 지지 · **Level 3(동일 commit state에서 `z ∉ C_net ∧ z ∈ C_physical`) 미확립**. `C_net ⊊ C_physical`을 state-wise 명제로 쓰지 않는다. E3에서 CAPTURED 40건은 oracle 도달 가능 limiter가 0/4, 침투는 4/4 — **부분적으로 상보적인 operating regions**에 가깝다.
+
+**★ 신규 (E4-1, docs/83 §21)**: 같은 물리·attacker·ring·PIP family에서 **timing target만** 바꿔 하드킬 0.190 → 0.253 (paired +0.063, CI [+0.017, +0.110]). ⇒ *"registered physical capability만으로 19%가 고정되는 것은 아니다."* 단 **기전 미확립** — 사전등록 mechanism endpoint가 양자화로 gate 미충족.
+
 **현재 위치**: T1 반응형 재실행 완료·Case B 판정(경계 유지, attainability 0.83→0.76) → **KSAS 2p 동결 직전(P1)**. 수치 전수감사 통과(PASS with scope caveats, FATAL 0건).
 
 **오늘 미팅에서 합의 요청 3건** (상세 §5): ① KSAS Case B 스파인 + 잔여 4건 처리로 제출 동결 ② arXiv 10월 초중 일정 + θ-sensitivity 처리 방식 ③ B2 진입 조건(공격자 관측 모델 선택 + MARL kill criterion).
@@ -92,7 +96,7 @@ claim registry 총계: **ACTIVE 19 · DOWNGRADED 5 · RETRACTED 3 · PENDING 2**
 | (a) | **χ>1 운동학 불성립** (a≥39.3 → 포획 불가) | ANALYTIC + **CENSORED MEASURED** | "analytic outer bound 위에서 포획이 관측되지 않았다. **단 게이트가 그 구간에서 발사하지 않았으므로 post-commit 실패의 독립 검정이 아니다**" | ★E1c: a≥32.2 발사 0/350 → 기존 "0/1598이 경계를 실측 검증" 서술은 **금지**(registry C032). 명제 N은 스케치·미비준; τ 하한·ρ 상한이 같은 방향으로 경계 이동 |
 | (a′) | **실질 전이의 기전** (22–32 붕괴) | **EXPLORATORY diagnostic** | "**진단 분해**: 표적 기동성이 커질수록 발사 자격이 붕괴하고, 발사된 shot 중 조건부 포획 성공률도 동시에 하락한다(경우 ③). 실현된 발사 기하가 공칭 최대-footprint 기하보다 상당히 좁으나, **그 인과적 역할은 아직 exploratory**" | ax≈6.4(공칭 8.22)·slack 1.103 → 2·slack/τ²=24.5 vs 관측 22.4–22.9. 기하가 발사 조건부라 순환성 있음. 확인엔 E1d(forced-commit) 필요 |
 | (b) | **겨냥 경계가 운동학 경계보다 먼저** | MEASURED (기전 귀속은 **DOWNGRADED**) | "residual aiming error가 더 이른 실질 경계와 결부된다" + 편차 **12.4%** 병기. **"finite slew binds first" 금지** | ★ ψ의 원인 미해결. ω=∞ paired 반사실이 0/500 flip → slew cap은 원인 아님 (docs/83, registry C031). 남은 후보 = 예측 오차 / 발사거리 기하 |
-| (b′) | **modality gap** — 요격 가능 ≠ 포획 가능 | MEASURED (**E2-B로 확정**) | "동일 commit 응답을 유지한 채 net을 경쟁 종말사건에서 제거해도 물리 요격 발생률은 불변" — 두 modality의 유능 구간이 **부분 상보적**(저-a는 net 0.717, 고-a는 HK 0.243) | ★E2-B: Δ_comp = **정확히 0** (n01=n10=0, 426건 중 전환 0). ~~"24.3%는 경쟁위험 때문에 하한"~~ **반증됨** — censoring 없음, 보정 불필요 |
+| (b′) | **modality gap** — regime 수준 (Level 1·2 확립 / **Level 3 미확립**) | MEASURED (**E2-B로 확정**) | "동일 commit 응답을 유지한 채 net을 경쟁 종말사건에서 제거해도 물리 요격 발생률은 불변" — 두 modality의 유능 구간이 **부분 상보적**(저-a는 net 0.717, 고-a는 HK 0.243) | ★E2-B: Δ_comp = **정확히 0** (n01=n10=0, 426건 중 전환 0). ~~"24.3%는 경쟁위험 때문에 하한"~~ **반증됨** — censoring 없음, 보정 불필요 |
 | (c) | **3-구간 구조** (baseline-achievable / aiming-limited / kinematically-infeasible) | MEASURED (T0+T1 각 n=2,700) | 구간명 위 3종만 ("성립/EASY" 금지) | Case B로 생존 확인済 (0.763 / 0.016 / 0) |
 | (d) | **종말 봉쇄 불가 ①-B1** | **CERTIFIED** | "registered fixed-state static-blockade 모델·0.30 s 창·검정 상태분포 내에서, limiter 4기로도 회복 불가" — 한정어 3종 필수 | 없음 (가장 강한 사슬). "협력 불가 일반화" 금지 |
 | (e) | **pre-commit shaping 필요성** | DECLARED + PILOT 목격자 1건 | "①-B1이 pre-commit 개입을 **동기화**한다" (필요성 '증명' 아님) | ①-B2 미확정 — B2 실험이 바로 이것 |
