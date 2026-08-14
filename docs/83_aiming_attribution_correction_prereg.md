@@ -2102,3 +2102,102 @@ e4_stagger 만 수정). 따라서 `results/lead_time_r4.json` 은 원본과 **�
 
 **§30.6 의 인용 금지 해제.** 단 인용은 위 정본 문장으로 하고, 원 "1.4–1.7 m" 표기는 쓰지
 않는다.
+
+## 30.9 lead-time 주장 축소 (§30.8 후속 확정)
+
+§30.8(b) 를 근거로 §17 의 "wall" 을 **기전 증거에서 완전히 철회**한다. `r_contact` 바로
+위에 붙는 하한은 물리가 아니라 **outcome-label geometry 가 만든 selection boundary** 다.
+
+lead-time 진단이 남기는 것은 **outcome 수준 null 하나뿐**이다:
+
+> **2× more engagement time did not increase P_HK** (0.190 / 0.207 / 0.177 / 0.177).
+
+침투 최근접 중앙값 증가(1.510 → 2.182 m) 는 이 null 을 **보조**할 뿐, 독립 증거로 쓰지
+않는다 (같은 selection boundary 위의 통계다).
+
+---
+
+# 32. E1e 사전등록 — 보정 capture-bound 의 fresh confirmation (결과 전 동결)
+
+§28.3 에서 **사후** 도출한 보정 법칙을 미사용 seed 에서 검정한다. E1d 의 D-a/D-b 재현이
+목적이 **아니다** — 결과를 보고 만든 piecewise law 자체가 시험 대상이다.
+
+## 32.1 검정 대상
+
+$$s(a_x)=\min\bigl(a_x\tan\theta,\; R_{\max}-a_x\bigr), \qquad a^*(a_x)=\frac{2\,s(a_x)}{\tau^2}$$
+
+near side 는 lateral cone clearance 가, `ax* = R_max/(1+tanθ)` 이후로는 **far-edge range
+clearance** 가 지배 → **inverted-U**.
+
+동결 상수 (`m4_config`): `τ = 0.30` · `R_max = 8.22` · `θ = 0.212100 rad (12.1524°)` ·
+`tanθ = 0.215339` · **`ax* = 6.763546 m`**.
+
+## 32.2 Arms (n=300/arm, 동일 에피소드 = paired)
+
+| arm | target ax | 지배 제약 (예측) | `s` | **보정 `a*`** | 기존 법칙 `a*` |
+|---|---|---|---|---|---|
+| **E-1** | 5.50 | lateral | 1.1844 | **26.32** | 26.32 (동일) |
+| **E-2** | 6.75 | lateral (간발) | 1.4535 | **32.30** | 32.30 (동일) |
+| **E-3** | **7.20** | **far-edge** | 1.0200 | **22.67** | **34.45** |
+| **E-4** | 7.90 | far-edge | 0.3200 | **7.11** | 37.76 |
+
+**E-3 (7.20) 이 판별점이다.** 두 법칙이 6.75 대비 **반대 방향**을 예측하는 유일한 미관측
+지점 — 기존 법칙은 증가(34.45 > 32.30), 보정 법칙은 감소(22.67 < 32.30). E-1 은 두 법칙이
+같은 값이라 판별력이 없고(형태 확인용), E-4 는 E1d 에서 이미 관측됐다.
+
+공통: T1 세계 · `ideal aim (ψ=0)` · ω 기본값 · force-commit semantics 는 E1d 와 동일
+(`force_commit_step` = **1-based `_step_i` 규약**) · two-pass replay (Pass 1 은 4 arm 공유) ·
+**fresh seeds `31000..31299`**.
+
+## 32.3 Primary — **shape** (a*₅₀ 아님)
+
+E1d 에서 `cross50` 이 `nan` 이 된 전례가 있으므로 primary 를 단일 임계값에 두지 않는다.
+paired bootstrap (20 000 resample) CI95 가 0 을 배제해야 한다.
+
+| # | 예측 |
+|---|---|
+| **H1** | `P_C(6.75) > P_C(5.50)` |
+| **H2** | `P_C(6.75) > P_C(7.90)` |
+| **H3 (판별)** | **`P_C(7.20) < P_C(6.75)`** — 기존 법칙은 반대를 예측 |
+
+## 32.4 판정 (결과 전 동결)
+
+| # | 조건 | 판정 |
+|---|---|---|
+| **E1e-A** | H1 ∧ H2 ∧ H3 | **보정 법칙 확인.** 사후 → confirmatory 로 승격 |
+| **E1e-B** | H1 ∧ H2, H3 실패 | 내부 최적은 존재하나 **위치/형태 오설정**. 승격 보류 |
+| **E1e-C** | `P_C(7.90) ≥ P_C(6.75)` (단조 증가) | **보정 법칙 반증**, 기존 lateral-only 법칙 복권 |
+| **E1e-D** | 그 외 / 비일관 | INCONCLUSIVE |
+
+## 32.5 Secondary
+
+- **S1 (episode-level)**: 마진 $m = a^*(a_x^{\rm realized}) - a_{\rm att}$ 를 사전등록.
+  `m > 0 ⇒ capture` 분류 정확도를 arm 별로 보고. **수락 기준 ≥ 0.95** (E1d 사후값
+  0.993/0.997/0.997 은 같은 데이터에서 나왔으므로 기준으로 쓰지 않는다).
+- **S2**: arm 별 `a*₅₀` 와 예측값(26.32 / 32.30 / 22.67 / 7.11) 의 차. E-4 는 예측 `a*` 가
+  위협 브래킷 하한 11 미만이라 **`cross50` 이 정의되지 않는 것 자체가 예측**이다.
+- **S3 (참고, pass/fail 아님)**: 브래킷 `a ~ U[11,78]` 균일 가정 하 주변 예측 포획률
+  **0.229 / 0.318 / 0.174 / 0.000**. E1d 에서 이 근사가 20 % 과대예측(D-a 예측 0.299 vs
+  관측 0.240)이었으므로 **calibration 참고값**으로만 쓴다.
+- **S4**: 모든 분석은 **realized ax** 로 한다 (nominal target 아님, E1d 교훈). realized ax
+  분포와 `ψ_at_commit` 을 arm 별로 병기.
+
+## 32.6 회귀 (실행 전 통과 필수)
+
+| # | 게이트 |
+|---|---|
+| **E-A** | `force_commit_step` 기본값 무변화 bit-exact (E1d D-A 와 동일 취지, 최우선) |
+| **E-B** | seed 대역 `31000..31299` 가 기존 캠페인(0.. / 10000.. / 30000..)과 **미교차** |
+| **E-C** | Pass 1 이 4 arm 에서 **완전 동일** (공유 검증) |
+| **E-D** | 강제 커밋이 에피소드당 **정확히 1 발**, 탄 미소모 (E1d D-D 와 동일) |
+
+## 32.7 금지 (결과와 무관하게)
+
+- **"net capture physics 를 설명했다"** — 이 식은 **idealized forced-commit terminal
+  geometry** 의 법칙일 뿐이다.
+- perfect aim (ψ=0) 은 **실현 불가능한 반사실**이다. arm 별 포획률을 시스템 성능으로 읽기 금지.
+- 최대 표현: *"Under the registered idealized commit counterfactual, the active geometric
+  constraint switches from lateral cone clearance to far-edge range clearance, producing an
+  interior optimal axial commit distance."*
+- **실제 closed-loop 에서 그 `ax*` 에 도달할 수 있는가는 별개 문제**이며, 본 실험은 그에
+  대해 아무것도 말하지 않는다 (B2 / cooperative shaping 질문으로 남긴다).
