@@ -2290,3 +2290,118 @@ E-1/E-3 은 거의 일치하고 E-2 에서 과대예측한다.
 **docs/84 §5 의 계획대로, 본 판정 커밋을 arXiv v0 의 science freeze point 로 선언한다.**
 이후 실험(새 geometry 축 · E4-2 · T2 · MARL · Δ_coop 층)은 **v0 와 병렬인 다음 branch**
 이며 v0 본문에 들어가지 않는다. v0 는 이제 **집필 단계**다.
+
+---
+
+# 34. E1e 이후 성립 상계의 계층화 — rho-bound 와 cone-geometry ceiling
+
+E1e(§33) 의 함의를 별도 기록한다. **단순한 문장 수정이 아니라 기존 headline bound 의
+수학적 지위를 한 단계 정교화한 것**이므로, 나중에 `39.3` 이 왜 남아 있고 `32.4` 가 왜
+새로 생겼는지 혼란이 없도록 여기에 고정한다.
+
+> **고정 표현**: *"39.3 은 틀렸다"* 가 **아니라** *"39.3 은 유효하지만 loose outer bound
+> 였다"* 로 쓴다.
+
+## 34.1 판정
+
+E1e 는 E1d 를 보고 사후 제안된 `s(ax) = min(ax*tan(theta), R_max - ax)` 의 **형상 예측을
+fresh seed 에서 확인**했다. 판별점 `ax = 7.20 m` 에서 기존 lateral-only 법칙은 증가를,
+보정 법칙은 감소를 예측했고 관측은 감소였다 (H3 = +0.1033, CI95 [+0.0700, +0.1400]).
+따라서 이 piecewise clearance law 는 post-hoc 설명에서 **confirmatory-supported
+mechanism** 으로 승격한다.
+
+단, 확인된 것은 **shape / direction** 이다. 폐루프가 최적 commit geometry 에 도달할 수
+있음이나 최적의 정확한 위치를 확인한 것이 **아니다**.
+
+## 34.2 기존 chi = 1 경계의 지위
+
+    chi = a_att * tau^2 / (2 rho) < 1,      rho = R_max * tan(theta)
+
+**등록값 검증**: `rho = 1.770000` vs `R_max*tan(theta) = 8.22 * 0.215339 = 1.770085`
+(차 8.5e-5). 즉 **rho 는 자유 파라미터가 아니라 cone 의 최대사거리에서의 측방 반폭**이다
+(이 대수 의존은 Π inventory 가 이미 적발했다).
+
+기준 운용점에서
+
+    a*_rho = 2 rho / tau^2 = 39.33 m/s^2
+
+이 식은 여전히 **자유 회피 표적에 대한 단독 포획의 유효한 필요조건**이다. 그러나 등록된
+cone geometry 에서는 rho 전체를 **어느 axial commit 위치에서도** 실제 clearance 로 쓸 수
+없다. `ax = R_max` 에서 lateral half-width 는 rho 에 도달하지만 **axial range slack 은 0**
+이다.
+
+⇒ 39.33 은 틀린 경계가 아니라 **등록 cone geometry 를 무시한 loose outer necessary bound**.
+
+## 34.3 등록 cone geometry 의 tighter ceiling
+
+사용 가능한 clearance 는 `s(ax) = min(ax*tan, R_max - ax)` 이고 최대는 두 항이 같은 지점:
+
+| 양 | 식 | 값 |
+|---|---|---|
+| `ax*` | `R_max / (1 + tan)` | **6.7635 m** |
+| `s_max` | `R_max*tan / (1 + tan)` | **1.4565 m** = **0.8229 rho** |
+| `a*_geom` | `2 s_max / tau^2` | **32.37 m/s^2** |
+| `chi*_geom` | `s_max / rho` | **0.8229** |
+
+따라서 기준 운용점의 analytic hierarchy 는
+
+    a*_rho = 39.33   >   a*_geom = 32.37
+
+이며, **32.37 < a_att < 39.33 구간은 rho-based 필요조건만 보면 열려 있지만 등록 cone
+geometry 를 포함하면 이미 닫힌다.**
+
+## 34.4 E1e empirical level 과의 구분 — 세 수준을 섞지 않는다
+
+E1e 최선 arm (E-2) 의 관측 임계는 `a*_50 ~ 27.03 m/s^2` (chi ~ 0.687) 이다. 그러나 이는
+**hold + forced commit + perfect aim** 계약의 결과이며 **T1 intercept 폐루프 곡선과 직접
+결합하면 안 된다**. 또 보정 법칙은 E1e 자체 실측 대비 약 **15 %** 낙관이다
+(`a*_50 / 예측 = 0.8506 +- 0.0111`).
+
+| 값 | 성격 |
+|---|---|
+| **39.33** | loose outer necessary bound (rho 전체 가용 가정) |
+| **32.37** | 등록 cone geometry 의 **analytic** ceiling |
+| **27.03** | E1e forced-commit **empirical** (다른 계약) |
+
+**세 값을 하나의 동일한 empirical curve 의 경계처럼 취급하지 않는다.**
+마지막 화살표만 *analytic → empirical + different contract* 로 시각적으로 구분한다.
+
+## 34.5 논문 영향
+
+### KSAS — 최소 개입
+
+- **§2.1**: 등록 기하에서 `rho = R_max * tan(theta)` 임을 명시.
+- **§2.2**: 식 (3) 뒤에 한 문장 (동결):
+
+  > 단, 등록된 원뿔형 포획 기하에서는 rho = R_max·tanθ 의 전체 폭과 축방향 여유를
+  > 동시에 확보할 수 없으므로, 식 (3) 은 tight 한 경계가 아니라 외곽 필요조건이다.
+
+  필요하면 바로 다음 문장에만:
+
+  > 해당 기하를 포함한 해석적 천장은 32.4 m/s² 로 낮아진다.
+
+- **Fig. 2**: 기존대로 **chi = 1 만** 표시. E1e empirical point 는 표시하지 않는다
+  (계약이 다르다).
+- 32.4 를 언급하더라도 **새 결과축으로 전개하지 않는다** — KSAS 에서 세 층을 다 설명하면
+  논문 핵심이 mechanism archaeology 로 빠진다.
+
+이 최소 개입만으로도 현행 초고의 오류 — **"open gap 전체가 controller 문제"** — 가 제거된다.
+간극의 일부(39.3 → 32.4)는 controller 가 아니라 **기하가 닫은 것**이다.
+
+### arXiv v0 — feasibility analysis 의 핵심 mechanism
+
+    naive net-width bound 39.3
+        -> finite-cone geometry 32.4
+        -> achieved forced-commit 27.0
+
+계층으로 제시한다 (docs/84 §2 의 "E1d → E1e 를 핵심 mechanism figure 로 승격" 이 이것).
+
+## 34.6 금지 해석 (E1e 가 지지하지 않는 것)
+
+- "폐루프 controller 가 `ax* = 6.7635 m` 에 도달한다."
+- "6.7635 m 가 실험적으로 확인된 정확한 최적 commit 위치다." (4 점 = 형태만)
+- "32.37 m/s² 가 T1 closed-loop 의 관측 붕괴점이다."
+- "27.03 m/s² 와 기존 chi ~ 0.66 aiming boundary 가 같은 mechanism 이다."
+  (위치가 우연히 가깝지만 설명이 다르다 — 조준이 아니라 기하. 철회된 주장을 부활시키지 않는다.)
+- "E1e 가 intercept-mode failure 의 원인을 설명했다."
+- **"39.3 m/s² 경계가 잘못되었다."**
