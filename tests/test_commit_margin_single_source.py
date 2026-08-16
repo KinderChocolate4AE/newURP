@@ -94,13 +94,17 @@ def _parts():
 KILL_RADIUS, ACCEL_TERM = _parts()
 
 #: kill_radius 와 절대 같아질 수 없는 divergent 값 (유도, 하드코딩 금지)
-R_COMMIT_CASES = [KILL_RADIUS * 0.5, KILL_RADIUS + 1.0]
+R_COMMIT_TIGHT = KILL_RADIUS * 0.5      # env 가 limiter 보다 **엄격**
+R_COMMIT_LOOSE = KILL_RADIUS + 1.0      # env 가 limiter 보다 **관대**
+R_COMMIT_CASES = [R_COMMIT_TIGHT, R_COMMIT_LOOSE]
 
 
-def _observed_margins(spec: SystemSpec):
-    """(mission_rollout 이 쓴 margin, env_sys 가 쓴 margin).
+def _observe(spec: SystemSpec):
+    """(mission_rollout 이 쓴 margin, 커밋 record 목록, 롤아웃 결과).
 
     같은 세계·같은 seed 의 **한 번의 롤아웃**에서 양쪽을 동시에 관측한다.
+    커밋이 없을 수도 있다 -- 그건 정상 동작일 수 있으므로 여기서 단정하지 않고
+    호출부가 자기 목적에 맞게 판단한다.
     """
     inner, scn, lay = make_train_env(as_config(SLOW_LIMITER))
     env = ModeSystemEnv(inner, lay, scn, spec)
@@ -120,9 +124,14 @@ def _observed_margins(spec: SystemSpec):
         mission_rollout.intercept_limiter = original
 
     assert "margin" in seen, "intercept arm 이 호출되지 않아 검정 불가"
-    commits = [c for c in env.commits if c.source == "commit"]
-    assert commits, "커밋 record 가 없어 게이트가 공회전했다 (fixture 재검토 필요)"
-    return seen["margin"], float(commits[0].margin), result
+    return seen["margin"], [c for c in env.commits if c.source == "commit"], result
+
+
+def _observed_margins(spec: SystemSpec):
+    """margin 동등성 검정용 -- 커밋이 실제로 나야 성립한다."""
+    mr, commits, result = _observe(spec)
+    assert commits, "커밋 record 가 없어 margin 동등성을 관측할 수 없다"
+    return mr, float(commits[0].margin), result
 
 
 # --------------------------------------------------------------- 대조군 ---
@@ -150,12 +159,24 @@ def test_r001_control_tau_kill_is_not_the_divergent_axis(tau_kill):
 
 
 # ------------------------------------------------- ★ divergence 노출 ---
-@pytest.mark.parametrize("r_commit", R_COMMIT_CASES)
-def test_r001_mission_rollout_must_honor_r_commit(r_commit):
-    """★ 본 게이트 — `r_commit` 이 실제 값이면 두 구현이 갈라진다.
+# 두 방향은 증상이 다르므로 **계기도 다르다** (첫 patch 후 발견, 기록으로 남긴다).
+#
+#   r_commit > kill_radius (LOOSE)  커밋은 나되 margin 값이 갈라진다
+#                                   -> margin 동등성으로 잡는다
+#   r_commit < kill_radius (TIGHT)  limiter 가 낡은(넓은) margin 으로 커밋해 버리고
+#                                   env 가 geometric_ok=False 로 기각한다.
+#                                   고쳐지면 애초에 커밋이 안 나므로 CommitRecord 가
+#                                   없어져 margin 동등성으로는 관측 불가
+#                                   -> **class B 의미 불변식**으로 잡는다
+#
+# 어느 한쪽만으로는 두 방향을 다 못 덮는다. 둘 다 pre-patch RED 임을 실증했다.
 
-    **현 HEAD 에서 반드시 RED.** GREEN 이면 R-001 finding 이 틀린 것이므로
-    patch 하지 말고 카드를 폐기한다 (Session 4 R-001 판정 규율).
+@pytest.mark.parametrize("r_commit", [R_COMMIT_LOOSE])
+def test_r001_mission_rollout_must_honor_r_commit(r_commit):
+    """★ 본 게이트 (LOOSE 방향) — `r_commit` 이 실제 값이면 두 margin 이 갈라진다.
+
+    **patch 전 RED.** GREEN 이면 R-001 finding 이 틀린 것이므로 patch 하지 말고
+    카드를 폐기한다 (Session 4 R-001 판정 규율).
     """
     assert r_commit != KILL_RADIUS, "파라미터가 kill_radius 와 충돌 — cell 이 퇴화한다"
     mr, env, _ = _observed_margins(_spec(r_commit=r_commit))
@@ -165,23 +186,47 @@ def test_r001_mission_rollout_must_honor_r_commit(r_commit):
         "limiter 의 결정 반경과 env 의 해소 반경이 갈라졌다.")
 
 
-@pytest.mark.parametrize("r_commit", R_COMMIT_CASES)
+@pytest.mark.parametrize("r_commit", [R_COMMIT_LOOSE])
 def test_r001_divergence_survives_tau_sweep(r_commit):
-    """★ 선언된 sweep 축(tau_kill=0.20)과 결합해도 divergence 가 남는지. 현 HEAD 에서 RED."""
+    """★ 선언된 sweep 축(tau_kill=0.20)과 결합해도 divergence 가 남는지. patch 전 RED."""
     mr, env, _ = _observed_margins(_spec(r_commit=r_commit, tau_kill=0.20))
     assert mr == env, (
         f"r_commit={r_commit} tau_kill=0.20: {mr} != {env} (차이 {env - mr:+.4f})")
+
+
+@pytest.mark.parametrize("r_commit", [None, R_COMMIT_TIGHT, R_COMMIT_LOOSE])
+def test_r001_limiter_never_commits_into_a_rejected_geometry(r_commit):
+    """★ 본 게이트 (TIGHT 방향, class B) — limiter 는 env 가 **기각할 기하**에
+    커밋해선 안 된다.
+
+    두 구현이 같은 반경을 쓰면 `d_nom <= margin` 을 limiter 가 이미 검사했으므로
+    env 가 같은 스텝·같은 상태에서 다시 검사해도 통과해야 한다. 즉
+
+        geometric_ok=False 인 커밋 record 는 **존재할 수 없다**.
+
+    patch 전에는 `r_commit` 이 조여진 순간 limiter 가 낡은 넓은 margin 으로 커밋해
+    이 불변식이 깨졌다 (r_commit=1.0 에서 4/4 record 가 ok=False). patch 후에는
+    limiter 가 애초에 커밋하지 않아 record 자체가 없다 -- 둘 다 불변식을 만족한다.
+    """
+    mr, commits, _ = _observe(_spec() if r_commit is None
+                              else _spec(r_commit=r_commit))
+    rejected = [c for c in commits if not c.geometric_ok]
+    assert not rejected, (
+        f"r_commit={r_commit}: limiter 가 margin {mr} 로 커밋했는데 env 가 "
+        f"{len(rejected)}/{len(commits)} 건을 geometric_ok=False 로 기각했다 "
+        f"(env margin {rejected[0].margin}, d_nom {rejected[0].d_nom}). "
+        "결정 반경과 해소 반경이 갈라져 있다.")
 
 
 def test_r001_r_commit_is_outcome_material():
     """`r_commit` 이 cosmetic 이 아니라 **결과를 바꾸는** 파라미터임을 고정한다.
 
     이것이 R-001 을 P0-LATENT 로 두는 근거다 — divergence 가 열리면 바뀌는 것이
-    진단값이 아니라 **종말 라벨**이다. (patch 후에도 GREEN 이어야 한다: patch 는
-    두 구현을 일치시킬 뿐 `r_commit` 의 물리적 의미를 없애지 않는다.)
+    진단값이 아니라 **종말 라벨**이다. patch 전후 모두 GREEN 이어야 한다: patch 는
+    두 구현을 일치시킬 뿐 `r_commit` 의 물리적 의미를 없애지 않는다.
     """
-    _, _, base = _observed_margins(_spec())
-    _, _, tight = _observed_margins(_spec(r_commit=KILL_RADIUS * 0.5))
+    _, _, base = _observe(_spec())
+    _, _, tight = _observe(_spec(r_commit=R_COMMIT_TIGHT))
     assert base.label != tight.label, (
         f"r_commit 을 조여도 라벨이 그대로다 ({base.label}) — "
         "이 fixture 로는 outcome-material 임을 보일 수 없다")
