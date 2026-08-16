@@ -14,7 +14,7 @@ import numpy as np
 import pytest
 
 from shepherd.env_sys import (CommitRecord, ModeSystemEnv, SystemSpec,
-                              _seg_min_dist)
+                              _seg_min_dist, commit_margin)
 from shepherd.params import as_config
 from shepherd.scripts.mission_rollout import run_episode
 from shepherd.train.make_env import make_train_env
@@ -171,8 +171,10 @@ def test_radius_keys_default_to_kill_radius():
     env, scn, lay = _wrapped(SystemSpec(enabled=True), SLOW_LIMITER)
     res = run_episode(env, scn, lay, seed=0, limiter_mode="intercept",
                       fire_mode="never", baseline_commit=True)
-    kr = float(env.inner.kill_radius)
-    margin_expect = kr + 0.5 * (env.a_lim_max - env.inner.a_att_max) * env.spec.tau_kill ** 2
+    # R-001: 기대값도 단일 정의원에서 뽑는다 (별도 공식 복제 금지 규율).
+    margin_expect = commit_margin(env.spec, kill_radius=env.inner.kill_radius,
+                                  a_lim_max=env.a_lim_max,
+                                  a_att_max=env.inner.a_att_max)
     assert env.commits, "커밋이 없어 검정 불가"
     assert env.commits[0].margin == pytest.approx(margin_expect)
 

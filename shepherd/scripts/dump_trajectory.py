@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse, json, pathlib
 import numpy as np
 
+from shepherd.env_sys import commit_margin as _commit_margin
 from shepherd.scripts.recoverability_probe import (MISS_EPISODES, _Driver,
                                                    _build, _sysenv)
 
@@ -103,11 +104,11 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
         tau_kill=float(se.spec.tau_kill),
         n_kill=int(max(round(se.spec.tau_kill / env.dt), 1)),
         p_kill=float(se.spec.p_kill),
-        # 커밋 기하 판정 반경 (env_sys.py:314-315 과 동일 식).
+        # 커밋 기하 판정 반경 -- env_sys.commit_margin 이 단일 정의원 (R-001).
         # a_lim < a_att 면 **음수**가 될 수 있다 -- 그때는 커밋해도 기하 미충족.
-        commit_margin=float(
-            (se.spec.r_commit if se.spec.r_commit is not None else env.kill_radius)
-            + 0.5 * (se.a_lim_max - env.a_att_max) * se.spec.tau_kill ** 2),
+        commit_margin=float(_commit_margin(
+            se.spec, kill_radius=env.kill_radius,
+            a_lim_max=se.a_lim_max, a_att_max=env.a_att_max)),
         net_radius=float(env.net_radius),
         tau_deploy=float(env.tau_deploy),
         cone_half_angle=float(env.cone_half_angle),

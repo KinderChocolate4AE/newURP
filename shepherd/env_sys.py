@@ -55,7 +55,7 @@ import numpy as np
 from shepherd.game.finisher_fsm import FinisherState
 
 __all__ = ["SystemSpec", "RewardSpec", "CommitRecord", "ModeSystemEnv",
-           "PARK_POSITION", "ratified_system"]
+           "PARK_POSITION", "ratified_system", "commit_margin"]
 
 _EPS = 1e-12
 
@@ -244,6 +244,37 @@ def _seg_min_dist(r0, r1) -> float:
     return float(np.linalg.norm(r0 + t * d))
 
 
+def commit_margin(spec: Optional[SystemSpec], *, kill_radius: float,
+                  a_lim_max: float, a_att_max: float) -> float:
+    """★ 커밋 기하 판정 반경의 **단일 정의원** (R-001).
+
+        margin = r_commit + 0.5*(a_lim_max - a_att_max)*tau_kill^2
+        r_commit = spec.r_commit if spec.r_commit is not None else kill_radius
+
+    WHY 한 곳에만 두는가
+    --------------------
+    limiter 가 커밋 비트를 세우는 술어(`mission_rollout.intercept_limiter` 의
+    `d_nom <= margin`)와 env 가 그 커밋을 해소하는 술어(`step()` 의
+    `geometric_ok`)는 **같은 반경**이어야 한다. 두 곳에 복사돼 있던 동안
+    `mission_rollout` 쪽이 `spec.r_commit` 을 읽지 않았고, `ratified_system()`
+    이 `r_commit=None` 이라 우연히 값이 같아 아무 테스트도 깨지지 않았다.
+    `r_commit` calibration 을 여는 순간 limiter 의 **결정** 반경과 env 의
+    **해소** 반경이 갈라진다 -- 그때 갈라지는 것은 진단값이 아니라 종말 라벨이다
+    (`tests/test_commit_margin_single_source.py` 가 이를 고정한다).
+
+    `a_lim < a_att` 면 **음수**가 될 수 있다 -- 그때는 커밋해도 기하 미충족이다.
+
+    `spec is None` 은 동결 env 경로다 (`ModeSystemEnv` 래퍼 없음). 그 경로에서
+    커밋 비트는 env 가 무시하므로 값은 inert 하지만, 선언된 기본 계약
+    (`SystemSpec()`) 을 쓴다 -- 고아 상수를 남기지 않는다.
+    """
+    if spec is None:
+        spec = SystemSpec()
+    r_commit = (float(spec.r_commit) if spec.r_commit is not None
+                else float(kill_radius))
+    return r_commit + 0.5 * (float(a_lim_max) - float(a_att_max)) * spec.tau_kill ** 2
+
+
 class ModeSystemEnv:
     """동결 env 를 감싸 하드킬 방아쇠와 no-kinetic 가드를 얹는다.
 
@@ -323,10 +354,9 @@ class ModeSystemEnv:
                 proposals.append(i)
 
         # --- 2. 커밋 시점에 판정 상태를 동결 (네트 S5 규약과 동일) ------------
-        r_commit = (float(spec.r_commit) if spec.r_commit is not None
-                    else float(inner.kill_radius))
-        margin = (r_commit
-                  + 0.5 * (self.a_lim_max - inner.a_att_max) * spec.tau_kill ** 2)
+        margin = commit_margin(spec, kill_radius=inner.kill_radius,
+                               a_lim_max=self.a_lim_max,
+                               a_att_max=inner.a_att_max)
         for i in proposals:
             p_lim, v_lim = inner._p(lims[i]), inner._v(lims[i])
             rel_p = p_att - p_lim

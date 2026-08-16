@@ -186,10 +186,15 @@ def _limiter_actions(env, scn, lay, mode, lims, p_att, v_att, limiter_kw=None):
                                           a_max=scn.limiter.a_max)
                 for i, lid in enumerate(env.limiter_ids)}
     if mode == "intercept":
+        # ★ R-001: 커밋 반경은 env_sys.commit_margin 이 단일 정의원이다.
+        #   여기서 다시 쓰면 limiter 의 **결정** 반경과 env 의 **해소** 반경이
+        #   갈라진다 (`spec.r_commit` 이 열리는 순간 종말 라벨이 뒤집힌다).
+        from shepherd.env_sys import SystemSpec, commit_margin
         spec = getattr(env, "spec", None)
-        tau_k = 0.1 if spec is None else spec.tau_kill
+        tau_k = SystemSpec().tau_kill if spec is None else spec.tau_kill
         a_lim = getattr(env, "a_lim_max", scn.limiter.a_max)
-        margin = env.kill_radius + 0.5 * (a_lim - env.a_att_max) * tau_k ** 2
+        margin = commit_margin(spec, kill_radius=env.kill_radius,
+                               a_lim_max=a_lim, a_att_max=env.a_att_max)
         # lead_deltas: limiter 별 조준 시점 오프셋 (docs/83 §20 E4-1).
         # 없으면 전부 0.0 -> 기존 경로와 bit-identical.
         dl = (limiter_kw or {}).get("lead_deltas")
