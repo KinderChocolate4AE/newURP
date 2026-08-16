@@ -38,6 +38,24 @@ analytic bound 를 *conservative / partial characterization* 으로 낮춘다.
 | **뺌** | **E4-2 · T2 · MARL** | 다음 논문의 cooperative-control half |
 | **뺌** | **R4 measurement-debug history** | 본문에서 사라진다. 최종 correct metric 과 protocol 만 쓴다. reproducibility appendix / artifact history 에는 남는다 |
 
+### 2.1 R4 canonical pointer (본문 대신 reproducibility appendix 로)
+
+정정 이력(`0.043 → 0.190`)은 본문/appendix **어디에도 쓰지 않는다**. 최종 값만 쓴다:
+
+$$P(d_{m actual}\le r_{m contact})=0.190,\qquad P(d_{m oracle}\le r_{m contact})=0.883$$
+
+숫자 변경사를 설명하면 독자 시선이 science 대신 debugging history 로 간다.
+대신 reproducibility appendix 에 **한 문장**:
+
+> **For E3 proximity-derived diagnostics, `results/e3_oracle_r4.json` is the canonical
+> artifact. The pre-R4 `results/e3_oracle.json` is retained for provenance only; all
+> reported proximity statistics use the R4-corrected measurement contract.**
+
+repo 쪽에서는 논문 문장 하나에 의존하지 않고 **`results/README.md`** 에 기계가 읽을 수
+있는 canonical pointer 를 둔다 (전 실험 + `lead_time_r4` no-op 함정 포함). 네 구분을
+명시한다: old artifact **삭제 안 함** · old **proximity metrics** superseded ·
+old **outcome labels invalidated 아님** · `*_r4` 가 proximity metric 의 canonical source.
+
 Conclusion 마무리 문장:
 
 > *"The present work characterizes Map A; whether cooperative pre-commit control can
