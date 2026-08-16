@@ -191,17 +191,27 @@ def run_curve(seed0: int, episodes: int, *, mode: str = "hold",
             if any(r["episode"] != i for i, r in enumerate(records)):
                 raise ValueError(f"{out}: 체크포인트 에피소드 인덱스가 불연속이다")
 
+    def _payload(done: int) -> dict:
+        """★ 저장본과 반환값의 **단일 정의원** (R-007).
+
+        종전에는 `_save` 의 payload 와 함수 말미의 return 이 따로 있었고, 반환
+        쪽에만 `route_gain` / `sense_range` / `capture_terminates` 가 빠져 있었다.
+        `--out` 없이 부르면 계약을 모르는 요약이 나왔고, 두 곳이 갈라져도
+        아무것도 잡지 못했다 (감사 Session 2 X-004).
+        """
+        return {"mode": mode, "seed0": seed0, "n_done": done,
+                "n_target": episodes, "baseline_commit": commit,
+                "w_kill": w_kill, "level": level, "jink_amp": jink,
+                # ★ 수치감사 §G-② 대응: 캠페인을 정의하는 값은 아티팩트 자체에
+                #   남긴다 (파일명·노트로만 구분하던 사고 재발 방지).
+                "route_gain": route_gain, "sense_range": sense_range,
+                "capture_terminates": capture_terminates,
+                "records": records}
+
     def _save(done: int) -> None:
         if not out:
             return
-        payload = {"mode": mode, "seed0": seed0, "n_done": done,
-                   "n_target": episodes, "baseline_commit": commit,
-                   "w_kill": w_kill, "level": level, "jink_amp": jink,
-                   # ★ 수치감사 §G-② 대응: 캠페인을 정의하는 값은 아티팩트 자체에
-                   #   남긴다 (파일명·노트로만 구분하던 사고 재발 방지).
-                   "route_gain": route_gain, "sense_range": sense_range,
-                   "capture_terminates": capture_terminates,
-                   "records": records}
+        payload = _payload(done)
         tmp = out + ".tmp"
         with open(tmp, "w", encoding="utf-8") as f:
             json.dump(payload, f)
@@ -222,10 +232,7 @@ def run_curve(seed0: int, episodes: int, *, mode: str = "hold",
             _save(ep + 1)
             if log:
                 log(f"[{mode}] {ep + 1}/{episodes}")
-    return {"mode": mode, "seed0": seed0, "n_done": len(records),
-            "n_target": episodes, "baseline_commit": commit,
-            "w_kill": w_kill, "level": level, "jink_amp": jink,
-            "records": records}
+    return _payload(len(records))
 
 
 # ----------------------------------------------------------------------- 집계
