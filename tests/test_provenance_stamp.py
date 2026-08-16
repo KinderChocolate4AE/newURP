@@ -89,59 +89,86 @@ def repo(tmp_path_factory):
     return d
 
 
+#: 생성기 전이 의존을 **신선한 인터프리터**에서 재는 프로브.
+#:
+#: ★ 첫 초안은 이 검사를 in-process 로 했다가 전체 suite 에서만 실패했다:
+#:   `sys.modules` 는 **다른 테스트가 로드한 것까지** 들고 있어서
+#:   (`tests/test_net_forward.py` · `test_viability.py` 가 `prototypes/` 를 직접
+#:   로드한다) 그 오염을 "생성기가 scope 밖을 import 한다" 로 오인했다.
+#:   측정 대상이 "생성기가 무엇을 import 하는가" 이므로 **프로세스를 격리**해야 한다.
+_SCOPE_PROBE = r'''
+import importlib, io, json, pathlib, sys
+sys.path.insert(0, ".")
+root = pathlib.Path(".").resolve()
+roots = tuple(r + "/" for r in %(roots)r)
+
+gens = []
+for base in ("shepherd", "viz", "scripts"):
+    d = root / base
+    if not d.exists():
+        continue
+    for p in d.rglob("*.py"):
+        if "__pycache__" in p.parts or p.name == "pivot_manifest.py":
+            continue
+        try:
+            src = io.open(p, encoding="utf-8").read()
+        except Exception:
+            continue
+        if "stamp(" in src:
+            gens.append(p.relative_to(root).as_posix())
+
+out_of_scope_gen = [g for g in gens if not g.startswith(roots)]
+for g in gens:
+    if g.startswith(roots):
+        importlib.import_module(g[:-3].replace("/", "."))
+
+outside = set()
+for mod in list(sys.modules.values()):
+    f = getattr(mod, "__file__", None)
+    if not f:
+        continue
+    try:
+        q = pathlib.Path(f).resolve()
+    except Exception:
+        continue
+    if root not in q.parents:
+        continue
+    rel = q.relative_to(root).as_posix()
+    if not rel.startswith(roots):
+        outside.add(rel)
+
+print(json.dumps({"n_gens": len(gens), "out_of_scope_gen": out_of_scope_gen,
+                  "outside": sorted(outside)}))
+'''
+
+
 def test_r025_scope_is_closed_under_the_declared_roots():
     """★ scope 가 선언된 root 로 닫혀 있는지 -- 편의가 아니라 감사 결과여야 한다.
 
     `stamp()` 를 부르는 생성기 전부의 전이 의존이 `SCIENCE_CODE_ROOTS` 안에
-    있는지 실제로 import 해서 확인한다. root 가 부족하면 scope 밖 파일을 고치고
-    돌려도 `code_dirty=False` 가 나오는 **false-negative provenance** 가 된다.
+    있는지 **신선한 인터프리터**에서 실제 import 해 확인한다. root 가 부족하면
+    scope 밖 파일을 고치고 돌려도 `code_dirty=False` 가 나오는
+    **false-negative provenance** 가 된다.
     """
-    import importlib
-    import io
+    import json
     import pathlib
+    import subprocess
     import sys
 
     root = pathlib.Path(__file__).resolve().parents[1]
-    gens = []
-    for base in ("shepherd", "viz", "scripts"):
-        d = root / base
-        if not d.exists():
-            continue
-        for p in d.rglob("*.py"):
-            if "__pycache__" in p.parts or p.name == "pivot_manifest.py":
-                continue
-            try:
-                src = io.open(p, encoding="utf-8").read()
-            except Exception:                              # pragma: no cover
-                continue
-            if "stamp(" in src:
-                gens.append(p.relative_to(root).as_posix())
+    r = subprocess.run([sys.executable, "-c",
+                        _SCOPE_PROBE % {"roots": SCIENCE_CODE_ROOTS}],
+                       cwd=str(root), capture_output=True, text=True)
+    assert r.returncode == 0, f"scope 프로브 실패:\n{r.stderr[-2000:]}"
+    got = json.loads(r.stdout.strip().splitlines()[-1])
 
-    assert gens, "생성기 스캔이 비었다 -- 공허한 통과 방지"
-    for rel in gens:
-        assert rel.startswith(tuple(r + "/" for r in SCIENCE_CODE_ROOTS)), \
-            f"선언된 scope 밖에 stamped-artifact 생성기가 있다: {rel}"
-        importlib.import_module(rel[:-3].replace("/", "."))
-
-    outside = set()
-    for mod in list(sys.modules.values()):
-        f = getattr(mod, "__file__", None)
-        if not f:
-            continue
-        try:
-            q = pathlib.Path(f).resolve()
-        except Exception:                                  # pragma: no cover
-            continue
-        if root not in q.parents:
-            continue                                       # 서드파티
-        rel = q.relative_to(root).as_posix()
-        if not rel.startswith(tuple(r + "/" for r in SCIENCE_CODE_ROOTS)):
-            outside.add(rel)
-    # tests/ 자신은 pytest 가 로드하므로 제외하고 본다
-    outside = {r for r in outside if not r.startswith("tests/")}
-    assert not outside, (
-        f"생성기가 scope 밖 리포 코드를 import 한다 -- SCIENCE_CODE_ROOTS 확장 필요: "
-        f"{sorted(outside)}")
+    assert got["n_gens"] >= 15, \
+        f"생성기 스캔이 {got['n_gens']} 개뿐 -- 공허한 통과 방지"
+    assert not got["out_of_scope_gen"], \
+        f"선언된 scope 밖에 stamped-artifact 생성기가 있다: {got['out_of_scope_gen']}"
+    assert not got["outside"], (
+        "생성기가 scope 밖 리포 코드를 import 한다 -- SCIENCE_CODE_ROOTS 확장 필요: "
+        f"{got['outside']}")
 
 
 # --------------------------------------------------- 3분할 계약 (4-way) ---
