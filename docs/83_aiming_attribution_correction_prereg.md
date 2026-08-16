@@ -2201,3 +2201,92 @@ paired bootstrap (20 000 resample) CI95 가 0 을 배제해야 한다.
   interior optimal axial commit distance."*
 - **실제 closed-loop 에서 그 `ax*` 에 도달할 수 있는가는 별개 문제**이며, 본 실험은 그에
   대해 아무것도 말하지 않는다 (B2 / cooperative shaping 질문으로 남긴다).
+
+---
+
+# 33. E1e 판정 — **E1e-A (보정 법칙 확인, 사후 → confirmatory 승격)**
+
+실행 `47268e1` (회귀 5/5) · 결과 `e3d1fbd` · `results/e1e.json` · fresh seeds
+`31000..31299` · n=300/arm · Pass 1 4-arm 공유 · ideal aim (psi=0).
+판정은 스크립트가 §32.4 동결표를 그대로 적용해 산출했다.
+
+## 33.1 Primary — shape (§32.3), 세 가설 전부 성립
+
+| # | 대조 | 차 | CI95 | 판정 |
+|---|---|---|---|---|
+| H1 | P_C(6.75) − P_C(5.50) | **+0.0433** | [+0.0200, +0.0700] | HOLDS |
+| H2 | P_C(6.75) − P_C(7.90) | **+0.2400** | [+0.1933, +0.2900] | HOLDS |
+| **H3 (판별)** | P_C(6.75) − P_C(7.20) | **+0.1033** | [+0.0700, +0.1400] | **HOLDS** |
+
+**H3 가 이 실험의 전부다.** ax 7.20 에서 기존 lateral-only 법칙은 a* 34.45 (증가) 를,
+보정 법칙은 22.67 (감소) 를 예측했다. 관측은 **감소** — 미관측 지점에서 두 법칙이 반대
+방향을 예측했고 보정 법칙이 맞았다.
+
+역 U 형태 확인:
+
+| arm | ax (realized med) | **P_C** | Wilson 95% |
+|---|---|---|---|
+| E-1 | 5.4810 | 0.2333 | [0.189, 0.284] |
+| **E-2** | **6.7244** | **0.2767** | [0.229, 0.330] |
+| E-3 | 7.1938 | 0.1733 | [0.135, 0.220] |
+| E-4 | 7.8041 | 0.0367 | [0.021, 0.065] |
+
+정점이 E-2 (realized ax 6.7244) 이고 예측 최적은 `ax* = 6.7635` 다.
+**단, 4 점만으로 최적의 위치를 특정했다고 쓰지 않는다** — 확인된 것은 *"가운데가 양쪽보다
+높다"* 이지 *"최적이 6.76 에 있다"* 가 아니다.
+
+## 33.2 Secondary
+
+**S1 (사전등록 수락 기준 ≥ 0.95) — PASS.** episode-level 마진 `m = a*(ax_realized) − a_att`
+의 `m > 0 ⇒ capture` 분류 정확도: **0.9967 / 0.9933 / 0.9900 / 1.0000**. 기준을 결과 전에
+동결했으므로 이번 값은 rubber stamp 가 아니다.
+
+**S2 — 형태는 맞고 수준은 계통적으로 낙관.**
+
+| arm | a*₅₀ (관측) | 예측 a* | 비 |
+|---|---|---|---|
+| E-1 | 22.39 | 26.32 | 0.8509 |
+| E-2 | 27.03 | 32.30 | 0.8368 |
+| E-3 | 19.59 | 22.67 | 0.8641 |
+| E-4 | **정의 불가** | 7.11 | — (**예측대로**) |
+
+비 = **0.8506 ± 0.0111** (세 팔). 편차가 극히 작다 = 잡음이 아니라 **계통 편향**이다.
+E-4 의 `cross50` 이 정의되지 않는 것은 §32.5 S2 가 예측한 그대로다 (예측 a* 7.11 <
+브래킷 하한 11).
+
+> **새 소득 (사후, 확인 필요 아님 — 관측 사실)**: 보정 법칙은 a* 의 **점 예측기가 아니라
+> 약 15 % 낙관적인 단측(상한) 경계**다. 세 팔에서 비가 0.837 ~ 0.864 로 안정적이다.
+> 이는 프로젝트의 *optimistic outer bound* framing 과 정합한다.
+
+**S3 (참고, pass/fail 아님)**: 주변 예측 포획률 vs 관측 —
+E-1 0.229 vs 0.2333 (**+0.004**) · E-2 0.318 vs 0.2767 (−0.041) ·
+E-3 0.174 vs 0.1733 (**−0.001**) · E-4 0.000 vs 0.0367 (+0.037).
+E-1/E-3 은 거의 일치하고 E-2 에서 과대예측한다.
+
+**S4**: 전 분석이 realized ax 기준. psi_at_commit 은 네 팔 모두 정확히 0.0000 deg
+(perfect aim 계약대로).
+
+## 33.3 정본 / 금지
+
+- **정본 (§32.7 최대 표현, 이제 fresh seed 로 확인됨)**:
+  *"Under the registered idealized commit counterfactual, the active geometric constraint
+  switches from lateral cone clearance to far-edge range clearance, producing an interior
+  optimal axial commit distance."*
+- 추가 정본: *"The resulting bound is optimistic by a stable factor of about 15 percent
+  across the tested arms and should be used as a one-sided bound, not as a point predictor."*
+- **금지 (§32.7 유지)**: "net capture physics 를 설명했다" / perfect aim 결과를 **시스템
+  성능**으로 읽기 / **최적 위치를 6.76 으로 특정** / closed-loop 에서 그 ax 에 도달
+  가능하다는 주장 (별개 문제, B2 / cooperative shaping 으로 남긴다).
+
+## 33.4 상태 전이
+
+- §28.3 의 보정 법칙: **사후(post-hoc) → confirmatory 승격.** C038 의 *"fresh seed 확인 전
+  승격 금지"* 조건 해제.
+- E1d 판정(§28, primary REFUTED)은 **그대로 유효**하다. E1e 는 E1d 를 뒤집는 것이 아니라
+  E1d 가 남긴 사후 가설을 닫는다.
+
+## 33.5 ★ arXiv v0 science freeze
+
+**docs/84 §5 의 계획대로, 본 판정 커밋을 arXiv v0 의 science freeze point 로 선언한다.**
+이후 실험(새 geometry 축 · E4-2 · T2 · MARL · Δ_coop 층)은 **v0 와 병렬인 다음 branch**
+이며 v0 본문에 들어가지 않는다. v0 는 이제 **집필 단계**다.
