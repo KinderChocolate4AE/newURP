@@ -84,8 +84,18 @@ def test_p63b_v_shot_index_points_at_the_real_channel():
     assert obs_index_v_shot(off) == idx
 
 
+@pytest.mark.torch
 def test_p63c_probe_positive_control_and_threshold():
-    """양성 대조 1.0 + 단일 임계가 라벨을 재현한다 (= 표현의 한계가 아니다)."""
+    """양성 대조 1.0 + 단일 임계가 라벨을 재현한다 (= 표현의 한계가 아니다).
+
+    ★ torch 표시 (R-009): `probe()` 는 `_fit_logistic` 에서 `import torch` 한다
+    (fire_audit.py:123). 마커가 없던 동안 torch-free 환경에서 이 테스트가 실행돼
+    **a3d_calibration 이 심어 둔 가짜 torch** 를 잡고 8 줄 뒤에서
+    `TypeError: '_Base' object is not subscriptable` 로 죽었다 -- 실패 지점이
+    진짜 원인(torch 부재)에서 멀어 오진을 유발했다 (Session 2 X-009).
+    판정 로직은 `conftest._torch_status` 가 이미 갖고 있으므로 여기서는
+    **소비만** 한다 (bare `import torch` 로 새 skip 로직을 만들지 않는다).
+    """
     d = collect_fire_dataset(episodes=30, seed0=0)
     assert d["y"].sum() > 0, "교차가 한 번도 안 났다 -- episodes 를 늘릴 것"
     r = probe(d, train_frac=0.6)
