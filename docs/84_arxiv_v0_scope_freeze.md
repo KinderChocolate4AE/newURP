@@ -42,7 +42,7 @@ analytic bound 를 *conservative / partial characterization* 으로 낮춘다.
 
 정정 이력(`0.043 → 0.190`)은 본문/appendix **어디에도 쓰지 않는다**. 최종 값만 쓴다:
 
-$$P(d_{	ext{actual}} \le r_{	ext{contact}}) = 0.190, \qquad P(d_{	ext{oracle}} \le r_{	ext{contact}}) = 0.883$$
+`P(d_actual <= r_contact) = 0.190`  ·  `P(d_oracle <= r_contact) = 0.883`
 
 숫자 변경사를 설명하면 독자 시선이 science 대신 debugging history 로 간다.
 대신 reproducibility appendix 에 **한 문장**:
