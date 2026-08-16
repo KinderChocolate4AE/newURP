@@ -131,3 +131,85 @@ generic 한 *"드론 위협 증가 · jamming · radar …"* 문헌을 두 페�
 
 *연관: 사전등록/판정 정본 = `docs/83` · 순서 규율 = `docs/81` · 미팅 브리핑 = `docs/82` ·
 claim registry = `artifacts/audits/claim_registry.tsv`*
+
+---
+
+## 6. Experimental Protocol 표 (v0 §5 용, 반 페이지)
+
+**랜덤화는 정확히 3곳** (`m4_env.build_m4_env` :139-149). 전부 SHA-256 결정론이라
+`(seed, episode)` 로 재현된다.
+
+| 종류 | 변수 | 처리 |
+|---|---|---|
+| Randomized threat | `a_att` | `U[11, 78]` m/s² (하한 = Pliska 실측, 상한 = 선언) |
+| Randomized threat | `v_att` | `U[8, 30]` m/s (하한 = Pliska 실측, 상한 = 선언) |
+| Randomized spawn | `dx`, `r_lat` | 회랑축 ±2.0 m · y-z 균일 원반 r=5.0 m |
+| Random nuisance | jink phase | `U[0, 2π)` |
+| **Coupled** defender | `a_lim / a_att` | **0.35** (Pliska 비율) |
+| **Coupled** defender | `v_lim / v_att` | **1.00** |
+| **Coupled** adversary | `v_adv / v_att` | 1.50 |
+| Fixed | `τ, ρ, θ, R_max, r_kill, r_nk, dt, N` | registered operating point |
+
+**반드시 함께 쓸 두 문장** (독자가 오해하는 지점):
+
+1. 방어자 능력은 **독립 변수가 아니라 위협에 연동**된다 (`CAPABILITY_RATIOS`). 따라서
+   자유 랜덤화 축은 위협 1 축 · 스폰 오프셋 · jink 위상뿐이다.
+2. **방어자 배치는 랜덤화되지 않는다.** 링은 `[8,0,0]` 중심 · 반경 5 · y-z 스크린 고정이며,
+   x 축 회전 랜덤화는 §31 에서 **게이지(relabeling)** 로 판정돼 정보가 없다.
+
+### 동반 문단 (동결)
+
+> The dimensional parameters of the environment are organized into **12 registered
+> dimensionless groups**. The present paper evaluates only the registered operating slice
+> relevant to the feasibility study; systematic reduction of this coordinate space is
+> treated separately.
+
+**주의**: *"can be represented by 12"* 라고 쓰지 않는다 — Π inventory 가 **미등록 3 군**
+(`k_f·τ`, `r_lat/ρ`, `T_reach/τ`) 을 이미 적발했으므로 완비 주장은 거짓이다.
+*"organized into 12 registered groups"* 로 쓴다.
+
+---
+
+## 7. Post-v0 branch — parameter/cooperation map
+
+**이미 있는 것 (재구축 금지)**
+
+| 층 | 산출물 |
+|---|---|
+| 원시 파라미터 레지스트리 | `shepherd/params.py` — 104 개 × 7 필드 (value/units/status/wired/where/source/note) |
+| 차원 전수 + Buckingham 근거 | `temp_research_note/2026-08-13_pi_inventory_full_classification.md` §B (raw 36) |
+| 등록 무차원 좌표 | `lattice_spec.PI_GROUPS` — 12 군 (core 3 + conditioning 7 + 이산 1 + 수치 1) |
+| **dimensional closure 검증** | `gate10_isopi.py` (iso-Π, bit 수준, bar 1e-6) · `gate11_system_similarity.py` (closed-loop) |
+| **iso-core 1 축 섭동 + 사전등록 허용오차** | `docs/78` r4 §C-4 (bar med 0.02 / p95 0.05 · 문턱 `n_inf ≥ 50`, 재실행 전 봉인) |
+| **등급 어휘** | `GOVERNING` / `NUISANCE-SUPPORTED` / `INACTIVE·NON-IDENTIFIABLE` / `INVALID·CONFOUNDED` + 공허 가드 `INCONCLUSIVE` |
+| 판정 결과 | Gate 10 Tier2 r4 — **core-only 기각**, `shape`(=R_max·tanα) 와 `eta` 가 **GOVERNING** |
+| 완비성 실패 사례 | 미등록 3 군: `k_f·τ`(하드코딩 fwd_gain, T1-T.system FAIL 원인) · `r_lat/ρ` · `T_reach/τ`(정규화 **상태 좌표** 누락) |
+| 과대표현 정정 선례 | 같은 노트 §B — *"34 개 독립군 존재"* 는 과한 표현이라고 이미 자기정정 (ρ = R_max·tanα 대수 의존 적발) |
+
+**framing (고정)**: 목표는 *"고른 4 개를 정당화"* 가 아니라 **12 차원에서 tested regime 의
+최소 governing subset 을 falsification-driven 하게 식별**하는 것이다. core 3 + N 은
+**basis 가 아니라 candidate reduced coordinates** 이며, core-only sufficiency 는 이미 기각됐다.
+
+**아직 없는 것 (= 이 branch 의 실제 신규 작업)**
+
+1. **`Δ_coop` 층.** 지금까지의 감도는 전부 `Π → feasibility` 다.
+   `Δ_coop(Π) = P_coop(Π) − P_single(Π)` 로 **협력의 한계가치** 를 응답으로 두는 층은 없다.
+   이게 있어야 파라미터 맵이 성능 phase diagram 이 아니라 **cooperation-value map** 이 된다.
+   *(주의: 어떤 좌표가 feasibility 를 움직인다 ≠ 그 좌표가 협력 필요성을 결정한다. 두 단계다.)*
+2. **통합 지도 아티팩트.** 위 재료가 `params.py` / `docs/78` / Gate 10 노트 3 편 / Π inventory /
+   numeric audit 에 흩어져 있다. 12 축 × (정의 · 물리 의미 · tested range · provenance ·
+   status) 한 장 + `12-D → similarity validation → iso-core perturbation → governing subset`
+   흐름도가 methodological figure 후보다.
+3. 미등록 3 군의 처리 종결 (`k_f` 는 게이트 11 에서 explicit param 승격 후 재검증 중).
+
+**Buckingham 이 보장하는 범위 (본문에 쓸 때 이 선을 넘지 않는다)**
+
+> 등록한 governing-variable set 이 simulator semantics 를 **완비했다면** dimensionless
+> outcome 은 불변이어야 한다.
+
+"12 개만 맞추면 bit-exact 가 보장된다" 는 정리가 아니다. 실패 시 후보는 넷:
+① 숨은 dimensional parameter · ② 누락된 Π 군 · ③ 미등록 **algorithmic** dimensionless 상수 ·
+④ discrete implementation (`dt/τ`, event ordering, clipping) 이 similarity 를 깨뜨림.
+**본 repo 는 이미 ①(`k_f`)·②(`T_reach/τ`)·③(`k_f·τ`) 의 실제 사례를 적발했다.**
+`gate11_system_similarity.py` 도 *"상사성 '보장' 이라 쓰지 않는다 — 유한 시험이므로"* 라고
+명시하고 목표를 **Level 2 (registered scripted encounter similarity)** 로 한정한다.
