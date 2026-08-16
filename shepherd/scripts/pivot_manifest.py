@@ -20,7 +20,21 @@ import json
 import pathlib
 import subprocess
 
-__all__ = ["PROTOCOL_FILES", "PHASE_FILES", "sha256_of", "build_manifest", "stamp"]
+__all__ = ["PROTOCOL_FILES", "PHASE_FILES", "sha256_of", "build_manifest", "stamp",
+           "SCIENCE_CODE_ROOTS", "dirty_state"]
+
+#: ★ 실험 outcome 을 만드는 실행 코드의 root (R-025).
+#:
+#: "편의상 shepherd 만" 이 아니라 **감사로 확인한 scope** 다 -- `stamp()` 를 부르는
+#: 생성기 21 개를 전부 import 해 `sys.modules` 를 훑었을 때 리포 안에서 로드된
+#: 모듈 중 이 root 밖은 0 개였다 (2026-08-17). scope 가 넓어지면
+#: `tests/test_provenance_stamp.py::test_r025_scope_is_closed_under_the_declared_roots`
+#: 가 먼저 깨진다.
+#:
+#: `tests/` 는 **제외한다**: regression contract 이지 science execution path 가
+#: 아니다. 테스트만 고친 상태로 캠페인을 돌린 결과를 "실행 코드가 dirty" 로 표시하면
+#: provenance 의미가 흐려진다. 그 변경은 `tracked_dirty` 가 잡는다.
+SCIENCE_CODE_ROOTS = ("shepherd",)
 
 # 전환 계약 본체 (이 파일들의 해시가 protocol_hash 를 만든다)
 PROTOCOL_FILES = (
@@ -82,6 +96,44 @@ def _git(*args) -> str:
         return "unknown"
 
 
+def dirty_state(repo: str | None = None) -> dict:
+    """작업 트리 상태를 **세 질문으로 분리**해 보고한다 (R-025).
+
+        code_dirty         결과를 만든 실행 코드가 stamped commit 과 다른가
+        tracked_dirty      tracked snapshot 전체가 clean 했는가 (docs·tests 포함)
+        untracked_present  실행 중 생성된 미추적 산출물이 있었는가
+
+    WHY 셋으로 쪼개는가 (감사 Session 2 X-002)
+    ------------------------------------------
+    종전 구현은 `bool(_git("status", "--porcelain"))` 하나였다. `--porcelain` 은
+    untracked 를 포함하므로 **실행이 자기 출력을 레포 안에 쓰는 순간 참**이 된다 --
+    모든 실행이 그렇게 한다. 실제로 `results/` 의 stamped artifact 16/16 이
+    `code_dirty: true` 였고, 포렌식 결과 14/16 은 `code_commit` 과 기록 커밋 사이
+    `shepherd/` diff 가 0 이었다. 즉 플래그가 "코드를 고쳤다" 와 "파일을 만들었다" 를
+    구분하지 못해 provenance 신호로서 거의 무의미했다.
+
+    셋을 **독립 명령**으로 계산한다 (한 결과를 재파싱해 나누지 않는다) -- 의미가
+    섞이지 않게 하기 위해서다.
+
+    ★ 과거 artifact 는 backfill 하지 않는다. 그때의 `code_dirty=true` 는 그때의
+      계약 아래에서 사실이었다 (docs/81 §1-2 historical preservation).
+
+    `repo` 는 테스트용이다 -- provenance 함수가 **주변 작업 트리 상태에 의존해서만**
+    검증 가능하면 개발 중에는 항상 깨지고 CI 에서는 우연히 통과한다. 임시 저장소를
+    가리켜 정책 자체를 격리 검증할 수 있게 둔다 (기본 None = 현재 리포).
+    """
+    pre = ("-C", repo) if repo else ()
+    tracked = _git(*pre, "status", "--porcelain", "--untracked-files=no")
+    code = _git(*pre, "status", "--porcelain", "--untracked-files=no", "--",
+                *SCIENCE_CODE_ROOTS)
+    untracked = _git(*pre, "ls-files", "--others", "--exclude-standard")
+    return {
+        "code_dirty": bool(code) and code != "unknown",
+        "tracked_dirty": bool(tracked) and tracked != "unknown",
+        "untracked_present": bool(untracked) and untracked != "unknown",
+    }
+
+
 def _hashes(names) -> dict:
     out = {}
     for n in names:
@@ -116,7 +168,7 @@ def build_manifest(*, in_flight: dict | None = None) -> dict:
         "phase3_cells_generated_so_far": PHASE3_CELLS_GENERATED_SO_FAR,
         "protocol_hash": protocol_hash,
         "code_commit": _git("rev-parse", "HEAD"),
-        "code_dirty": bool(_git("status", "--porcelain")),
+        **dirty_state(),                       # R-025: code / tracked / untracked 분리
         "protocol_files": protocol,
         "phase_files": _hashes(PHASE_FILES),
         "in_flight": in_flight or {
@@ -170,7 +222,7 @@ def stamp(**extra) -> dict:
     out = {
         "protocol_hash": protocol_hash,
         "code_commit": _git("rev-parse", "HEAD"),
-        "code_dirty": bool(_git("status", "--porcelain")),
+        **dirty_state(),                       # R-025: code / tracked / untracked 분리
         "judge_commit": judge.hexdigest()[:16],
         "scenario_manifest_hash": None,
         "map_spec_hash": None,

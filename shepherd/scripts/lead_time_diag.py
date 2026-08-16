@@ -29,7 +29,7 @@ T1 의 route 항은 `sense_range` 안의 limiter 만 본다. 등록값 30 m 를 
   3. closest     최근접 거리 (contact miss distance) 와 그 시각
   4. 순서        침투가 먼저인가, limiter 가 늦게 도착하는가
 
-    python -m shepherd.scripts.lead_time_diag --n 300 --out results/lead_time_diag.json
+    python -m shepherd.scripts.lead_time_diag --n 300 --out results/lead_time_r4b.json
 
 torch-free.
 """
@@ -174,7 +174,7 @@ def main() -> None:
     ap.add_argument("--n", type=int, default=300)
     ap.add_argument("--start-x", type=float, nargs="*",
                     default=[24.0, 36.0, 48.0, 60.0])
-    ap.add_argument("--out", default="results/lead_time_diag.json")
+    ap.add_argument("--out", default="results/lead_time_r4b.json")
     a = ap.parse_args()
 
     base = float(m4_config()["train"]["layout"]["adversary_start_x"])

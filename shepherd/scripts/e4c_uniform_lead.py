@@ -14,7 +14,7 @@
 
 Primary = paired P_HK (§26.3). 판정 U1~U4 는 §26.4 동결.
 
-    python -m shepherd.scripts.e4c_uniform_lead --n 300 --out results/e4c_uniform.json
+    python -m shepherd.scripts.e4c_uniform_lead --n 300 --out results/e4c_uniform_r4.json
 
 torch-free.
 """
@@ -39,7 +39,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="E4-1c uniform lead (docs/83 §26)")
     ap.add_argument("--n", type=int, default=300)
     ap.add_argument("--ep0", type=int, default=EP0)
-    ap.add_argument("--out", default="results/e4c_uniform.json")
+    ap.add_argument("--out", default="results/e4c_uniform_r4.json")
     a = ap.parse_args()
     print(f"[E4-1c · docs/83 §26] n={a.n} · delta={list(DELTAS)} · "
           f"fresh seeds {a.ep0}..{a.ep0+a.n-1}", flush=True)

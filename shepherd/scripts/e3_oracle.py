@@ -18,7 +18,7 @@
 
 세계 = curve_sweep/E2-A 와 동일 (ratified + T1 + intercept + commit).
 
-    python -m shepherd.scripts.e3_oracle --n 300 --out results/e3_oracle.json
+    python -m shepherd.scripts.e3_oracle --n 300 --out results/e3_oracle_r4.json
 
 torch-free.
 """
@@ -135,7 +135,7 @@ def episode_e3(ep: int) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser(description="E3 oracle + per-limiter (docs/83 §18)")
     ap.add_argument("--n", type=int, default=300)
-    ap.add_argument("--out", default="results/e3_oracle.json")
+    ap.add_argument("--out", default="results/e3_oracle_r4.json")
     a = ap.parse_args()
     print(f"[E3 · docs/83 §18] n={a.n} · 세계 = curve_sweep/E2-A 동일 "
           f"(ratified + T1 + intercept + commit)", flush=True)

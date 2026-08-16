@@ -18,7 +18,7 @@ Primary (§24.3) — 양자화 대응
 
 판정 M1~M4 는 §24.4 에 동결. 결과를 보고 바꾸지 않는다.
 
-    python -m shepherd.scripts.e4b_matched --n 300 --out results/e4b_matched.json
+    python -m shepherd.scripts.e4b_matched --n 300 --out results/e4b_matched_r4.json
 
 torch-free.
 """
@@ -69,7 +69,7 @@ def _summ(rows: list) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser(description="E4-1b matched-mean (docs/83 §24)")
     ap.add_argument("--n", type=int, default=300)
-    ap.add_argument("--out", default="results/e4b_matched.json")
+    ap.add_argument("--out", default="results/e4b_matched_r4.json")
     a = ap.parse_args()
     print(f"[E4-1b · docs/83 §24] n={a.n} · D={D_FIXED} · "
           f"control δ=0.125 vs diverse {{0,D/3,2D/3,D}} (평균 동일)", flush=True)

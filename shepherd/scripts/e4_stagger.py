@@ -24,7 +24,7 @@
 Primary 는 **mechanism** (range(t_min)) 이지 HK 가 아니다 (§20.4) -- 실패 시
 S1(구현 실패)과 S3(구현됐으나 무효)를 가르기 위함.
 
-    python -m shepherd.scripts.e4_stagger --n 300 --out results/e4_stagger.json
+    python -m shepherd.scripts.e4_stagger --n 300 --out results/e4_stagger_r4.json
 
 torch-free.
 """
@@ -121,7 +121,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="E4-1 temporal stagger (docs/83 §20)")
     ap.add_argument("--n", type=int, default=300)
     ap.add_argument("--deltas", type=float, nargs="*", default=[0.0, 0.125, 0.25])
-    ap.add_argument("--out", default="results/e4_stagger.json")
+    ap.add_argument("--out", default="results/e4_stagger_r4.json")
     a = ap.parse_args()
     print(f"[E4-1 · docs/83 §20] n={a.n} · D={a.deltas} · 세계 = E2-A 동일", flush=True)
 
