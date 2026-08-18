@@ -12,7 +12,13 @@ from __future__ import annotations
 import pathlib
 import re
 
-DOCS = pathlib.Path(__file__).resolve().parents[1] / "docs"
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+DOCS = ROOT / "docs"
+#: ★ 소스까지 확장 (Stage 5 준비, 2026-08-19). `curve_sweep` 모듈 docstring 이
+#: registry C031 의 금지 문구("두 번째 경계의 **검증**")를 단언으로 싣고 있었는데
+#: 이 스캔이 docs/ 만 봐서 놓쳤다 (Stage 4 에서 수동 발견). 주장은 문서에만 사는
+#: 것이 아니라 docstring 에도 산다.
+SRC = ROOT / "shepherd"
 
 RETRACTED = [
     ("하드킬 도피 (docs/48 정정 9)", re.compile(r"하드킬로\s*도[망피]")),
@@ -27,9 +33,22 @@ MARKERS = ("철회", "정정", "금지", "기각", "오독", "~~", "재인용", 
            "안 된다")   # "…로 읽으면 안 된다" 류의 명시적 부정 (docs/53 §형)
 
 
+def _scan_targets():
+    """docs 본문 + **소스 주석/docstring**. 둘 다 주장이 사는 곳이다."""
+    yield from sorted(DOCS.glob("*.md"))
+    yield from sorted(p for p in SRC.rglob("*.py") if "__pycache__" not in p.parts)
+
+
+def test_scan_covers_both_docs_and_source():
+    """반-theatre — 스캔이 두 표면을 실제로 훑는가."""
+    t = list(_scan_targets())
+    assert sum(1 for p in t if p.suffix == ".md") > 20, "docs 스캔이 비었다"
+    assert sum(1 for p in t if p.suffix == ".py") > 50, "소스 스캔이 비었다"
+
+
 def test_retracted_claims_do_not_reappear_unmarked():
     bad = []
-    for f in sorted(DOCS.glob("*.md")):
+    for f in _scan_targets():
         # review_prompt_* 는 리뷰어에게 보낸 프롬프트 원문 -- 역사 기록이라
         # 수정·검사 대상이 아니다 (감사 C005 판정: 수정 불요, 인용 금지만).
         if f.name.startswith("review_prompt_"):
