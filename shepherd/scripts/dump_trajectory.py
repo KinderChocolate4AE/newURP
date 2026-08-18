@@ -182,8 +182,18 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
             clean=bool(fi.get("clean_net_threshold_crossed", False)),
             d_asset=round(float(np.linalg.norm(
                 p_att - np.asarray(lay.target, float))), 3),
-            d_lim_min=round(min(float(np.linalg.norm(p_att - np.asarray(q, float)))
-                                for q in lim_pos), 3),
+            # ★ R-014 -- 두 양을 **이름으로 구분**한다 (감사 Session 2 X-007).
+            #   d_lim_min_display : 화면 좌표(주차 보정 포함) 위의 **끝점** 거리.
+            #     표기용이며 R4 가 superseded 로 선언한 계열이다. 주차된 limiter 는
+            #     마지막 실좌표에 고정돼 있으므로 은퇴 후에도 값이 계속 움직인다.
+            #   d_swept_min : `_Driver.d_min` 의 누적 최소 = **R4 권위 측정**
+            #     (swept 거리 · retired_pre 스냅샷 기준). 해소기와 같은 술어다.
+            #   종전에는 앞의 것만 "최근접 limiter" 로 실려 권위값처럼 읽혔다.
+            d_lim_min_display=round(min(
+                float(np.linalg.norm(p_att - np.asarray(q, float)))
+                for q in lim_pos), 3),
+            d_swept_min=(None if not np.isfinite(float(np.min(d.d_min)))
+                         else round(float(np.min(d.d_min)), 3)),
             events=new_ev,
         ))
         if hard_kill_step is None and bool(fi.get("hard_kill", False)):
@@ -202,11 +212,20 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
                     geometric_ok=bool(r.geometric_ok), source=r.source)
                for r in se.commits]
 
+    # ★ R-014: 에피소드 수준 권위 기록 (docs/83 §29 R4 측정계약).
+    #   호출부가 자체 거리 루프를 만들지 않도록 driver 값을 그대로 싣는다.
+    proximity = dict(
+        d_min=[None if not np.isfinite(float(x)) else round(float(x), 4)
+               for x in d.d_min],
+        t_min=[int(x) for x in d.t_min],
+        n_unmeasured=int(d.n_unmeasured),
+        contract="R4 (swept · retired_pre 스냅샷)")
+
     return dict(static=static, steps=steps, label=d.label,
                 fire_step=fire_step, net_center=net_center,
                 resolve_step=resolve_step, handoff_step=d.handoff_step,
                 hard_kill_step=hard_kill_step, terminal_step=terminal_step,
-                commits=commits,
+                commits=commits, proximity=proximity,
                 net_spent=bool(se.net_spent), group=None)
 
 

@@ -433,8 +433,10 @@ function readout() {
     ["boxed", s.boxed ? "예" : "—"],
     ["clean 게이트", s.clean ? "개방" : "—"],
     ["자산까지 (m)", s.d_asset.toFixed(2) + (s.d_asset <= e.static.r_nk ? "  (NK 안)" : "")],
-    ["최근접 limiter (m)", s.d_lim_min.toFixed(2)
-      + (s.d_lim_min <= (e.static.r_contact ?? e.static.kill_radius) ? "  (접촉권)" : "")],
+    ["최근접 (권위·누적 m)", s.d_swept_min == null ? "—" : (s.d_swept_min.toFixed(2)
+      + (s.d_swept_min <= (e.static.r_contact ?? e.static.kill_radius) ? "  (접촉권)" : ""))],
+    ["표시 끝점거리 (m)", (s.d_lim_min_display ?? s.d_lim_min).toFixed(2)
+      + "  (표기용 · 주차 보정 좌표)"],
     ["limiter 커밋중", (s.committed || []).length ? (s.committed).join(",") : "—"],
     ["limiter SPENT", (s.spent || s.retired || []).length
       ? (s.spent || s.retired).join(",") + ` (${(s.spent||s.retired).length}/${s.lims.length})` : "—"],
