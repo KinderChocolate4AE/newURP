@@ -192,7 +192,10 @@ def regime_of(a_att: float, tau: float, net_radius: float) -> str:
 
     `w = 0.5*a_att*tau^2` 가 `rho`(net_radius) 이하이면 조향 없이도 포획된다
     -- 조향의 방어가치가 0 이다. 위협 브래킷이 이 경계를 가로지르도록
-    선언되어 있다 (docs/40 §8.1, a* = 2*rho/tau^2 = 44.4 m/s^2).
+    선언되어 있다 (docs/40 §8.1). 현행 계약에서 a* = 2*rho/tau^2 = **39.33**
+    m/s^2 다 (rho 1.77 · tau 0.30). 44.4 는 rho=2.0 시절 값이라 고아가 됐다
+    -- 값은 `curve_sweep.a_star(cfg)` 가 config 에서 계산하며, 이 주석의
+    수치는 참고용이다 (감사 Session 3 C-008).
     """
     return ("SHAPING_NEEDED" if 0.5 * float(a_att) * float(tau) ** 2 > float(net_radius)
             else "FREE_CAPTURE")

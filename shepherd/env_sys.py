@@ -588,7 +588,20 @@ class ModeSystemEnv:
         return events
 
     def _outcome_label(self, terms, truncs, infos):
-        """보상용 결과 라벨. mission_rollout 의 라벨 규칙과 같은 술어를 쓴다."""
+        """보상용 결과 라벨.
+
+        `mission_rollout` 과 **같은 접촉 술어**(|p_att - c| <= kill_radius)를
+        쓰지만 **적용 범위가 다르다** -- 여기는 종료 tick 의 post-move 상태
+        한 장면만 보고, `run_episode` 는 전 스텝의 pre-move 상태를 집합으로
+        누적한다. 그래서 같은 판이 보상측 NET_CAPTURE / 지표측
+        CAPTURE_WITH_CONTACT 로 갈릴 수 있다.
+
+        ★ 이것은 결함이 아니라 **비준된 divergence** 다 (docs/66 행 12 "B1
+        divergence"). 두 라벨의 terminal 이 같으므로(+b_net) 학습 목표가
+        바뀌지 않고, `tests/test_terminal_truth_table.py::test_row12` 가 이
+        갈림을 의도적으로 재현해 고정한다. 종전 주석의 "같은 술어를 쓴다" 는
+        범위 차이를 숨겨 감사자가 결함으로 재유도하게 만들었다 (Session 3 C-017).
+        """
         fi = next(iter(infos.values()), {})
         if self.hard_kill:
             return "HARD_KILL"
