@@ -988,6 +988,16 @@ event.*
 
 # 17. 리드타임 진단 — **"시간 부족" 가설 기각** (EXPLORATORY)
 
+> ### * SUPERSEDED POINTER (R-015, 2026-08-17)
+> 이 절의 근접거리 수치는 **R4 이전 측정계약** 산물이다. append-only 규율(§29.6)에
+> 따라 본문은 고치지 않는다 -- 정정은 **§30.8 · §30.9** 에 있다.
+> * `closest approach 1.4-1.7 m` -> pooled 1.24-1.67 m (오염 수치였다)
+> * 침투 최소거리 ~0.75 m 는 **물리적 벽이 아니라 라벨 정의의 동어반복** 이며
+>   §30.9 에서 기전 증거로부터 **완전히 철회**됐다.
+> * canonical 산출물 = `results/lead_time_r4b.json` (`lead_time_r4.json` 은 no-op).
+> 원 결론(*"짧은 교전시간이 하드킬을 억제한다"* 기각)은 생존한다.
+
+
 산출물: `results/lead_time_diag.json` · `results/lead.log` (랩 서버 tmux, n=300/arm).
 **증거 등급 = EXPLORATORY / post-result diagnostic.** 등록 T1 이 아니라
 `sense = ∞` **진단 변형**이므로 등록 T1 수치와 나란히 놓지 않는다.
@@ -1221,6 +1231,16 @@ pursuit  ->  route occupation / cutoff  ->  cooperative shaping
 ---
 
 # 19. E3 판정 — **B: controller-limited on the realized attacker path**
+
+> ### * SUPERSEDED POINTER (R-015, 2026-08-17)
+> 이 절의 근접거리 수치는 **R4 이전 측정계약** 산물이다. 정정은 **§30.1 · §30.2**.
+> * `P(d_actual <= 0.75)` 0.043 -> **0.190**   (oracle 0.883 은 무영향)
+> * 최근접 중앙값 actual 1.482 -> **1.433**
+> * `range(t_min)` 중앙값 0.125 -> **0.150 s** (<=0.3 s 비율 0.953 은 양쪽 동일)
+> * canonical 산출물 = `results/e3_oracle_r4.json`.
+> registry **C039** 가 `"0.043 vs 0.883"` 인용을 금지한다. 인용은 **0.190 vs 0.883**.
+> 질적 결론(사용되지 않은 pathwise 요격 기회가 크다)은 생존한다.
+
 
 산출물: `results/e3_oracle.json` · `.log` (n=300, 세계 = curve_sweep/E2-A 동일).
 

@@ -157,6 +157,14 @@ claim registry = `artifacts/audits/claim_registry.tsv`*
 2. **방어자 배치는 랜덤화되지 않는다.** 링은 `[8,0,0]` 중심 · 반경 5 · y-z 스크린 고정이며,
    x 축 회전 랜덤화는 §31 에서 **게이지(relabeling)** 로 판정돼 정보가 없다.
 
+> **각주 (R-022, 2026-08-17)** — 여기서 말하는 *반경 5* 는 `lay.limiter_p0` 가
+> 실제로 놓이는 limiter 링 반경이다 (검증: 네 기체가 `[8,0,0]` 에서 정확히 5.0 m).
+> 코드에는 **이름이 비슷한 다른 값**이 있다: `lay.r_ring = 2.1` 은
+> `mission_rollout` 의 `ring` 성형 모드가 `scripted_shaping_limiter` 에 넘기는
+> **성형 링 반경**이고 배치와 무관하다. 두 값을 혼동하면 프로토콜 표가 틀린 것으로
+> 읽힌다 -- 표는 맞다 (감사 Session 3 §C.3). 필드 개명은 동결된 표를 건드리므로
+> 별도 정리 대상으로 남긴다.
+
 ### 동반 문단 (동결)
 
 > The dimensional parameters of the environment are organized into **12 registered

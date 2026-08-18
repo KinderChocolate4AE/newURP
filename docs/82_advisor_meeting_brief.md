@@ -4,6 +4,21 @@
 - **작성 방식**: 코드 전수감사(`artifacts/audits/environment_numeric_audit_2026-08-13.md`)에 이은 **산출물 감사** — docs 00→81 전체 + claim registry 30건 + 게이트 판정 전수 재구성.
 - 이 문서는 요약본. 모든 주장의 정본은 각 표의 근거 열에 있는 문서.
 
+> ### ★ SNAPSHOT / PARTIALLY STALE (R-016, 2026-08-17)
+> 이 문서는 **2026-08-13 · HEAD 43acc39 시점의 스냅샷**이다. 작성 당시에는 정확했고
+> append-only 규율에 따라 본문을 소급 수정하지 않는다. 다만 그 다음 날 R4 측정계약
+> 정정이 들어갔으므로 **아래 한 곳은 현재 인용 금지**다.
+>
+> * §3 행 (i) 의 *"실측 0.043"* -> canonical 은 **0.190** 이다
+>   (`results/e3_oracle_r4.json`, docs/83 §30.1). registry **C039** 가
+>   `"0.043 vs 0.883"` 인용을 명시적으로 금지한다.
+> * §3 행 (c) 의 *"T0+T1 각 n=2,700"* -> **T0 n=2700 곡선 아티팩트는 리포에 없다**
+>   (감사 Session 3 C-002). 실재하는 T0 곡선은 `curve_hold.json` n=1500 ·
+>   `curve_intercept.json` n=1200 뿐이다.
+>
+> 그 외 판정·허용 표현·금지 표현은 유효하며, 특히 §4 의 "본문 정정 6곳" 은
+> KSAS 원고에 **아직 적용되지 않았다** (Session 3 C-001).
+
 ---
 
 ## 0. 한 페이지 요약
@@ -101,7 +116,7 @@ claim registry 총계: **ACTIVE 19 · DOWNGRADED 5 · RETRACTED 3 · PENDING 2**
 | (d) | **종말 봉쇄 불가 ①-B1** | **CERTIFIED** | "registered fixed-state static-blockade 모델·0.30 s 창·검정 상태분포 내에서, limiter 4기로도 회복 불가" — 한정어 3종 필수 | 없음 (가장 강한 사슬). "협력 불가 일반화" 금지 |
 | (e) | **pre-commit shaping 필요성** | DECLARED + PILOT 목격자 1건 | "①-B1이 pre-commit 개입을 **동기화**한다" (필요성 '증명' 아님) | ①-B2 미확정 — B2 실험이 바로 이것 |
 | (f) | **route 채널 인과 실존** (P94) | PILOT (n=50) | "채널이 존재하고 측정 가능" — 학습이 이를 **쓰는지는** 미검정 | MARL 재개의 전제이지 근거 아님 |
-| (g) | **반응형 T1이 경계를 파괴하지 않음** | MEASURED — **Case B 봉인** (08-13) | "reactive avoidance reduced baseline attainability (0.83→0.76) while the boundary remained approximately stable" — "반응성 무관/결정적" 양쪽 금지 | T1 = 단일 구성(0.5, 30 m)이지 family 아님; Phase III 스케일에선 terminal-only reactive |
+| (g) | **반응형 T1이 경계를 파괴하지 않음** | MEASURED — **Case B 봉인** (08-13) · ★ paired 로 강화 (R-019, 08-17) | "reactive avoidance reduced attainability from **0.832 to 0.763 on the same 304 EASY episodes** (discordant 28 vs 7) while the high-χ boundary remained unchanged (**0/904 in both arms, zero flips**)" — "반응성 무관/결정적" 양쪽 금지 | T1 = 단일 구성(0.5, 30 m)이지 family 아님; Phase III 스케일에선 terminal-only reactive. ★ 종전 표기 0.83→0.76 은 **분모가 다른 두 파일**(n=1500 · n=2700)의 점추정이었다. 두 캠페인은 seed0=0 이 같고 ep 0..1499 의 위협 draw 가 1500/1500 일치하므로 **paired 재분석이 가능**하며, 같은 304 판에서 0.8322→0.7632 (28 vs 7 불일치)로 효과가 유지된다 — 발표 수치보다 강하다 (감사 Session 3 C-009) |
 | (i) | **all-chase가 pathwise 요격 기회를 못 쓴다** (E3) | MEASURED (hindsight oracle) | "There is substantial unused pathwise interception opportunity, but the baseline concentrates those opportunities into a single temporal layer." | P(oracle≤0.75)=0.883 vs 실측 0.043 · E[가능 limiter]=2.84/4 · range(t_min) 0.125 s(93.7%가 0.3 s 내). **금지**: "causal policy가 성공한다"/"학습이 필요"/"capability 부족" — realized path 한정 |
 | (j) | **timing만 바꿔도 하드킬이 오른다** (E4-1) | outcome MEASURED / **기전 UNRESOLVED** | "registered physical capability만으로 19%가 고정되는 것은 아니다" — 0.190→0.253 (paired +0.063, CI [+0.017,+0.110]) | 동결 mechanism endpoint가 양자화로 gate 미충족(자기신고). Δ=0.25는 clamp 98%라 격리. **금지**: "S2"/"temporal staggering 성공"/dose-response |
 | (h) | **MARL null** (LL 0/300 등) | MEASURED (등록된 해석 동결) | "사전등록 우월성 주장을 지지하지 않았다"; Phase III는 이 null의 "mechanism-consistent explanation" — **원인 증명 아님** | 학습이 hold를 못 넘은 원인은 조준 축으로 특정(C003)·BC로 매개 확인(C004) |
