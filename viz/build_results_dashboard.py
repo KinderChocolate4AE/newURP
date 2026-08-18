@@ -15,6 +15,7 @@ import json
 import math
 import pathlib
 import re
+import sys
 from collections import Counter
 
 import numpy as np
@@ -22,41 +23,45 @@ import numpy as np
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 R = ROOT / "results"
 
-TAU, RHO, RMAX, THETA = 0.30, 1.77, 8.22, 0.2121
-PSI_MED = math.radians(4.26)
-A_STAR = 2 * RHO / TAU ** 2                      # 39.33
-A_PSI = 2 * RMAX * (math.tan(THETA) - PSI_MED) / TAU ** 2   # 25.75
-BR_LO, BR_HI = 11.0, 78.0
+# --------------------------------------------------------------------------
+# R-012 / R-013 -- 집계와 경계 상수는 **정본에서 가져온다**. 여기서 다시 구현하지
+# 않는다. 종전에는 Wilson(z 가 정본과 달랐다) · bin 격자 · tau/rho/theta 를 전부
+# 사본으로 들고 있었고, 최상단 칸은 경계 위 판을 조용히 떨어뜨렸다
+# (감사 Session 2 X-005 · X-006). 모듈 docstring 의 "분석 로직을 새로 만들지
+# 않는다" 를 이제 코드가 실제로 지킨다.
+# --------------------------------------------------------------------------
+sys.path.insert(0, str(ROOT))          # 스크립트로 직접 실행돼도 패키지가 잡히도록
+from shepherd.m4_config import THREAT_BRACKET, m4_config          # noqa: E402
+from shepherd.scripts.curve_sweep import (PSI_MED_DEG, a_star,    # noqa: E402
+                                          a_star_psi, bin_edges)
+from shepherd.stats import wilson                                 # noqa: E402
+
+_CFG = m4_config()
+TAU = float(_CFG["physics"]["tau_deploy"])
+RHO = float(_CFG["physics"]["net_radius"])
+RMAX = float(_CFG["viability"]["cone"]["range_max"])
+THETA = float(_CFG["viability"]["cone"]["half_angle"])
+PSI_MED = math.radians(PSI_MED_DEG)
+A_STAR = a_star(RHO, TAU)
+A_PSI = a_star_psi(PSI_MED, range_max=RMAX, half_angle=THETA, tau=TAU)
+BR_LO, BR_HI = (float(x) for x in THREAT_BRACKET["physics.a_att_max"])
+
+EDGES = bin_edges(BR_LO, BR_HI, A_STAR)
 
 
 def _load(name):
     return json.load(io.open(R / name, encoding="utf-8"))
 
 
-def wilson(k, n, z=1.959963984540054):
-    if n <= 0:
-        return (0.0, 0.0)
-    p = k / n
-    d = 1 + z * z / n
-    c = p + z * z / (2 * n)
-    h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
-    return ((c - h) / d, (c + h) / d)
-
-
-def bins(lo, hi, boundary, per_side=4):
-    left = [lo + (boundary - lo) * i / per_side for i in range(per_side)]
-    right = [boundary + (hi - boundary) * i / per_side for i in range(per_side)]
-    return left + right + [hi]
-
-
-EDGES = bins(BR_LO, BR_HI, A_STAR)
-
-
 def curve(records, pred):
     out = []
     for i in range(len(EDGES) - 1):
         lo, hi = EDGES[i], EDGES[i + 1]
-        sub = [r for r in records if lo <= r["a_att"] < hi]
+        # ★ 최상단 칸은 경계값을 **포함**한다 -- summarize_curve 와 동일 술어.
+        #   없으면 a_att == BR_HI 인 판이 dashboard 에서만 사라진다 (X-006).
+        top = (i == len(EDGES) - 2)
+        sub = [r for r in records
+               if lo <= r["a_att"] < hi or (top and r["a_att"] == hi)]
         if not sub:
             continue
         k = sum(1 for r in sub if pred(r))
