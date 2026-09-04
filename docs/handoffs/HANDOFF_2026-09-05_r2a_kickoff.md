@@ -86,3 +86,26 @@ CONFIRMED) → r2 → 감사 2차 (identifiability 정밀화) → **r3 (현재)*
 - 결과 JSON 인코딩: 기존 산출물 cp949, 신규는 utf-8 명시 (docs/87 §0).
 - 30분+ 실험은 랩서버 tmux+ntfy, 로컬 직렬 금지 (memory: long-run-policy).
 - 새 regime 첫 결과는 수치 전에 궤적 뷰어부터 (memory: viz-first-policy).
+
+---
+
+## 6. 같은 날 후속 — Stage 0 완료 · r4 (B+C, a_min^P=6) · 봉인 커밋 · Stage 1 착수 승인
+
+- **Stage 0 판독**: transition 은 step (χ<0.49 p≈1 / >0.73 p=0), χ50(η) 0.60→0.54 약한
+  감소, pooled isotonic 0.565. slope 연동 δχ 역산 (§6.1) 폐기.
+- **r4-C**: δp 0.10 / δχ 0.05 별도 estimand (δχ = R2b regime 분류 보존 변위). map grid
+  (0.41…0.85 step 0.04 × η 2.1…3.9) 와 boundary micro-grid (χ50⁽⁰⁾±0.10 step 0.02) 분리.
+- **r4-B / B′**: 계약 2종 별도 hash, pooling 금지. R2a-L (a≥11, τ 0.375 directional only) /
+  R2a-P (a≥6, τ_B 0.45 confirmatory). a_min^P 는 H_support ≥ max(δχ, 2Δχ_micro)=0.05
+  규칙으로 {7,6} 중 기계 선택 (7→0.043 reject, 6→0.057 accept). a∈[6,7] hidden-branch
+  감사 통과. ledger 는 주입 차원값에서 무차원군을 계산해 SIM invariant / DOM target 만
+  이동을 assert (R-tau-DOM target = {k_f·τ} 비어 있지 않음).
+- **봉인 hash**: Stage 0 `3878260e937f9b05` · R2a-L `a854a57a643a17fd` · R2a-P
+  `e43036f00679ff77` (`artifacts/r2a/`). 브리프 §10 r4 부록이 설계 기록.
+- **다음 순서 (사용자 승인)**: seal → repo-R1 (provenance pass) → H-4 랩서버 (사용자) →
+  **Stage 1**. Stage 1 의 첫 실질 gate = **Tier A pathwise** (CRN 고정 정규화 궤적 atol 일치).
+  불일치 시 n=400 kill screen 결과를 보지 말고 원인 분류 (하네스 버그 / 숨은 차원상수 /
+  IC 스케일링 / 이산화) 부터. viz-first 선행. 하네스 주입 실현성은 ledger `inject`
+  목록 (dt, tau_lock, tau_kill, omega_aim, omega_att_slew, k_f, R_max, spawn dx/r_lat/x0,
+  kill_radius) 으로 검증 — 주입 불가 항목은 DOM target 으로 재분류하고 봉인 갱신 (새 hash).
+- 노트: `temp_research_note/2026-09-05_r2a_stage0_boundary_sharp_tau_gate_hinges_on_chi_step.md`.

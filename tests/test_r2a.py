@@ -1,0 +1,153 @@
+"""paper-R2a lattice / Stage 0 게이트 (docs/87 §4 RED-first 목록: pin 왕복 · co-scale 후
+pin pi 불변 · 판정 함수 · hash 안정성) + r4 계약 분리 (R2a-L / R2a-P)."""
+import pathlib
+
+import numpy as np
+import pytest
+
+from shepherd.scripts import r2a_lattice as L
+from shepherd.scripts.r2a_stage0 import chi50_isotonic, pav_decreasing
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+FROZEN = ROOT / "results/curve_hold_reactive.json"
+CELLS = [(0.53, 2.1), (0.61, 3.9)]
+
+
+def test_pi_roundtrip_bit_exact():
+    for chi, eta, tau, rho in [(0.57, 2.1, 0.30, 1.77), (1.2, 3.9, 0.45, 2.30)]:
+        a, v = L.dims_from(chi, eta, tau, rho)
+        c2, e2 = L.chi_eta(a, v, tau, rho)
+        assert abs(c2 - chi) < 1e-12 and abs(e2 - eta) < 1e-12
+
+
+def test_support_matches_brief_table():
+    """브리프 §4.4 tau_B 후보표 (legacy a_min 11) + R-rho support + r4 a_min 7 at tau 0.45."""
+    for tb, cmin, emin in [(0.45, 0.629, 2.034), (0.425, 0.561, 1.921),
+                           (0.40, 0.497, 1.808), (0.375, 0.437, 1.695)]:
+        s = L.support(tb, L.RHO_REF, 11.0)
+        assert abs(s["chi"][0] - cmin) < 5e-4 and abs(s["eta"][0] - emin) < 5e-4
+    r = L.support(L.TAU_REF, L.RHO_B, 11.0)
+    assert abs(r["chi"][1] - 1.526) < 5e-4 and abs(r["eta"][1] - 3.913) < 5e-4
+    assert abs(L.support(0.45, L.RHO_REF, 7.0)["chi"][0] - 0.400) < 5e-4
+    assert abs(L.support(0.45, L.RHO_REF, 6.0)["chi"][0] - 0.343) < 5e-4
+
+
+def test_ledger_sim_invariant_dom_target_only():
+    rows = L.ledger(0.45, 7.0, CELLS)
+    assert len(rows) == 5 * len(CELLS)
+    ref = next(r for r in rows if r["impl"] == "R-ref")["pi"]
+    for r in rows:
+        moved = sorted(k for k in r["pi"] if abs(r["pi"][k] - ref[k]) > 1e-9)
+        assert moved == r["target"], r["impl"]
+    dom = next(r for r in rows if r["impl"] == "R-rho-DOM")["pi"]
+    assert abs(dom["lam"] - 3.574) < 2e-3 and abs(np.degrees(dom["alpha"]) - 15.63) < 0.02
+    tdom = next(r for r in rows if r["impl"] == "R-tau-DOM")["pi"]
+    assert abs(tdom["k_f_tau"] - 4.0 * 0.45) < 1e-12 and abs(ref["k_f_tau"] - 1.20) < 1e-12
+
+
+def test_ledger_rejects_leaky_dom():
+    """R-tau-DOM 이 k_f 를 co-scale 해버리면 (SIM 누수) ledger 가 거부해야 한다."""
+    good, orig = L.impls(0.45), L.impls
+
+    def leaky(tb):
+        d = orig(tb)
+        d["R-tau-DOM"]["k_f"] = d["R-tau-SIM"]["k_f"]
+        return d
+    L.impls = leaky
+    try:
+        with pytest.raises(AssertionError):
+            L.ledger(0.45, 7.0, CELLS)
+    finally:
+        L.impls = orig
+    assert L.impls(0.45) == good
+
+
+def test_select_tau_b_largest_passing_then_d1():
+    inside = {"2.1": [0.70, 0.80], "3.9": [0.70, 0.80]}       # 0.45 legacy support 내부
+    assert L.select_tau_b(inside, 11.0)["tau_B"] == 0.45
+    low = {"3.6": [0.54, 0.64]}          # lo-0.02 = 0.52: 0.425 (0.561) 밖, 0.40 (0.497) 안
+    assert L.select_tau_b(low, 11.0)["tau_B"] == 0.40
+    hopeless = {"3.6": [0.30, 0.40]}
+    g = L.select_tau_b(hopeless, 11.0)
+    assert g["tau_B"] is None and g["verdict"].startswith("D-1")
+    assert L.select_tau_b({}, 11.0)["tau_B"] is None          # usable 행 0 = 판정 불가
+    # r4-B: 같은 envelope 도 pin-확장 (a_min 7) 에서는 0.45 가 살아난다
+    stage0_like = {"3.6": [0.44, 0.60]}
+    assert L.select_tau_b(stage0_like, 11.0)["tau_B"] is None
+    assert L.select_tau_b(stage0_like, 7.0)["tau_B"] == 0.45
+
+
+def test_micro_grid_shape():
+    g = L.micro_grid(0.5523)
+    assert len(g) == 11 and g[5] == 0.55 and abs(g[1] - g[0] - 0.02) < 1e-9
+    assert L.DELTA_P == 0.10 and L.DELTA_CHI == 0.05 and "NOT slope-derived" in L.DELTA_CHI_RATIONALE
+    assert L.H_SUPPORT_MIN == 0.05
+
+
+def test_select_a_min_buffer_rule():
+    """r4-B': Stage 0 꼴 envelope (chi50 0.52 at eta 3.6, W 0.10) 에서 7 은 buffer 0.000
+    으로 reject, 6 은 0.057 로 accept — 사후 편의가 아니라 H >= 0.05 규칙."""
+    env = {"3.6": [0.42, 0.62]}
+    sel = L.select_a_min(env, (7.0, 6.0), (0.45,))
+    assert sel["a_min"] == 6.0 and sel["gate"]["tau_B"] == 0.45
+    assert [t["accept"] for t in sel["trace"]] == [False, True]
+    assert not (sel["trace"][0]["H_support"] >= L.H_SUPPORT_MIN)   # 7: 0.45 탈락 → nan/부족
+    assert abs(sel["H_support"] - 0.057) < 2e-3
+
+
+def test_pav_and_cross50_on_step_data():
+    x = np.linspace(0, 1, 40)
+    y = (x < 0.5).astype(float)
+    y[10], y[30] = 0.0, 1.0                                    # 위반 2건
+    fit = pav_decreasing(x, y)
+    assert np.all(np.diff(fit) <= 1e-12)
+    assert abs(chi50_isotonic(x, y) - 0.5) < 0.05
+    assert np.isnan(chi50_isotonic(x, np.ones_like(x)))       # 교차 없음 = censored
+
+
+@pytest.mark.skipif(not FROZEN.exists(), reason="frozen T1 curve artifact not present")
+def test_stage0_hash_stable_and_boundary_pinned():
+    from shepherd.scripts.r2a_stage0 import run
+    a, b = run(ROOT), run(ROOT)
+    assert a["hash"] == b["hash"]
+    assert abs(a["pooled_chi50_isotonic"] - 0.565) < 0.005
+    on = [r for r in a["rows"].values() if r["on_lattice"]]
+    assert len(on) == 7 and not any(r["censored"] for r in on)
+    assert all(0.50 < r["chi50_isotonic"] < 0.67 for r in on)
+
+
+@pytest.mark.skipif(not (ROOT / "artifacts/r2a/stage0_envelope.json").exists(),
+                    reason="stage0 artifact not built")
+def test_contracts_separate_hashes_and_tau_b():
+    st0 = ROOT / "artifacts/r2a/stage0_envelope.json"
+    lat_l, lat_p = L.build_lattice(st0, "R2a-L"), L.build_lattice(st0, "R2a-P")
+    assert lat_l["lattice_hash"] != lat_p["lattice_hash"]
+    assert lat_p["a_min"] == 6.0 and lat_p["tau_B"] == 0.45 and lat_p["tau_B_gate"]["verdict"] == "SELECTED"
+    assert lat_p["a_min_selection"]["H_support"] >= L.H_SUPPORT_MIN
+    assert lat_l["a_min"] == 11.0 and lat_l["tau_B"] == 0.375 and lat_l["tau_B_gate"]["directional_only"]
+    assert "never pooled" in lat_l["pooling"]
+    for lat in (lat_l, lat_p):     # ledger 는 hash 밖 (셀 파생) — 하지만 pi 검증은 통과해야 한다
+        assert all(r["in_bracket"] for r in lat["ledger"]
+                   if r["impl"] == "R-ref" and r["chi"] >= 0.41)
+    # R2a-P boundary 셀은 전 구현 공통 support (a >= 6) 내부여야 한다
+    bcells = {(r["chi"], r["eta"]) for r in lat_p["ledger"] if r["chi"] not in L.CHI_GRID}
+    assert bcells and all(r["in_bracket"] for r in lat_p["ledger"] if (r["chi"], r["eta"]) in bcells)
+
+
+def test_ledger_dimensionless_groups_from_injected_values():
+    """봉인 조건 (사용자, 2026-09-05): 주입 차원값에서 계산한 무차원군이 구현별로
+    SIM = 전부 invariant / R-tau-DOM = k_f·tau 만 / R-rho-DOM = {lam, alpha} 만 이동."""
+    rows = L.ledger(0.45, 6.0, CELLS)
+    need = {"tau_lock_tau", "tau_kill_tau", "omega_aim_tau", "omega_slew_tau",
+            "dx_rho", "r_lat_rho", "x0_rho", "kappa", "dt_tau", "k_f_tau", "lam", "alpha"}
+    ref = next(r for r in rows if r["impl"] == "R-ref")["pi"]
+    assert need <= set(ref)
+    expect = {"R-ref": [], "R-tau-SIM": [], "R-rho-SIM": [],
+              "R-tau-DOM": ["k_f_tau"], "R-rho-DOM": ["alpha", "lam"]}
+    for impl, tgt in expect.items():
+        pi = next(r for r in rows if r["impl"] == impl)["pi"]
+        moved = sorted(k for k in need if abs(pi[k] - ref[k]) > 1e-9)
+        assert moved == tgt, (impl, moved)
+    # 1/s 차원 상수가 R-tau 에서 실제로 co-scale 됐는지 (원시값 검사)
+    inj = next(r for r in rows if r["impl"] == "R-tau-SIM")["inject"]
+    assert abs(inj["omega_aim"] - 3.14159 * 0.30 / 0.45) < 1e-9 and abs(inj["tau_lock"] - 0.15) < 1e-9

@@ -193,3 +193,61 @@ regime), 위협 = 자유방향 점질량 A1, 기존 1-D 곡선 n=2,700 (pooled c
     재분류하고 봉인에 기록).
   - D-1 발동 시 pin-확장 범위 선언 문안.
 ================================================================================
+
+10. r4 부록 — Stage 0 판독 반영 (2026-09-05, 사용자 결정 = B + C)
+--------------------------------------------------------------------------------
+  Stage 0 (frozen n=2,700 재집계, exploratory) 판독:
+    (1) chi50(eta) 약한 단조 감소: lattice 행 0.60 → 0.54 (off-lattice 포함 0.61 → 0.49).
+        pooled 1-D isotonic 0.565. censored 0, 단조성 flag 0.
+    (2) transition 은 step 에 가깝다 (raw bin: chi<0.49 p≈1.0 / >0.73 p=0). logistic
+        기울기로 delta_p 0.10 을 역산하면 delta_chi ≈ 0.01 — 이는 "0.01 이 과학적으로
+        중요" 가 아니라 확률축 10% 가 chi 축에 아주 작게 투영된 것. §6.1 의 slope 연동
+        역산은 **폐기**.
+    (3) legacy bracket 에서 R-tau 후보 0.45/0.425/0.40 은 경계 support 이탈, 0.375 는
+        chi-grid step 0.04 이하에서만 (eta 3.6 여유 0.003) 통과 — identifiability 가
+        격자 간격에 따라 뒤집히면 안 된다. strong time-perturbation H-DOM 은 legacy
+        안에서 non-identifiable/marginal.
+
+  C (필수) — estimand 분리 + 격자 분리:
+    delta_p = 0.10 : 같은 (chi, eta) 에서 구현에 의한 p 변화 (probability robustness).
+    delta_chi = 0.05 : 경계 이동 — 근거 = "R2b 하류 regime 분류를 바꾸는 최소 변위"
+      (R2b 경계 주변 chi 간격 ~0.1). slope 에서 유도하지 않는다.
+    map grid (Stage 2, R-ref): chi 0.41…0.85 step 0.04 × eta 2.1…3.9 step 0.3.
+    boundary micro-grid (Stage 1/3): 행별 chi50^(0)(eta) ± W (W=0.08), step 0.02, 9점.
+      chi50 정밀도·tau_B 게이트 headroom 은 micro-grid step 에만 걸린다.
+    envelope B(eta) = chi50^(0) ± W (고정 반폭; CI 반폭 ≤ W 여부는 Stage 0 이 플래그).
+
+  B — 계약 2종 (별도 hash, pooling 금지):
+    R2a-L  legacy a∈[11,78]: R-ref full map + legacy 내부 최대 허용 교란 (tau 0.375)
+           **방향 확인** (directional; confirmatory 아님 — 게이트 탈락 행 기록).
+    R2a-P  pin-확장 a∈[7,78]: strict similarity/robustness 식별. tau_B 0.45 복구
+           (chi_min = 7·0.45²/3.54 = 0.400 → 경계 0.49–0.65 가 support 내부).
+    a<11 의 지위: 위협 대표성 주장 없음 — "extended low-acceleration cases were
+    introduced solely to provide common dimensionless support for the similarity/
+    robustness test and were not pooled with the legacy threat-regime estimates."
+    두 계약이 같은 결론이면 강한 증거, 다르면 그것도 결과.
+
+  구현: shepherd/scripts/r2a_lattice.py (CONTRACTS, micro_grid, select_tau_b(a_min)),
+    r2a_stage0.py (envelope = chi50 ± W), artifacts/r2a/lattice_R2a_L.json /
+    lattice_R2a_P.json (각자 lattice_hash; ledger 는 hash 밖 파생물), tests/test_r2a.py.
+  §9 잔여: Tier A pathwise atol · Stage 3 worst-case exact rule · SIM co-scale 하네스
+    실현성 (dt=0.075, k_f=2.667 s⁻¹ 주입) · n 재산정 — Stage 1 착수 시.
+  r4-B' (같은 날, 사용자 결정 a_min^P = 6 + support buffer 사전규칙):
+    H_support ≥ max(delta_chi, 2·Δchi_micro) = 0.05, H_support = min_eta (B_lo(eta) −
+      headroom − chi_min,common). 근거: equivalence margin 만큼의 buffer 가 없으면 PASS 는
+      보여도 **FAIL 이 support/censoring 에 먼저 걸린다** — confirmatory 는 FAIL 도 관측
+      가능해야 한다. 사전 후보 {7, 6} 중 규칙을 만족하는 가장 큰 a_min 을 기계 선택
+      (7 → H 0.000 reject / 6 → H 0.057 accept, W=0.10 기준). 6 은 "물리적으로 맞아서"
+      가 아니라 margin 크기의 buffer 를 확보하는 최소 계약 확장이다.
+    boundary micro-grid 반폭 W 0.08 → 0.10 (step 0.02, 11점): margin ±0.05 밖의 관측폭
+      한쪽 0.05 확보 (경계가 −0.07 이상 움직인 명백한 FAIL 도 grid edge 에 붙지 않게).
+    a ∈ [6, 7] hidden-branch 감사 (코드 실측): A1 산술은 전부 a_att 비례 (dodge 1.8·a_lat,
+      repel a_att·(1+s), clamp) — 절대 임계 없음. hold arm 은 limiter 가속 0, finisher 정지
+      (mobility 0) 라 a_lim=0.35a 는 commit margin 식 r_c + 0.5(a_lim−a_att)τ_kill² 에
+      **선형**으로만 들어감. heading slew 8/10 rad/s 는 a/v ≤ 7/8 rad/s 라 저가속에서 결코
+      binding 아님. 결론: 6~7 사이 새 branch / 미등록 pi 발생 없음. 단, 감사 중 시간·길이
+      상수 인벤토리가 드러남 → ledger `inject` 에 등재 (dt · tau_lock 0.10 · tau_kill 0.15 ·
+      omega_aim 3.14 · omega_att_slew 8.0 · k_f · R_max · spawn dx 2.0 / r_lat 5.0 / x0 24 ·
+      kill_radius 0.75). SIM/DOM 공통 co-scale 대상 — 하나라도 빠지면 미등록 pi 누수.
+    판정: 사용자 = Stage 1 착수 승인 조건 (H 규칙 + hidden-branch 없음) 충족.
+================================================================================
