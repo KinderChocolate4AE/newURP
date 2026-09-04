@@ -1,0 +1,1416 @@
+{
+ "sidecar_lineage": "results/curve_hold_reactive.manifest.json (commit 43acc39; run commit edf34d9)",
+ "candidate": {
+  "route_gain": 0.5,
+  "sense_range": 30.0
+ },
+ "control": {
+  "route_gain": 0.0,
+  "sense_range": "inf"
+ },
+ "n_episodes": 60,
+ "selection": "first 60 boundary-band episodes (chi in [0.45, 0.75])",
+ "deterministic_replay_ok": true,
+ "candidate_label_match": [
+  60,
+  60
+ ],
+ "control_label_match": [
+  54,
+  60
+ ],
+ "draw_bitexact_all": true,
+ "label_discriminating_eps": [
+  46,
+  126,
+  171,
+  190,
+  225,
+  232
+ ],
+ "metric_discriminating_eps_n": 60,
+ "verdict": "CONFIRMED",
+ "verdict_rule": "CONFIRMED iff candidate 라벨 전수 일치 AND 결정론 재현 AND config 간 metric 분기 존재 AND control 이 전수 일치는 아님",
+ "rows": [
+  {
+   "episode": 1,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 15,
+    "min_target_dist": 3.911877554442155,
+    "fire_step": 6,
+    "clean_crossings": 2,
+    "a_att": 20.38927076918285,
+    "att_speed": 25.876194194481418
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 15,
+    "min_target_dist": 4.057485290382748,
+    "fire_step": 6,
+    "clean_crossings": 2,
+    "a_att": 20.38927076918285,
+    "att_speed": 25.876194194481418
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 2,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 26,
+    "min_target_dist": 0.9262068402410557,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 27.79609380197426,
+    "att_speed": 19.386131241379434
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 52,
+    "min_target_dist": 0.8333119031640832,
+    "fire_step": 12,
+    "clean_crossings": 2,
+    "a_att": 27.79609380197426,
+    "att_speed": 19.386131241379434
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 10,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 20,
+    "min_target_dist": 5.555628367408519,
+    "fire_step": 11,
+    "clean_crossings": 3,
+    "a_att": 18.853277678664192,
+    "att_speed": 20.516412550168333
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 20,
+    "min_target_dist": 5.336530064812531,
+    "fire_step": 11,
+    "clean_crossings": 3,
+    "a_att": 18.853277678664192,
+    "att_speed": 20.516412550168333
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 16,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 19,
+    "min_target_dist": 5.619891147642828,
+    "fire_step": 10,
+    "clean_crossings": 2,
+    "a_att": 21.59890930783675,
+    "att_speed": 21.10279345177827
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 19,
+    "min_target_dist": 5.384370956722435,
+    "fire_step": 10,
+    "clean_crossings": 3,
+    "a_att": 21.59890930783675,
+    "att_speed": 21.10279345177827
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 23,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 25,
+    "min_target_dist": 7.039062823157438,
+    "fire_step": 16,
+    "clean_crossings": 3,
+    "a_att": 18.76539468255005,
+    "att_speed": 13.81463804394182
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 25,
+    "min_target_dist": 6.790673382339333,
+    "fire_step": 16,
+    "clean_crossings": 4,
+    "a_att": 18.76539468255005,
+    "att_speed": 13.81463804394182
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 26,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 26,
+    "min_target_dist": 0.8365555403711048,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 25.95514755700127,
+    "att_speed": 19.856334777194597
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 56,
+    "min_target_dist": 0.6726188251511388,
+    "fire_step": 12,
+    "clean_crossings": 5,
+    "a_att": 25.95514755700127,
+    "att_speed": 19.856334777194597
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 31,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 16,
+    "min_target_dist": 4.608609836439255,
+    "fire_step": 7,
+    "clean_crossings": 2,
+    "a_att": 20.54164914633728,
+    "att_speed": 24.07785953535841
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 16,
+    "min_target_dist": 4.39576632205211,
+    "fire_step": 7,
+    "clean_crossings": 2,
+    "a_att": 20.54164914633728,
+    "att_speed": 24.07785953535841
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 35,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 51,
+    "min_target_dist": 0.9267791675357973,
+    "fire_step": null,
+    "clean_crossings": 0,
+    "a_att": 29.254759080121914,
+    "att_speed": 15.056447212522457
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 51,
+    "min_target_dist": 0.8913239582032261,
+    "fire_step": 15,
+    "clean_crossings": 2,
+    "a_att": 29.254759080121914,
+    "att_speed": 15.056447212522457
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 39,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 24,
+    "min_target_dist": 6.292037683488832,
+    "fire_step": 15,
+    "clean_crossings": 3,
+    "a_att": 19.705254168701153,
+    "att_speed": 14.89817887371867
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 24,
+    "min_target_dist": 6.0430756023520455,
+    "fire_step": 15,
+    "clean_crossings": 4,
+    "a_att": 19.705254168701153,
+    "att_speed": 14.89817887371867
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 46,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 23,
+    "min_target_dist": 6.182177172261417,
+    "fire_step": 14,
+    "clean_crossings": 2,
+    "a_att": 25.477104169362107,
+    "att_speed": 17.801666635806168
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 55,
+    "min_target_dist": 0.9062744132713126,
+    "fire_step": 14,
+    "clean_crossings": 2,
+    "a_att": 25.477104169362107,
+    "att_speed": 17.801666635806168
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 70,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 23,
+    "min_target_dist": 6.333366777290087,
+    "fire_step": 14,
+    "clean_crossings": 4,
+    "a_att": 21.082069707794837,
+    "att_speed": 14.367294322416438
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 23,
+    "min_target_dist": 6.321241202603247,
+    "fire_step": 14,
+    "clean_crossings": 4,
+    "a_att": 21.082069707794837,
+    "att_speed": 14.367294322416438
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 76,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 54,
+    "min_target_dist": 0.6180342874402692,
+    "fire_step": 12,
+    "clean_crossings": 4,
+    "a_att": 26.54797713470994,
+    "att_speed": 16.912249650900378
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 51,
+    "min_target_dist": 0.6248813717469333,
+    "fire_step": 12,
+    "clean_crossings": 2,
+    "a_att": 26.54797713470994,
+    "att_speed": 16.912249650900378
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 87,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 56,
+    "min_target_dist": 0.8614916562464435,
+    "fire_step": null,
+    "clean_crossings": 0,
+    "a_att": 29.18416319536772,
+    "att_speed": 27.62933365703901
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 18,
+    "min_target_dist": 0.8903995527494185,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 29.18416319536772,
+    "att_speed": 27.62933365703901
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 89,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 55,
+    "min_target_dist": 0.8474792022297591,
+    "fire_step": 13,
+    "clean_crossings": 4,
+    "a_att": 28.213547563623948,
+    "att_speed": 18.1832767308823
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 27,
+    "min_target_dist": 0.574866635673008,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 28.213547563623948,
+    "att_speed": 18.1832767308823
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 95,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 57,
+    "min_target_dist": 0.9245513637301978,
+    "fire_step": 7,
+    "clean_crossings": 5,
+    "a_att": 24.32396005169361,
+    "att_speed": 22.812676524463836
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 57,
+    "min_target_dist": 0.49611604178961305,
+    "fire_step": 7,
+    "clean_crossings": 5,
+    "a_att": 24.32396005169361,
+    "att_speed": 22.812676524463836
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 98,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 55,
+    "min_target_dist": 0.9838414631817252,
+    "fire_step": 13,
+    "clean_crossings": 3,
+    "a_att": 24.948616660357114,
+    "att_speed": 18.344717338902253
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 56,
+    "min_target_dist": 0.4677397364398347,
+    "fire_step": 13,
+    "clean_crossings": 2,
+    "a_att": 24.948616660357114,
+    "att_speed": 18.344717338902253
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 123,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 22,
+    "min_target_dist": 5.67375594928057,
+    "fire_step": 13,
+    "clean_crossings": 2,
+    "a_att": 23.77919600030728,
+    "att_speed": 16.168397801738628
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 21,
+    "min_target_dist": 6.421977051416924,
+    "fire_step": 12,
+    "clean_crossings": 3,
+    "a_att": 23.77919600030728,
+    "att_speed": 16.168397801738628
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 126,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 60,
+    "min_target_dist": 0.9244740396708597,
+    "fire_step": 16,
+    "clean_crossings": 8,
+    "a_att": 20.65437997278743,
+    "att_speed": 15.692667279241855
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 25,
+    "min_target_dist": 6.1220871064728275,
+    "fire_step": 16,
+    "clean_crossings": 3,
+    "a_att": 20.65437997278743,
+    "att_speed": 15.692667279241855
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 137,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 21,
+    "min_target_dist": 0.9536232089951997,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 24.970383879598927,
+    "att_speed": 22.379911478006623
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 57,
+    "min_target_dist": 0.43710825230324496,
+    "fire_step": 8,
+    "clean_crossings": 5,
+    "a_att": 24.970383879598927,
+    "att_speed": 22.379911478006623
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 156,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 37,
+    "min_target_dist": 7.530251440744259,
+    "fire_step": 28,
+    "clean_crossings": 3,
+    "a_att": 22.98348974444233,
+    "att_speed": 9.794761747719262
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 36,
+    "min_target_dist": 7.637127025448888,
+    "fire_step": 27,
+    "clean_crossings": 4,
+    "a_att": 22.98348974444233,
+    "att_speed": 9.794761747719262
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 158,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 19,
+    "min_target_dist": 0.7999756063932629,
+    "fire_step": null,
+    "clean_crossings": 0,
+    "a_att": 29.027613437387476,
+    "att_speed": 23.90186426833855
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 18,
+    "min_target_dist": 0.785718302204339,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 29.027613437387476,
+    "att_speed": 23.90186426833855
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 161,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 24,
+    "min_target_dist": 6.572573115588737,
+    "fire_step": 15,
+    "clean_crossings": 4,
+    "a_att": 22.285418539603384,
+    "att_speed": 14.391424174630613
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 24,
+    "min_target_dist": 6.5443953429977375,
+    "fire_step": 15,
+    "clean_crossings": 4,
+    "a_att": 22.285418539603384,
+    "att_speed": 14.391424174630613
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 164,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 58,
+    "min_target_dist": 0.8679606494022191,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 27.94051205424472,
+    "att_speed": 11.930549615245948
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 48,
+    "min_target_dist": 0.9306868933952372,
+    "fire_step": 23,
+    "clean_crossings": 2,
+    "a_att": 27.94051205424472,
+    "att_speed": 11.930549615245948
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 171,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 52,
+    "min_target_dist": 0.6659522764899155,
+    "fire_step": 28,
+    "clean_crossings": 5,
+    "a_att": 25.23216445652102,
+    "att_speed": 9.526238623079841
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 36,
+    "min_target_dist": 7.376849250156008,
+    "fire_step": 27,
+    "clean_crossings": 3,
+    "a_att": 25.23216445652102,
+    "att_speed": 9.526238623079841
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 179,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 21,
+    "min_target_dist": 5.839934399502629,
+    "fire_step": 12,
+    "clean_crossings": 2,
+    "a_att": 22.884231902454776,
+    "att_speed": 18.22581222216443
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 21,
+    "min_target_dist": 5.496195804119559,
+    "fire_step": 12,
+    "clean_crossings": 3,
+    "a_att": 22.884231902454776,
+    "att_speed": 18.22581222216443
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 180,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 71,
+    "min_target_dist": 0.8651450569092822,
+    "fire_step": 37,
+    "clean_crossings": 8,
+    "a_att": 26.084480409444573,
+    "att_speed": 8.455154493229841
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 64,
+    "min_target_dist": 0.6817310344258036,
+    "fire_step": 35,
+    "clean_crossings": 2,
+    "a_att": 26.084480409444573,
+    "att_speed": 8.455154493229841
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 183,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 51,
+    "min_target_dist": 0.7555591704177451,
+    "fire_step": 11,
+    "clean_crossings": 3,
+    "a_att": 25.98328955895894,
+    "att_speed": 17.463070424861023
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 51,
+    "min_target_dist": 0.6007745517750777,
+    "fire_step": 11,
+    "clean_crossings": 2,
+    "a_att": 25.98328955895894,
+    "att_speed": 17.463070424861023
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 187,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 62,
+    "min_target_dist": 0.7217714852523383,
+    "fire_step": null,
+    "clean_crossings": 2,
+    "a_att": 26.337142533461517,
+    "att_speed": 29.939931442392687
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 17,
+    "min_target_dist": 0.4057016937321909,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 26.337142533461517,
+    "att_speed": 29.939931442392687
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 190,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 18,
+    "min_target_dist": 0.824111039635567,
+    "fire_step": 6,
+    "clean_crossings": 3,
+    "a_att": 18.8975010917392,
+    "att_speed": 25.03396842931493
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 15,
+    "min_target_dist": 3.6764296561175165,
+    "fire_step": 6,
+    "clean_crossings": 3,
+    "a_att": 18.8975010917392,
+    "att_speed": 25.03396842931493
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 197,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 66,
+    "min_target_dist": 0.483647467886354,
+    "fire_step": 6,
+    "clean_crossings": 4,
+    "a_att": 22.591678592425374,
+    "att_speed": 26.49345643064019
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 64,
+    "min_target_dist": 0.6247020872601128,
+    "fire_step": 6,
+    "clean_crossings": 6,
+    "a_att": 22.591678592425374,
+    "att_speed": 26.49345643064019
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 205,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 56,
+    "min_target_dist": 0.71296984534459,
+    "fire_step": 15,
+    "clean_crossings": 2,
+    "a_att": 28.317438349839836,
+    "att_speed": 16.99810445256276
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 52,
+    "min_target_dist": 0.5809829504501465,
+    "fire_step": 15,
+    "clean_crossings": 2,
+    "a_att": 28.317438349839836,
+    "att_speed": 16.99810445256276
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 207,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 28,
+    "min_target_dist": 6.593099117117795,
+    "fire_step": 19,
+    "clean_crossings": 3,
+    "a_att": 19.721360045041116,
+    "att_speed": 13.412994660669465
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 27,
+    "min_target_dist": 6.924085707528325,
+    "fire_step": 18,
+    "clean_crossings": 4,
+    "a_att": 19.721360045041116,
+    "att_speed": 13.412994660669465
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 224,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 52,
+    "min_target_dist": 0.8930394294088357,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 28.12874672659317,
+    "att_speed": 17.930072713465016
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 52,
+    "min_target_dist": 0.6346586380056959,
+    "fire_step": 13,
+    "clean_crossings": 2,
+    "a_att": 28.12874672659317,
+    "att_speed": 17.930072713465016
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 225,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 61,
+    "min_target_dist": 0.8652374635997431,
+    "fire_step": 14,
+    "clean_crossings": 9,
+    "a_att": 20.64115309375414,
+    "att_speed": 15.672999895537238
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 23,
+    "min_target_dist": 6.021956798657431,
+    "fire_step": 14,
+    "clean_crossings": 3,
+    "a_att": 20.64115309375414,
+    "att_speed": 15.672999895537238
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 230,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 58,
+    "min_target_dist": 0.3219526113239018,
+    "fire_step": 10,
+    "clean_crossings": 6,
+    "a_att": 23.84391214370039,
+    "att_speed": 20.74722651141847
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 57,
+    "min_target_dist": 0.833950064746875,
+    "fire_step": 10,
+    "clean_crossings": 6,
+    "a_att": 23.84391214370039,
+    "att_speed": 20.74722651141847
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 232,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 65,
+    "min_target_dist": 0.7149086930152289,
+    "fire_step": 8,
+    "clean_crossings": 4,
+    "a_att": 22.283975691273593,
+    "att_speed": 25.204030679385617
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 17,
+    "min_target_dist": 4.425757829618698,
+    "fire_step": 8,
+    "clean_crossings": 2,
+    "a_att": 22.283975691273593,
+    "att_speed": 25.204030679385617
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 236,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 17,
+    "min_target_dist": 0.5034568134762396,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 22.1253591825666,
+    "att_speed": 29.69317095786767
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 71,
+    "min_target_dist": 0.1366965701166043,
+    "fire_step": 6,
+    "clean_crossings": 4,
+    "a_att": 22.1253591825666,
+    "att_speed": 29.69317095786767
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 241,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 66,
+    "min_target_dist": 0.7652463644963434,
+    "fire_step": 7,
+    "clean_crossings": 5,
+    "a_att": 23.435944744709403,
+    "att_speed": 27.349215991442072
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 65,
+    "min_target_dist": 0.21266637502041463,
+    "fire_step": 7,
+    "clean_crossings": 4,
+    "a_att": 23.435944744709403,
+    "att_speed": 27.349215991442072
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 246,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 26,
+    "min_target_dist": 0.976945753574397,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 27.222939852165634,
+    "att_speed": 17.947610092238566
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 50,
+    "min_target_dist": 0.9406767599317057,
+    "fire_step": 11,
+    "clean_crossings": 2,
+    "a_att": 27.222939852165634,
+    "att_speed": 17.947610092238566
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 283,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 17,
+    "min_target_dist": 4.323132361760699,
+    "fire_step": 8,
+    "clean_crossings": 3,
+    "a_att": 20.242510306688235,
+    "att_speed": 21.861186615189034
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 17,
+    "min_target_dist": 4.450297613133661,
+    "fire_step": 8,
+    "clean_crossings": 2,
+    "a_att": 20.242510306688235,
+    "att_speed": 21.861186615189034
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 286,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 54,
+    "min_target_dist": 0.9047997601689745,
+    "fire_step": 12,
+    "clean_crossings": 3,
+    "a_att": 27.15306078634365,
+    "att_speed": 16.862972670993464
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 51,
+    "min_target_dist": 0.5733007006604525,
+    "fire_step": 12,
+    "clean_crossings": 2,
+    "a_att": 27.15306078634365,
+    "att_speed": 16.862972670993464
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 290,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 25,
+    "min_target_dist": 0.6827669159174775,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 28.54414154977457,
+    "att_speed": 17.99131188950161
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 49,
+    "min_target_dist": 0.7506188179611852,
+    "fire_step": 10,
+    "clean_crossings": 2,
+    "a_att": 28.54414154977457,
+    "att_speed": 17.99131188950161
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 291,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 50,
+    "min_target_dist": 0.9140458912158524,
+    "fire_step": 25,
+    "clean_crossings": 2,
+    "a_att": 27.68579350329598,
+    "att_speed": 10.832237345226645
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 50,
+    "min_target_dist": 0.8202312251986266,
+    "fire_step": 24,
+    "clean_crossings": 2,
+    "a_att": 27.68579350329598,
+    "att_speed": 10.832237345226645
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 293,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 19,
+    "min_target_dist": 5.498319923007944,
+    "fire_step": 10,
+    "clean_crossings": 2,
+    "a_att": 21.965496471575882,
+    "att_speed": 20.196004304358897
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 19,
+    "min_target_dist": 5.127373587650855,
+    "fire_step": 10,
+    "clean_crossings": 2,
+    "a_att": 21.965496471575882,
+    "att_speed": 20.196004304358897
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 295,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 32,
+    "min_target_dist": 7.2553294793364405,
+    "fire_step": 23,
+    "clean_crossings": 4,
+    "a_att": 19.02619133356778,
+    "att_speed": 10.830337346669868
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 31,
+    "min_target_dist": 7.4794764327288865,
+    "fire_step": 22,
+    "clean_crossings": 5,
+    "a_att": 19.02619133356778,
+    "att_speed": 10.830337346669868
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 300,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 18,
+    "min_target_dist": 0.983274860222943,
+    "fire_step": null,
+    "clean_crossings": 0,
+    "a_att": 29.361778950864707,
+    "att_speed": 28.089759285971844
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 18,
+    "min_target_dist": 0.5130340031920835,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 29.361778950864707,
+    "att_speed": 28.089759285971844
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 302,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 39,
+    "min_target_dist": 7.611003893337356,
+    "fire_step": 30,
+    "clean_crossings": 6,
+    "a_att": 20.671161922931937,
+    "att_speed": 8.729027331959886
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 38,
+    "min_target_dist": 7.900237419700125,
+    "fire_step": 29,
+    "clean_crossings": 5,
+    "a_att": 20.671161922931937,
+    "att_speed": 8.729027331959886
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 303,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 58,
+    "min_target_dist": 0.6341298035358477,
+    "fire_step": 21,
+    "clean_crossings": 3,
+    "a_att": 26.498919302701935,
+    "att_speed": 13.365909739703469
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 57,
+    "min_target_dist": 0.8227345219860189,
+    "fire_step": 21,
+    "clean_crossings": 2,
+    "a_att": 26.498919302701935,
+    "att_speed": 13.365909739703469
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 320,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 25,
+    "min_target_dist": 6.457240189378285,
+    "fire_step": 16,
+    "clean_crossings": 2,
+    "a_att": 21.00085712986631,
+    "att_speed": 15.173566094657016
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 25,
+    "min_target_dist": 6.109929571321106,
+    "fire_step": 16,
+    "clean_crossings": 2,
+    "a_att": 21.00085712986631,
+    "att_speed": 15.173566094657016
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 324,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 26,
+    "min_target_dist": 6.825075244024341,
+    "fire_step": 17,
+    "clean_crossings": 5,
+    "a_att": 19.20832597003221,
+    "att_speed": 11.948703628929643
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 26,
+    "min_target_dist": 6.838168857763643,
+    "fire_step": 17,
+    "clean_crossings": 4,
+    "a_att": 19.20832597003221,
+    "att_speed": 11.948703628929643
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 342,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 22,
+    "min_target_dist": 0.7861482100103483,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 24.598733403366346,
+    "att_speed": 21.629293793222185
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 57,
+    "min_target_dist": 0.3344187945220365,
+    "fire_step": 9,
+    "clean_crossings": 5,
+    "a_att": 24.598733403366346,
+    "att_speed": 21.629293793222185
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 343,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 33,
+    "min_target_dist": 7.1084185401302165,
+    "fire_step": 24,
+    "clean_crossings": 4,
+    "a_att": 22.171971583590448,
+    "att_speed": 11.36449820257611
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 33,
+    "min_target_dist": 7.126882223081638,
+    "fire_step": 24,
+    "clean_crossings": 3,
+    "a_att": 22.171971583590448,
+    "att_speed": 11.36449820257611
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 349,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 93,
+    "min_target_dist": 0.9447191299880457,
+    "fire_step": 50,
+    "clean_crossings": 6,
+    "a_att": 27.0679819699182,
+    "att_speed": 28.060512713684354
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 59,
+    "min_target_dist": 0.8250396059966096,
+    "fire_step": 6,
+    "clean_crossings": 3,
+    "a_att": 27.0679819699182,
+    "att_speed": 28.060512713684354
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 354,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 23,
+    "min_target_dist": 0.9614078564579577,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 25.91935635363728,
+    "att_speed": 21.389098601501196
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 55,
+    "min_target_dist": 0.20559656888067235,
+    "fire_step": 9,
+    "clean_crossings": 5,
+    "a_att": 25.91935635363728,
+    "att_speed": 21.389098601501196
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 357,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 81,
+    "min_target_dist": 0.697706290121327,
+    "fire_step": 46,
+    "clean_crossings": 3,
+    "a_att": 27.868319533230515,
+    "att_speed": 22.97584513802616
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 22,
+    "min_target_dist": 0.4152513930645581,
+    "fire_step": null,
+    "clean_crossings": 1,
+    "a_att": 27.868319533230515,
+    "att_speed": 22.97584513802616
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 360,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 44,
+    "min_target_dist": 7.647049555768896,
+    "fire_step": 35,
+    "clean_crossings": 3,
+    "a_att": 23.109751437119684,
+    "att_speed": 8.490676005458402
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 42,
+    "min_target_dist": 7.897089418362137,
+    "fire_step": 33,
+    "clean_crossings": 4,
+    "a_att": 23.109751437119684,
+    "att_speed": 8.490676005458402
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 361,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 33,
+    "min_target_dist": 6.928196308658426,
+    "fire_step": 24,
+    "clean_crossings": 5,
+    "a_att": 21.99486762167902,
+    "att_speed": 10.897769260483326
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 32,
+    "min_target_dist": 7.421240928838996,
+    "fire_step": 23,
+    "clean_crossings": 4,
+    "a_att": 21.99486762167902,
+    "att_speed": 10.897769260483326
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 365,
+   "frozen_label": "NET_CAPTURE",
+   "cand": {
+    "label": "NET_CAPTURE",
+    "steps": 31,
+    "min_target_dist": 6.921579141099243,
+    "fire_step": 22,
+    "clean_crossings": 5,
+    "a_att": 20.273724104087,
+    "att_speed": 12.321179781873443
+   },
+   "ctrl": {
+    "label": "NET_CAPTURE",
+    "steps": 31,
+    "min_target_dist": 6.876092322928575,
+    "fire_step": 22,
+    "clean_crossings": 4,
+    "a_att": 20.273724104087,
+    "att_speed": 12.321179781873443
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 367,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 56,
+    "min_target_dist": 0.8316419601362331,
+    "fire_step": 15,
+    "clean_crossings": 5,
+    "a_att": 27.929834103832434,
+    "att_speed": 16.306177193991882
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 52,
+    "min_target_dist": 0.7064340139261917,
+    "fire_step": 15,
+    "clean_crossings": 2,
+    "a_att": 27.929834103832434,
+    "att_speed": 16.306177193991882
+   },
+   "draw_bitexact": true
+  },
+  {
+   "episode": 376,
+   "frozen_label": "PENETRATED",
+   "cand": {
+    "label": "PENETRATED",
+    "steps": 61,
+    "min_target_dist": 0.5433403833709086,
+    "fire_step": 9,
+    "clean_crossings": 5,
+    "a_att": 24.426038390529627,
+    "att_speed": 24.289786645869402
+   },
+   "ctrl": {
+    "label": "PENETRATED",
+    "steps": 61,
+    "min_target_dist": 0.17266333684552893,
+    "fire_step": 9,
+    "clean_crossings": 5,
+    "a_att": 24.426038390529627,
+    "att_speed": 24.289786645869402
+   },
+   "draw_bitexact": true
+  }
+ ]
+}

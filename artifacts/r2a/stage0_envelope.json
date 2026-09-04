@@ -2,6 +2,19 @@
  "status": "exploratory/design — Stage 0 re-aggregation, not evidence",
  "source": "results/curve_hold_reactive.json",
  "n": 2700,
+ "world": {
+  "threat": "A2-reactive",
+  "jink_amp": 0.6,
+  "jink_freq_hz": 1.5,
+  "route_gain": 0.5,
+  "sense_range_m": 30.0,
+  "lineage": "results/curve_hold_reactive.manifest.json (commit 43acc39, run commit edf34d9)",
+  "verification": "artifacts/r2a/provenance_route_sense.json"
+ },
+ "supersedes": {
+  "stage0": "3878260e937f9b05",
+  "reason": "D-2 world correction A1->A2"
+ },
  "eta_step": 0.3,
  "W_boundary": 0.1,
  "seed": 0,
@@ -872,5 +885,5 @@
   ]
  },
  "envelope_rule": "B(eta) = chi50_isotonic ± W_boundary (fixed boundary half-width, independent of map grid); lattice rows only, censored excluded. Logistic slope is diagnostic only (r4-C).",
- "hash": "3878260e937f9b05"
+ "hash": "4c26cf1a2a4d9ab8"
 }

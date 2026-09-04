@@ -135,6 +135,13 @@ def run(root: pathlib.Path, seed: int = 0) -> dict:
     pooled = chi50_isotonic(data[:, 0], data[:, 2])
     out = {"status": "exploratory/design — Stage 0 re-aggregation, not evidence",
            "source": SRC, "n": int(len(data)),
+           # D-2 (감사 r2): 세계 선언을 데이터의 실제 세계로 정합. 구 hash lineage 유지.
+           "world": {"threat": "A2-reactive", "jink_amp": 0.6, "jink_freq_hz": 1.5,
+                     "route_gain": 0.5, "sense_range_m": 30.0,
+                     "lineage": "results/curve_hold_reactive.manifest.json (commit 43acc39, "
+                                "run commit edf34d9)",
+                     "verification": "artifacts/r2a/provenance_route_sense.json"},
+           "supersedes": {"stage0": "3878260e937f9b05", "reason": "D-2 world correction A1->A2"},
            "eta_step": ETA_STEP, "W_boundary": W_BOUNDARY, "seed": seed, "n_boot": N_BOOT,
            "pooled_chi50_isotonic": pooled,
            "rows": rows, "envelope": envelope,

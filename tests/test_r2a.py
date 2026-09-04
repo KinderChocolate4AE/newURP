@@ -116,8 +116,9 @@ def test_stage0_hash_stable_and_boundary_pinned():
     assert all(0.50 < r["chi50_isotonic"] < 0.67 for r in on)
 
 
-@pytest.mark.skipif(not (ROOT / "artifacts/r2a/stage0_envelope.json").exists(),
-                    reason="stage0 artifact not built")
+@pytest.mark.skipif(not (ROOT / "artifacts/r2a/stage0_envelope.json").exists()
+                    or not (ROOT / "artifacts/r2a/provenance_route_sense.json").exists(),
+                    reason="stage0/provenance artifact not built")
 def test_contracts_separate_hashes_and_tau_b():
     st0 = ROOT / "artifacts/r2a/stage0_envelope.json"
     lat_l, lat_p = L.build_lattice(st0, "R2a-L"), L.build_lattice(st0, "R2a-P")
@@ -155,3 +156,56 @@ def test_ledger_dimensionless_groups_from_injected_values():
     assert abs(inj["jink_freq"] - 1.5 * 0.30 / 0.45) < 1e-9
     rho_inj = next(r for r in rows if r["impl"] == "R-rho-SIM")["inject"]
     assert abs(rho_inj["sense_range"] - 30.0 * 2.30 / 1.77) < 1e-9
+
+
+def test_runtime_norm_invariant_across_all_impls():
+    """감사 r2 Q3: layout·판정 길이의 /rho 정규화는 DOM 포함 전 구현 invariant."""
+    rows = L.ledger(0.45, 6.0, CELLS)
+    ref = next(r for r in rows if r["impl"] == "R-ref")["runtime_norm"]
+    assert set(ref) == {"ring_center_rho", "ring_radius_rho", "r_ring_rho", "finisher_rho",
+                        "x_fire_rho", "target_r_rho", "r_nk_rho"}
+    for r in rows:
+        assert all(abs(r["runtime_norm"][k] - ref[k]) < 1e-9 for k in ref), r["impl"]
+    assert abs(ref["x_fire_rho"] - 16.0 / 1.77) < 1e-9
+    # co-scale 누수 주입 시 ledger 가 거부하는지 (r_ring 을 rho 와 안 맞게)
+    orig = L._inject
+
+    def leaky(im):
+        d = orig(im)
+        d["r_ring"] = 2.1                       # 항상 기준값 = R-rho 계에서 비-co-scale
+        return d
+    L._inject = leaky
+    try:
+        with pytest.raises(AssertionError):
+            L.ledger(0.45, 6.0, CELLS)
+    finally:
+        L._inject = orig
+
+
+def test_conditioning_vector_sealed():
+    """감사 r2 Q5/§8: 무차원 행동·판정 상수 봉인 + mu 는 conditioning ratio (inert 아님)."""
+    cv = L.CONDITIONING_VECTOR
+    ev = cv["evasion"]
+    assert (ev["jink_amp"], ev["route_gain"], ev["dodge_amp"], ev["repel_margin"]) ==         (0.6, 0.5, 1.8, 1.0) and ev["react_on_commit"] is True
+    assert abs(ev["jink_freq_tau_cycles"] - 0.45) < 1e-12 and "2*pi*f*tau" in ev["jink_phase_convention"]
+    cr = cv["capability_ratios"]
+    assert (cr["mu_a_lim_over_a_att"], cr["nu_v_lim_over_v_att"], cr["v_adv_max_over_v_att"]) ==         (0.35, 1.0, 1.5)
+    assert cv["decision"]["commit_threshold"] == 0.5 and cv["decision"]["hold_arm"] is True
+
+
+@pytest.mark.skipif(not (ROOT / "artifacts/r2a/provenance_route_sense.json").exists(),
+                    reason="provenance artifact not built")
+def test_provenance_confirmed_and_new_seal_a2():
+    import json
+    prov = json.loads((ROOT / "artifacts/r2a/provenance_route_sense.json").read_text(encoding="utf-8"))
+    assert prov["verdict"] == "CONFIRMED"
+    assert prov["deterministic_replay_ok"] and prov["draw_bitexact_all"]
+    assert prov["candidate_label_match"][0] == prov["candidate_label_match"][1]
+    assert prov["metric_discriminating_eps_n"] > 0
+    st0 = ROOT / "artifacts/r2a/stage0_envelope.json"
+    lat = L.build_lattice(st0, "R2a-P")
+    assert "A2-reactive" in lat["world"]
+    assert lat["supersedes"]["R2a-P"] == "e43036f00679ff77"
+    assert lat["lattice_hash"] != "e43036f00679ff77"
+    assert "conditional on the sealed A2-reactive" in lat["vocab"]["global"]
+    assert any("HARD_KILL" in g for g in lat["stage1_gates"])

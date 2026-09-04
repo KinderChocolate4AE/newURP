@@ -127,7 +127,11 @@ def _inject(im: dict) -> dict:
             "jink_freq": 1.5 / s, "homing_gain": 4.0 / s,
             "jink_terminal_r": 3.0 * r, "sense_range": 30.0 * r,
             "R_max": im["R_max"], "spawn_dx": 2.0 * r, "spawn_r_lat": 5.0 * r,
-            "adversary_start_x": 24.0 * r, "kill_radius": 0.75 * r}
+            "adversary_start_x": 24.0 * r, "kill_radius": 0.75 * r,
+            # layout·판정 길이 (감사 r2 Q3: "ledger 밖 /rho pin" 이던 것 전부 기계 검증으로 승격)
+            "ring_center_x": 8.0 * r, "ring_radius": 5.0 * r, "r_ring": 2.1 * r,
+            "finisher_x": 2.0 * r, "x_fire": 16.0 * r, "target_radius": 1.0 * r,
+            "r_nk": 6.0 * r}
 
 
 def _pins(im: dict) -> dict:
@@ -144,6 +148,35 @@ def _pins(im: dict) -> dict:
             "sig_dt": j["sense_range"] / rho, "dx_rho": j["spawn_dx"] / rho,
             "r_lat_rho": j["spawn_r_lat"] / rho, "x0_rho": j["adversary_start_x"] / rho,
             "kappa": j["kill_radius"] / rho}
+
+
+def _runtime_norm(im: dict) -> dict:
+    """normalized runtime constants (감사 r2 Q3) — PI_GROUPS 독립군은 아니지만 runtime
+    이 실제로 쓰는 차원 상수의 /rho 정규화. **전 구현 invariant** (target 예외 없음)."""
+    j, rho = _inject(im), im["rho"]
+    return {k: j[src] / rho for k, src in
+            [("ring_center_rho", "ring_center_x"), ("ring_radius_rho", "ring_radius"),
+             ("r_ring_rho", "r_ring"), ("finisher_rho", "finisher_x"),
+             ("x_fire_rho", "x_fire"), ("target_r_rho", "target_radius"),
+             ("r_nk_rho", "r_nk")]}
+
+
+# 감사 r2 Q5/§8: 무차원 행동·판정 상수의 봉인 conditioning vector. co-scale 대상이
+# 아니라 **정확히 불변**이어야 하는 것들. mu 는 "inert" 가 아니다 — 운동학적으로는
+# hold arm 에서 관성이지만 commit margin 식 r_c + 0.5(a_lim − a_att)·tau_kill² 을
+# 통해 결정 논리에 들어간다 → 고정 conditioning ratio 로 유지.
+CONDITIONING_VECTOR = {
+    "evasion": {"level": "A2-reactive", "jink_amp": 0.6, "route_gain": 0.5,
+                "dodge_amp": 1.8, "repel_margin": 1.0, "react_on_commit": True,
+                "bait": "off", "sprint": "off", "slowdown": "off",
+                "jink_freq_tau_cycles": 0.45,
+                "jink_phase_convention": "sin(2*pi*f*t + phi) — phase advance per tau "
+                                         "= 2*pi*f*tau = 2.827 rad; f*tau = cycles/tau"},
+    "capability_ratios": {"mu_a_lim_over_a_att": 0.35, "nu_v_lim_over_v_att": 1.0,
+                          "v_adv_max_over_v_att": 1.5},
+    "decision": {"commit_threshold": 0.5, "w_kill": 0.5, "p_kill": 1.0,
+                 "hold_arm": True, "capture_terminates": True, "fire_mode": "clean"},
+}
 
 
 def micro_grid(chi50: float) -> list[float]:
@@ -199,27 +232,77 @@ def ledger(tau_b: float, a_min: float, cells: list[tuple[float, float]]) -> list
     """구현 × 셀당 1행 (§4.3). 자동 검증: SIM 행은 전 pi invariant, DOM 행은 target 만
     이동 — R-tau-DOM 이 SIM 으로 새는 누수 (dt·k_f 항등식) 의 방어선."""
     ims = impls(tau_b)
-    ref = _pins(ims["R-ref"])
+    ref, ref_norm = _pins(ims["R-ref"]), _runtime_norm(ims["R-ref"])
     rows = []
     for name, im in ims.items():
-        pi = _pins(im)
+        pi, norm = _pins(im), _runtime_norm(im)
         moved = sorted(k for k in pi if abs(pi[k] - ref[k]) > 1e-9)
         assert moved == im["target"], (name, moved, im["target"])
+        # runtime norm 은 DOM 포함 전 구현 invariant (layout 은 결코 target 이 아니다)
+        bad = [k for k in norm if abs(norm[k] - ref_norm[k]) > 1e-9]
+        assert not bad, (name, bad)
         inject = _inject(im)
         for chi, eta in cells:
             a, v = dims_from(chi, eta, im["tau"], im["rho"])
             rows.append({"impl": name, "tier": im["tier"], "chi": chi, "eta": eta,
                          "a_att": a, "att_speed": v, "tau": im["tau"], "rho": im["rho"],
-                         "inject": inject, "pi": pi, "target": im["target"],
+                         "inject": inject, "pi": pi, "runtime_norm": norm,
+                         "target": im["target"],
                          "in_bracket": a_min <= a <= A_BR[1] and V_BR[0] <= v <= V_BR[1]})
     return rows
 
 
-def build_lattice(stage0_path: pathlib.Path, contract: str) -> dict:
+# D-2 supersession (감사 r2 판정): 구 seal 은 삭제하지 않고 lineage 로 남긴다.
+SUPERSEDES = {
+    "reason": "D-2 — world declaration corrected A1 -> A2-reactive (sealed evasion "
+              "vector). Stage 0 data was always A2-reactive; the confirmatory contract "
+              "is aligned to the world the design data actually came from, before any "
+              "confirmatory episode exists. Stage 0 is exploratory by declaration — "
+              "result-informed design on Stage 0 already happened and is permitted; "
+              "what re-sealing must NOT depend on is confirmatory (Stage 1+) results, "
+              "of which there are none.",
+    "stage0": "3878260e937f9b05", "R2a-L": "a854a57a643a17fd", "R2a-P": "e43036f00679ff77",
+    "old_seal_commit": "a9fee8c",
+}
+
+EPS_AUDIT = {
+    "runtime_path": "_EPS = 1e-12 norm guards (env.py:39, env_sys.py:60, sim/analytic.py:28, "
+                    "agents/adversary.py:16, agents/attacker_ladder.py:46) — semantically "
+                    "dimensional (guards |v|, |a|, lengths) but 12-13 orders below physical "
+                    "magnitudes at both rho scales; classified numerically inert, NOT co-scaled.",
+    "baselines_1e-6": "baselines.py:62 velocity-norm guard — brake_limiter only, dead in hold arm.",
+    "note": "the '1e-6 / theta 0.9 / witness counts' constants live in c1_* scripts outside "
+            "the R2a runtime path; excluded as judge-resolution constants, not lengths/times.",
+}
+
+STAGE1_GATES = [
+    "Tier A pathwise metamorphic FIRST: CRN-fixed normalized trajectories within sealed atol. "
+    "On mismatch, do NOT read the n=400 kill-screen numbers; classify the cause "
+    "(harness bug / hidden dimensional constant / IC scaling / discretization) first.",
+    "HARD_KILL STOP: if any HARD_KILL occurs in a hold-arm confirmatory run, halt H-SIM/H-DOM "
+    "reading for that batch and classify as competing-risk emergence. Do not drop or recode "
+    "HARD_KILL episodes from the NET_CAPTURE denominator before the cause is identified.",
+    "viz-first: trajectory inspection of 2-3 episodes per implementation precedes any "
+    "collapse statistic.",
+]
+
+# 감사 r2 Q6: 순위 주장 기각 — 실험 비교 없이 '>' 관계를 주장하지 않는다.
+A_PRIORI_SENSITIVITY_CANDIDATES = [
+    "evasion behavior ratios (jink_amp, route_gain) — untested axis, fixed by the sealed vector",
+    "k_f*tau — tested by R-tau-DOM", "lam/alpha — tested by R-rho-DOM",
+    "kappa, commit_threshold — untested, pinned",
+]
+
+
+def build_lattice(stage0_path: pathlib.Path, contract: str,
+                  provenance_path: pathlib.Path | None = None) -> dict:
     cfg = m4_config()
     assert (cfg["physics"]["net_radius"], cfg["physics"]["tau_deploy"],
             cfg["physics"]["dt"], cfg["viability"]["cone"]["range_max"]) == \
         (RHO_REF, TAU_REF, DT_REF, R_MAX_REF)
+    prov_path = provenance_path or stage0_path.parent / "provenance_route_sense.json"
+    prov = json.loads(prov_path.read_text(encoding="utf-8"))
+    assert prov["verdict"] == "CONFIRMED", "route/sense provenance 미확정 — 재봉인 금지 (감사 Q2)"
     ct = CONTRACTS[contract]
     st0 = json.loads(stage0_path.read_text(encoding="utf-8"))
     sel = select_a_min(st0["envelope"], ct["a_min_candidates"], ct["tau_candidates"])
@@ -233,8 +316,17 @@ def build_lattice(stage0_path: pathlib.Path, contract: str) -> dict:
                       for c in micro_grid((lo + hi) / 2)]
     map_cells = [(c, e) for c in CHI_GRID for e in ETA_GRID]
     payload = {
-        "schema": "r2a-lattice-v2", "contract": contract, "a_min": ct["a_min"], "role": ct["role"],
-        "world": "legacy 24 m corridor; threat A1; fixed capability-ratio family (mu, nu pinned)",
+        "schema": "r2a-lattice-v3", "contract": contract, "a_min": ct["a_min"], "role": ct["role"],
+        "world": "legacy 24 m corridor; threat A2-reactive (sealed evasion vector, see "
+                 "conditioning_vector); fixed capability-ratio family (mu, nu pinned)",
+        "supersedes": SUPERSEDES,
+        "conditioning_vector": CONDITIONING_VECTOR,
+        "evasion_provenance": {"file": str(prov_path).replace("\\", "/"),
+                               "verdict": prov["verdict"],
+                               "lineage": prov["sidecar_lineage"]},
+        "eps_audit": EPS_AUDIT,
+        "stage1_gates": STAGE1_GATES,
+        "a_priori_sensitivity_candidates": A_PRIORI_SENSITIVITY_CANDIDATES,
         "pooling": "R2a-L and R2a-P are separate estimates; never pooled",
         "map_grid": {"chi": CHI_GRID, "eta": ETA_GRID, "chi_step": CHI_STEP, "eta_step": ETA_STEP,
                      "stage": 2, "impl": "R-ref only"},
@@ -254,7 +346,10 @@ def build_lattice(stage0_path: pathlib.Path, contract: str) -> dict:
         "impls": impls(tb),
         "estimand": "hold-arm net capture p on (chi, eta); mu, nu fixed = capability-ratio family map",
         "vocab": {"H-SIM": "consistent with dimensional similarity",
-                  "H-DOM": "boundary robust to the declared perturbations"},
+                  "H-DOM": "boundary robust to the declared perturbations",
+                  "global": "consistent with (chi, eta) dominance under the declared "
+                            "perturbations, conditional on the sealed A2-reactive evasion "
+                            "behavior vector"},
         "registry": {"C044": "chi50(eta) + simultaneous band",
                      "C045": ["PASS_2D", "PARTIAL_3D", "FAIL", "NON_IDENTIFIABLE"],
                      "C046": "provenance + legacy corridor / A1 / capability-ratio caveat"},

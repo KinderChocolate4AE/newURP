@@ -68,3 +68,10 @@ a_min 7 은 사용자 제안값; 여유 +0.020 이 부족하다고 판단되면 
 - micro-grid ±0.10 step 0.02 (11점). Stage 0 hash 갱신 (W 변경).
 - a∈[6,7] 감사: A1 항 전부 a 비례, hold arm 은 limiter 가속 0·finisher 정지, a_lim 은 commit margin 에 선형, slew 8/10 rad/s 는 a/v<1 이라 무관 → **branch 없음**. 부산물 = 시간·길이 상수 인벤토리 (tau_lock 0.10, tau_kill 0.15, omega_aim 3.14, slew 8.0, spawn 2.0/5.0/24, kill_radius 0.75) → ledger `inject` 필드. Stage 1 하네스 주입 실현성 검증 대상.
 - 사용자: 위 두 조건 충족 시 **Stage 1 착수 승인**. 선행 = 봉인 커밋 → repo-R1 → H-4 랩서버.
+
+## 후속 3 — 감사 r2 (조건부 승인) 반영: A2-reactive 재봉인 + blocker 3건 닫음
+
+- **provenance**: 1차 = 생성 커밋 43acc39 동봉 sidecar manifest (route 0.5 · sense 30 · run commit edf34d9 — r1 의 "문서-추정" 은 과소평가, 기계 sidecar 였음). 2차 = exact replay 60판 (경계 밴드): 후보 60/60 · 대조 54/60 (판별 6판 전부 후보 승) · 결정론·draw bit-exact → **CONFIRMED**. 재봉인은 이 verdict 를 assert.
+- **ledger 확장**: inject 22종 (layout 7 추가) · runtime_norm 7종 /ρ 전 구현 invariant (DOM 예외 없음, 누수 거부 테스트) · CONDITIONING_VECTOR (무차원 행동·판정 상수 + jink 2π 규약) · EPS_AUDIT (runtime 은 _EPS 1e-12, inert) · "μ inert" 삭제 (motion-inert / decision-active, conditioning ratio 유지).
+- **어휘·게이트**: 전역 어휘 "…conditional on the sealed A2-reactive evasion behavior vector". 순위 주장 → a priori sensitivity candidates 강등. STAGE1_GATES = pathwise-first + HARD_KILL STOP (분모 삭제·재코딩 금지) + viz-first.
+- **새 hash (v3)**: Stage 0 `4c26cf1a2a4d9ab8` / R2a-L `da36d96eb5bceddc` / R2a-P `3aa3adef77420d12`. 구 hash 3종은 SUPERSEDES 로 lineage 보존. envelope·게이트 수치 불변. docs/87 §4 A1→A2 개정 (날짜 명기). 테스트 19/19.
