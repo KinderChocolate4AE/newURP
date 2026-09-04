@@ -259,6 +259,21 @@ canonical outcome   변화 0
   R-023(`pilot_report` 은퇴)은 **H-4 대기**.
 - **미해결 human decision** — H-4: LS seeds 1–4 체크포인트와 `results/m4_pilot/`
   가 랩 서버에 있는가.
+- **Tooling debt — F-1 (2026-08-19, 기록만 · 게이트 무수정)**: R-025 scope probe 의
+  생성기 판별이 substring(`"stamp(" in src`)이라 **호출과 판독을 구분하지 못한다**.
+  - false positive 실례: evidence dashboard **판독자**
+    (`viz/build_research_evidence_dashboard.py`)의 helper 명(`_find_stamp`)이 걸려
+    RED → 개명으로 해소. 현 휴리스틱에 대한 회피이지 근본 구분이 아니다.
+  - false negative 가 더 위험: 별칭 import(`import stamp as _s`)·`getattr` 경유
+    호출 생성기는 놓치고, `n_gens >= 15` 가드는 대량 붕괴만 잡지 한 개 누락은 못
+    잡는다.
+  - 교차검증(2026-08-19): 현 리포는 양방향 깨끗 — substring 21 = AST 실제 호출 21,
+    FP/FN 0. import-무호출 판독자 1건 = 위 dashboard (단, `stamp` 심볼이 아니라
+    `pivot_manifest` **모듈** import 이며 용도는 `dirty_state` 정본 소비 —
+    snapshot 게이트가 강제하므로 제거 대상 아님).
+  - 최소 수리 = AST 호출부 탐지(pivot_manifest 에서 import 된 별칭 집합 대조).
+    게이트 자체의 수정이므로 RED-first + mutation(별칭 호출 생성기 주입) 규율이
+    그대로 적용된다.
 
 **여기서 하지 않은 것 (의도적)**
 
