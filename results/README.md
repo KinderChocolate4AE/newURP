@@ -110,6 +110,44 @@ R4 권위값(`_Driver.d_min`)은 같은 driver 위에 있으면서 덤프되지 
          psi/ax 등 기존 값에 영향이 없다)
 ```
 
+## 캠페인 계보 라벨 (2026-09-05)
+
+세계·노선의 경계는 **스폰 거리가 아니라 캠페인 계약**이다. 오독 주의 2건:
+
+1. **Phase III / T0·T1 (v0 정본) 세계 = 스폰 24 m 회랑이다** (`curve_intercept_reactive.manifest.json`
+   실측: `adversary_start_x 24.0 · episode_len 160 · ring [8,0,0]`). 이는 결함이 아니라
+   **선언된 regime** 이다 (docs/87 §B0: "대상 세계 = legacy 24 m 회랑 한정 — frozen curve
+   계약과 동일. scale_v2 수치와 같은 곡선·같은 주장 혼합 금지"). "v0 = 300 m 세계" 로
+   읽지 말 것.
+2. scale_v2/v3 (300 m 대, docs/59~69) 는 **MARL/train branch 의 세계**다. v0 본문과
+   무관하며 (docs/84 §2 뺌 항목), branch 재개 시의 동결 계약이다.
+
+상태 어휘 4종:
+
+- **RETIRED** — 연구 노선 자체가 폐기됨. 수치 인용 금지, 방법론 이력으로만.
+- **LEGACY-REGIME** — 결론은 그 세계에서 참이나, 인용 시 **"legacy small-scale regime 한정"**
+  문구 필수 (docs/59 §0 재스코프 · docs/64 F-flags 규율). 일반화 주장 금지.
+- **NEXT-BRANCH** — v0 밖. MARL/train branch (docs/84 §7) 재개 시의 정본 계약·기준선.
+  성능 결과는 docs/74 Phase-II exploratory 규율 적용 (confirmatory 사용 금지).
+- **CANONICAL** — v0 line (Phase III T0/T1). 위 R4/뷰어 계약 절이 우선한다.
+
+| 패턴 | 캠페인 | 상태 |
+|---|---|---|
+| `m2_*` | M2 셰이핑/교환 게임 데모 (6월) | RETIRED |
+| `ppo_toy/ · spike_throughput/` | 인프라 스파이크 (7월 초) | RETIRED |
+| `ippo* · coma_run* · mappo_run* · p1_eval/` | M4 초기 MARL 런 (7월 초) | RETIRED |
+| `c1_corridor/` | C1 corridor probe (docs/23~25) | RETIRED |
+| `a3* · m3a_* · _calib/ · p4_probe/ · bankv2_* · snapshot_witness* · witness_margin* · temporal_support*` | A-3 커리큘럼/SBE 캠페인 (docs/13~21) — pivot(docs/74)으로 노선 폐기 | RETIRED |
+| `hold_baseline · intercept_baseline · curve_hold.json · curve_intercept.json` | 초기 curve/기준선 (08-02~03) — `*_reactive` 판이 supersede | LEGACY-REGIME |
+| `fire_audit_probe · fire_gate_calibration.md · boxed_arm_audit* · contact_* · coverage_* · handoff_audit · mobility_factorial · pk_sweep_audit · slew_counterfactual.json · coupling_gate · latest_start_sweep · recoverability_probe · p2prime_* · prefire_* · viz_trajectories*` | M4 legacy 진단 (docs/51~58: NK 42/42 · knife-edge · 폴백 등, 08-05~07) | LEGACY-REGIME |
+| `scale_v2_baseline*` | v2 스케일 첫 측정 (docs/59) | NEXT-BRANCH |
+| `threat_v3_* · v6_*` | 위협 v3 게이트 + TRAIN 분포 동결 계약 (docs/60~69 FINAL FREEZE) | NEXT-BRANCH |
+| `m4_v3_train* · iid_abl/ · viz_ls* · viz_arc · viz_hold · arc_tuning_* · shaping_ceiling*` | MARL LS/SS 학습·ablation (docs/69~72) | NEXT-BRANCH |
+| `phase3/ · curve_*_reactive* · e1* · e2b_* · e3_* · e4* · eta_sensitivity · analytic_bands · lead* · viz_traj_t1_hk* · viz_e4c_* · viz_lead_compare` | Phase III T0/T1 feasibility (v0 정본) | CANONICAL |
+
+가드: `tests/test_results_lineage.py` 가 results/ 최상위 전 항목이 위 표에 분류됨을 강제한다.
+새 아티팩트를 만들면 표에 행(또는 패턴)을 추가해야 GREEN 이다.
+
 ## 인용 규칙
 
 - 보고 수치는 canonical 산출물에서만 가져온다.
