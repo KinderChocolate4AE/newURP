@@ -1,0 +1,324 @@
+{
+ "protocol_hash": "1496a4769876b438",
+ "delta_p": 0.1,
+ "B": 4000,
+ "status": "falsification screen — no representativeness claim",
+ "cells": {
+  "(0.54, 3.0)": {
+   "n": 400,
+   "p_ref": 0.6525,
+   "R-tau-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-rho-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-tau-DOM": {
+    "n": 400,
+    "dp": 0.0025,
+    "ci95": [
+     -0.0075,
+     0.015
+    ],
+    "discordant": 5,
+    "q": 0.0125,
+    "verdict": "PASS"
+   },
+   "R-rho-DOM": {
+    "n": 400,
+    "dp": -0.39,
+    "ci95": [
+     -0.44,
+     -0.34
+    ],
+    "discordant": 172,
+    "q": 0.43,
+    "verdict": "FAIL"
+   }
+  },
+  "(0.54, 3.9)": {
+   "n": 400,
+   "p_ref": 0.4025,
+   "R-tau-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-rho-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-tau-DOM": {
+    "n": 400,
+    "dp": -0.0025,
+    "ci95": [
+     -0.0075,
+     0.0
+    ],
+    "discordant": 1,
+    "q": 0.0025,
+    "verdict": "PASS"
+   },
+   "R-rho-DOM": {
+    "n": 400,
+    "dp": -0.315,
+    "ci95": [
+     -0.3625,
+     -0.2675
+    ],
+    "discordant": 136,
+    "q": 0.34,
+    "verdict": "FAIL"
+   }
+  },
+  "(0.56, 3.0)": {
+   "n": 400,
+   "p_ref": 0.5125,
+   "R-tau-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-rho-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-tau-DOM": {
+    "n": 400,
+    "dp": -0.005,
+    "ci95": [
+     -0.0175,
+     0.0075
+    ],
+    "discordant": 6,
+    "q": 0.015,
+    "verdict": "PASS"
+   },
+   "R-rho-DOM": {
+    "n": 400,
+    "dp": -0.365,
+    "ci95": [
+     -0.415,
+     -0.315
+    ],
+    "discordant": 162,
+    "q": 0.405,
+    "verdict": "FAIL"
+   }
+  },
+  "(0.56, 3.9)": {
+   "n": 400,
+   "p_ref": 0.32,
+   "R-tau-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-rho-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-tau-DOM": {
+    "n": 400,
+    "dp": -0.0075,
+    "ci95": [
+     -0.0175,
+     0.0
+    ],
+    "discordant": 3,
+    "q": 0.0075,
+    "verdict": "PASS"
+   },
+   "R-rho-DOM": {
+    "n": 400,
+    "dp": -0.28,
+    "ci95": [
+     -0.3275,
+     -0.2325
+    ],
+    "discordant": 124,
+    "q": 0.31,
+    "verdict": "FAIL"
+   }
+  },
+  "(0.58, 2.1)": {
+   "n": 400,
+   "p_ref": 0.665,
+   "R-tau-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-rho-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-tau-DOM": {
+    "n": 400,
+    "dp": -0.0025,
+    "ci95": [
+     -0.0225,
+     0.0175
+    ],
+    "discordant": 17,
+    "q": 0.0425,
+    "verdict": "PASS"
+   },
+   "R-rho-DOM": {
+    "n": 400,
+    "dp": -0.27,
+    "ci95": [
+     -0.33,
+     -0.205
+    ],
+    "discordant": 186,
+    "q": 0.465,
+    "verdict": "FAIL"
+   }
+  },
+  "(0.6, 2.1)": {
+   "n": 400,
+   "p_ref": 0.5025,
+   "R-tau-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-rho-SIM": {
+    "n": 400,
+    "dp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "discordant": 0,
+    "q": 0.0,
+    "verdict": "PASS"
+   },
+   "R-tau-DOM": {
+    "n": 400,
+    "dp": -0.0125,
+    "ci95": [
+     -0.0325,
+     0.01
+    ],
+    "discordant": 19,
+    "q": 0.0475,
+    "verdict": "PASS"
+   },
+   "R-rho-DOM": {
+    "n": 400,
+    "dp": -0.2025,
+    "ci95": [
+     -0.2675625,
+     -0.135
+    ],
+    "discordant": 199,
+    "q": 0.4975,
+    "verdict": "FAIL"
+   }
+  }
+ },
+ "n_recalc": {
+  "R-tau-DOM": {
+   "q_by_cell": {
+    "(0.54, 3.0)": 0.0125,
+    "(0.54, 3.9)": 0.0025,
+    "(0.56, 3.0)": 0.015,
+    "(0.56, 3.9)": 0.0075,
+    "(0.58, 2.1)": 0.0425,
+    "(0.6, 2.1)": 0.0475
+   },
+   "worst_q": 0.0475,
+   "n_for_90pct_pass": 70
+  },
+  "R-rho-DOM": {
+   "q_by_cell": {
+    "(0.54, 3.0)": 0.43,
+    "(0.54, 3.9)": 0.34,
+    "(0.56, 3.0)": 0.405,
+    "(0.56, 3.9)": 0.31,
+    "(0.58, 2.1)": 0.465,
+    "(0.6, 2.1)": 0.4975
+   },
+   "worst_q": 0.4975,
+   "n_for_90pct_pass": 650
+  },
+  "stage3_n": 650
+ },
+ "sim_total_discordant": 0
+}
