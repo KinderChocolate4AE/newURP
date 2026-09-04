@@ -139,6 +139,7 @@ def test_ledger_dimensionless_groups_from_injected_values():
     SIM = 전부 invariant / R-tau-DOM = k_f·tau 만 / R-rho-DOM = {lam, alpha} 만 이동."""
     rows = L.ledger(0.45, 6.0, CELLS)
     need = {"tau_lock_tau", "tau_kill_tau", "omega_aim_tau", "omega_slew_tau",
+            "jink_freq_tau", "homing_tau", "jink_r_rho", "sig_dt",
             "dx_rho", "r_lat_rho", "x0_rho", "kappa", "dt_tau", "k_f_tau", "lam", "alpha"}
     ref = next(r for r in rows if r["impl"] == "R-ref")["pi"]
     assert need <= set(ref)
@@ -150,4 +151,7 @@ def test_ledger_dimensionless_groups_from_injected_values():
         assert moved == tgt, (impl, moved)
     # 1/s 차원 상수가 R-tau 에서 실제로 co-scale 됐는지 (원시값 검사)
     inj = next(r for r in rows if r["impl"] == "R-tau-SIM")["inject"]
-    assert abs(inj["omega_aim"] - 3.14159 * 0.30 / 0.45) < 1e-9 and abs(inj["tau_lock"] - 0.15) < 1e-9
+    assert abs(inj["omega_aim"] - 2.0 * 0.30 / 0.45) < 1e-9 and abs(inj["tau_lock"] - 0.15) < 1e-9
+    assert abs(inj["jink_freq"] - 1.5 * 0.30 / 0.45) < 1e-9
+    rho_inj = next(r for r in rows if r["impl"] == "R-rho-SIM")["inject"]
+    assert abs(rho_inj["sense_range"] - 30.0 * 2.30 / 1.77) < 1e-9

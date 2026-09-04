@@ -121,7 +121,11 @@ def _inject(im: dict) -> dict:
     상수 포함). target 외 항목은 SIM/DOM 공통 co-scale — 하나라도 빠지면 미등록 pi 누수."""
     s, r = im["tau"] / TAU_REF, im["rho"] / RHO_REF
     return {"dt": DT_REF * s, "tau_lock": 0.10 * s, "tau_kill": 0.15 * s,
-            "omega_aim": 3.14159 / s, "omega_att_slew": 8.0 / s, "k_f": im["k_f"],
+            # M4 override 값 (attitude.omega_max 2.0 — params 기본 3.14 아님); backend slew 10.0
+            "omega_aim": 2.0 / s, "omega_att_slew": 10.0 / s, "k_f": im["k_f"],
+            # 동결 곡선의 적대자 = A2-reactive: jink_freq·homing_gain [1/s], terminal_r·sense [m]
+            "jink_freq": 1.5 / s, "homing_gain": 4.0 / s,
+            "jink_terminal_r": 3.0 * r, "sense_range": 30.0 * r,
             "R_max": im["R_max"], "spawn_dx": 2.0 * r, "spawn_r_lat": 5.0 * r,
             "adversary_start_x": 24.0 * r, "kill_radius": 0.75 * r}
 
@@ -135,7 +139,9 @@ def _pins(im: dict) -> dict:
     return {"lam": lam, "alpha": math.atan(1.0 / lam), "k_f_tau": j["k_f"] * tau,
             "dt_tau": j["dt"] / tau, "tau_lock_tau": j["tau_lock"] / tau,
             "tau_kill_tau": j["tau_kill"] / tau, "omega_aim_tau": j["omega_aim"] * tau,
-            "omega_slew_tau": j["omega_att_slew"] * tau, "dx_rho": j["spawn_dx"] / rho,
+            "omega_slew_tau": j["omega_att_slew"] * tau, "jink_freq_tau": j["jink_freq"] * tau,
+            "homing_tau": j["homing_gain"] * tau, "jink_r_rho": j["jink_terminal_r"] / rho,
+            "sig_dt": j["sense_range"] / rho, "dx_rho": j["spawn_dx"] / rho,
             "r_lat_rho": j["spawn_r_lat"] / rho, "x0_rho": j["adversary_start_x"] / rho,
             "kappa": j["kill_radius"] / rho}
 
