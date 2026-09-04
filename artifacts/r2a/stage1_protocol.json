@@ -1,0 +1,52 @@
+{
+ "schema": "r2a-stage1-protocol-v1",
+ "contract": "R2a-P",
+ "lattice_hash": "3aa3adef77420d12",
+ "seed0": 1000,
+ "n_per_cell": 400,
+ "cells": [
+  [
+   0.58,
+   2.1
+  ],
+  [
+   0.6,
+   2.1
+  ],
+  [
+   0.54,
+   3.0
+  ],
+  [
+   0.56,
+   3.0
+  ],
+  [
+   0.54,
+   3.9
+  ],
+  [
+   0.56,
+   3.9
+  ]
+ ],
+ "cells_rule": "eta {2.1, 3.0, 3.9} x two micro-grid neighbors bracketing chi50(eta)",
+ "crn": {
+  "jitter": {
+   "chi": 0.01,
+   "eta": 0.15
+  },
+  "law": "SHA-256('r2a_s1|seed0|ep') -> uniform; dims back-computed per impl; spawn u and jink phase shared via (seed0, ep)"
+ },
+ "pathwise_atol": 1e-06,
+ "pathwise_calibration": 7.993605777301127e-15,
+ "gates": [
+  "Tier A pathwise metamorphic FIRST: CRN-fixed normalized trajectories within sealed atol. On mismatch, do NOT read the n=400 kill-screen numbers; classify the cause (harness bug / hidden dimensional constant / IC scaling / discretization) first.",
+  "HARD_KILL STOP: if any HARD_KILL occurs in a hold-arm confirmatory run, halt H-SIM/H-DOM reading for that batch and classify as competing-risk emergence. Do not drop or recode HARD_KILL episodes from the NET_CAPTURE denominator before the cause is identified.",
+  "viz-first: trajectory inspection of 2-3 episodes per implementation precedes any collapse statistic."
+ ],
+ "dt_check": "2 boundary cells x dt/2 (steps x2), lab server, before Stage 3",
+ "n_recalc": "measure paired correlation on Stage 1 output -> re-derive n for >=90% expected PASS at true delta=0; seal as Stage 3 n",
+ "status": "kill screen = falsification screen; no representativeness claim",
+ "protocol_hash": "a24fd8ce82afe7c5"
+}

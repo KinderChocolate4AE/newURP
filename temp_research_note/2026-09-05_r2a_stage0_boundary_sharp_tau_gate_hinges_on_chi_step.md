@@ -75,3 +75,12 @@ a_min 7 은 사용자 제안값; 여유 +0.020 이 부족하다고 판단되면 
 - **ledger 확장**: inject 22종 (layout 7 추가) · runtime_norm 7종 /ρ 전 구현 invariant (DOM 예외 없음, 누수 거부 테스트) · CONDITIONING_VECTOR (무차원 행동·판정 상수 + jink 2π 규약) · EPS_AUDIT (runtime 은 _EPS 1e-12, inert) · "μ inert" 삭제 (motion-inert / decision-active, conditioning ratio 유지).
 - **어휘·게이트**: 전역 어휘 "…conditional on the sealed A2-reactive evasion behavior vector". 순위 주장 → a priori sensitivity candidates 강등. STAGE1_GATES = pathwise-first + HARD_KILL STOP (분모 삭제·재코딩 금지) + viz-first.
 - **새 hash (v3)**: Stage 0 `4c26cf1a2a4d9ab8` / R2a-L `da36d96eb5bceddc` / R2a-P `3aa3adef77420d12`. 구 hash 3종은 SUPERSEDES 로 lineage 보존. envelope·게이트 수치 불변. docs/87 §4 A1→A2 개정 (날짜 명기). 테스트 19/19.
+
+## 후속 4 — Stage 1 설계 구현: 주입 실증 5/5 · Tier A pathwise 기계 정밀도 PASS · protocol 봉인
+
+- **fwd_gain 승격 완료** (게이트 11 잔여): `AttackerSpec.fwd_gain` 필드 (기본 = FWD_GAIN 4.0, bit-exact; is_a1_equivalent 에 조건 추가). A2 경로만 사용, A1 정의 (adversary.py) 무수정.
+- **`r2a_stage1.py`**: resolver (ledger inject 22종 → extra_cfg + AttackerSpec + SpawnSpec + SystemSpec(tau_kill, r_nk); ★능력비 3종은 draw 파생값을 덮어써야 μ/ν 보존) · feasibility · pathwise · viz · protocol seal · kill screen 러너 (checkpoint + HARD_KILL STOP 내장).
+- **feasibility 5/5 OK** — 22종 전부 실주입 확인, 재분류 필요 π 없음 (r4 §10 잔여 해소).
+- **Tier A pathwise: max dev 8.0e-15** (정규화 궤적, 경계 1셀 × 2 ep) — 상사변환이 부동소수 정밀도로 정확. DOM 판별력: R-tau-DOM 5.6e-2 / R-rho-DOM 5.2e-1 (λ 이동이 commit 기하를 바꿈, viz 정합). atol = 1e-6 (실측 ×10 후 하한 적용; DOM 대비 4~5 자릿수 여유).
+- **protocol 봉인** `a24fd8ce82afe7c5`: cells 6 = (0.58, 0.60)@η2.1 · (0.54, 0.56)@η3.0 · (0.54, 0.56)@η3.9 (chi50 감싸는 micro-grid 이웃, 공통 support 내) · seed0 1000 · n 400 · CRN 지터 (±0.01, ±0.15) SHA-256 · n 재산정/dt-check 계획 명기.
+- **잔여 (실행)**: kill screen 5 impl × 6 cell × 400 = 12,000 ep ≈ 5h 직렬 → 랩서버 (H-4 사용자 확인 선행, long-run-policy). 샤딩 = `--impl X --cells i,j`. repo-R1 provenance pass 도 선행 의무.

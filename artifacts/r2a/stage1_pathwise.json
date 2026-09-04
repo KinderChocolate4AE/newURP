@@ -1,0 +1,69 @@
+{
+ "cell": [
+  0.5519282431198343,
+  3.0
+ ],
+ "eps": {
+  "0": {
+   "R-ref": {
+    "label": "NET_CAPTURE",
+    "steps": 20
+   },
+   "R-tau-SIM": {
+    "label": "NET_CAPTURE",
+    "steps": 20,
+    "max_dev": 2.220446049250313e-15,
+    "steps_match": true
+   },
+   "R-rho-SIM": {
+    "label": "NET_CAPTURE",
+    "steps": 20,
+    "max_dev": 3.552713678800501e-15,
+    "steps_match": true
+   },
+   "R-tau-DOM": {
+    "label": "NET_CAPTURE",
+    "steps": 20,
+    "max_dev": 0.05649706131659249,
+    "steps_match": true
+   },
+   "R-rho-DOM": {
+    "label": "NET_CAPTURE",
+    "steps": 22,
+    "max_dev": 0.5177259543519641,
+    "steps_match": false
+   }
+  },
+  "1": {
+   "R-ref": {
+    "label": "NET_CAPTURE",
+    "steps": 23
+   },
+   "R-tau-SIM": {
+    "label": "NET_CAPTURE",
+    "steps": 23,
+    "max_dev": 1.7763568394002505e-15,
+    "steps_match": true
+   },
+   "R-rho-SIM": {
+    "label": "NET_CAPTURE",
+    "steps": 23,
+    "max_dev": 7.993605777301127e-15,
+    "steps_match": true
+   },
+   "R-tau-DOM": {
+    "label": "NET_CAPTURE",
+    "steps": 23,
+    "max_dev": 0.061683873602587536,
+    "steps_match": true
+   },
+   "R-rho-DOM": {
+    "label": "NET_CAPTURE",
+    "steps": 25,
+    "max_dev": 0.5159301410235453,
+    "steps_match": false
+   }
+  }
+ },
+ "tier_a_max_dev": 7.993605777301127e-15
+}

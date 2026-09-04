@@ -209,3 +209,51 @@ def test_provenance_confirmed_and_new_seal_a2():
     assert lat["lattice_hash"] != "e43036f00679ff77"
     assert "conditional on the sealed A2-reactive" in lat["vocab"]["global"]
     assert any("HARD_KILL" in g for g in lat["stage1_gates"])
+
+
+def test_attacker_fwd_gain_promotion_bitexact_default():
+    """R2a Stage 1: fwd_gain 주입점 — 기본값 = FWD_GAIN (기존 거동 bit-exact),
+    비기본값은 A1 위임 금지 (A1 경로는 4.0 하드코딩이므로)."""
+    from shepherd.agents.attacker_ladder import (FWD_GAIN, A1_SPEC, AttackerSpec,
+                                                 is_a1_equivalent)
+    assert AttackerSpec().fwd_gain == FWD_GAIN == 4.0
+    assert is_a1_equivalent(A1_SPEC)
+    import dataclasses
+    assert not is_a1_equivalent(dataclasses.replace(A1_SPEC, fwd_gain=2.6666666666666665))
+
+
+def test_stage1_resolver_capability_and_cone():
+    """resolver: 능력비 3종 덮어쓰기 (draw 파생값 누수 방어) + cone half_angle 재계산."""
+    import math
+    from shepherd.scripts.r2a_stage1 import MU, NU, ADV_V, resolve, draw_cell_jitter
+    ims = L.impls(0.45)
+    for name in ("R-tau-SIM", "R-rho-DOM"):
+        im = ims[name]
+        kw = resolve(im, 0.55, 3.0)
+        a, v = L.dims_from(0.55, 3.0, im["tau"], im["rho"])
+        x = kw["extra_cfg"]
+        assert abs(x["physics.a_lim_max"] - MU * a) < 1e-9
+        assert abs(x["train.limits.limiter_v_max"] - NU * v) < 1e-9
+        assert abs(x["train.limits.adversary_v_max"] - ADV_V * v) < 1e-9
+        assert abs(x["viability.cone.half_angle"]
+                   - math.atan(im["rho"] / x["viability.cone.range_max"])) < 1e-12
+        assert abs(kw["attacker"].fwd_gain * im["tau"]
+                   - (1.20 if not im["target"] else 4.0 * im["tau"])) < 1e-9
+    c1 = draw_cell_jitter(1000, 7, 0.56, 3.0)
+    assert c1 == draw_cell_jitter(1000, 7, 0.56, 3.0)          # CRN 결정론
+    assert abs(c1[0] - 0.56) <= 0.01 and abs(c1[1] - 3.0) <= 0.15
+
+
+@pytest.mark.skipif(not (ROOT / "artifacts/r2a/stage1_protocol.json").exists(),
+                    reason="stage1 protocol not sealed")
+def test_stage1_gates_sealed_and_passed():
+    import json
+    fz = json.loads((ROOT / "artifacts/r2a/stage1_feasibility.json").read_text(encoding="utf-8"))
+    pw = json.loads((ROOT / "artifacts/r2a/stage1_pathwise.json").read_text(encoding="utf-8"))
+    pr = json.loads((ROOT / "artifacts/r2a/stage1_protocol.json").read_text(encoding="utf-8"))
+    assert fz["all_ok"] and all(v["ok"] for v in fz["impls"].values())
+    assert pw["tier_a_max_dev"] < pr["pathwise_atol"]           # Tier A 게이트
+    for row in pw["eps"].values():                              # DOM 판별력 (power)
+        assert row["R-tau-DOM"]["max_dev"] > pr["pathwise_atol"]
+        assert row["R-rho-DOM"]["max_dev"] > pr["pathwise_atol"]
+    assert len(pr["cells"]) == 6 and pr["lattice_hash"] == "3aa3adef77420d12"

@@ -89,6 +89,8 @@ class AttackerSpec:
     jink_freq: float = 1.5             # Hz
     jink_terminal_r: float = 3.0       # m. 목표 이 반경 안에서는 회피 중단(종말 유도)
     route_gain: float = 0.0            # x a_lat_max. angular-gap 회피 편향 (docs/60 §3.2)
+    fwd_gain: float = FWD_GAIN         # 1/s. 전진 P-게인 (R2a: 시간 상사변환 주입점.
+                                       # 기본값 = FWD_GAIN 이므로 기존 거동 bit-exact)
     homing_gain: float = 4.0           # 1/s. 횡속도 감쇠 = 회피 후 시선축 복귀
                                        # 값의 근거: params.py `adversary.fwd_gain`(=4.0,
                                        # A1 의 비준된 전진 P-게인)을 그대로 상속. 성능을
@@ -139,7 +141,7 @@ def is_a1_equivalent(spec: AttackerSpec) -> bool:
     """A1 위임 경로를 쓸 수 있는가 (모든 extras off + lambda 기준점)."""
     return (spec.lam_gain == _REF_LAM_GAIN and spec.lam_range == _REF_LAM_RANGE
             and spec.jink_amp == 0.0 and spec.route_gain == 0.0
-            and spec.bait_gain == 0.0
+            and spec.bait_gain == 0.0 and spec.fwd_gain == FWD_GAIN
             and spec.sprint_range == 0.0 and spec.slowdown_range[0] == 0.0)
 
 
@@ -388,7 +390,7 @@ def _general_action(spec, p_att, v_att, *, target, net_center, finisher_p, limit
 
     # --- A1: 전진 P-drive (원본과 동일 순서; v3 off 면 v_ref == v_nominal) ----
     v_fwd = float(v_att @ fwd)
-    a_fwd = FWD_GAIN * (v_ref - v_fwd) * fwd
+    a_fwd = spec.fwd_gain * (v_ref - v_fwd) * fwd
 
     # --- A1: 커밋 후 횡회피 ---------------------------------------------------
     to_net = _unit(net_center - p_att, fwd)

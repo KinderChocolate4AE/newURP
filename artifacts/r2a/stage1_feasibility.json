@@ -1,0 +1,35 @@
+{
+ "probe_cell": [
+  0.55,
+  3.0
+ ],
+ "lattice_hash": "3aa3adef77420d12",
+ "all_ok": true,
+ "impls": {
+  "R-ref": {
+   "ok": true,
+   "mismatches": [],
+   "n_injected": 29
+  },
+  "R-tau-SIM": {
+   "ok": true,
+   "mismatches": [],
+   "n_injected": 29
+  },
+  "R-rho-SIM": {
+   "ok": true,
+   "mismatches": [],
+   "n_injected": 29
+  },
+  "R-tau-DOM": {
+   "ok": true,
+   "mismatches": [],
+   "n_injected": 29
+  },
+  "R-rho-DOM": {
+   "ok": true,
+   "mismatches": [],
+   "n_injected": 29
+  }
+ }
+}
