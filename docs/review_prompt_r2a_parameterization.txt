@@ -1,0 +1,195 @@
+================================================================================
+R2A PARAMETERIZATION — 설계 브리프 r3
+r1 2026-09-05 → 감사 1차 "수정 요구" (9건) → r2 → 감사 2차 (identifiability
+정밀화 + tau 선택 게이트 + SIM/DOM 구현 분리) → r3 2026-09-05
+정본 계획 docs/87 §4 를 supersede 하는 부분이 있다 — lattice 봉인 문서가
+최종 정본이 된다. 수치 주장은 전부 적대적 재검증 완료 (§8).
+================================================================================
+
+0. 문서 지위
+--------------------------------------------------------------------------------
+실행 전 설계 문서. 봉인 문서 (기계 판독)가 본 내용을 확정하며 결과 열람 전
+hash 봉인. r3 의 핵심 변경 = ① identifiability 를 명시적 설계 제약으로 격상
+② tau_B 를 고정하지 않고 사전등록 알고리즘으로 선택 ③ 구현을 SIM(차원 변경)
+/ DOM(물리 변경) 으로 분리.
+
+1. 배경 (요약)
+--------------------------------------------------------------------------------
+단독(hold arm) net 포획률 경계의 무차원 지도. 세계 = legacy 24 m 회랑 (선언
+regime), 위협 = 자유방향 점질량 A1, 기존 1-D 곡선 n=2,700 (pooled chi50 =
+0.571 — ★ 1-D projection 이며 chi50(eta) 의 행별 값을 함의하지 않는다).
+동기 = Gate 10 core-only 기각 + eta GOVERNING + "chi 1차원 단면" 철회.
+
+2. 가설 2종 + identifiability 제약 (감사 2차 핵심)
+--------------------------------------------------------------------------------
+  H-SIM (strict similarity): 모든 등록 π 와 무차원 초기조건 법칙을 co-scale
+    로 고정한 완전 상사 구현에서 지도가 pathwise + 통계적으로 collapse.
+    실패 = 하네스 버그/숨은 차원상수/IC 스케일링 누락/이산화 중 하나 —
+    ledger 감사로 분류 후 처리 ("버그 간주" 단정 금지).
+  H-DOM (local robustness): 사전 지정 conditioning perturbation 에서 경계
+    지도 변화가 선언 허용치 이하. 성공 주장은 "시험한 교란 범위 내" 한정.
+
+  ★ identifiability 제약 (설계의 1급 제약): H-DOM 의 primary estimand 는
+  chi50(eta) curve 다. 경계가 구현들의 공통 support 밖에 있으면 세 curve 가
+  같은 방향으로 censored 되어 D_chi 가 **계산 자체가 불가능**하다 — 이는
+  negative result 가 아니라 non-identifiable design 이다. R_cell (저-p 영역
+  일치) 은 계산 가능하나 primary 를 대체하지 못한다. 따라서 경계 근방을
+  **양측에서** 관측할 수 있음(boundary envelope ⊂ common support + headroom)
+  이 confirmatory 착수의 전제 조건이며, Stage 0 + 구현 선택 게이트가 이를
+  결과 열람 전 규칙으로 보장한다 (§5).
+
+  허용 어휘: H-SIM = "consistent with dimensional similarity" / H-DOM =
+  "boundary robust to the declared perturbations". closure "입증" 금지.
+
+3. 좌표·세계 계약
+--------------------------------------------------------------------------------
+3.1 등록 π (lattice_spec.PI_GROUPS 12군): chi, eta = plotted / kappa, mu, nu,
+    sig_sb, sig_dt, sig_as, N, dt/tau = pin / lam, alpha (= 대수 종속쌍,
+    lam = 1/tan(alpha)) = R-rho-DOM target.
+3.2 무차원 초기조건 법칙 등록: sig_spawn = D_spawn/rho (기준 13.56),
+    dx/rho, r_lat/rho. T_reach/tau = (D_0/rho)/eta 로 등록 π 의 함수임을
+    명기. SIM 구현은 이들 전부 co-scale, DOM 구현은 target 외 전부 co-scale.
+3.3 estimand 명명: mu, nu 고정 = "고정 capability-ratio family 의 위협
+    지도" (고정 방어자 지도 아님). 본문·캡션 이 문구만.
+
+4. 구현 계약 (r3 재구성 — 차원 변경과 물리 변경을 섞지 않는다)
+--------------------------------------------------------------------------------
+4.1 구현 5종 (역할 분리):
+    [Tier A — H-SIM, 완전 상사]
+      R-ref      : tau 0.30, rho 1.77 (기준)
+      R-tau-SIM  : tau = tau_B (§4.4 선택 게이트) — dt, k_f, 스폰 기하 등
+                   전 차원변수 co-scale (dt/tau, k_f·tau, sig_* 전부 불변)
+      R-rho-SIM  : rho 2.30 — R_max·스폰·sig_* 원천 길이 전부 co-scale
+                   (lam, alpha 불변)
+    [Tier B — H-DOM, target 만 이동]
+      R-tau-DOM  : tau = tau_B, k_f 를 차원값 4.0 s^-1 로 **유지** →
+                   k_f·tau 가 1.20 → 4.0·tau_B 로 이동. 명명 규칙: 이 교란은
+                   "tau perturbation" 이 아니라 **"fixed-dimensional
+                   controller gain 이 유도한 k_f·tau perturbation"** 이다 —
+                   실제로 움직인 π 로만 부른다. (다른 잔여 차원상수가 ledger
+                   에서 발견되면 동일 원리로 target 에 등재.)
+      R-rho-DOM  : rho 2.30, R_max 비-co-scale → target = {lam 4.64→3.57,
+                   alpha 12.15°→15.63°}. 스폰·sig_* 는 co-scale 로 격리.
+4.2 Tier A 검사: 저p/경계/고p × 상이한 eta 의 3~4셀. 통계 이전에 pathwise
+    metamorphic 선행 — CRN 고정 시 정규화 궤적이 선언 atol 내 일치 (n=400
+    통계보다 강한 검사, 먼저 실행).
+4.3 invariant/perturbation ledger (봉인 필수): r2a_lattice.py 가 구현×셀당
+    1행 — raw 차원 파라미터 / 등록 π / 기지 미등록 π (k_f·tau, r_lat/rho,
+    T_reach/tau 표현식) / 무차원 IC / target 여부. 자동 검증: SIM = 전 행
+    invariant / DOM = target 행만 이동. (R-tau-DOM 이 사실상 SIM 이 되는
+    누수 — dt·k_f = (dt/tau)(k_f·tau) 항등식 — 의 유일한 방어선.)
+4.4 ★ tau_B 선택 게이트 (r3 신설 — 결과 열람 전 알고리즘 봉인):
+    legacy bracket a∈[11,78], v∈[8,30] 유지 시 R-tau 계 support 하단:
+      tau_B   chi_min  eta_min   (chi_min = 11·tau_B²/3.54)
+      0.45    0.629    2.034
+      0.425   0.561    1.921
+      0.40    0.497    1.808
+      0.375   0.437    1.695
+    선택 규칙 (사전등록): 후보 tau_B ∈ {0.45, 0.425, 0.40, 0.375} 중,
+    Stage 0 이 정의한 boundary envelope 전체가 R-ref/R-tau계/R-rho계 공통
+    support 내부에 들어가고 support 경계와 confirmatory band 사이에 최소
+    1 chi-grid 간격의 headroom 이 남는 **가장 큰 tau_B** 를 기계적으로
+    선택한다. perturbation floor: tau_B/tau_ref ≥ 1.25 (최소 후보 0.375 —
+    이보다 약한 교란으로 "robust" 주장은 무의미).
+    0.375 로도 envelope 를 못 감싸면 → 분기 D-1: "legacy bracket 내에서는
+    의미 있는 time-perturbation H-DOM 이 identifiable 하지 않다" 를 공식
+    판정으로 기록하고 (실패가 아니라 design-feasibility 결과), 저가속 확장
+    (a<11) pin-contract 를 신규 hash 로 분리 선언. estimand 혼합 금지.
+    R-rho 계 support: chi [0.215, 1.526], eta [1.043, 3.913] (하단은 R-tau
+    계가 지배, 상단 chi/eta 는 R-rho 가 지배 — 공통 상단 1.526/3.913).
+
+5. Stage 구성 (순서 = 감사 Q3 옵션 1 + r3 선택 게이트)
+--------------------------------------------------------------------------------
+  Stage 0 (설계/feasibility 데이터 — 봉인 전, 명시적 exploratory):
+    frozen 2,700판 (chi,eta) 재집계 → 행별 chi50(eta) + **boundary envelope**
+      B(eta) = [chi50(eta) − h, chi50(eta) + h],
+      h = max(delta_chi50 역산값, 행별 경계 CI 반폭, chi-grid 1간격).
+    "chi50 한 점 포함" 이 아니라 경계 **양측** 관측 가능성이 기준이다.
+    + margin 역산 (§6.1). 산출물 hash 는 봉인에 들어간다.
+  [구현 선택 게이트] tau_B 자동 선택 (§4.4 규칙) — 판정문 기록.
+  [lattice 봉인 — 여기서 hash: 격자·tau_B·envelope·ledger·판정 규칙 전부]
+  Stage 1 (kill screen): 5구현 × 경계 걸침 6셀 (eta 3구간 × 예비 chi50(eta)
+    최근접 2셀, envelope∩공통 support 내부 — 결정론 규칙) × n=400 paired.
+    지위 = falsification screen (대표성 주장 금지). + viz-first 궤적 육안검사
+    + Tier A pathwise 검사 + dt 수렴 spot-check (경계 2셀 × dt/2)
+    + paired 상관 실측 → n 재산정 게이트 (§6.2).
+  Stage 2 (본 지도, R-ref 단독): chi 12 × eta 7 × n=400 = 33,600 ep.
+    (r1 의 "84셀 × 3구현 전면" 은 예산 모순으로 폐기 — full 지도는 R-ref,
+    robustness 는 경계 밴드.)
+  Stage 3 (confirmatory): 경계 밴드 셀 (~15) × {Tier A 3종 (H-SIM) +
+    R-tau-DOM + R-rho-DOM (H-DOM, **별도 판정**)} × n (§6.2 재산정)
+    + scripted family worst-case (exact rule — family 목록·밴드 생성·n·
+    worst 정의·max-선택 bootstrap — 봉인 명기).
+  Stage 4 (직교 lam test): R-rho-DOM 실패 시 lam 승격은 자동이 아니다 —
+    "미해소 bundle" 기록 후, lam·alpha 만 움직인 직교 섭동 (3레벨 × 경계
+    6셀) 에서 독립 효과 확인 시에만 (chi,eta,lam) 재등록.
+
+6. 판정 규칙
+--------------------------------------------------------------------------------
+6.1 margin: delta_p, delta_chi50 은 Stage 0 설계 데이터에서 경계 기울기
+    |dp/dchi| 로 연동 역산 ("R2b 경계 셀 분류를 바꾸지 않는 최대 허용 이동").
+    역산값이 0.10/0.05 와 다르면 역산값이 정본.
+6.2 셀 판정 (equivalence 3분법):
+      PASS = paired CI95(Δp) ⊂ [−delta_p, +delta_p] / INCONCLUSIVE = 걸침 /
+      FAIL = 밖.
+    paired CRN: 시나리오를 무차원 공간에서 추첨 ((seed,episode) SHA-256 —
+    셀 내 지터·스폰 오프셋/rho·jink 위상), 구현별 차원값은 chi·eta 역산
+    (a = chi·2rho/tau_B², v = eta·rho/tau_B). 검정력: 독립 가정 n=400 의
+    기대 PASS (참 Δ=0) = 61.5% (500→77%, 600→87%, 800→96%) — Stage 1 paired
+    상관 실측으로 "기대 PASS ≥ 90%" n 을 재산정해 Stage 3 n 으로 봉인.
+6.3 전역 판정 (identifiability 전제 명시):
+      primary   D_chi = max_eta |chi50_i(eta) − chi50_ref(eta)|,
+                simultaneous bootstrap band 상한 ≤ delta_chi50.
+                ★ 계산 가능 조건 = 해당 eta 행에서 경계가 양측 관측됨 —
+                censored 행은 D_chi 에서 제외하고 제외 행 수를 함께 보고.
+                usable 행이 0 이면 H-DOM 판정 불가 선언 (D-1 경로).
+      secondary R_cell = max_i p_i − min_i p_i (경계 밴드 셀).
+    bootstrap 은 episode 수준 estimator 전체 재적합. H-SIM 판정과 H-DOM
+    판정은 별도 보고 (Tier A 3종 / DOM 2종).
+6.4 chi50(eta) 추정: primary = 행별 binomial isotonic / secondary =
+    logistic fit / transparency = raw bin. 예외 사전 선언: 교차 없음 =
+    censored / 다중 교차 = 단조성 flag / 경계 외삽 금지.
+6.5 어휘: 성공 = "consistent with (chi,eta) dominance under the declared
+    perturbations" 까지. kill = π-축소 실패 지도 그대로 보고 (null 도 결과).
+
+7. 후속 연결 (registry 하드 의존성)
+--------------------------------------------------------------------------------
+    C044 = chi50(eta) + simultaneous band
+    C045 ∈ { PASS_2D, PARTIAL_3D, FAIL, NON_IDENTIFIABLE }:
+      PASS_2D → R2b (chi,eta) 좌표 잠금 허용
+      PARTIAL_3D → 2-D 잠금 자동 무효, 새 3-D hash 후 R2b 재설계, 기존
+        데이터 exploratory 강등
+      FAIL → R2b 물리 좌표 잠금 금지 (차원 좌표 + 동결 세계 후퇴)
+      NON_IDENTIFIABLE (D-1) → 판정 자체를 보류하고 pin-확장 캠페인으로
+    C046 = provenance + legacy 회랑·A1·capability-ratio-family 한정 caveat
+
+8. 감사 반영 기록
+--------------------------------------------------------------------------------
+  1차 (r1→r2): 판정 "수정 요구". 최소 수정 9건 + 추가 A~F 전부 반영.
+    수치 재검증: support 4조·pooled chi50=0.571 위치·equivalence 61.5%·
+    lam/alpha·24/rho 23% — 전부 CONFIRMED. k_f = fwd_gain 4.0 [1/s]
+    (params.py:272) 연속 gain 실측.
+  2차 (r2→r3): ① "가장 아픈 발견" 의 정밀화 — 문제의 본질은 pooled 경계의
+    support 이탈이 아니라 **H-DOM primary estimand 의 non-identifiability
+    위험** (세 curve 동방향 censoring 시 D_chi 계산 불능). 반영 = §2 제약
+    격상 + §6.3 계산 가능 조건 + C045 NON_IDENTIFIABLE 값 신설.
+    ② 과잉 추론 2건 자기정정: pooled 0.571 은 행별 chi50(eta) 를 함의하지
+    않음 / marginal p(eta) 감소는 conditional 경계 단조 감소의 증명이 아님
+    — 둘 다 Stage 0 직접 측정 사안. ③ tau_B 후보표 재계산 일치 (chi_min
+    0.629/0.561/0.497/0.437, eta_min 2.034/1.921/1.808/1.695) → 선택 게이트
+    §4.4 채택 (0.425 는 pooled 경계와 여유 0.010 뿐이라 후보로만 유지).
+    ④ R-tau 의 SIM/DOM 분리 — "전부 co-scale 한 tau 변경은 conditioning
+    perturbation 이 아니라 H-SIM" 지적 수용, 구현 5종으로 재구성 (§4.1).
+    ⑤ D-1 의 지위 변경: 캠페인 blocker → Stage 0 이 답하는 design-
+    feasibility gate 의 최후 분기.
+9. 잔여 결정 (봉인 전)
+--------------------------------------------------------------------------------
+  - h (envelope 반폭) 구성값 중 delta_chi50 역산 절차 확정 (Stage 0 후).
+  - Tier A pathwise atol — 구현 후 1셀 calibration 으로 정하되 봉인 전 고정.
+  - Stage 3 family worst-case exact rule 문안.
+  - SIM co-scale 의 하네스 실현성 점검: dt = tau_B/6 (dt/tau pin), k_f =
+    1.20/tau_B [1/s] 등이 config 로 실제 주입 가능한지 — r2a_lattice.py
+    구현 시 ledger 로 검증 (불가 항목 발견 시 해당 π 를 DOM target 으로
+    재분류하고 봉인에 기록).
+  - D-1 발동 시 pin-확장 범위 선언 문안.
+================================================================================
