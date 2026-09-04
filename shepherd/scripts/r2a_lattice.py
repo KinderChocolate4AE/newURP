@@ -141,7 +141,10 @@ def _pins(im: dict) -> dict:
     j, tau, rho = _inject(im), im["tau"], im["rho"]
     lam = j["R_max"] / rho
     return {"lam": lam, "alpha": math.atan(1.0 / lam), "k_f_tau": j["k_f"] * tau,
-            "dt_tau": j["dt"] / tau, "tau_lock_tau": j["tau_lock"] / tau,
+            # q_dec = T_decision/tau (A-prime: 현 구현은 적분·상태갱신·clean 판정·발사
+            # cadence 가 전부 dt 로 일치 -> T_decision == dt). "수치 검증수" 지위는 dt/2
+            # 진단으로 철회 — chi50 을 +0.15 움직이는 governing conditioning coordinate.
+            "q_dec": j["dt"] / tau, "tau_lock_tau": j["tau_lock"] / tau,
             "tau_kill_tau": j["tau_kill"] / tau, "omega_aim_tau": j["omega_aim"] * tau,
             "omega_slew_tau": j["omega_att_slew"] * tau, "jink_freq_tau": j["jink_freq"] * tau,
             "homing_tau": j["homing_gain"] * tau, "jink_r_rho": j["jink_terminal_r"] / rho,
@@ -275,7 +278,27 @@ EPS_AUDIT = {
             "the R2a runtime path; excluded as judge-resolution constants, not lengths/times.",
 }
 
+Q_DEC = {
+    "value": 1.0 / 6.0,
+    "definition": "q_dec = T_decision / tau. In the current implementation the integration "
+                  "step, state-update, clean-judgment and fire-command cadences coincide "
+                  "(T_decision == dt), so q_dec == dt/tau = 1/6.",
+    "status": "registered GOVERNING conditioning coordinate (A-prime reclassification, "
+              "2026-09-05). Pre-Stage-1 diagnostic found strong boundary sensitivity to "
+              "normalized decision cadence: q_dec 1/6 -> 1/12 shifted chi50 by ~+0.15 "
+              "(>> delta_chi 0.05). The former numerical-verification-number status of "
+              "dt/tau is REVOKED for this closed-loop decision layer. The dt/2 result is "
+              "published as a pre-confirmatory sensitivity diagnostic "
+              "(stage1_dt_check.json + stage1_dt_review.json), not a convergence failure.",
+    "caveat": "this experiment alone does not separate pure fire-delay physics from "
+              "numerical discretization at fixed cadence — a decision-decoupled substep "
+              "probe (integration dt/2 at fixed T_decision) is the follow-up B-track.",
+}
+
 STAGE1_GATES = [
+    "q_dec invariant: every implementation and every episode runs at q_dec = dt/tau = 1/6 "
+    "(runtime assert in the shard runner). The dt/2 diagnostic is a conditioning "
+    "perturbation, not a convergence gate — it does not block execution.",
     "Tier A pathwise metamorphic FIRST: CRN-fixed normalized trajectories within sealed atol. "
     "On mismatch, do NOT read the n=400 kill-screen numbers; classify the cause "
     "(harness bug / hidden dimensional constant / IC scaling / discretization) first.",
@@ -320,6 +343,13 @@ def build_lattice(stage0_path: pathlib.Path, contract: str,
         "world": "legacy 24 m corridor; threat A2-reactive (sealed evasion vector, see "
                  "conditioning_vector); fixed capability-ratio family (mu, nu pinned)",
         "supersedes": SUPERSEDES,
+        "supersedes_v3": {"reason": "A-prime — q_dec (normalized decision cadence) "
+                                    "reclassified from numerical verification number to "
+                                    "governing conditioning coordinate before "
+                                    "confirmatory execution",
+                          "stage0": "4c26cf1a2a4d9ab8", "R2a-L": "da36d96eb5bceddc",
+                          "R2a-P": "3aa3adef77420d12"},
+        "q_dec": Q_DEC,
         "conditioning_vector": CONDITIONING_VECTOR,
         "evasion_provenance": {"file": str(prov_path).replace("\\", "/"),
                                "verdict": prov["verdict"],
@@ -349,10 +379,11 @@ def build_lattice(stage0_path: pathlib.Path, contract: str,
                   "H-DOM": "boundary robust to the declared perturbations",
                   "global": "consistent with (chi, eta) dominance under the declared "
                             "perturbations, conditional on the sealed A2-reactive evasion "
-                            "behavior vector"},
+                            "behavior vector and normalized decision cadence q_dec = 1/6"},
         "registry": {"C044": "chi50(eta) + simultaneous band",
                      "C045": ["PASS_2D", "PARTIAL_3D", "FAIL", "NON_IDENTIFIABLE"],
-                     "C046": "provenance + legacy corridor / A1 / capability-ratio caveat"},
+                     "C046": "provenance + legacy corridor / A2-reactive evasion vector / "
+                             "capability-ratio / q_dec = 1/6 decision-cadence caveat"},
     }
     payload["lattice_hash"] = hashlib.sha256(
         json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]

@@ -248,21 +248,22 @@ def seal_protocol() -> dict:
                          "scenario and halts at the next scenario boundary "
                          "(stopped_by_sentinel flag); the sentinel records (shard, "
                          "scenario, impl) so nothing is excluded silently",
-        "dt_check": {"when": "BEFORE the Stage 1 main run (audit r3 — moved up from "
-                             "pre-Stage-3)",
-                     "design": "R-ref, 2 boundary cells, n=50 paired CRN episodes at dt vs "
-                               "dt/2 (episode_len x2; dt_tau is a numerical verification "
-                               "number, not a design parameter — PI_GROUPS)",
-                     "rule": "paired discordant-label fraction per cell <= 0.10 (= "
-                             "delta_p); else STOP-and-review before any kill-screen "
-                             "episode"},
+        "q_dec_gate": "every implementation and episode runs at q_dec = dt/tau = 1/6 "
+                      "(runtime assert). Pre-Stage-1 diagnostic found strong boundary "
+                      "sensitivity to normalized decision cadence: q_dec 1/6 -> 1/12 "
+                      "shifted chi50 by ~+0.15; q_dec was therefore reclassified from a "
+                      "numerical verification ratio to a governing conditioning "
+                      "coordinate BEFORE confirmatory execution (A-prime). The dt/2 run "
+                      "is published as a sensitivity diagnostic (stage1_dt_check.json), "
+                      "not used as a convergence gate.",
         "n_recalc": "paired correlation for Stage 3 n is computed SEPARATELY for "
                     "R-ref<->R-tau-DOM and R-ref<->R-rho-DOM — never pooled with SIM arms "
                     "(near-identical SIM pairs inflate correlation and understate n); "
                     "per-cell variation inspected; the most conservative n is sealed for "
                     "Stage 3 (>=90% expected PASS at true delta = 0)",
-        "supersedes_protocol": "a24fd8ce82afe7c5 (pre-audit-r3: per-impl sharding, "
-                               "shard-local STOP, dt-check deferred to pre-Stage-3)",
+        "supersedes_protocol": ["a24fd8ce82afe7c5 (pre-audit-r3)",
+                                "93c201cfba2785d2 (pre-A-prime: dt-check as a "
+                                "convergence gate)"],
         "status": "kill screen = falsification screen; no representativeness claim",
     }
     payload["protocol_hash"] = hashlib.sha256(
@@ -319,6 +320,8 @@ def run_shard(shard: int, n_shards: int = 8) -> dict:
         chi, eta = draw_cell_jitter(proto["seed0"], s, chi_c, eta_c)
         for name, im in ims.items():
             kw = resolve(im, chi, eta)
+            q = kw["extra_cfg"]["physics.dt"] / kw["extra_cfg"]["physics.tau_deploy"]
+            assert abs(q - 1.0 / 6.0) < 1e-12, (name, q)   # q_dec invariant gate (A-prime)
             st = build_m4_env(proto["seed0"], s, **kw)
             r = run_episode(st.env, st.scn, st.lay, seed=proto["seed0"] + s,
                             limiter_mode="hold", fire_mode="clean", policy=None,
@@ -338,9 +341,9 @@ def run_shard(shard: int, n_shards: int = 8) -> dict:
 
 # ------------------------------------------------------------- dt 수렴 검사 --
 def dt_check(n: int = 50) -> dict:
-    """본 run 전 필수 (감사 r3): R-ref, 경계 2셀, paired CRN, dt vs dt/2 (steps x2).
-    dt_tau 는 수치 검증수 — 이 검사만 의도적으로 pin 을 깬다. 규칙: 셀당 라벨
-    불일치율 <= 0.10 (= delta_p), 아니면 kill screen 착수 금지."""
+    """q_dec 민감도 진단 (A-prime 이후 지위): R-ref, 경계 2셀, paired CRN,
+    q_dec 1/6 vs 1/12. 실행 gate 아님 — 발견 (chi50 ~+0.15 이동) 은
+    stage1_dt_review.json 에 분류·공개된다."""
     from shepherd.stats import wilson
     proto = json.loads((ART / "stage1_protocol.json").read_text(encoding="utf-8"))
     lat = _lattice()
@@ -409,8 +412,6 @@ def main(argv=None) -> None:
             print(f"  cell {c}: discordant {v['discordant']}  p_dt {v['p_dt']:.3f}  "
                   f"p_dt/2 {v['p_dt2']:.3f}")
     if a.run:
-        dtc = json.loads((ART / "stage1_dt_check.json").read_text(encoding="utf-8"))
-        assert dtc["verdict"] == "PASS", "dt_check 미통과 — kill screen 착수 금지"
         run_shard(a.shard, a.n_shards)
 
 

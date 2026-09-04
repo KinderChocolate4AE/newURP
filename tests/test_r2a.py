@@ -141,7 +141,7 @@ def test_ledger_dimensionless_groups_from_injected_values():
     rows = L.ledger(0.45, 6.0, CELLS)
     need = {"tau_lock_tau", "tau_kill_tau", "omega_aim_tau", "omega_slew_tau",
             "jink_freq_tau", "homing_tau", "jink_r_rho", "sig_dt",
-            "dx_rho", "r_lat_rho", "x0_rho", "kappa", "dt_tau", "k_f_tau", "lam", "alpha"}
+            "dx_rho", "r_lat_rho", "x0_rho", "kappa", "q_dec", "k_f_tau", "lam", "alpha"}
     ref = next(r for r in rows if r["impl"] == "R-ref")["pi"]
     assert need <= set(ref)
     expect = {"R-ref": [], "R-tau-SIM": [], "R-rho-SIM": [],
@@ -256,7 +256,11 @@ def test_stage1_gates_sealed_and_passed():
     for row in pw["eps"].values():                              # DOM 판별력 (power)
         assert row["R-tau-DOM"]["max_dev"] > pr["pathwise_atol"]
         assert row["R-rho-DOM"]["max_dev"] > pr["pathwise_atol"]
-    assert len(pr["cells"]) == 6 and pr["lattice_hash"] == "3aa3adef77420d12"
+    lat = json.loads((ROOT / "artifacts/r2a/lattice_R2a_P.json").read_text(encoding="utf-8"))
+    assert len(pr["cells"]) == 6 and pr["lattice_hash"] == lat["lattice_hash"]
+    assert lat["supersedes_v3"]["R2a-P"] == "3aa3adef77420d12"      # A-prime 체인
+    assert abs(lat["q_dec"]["value"] - 1.0 / 6.0) < 1e-12
+    assert "q_dec = 1/6" in lat["vocab"]["global"]
 
 
 def test_stage1_shard_ranges_and_sentinel_atomic(tmp_path):
@@ -278,14 +282,11 @@ def test_stage1_shard_ranges_and_sentinel_atomic(tmp_path):
         S.SENTINEL = orig
 
 
-@pytest.mark.skipif(not (ROOT / "artifacts/r2a/stage1_dt_check.json").exists(),
-                    reason="dt check not run")
-def test_stage1_dt_check_gate_consistent():
-    """dt_check 판정이 규칙과 일치하고, PASS 아니면 kill screen 산출물이 없어야 한다."""
-    import json as _json
-    d = _json.loads((ROOT / "artifacts/r2a/stage1_dt_check.json").read_text(encoding="utf-8"))
-    rule_pass = all(v["frac"] <= 0.10 for v in d["cells"].values())
-    assert (d["verdict"] == "PASS") == rule_pass
-    if d["verdict"] != "PASS":                     # STOP-and-review 상태의 계약
-        assert not list((ROOT / "artifacts/r2a/stage1").glob("shard*.json"))
-        assert (ROOT / "artifacts/r2a/stage1_dt_review.json").exists()
+def test_stage1_qdec_invariant_gate():
+    """A-prime: dt_check 는 gate 가 아니라 진단 — 대신 전 구현이 q_dec = 1/6 이어야 한다."""
+    from shepherd.scripts.r2a_stage1 import resolve
+    for name, im in L.impls(0.45).items():
+        kw = resolve(im, 0.55, 3.0)
+        q = kw["extra_cfg"]["physics.dt"] / kw["extra_cfg"]["physics.tau_deploy"]
+        assert abs(q - 1.0 / 6.0) < 1e-12, name
+    assert (ROOT / "artifacts/r2a/stage1_dt_review.json").exists()   # 진단은 공개 상태

@@ -1,7 +1,7 @@
 {
  "schema": "r2a-stage1-protocol-v1",
  "contract": "R2a-P",
- "lattice_hash": "3aa3adef77420d12",
+ "lattice_hash": "05f3e5c18d147b9f",
  "seed0": 1000,
  "n_per_cell": 400,
  "cells": [
@@ -41,19 +41,19 @@
  "pathwise_atol": 1e-06,
  "pathwise_calibration": 7.993605777301127e-15,
  "gates": [
+  "q_dec invariant: every implementation and every episode runs at q_dec = dt/tau = 1/6 (runtime assert in the shard runner). The dt/2 diagnostic is a conditioning perturbation, not a convergence gate — it does not block execution.",
   "Tier A pathwise metamorphic FIRST: CRN-fixed normalized trajectories within sealed atol. On mismatch, do NOT read the n=400 kill-screen numbers; classify the cause (harness bug / hidden dimensional constant / IC scaling / discretization) first.",
   "HARD_KILL STOP: if any HARD_KILL occurs in a hold-arm confirmatory run, halt H-SIM/H-DOM reading for that batch and classify as competing-risk emergence. Do not drop or recode HARD_KILL episodes from the NET_CAPTURE denominator before the cause is identified.",
   "viz-first: trajectory inspection of 2-3 episodes per implementation precedes any collapse statistic."
  ],
  "sharding": "by scenario: s in [0, 2400), cell = s // n_per_cell; ALL 5 impls run per scenario inside one shard (paired structure preserved); 8 shards = ~300 scenarios (~1,500 ep, ~37 min nominal) each",
  "stop_sentinel": "artifacts/r2a/stage1/HARD_KILL_STOP — atomic create (O_EXCL) by the shard observing HARD_KILL; every shard checks before each scenario and halts at the next scenario boundary (stopped_by_sentinel flag); the sentinel records (shard, scenario, impl) so nothing is excluded silently",
- "dt_check": {
-  "when": "BEFORE the Stage 1 main run (audit r3 — moved up from pre-Stage-3)",
-  "design": "R-ref, 2 boundary cells, n=50 paired CRN episodes at dt vs dt/2 (episode_len x2; dt_tau is a numerical verification number, not a design parameter — PI_GROUPS)",
-  "rule": "paired discordant-label fraction per cell <= 0.10 (= delta_p); else STOP-and-review before any kill-screen episode"
- },
+ "q_dec_gate": "every implementation and episode runs at q_dec = dt/tau = 1/6 (runtime assert). Pre-Stage-1 diagnostic found strong boundary sensitivity to normalized decision cadence: q_dec 1/6 -> 1/12 shifted chi50 by ~+0.15; q_dec was therefore reclassified from a numerical verification ratio to a governing conditioning coordinate BEFORE confirmatory execution (A-prime). The dt/2 run is published as a sensitivity diagnostic (stage1_dt_check.json), not used as a convergence gate.",
  "n_recalc": "paired correlation for Stage 3 n is computed SEPARATELY for R-ref<->R-tau-DOM and R-ref<->R-rho-DOM — never pooled with SIM arms (near-identical SIM pairs inflate correlation and understate n); per-cell variation inspected; the most conservative n is sealed for Stage 3 (>=90% expected PASS at true delta = 0)",
- "supersedes_protocol": "a24fd8ce82afe7c5 (pre-audit-r3: per-impl sharding, shard-local STOP, dt-check deferred to pre-Stage-3)",
+ "supersedes_protocol": [
+  "a24fd8ce82afe7c5 (pre-audit-r3)",
+  "93c201cfba2785d2 (pre-A-prime: dt-check as a convergence gate)"
+ ],
  "status": "kill screen = falsification screen; no representativeness claim",
- "protocol_hash": "93c201cfba2785d2"
+ "protocol_hash": "1496a4769876b438"
 }

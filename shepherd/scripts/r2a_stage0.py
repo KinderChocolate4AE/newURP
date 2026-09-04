@@ -141,7 +141,12 @@ def run(root: pathlib.Path, seed: int = 0) -> dict:
                      "lineage": "results/curve_hold_reactive.manifest.json (commit 43acc39, "
                                 "run commit edf34d9)",
                      "verification": "artifacts/r2a/provenance_route_sense.json"},
-           "supersedes": {"stage0": "3878260e937f9b05", "reason": "D-2 world correction A1->A2"},
+           "supersedes": {"stage0": ["3878260e937f9b05", "4c26cf1a2a4d9ab8"],
+                          "reason": "D-2 world correction A1->A2; then A-prime q_dec "
+                                    "reclassification (governing conditioning coordinate)"},
+           "q_dec": {"value": 1.0 / 6.0, "definition": "T_decision/tau (== dt/tau here)",
+                     "status": "governing conditioning coordinate — the frozen curve and "
+                               "every R2a implementation share q_dec = 1/6"},
            "eta_step": ETA_STEP, "W_boundary": W_BOUNDARY, "seed": seed, "n_boot": N_BOOT,
            "pooled_chi50_isotonic": pooled,
            "rows": rows, "envelope": envelope,

@@ -12,8 +12,16 @@
   "verification": "artifacts/r2a/provenance_route_sense.json"
  },
  "supersedes": {
-  "stage0": "3878260e937f9b05",
-  "reason": "D-2 world correction A1->A2"
+  "stage0": [
+   "3878260e937f9b05",
+   "4c26cf1a2a4d9ab8"
+  ],
+  "reason": "D-2 world correction A1->A2; then A-prime q_dec reclassification (governing conditioning coordinate)"
+ },
+ "q_dec": {
+  "value": 0.16666666666666666,
+  "definition": "T_decision/tau (== dt/tau here)",
+  "status": "governing conditioning coordinate — the frozen curve and every R2a implementation share q_dec = 1/6"
  },
  "eta_step": 0.3,
  "W_boundary": 0.1,
@@ -885,5 +893,5 @@
   ]
  },
  "envelope_rule": "B(eta) = chi50_isotonic ± W_boundary (fixed boundary half-width, independent of map grid); lattice rows only, censored excluded. Logistic slope is diagnostic only (r4-C).",
- "hash": "4c26cf1a2a4d9ab8"
+ "hash": "9d134d5c1a11c1ba"
 }
