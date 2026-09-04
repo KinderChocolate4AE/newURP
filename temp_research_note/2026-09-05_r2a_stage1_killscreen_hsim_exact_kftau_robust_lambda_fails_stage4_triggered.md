@@ -38,3 +38,28 @@ n 봉인은 보수값 유지.)
 Stage 2 (R-ref full map 33,600 ep, 서버 ~2.6h 8샤드) + **Stage 4 발동** (조건 충족).
 Stage 3 착수 전 잔여 = worst-case family exact rule 봉인 + repo-R1. 산출물 =
 `artifacts/r2a/stage1_readout.json`, 판독기 = `r2a_stage1_readout.py`.
+
+## 정정 (같은 날, 사용자 감사) — 해석 문구 협소화 2건
+
+- "controller gain 축은 (χ,η) 지배를 위협하지 않는다" → 철회. 정확한 범위: **"시험한
+  k_f·τ 교란 1.20→1.80 (+50%) 은 사전 지정 6개 경계 셀에서 δp=0.10 이내로 robust 했다"**
+  — 다른 gain 범위·다른 (χ,η) 영역으로 일반화 금지.
+- H-SIM 은 오히려 더 구체적으로: "implemented dimensional rescaling preserved the
+  normalized hold-arm dynamics and capture outcomes **exactly** over the tested boundary
+  scenarios" (4,800 paired labels discordance 0 + pathwise 1e-15).
+
+## 후속 봉인 (Stage 2·4 병행 결정)
+
+- **Stage 2** `3bc9dba2fe01385f`: R2a-L 귀속 (role = R-ref full map). 84셀 × 400 = 33,600
+  ep, seed0 2000, ns r2a_s2, jitter ±0.02/±0.15. λ 승격 시에도 폐기 아님 — λ=4.644 기준
+  slice 로 의미만 바뀜.
+- **Stage 4** `59c4de1889ed72dc`: λ 등간격 3레벨 (4.644/4.109/3.574 = R_max 8.22/7.27/6.33 m,
+  α 12.15/13.68/15.63°), ρ·τ·q_dec·κ·runtime_norm 전부 불변 (runner 가 이동 pin = {α,λ}
+  만임을 assert). 질문 = "Stage 1 R-rho-DOM 효과가 {λ,α} 독립 교란만으로 재현되는가"
+  (governing 증명 아님). 판정: primary = 방향 (6셀 전부 CI 상한 < 0) AND material
+  (pooled |Δp| ≥ 0.20, 봉인된 승격 후보 문턱) / secondary = dose ordering (비게이트).
+  n = 400 별도 봉인 (Stage 3 의 650 상속 금지 — estimand 다름). 6셀 × 400 × 3레벨 =
+  7,200 ep.
+- **Stage 3 cell lattice 는 Stage 4 판정 뒤에만 봉인** (POSITIVE 면 λ slice 선택이 계약에
+  들어가야 함). behavior-side worst-case family rule 은 별도 선행 봉인 가능 (미착수).
+- smoke test: 두 러너 각 2 scenario 로컬 확인 후 부분 shard 삭제 (결정론 재생성).

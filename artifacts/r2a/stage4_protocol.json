@@ -1,0 +1,72 @@
+{
+ "schema": "r2a-stage4-protocol-v1",
+ "contract": "R2a-P chain (Stage 4 conditional)",
+ "lattice_hash": "05f3e5c18d147b9f",
+ "trigger": "Stage 1 R-rho-DOM 6/6 FAIL, sign-consistent dp -0.20..-0.39 (stage1_readout.json)",
+ "levels": [
+  {
+   "level": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "alpha_deg": 12.151867229554377
+  },
+  {
+   "level": 1,
+   "lam": 4.108990420044216,
+   "R_max": 7.272913043478262,
+   "alpha_deg": 13.678098052268338
+  },
+  {
+   "level": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "alpha_deg": 15.631904258852984
+  }
+ ],
+ "invariants": "rho, tau, q_dec, kappa, k_f*tau, all runtime_norm ratios, A2 conditioning vector unchanged — runner asserts the moved pin set is exactly {alpha, lam} for levels 1-2",
+ "cells": [
+  [
+   0.58,
+   2.1
+  ],
+  [
+   0.6,
+   2.1
+  ],
+  [
+   0.54,
+   3.0
+  ],
+  [
+   0.56,
+   3.0
+  ],
+  [
+   0.54,
+   3.9
+  ],
+  [
+   0.56,
+   3.9
+  ]
+ ],
+ "n_per_cell": 400,
+ "seed0": 4000,
+ "crn_ns": "r2a_s4",
+ "n_rationale": "Stage 4 estimand = independent shape-effect reproduction, not the Stage 3 equivalence precision; n=400 (kill-screen grade) is sealed separately and NOT inherited from the Stage 3 n=650",
+ "jitter": {
+  "chi": 0.01,
+  "eta": 0.15
+ },
+ "crn": "all 3 levels run inside one scenario (paired)",
+ "verdict_rules": {
+  "primary_direction": "dp(level2 vs level0) negative in ALL 6 cells (paired CI95 upper < 0 per cell)",
+  "primary_material": "pooled |dp(level2 vs level0)| >= 0.20 — the sealed promotion-candidate threshold (sign-consistent |dp|>0.20)",
+  "secondary_dose": "pooled dp(level1) lies between 0 and dp(level2) — reported as ordering cross-check, not gating",
+  "POSITIVE": "direction AND material -> (chi, eta, lam) re-registration path, C045 candidate PARTIAL_3D; Stage 3 cell lattice is sealed only AFTER this verdict (lambda slice choice enters the contract)",
+  "NEGATIVE": "direction or material fails -> lambda NOT independently reproducing; the Stage 1 R-rho-DOM effect is recorded as an unresolved bundle (no auto-promotion, sealed rule)"
+ },
+ "sharding": "by scenario: s in [0, 2400), cell = s // 400; 3 levels per scenario; 8 shards ~25 min",
+ "stop_sentinel": "artifacts/r2a/stage4/HARD_KILL_STOP",
+ "protocol_hash": "59c4de1889ed72dc"
+}

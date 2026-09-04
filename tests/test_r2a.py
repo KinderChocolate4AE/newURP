@@ -290,3 +290,33 @@ def test_stage1_qdec_invariant_gate():
         q = kw["extra_cfg"]["physics.dt"] / kw["extra_cfg"]["physics.tau_deploy"]
         assert abs(q - 1.0 / 6.0) < 1e-12, name
     assert (ROOT / "artifacts/r2a/stage1_dt_review.json").exists()   # 진단은 공개 상태
+
+
+def test_stage4_levels_orthogonal():
+    """Stage 4: lam 등간격 3레벨, rho/tau/q_dec 불변, 이동 pin = {alpha, lam} 뿐."""
+    from shepherd.scripts.r2a_stage1 import _stage4_levels
+    lvs = _stage4_levels()
+    assert [round(l["lam"], 4) for l in lvs] == [4.6441, 4.109, 3.5739]
+    assert [round(l["R_max"], 2) for l in lvs] == [8.22, 7.27, 6.33]
+    assert [round(l["alpha_deg"], 2) for l in lvs] == [12.15, 13.68, 15.63]
+    ref = L._pins(lvs[0]["im"])
+    for lv in lvs[1:]:
+        pins = L._pins(lv["im"])
+        assert sorted(k for k in pins if abs(pins[k] - ref[k]) > 1e-9) == ["alpha", "lam"]
+        assert abs(pins["q_dec"] - 1.0 / 6.0) < 1e-12
+        assert lv["im"]["rho"] == L.RHO_REF and lv["im"]["tau"] == L.TAU_REF
+
+
+@pytest.mark.skipif(not (ROOT / "artifacts/r2a/stage2_protocol.json").exists(),
+                    reason="stage2/4 protocols not sealed")
+def test_stage24_protocols_sealed():
+    import json as _j
+    p2 = _j.loads((ROOT / "artifacts/r2a/stage2_protocol.json").read_text(encoding="utf-8"))
+    p4 = _j.loads((ROOT / "artifacts/r2a/stage4_protocol.json").read_text(encoding="utf-8"))
+    lat_l = _j.loads((ROOT / "artifacts/r2a/lattice_R2a_L.json").read_text(encoding="utf-8"))
+    assert p2["contract"] == "R2a-L" and p2["lattice_hash"] == lat_l["lattice_hash"]
+    assert len(p2["cells"]) == 84 and p2["impl"] == "R-ref only"
+    assert p4["n_per_cell"] == 400 and "NOT inherited" in p4["n_rationale"]
+    assert ">= 0.20" in p4["verdict_rules"]["primary_material"]
+    assert "not gating" in p4["verdict_rules"]["secondary_dose"]
+    assert p2["crn_ns"] == "r2a_s2" and p4["crn_ns"] == "r2a_s4"    # Stage 1 CRN 과 분리

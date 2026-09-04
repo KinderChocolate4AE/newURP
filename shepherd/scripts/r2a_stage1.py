@@ -108,12 +108,14 @@ def cells_rule(lat: dict) -> list[tuple[float, float]]:
     return out
 
 
-def draw_cell_jitter(seed0: int, ep: int, chi_c: float, eta_c: float) -> tuple[float, float]:
-    """무차원 공간 CRN 추첨 (전 구현 공유). SHA-256 — 파이썬 hash() 금지."""
-    h = hashlib.sha256(f"r2a_s1|{seed0}|{ep}".encode()).digest()
+def draw_cell_jitter(seed0: int, ep: int, chi_c: float, eta_c: float,
+                     ns: str = "r2a_s1", jc: float = JITTER_CHI,
+                     je: float = JITTER_ETA) -> tuple[float, float]:
+    """무차원 공간 CRN 추첨 (전 구현/레벨 공유). SHA-256 — 파이썬 hash() 금지."""
+    h = hashlib.sha256(f"{ns}|{seed0}|{ep}".encode()).digest()
     u1 = int.from_bytes(h[:8], "big") / 2 ** 64
     u2 = int.from_bytes(h[8:16], "big") / 2 ** 64
-    return chi_c + (2 * u1 - 1) * JITTER_CHI, eta_c + (2 * u2 - 1) * JITTER_ETA
+    return chi_c + (2 * u1 - 1) * jc, eta_c + (2 * u2 - 1) * je
 
 
 # ------------------------------------------------------------- feasibility --
@@ -383,6 +385,210 @@ def dt_check(n: int = 50) -> dict:
     return out
 
 
+# =============================================================== Stage 2 ====
+def seal_stage2() -> dict:
+    """Stage 2 (R-ref full map) 사전등록 — R2a-L 계약 귀속 (role: R-ref full map)."""
+    lat_l = json.loads((ART / "lattice_R2a_L.json").read_text(encoding="utf-8"))
+    cells = [(c, e) for c in lat_l["map_grid"]["chi"] for e in lat_l["map_grid"]["eta"]]
+    payload = {
+        "schema": "r2a-stage2-protocol-v1", "contract": "R2a-L",
+        "lattice_hash": lat_l["lattice_hash"], "impl": "R-ref only",
+        "cells": cells, "n_per_cell": 400, "seed0": 2000, "crn_ns": "r2a_s2",
+        "jitter": {"chi": 0.02, "eta": 0.15},   # map cell 반폭 — 셀 내 균일 커버
+        "sharding": "by scenario: s in [0, 33600), cell = s // 400; 8 shards ~2.6 h",
+        "stop_sentinel": "artifacts/r2a/stage2/HARD_KILL_STOP (same rule as Stage 1)",
+        "q_dec_gate": "runtime assert q_dec = 1/6",
+        "deliverable": "chi50(eta) full curve + simultaneous band (C044 input); if Stage 4 "
+                       "is POSITIVE this map is the lambda = 4.644 reference slice of the "
+                       "3-D surface, not discarded",
+    }
+    payload["protocol_hash"] = hashlib.sha256(
+        json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
+    (ART / "stage2_protocol.json").write_text(
+        json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
+    return payload
+
+
+def run_shard2(shard: int, n_shards: int = 8) -> dict:
+    proto = json.loads((ART / "stage2_protocol.json").read_text(encoding="utf-8"))
+    im = impls(_lattice()["tau_B"])["R-ref"]
+    cells, n_cell = [tuple(c) for c in proto["cells"]], proto["n_per_cell"]
+    total = len(cells) * n_cell
+    lo, hi = shard * total // n_shards, (shard + 1) * total // n_shards
+    out_dir = ART / "stage2"; out_dir.mkdir(parents=True, exist_ok=True)
+    sentinel = out_dir / "HARD_KILL_STOP"
+    path = out_dir / f"shard{shard:02d}.json"
+    records = []
+    if path.exists():
+        prev = json.loads(path.read_text(encoding="utf-8"))
+        if prev["protocol_hash"] == proto["protocol_hash"]:
+            records = prev["records"]
+
+    def _save(stopped=False):
+        path.write_text(json.dumps(
+            {"shard": shard, "n_shards": n_shards, "scenario_range": [lo, hi],
+             "protocol_hash": proto["protocol_hash"],
+             "stopped_by_sentinel": stopped, "records": records},
+            ensure_ascii=False), encoding="utf-8")
+
+    for s in range(lo + len(records), hi):
+        if sentinel.exists():
+            _save(stopped=True)
+            return {"n_done": len(records), "stopped": True}
+        chi_c, eta_c = cells[s // n_cell]
+        chi, eta = draw_cell_jitter(proto["seed0"], s, chi_c, eta_c,
+                                    ns=proto["crn_ns"], jc=proto["jitter"]["chi"],
+                                    je=proto["jitter"]["eta"])
+        kw = resolve(im, chi, eta)
+        q = kw["extra_cfg"]["physics.dt"] / kw["extra_cfg"]["physics.tau_deploy"]
+        assert abs(q - 1.0 / 6.0) < 1e-12
+        st = build_m4_env(proto["seed0"], s, **kw)
+        r = run_episode(st.env, st.scn, st.lay, seed=proto["seed0"] + s,
+                        limiter_mode="hold", fire_mode="clean", policy=None,
+                        baseline_commit=False)
+        records.append({"s": s, "cell": [chi_c, eta_c], "chi": chi, "eta": eta,
+                        "label": r.label})
+        if r.label == "HARD_KILL":
+            sentinel.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                with open(sentinel, "x", encoding="utf-8") as f:
+                    json.dump({"shard": shard, "scenario": s}, f)
+            except FileExistsError:
+                pass
+            _save(stopped=True)
+            raise SystemExit(f"HARD_KILL STOP: stage2 shard {shard} scenario {s}")
+        if (s - lo + 1) % 100 == 0 or s + 1 == hi:
+            _save()
+            print(f"[s2 shard {shard}] {s - lo + 1}/{hi - lo}", flush=True)
+    _save()
+    return {"n_done": len(records), "stopped": False}
+
+
+# =============================================================== Stage 4 ====
+def _stage4_levels() -> list[dict]:
+    """직교 {lam, alpha} 3레벨 — rho·tau·기타 전부 R-ref 그대로, R_max 만 이동.
+    lam 등간격: lam0 = 8.22/1.77, lam2 = 8.22/2.30 (Stage 1 R-rho-DOM 값), lam1 = 중점."""
+    from shepherd.scripts.r2a_lattice import RHO_REF, RHO_B, R_MAX_REF
+    lam0 = R_MAX_REF / RHO_REF
+    lam2 = R_MAX_REF / RHO_B
+    lams = [lam0, (lam0 + lam2) / 2.0, lam2]
+    base = impls(0.45)["R-ref"]
+    out = []
+    for k, lam in enumerate(lams):
+        im = dict(base, R_max=lam * RHO_REF, target=([] if k == 0 else ["alpha", "lam"]))
+        out.append({"level": k, "lam": lam, "R_max": im["R_max"],
+                    "alpha_deg": math.degrees(math.atan(1.0 / lam)), "im": im})
+    return out
+
+
+def seal_stage4() -> dict:
+    """Stage 4 (조건부 직교 lambda test) 사전등록 — Stage 1 발동 조건 충족 (R-rho-DOM
+    6/6 FAIL, sign-일관 -0.20~-0.39). 질문 = "그 효과가 {lam, alpha} 의 독립 교란만으로
+    재현되는가" (lambda governing 증명이 아님)."""
+    lat_p = json.loads((ART / "lattice_R2a_P.json").read_text(encoding="utf-8"))
+    s1 = json.loads((ART / "stage1_protocol.json").read_text(encoding="utf-8"))
+    levels = [{k: v for k, v in lv.items() if k != "im"} for lv in _stage4_levels()]
+    payload = {
+        "schema": "r2a-stage4-protocol-v1", "contract": "R2a-P chain (Stage 4 conditional)",
+        "lattice_hash": lat_p["lattice_hash"], "trigger": "Stage 1 R-rho-DOM 6/6 FAIL, "
+        "sign-consistent dp -0.20..-0.39 (stage1_readout.json)",
+        "levels": levels,
+        "invariants": "rho, tau, q_dec, kappa, k_f*tau, all runtime_norm ratios, A2 "
+                      "conditioning vector unchanged — runner asserts the moved pin set "
+                      "is exactly {alpha, lam} for levels 1-2",
+        "cells": s1["cells"], "n_per_cell": 400, "seed0": 4000, "crn_ns": "r2a_s4",
+        "n_rationale": "Stage 4 estimand = independent shape-effect reproduction, not the "
+                       "Stage 3 equivalence precision; n=400 (kill-screen grade) is sealed "
+                       "separately and NOT inherited from the Stage 3 n=650",
+        "jitter": {"chi": 0.01, "eta": 0.15},
+        "crn": "all 3 levels run inside one scenario (paired)",
+        "verdict_rules": {
+            "primary_direction": "dp(level2 vs level0) negative in ALL 6 cells "
+                                 "(paired CI95 upper < 0 per cell)",
+            "primary_material": "pooled |dp(level2 vs level0)| >= 0.20 — the sealed "
+                                "promotion-candidate threshold (sign-consistent |dp|>0.20)",
+            "secondary_dose": "pooled dp(level1) lies between 0 and dp(level2) — reported "
+                              "as ordering cross-check, not gating",
+            "POSITIVE": "direction AND material -> (chi, eta, lam) re-registration path, "
+                        "C045 candidate PARTIAL_3D; Stage 3 cell lattice is sealed only "
+                        "AFTER this verdict (lambda slice choice enters the contract)",
+            "NEGATIVE": "direction or material fails -> lambda NOT independently "
+                        "reproducing; the Stage 1 R-rho-DOM effect is recorded as an "
+                        "unresolved bundle (no auto-promotion, sealed rule)",
+        },
+        "sharding": "by scenario: s in [0, 2400), cell = s // 400; 3 levels per scenario; "
+                    "8 shards ~25 min",
+        "stop_sentinel": "artifacts/r2a/stage4/HARD_KILL_STOP",
+    }
+    payload["protocol_hash"] = hashlib.sha256(
+        json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
+    (ART / "stage4_protocol.json").write_text(
+        json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
+    return payload
+
+
+def run_shard4(shard: int, n_shards: int = 8) -> dict:
+    from shepherd.scripts.r2a_lattice import _pins
+    proto = json.loads((ART / "stage4_protocol.json").read_text(encoding="utf-8"))
+    levels = _stage4_levels()
+    ref_pins = _pins(levels[0]["im"])
+    for lv in levels[1:]:
+        moved = sorted(k for k, v in _pins(lv["im"]).items()
+                       if abs(v - ref_pins[k]) > 1e-9)
+        assert moved == ["alpha", "lam"], (lv["level"], moved)
+    cells, n_cell = [tuple(c) for c in proto["cells"]], proto["n_per_cell"]
+    total = len(cells) * n_cell
+    lo, hi = shard * total // n_shards, (shard + 1) * total // n_shards
+    out_dir = ART / "stage4"; out_dir.mkdir(parents=True, exist_ok=True)
+    sentinel = out_dir / "HARD_KILL_STOP"
+    path = out_dir / f"shard{shard:02d}.json"
+    records = []
+    if path.exists():
+        prev = json.loads(path.read_text(encoding="utf-8"))
+        if prev["protocol_hash"] == proto["protocol_hash"]:
+            records = prev["records"]
+
+    def _save(stopped=False):
+        path.write_text(json.dumps(
+            {"shard": shard, "n_shards": n_shards, "scenario_range": [lo, hi],
+             "protocol_hash": proto["protocol_hash"],
+             "stopped_by_sentinel": stopped, "records": records},
+            ensure_ascii=False), encoding="utf-8")
+
+    for s in range(lo + len(records) // len(levels), hi):
+        if sentinel.exists():
+            _save(stopped=True)
+            return {"n_done": len(records), "stopped": True}
+        chi_c, eta_c = cells[s // n_cell]
+        chi, eta = draw_cell_jitter(proto["seed0"], s, chi_c, eta_c,
+                                    ns=proto["crn_ns"], jc=proto["jitter"]["chi"],
+                                    je=proto["jitter"]["eta"])
+        for lv in levels:
+            kw = resolve(lv["im"], chi, eta)
+            q = kw["extra_cfg"]["physics.dt"] / kw["extra_cfg"]["physics.tau_deploy"]
+            assert abs(q - 1.0 / 6.0) < 1e-12
+            st = build_m4_env(proto["seed0"], s, **kw)
+            r = run_episode(st.env, st.scn, st.lay, seed=proto["seed0"] + s,
+                            limiter_mode="hold", fire_mode="clean", policy=None,
+                            baseline_commit=False)
+            records.append({"s": s, "level": lv["level"], "cell": [chi_c, eta_c],
+                            "chi": chi, "eta": eta, "label": r.label})
+            if r.label == "HARD_KILL":
+                sentinel.parent.mkdir(parents=True, exist_ok=True)
+                try:
+                    with open(sentinel, "x", encoding="utf-8") as f:
+                        json.dump({"shard": shard, "scenario": s, "level": lv["level"]}, f)
+                except FileExistsError:
+                    pass
+                _save(stopped=True)
+                raise SystemExit(f"HARD_KILL STOP: stage4 shard {shard} scenario {s}")
+        if (s - lo + 1) % 20 == 0 or s + 1 == hi:
+            _save()
+            print(f"[s4 shard {shard}] {s - lo + 1}/{hi - lo} scenarios", flush=True)
+    _save()
+    return {"n_done": len(records), "stopped": False}
+
+
 def main(argv=None) -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--feasibility", action="store_true")
@@ -390,6 +596,10 @@ def main(argv=None) -> None:
     ap.add_argument("--seal-protocol", action="store_true")
     ap.add_argument("--dt-check", action="store_true")
     ap.add_argument("--run", action="store_true")
+    ap.add_argument("--seal-stage2", action="store_true")
+    ap.add_argument("--run-stage2", action="store_true")
+    ap.add_argument("--seal-stage4", action="store_true")
+    ap.add_argument("--run-stage4", action="store_true")
     ap.add_argument("--shard", type=int, default=0)
     ap.add_argument("--n-shards", type=int, default=8)
     a = ap.parse_args(argv)
@@ -413,6 +623,20 @@ def main(argv=None) -> None:
                   f"p_dt/2 {v['p_dt2']:.3f}")
     if a.run:
         run_shard(a.shard, a.n_shards)
+    if a.seal_stage2:
+        p2 = seal_stage2()
+        print(f"stage2 protocol_hash {p2['protocol_hash']}  cells {len(p2['cells'])}  "
+              f"total ep {len(p2['cells']) * p2['n_per_cell']}")
+    if a.run_stage2:
+        run_shard2(a.shard, a.n_shards)
+    if a.seal_stage4:
+        p4 = seal_stage4()
+        print(f"stage4 protocol_hash {p4['protocol_hash']}")
+        for lv in p4["levels"]:
+            print(f"  level {lv['level']}: lam {lv['lam']:.4f}  R_max {lv['R_max']:.4f} m  "
+                  f"alpha {lv['alpha_deg']:.2f} deg")
+    if a.run_stage4:
+        run_shard4(a.shard, a.n_shards)
 
 
 if __name__ == "__main__":
