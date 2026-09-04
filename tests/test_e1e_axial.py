@@ -24,7 +24,10 @@ TAU = float(_CFG["physics"]["tau_deploy"])
 RMAX = float(_CFG["viability"]["cone"]["range_max"])
 TH = float(_CFG["viability"]["cone"]["half_angle"])
 TAN = math.tan(TH)
-KW = dict(tan_th=TAN, rmax=RMAX, tau=TAU)
+# ★ 이 파일은 **동결 사전등록**(docs/83 §32)의 상수 게이트다. 2026-08-28 에
+#   정본 규약이 "inscribed"(sin) 로 정정됐지만, 여기서 고정하는 것은 사전등록
+#   당시의 예측이므로 규약을 "tan" 으로 **명시**한다 (정정 노트 2026-08-28).
+KW = dict(theta=TH, rmax=RMAX, tau=TAU, convention="tan")
 
 
 def _kw(**sys_over):
@@ -118,7 +121,11 @@ def test_frozen_law_constants_match_prereg():
     assert float(a_star(7.20, **KW)) < float(a_star(6.75, **KW))          # new: 감소
     # 마진 정의
     assert abs(float(margin(6.75, 10.0, **KW)) - (float(a_star(6.75, **KW)) - 10.0)) < 1e-9
-    assert float(s_of_ax(7.90, tan_th=TAN, rmax=RMAX)) == pytest.approx(RMAX - 7.90)
+    got = float(s_of_ax(7.90, theta=TH, rmax=RMAX, convention="tan"))
+    assert got == pytest.approx(RMAX - 7.90)
+    # far-edge 가 binding 인 arm 은 규약과 무관해야 한다 (정정 불변량)
+    got = float(s_of_ax(7.90, theta=TH, rmax=RMAX, convention="inscribed"))
+    assert got == pytest.approx(RMAX - 7.90)
 
 
 if __name__ == "__main__":                                  # pragma: no cover

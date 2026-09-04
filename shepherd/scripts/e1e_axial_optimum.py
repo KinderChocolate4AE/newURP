@@ -41,7 +41,7 @@ from shepherd.scripts.curve_sweep import _cross50, bin_edges
 from shepherd.scripts.e1d_commit_geom import _select_step, forced_pass, reference_pass
 from shepherd.stats import wilson
 
-__all__ = ["ARMS", "EP0", "a_star", "s_of_ax", "margin"]
+__all__ = ["ARMS", "EP0", "a_star", "s_of_ax", "margin", "ax_optimum"]
 
 #: fresh seed block (§32.2). 기존 캠페인 0.. / 10000.. / 30000..30299 과 미교차.
 EP0 = 31000
@@ -55,20 +55,61 @@ SHAPE = (("H1", "E-2", "E-1", +1),
          ("H3", "E-2", "E-3", +1))          # P_C(6.75) > P_C(7.20)
 
 
-def s_of_ax(ax, *, tan_th: float, rmax: float):
+#: 포획영역 여유 s(ax) 의 두 규약. **정본은 "inscribed"** 다.
+#
+#   inscribed  s = min(ax*sin(theta), R_max - ax)     <- 정본 (2026-08-28 정정)
+#   tan        s = min(ax*tan(theta), R_max - ax)     <- 동결 사전등록 E1e 재현 전용
+#
+# 왜 sin 인가 (기하 도출 — 결과와 무관):
+#   포획 판정 `viability._caught_se3_cone` 은 축방향 성분 ax 를 [range_min, R_max]
+#   로 자르고 각도를 theta 로 자른다. 즉 포획영역
+#       K = { p : angle(p, n) <= theta,  0 <= p.n <= R_max }
+#   는 **볼록**이고 경계는 (i) 원뿔 측면 (ii) 평면 p.n = R_max 두 개다.
+#   한편 도달집합은 등속 외삽점을 중심으로 한 **등방 구**(attacker_turn_limited=False,
+#   반경 w = a*tau^2/2)이고 성공 판정은 그 구가 K 에 **전부** 들어갈 때다
+#   (v_shot_worst >= 1). 볼록집합에서 "구 ⊂ K" ⟺ "중심에서 경계까지 최단거리 >= w"
+#   이므로 s 는 K 의 **내접구 반경**이다. 축 위의 점에서
+#       원뿔 측면까지의 수직거리 = ax*sin(theta)      (ax*tan 은 축에 수직인 반폭)
+#       far-edge 평면까지의 거리   = R_max - ax
+#   따라서 s = min(ax*sin, R_max - ax).
+#
+# ax*tan 은 "축에 수직인 방향으로만" 이탈할 때의 여유라, 등방 구에는 맞지 않는다.
+# 두 규약은 far-edge 가 binding 인 구간(E-3/E-4)에서 **동일**하므로 E1e 의 판별
+# 가설 H3 는 어느 쪽에서도 같은 예측을 낸다 — 정정이 판정을 바꾸지 않는다.
+_CONVENTIONS = ("inscribed", "tan")
+
+
+def _lateral_coeff(theta: float, convention: str) -> float:
+    if convention == "inscribed":
+        return math.sin(float(theta))
+    if convention == "tan":
+        return math.tan(float(theta))
+    raise ValueError(f"convention 은 {_CONVENTIONS} 중 하나여야 한다: {convention!r}")
+
+
+def s_of_ax(ax, *, theta: float, rmax: float, convention: str = "inscribed"):
     """지배 제약 여유 s = min(lateral, far-edge). 배열/스칼라 모두 허용."""
     ax = np.asarray(ax, float)
-    return np.minimum(ax * tan_th, rmax - ax)
+    return np.minimum(ax * _lateral_coeff(theta, convention), rmax - ax)
 
 
-def a_star(ax, *, tan_th: float, rmax: float, tau: float):
+def ax_optimum(*, theta: float, rmax: float, convention: str = "inscribed") -> float:
+    """두 제약이 같아지는 내부 최적 축거리 ax* = R_max / (1 + k)."""
+    return rmax / (1.0 + _lateral_coeff(theta, convention))
+
+
+def a_star(ax, *, theta: float, rmax: float, tau: float,
+           convention: str = "inscribed"):
     """보정 capture-bound a* = 2 s / tau^2."""
-    return 2.0 * s_of_ax(ax, tan_th=tan_th, rmax=rmax) / tau ** 2
+    return 2.0 * s_of_ax(ax, theta=theta, rmax=rmax,
+                         convention=convention) / tau ** 2
 
 
-def margin(ax, a_att, *, tan_th: float, rmax: float, tau: float):
+def margin(ax, a_att, *, theta: float, rmax: float, tau: float,
+           convention: str = "inscribed"):
     """S1 (§32.5) episode-level 마진 m = a*(ax_realized) - a_att."""
-    return a_star(ax, tan_th=tan_th, rmax=rmax, tau=tau) - np.asarray(a_att, float)
+    return a_star(ax, theta=theta, rmax=rmax, tau=tau,
+                  convention=convention) - np.asarray(a_att, float)
 
 
 def _paired_ci(x: np.ndarray, y: np.ndarray, *, seed: int = 0, n_boot: int = 20000):
@@ -92,13 +133,19 @@ def main() -> None:
     rmax = float(cfg["viability"]["cone"]["range_max"])
     th = float(cfg["viability"]["cone"]["half_angle"])
     rho = float(cfg["physics"]["net_radius"])
+    # ★ 이 스크립트는 **동결 사전등록의 재현기**다. 2026-08-28 에 정본 규약이
+    #   "inscribed"(sin) 로 정정됐지만, 여기서는 사전등록 당시의 "tan" 을 명시
+    #   고정해 results/e1e.json 을 bit-재현한다. 정정본 재계산은 별도 스크립트
+    #   (e1e_law_recompute.py) 가 담당하며 원 아티팩트를 덮지 않는다.
+    FROZEN_CONVENTION = "tan"
     tan_th = math.tan(th)
-    ax_opt = rmax / (1.0 + tan_th)
-    kw = dict(tan_th=tan_th, rmax=rmax, tau=tau)
+    ax_opt = ax_optimum(theta=th, rmax=rmax, convention=FROZEN_CONVENTION)
+    kw = dict(theta=th, rmax=rmax, tau=tau, convention=FROZEN_CONVENTION)
 
     print(f"[E1e · docs/83 §32] n={a.n} · seeds {a.ep0}..{a.ep0+a.n-1} · "
           f"tau {tau} · R_max {rmax} · theta {math.degrees(th):.4f}deg · "
-          f"tan {tan_th:.6f} · ax* {ax_opt:.6f}", flush=True)
+          f"tan {tan_th:.6f} · ax* {ax_opt:.6f} · convention={FROZEN_CONVENTION}",
+          flush=True)
     print("  동결 예측 a*: " + " · ".join(
         f"{nm}({tgt}) {float(a_star(tgt, **kw)):.2f}" for nm, tgt in ARMS), flush=True)
 

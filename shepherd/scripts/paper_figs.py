@@ -31,6 +31,10 @@ import matplotlib.pyplot as plt          # noqa: E402
 
 from shepherd.scripts.curve_sweep import (PSI_MED_DEG, a_star_psi,  # noqa: E402
                                           summarize_curve)
+# cone 여유 법칙은 e1e 가 단일 정의원이다 -- 여기서 다시 구현하지 않는다
+# (docs/85 R-001/R-012 의 이중 구현 사고 재발 방지). 기본 규약 = inscribed(sin).
+from shepherd.scripts.e1e_axial_optimum import (a_star as cone_a_star,  # noqa: E402
+                                                ax_optimum, s_of_ax)
 
 # two hues + redundant marker/linestyle so the panels survive B&W print and CVD
 INK = "#111111"
@@ -170,6 +174,134 @@ def fig1(hold: dict, itc: dict, out: pathlib.Path) -> dict:
     return {"hold": sh, "intercept": si, "a_aim": a_aim}
 
 
+
+# ---------------------------------------------------------------- KSAS F1 ----
+# r6 (2026-08-28). 본문이 39.3 -> 31.8 두 경계 한 축으로 정리됐으므로 그림도
+# 그 둘만 남긴다. 뺀 것: 25.8 사전분할 점선(본문에서 삭제) · observed 50 % ·
+# 구간 음영/로마숫자 · 브래킷 앵커 라벨 · U 계단 · 그림 내 각주(캡션으로 이관).
+# 크기: 1 단 폭(8.5 cm ≈ 3.35 in)에 1:1 로 앉도록 3.4 x 2.7 in.
+#   -> 축소 없이 들어가므로 인쇄 시 글자가 작아지지 않는다 (ver3-1 의 문제).
+
+def fig1_ksas(hold: dict, out: pathlib.Path) -> dict:
+    """KSAS Fig. 1 — 두 해석적 상계와 폐루프 달성 곡선."""
+    sh = summarize_curve(hold)
+    d = sh["_declared"]
+    tau, rho = d["tau_deploy"], d["net_radius"]
+    a_lo, a_hi = d["a_att_bracket"]
+    r_max, half = d["range_max"], d["half_angle"]
+    x_opt = ax_optimum(theta=half, rmax=r_max)
+    a_geom = float(cone_a_star(x_opt, theta=half, rmax=r_max, tau=tau))
+    a_rho = 2.0 * rho / tau ** 2
+    x_geom = _chi(a_geom, tau, rho)
+    x_lo, x_hi = _chi(a_lo, tau, rho), _chi(a_hi, tau, rho)
+
+    with plt.rc_context({"font.size": 7.6, "axes.labelsize": 7.8,
+                         "legend.fontsize": 6.9, "xtick.labelsize": 7.0,
+                         "ytick.labelsize": 7.0}):
+        fig, ax = plt.subplots(figsize=(3.4, 2.7))
+
+        ax.axvline(x_geom, color=INK, ls="-", lw=1.3, zorder=3)
+        ax.axvline(1.0, color=INK, ls=(0, (5, 2)), lw=1.3, zorder=3)
+        # 두 라벨은 파선(chi=1) 오른쪽 빈 영역에 쌓는다. 선 위에 얹으면 글자가
+        # 가려지므로 흰 bbox 도 함께 준다 (인쇄본에서 실제로 겹쳤던 부분).
+        lab = dict(fontsize=6.9, color=INK, va="center", ha="left",
+                   bbox=dict(facecolor="white", edgecolor="none", pad=1.0),
+                   arrowprops=dict(arrowstyle="->", color=INK, lw=0.8))
+        ax.annotate(f"finite-cone\n{a_geom:.1f} m/s$^2$", xy=(x_geom, 0.42),
+                    xytext=(1.16, 0.56), **lab)
+        ax.annotate(f"loose outer\n{a_rho:.1f} m/s$^2$", xy=(1.0, 0.16),
+                    xytext=(1.16, 0.26), **lab)
+
+        xs = [_chi(b["mid"], tau, rho) for b in sh["bins"]]
+        c = [b["net_capture"] for b in sh["bins"]]
+        _errbars(ax, xs, [b["p"] for b in c], [b["lo"] for b in c],
+                 [b["hi"] for b in c], color=C_NET, marker="o", ls="-",
+                 label=f"net capture (n={sh['n']:,}, Wilson 95 %)")
+
+        ax.set_xlim(x_lo, x_hi)
+        ax.set_ylim(-0.04, 1.06)
+        ax.set_xticks([x_lo, x_geom, 1.0, 1.5, x_hi])
+        ax.set_xticklabels([f"{x_lo:.2f}", f"{x_geom:.3f}", "1.00", "1.50",
+                            f"{x_hi:.2f}"])
+        ax.set_xlabel(r"$\chi = a_{att}\tau^2/2\rho$")
+        ax.set_ylabel("net capture probability")
+        ax.grid(axis="y", color="#E5E7EB", lw=0.6, zorder=0)
+        ax.set_axisbelow(True)
+        ax.legend(loc="upper right", bbox_to_anchor=(1.005, 1.0), frameon=True,
+                  facecolor="white", edgecolor="none", framealpha=1.0,
+                  borderpad=0.3, handlelength=1.8)
+        _second_axis(ax, tau, rho)
+        fig.tight_layout(pad=0.35)
+        _save(fig, out)
+    return {"hold": sh, "x_geom": x_geom, "a_geom": a_geom}
+
+
+def fig2_ksas(hold: dict, out: pathlib.Path) -> dict:
+    """KSAS Fig. 2 — tau–a* 해석 경계 + 기준 지연에서의 폐루프 달성점.
+
+    곡선 = 해석식이라 모든 tau 에서 유효 (loose outer 2 rho/tau^2 = 식 (3),
+    finite-cone 2 s_max/tau^2 = 식 (5)). 마커 = tau=0.30 s 한 점에서만 잰
+    폐루프 실측이므로 곡선으로 잇지 않는다. 범례는 이름만 — 수치(39.3/31.8/
+    31.2/22.5)는 본문·캡션 담당 (사용자 확정 2026-09-04, 캡션 B안).
+    """
+    sh = summarize_curve(hold)
+    d = sh["_declared"]
+    tau, rho = d["tau_deploy"], d["net_radius"]
+    x_opt = ax_optimum(theta=d["half_angle"], rmax=d["range_max"])
+    a1 = float(cone_a_star(x_opt, theta=d["half_angle"], rmax=d["range_max"],
+                           tau=1.0))                      # = 2 s_max
+    cross50 = sh["cross50_net_capture"]
+    a_cap = max(r["a_att"] for r in hold["records"]
+                if r["label"] in ("NET_CAPTURE", "CAPTURE_WITH_CONTACT"))
+
+    # frozen 수치 (KSAS 본문과 동일 계보) — drift 시 그리지 않고 죽는다
+    frozen = {"a_geom": (a1 / tau ** 2, 31.8),
+              "a_loose": (2 * rho / tau ** 2, 39.33),
+              "cross50": (cross50, 22.45), "max_cap": (a_cap, 31.2)}
+    for k, (got, want) in frozen.items():
+        assert abs(got - want) <= abs(want) * 0.01, f"{k}: {got} != {want} (frozen)"
+
+    taus = [0.15 + 0.45 * i / 399 for i in range(400)]
+    geom = [a1 / t ** 2 for t in taus]
+    loose = [2.0 * rho / t ** 2 for t in taus]
+
+    # 작은 지면 대비 큰 글자 (반 컬럼 축소 인쇄에서도 읽히는 판형)
+    rc = {"font.size": 9.5, "axes.labelsize": 10.5, "legend.fontsize": 9.0,
+          "xtick.labelsize": 9.5, "ytick.labelsize": 9.5}
+    with plt.rc_context(rc):
+        fig, ax = plt.subplots(figsize=(3.4, 2.7))
+        ax.fill_between(taus, 0, [min(g, 80.0) for g in geom],
+                        color="#EEF2F7", zorder=0)
+        # legend 순서 = 기준선 위에서의 상하 순서 (39.3 > 31.8 > 31.2 > 22.5)
+        ax.plot(taus, loose, color=INK, lw=1.3, ls=(0, (5, 2)), zorder=3,
+                label="loose outer")
+        ax.plot(taus, geom, color=INK, lw=1.5, zorder=3, label="finite-cone")
+        ax.axvline(tau, color=MUTED, ls=(0, (1, 2)), lw=1.1, zorder=2)
+        ax.text(tau, 81.5, "baseline 0.30 s", ha="center", va="bottom",
+                fontsize=8.8, color=MUTED)
+        ax.text(0.185, 5.5, "capture feasible", fontsize=8.8, color=MUTED,
+                style="italic", ha="left")
+        ax.plot([tau], [a_cap], marker="*", ms=10.5, color=C_NET, mec=C_NET,
+                ls="none", zorder=5, label="max captured")
+        ax.plot([tau], [cross50], marker="o", ms=6.0, color=C_NET, mfc="white",
+                mew=1.5, ls="none", zorder=5, label="50 % crossing")
+
+        ax.set_xlim(0.15, 0.60)
+        ax.set_ylim(0, 80)
+        ax.set_xticks([0.2, 0.3, 0.4, 0.5, 0.6])
+        ax.set_yticks([0, 20, 40, 60, 80])
+        ax.set_xlabel(r"capture delay $\tau$  [s]")
+        ax.set_ylabel(r"$a_{att}$  [m/s$^2$]")
+        ax.grid(axis="y", color="#E5E7EB", lw=0.6, zorder=0)
+        ax.set_axisbelow(True)
+        ax.legend(loc="upper right", frameon=True, facecolor="white",
+                  edgecolor="none", framealpha=1.0, borderpad=0.3,
+                  handlelength=1.9, labelspacing=0.4, handletextpad=0.6)
+        fig.tight_layout(pad=0.35)
+        _save(fig, out)
+    return {k: v[0] for k, v in frozen.items()}
+
+
 def fig2(e1c: dict, hold: dict, out: pathlib.Path) -> dict:
     """E1c: the eligibility/conditional split -- the censoring caveat, drawn."""
     g = e1c["manifest"]["geometry"]
@@ -267,9 +399,23 @@ def main(argv=None):
     ap.add_argument("--intercept", default="results/curve_intercept_reactive.json")
     ap.add_argument("--e1c", default="results/e1c_fire_decomp.json")
     ap.add_argument("--outdir", default="figures")
+    # 전체 재렌더는 matplotlib 판본 차이만으로도 기존 f1/f2 의 바이트를 바꾼다
+    # (실측 2026-08-26, mpl 3.11: PNG +30 KB, 내용 동일). 한 장만 손볼 때
+    # 나머지 추적 아티팩트를 건드리지 않도록 --only 를 둔다.
+    ap.add_argument("--only", choices=("all", "ksas", "ksas2"), default="all",
+                    help="ksas = KSAS Fig.1 만, ksas2 = KSAS Fig.2 만 렌더 "
+                         "(둘 다 f1/f2 재렌더 안 함)")
     a = ap.parse_args(argv)
     d = pathlib.Path(a.outdir)
+    if a.only == "ksas":
+        fig1_ksas(_load(a.hold), d / "f1_ksas_feasibility")
+        return
+    if a.only == "ksas2":
+        fig2_ksas(_load(a.hold), d / "f2_ksas_tau_boundary")
+        return
     f1 = fig1(_load(a.hold), _load(a.intercept), d / "f1_feasibility_modality")
+    fig1_ksas(_load(a.hold), d / "f1_ksas_feasibility")
+    fig2_ksas(_load(a.hold), d / "f2_ksas_tau_boundary")
     f2 = fig2(_load(a.e1c), _load(a.hold), d / "f2_fire_decomposition")
     _check(f1, f2)
 
