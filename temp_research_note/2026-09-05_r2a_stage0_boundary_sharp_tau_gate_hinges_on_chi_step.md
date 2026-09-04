@@ -84,3 +84,12 @@ a_min 7 은 사용자 제안값; 여유 +0.020 이 부족하다고 판단되면 
 - **Tier A pathwise: max dev 8.0e-15** (정규화 궤적, 경계 1셀 × 2 ep) — 상사변환이 부동소수 정밀도로 정확. DOM 판별력: R-tau-DOM 5.6e-2 / R-rho-DOM 5.2e-1 (λ 이동이 commit 기하를 바꿈, viz 정합). atol = 1e-6 (실측 ×10 후 하한 적용; DOM 대비 4~5 자릿수 여유).
 - **protocol 봉인** `a24fd8ce82afe7c5`: cells 6 = (0.58, 0.60)@η2.1 · (0.54, 0.56)@η3.0 · (0.54, 0.56)@η3.9 (chi50 감싸는 micro-grid 이웃, 공통 support 내) · seed0 1000 · n 400 · CRN 지터 (±0.01, ±0.15) SHA-256 · n 재산정/dt-check 계획 명기.
 - **잔여 (실행)**: kill screen 5 impl × 6 cell × 400 = 12,000 ep ≈ 5h 직렬 → 랩서버 (H-4 사용자 확인 선행, long-run-policy). 샤딩 = `--impl X --cells i,j`. repo-R1 provenance pass 도 선행 의무.
+
+## 후속 5 — ★dt_check STOP_AND_REVIEW: 경계 위치가 발사 지연(=1 스텝) 에 종속 (kill screen 착수 금지 상태)
+
+- 감사 r3 지시로 본 run 전 dt_check 실행 (R-ref, 경계 2셀, n=50 paired, dt vs dt/2): **불일치 27/50·30/50 >> 0.10 → STOP**. dt/2 에서 두 셀 p 가 1.000.
+- **원인 분류 (STAGE1_GATES 준수 — 수치 판독 전 분류 완료)**: 적분기 발산 아님 (pathwise 8e-15). 기전 = clean 판정→발사 1스텝 지연: coarse dt 는 지연 0.05 s 가 짧은 clean 창 끝을 넘겨 wasted, dt/2 는 지연 절반이라 창 안 (probe: 같은 물리 시각 발사, fire_step 14@dt wasted vs 26@dt/2 captured).
+- **경계는 소멸이 아니라 이동**: dt/2 에서 χ50 ≈ 0.55 → ≈ 0.70 (+0.15 >> δχ 0.05; χ≥0.85 는 p=0/36).
+- **판정**: dt_τ 는 "수치 검증수" 가 아니라 **발사-결정 지연이라는 물리 conditioning π** — PI_GROUPS 의 해당 주장 반증. R2a 내부 타당성은 무사 (5구현 전부 dt/τ=1/6 pin, pathwise 정확) — 지도가 "선언된 결정 지연 (1 control step, dt/τ=1/6) 조건부" 가 된다.
+- 산출물: `stage1_dt_check.json` (STOP 판정) + `stage1_dt_review.json` (기전·probe·옵션 A/B/C). **runner 는 dt_check PASS 를 assert 하므로 kill screen 은 물리적으로 착수 불가 상태.**
+- 사용자 결정 대기: A = dt_τ 를 conditioning π 로 재분류 + 어휘 협소화 + 재봉인 후 진행 (권고, 코드 무변경, Stage 0 대응 보존) / B = 결정율을 dt 에서 분리 (코드 변경, blast radius 큼) / C = 중단.

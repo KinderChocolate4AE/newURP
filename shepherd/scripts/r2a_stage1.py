@@ -3,7 +3,11 @@
     python -m shepherd.scripts.r2a_stage1 --feasibility          # 주입 실증 (로컬, ~초)
     python -m shepherd.scripts.r2a_stage1 --pathwise             # Tier A 궤적 게이트 + viz
     python -m shepherd.scripts.r2a_stage1 --seal-protocol        # cells·atol·CRN 봉인
-    python -m shepherd.scripts.r2a_stage1 --run --impl R-ref --cells 0,1  # kill screen (랩서버)
+    python -m shepherd.scripts.r2a_stage1 --dt-check             # 본 run 전 필수 (감사 r3)
+    python -m shepherd.scripts.r2a_stage1 --run --shard 3 --n-shards 8   # kill screen (랩서버)
+
+샤딩 = scenario 단위 (한 scenario 안에서 5 구현 전부 — paired 보존). 전역 STOP =
+artifacts/r2a/stage1/HARD_KILL_STOP sentinel (O_EXCL; 전 shard 가 scenario 경계마다 확인).
 
 계약 = artifacts/r2a/lattice_R2a_P.json (hash 3aa3adef77420d12). STAGE1_GATES 준수:
 pathwise 불일치 시 kill screen 수치를 읽지 않는다. HARD_KILL 출현 시 STOP.
@@ -236,9 +240,29 @@ def seal_protocol() -> dict:
                        "spawn u and jink phase shared via (seed0, ep)"},
         "pathwise_atol": atol, "pathwise_calibration": pw["tier_a_max_dev"],
         "gates": lat["stage1_gates"],
-        "dt_check": "2 boundary cells x dt/2 (steps x2), lab server, before Stage 3",
-        "n_recalc": "measure paired correlation on Stage 1 output -> re-derive n for >=90% "
-                    "expected PASS at true delta=0; seal as Stage 3 n",
+        "sharding": "by scenario: s in [0, 2400), cell = s // n_per_cell; ALL 5 impls run "
+                    "per scenario inside one shard (paired structure preserved); 8 shards "
+                    "= ~300 scenarios (~1,500 ep, ~37 min nominal) each",
+        "stop_sentinel": "artifacts/r2a/stage1/HARD_KILL_STOP — atomic create (O_EXCL) by "
+                         "the shard observing HARD_KILL; every shard checks before each "
+                         "scenario and halts at the next scenario boundary "
+                         "(stopped_by_sentinel flag); the sentinel records (shard, "
+                         "scenario, impl) so nothing is excluded silently",
+        "dt_check": {"when": "BEFORE the Stage 1 main run (audit r3 — moved up from "
+                             "pre-Stage-3)",
+                     "design": "R-ref, 2 boundary cells, n=50 paired CRN episodes at dt vs "
+                               "dt/2 (episode_len x2; dt_tau is a numerical verification "
+                               "number, not a design parameter — PI_GROUPS)",
+                     "rule": "paired discordant-label fraction per cell <= 0.10 (= "
+                             "delta_p); else STOP-and-review before any kill-screen "
+                             "episode"},
+        "n_recalc": "paired correlation for Stage 3 n is computed SEPARATELY for "
+                    "R-ref<->R-tau-DOM and R-ref<->R-rho-DOM — never pooled with SIM arms "
+                    "(near-identical SIM pairs inflate correlation and understate n); "
+                    "per-cell variation inspected; the most conservative n is sealed for "
+                    "Stage 3 (>=90% expected PASS at true delta = 0)",
+        "supersedes_protocol": "a24fd8ce82afe7c5 (pre-audit-r3: per-impl sharding, "
+                               "shard-local STOP, dt-check deferred to pre-Stage-3)",
         "status": "kill screen = falsification screen; no representativeness claim",
     }
     payload["protocol_hash"] = hashlib.sha256(
@@ -249,45 +273,111 @@ def seal_protocol() -> dict:
 
 
 # ------------------------------------------------------------- kill screen --
-def run_cells(impl_name: str, cell_idx: list[int], n: int = N_CELL,
-              out: str | None = None) -> dict:
-    """kill screen 실행 (랩서버용; 로컬 30분+ 금지 — memory: long-run-policy)."""
+SENTINEL = ART / "stage1" / "HARD_KILL_STOP"
+
+
+def _sentinel_write(shard: int, scenario: int, impl: str) -> None:
+    SENTINEL.parent.mkdir(parents=True, exist_ok=True)
+    try:                                           # atomic — 최초 발생자만 기록
+        with open(SENTINEL, "x", encoding="utf-8") as f:
+            json.dump({"shard": shard, "scenario": scenario, "impl": impl}, f)
+    except FileExistsError:
+        pass
+
+
+def run_shard(shard: int, n_shards: int = 8) -> dict:
+    """scenario 샤딩: 한 scenario 안에서 5 구현 전부 실행 (paired 구조 보존).
+    전역 STOP: 매 scenario 시작 전 sentinel 확인 — 다른 shard 의 HARD_KILL 도 멈춘다."""
     proto = json.loads((ART / "stage1_protocol.json").read_text(encoding="utf-8"))
     lat = _lattice()
-    im = impls(lat["tau_B"])[impl_name]
-    cells = [tuple(proto["cells"][i]) for i in cell_idx]
-    path = pathlib.Path(out) if out else ART / f"stage1_{impl_name}_{'-'.join(map(str, cell_idx))}.json"
+    ims = impls(lat["tau_B"])
+    cells, n_cell = proto["cells"], proto["n_per_cell"]
+    total = len(cells) * n_cell
+    lo, hi = shard * total // n_shards, (shard + 1) * total // n_shards
+    out_dir = ART / "stage1"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / f"shard{shard:02d}.json"
     records = []
     if path.exists():
         prev = json.loads(path.read_text(encoding="utf-8"))
         if prev["protocol_hash"] == proto["protocol_hash"]:
             records = prev["records"]
-    def _save():
+
+    def _save(stopped=False):
         path.write_text(json.dumps(
-            {"impl": impl_name, "cells": cells, "protocol_hash": proto["protocol_hash"],
-             "lattice_hash": lat["lattice_hash"], "n_target": n * len(cells),
-             "records": records}, ensure_ascii=False), encoding="utf-8")
-    done = len(records)
-    for i in range(done, n * len(cells)):
-        ci, ep = divmod(i, n)
-        chi_c, eta_c = cells[ci]
-        chi, eta = draw_cell_jitter(proto["seed0"], ci * n + ep, chi_c, eta_c)
-        kw = resolve(im, chi, eta)
-        st = build_m4_env(proto["seed0"], ci * n + ep, **kw)
-        r = run_episode(st.env, st.scn, st.lay, seed=proto["seed0"] + ci * n + ep,
-                        limiter_mode="hold", fire_mode="clean", policy=None,
-                        baseline_commit=False)
-        if r.label == "HARD_KILL":                       # STAGE1_GATES: STOP
-            records.append({"cell": [chi_c, eta_c], "chi": chi, "eta": eta,
-                            "label": r.label, "STOP": "HARD_KILL emergence"})
+            {"shard": shard, "n_shards": n_shards, "scenario_range": [lo, hi],
+             "protocol_hash": proto["protocol_hash"], "lattice_hash": lat["lattice_hash"],
+             "stopped_by_sentinel": stopped, "records": records},
+            ensure_ascii=False), encoding="utf-8")
+
+    for s in range(lo + len(records) // len(ims), hi):
+        if SENTINEL.exists():
+            _save(stopped=True)
+            print(f"[shard {shard}] sentinel — halt at scenario {s}", flush=True)
+            return {"n_done": len(records), "stopped": True}
+        chi_c, eta_c = cells[s // n_cell]
+        chi, eta = draw_cell_jitter(proto["seed0"], s, chi_c, eta_c)
+        for name, im in ims.items():
+            kw = resolve(im, chi, eta)
+            st = build_m4_env(proto["seed0"], s, **kw)
+            r = run_episode(st.env, st.scn, st.lay, seed=proto["seed0"] + s,
+                            limiter_mode="hold", fire_mode="clean", policy=None,
+                            baseline_commit=False)
+            records.append({"s": s, "impl": name, "cell": [chi_c, eta_c],
+                            "chi": chi, "eta": eta, "label": r.label})
+            if r.label == "HARD_KILL":               # STAGE1_GATES: 전역 STOP
+                _sentinel_write(shard, s, name)
+                _save(stopped=True)
+                raise SystemExit(f"HARD_KILL STOP: shard {shard} scenario {s} impl {name}")
+        if (s - lo + 1) % 20 == 0 or s + 1 == hi:
             _save()
-            raise SystemExit(f"HARD_KILL STOP gate: ep {i} — 판독 중지, 원인 분류부터")
-        records.append({"cell": [chi_c, eta_c], "chi": chi, "eta": eta, "label": r.label})
-        if (i + 1) % 100 == 0 or i + 1 == n * len(cells):
-            _save()
-            print(f"[{impl_name}] {i + 1}/{n * len(cells)}", flush=True)
+            print(f"[shard {shard}] {s - lo + 1}/{hi - lo} scenarios", flush=True)
     _save()
-    return {"n_done": len(records)}
+    return {"n_done": len(records), "stopped": False}
+
+
+# ------------------------------------------------------------- dt 수렴 검사 --
+def dt_check(n: int = 50) -> dict:
+    """본 run 전 필수 (감사 r3): R-ref, 경계 2셀, paired CRN, dt vs dt/2 (steps x2).
+    dt_tau 는 수치 검증수 — 이 검사만 의도적으로 pin 을 깬다. 규칙: 셀당 라벨
+    불일치율 <= 0.10 (= delta_p), 아니면 kill screen 착수 금지."""
+    from shepherd.stats import wilson
+    proto = json.loads((ART / "stage1_protocol.json").read_text(encoding="utf-8"))
+    lat = _lattice()
+    im = impls(lat["tau_B"])["R-ref"]
+    cells = [tuple(proto["cells"][3]), tuple(proto["cells"][4])]  # (0.56, 3.0), (0.54, 3.9)
+    out = {"impl": "R-ref", "n": n, "cells": {}, "rule": "discordant <= 0.10 per cell",
+           "protocol_hash": proto["protocol_hash"]}
+    ok = True
+    for chi_c, eta_c in cells:
+        disc, labels = 0, []
+        for i in range(n):
+            ep = 90_000 + i                          # kill-screen CRN 과 분리된 namespace
+            chi, eta = draw_cell_jitter(proto["seed0"], ep, chi_c, eta_c)
+            got = []
+            for half in (False, True):
+                kw = resolve(im, chi, eta)
+                if half:
+                    kw["extra_cfg"]["physics.dt"] = kw["extra_cfg"]["physics.dt"] / 2
+                    kw["extra_cfg"]["train.episode_len"] = 320
+                st = build_m4_env(proto["seed0"], ep, **kw)
+                r = run_episode(st.env, st.scn, st.lay, seed=proto["seed0"] + ep,
+                                limiter_mode="hold", fire_mode="clean", policy=None,
+                                baseline_commit=False)
+                got.append(r.label)
+            labels.append(got)
+            disc += got[0] != got[1]
+        lo_ci, hi_ci = wilson(disc, n)
+        cell_ok = disc / n <= 0.10
+        ok &= cell_ok
+        out["cells"][f"{chi_c},{eta_c}"] = {
+            "discordant": [disc, n], "frac": disc / n, "wilson95": [lo_ci, hi_ci],
+            "p_dt": sum(g[0] == "NET_CAPTURE" for g in labels) / n,
+            "p_dt2": sum(g[1] == "NET_CAPTURE" for g in labels) / n, "ok": cell_ok}
+    out["verdict"] = "PASS" if ok else "STOP_AND_REVIEW"
+    (ART / "stage1_dt_check.json").write_text(
+        json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")
+    return out
 
 
 def main(argv=None) -> None:
@@ -295,11 +385,10 @@ def main(argv=None) -> None:
     ap.add_argument("--feasibility", action="store_true")
     ap.add_argument("--pathwise", action="store_true")
     ap.add_argument("--seal-protocol", action="store_true")
+    ap.add_argument("--dt-check", action="store_true")
     ap.add_argument("--run", action="store_true")
-    ap.add_argument("--impl", default="R-ref")
-    ap.add_argument("--cells", default="0,1,2,3,4,5")
-    ap.add_argument("--n", type=int, default=N_CELL)
-    ap.add_argument("--out", default=None)
+    ap.add_argument("--shard", type=int, default=0)
+    ap.add_argument("--n-shards", type=int, default=8)
     a = ap.parse_args(argv)
     if a.feasibility:
         r = feasibility()
@@ -309,16 +398,20 @@ def main(argv=None) -> None:
     if a.pathwise:
         r = pathwise()
         print(f"pathwise tier_a_max_dev {r['tier_a_max_dev']:.3e}  cell {r['cell']}")
-        for ep, row in r["eps"].items():
-            print(f"  ep{ep}: " + "  ".join(
-                f"{k}:{v['label']}" + (f"/dev {v['max_dev']:.1e}" if "max_dev" in v else "")
-                for k, v in row.items()))
     if a.seal_protocol:
         p = seal_protocol()
         print(f"protocol_hash {p['protocol_hash']}  atol {p['pathwise_atol']:.0e}  "
               f"cells {p['cells']}")
+    if a.dt_check:
+        r = dt_check()
+        print(f"dt_check {r['verdict']}")
+        for c, v in r["cells"].items():
+            print(f"  cell {c}: discordant {v['discordant']}  p_dt {v['p_dt']:.3f}  "
+                  f"p_dt/2 {v['p_dt2']:.3f}")
     if a.run:
-        run_cells(a.impl, [int(x) for x in a.cells.split(",")], a.n, a.out)
+        dtc = json.loads((ART / "stage1_dt_check.json").read_text(encoding="utf-8"))
+        assert dtc["verdict"] == "PASS", "dt_check 미통과 — kill screen 착수 금지"
+        run_shard(a.shard, a.n_shards)
 
 
 if __name__ == "__main__":

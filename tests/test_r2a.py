@@ -257,3 +257,35 @@ def test_stage1_gates_sealed_and_passed():
         assert row["R-tau-DOM"]["max_dev"] > pr["pathwise_atol"]
         assert row["R-rho-DOM"]["max_dev"] > pr["pathwise_atol"]
     assert len(pr["cells"]) == 6 and pr["lattice_hash"] == "3aa3adef77420d12"
+
+
+def test_stage1_shard_ranges_and_sentinel_atomic(tmp_path):
+    """scenario 샤딩이 [0, 2400) 을 정확히 분할하고, sentinel 이 O_EXCL 원자적인지."""
+    import json as _json
+    from shepherd.scripts import r2a_stage1 as S
+    total = 6 * S.N_CELL
+    edges = [(k * total // 8, (k + 1) * total // 8) for k in range(8)]
+    assert edges[0][0] == 0 and edges[-1][1] == total
+    assert all(a2 == b1 for (_, b1), (a2, _) in zip(edges[:-1], edges[1:]))
+    orig = S.SENTINEL
+    S.SENTINEL = tmp_path / "HARD_KILL_STOP"
+    try:
+        S._sentinel_write(3, 777, "R-rho-DOM")
+        S._sentinel_write(5, 999, "R-ref")            # 두 번째는 무시돼야 한다
+        d = _json.loads(S.SENTINEL.read_text(encoding="utf-8"))
+        assert d == {"shard": 3, "scenario": 777, "impl": "R-rho-DOM"}
+    finally:
+        S.SENTINEL = orig
+
+
+@pytest.mark.skipif(not (ROOT / "artifacts/r2a/stage1_dt_check.json").exists(),
+                    reason="dt check not run")
+def test_stage1_dt_check_gate_consistent():
+    """dt_check 판정이 규칙과 일치하고, PASS 아니면 kill screen 산출물이 없어야 한다."""
+    import json as _json
+    d = _json.loads((ROOT / "artifacts/r2a/stage1_dt_check.json").read_text(encoding="utf-8"))
+    rule_pass = all(v["frac"] <= 0.10 for v in d["cells"].values())
+    assert (d["verdict"] == "PASS") == rule_pass
+    if d["verdict"] != "PASS":                     # STOP-and-review 상태의 계약
+        assert not list((ROOT / "artifacts/r2a/stage1").glob("shard*.json"))
+        assert (ROOT / "artifacts/r2a/stage1_dt_review.json").exists()

@@ -1,0 +1,18 @@
+{
+ "verdict_under_review": "STOP_AND_REVIEW (dt_check: discordant 27/50, 30/50 >> 0.10)",
+ "classification": "decision-layer time quantization — NOT integrator divergence",
+ "evidence": {
+  "pathwise": "Tier A normalized-trajectory deviation 8e-15 at fixed dt/tau — the integrator and dynamics non-dimensionalize exactly; divergence is not in the physics path",
+  "fire_timing_probe": "fire occurs at ~the same physical time (t~0.65-0.70 s) at both dt; at dt=0.05 the one-step fire latency (clean flag from the PREVIOUS step triggers the shot) lands past the short clean window -> wasted fire -> PENETRATED; at dt/2 the latency halves and the same shot lands inside the window -> NET_CAPTURE (ep0/ep1: fire_step 14@dt wasted vs 26@dt/2 captured)",
+  "boundary_shift_probe": "at dt/2 the sharp chi-boundary persists but moves up: p(chi~0.70)=5/12, p(chi>=0.85)=0/36 -> chi50 shifts ~0.55 -> ~0.70 (+0.15 >> delta_chi 0.05)"
+ },
+ "finding": "the effective fire-decision latency tau_fire = 1 control step = dt is a load-bearing physical timescale: the capture boundary location depends on dt/tau. dt_tau is therefore NOT a pure numerical verification number (PI_GROUPS claim falsified for this decision layer); it acts as a physical conditioning group (declared decision-latency ratio).",
+ "internal_validity": "unaffected within R2a: all five implementations pin dt/tau = 1/6 (pathwise-exact), so H-SIM/H-DOM comparisons remain internally consistent under the declared latency.",
+ "external_validity": "the (chi, eta) map is conditional on dt/tau = 1/6; the continuum limit has a different (higher-chi) boundary. Claims must carry 'conditional on the declared fire-decision latency (one control step, dt/tau = 1/6)'.",
+ "options": {
+  "A": "reclassify dt_tau as a physical conditioning pi (declared fire-decision latency), amend lattice text + vocab, re-seal (new hashes), proceed with the kill screen under the pin — no code change, Stage 0 correspondence preserved",
+  "B": "decouple the decision rate from the integration step (fixed tau_fire co-scaled with tau), then re-run dt-check as a pure integration test — code change in the fire path, larger blast radius, defer decision",
+  "C": "halt the campaign pending deeper review"
+ },
+ "gate_state": "kill screen NOT started (runner refuses while dt_check verdict != PASS)"
+}

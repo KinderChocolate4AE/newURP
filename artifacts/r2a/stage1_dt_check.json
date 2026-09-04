@@ -1,0 +1,37 @@
+{
+ "impl": "R-ref",
+ "n": 50,
+ "cells": {
+  "0.56,3.0": {
+   "discordant": [
+    27,
+    50
+   ],
+   "frac": 0.54,
+   "wilson95": [
+    0.4039887129739265,
+    0.6703034790117844
+   ],
+   "p_dt": 0.46,
+   "p_dt2": 1.0,
+   "ok": false
+  },
+  "0.54,3.9": {
+   "discordant": [
+    30,
+    50
+   ],
+   "frac": 0.6,
+   "wilson95": [
+    0.4618143764085632,
+    0.7239161035557139
+   ],
+   "p_dt": 0.4,
+   "p_dt2": 1.0,
+   "ok": false
+  }
+ },
+ "rule": "discordant <= 0.10 per cell",
+ "protocol_hash": "93c201cfba2785d2",
+ "verdict": "STOP_AND_REVIEW"
+}
