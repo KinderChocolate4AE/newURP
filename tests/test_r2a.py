@@ -320,3 +320,18 @@ def test_stage24_protocols_sealed():
     assert ">= 0.20" in p4["verdict_rules"]["primary_material"]
     assert "not gating" in p4["verdict_rules"]["secondary_dose"]
     assert p2["crn_ns"] == "r2a_s2" and p4["crn_ns"] == "r2a_s4"    # Stage 1 CRN 과 분리
+
+
+@pytest.mark.skipif(not (ROOT / "artifacts/r2a/lattice_R2a_P3.json").exists(),
+                    reason="3-D lattice not sealed")
+def test_lattice3d_and_scout_sealed():
+    import json as _j
+    l3 = _j.loads((ROOT / "artifacts/r2a/lattice_R2a_P3.json").read_text(encoding="utf-8"))
+    assert "algebraically locked" in l3["coordinates"]["lam"]          # 단일 DOF
+    assert l3["stage3_design"]["n3"] == 680 and "650 floor" in l3["stage3_design"]["n_rule"]
+    assert "ONLY after the lambda2 boundary slice" in l3["claim_status"]["unlock_rule"]
+    assert "min over sealed family F" in l3["stage3_design"]["family_envelope"]["estimand"]
+    assert "EVERY resample" in l3["stage3_design"]["family_envelope"]["bootstrap"]
+    sc = _j.loads((ROOT / "artifacts/r2a/scout_l2_protocol.json").read_text(encoding="utf-8"))
+    assert sc["status"].startswith("exploratory") and sc["lattice3d_hash"] == l3["lattice_hash"]
+    assert len(sc["chi_grid"]) == 8 and abs(sc["R_max"] - 8.22 * 1.77 / 2.30) < 1e-9

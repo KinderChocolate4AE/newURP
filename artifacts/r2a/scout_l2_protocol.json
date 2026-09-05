@@ -1,0 +1,37 @@
+{
+ "schema": "r2a-scout-l2-v1",
+ "status": "exploratory/design — not evidence",
+ "lattice3d_hash": "d9d93e20d76859a8",
+ "impl": "R-ref geometry with R_max = lam2 * rho_ref",
+ "R_max": 6.325826086956523,
+ "chi_grid": [
+  0.33,
+  0.37,
+  0.41,
+  0.45,
+  0.49,
+  0.53,
+  0.57,
+  0.61
+ ],
+ "eta_grid": [
+  2.1,
+  2.4,
+  2.7,
+  3.0,
+  3.3,
+  3.6,
+  3.9
+ ],
+ "n_per_cell": 60,
+ "seed0": 5000,
+ "crn_ns": "r2a_sc2",
+ "jitter": {
+  "chi": 0.02,
+  "eta": 0.15
+ },
+ "envelope_rule": "chi50(eta) isotonic +/- 0.10 (as Stage 0)",
+ "q_dec_gate": "runtime assert 1/6",
+ "stop_sentinel": "artifacts/r2a/scout_l2/HARD_KILL_STOP",
+ "protocol_hash": "fa3d149eb846c00d"
+}

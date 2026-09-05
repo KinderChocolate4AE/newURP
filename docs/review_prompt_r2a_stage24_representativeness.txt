@@ -1,0 +1,145 @@
+================================================================================
+R2A STAGE 2·4 결과 + FULL PARAMETER SPACE 대표성 — 외부 감사 브리프 r1 (2026-09-05)
+선행: review_prompt_r2a_parameterization.txt (r3+r4) · review_prompt_r2a_pins_evasion.txt
+(r1~r2). 봉인 체인 = A′ (lattice L a253505b1280804e / P 05f3e5c18d147b9f, stage1 proto
+1496a4769876b438, stage2 3bc9dba2fe01385f, stage4 59c4de1889ed72dc). 커밋 c3e70cb.
+================================================================================
+
+0. 문서 지위 / 핵심 질문
+--------------------------------------------------------------------------------
+결과 보고 + 대표성 감사. 핵심 질문 (의뢰자 명시): "지금 데이터가 full parameter
+space 의 모든 대표성을 포함하는가?"
+우리의 선판정: **아니오 — 그리고 설계상 목표도 아니었다.** 본 캠페인이 담보하는 것
+은 "봉인된 conditioning vector 하에서, 경계 국소 영역의, (chi, eta) + 승격된 lam 좌
+표 식별" 이다. 이 선판정 자체와, §4 의 계층별 gap 분류, §6 의 후속 설계 질문이 감사
+대상이다. 수치 주장 (§5) 은 전부 적대적 재검증 요청.
+
+1. Stage 1 recap (판독 완료, 이전 브리프 이후)
+--------------------------------------------------------------------------------
+kill screen 12,000 ep (6 경계 셀 × 400 paired CRN × 5구현), HARD_KILL 0:
+  SIM 2팔: paired 라벨 불일치 **0/4,800** (pathwise 8e-15 의 라벨 수준 확장).
+  R-tau-DOM (k_f·tau 1.20→1.80): 전 셀 PASS, |dp| ≤ 0.013.
+    ★어휘 협소화 반영: "시험한 +50% 교란이 사전 지정 6개 경계 셀에서 delta_p 이내
+    로 robust" — gain 축 전체의 관성 주장 아님.
+  R-rho-DOM (lam 4.644→3.574): 전 셀 FAIL, sign-일관 dp −0.20~−0.39 → Stage 4 발동.
+
+2. Stage 4 결과 (protocol 59c4de1889ed72dc, 7,200 ep, 규칙 사전 봉인) — POSITIVE
+--------------------------------------------------------------------------------
+직교 {lam, alpha} 3레벨 (rho·tau·q_dec·kappa·runtime ratio 전부 불변, 이동 pin =
+{alpha, lam} 뿐임을 러너가 assert):
+  lam 4.644 / 4.109 / 3.574 = R_max 8.22 / 7.27 / 6.33 m = alpha 12.15/13.68/15.63°
+
+  cell        p(L0)  p(L1)  p(L2)   dp(L2)  CI95
+  (0.54,3.0)  .630   .453   .265   −.365  [−.420,−.312]
+  (0.54,3.9)  .395   .270   .075   −.320  [−.370,−.270]
+  (0.56,3.0)  .515   .347   .175   −.340  [−.393,−.290]
+  (0.56,3.9)  .325   .200   .052   −.273  [−.320,−.228]
+  (0.58,2.1)  .672   .535   .390   −.282  [−.347,−.217]
+  (0.60,2.1)  .517   .410   .280   −.237  [−.297,−.175]
+
+  방향 6/6 (CI 상한 < 0) ✓ · material pooled dp(L2) = −0.303 ≥ 0.20 ✓ → POSITIVE.
+  secondary dose ordering: pooled dp(L1) = −0.140 — 거의 정확한 중간 (lam 에 근사
+  선형). Stage 1 효과가 cone 기하 단독 교란으로 재현됨 → (chi, eta, lam) 재등록
+  경로, C045 후보 PARTIAL_3D (등록은 재설계된 confirmatory 후).
+
+3. Stage 2 결과 (protocol 3bc9dba2fe01385f, 33,600 ep, R-ref) — lam 4.644 slice
+--------------------------------------------------------------------------------
+  eta    2.1    2.4    2.7    3.0    3.3    3.6    3.9
+  chi50  .605   .587   .577   .568   .542   .538   .525   (행별 n=4,800, isotonic)
+  단조 감소, 총 폭 0.08. Stage 0 대비 |Δ| ≤ 0.03 (η 2.4/2.7 의 −0.06~−0.08 은
+  Stage 0 행 CI [0.52, 0.67] 폭 안 — 정합). 경계 CI 반폭 0.003~0.019.
+
+4. 대표성 인벤토리 — 계층별 정직 분류 (핵심 감사 대상)
+--------------------------------------------------------------------------------
+4.1 시험·변화된 축 (그러나 전부 국소·소수점·단방향):
+  axis        시험 범위                    점수  비고
+  chi         map 0.41~0.85 / micro 0.52~0.62  12+11  legacy support 는 0.28~1.98 —
+              plateau (p≈1 / p≈0) 양쪽 꼬리는 map 밖 (경계 국소화는 의도된 설계)
+  eta         2.1~3.9 (7점)                7   frozen support 1.36~5.08 의 내부 밴드.
+              밴드 밖 행 (1.8, 4.2~4.8) 은 Stage 0 exploratory 만
+  lam(=alpha) 3.574~4.644 (3점)            3   **단방향 (감소만)** · 경계 6셀 한정 ·
+              lam > 4.644 미시험 · full map 은 lam0 slice 뿐
+  tau         0.30, 0.45                   2   증가만
+  rho         1.77, 2.30                   2   증가만
+  k_f·tau     1.20, 1.80                   2   증가만
+4.2 ★구조적 유의: 본 구현에서 **lam 과 alpha 는 자유도 1개다** (alpha = atan(rho/
+  R_max) 로 대수 종속 — R_max 단일 노브). "{lam, alpha} 교란" 은 cone-기하 1-DOF
+  방향이지 두 축이 아니다. 둘을 분리하려면 half_angle 을 R_max 와 독립으로 두는
+  cone 재매개변수화가 필요 (미실시). 3-D 재등록 시 좌표 명명에 반영해야 함 (Q3).
+4.3 시험 안 된 채 고정 (봉인 conditioning) — 대표성 주장 불가 축:
+  (a) **q_dec = 1/6**: 유일하게 *민감도가 실측된* pin (1/6→1/12 에서 chi50 +0.15).
+      알고도 고정한 governing 좌표 — 어휘가 이미 conditional 로 협소화됨.
+  (b) **A2-reactive evasion vector** (jink 0.6 · route 0.5 · sigma_dt 17 · dodge 1.8
+      등): a priori 후보 governing 축, 민감도 미실측. scripted 단일 config — family
+      도 worst-case 도 아직 아님 (Stage 3 의 family worst-case 가 첫 완화).
+  (c) capability family (mu .35, nu 1.0, v_adv 1.5) · kappa .424 · N=4 limiter ·
+      commit_threshold .5 · spawn/layout 비 · tau_lock/tau · tau_kill/tau ·
+      omega·tau 4종 · jink_freq·tau — 전부 1점.
+  (d) 세계 자체: legacy 24 m 회랑 · hold arm (협력 없음) · 점질량 위협 1기.
+4.4 상사 증거의 범위: 라벨-정확 (0/4,800) 은 **경계 6셀 시나리오 한정**. full map
+  의 SIM 불변은 미시험 (map 은 R-ref 만 돌았다). 정규화가 정확하므로 이론상 전
+  좌표에서 성립해야 하나, 실증 범위는 경계 셀이다 (Q5).
+
+5. 수치 주장 (적대적 재검증 요청)
+--------------------------------------------------------------------------------
+  N-1  Stage 4 표 전체 (§2) + pooled −0.140 / −0.303 + 판정 3조건
+  N-2  Stage 2 chi50 행 7개 + Stage 0 차이 {+.007, −.064, −.076, +.016, −.028,
+       +.018, −.016}
+  N-3  lam 레벨 산술: 4.644=8.22/1.77 · 3.574=8.22/2.30 · 중점 4.109 · alpha 표
+  N-4  Stage 1: SIM 불일치 0/4,800 · R-tau-DOM |dp|max 0.013 · R-rho-DOM
+       −0.20~−0.39 · n 재산정 q 0.048/0.497 → 70/650
+  N-5  support: chi_ref 0.28~1.98 (a 11~78) · eta frozen 1.36~5.08 · q_dec 민감도
+       chi50 +0.15 (1/6→1/12)
+
+6. 감사 판정 요청
+--------------------------------------------------------------------------------
+  Q1  §0 선판정 승인 여부: "full-space 대표성 없음 + 목표 아니었음 + 담보 범위 =
+      경계 국소 (chi, eta, lam) 식별, sealed conditioning 조건부" — 이 서술로 논문
+      claim 이 충분히 방어되는가, 추가 협소화가 필요한가.
+  Q2  R2b 소비 관점의 최소 보강: R2b 는 경계 밴드를 소비하므로 plateau 대표성은
+      불필요하다는 것이 우리 입장 — 동의하는가? 동의 시 잔여 최소 보강 후보의
+      우선순위: (i) lam 증가 방향 1점 (>4.644, 단방향성 해소) (ii) map 의 lam2
+      slice 부분 재현 (3-D 표면 주장용) (iii) SIM 라벨-정확의 map 모서리 spot-check
+      (iv) evasion vector 1축 민감도 probe. 비용 대비 순서 판정 요청.
+  Q3  lam/alpha 1-DOF 문제 (§4.2): 3-D 재등록 좌표를 "lam (cone geometry, alpha
+      algebraically locked)" 로 명명하는 안 vs cone 재매개변수화로 분리 시험하는 안.
+  Q4  Stage 3 재설계 골격: lam slice 선택 (lam0 단독 vs lam0+lam2 2-slice) · family
+      worst-case exact rule · n=650 의 3-D 유효성 (Stage 4 의 lam 축 q 는 더 클 수
+      있음 — 재산정 필요?).
+  Q5  §4.4 의 상사 증거 범위 한정 서술로 충분한가, map corner SIM spot-check 를
+      Stage 3 에 포함해야 하는가.
+  Q6  q_dec: 어휘 conditional 로 충분 vs 1/12 slice mini-map (경계 밴드만) 을 논문
+      부록 증거로 추가 — 비용 ~7,200 ep. 판정 요청.
+7. 감사 반영 기록 r2 (2026-09-05 — 판정: 대표성 선판정 승인, "3-D 식별 완료" 불승인)
+--------------------------------------------------------------------------------
+  판정 요약: Q1 승인 + 추가 협소화 / Q2 우선순위 ii>iv>i>iii / Q3 lam 단일 DOF 유지
+  / Q4 lam0+lam2 2-slice + family envelope + n 재정당화 / Q5 필수 아님 (QA 만) /
+  Q6 부록 run (core 후). "exhaustive full-space sweep 비추천, hierarchical
+  identification 추천".
+
+  반영 내역:
+  (1) ★수치 서술 오류 정정 (Stage 2): "Stage 0 대비 |Δ| ≤ 0.03" 철회 → 정확한 문구
+      = "5/7 행이 점추정 차 ≤ 0.03; η 2.4/2.7 은 −0.064/−0.076 이나 Stage 0 의 넓은
+      exploratory 불확실성과는 양립". CI 겹침 ≠ 점추정 일치 — 구분 유지.
+      "λ 에 거의 선형" 도 철회 → "approximately intermediate response" (3점 뿐).
+  (2) claim 어휘 재협소화: "(chi, eta, lam) 식별 완료" 금지. 현재 허용 =
+      "conditional local boundary characterization at lambda = 4.644, with
+      independently confirmed sensitivity to the additional cone-geometry
+      coordinate lambda". "local 3-D boundary surface" 는 lam2 경계곡선 확보 후에만
+      (unlock rule 로 봉인). "representative" 대신 "coverage".
+  (3) (chi, eta, lam) 재등록: lattice_R2a_P3.json **d9d93e20d76859a8** — lam = 단일
+      cone-geometry DOF (alpha 대수 종속 명시), 축별 증거 수준표 내장, 2-D 좌표 잠금
+      해제 (PARTIAL_3D 규칙), C045 등록은 Stage 3 후.
+  (4) Stage 3 골격 봉인 (P3 내): lam0+lam2 2-slice (lam1 은 Stage 4 ordering 증거로
+      대체, 비용 절감) · family envelope p_worst = min_F (bootstrap 매 resample 내
+      재최소화, 사후 단일-worst 서사 금지) · **n3 = max(650 floor, nuisance 재추정)
+      = 680** (Stage 4 실측 worst q 0.522, effect size 미참조 규칙).
+      F 제안 (봉인 전 확인 1건): A1(0,0) · A2-nom(0.6,0.5) · A2-J+(0.9,0.5) ·
+      A2-R+(0.6,0.75).
+  (5) lam2 경계 scout 사전등록: scout_l2 protocol **fa3d149eb846c00d** — exploratory
+      지위 (Stage 0 역할), chi 0.33~0.61 × eta 7행 × n=60 = 3,360 ep (~12분 8샤드).
+      Stage 3 lam2 band 중심의 유일 입력.
+  (6) 계층 계획 (P3 에 봉인): ① core 3-D 경계 → ② evasion family (Stage 3 내) →
+      ③ q_dec 1/12 mini-map (부록, core 후) → ④ 잔여 pin one-at-a-time screening
+      (delta_chi 0.05 문턱, 이동 축만 승격). SIM corner 4점은 QA 로만 (증거 아님).
+================================================================================

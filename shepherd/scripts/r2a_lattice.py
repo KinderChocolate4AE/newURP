@@ -391,11 +391,95 @@ def build_lattice(stage0_path: pathlib.Path, contract: str,
     return payload
 
 
+# ====================================================== 3-D 재등록 (A-prime 후) ==
+def build_lattice_3d() -> dict:
+    """(chi, eta, lam) 재등록 — Stage 4 POSITIVE (감사 r2 승인) 에 따른 새 계약.
+    lam 은 단일 cone-geometry DOF (alpha 대수 종속) — 축 2개처럼 쓰지 않는다."""
+    lat_p = json.loads(pathlib.Path("artifacts/r2a/lattice_R2a_P.json").read_text(encoding="utf-8"))
+    s4 = json.loads(pathlib.Path("artifacts/r2a/stage4_readout.json").read_text(encoding="utf-8"))
+    assert s4["verdict"] == "POSITIVE"
+    lam0, lam2 = R_MAX_REF / RHO_REF, R_MAX_REF / RHO_B
+    payload = {
+        "schema": "r2a-lattice3d-v1", "contract": "R2a-P3",
+        "coordinates": {
+            "chi": "a*tau^2/(2*rho)", "eta": "v*tau/rho",
+            "lam": "R_max/rho — cone geometry coordinate; alpha = arctan(1/lam) "
+                   "algebraically locked by the current cone model (single DOF; "
+                   "separating alpha would be a new physical model, out of scope)"},
+        "lam_domain": [lam2, lam0],
+        "lam_slices_confirmatory": [lam0, lam2],
+        "lam_mid_evidence": "Stage 4 level 1 (4.109): approximately intermediate "
+                            "response (pooled dp -0.140 vs -0.303) — ordering evidence "
+                            "only; slice omitted from Stage 3 for cost. NOT a linearity "
+                            "claim (3 points).",
+        "claim_status": {
+            "now": "conditional local boundary characterization at lambda = 4.644, with "
+                   "independently confirmed sensitivity to the additional cone-geometry "
+                   "coordinate lambda (dose-ordered, 6/6 cells)",
+            "unlock_rule": "'local 3-D boundary surface chi50(eta, lambda)' vocabulary is "
+                           "allowed ONLY after the lambda2 boundary slice curve exists",
+            "coverage_not_representativeness": "this campaign provides pre-registered "
+                           "local design-space coverage, not a representative sample of "
+                           "the full parameter space"},
+        "axis_evidence": {
+            "chi": "strong governing (step-like boundary, all stages)",
+            "eta": "boundary shift 0.08 over [2.1, 3.9] (Stage 2, n=4800/row)",
+            "lam": "independent, large, dose-ordered effect (Stage 4 POSITIVE)",
+            "k_f_tau": "local robustness for the tested +50% move over 6 boundary cells",
+            "q_dec": "large sensitivity measured (chi50 ~ +0.15 at 1/6 -> 1/12); "
+                     "pinned at 1/6, conditional vocabulary; appendix mini-map planned",
+            "evasion_vector": "conditioning-only, sensitivity unmeasured — Stage 3 "
+                              "family envelope is the first relaxation"},
+        "stage3_design": {
+            "slices": "boundary bands at lam0 AND lam2 (auditor: single-slice would "
+                      "verify evasion robustness at one lambda only)",
+            "lam2_band_source": "sealed exploratory scout (stage_scout_l2) — mirrors the "
+                                "Stage 0 role; envelope chi50 +/- 0.10",
+            "family_envelope": {
+                "estimand": "p_worst(chi, eta, lam) = min over sealed family F of p_f",
+                "bootstrap": "family minimization re-performed inside EVERY resample "
+                             "(selection uncertainty inside the estimator); the "
+                             "post-hoc single-worst-family narrative is forbidden",
+                "F_proposed_PENDING_CONFIRMATION": [
+                    {"name": "A1", "jink_amp": 0.0, "route_gain": 0.0},
+                    {"name": "A2-nom", "jink_amp": 0.6, "route_gain": 0.5},
+                    {"name": "A2-J+", "jink_amp": 0.9, "route_gain": 0.5},
+                    {"name": "A2-R+", "jink_amp": 0.6, "route_gain": 0.75}]},
+            "n_rule": "n3 = max(650 floor, n from nuisance-only re-estimation over the "
+                      "worst paired discordance observed in Stage 1 and Stage 4) — "
+                      "effect sizes never consulted. Measured: worst q = 0.522 "
+                      "(Stage 4, cell (0.58, 2.1)) -> n3 = 680.",
+            "n3": 680},
+        "hierarchy_plan": [
+            "1 core: Stage 3 lam0+lam2 boundary slices -> local 3-D surface",
+            "2 evasion family worst-case (inside Stage 3)",
+            "3 q_dec = 1/12 boundary mini-map (appendix, after core)",
+            "4 remaining pins: one-at-a-time screening vs delta_chi 0.05; promote only "
+            "movers (hierarchical identification, not exhaustive sweep)"],
+        "supersedes": {"R2a-P_2d_lock": lat_p["lattice_hash"],
+                       "reason": "C045 candidate PARTIAL_3D — the 2-D coordinate lock "
+                                 "for R2b is void per the sealed rule; R2a data stands, "
+                                 "claims become 3-D-conditional"},
+        "registry": {"C045_candidate": "PARTIAL_3D (registration after Stage 3)"},
+    }
+    payload["lattice_hash"] = hashlib.sha256(
+        json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
+    pathlib.Path("artifacts/r2a/lattice_R2a_P3.json").write_text(
+        json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
+    return payload
+
+
 def main(argv=None) -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--stage0", default="artifacts/r2a/stage0_envelope.json")
     ap.add_argument("--outdir", default="artifacts/r2a")
+    ap.add_argument("--seal-3d", action="store_true")
     a = ap.parse_args(argv)
+    if a.seal_3d:
+        l3 = build_lattice_3d()
+        print(f"[R2a-P3] lattice_hash {l3['lattice_hash']}  lam slices "
+              f"{[round(x, 4) for x in l3['lam_slices_confirmatory']]}  n3 {l3['stage3_design']['n_rule'][-4:]}")
+        return
     for name in CONTRACTS:
         lat = build_lattice(pathlib.Path(a.stage0), name)
         p = pathlib.Path(a.outdir) / f"lattice_{name.replace('-', '_')}.json"

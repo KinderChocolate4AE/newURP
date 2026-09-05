@@ -589,6 +589,89 @@ def run_shard4(shard: int, n_shards: int = 8) -> dict:
     return {"n_done": len(records), "stopped": False}
 
 
+# ================================================== lam2 boundary scout ====
+def seal_scout_l2() -> dict:
+    """lam2 slice 경계 scout 사전등록 — 지위 = **exploratory/design** (Stage 0 의 역할과
+    동일: Stage 3 lam2 band 의 중심만 정한다, 증거 아님)."""
+    from shepherd.scripts.r2a_lattice import RHO_REF, RHO_B, R_MAX_REF
+    l3 = json.loads((ART / "lattice_R2a_P3.json").read_text(encoding="utf-8"))
+    chi_grid = [round(0.33 + 0.04 * i, 3) for i in range(8)]     # 0.33 … 0.61
+    payload = {
+        "schema": "r2a-scout-l2-v1", "status": "exploratory/design — not evidence",
+        "lattice3d_hash": l3["lattice_hash"],
+        "impl": "R-ref geometry with R_max = lam2 * rho_ref",
+        "R_max": R_MAX_REF / RHO_B * RHO_REF,
+        "chi_grid": chi_grid, "eta_grid": [2.1, 2.4, 2.7, 3.0, 3.3, 3.6, 3.9],
+        "n_per_cell": 60, "seed0": 5000, "crn_ns": "r2a_sc2",
+        "jitter": {"chi": 0.02, "eta": 0.15},
+        "envelope_rule": "chi50(eta) isotonic +/- 0.10 (as Stage 0)",
+        "q_dec_gate": "runtime assert 1/6",
+        "stop_sentinel": "artifacts/r2a/scout_l2/HARD_KILL_STOP",
+    }
+    payload["protocol_hash"] = hashlib.sha256(
+        json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
+    (ART / "scout_l2_protocol.json").write_text(
+        json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
+    return payload
+
+
+def run_scout(shard: int, n_shards: int = 8) -> dict:
+    proto = json.loads((ART / "scout_l2_protocol.json").read_text(encoding="utf-8"))
+    im = dict(impls(_lattice()["tau_B"])["R-ref"], R_max=proto["R_max"],
+              target=["alpha", "lam"])
+    cells = [(c, e) for c in proto["chi_grid"] for e in proto["eta_grid"]]
+    n_cell = proto["n_per_cell"]
+    total = len(cells) * n_cell
+    lo, hi = shard * total // n_shards, (shard + 1) * total // n_shards
+    out_dir = ART / "scout_l2"; out_dir.mkdir(parents=True, exist_ok=True)
+    sentinel = out_dir / "HARD_KILL_STOP"
+    path = out_dir / f"shard{shard:02d}.json"
+    records = []
+    if path.exists():
+        prev = json.loads(path.read_text(encoding="utf-8"))
+        if prev["protocol_hash"] == proto["protocol_hash"]:
+            records = prev["records"]
+
+    def _save(stopped=False):
+        path.write_text(json.dumps(
+            {"shard": shard, "n_shards": n_shards, "scenario_range": [lo, hi],
+             "protocol_hash": proto["protocol_hash"],
+             "stopped_by_sentinel": stopped, "records": records},
+            ensure_ascii=False), encoding="utf-8")
+
+    for s in range(lo + len(records), hi):
+        if sentinel.exists():
+            _save(stopped=True)
+            return {"n_done": len(records), "stopped": True}
+        chi_c, eta_c = cells[s // n_cell]
+        chi, eta = draw_cell_jitter(proto["seed0"], s, chi_c, eta_c,
+                                    ns=proto["crn_ns"], jc=proto["jitter"]["chi"],
+                                    je=proto["jitter"]["eta"])
+        kw = resolve(im, chi, eta)
+        q = kw["extra_cfg"]["physics.dt"] / kw["extra_cfg"]["physics.tau_deploy"]
+        assert abs(q - 1.0 / 6.0) < 1e-12
+        st = build_m4_env(proto["seed0"], s, **kw)
+        r = run_episode(st.env, st.scn, st.lay, seed=proto["seed0"] + s,
+                        limiter_mode="hold", fire_mode="clean", policy=None,
+                        baseline_commit=False)
+        records.append({"s": s, "cell": [chi_c, eta_c], "chi": chi, "eta": eta,
+                        "label": r.label})
+        if r.label == "HARD_KILL":
+            sentinel.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                with open(sentinel, "x", encoding="utf-8") as f:
+                    json.dump({"shard": shard, "scenario": s}, f)
+            except FileExistsError:
+                pass
+            _save(stopped=True)
+            raise SystemExit(f"HARD_KILL STOP: scout shard {shard} scenario {s}")
+        if (s - lo + 1) % 100 == 0 or s + 1 == hi:
+            _save()
+            print(f"[scout shard {shard}] {s - lo + 1}/{hi - lo}", flush=True)
+    _save()
+    return {"n_done": len(records), "stopped": False}
+
+
 def main(argv=None) -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--feasibility", action="store_true")
@@ -600,6 +683,8 @@ def main(argv=None) -> None:
     ap.add_argument("--run-stage2", action="store_true")
     ap.add_argument("--seal-stage4", action="store_true")
     ap.add_argument("--run-stage4", action="store_true")
+    ap.add_argument("--seal-scout", action="store_true")
+    ap.add_argument("--run-scout", action="store_true")
     ap.add_argument("--shard", type=int, default=0)
     ap.add_argument("--n-shards", type=int, default=8)
     a = ap.parse_args(argv)
@@ -637,6 +722,13 @@ def main(argv=None) -> None:
                   f"alpha {lv['alpha_deg']:.2f} deg")
     if a.run_stage4:
         run_shard4(a.shard, a.n_shards)
+    if a.seal_scout:
+        ps = seal_scout_l2()
+        print(f"scout_l2 protocol_hash {ps['protocol_hash']}  cells "
+              f"{len(ps['chi_grid']) * len(ps['eta_grid'])}  total ep "
+              f"{len(ps['chi_grid']) * len(ps['eta_grid']) * ps['n_per_cell']}")
+    if a.run_scout:
+        run_scout(a.shard, a.n_shards)
 
 
 if __name__ == "__main__":

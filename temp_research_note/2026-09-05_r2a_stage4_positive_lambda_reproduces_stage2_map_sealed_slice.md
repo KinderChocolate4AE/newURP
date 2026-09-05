@@ -39,3 +39,15 @@ Stage 3 재설계에서). Stage 2 지도는 3-D 표면의 λ=4.644 slice.
    + worst-case family exact rule + n=650 재검토 — 봉인 전 감사 1회 권장.
 3. repo-R1 (여전히 미실시) — Stage 3 confirmatory 전 필수.
 산출물: stage4_readout.json · stage2_readout.json · 판독기 r2a_stage24_readout.py.
+
+
+## 정정 + 후속 봉인 (같은 날, 감사 r2)
+
+- **정정 1**: "Stage 0 대비 대부분 |Δ|≤0.03" → 5/7 행 ≤0.03, η 2.4/2.7 은 −0.064/−0.076
+  (넓은 Stage 0 CI 와 양립). CI 겹침 ≠ 점추정 일치.
+- **정정 2**: "λ 에 거의 선형" → "approximately intermediate response" (3점).
+- **claim 상한**: 3-D 식별 완료 아님 — λ=4.644 의 2-D 경계 slice + λ 민감도의 독립 확인
+  까지. "local 3-D boundary surface" 는 λ2 경계곡선 후 unlock.
+- **재등록**: R2a-P3 `d9d93e20d76859a8` (λ = 단일 cone DOF, 2-D 잠금 해제, n3=680 =
+  max(650, Stage 4 실측 worst q 0.522 재추정), family envelope 규칙, 계층 계획).
+- **λ2 scout 봉인**: `fa3d149eb846c00d` (exploratory, 3,360 ep). F 4종은 봉인 전 확인 대기.
