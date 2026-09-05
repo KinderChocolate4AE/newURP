@@ -196,11 +196,18 @@
   "eta": 0.15
  },
  "crn": "all 5 configs run inside one scenario (paired); one scenario carries ONE (slice, cell)",
- "estimand": "primary p_worst,A2 = min over F_primary per cell; bootstrap re-minimizes in every resample; A1 reported as p_A1 - p_A2nom",
- "readout_plan": "per-slice chi50_worst(eta) bands -> local 3-D surface unlock check (P3 rule) + D_chi vs delta_chi 0.05 between slices reported descriptively; C044/C045/C046 registration after readout; repo-R1 REQUIRED before readout",
+ "estimand_clarified": {
+  "audit_r4": "the two-point band brackets the NOMINAL (A2-nom) boundary — it is NOT a design for estimating a worst-case chi50 surface",
+  "a_nominal_surface": "chi50(eta, lam) confirmation comes from the A2-nom arm alone at the bracketing cells; the P3 'local 3-D boundary surface' unlock refers to THIS nominal surface",
+  "b_envelope": "p_worst,A2 = min over F_primary is a CELL-LOCAL statistic measured at those nominal band cells (bootstrap re-minimizes in every resample); A1 reported as p_A1 - p_A2nom",
+  "c_censoring": "if p_worst < 0.5 at BOTH bracketing points of a row, the worst-family crossing lies left of the band: report 'local envelope displaced beyond the tested nominal boundary band' — no extrapolation; estimating chi50_worst(eta, lam) is explicitly OUT OF SCOPE of this protocol"
+ },
+ "readout_plan": "A2-nom arm -> per-slice nominal chi50(eta) bands -> nominal 3-D surface unlock check (P3 rule); family envelope reported cell-locally per estimand_clarified; D_chi between slices descriptive; C044/C045/C046 registration after readout; repo-R1 REQUIRED before readout",
+ "run_lineage": "every shard manifest records the git code commit and this protocol hash; if the pre-readout repo-R1 provenance pass fails, the ENTIRE run is quarantined and re-executed under a new lineage — results are never opened-and-patched",
  "sharding": "by scenario: s in [0, 19040), cell = s // 680; 8 shards ~2,380 scenarios (~11,900 ep, ~5 h) each",
  "stop_sentinel": "artifacts/r2a/stage3/HARD_KILL_STOP",
  "q_dec_gate": "runtime assert 1/6",
  "total_ep": 95200,
- "protocol_hash": "11dbf6114425b49c"
+ "supersedes_protocol": "11dbf6114425b49c (pre-audit-r4: readout wording was ambiguous between the nominal-band envelope and worst-case surface estimation; amended before any episode was generated)",
+ "protocol_hash": "eb3a85e702020167"
 }

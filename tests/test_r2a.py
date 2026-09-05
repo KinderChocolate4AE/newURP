@@ -368,6 +368,9 @@ def test_stage3_protocol_sealed():
         ["A2-nom", "A2-J+", "A2-R+", "A2-J+R+", "A1-anchor"]
     assert "NOT in the min" in p3["configs"][-1]["role"]
     assert "repo-R1 REQUIRED before readout" in p3["readout_plan"]
+    ec = p3["estimand_clarified"]
+    assert "OUT OF SCOPE" in ec["c_censoring"] and "A2-nom arm" in ec["a_nominal_surface"]
+    assert "quarantined" in p3["run_lineage"] and "11dbf6114425b49c" in p3["supersedes_protocol"]
     # slice 별 셀이 각 slice 의 chi50 을 실제로 감싸는지 (밴드 규칙)
     s2 = _j.loads((ROOT / "artifacts/r2a/stage2_readout.json").read_text(encoding="utf-8"))
     sc = _j.loads((ROOT / "artifacts/r2a/scout_l2_envelope.json").read_text(encoding="utf-8"))
