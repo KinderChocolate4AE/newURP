@@ -399,10 +399,11 @@ def test_r2b_b0_sealed():
 
 def test_r2b_phase1_single_treatment_and_order():
     """B0 이행: A/B resolve kwargs 동일 (단일 treatment) + branch seal 필드 스펙."""
-    from shepherd.scripts.r2b_phase1 import B0_HASH, THRESHOLD_H, _cells
+    from shepherd.scripts.r2b_phase1 import B0_HASH, THRESHOLD_H, _cells, SEED0, NS
     from shepherd.scripts.r2a_stage1 import resolve, _lattice
     from shepherd.scripts.r2a_lattice import impls
-    assert B0_HASH == "e3fd7800003d34e1" and THRESHOLD_H == 14.0
+    assert B0_HASH == "cba024d7ee3d9f61" and THRESHOLD_H == 14.0
+    assert (SEED0, NS) == (7000, "r2b_p1_v2")               # v2 fresh stream
     cells = _cells()
     assert len(cells) == 28
     im = impls(_lattice()["tau_B"])["R-ref"]
@@ -423,3 +424,22 @@ def test_r2b_branch_sealed_before_readout():
     assert (br["T_proj_hours"] <= 14.0) == (br["selected_C_design"] == "FULL_28x100")
     assert ("0:100" in br["S_C_rule"]) if br["selected_C_design"] == "FULL_28x100" \
         else ("0:50" in br["S_C_rule"])
+
+
+@pytest.mark.skipif(not (ROOT / "artifacts/r2b/b0_world_contract.json").exists(),
+                    reason="B0 not sealed")
+def test_r2b_b0_v2_amendment():
+    import json as _j
+    b0 = _j.loads((ROOT / "artifacts/r2b/b0_world_contract.json").read_text(encoding="utf-8"))
+    ab = _j.loads((ROOT / "artifacts/r2b/phase1_v1_aborted/ABORT_MANIFEST.json").read_text(encoding="utf-8"))
+    assert b0["schema"] == "r2b-b0-v2"
+    assert b0["amendment_status"]["supersedes_b0_v1"] == "e3fd7800003d34e1"
+    assert b0["amendment_status"]["quarantine_manifest"] == ab["manifest_hash"]
+    crs = b0["competing_risk_semantics"]
+    assert "STOP" in crs["arm_A"] and "VALID terminal outcome" in crs["arm_B"]
+    lay = crs["estimand_layers"]
+    assert "Delta_p_net" in lay["primary"] and "p_U = p_N + p_H" in lay["reported"]
+    assert "never primary" in lay["forbidden"] and "Delta_p_net" in lay["p1_rule_layer"]
+    assert "NET_CAPTURE" in crs["C_arm_semantics"] and "does NOT count" in crs["C_arm_semantics"]
+    assert ab["excluded_from_all_v2_inference"] and ab["records"] == 578
+    assert b0["cells"]["crn"]["ns"] == "r2b_p1_v2" and b0["cells"]["crn"]["seed0"] == 7000

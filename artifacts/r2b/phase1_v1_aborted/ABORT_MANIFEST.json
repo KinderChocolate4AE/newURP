@@ -1,0 +1,21 @@
+{
+ "tag": "R2B_P1_V1_ABORTED",
+ "reason": "HARD_KILL competing-risk class emerged in arm B (limiter motion opened a previously structurally inaccessible terminal class)",
+ "records": 578,
+ "scenarios": 289,
+ "first_event": {
+  "shard": 0,
+  "scenario": 41,
+  "arm": "B",
+  "cell": "(lam0, chi 0.60, eta 2.1)"
+ },
+ "HARD_KILL": {
+  "B": 1,
+  "A": 0
+ },
+ "effect_estimand_not_computed": true,
+ "excluded_from_all_v2_inference": true,
+ "information_viewed_before_amendment": "record count (578), HARD_KILL count per arm (1 B / 0 A) and its cell, sentinel content, branch-seal consistency — no NET/PENETRATED split, no per-arm p, no Delta_p was computed or viewed",
+ "preservation": "immutable audit evidence — never deleted, never re-entered into inference",
+ "manifest_hash": "1b20c43a291324be"
+}

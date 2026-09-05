@@ -4,10 +4,13 @@
     python -m shepherd.scripts.r2b_phase1 --seal-branch        # T_proj 분기 기계 봉인
     python -m shepherd.scripts.r2b_phase1 --run --shard K --n-shards 8   # A/B 22,400 ep
 
-계약 = B0 e3fd7800003d34e1 (B2_WORLD_CONTRACT_FROZEN). 실행 순서 강제:
+계약 = B0 v2 cba024d7ee3d9f61 (B2_WORLD_CONTRACT_FROZEN; v1 e3fd7800003d34e1 supersede). 실행 순서 강제:
 benchmark → branch seal → Phase 1 → (판독기가 branch seal 존재를 assert) → C.
 단일 treatment 조항: A/B 는 **동일한 resolve() kwargs** 로 env 를 짓고 limiter_mode
 문자열("hold"/"intercept") 만 다르다 — 러너가 kwargs 동일성을 기계 assert.
+B0 v2: HARD_KILL STOP 은 **arm A 한정** (hold 에선 계약 위반 신호); arm B 의
+HARD_KILL 은 유효 competing terminal 로 기록된다 (2-layer 판독: Δp_net primary /
+Δp_neutralization secondary / p_hard 보고).
 7C: fire_step·steps 를 기록 (descriptive only — inference/게이트 사용 금지;
 intercept limiter 는 설계상 step 0 부터 반응). torch-free.
 """
@@ -29,8 +32,8 @@ from shepherd.scripts.r2a_lattice import impls                          # noqa: 
 from shepherd.scripts.r2a_stage1 import _lattice, draw_cell_jitter, resolve  # noqa: E402
 
 ART2 = ROOT / "artifacts/r2b"
-B0_HASH = "e3fd7800003d34e1"
-SEED0, NS = 6000, "r2b_p1"
+B0_HASH = "cba024d7ee3d9f61"            # B0 v2 (arm-A-only STOP, 2-layer estimand)
+SEED0, NS = 7000, "r2b_p1_v2"     # v2: fresh stream (v1 289 scenarios quarantined)
 N_AB, N_SHARD_DEFAULT = 400, 8
 THRESHOLD_H = 14.0
 
@@ -114,7 +117,7 @@ def run_shard(shard: int, n_shards: int = N_SHARD_DEFAULT) -> dict:
                       target=["alpha", "lam"])}
     total = len(cells) * N_AB
     lo, hi = shard * total // n_shards, (shard + 1) * total // n_shards
-    out_dir = ART2 / "phase1"; out_dir.mkdir(parents=True, exist_ok=True)
+    out_dir = ART2 / "phase1_v2"; out_dir.mkdir(parents=True, exist_ok=True)
     sentinel = out_dir / "HARD_KILL_STOP"
     path = out_dir / f"shard{shard:02d}.json"
     code_commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
@@ -152,7 +155,9 @@ def run_shard(shard: int, n_shards: int = N_SHARD_DEFAULT) -> dict:
             records.append({"s": s, "arm": arm, "slice": sl, "cell": [chi_c, eta_c],
                             "chi": chi, "eta": eta, "label": r.label,
                             "fire_step": r.fire_step, "steps": r.steps})  # 7C descriptive
-            if r.label == "HARD_KILL":
+            # B0 v2 competing-risk semantics: arm B 의 HARD_KILL 은 유효 terminal
+            # (treatment 의 downstream consequence — 기록만). STOP 은 arm A 한정.
+            if r.label == "HARD_KILL" and arm == "A":
                 sentinel.parent.mkdir(parents=True, exist_ok=True)
                 try:
                     with open(sentinel, "x", encoding="utf-8") as f:

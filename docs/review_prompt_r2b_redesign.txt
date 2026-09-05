@@ -250,4 +250,30 @@ chi50(eta, lam) 을 얼마나 이동시키는가 — 그리고 그 이동은 ora
     에 b0_hash + code_commit. smoke 1 scenario 확인.
   - 실행 순서 (봉인): B0 (완료) → 서버 benchmark (full 3 + lite 3, mean·max) →
     branch seal → Phase 1 A/B 22,400 ep → P1 readout (분기 봉인 assert) → C 실행.
+11. r7 (2026-09-05 — HARD_KILL STOP 발화 → B0 v2 개정, 4조건 이행)
+--------------------------------------------------------------------------------
+  사건: Phase 1 v1 착수 직후 sentinel 발화 (shard0/scenario41/arm B, 셀 λ0
+  (0.60, 2.1)). 수확 578 레코드 / 289 scenario, HARD_KILL = B 1건 / A 0건. 분류 =
+  limiter motion 이 연 competing-risk class (kinetic kill) — 계약 위반·버그 아님.
+  Δp·per-arm p 미계산 (열람 정보는 quarantine manifest 에 명시).
+  감사 판정 "개정 정당" + 4조건 이행:
+  (1) STOP 게이트 arm A 한정 (hold 의 HARD_KILL = 위반 신호 유지) / arm B =
+      유효 terminal (treatment 의 downstream consequence — 단일 treatment 불변).
+  (2) estimand 2층 + 분해: primary Δp_net (HARD_KILL = net 실패) / secondary
+      Δp_neutralization (p_U) / **p_hard 별도 보고** (p_U = p_N + p_H 분해로
+      "경계 이동" vs "kinetic 치환" 구분). 조건부 estimand primary 금지. P1 규칙은
+      Δp_net 층에 적용.
+  (3) **C arm 동일 semantics**: C_N (NET_CAPTURE 만 성공) primary — HARD_KILL 로
+      끝난 solver rollout 은 불인정; C_U/C_H secondary; 3-way 표는 (B_N, C_N) 기준
+      — "kinetic kill 로만 이룬 C+" 가 learned-controller 문장을 오지지하는 구멍 봉쇄.
+  (4) v1 데이터 **freeze+quarantine+exclude** (삭제 금지): phase1_v1_aborted/ +
+      ABORT_MANIFEST `1b20c43a291324be`. v2 = **fresh stream** (ns r2b_p1_v2,
+      seed0 7000; v1 289 scenario 재사용 금지 — outcome-class 부분 열람).
+      benchmark·branch seal 은 pre-outcome infra 로 hash 승계 (재실행 불필요).
+  B0 v2 재봉인 = **cba024d7ee3d9f61** (개정 경위 원문 statement 내장). 러너 v2
+  (A-only STOP·새 namespace·phase1_v2/) 반영. 사건의 지위 = sentinel 이 정확히
+  작동한 사례: STOP → classify → amend before effect readout → fresh restart.
+  개념 이득: limiter 협력에는 "capture-set shaping" 과 "direct kinetic
+  interception" 두 경쟁 경로가 공존 — primary 는 전자를 추적, 분해가 후자의 개입을
+  정직 보고.
 ================================================================================

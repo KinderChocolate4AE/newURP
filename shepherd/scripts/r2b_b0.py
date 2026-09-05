@@ -19,8 +19,26 @@ sys.path.insert(0, str(ROOT))
 def build() -> dict:
     l3 = json.loads((ROOT / "artifacts/r2a/lattice_R2a_P3.json").read_text(encoding="utf-8"))
     s3 = json.loads((ROOT / "artifacts/r2a/stage3_protocol.json").read_text(encoding="utf-8"))
+    aborted = json.loads((ROOT / "artifacts/r2b/phase1_v1_aborted/ABORT_MANIFEST.json")
+                         .read_text(encoding="utf-8"))
+    branch = json.loads((ROOT / "artifacts/r2b/c_budget_branch.json").read_text(encoding="utf-8"))
     payload = {
-        "schema": "r2b-b0-v1", "contract": "R2b",
+        "schema": "r2b-b0-v2", "contract": "R2b",
+        "amendment_status": {
+            "supersedes_b0_v1": "e3fd7800003d34e1",
+            "statement": "This amendment was triggered prospectively by the first valid "
+                "occurrence of a previously structurally inaccessible terminal class "
+                "(HARD_KILL) after limiter motion was enabled. Before amendment, 578 arm "
+                "records from 289 scenarios had been generated; one HARD_KILL was observed "
+                "in arm B and none in arm A. No cooperative effect estimand or boundary "
+                "statistic was computed. All pre-amendment Phase-1 records were quarantined "
+                "and excluded from confirmatory inference, and v2 restarted from a fresh "
+                "CRN namespace.",
+            "quarantine_manifest": aborted["manifest_hash"],
+            "inherited_by_reference": {
+                "oracle_server_benchmark": "pre-outcome infrastructure evidence",
+                "c_budget_branch": branch["branch_hash"],
+                "selected_C_design": branch["selected_C_design"]}},
         "question": "How far does limiter cooperation move the hold nominal boundary "
                     "chi50(eta, lam), and how does rule-based cooperation compare with "
                     "the achievable improvement found by a sealed-budget optimization "
@@ -89,7 +107,10 @@ def build() -> dict:
                                 "threshold is an operating budget fixed BEFORE the "
                                 "benchmark result is seen."}},
         "cells": {"source": "Stage 3 band cells (28) from protocol " + s3["protocol_hash"],
-                  "crn": {"ns": "r2b_p1", "seed0": 6000,
+                  "crn": {"ns": "r2b_p1_v2", "seed0": 7000,
+                          "fresh_stream": "v1 scenarios (289) are never reused — outcome-"
+                                          "class information was partially viewed, so v2 "
+                                          "draws a fresh stream; S_C = S_AB_v2[0:100]",
                           "jitter": {"chi": 0.01, "eta": 0.15},
                           "pairing": "A and B run inside one scenario; C on the nested "
                                      "subset"},
@@ -123,7 +144,34 @@ def build() -> dict:
                              "budget.' — 'genuine physical null' and design conclusions "
                              "('tau reduction instead of cooperation') are FORBIDDEN "
                              "without separate argument"},
-        "gates": ["HARD_KILL STOP (global sentinel, as R2a)",
+        "competing_risk_semantics": {
+            "arm_A": "HARD_KILL => STOP (hold limiters cannot kinetically kill; any "
+                     "occurrence signals a world-contract violation or harness fault)",
+            "arm_B": "HARD_KILL is a VALID terminal outcome — the downstream consequence "
+                     "of the single treatment (limiter motion), not a new treatment; "
+                     "p_kill, kill radius and judge are identical across arms. Never "
+                     "dropped, never recoded.",
+            "estimand_layers": {
+                "primary": "Delta_p_net = p_N^B - p_N^A, p_N = P(Y = NET_CAPTURE) — "
+                           "HARD_KILL counts as a net-capture failure",
+                "secondary": "Delta_p_neutralization on p_U = P(Y in {NET, HARD})",
+                "reported": "p_H = P(Y = HARD_KILL) per arm and cell — with mutually "
+                            "exclusive terminals p_U = p_N + p_H, so the three numbers "
+                            "separate genuine net-boundary movement from kinetic "
+                            "substitution",
+                "forbidden": "conditional estimands such as P(NET | no HARD_KILL) are "
+                             "never primary",
+                "p1_rule_layer": "the sealed P1-positive rule applies to the "
+                                 "Delta_p_net layer"},
+            "C_arm_semantics": "C_N(s) = 1 iff the sealed search finds a plan achieving "
+                               "NET_CAPTURE (a rollout ending in HARD_KILL does NOT count); "
+                               "C_U and C_H recorded as secondaries. The 3-way readout "
+                               "table is defined on (B_N, C_N); neutralization outcomes "
+                               "are a separate secondary readout. This closes the "
+                               "loophole where a 'positive' C built purely on kinetic "
+                               "kills would falsely support the "
+                               "learned-cooperative-controller sentence."},
+        "gates": ["HARD_KILL STOP — ARM A ONLY (see competing_risk_semantics)",
                   "q_dec = 1/6 runtime assert",
                   "single-treatment-difference assert (see treatment.machine_assert)",
                   "B0 seal timestamp must precede every R2b execution (manifest check)"],
