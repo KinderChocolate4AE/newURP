@@ -338,7 +338,9 @@ def test_lattice3d_and_scout_sealed():
     assert "FORBIDDEN" in fe["vocabulary_cap"] and "four-member local family" in fe["n_scope"]
     assert "d9d93e20d76859a8" in l3["supersedes_p3"]
     sc = _j.loads((ROOT / "artifacts/r2a/scout_l2_protocol.json").read_text(encoding="utf-8"))
-    assert sc["status"].startswith("exploratory") and sc["lattice3d_hash"] == l3["lattice_hash"]
+    # scout 는 F 확정 전 P3 아래 봉인 (family-독립, 서버 진행 중일 수 있어 재봉인 안 함)
+    assert sc["status"].startswith("exploratory")
+    assert sc["lattice3d_hash"] in {l3["lattice_hash"], *l3["supersedes_p3"]}
     assert len(sc["chi_grid"]) == 8 and abs(sc["R_max"] - 8.22 * 1.77 / 2.30) < 1e-9
 
 
