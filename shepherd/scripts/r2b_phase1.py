@@ -49,6 +49,24 @@ def _cells() -> list:
     return [tuple(c) for c in s3["cells"]]                  # [(slice, chi_c, eta), ...] 28개
 
 
+def _slices() -> dict:
+    """λ slice 구현 2종 — Phase 1 A/B 와 C arm 의 단일 정의원."""
+    lat = _lattice()
+    return {0: impls(lat["tau_B"])["R-ref"],
+            2: dict(impls(lat["tau_B"])["R-ref"], R_max=8.22 * 1.77 / 2.30,
+                    target=["alpha", "lam"])}
+
+
+def scenario_kwargs(s: int, cells: list, sls: dict) -> tuple:
+    """scenario id → (slice, cell, chi, eta, build kwargs). q_dec 게이트 포함."""
+    sl, chi_c, eta_c = cells[s // N_AB]
+    chi, eta = draw_cell_jitter(SEED0, s, chi_c, eta_c, ns=NS)
+    kw = resolve(sls[sl], chi, eta)
+    q = kw["extra_cfg"]["physics.dt"] / kw["extra_cfg"]["physics.tau_deploy"]
+    assert abs(q - 1.0 / 6.0) < 1e-12
+    return sl, chi_c, eta_c, chi, eta, kw
+
+
 def benchmark(eps=(2, 26, 35)) -> dict:
     """서버용: full (run_p2prime) / lite (run_probe, §7.1 상수) sec/solve 실측.
     구 MISS_EPISODES 만 사용 — 신규 R2b seed 무접촉."""
@@ -111,10 +129,7 @@ def run_shard(shard: int, n_shards: int = N_SHARD_DEFAULT) -> dict:
     import subprocess
     _b0()
     cells = _cells()
-    lat = _lattice()
-    slices = {0: impls(lat["tau_B"])["R-ref"],
-              2: dict(impls(lat["tau_B"])["R-ref"], R_max=8.22 * 1.77 / 2.30,
-                      target=["alpha", "lam"])}
+    slices = _slices()
     total = len(cells) * N_AB
     lo, hi = shard * total // n_shards, (shard + 1) * total // n_shards
     out_dir = ART2 / "phase1_v2"; out_dir.mkdir(parents=True, exist_ok=True)
@@ -139,11 +154,7 @@ def run_shard(shard: int, n_shards: int = N_SHARD_DEFAULT) -> dict:
         if sentinel.exists():
             _save(stopped=True)
             return {"n_done": len(records), "stopped": True}
-        sl, chi_c, eta_c = cells[s // N_AB]
-        chi, eta = draw_cell_jitter(SEED0, s, chi_c, eta_c, ns=NS)
-        kw = resolve(slices[sl], chi, eta)
-        q = kw["extra_cfg"]["physics.dt"] / kw["extra_cfg"]["physics.tau_deploy"]
-        assert abs(q - 1.0 / 6.0) < 1e-12
+        sl, chi_c, eta_c, chi, eta, kw = scenario_kwargs(s, cells, slices)
         kw_b = resolve(slices[sl], chi, eta)
         assert kw["extra_cfg"] == kw_b["extra_cfg"] and kw["attacker"] == kw_b["attacker"] \
             and kw["spawn"] == kw_b["spawn"]              # 단일 treatment: kwargs 동일
