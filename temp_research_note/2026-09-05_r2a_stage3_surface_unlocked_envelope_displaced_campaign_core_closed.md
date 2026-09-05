@@ -63,3 +63,17 @@ protocol `eb3a85e702020167` · 95,200 ep · HARD_KILL 0 · code lineage 단일 b
 sensitivity screen (OAT, 봉인 설계 노트) → q_dec 1/12 mini-map (부록) → SIM corner
 QA → G3 판정문 (금요일 감사 리듬, 오늘이 금요일 — 사용자 판정) → C044~046 registry
 등록 (사용자) → R2b 재설계 (3-D 좌표). KSAS 9/11 은 독립 병행.
+
+## 정정 + 종결 승인 (감사 r2, 2026-09-05 **토** — 위 본문의 "오늘이 금요일" 은 오기)
+
+- **종결 승인**: blocker 3건 해소 — ① "η 단조 증가" → "generally widened at higher η"
+  (2.1→2.7 은 미소 감소) ② Δ = unrounded 계산 각주 ③ S3 "surface characterized" →
+  "two nominal slices ... characterized". S1~S4·C044 제목·G3 문안 = 감사 문안 채택
+  (브리프 §8 정본).
+- **supplementary**: slice-독립 joint bootstrap 차이 CI — 7/7 행 0 제외
+  (`stage3_diff_ci.json`). argmin: R+ 22/28, J+ 4, J+R+ 2. interaction contrast
+  예시 I = +0.253/+0.361 (관측 기록만).
+- **Q3~Q6**: R2b primary = nominal cooperative boundary shift · J+R+ 관측 유지 ·
+  후속 = 등록·freeze → KSAS 9/11 → R2b 문서 설계 → q_dec mini-map (OAT 보류) ·
+  diff CI 완료.
+- C044~C046 + G3 = **등록 가능 상태** (등록 행위 = 사용자 트랙).

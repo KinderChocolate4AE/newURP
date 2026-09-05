@@ -1,0 +1,182 @@
+================================================================================
+R2A STAGE 3 CONFIRMATORY 결과 + 캠페인 종결 판정 — 외부 감사 브리프 r1 (2026-09-05)
+선행: review_prompt_r2a_parameterization.txt (r3+r4) · ..._pins_evasion.txt (r1~r2) ·
+..._stage24_representativeness.txt (r1~r3). 봉인 = P3 b7b3f6440e5b83eb · stage3
+protocol eb3a85e702020167 (audit-r4 estimand_clarified 포함). 실행 lineage = code
+commit b397720 단일 · repo-R1 PASS (0446b78) 후 개봉 · readout 커밋 88bbe15.
+================================================================================
+
+0. 문서 지위 / 감사 요청
+--------------------------------------------------------------------------------
+R2a core 캠페인의 **종결 감사**. 요청 4건: ① Stage 3 수치의 적대적 재검증 (§5)
+② 최종 claim 문장 세트 승인 (§3) ③ C044/C045/C046 등록안 + G3 판정문 승인 (§4)
+④ 종결 후 우선순위 판정 (§7). 실행·판독은 전부 사전 봉인 규칙 하에 이뤄졌다:
+repo-R1 하드 게이트 → A2-nom 팔 먼저 → 셀-국소 envelope → displaced 행은 외삽
+없이 보고 (estimand_clarified a/b/c).
+
+1. Stage 3 결과 (95,200 ep · HARD_KILL 0 · 28셀 × 5 config × n=680 paired CRN)
+--------------------------------------------------------------------------------
+1.1 (a) nominal 국소 3-D 경계면 — 14/14 행 무censoring → **UNLOCK 규칙 충족**:
+
+  eta    chi50(lam 4.644)        chi50(lam 3.574)        slice간 Δ
+  2.1    0.610 [.600,.629]       0.555 [.546,.563]       −0.055
+  2.4    0.585 [.575,.604]       0.531 [.531,.545]       −0.053
+  2.7    0.563 [.561,.572]       0.511 [.509,.526]       −0.052
+  3.0    0.557 [.554,.567]       0.499 [.491,.507]       −0.058
+  3.3    0.544 [.531,.550]       0.479 [.470,.488]       −0.064
+  3.6    0.541 [.525,.550]       0.470 [.459,.470]       −0.071
+  3.9    0.521 [.518,.534]       0.443 [.441,.450]       −0.077
+
+  - Stage 2 (λ0 full map) · λ2 scout 와 전부 CI 내 정합 (설계→확정 3중 교차검증).
+  - slice 분리 |Δ| 가 η 에 단조 증가. D_chi 지위 = 서술적 (slice 간 분리 크기).
+1.2 (b) A2 family envelope (p_worst = min{nom, J+, R+, J+R+}, bootstrap 재최소화):
+  - nominal 경계 셀에서 p_worst 0.251~0.432. **28/28 셀 < 0.5** → 사전 봉인 어휘로
+    전 14 행 "local envelope displaced beyond the tested nominal boundary band".
+    worst-case chi50 는 추정하지 않음 (scope 밖 — 외삽 0건).
+  - argmin 지배 = **R+ (route 0.75)**. J+ 중간.
+  - ★발견: **J+R+ 상호작용 길항** — 다수 셀에서 p(J+R+) > p(J+), p(R+); 일부 셀은
+    p(nom) 도 초과 (예: λ0 (0.54, 3.9) nom .407 vs J+R+ .503; λ2 (0.54, 2.4) nom
+    .463 vs J+R+ .638). 기전 추정 (미검증): 가속 clamp 하 방향 경쟁 — jink 와 route
+    가 같은 횡가속 예산을 놓고 간섭.
+1.3 (c) A1 anchor (min 밖): 전 28 셀 **p_A1 = 1.000**, anchor − nom = +0.34~+0.64.
+
+2. 이 브리프가 세운 자기의심 (감사가 공격할 지점)
+--------------------------------------------------------------------------------
+  - "surface" 는 **λ 2점의 곡선 2개 + Stage 4 중간점 ordering** 이다 — slice 사이
+    보간은 어떤 주장에도 사용하지 않았고, 해서도 안 된다 (문구 검수 요청).
+  - slice 간 Δ 에 행별 차이 CI 를 따로 계산하지 않았다 (행별 chi50 CI 만 제공).
+    서술적 지위라 생략했는데, 등록 C044 에 difference CI 가 필요하다면 지시 요망.
+  - nominal chi50 은 밴드 2셀 + 지터 (~0.05 폭 창) 위 isotonic — 좁은 창의 경계
+    추정이라 창 밖 형상 가정 없음이 강점이자, 창 끝 근접 행 (λ0 η2.1: chi50 0.610,
+    셀 0.60/0.62) 에서 편향 가능성이 약점. CI 는 이를 반영하나 재검증 대상.
+  - J+R+ 길항은 **관측이지 기전 주장이 아니다** — clamp/방향 경쟁 기전은 추정.
+    jink 위상 CRN 공유가 특정 위상 정렬을 만들 가능성 (전 family 동일 위상 규약)
+    도 배제 못 함. 서술 수위 판정 요청 (Q4).
+  - A1 p=1.000 은 포화 — 방향 정보 외 무정보 (anchor 설계 의도대로).
+  - envelope displaced "전 행" 은 **밴드가 nominal 경계에 놓였기 때문에 필연에
+    가까운 결과일 수 있다** (family 효과 ~−0.1~−0.2 면 자동으로 <0.5). 이는 설계의
+    한계이지 오류가 아니나, "displaced" 를 대단한 발견처럼 쓰지 않도록 문구 주의.
+
+3. 최종 claim 문장 세트 (승인 요청 — 이 4문장이 논문 골격)
+--------------------------------------------------------------------------------
+  S1 (H-SIM): "Implemented dimensional rescaling preserved the normalized hold-arm
+     dynamics and capture outcomes exactly over the tested boundary scenarios"
+     (pathwise 8e-15 + 0/4,800 labels).
+  S2 (k_f·τ): "The tested +50% controller-gain perturbation left the boundary
+     robust within δp = 0.10 over the six pre-registered boundary cells."
+  S3 (λ): "The nominal local 3-D boundary surface χ50(η, λ) was characterized at
+     λ ∈ {4.644, 3.574} with slice separation −0.05…−0.08 growing with η,
+     conditional on the sealed A2-nominal evasion vector, q_dec = 1/6, and the
+     fixed capability-ratio family."
+  S4 (evasion): "Over the prespecified local 2×2 high-side A2 family, the capture
+     envelope at the nominal boundary cells is displaced below one-half in every
+     tested row (worst member predominantly route-enhanced; the joint corner is
+     antagonistic), and the worst-case boundary location was not estimated."
+
+4. 등록안 + G3 판정문 (승인 요청)
+--------------------------------------------------------------------------------
+  C044 = nominal local 3-D boundary surface: λ0 full map (Stage 2, n=4,800/행) +
+    양 slice 경계 밴드 confirmatory (Stage 3, n=1,360/행) + CI 표. 조건 명기.
+  C045 = **PARTIAL_3D**: (χ,η) 단독 불충분 — λ (단일 cone-기하 DOF, α 대수 종속)
+    추가. 승격 사슬 = Stage 1 R-rho-DOM 6/6 FAIL (sign-일관) → Stage 4 직교 재현
+    (dose-ordered, POSITIVE) → Stage 3 slice 분리 confirmatory. 2-D 좌표 잠금 무효,
+    R2b 는 (χ,η,λ) 재설계.
+  C046 = provenance (repo-R1 manifest + seal 4세대 supersession 체인) + caveat:
+    legacy 24 m 회랑 · A2-reactive sealed vector · q_dec 1/6 (governing 실측) ·
+    local A2 family envelope displaced (worst 경계 미추정) · coverage ≠
+    representativeness · fire-decision cadence 는 dt 와 결합된 구현.
+  G3 판정문 (제안): "R2a collapse 판정 = PARTIAL_3D. (χ,η) 2-D collapse 는 기각,
+    (χ,η,λ) 국소 3-D 서술이 선언 교란·조건 하에서 성립. R2b 좌표 = 3-D 로 진입."
+
+5. 수치 주장 (적대적 재검증 요청)
+--------------------------------------------------------------------------------
+  N-1  §1.1 표 전체 (14 행 chi50 + CI + Δ 7개)
+  N-2  envelope: p_worst 범위 0.251~0.432 · 28/28 < 0.5 · argmin R+ 지배 ·
+       길항 예시 2건 (λ0 (0.54,3.9): .407/.366/.291/.503 · λ2 (0.54,2.4):
+       .463/.368/.372/.638)
+  N-3  A1 anchor 28/28 p=1.000, Δ +0.34~+0.64
+  N-4  무결성: 95,200/95,200 · protocol eb3a85e702020167 전 shard 일치 · code
+       lineage {b397720} 단일 · HARD_KILL 0 · sentinel 미발화
+  N-5  repo-R1: 고아 0 · 미커밋 0 · frozen results 무변경 · 테스트 29 green
+  N-6  Stage 2/scout 정합: Stage 3 λ0 chi50 vs Stage 2 {+.005,−.002,−.014,−.011,
+       +.002,+.003,−.004} · λ2 vs scout {+.010,−.015,+.010,−.010,+.003,+.017,+.004}
+
+6. 사전 봉인 이행 감사 (규율 검수 요청)
+--------------------------------------------------------------------------------
+  - estimand_clarified (audit r4) 3항 전부 이행: nominal surface 는 A2-nom 팔만 /
+    envelope 는 셀-국소 / displaced 행 외삽 0건.
+  - readout 순서: repo-R1 PASS → 개봉 (스크립트가 manifest verdict 를 assert).
+  - n=680 은 "4-member local family 정밀도" 로만 서술 (P3 n_scope).
+  - 어휘 상한 준수 확인 요청: §3 S3 의 "characterized" 가 "identified 완료" 를
+    함의하지 않는지, S4 가 "worst-case attacker" 금지를 지키는지.
+
+7. 종결 후 우선순위 판정 요청
+--------------------------------------------------------------------------------
+  Q1  §3 S1~S4 승인 / 수정.
+  Q2  C044~C046 + G3 판정문 (§4) 승인 — 오늘 (금) 등록 가능 여부.
+  Q3  ★R2b 소비 설계: R2b 협력 경계 이동은 **nominal 경계** 기준으로 재는가,
+      worst-family 경계 기준인가? 후자면 worst 경계 scout (λ0/λ2 × R+ 중심,
+      ~scout 급 3,400 ep) 가 R2b 선행 필요. 전자면 displaced 는 caveat 로 족함.
+  Q4  J+R+ 길항의 서술 수위: (a) 관측 + 기전 추정 명기 (현재) (b) 위상 CRN
+      confound 배제 probe (위상 독립 추첨 재실행, ~2,800 ep) 후 승격 (c) 부록.
+  Q5  후속 순서: OAT sensitivity screen (12,600 ep) vs q_dec mini-map (7,200 ep)
+      vs R2b 재설계 착수 vs KSAS 주간 (9/11) 우선 — 비용·달력 판정.
+  Q6  slice 간 difference CI 추가 계산 필요 여부 (§2 두 번째 항목).
+8. 감사 반영 기록 r2 (2026-09-05 토 — 판정: R2a 종결 승인, 문구 수정 후 등록 가능)
+--------------------------------------------------------------------------------
+  blocker 3건 (전부 해소):
+  (1) "|Δ| 가 η 에 단조 증가" 삭제 → "the separation generally widened at higher η"
+      (2.1→2.7 구간은 약간 감소: 0.0547→0.0534→0.0524 후 증가).
+  (2) Δ 반올림 불일치 정리: Δ 는 unrounded χ50 에서 계산 — 각주 "Δ computed from
+      unrounded estimates" 채택 (unrounded: −.0547/−.0534/−.0524/−.0581/−.0642/
+      −.0708/−.0773).
+  (3) S3 "surface characterized" 철회 → 감사 문안 채택 (two nominal slices, §아래).
+
+  최종 claim 문장 (감사 문안 그대로 채택):
+  S1: "Implemented dimensional rescaling preserved the normalized hold-arm
+      trajectories to numerical precision (maximum pathwise discrepancy 8e-15)
+      and produced identical capture labels in all 4,800 tested boundary episodes."
+  S2: "The tested +50% controller-gain perturbation changed capture probability by
+      no more than the pre-specified delta_p = 0.10 in each of the six
+      pre-registered boundary cells."
+  S3: "Under the sealed A2-nominal evasion vector, q_dec = 1/6, and the fixed
+      capability-ratio family, two nominal chi50(eta) slices of the local
+      (chi, eta, lam) boundary were characterized at lam in {4.644, 3.574}. The
+      lower-lam slice lay approximately 0.05-0.08 lower in chi50 across all seven
+      tested eta values, with the point-estimate separation generally widening at
+      higher eta."
+  S4: "Across the prespecified local 2x2 high-side A2 family, the re-minimized
+      local envelope was below 0.5 at all 28 tested nominal-boundary cells. The
+      minimum was most often (22/28) attained by the route-enhanced member, while
+      the joint J+R+ corner frequently yielded higher capture probability than
+      either single perturbation. No worst-family boundary location was estimated."
+      (argmin 등록: R+ 22 / J+ 4 / J+R+ 2 / nom 0. interaction contrast I =
+      p_JR−p_J−p_R+p_N 예시 +0.253/+0.361 은 관측 기록만 — estimand·CI 미정의
+      상태로 "antagonistic interaction" 승격 금지.)
+
+  C044 제목 정정: "confirmed nominal λ-slices of the local 3-D boundary"
+  (continuous surface 재구성 아님). C045 PARTIAL_3D · C046 승인.
+  G3 판정문 (감사 문안 채택): "R2a collapse verdict = PARTIAL_3D. The (chi, eta)
+  2-D collapse is rejected. Under the declared perturbations and conditioning
+  variables, the evidence supports lambda as an additional coordinate, with
+  confirmed local boundary slices in (chi, eta, lambda). R2b therefore proceeds
+  with (chi, eta, lambda) as the working coordinate set."
+
+  supplementary uncertainty summary (사후 추가, 새 confirmatory claim 아님 —
+  stage3_diff_ci.json): slice 독립 구조 보존 joint bootstrap (replicate 마다 양
+  slice χ50 재추정, marginal CI 뺄셈 금지 준수), B=1000:
+    Δ_λ(η) CI95: 2.1 [−.080,−.047] · 2.4 [−.073,−.039] · 2.7 [−.059,−.040] ·
+    3.0 [−.073,−.048] · 3.3 [−.074,−.048] · 3.6 [−.089,−.057] · 3.9 [−.090,−.069]
+    — **7/7 행 CI 가 0 제외** (slice 분리의 행별 뒷받침; η-단조성은 주장하지 않음).
+
+  Q3~Q6 판정 기록: R2b primary = **nominal cooperative boundary shift** (p_worst
+  primary 금지 — worst member identity 교체 효과와 협력 효과가 섞임; worst-boundary
+  scout 는 "cooperation improves worst-family feasibility" 주장 시에만 별도 캠페인) /
+  J+R+ = 관측 + 기전 hypothesis 로만 (위상 probe 는 기전 주장 시에만) / 후속 순서 =
+  R2a 등록·freeze → KSAS 9/11 → R2b 문서 설계 → **q_dec mini-map (OAT 보다 우선** —
+  implementation-conditioned 축 선처리; broad OAT 는 캠페인 미종결 위험으로 보류) /
+  difference CI = 완료 (위).
+
+  요일 정정: 2026-09-05 = **토요일** (§7 Q2 의 "오늘 (금)" 오기; 금요일 감사 리듬
+  언급도 동일 오기 — 판정일 기준으로 정정).
+================================================================================

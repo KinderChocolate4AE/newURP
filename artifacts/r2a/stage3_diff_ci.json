@@ -1,0 +1,69 @@
+{
+ "status": "supplementary uncertainty summary — post-hoc analysis on the sealed Stage 3 data (no new episodes); slices are independent samples, so the joint bootstrap resamples each slice-row independently and re-estimates BOTH chi50 per replicate (marginal-CI subtraction NOT used). Not a new confirmatory claim (eta-monotonicity not claimed).",
+ "B": 1000,
+ "diff_lam2_minus_lam0": {
+  "2.1": {
+   "diff_unrounded": -0.05470556388510628,
+   "ci95": [
+    -0.07994842641988299,
+    -0.046802998678247526
+   ],
+   "boot_nan_frac": 0.004
+  },
+  "2.4": {
+   "diff_unrounded": -0.053364339858933185,
+   "ci95": [
+    -0.07269077174294093,
+    -0.038671169003991895
+   ],
+   "boot_nan_frac": 0.024
+  },
+  "2.7": {
+   "diff_unrounded": -0.05244090787458022,
+   "ci95": [
+    -0.05902036060167418,
+    -0.04028067366107257
+   ],
+   "boot_nan_frac": 0.0
+  },
+  "3.0": {
+   "diff_unrounded": -0.05812215839535051,
+   "ci95": [
+    -0.07300951630252563,
+    -0.047765804517852624
+   ],
+   "boot_nan_frac": 0.001
+  },
+  "3.3": {
+   "diff_unrounded": -0.064174566853414,
+   "ci95": [
+    -0.07348519133074291,
+    -0.04831733644516659
+   ],
+   "boot_nan_frac": 0.001
+  },
+  "3.6": {
+   "diff_unrounded": -0.07081907595617021,
+   "ci95": [
+    -0.08878453030834407,
+    -0.05732042711318948
+   ],
+   "boot_nan_frac": 0.106
+  },
+  "3.9": {
+   "diff_unrounded": -0.07733060726520907,
+   "ci95": [
+    -0.09023413141320587,
+    -0.0690858993401011
+   ],
+   "boot_nan_frac": 0.002
+  }
+ },
+ "argmin_counts_point_estimate": {
+  "A2-nom": 0,
+  "A2-J+": 4,
+  "A2-R+": 22,
+  "A2-J+R+": 2
+ },
+ "all_ci_exclude_zero": true
+}
