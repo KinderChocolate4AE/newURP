@@ -207,4 +207,29 @@ chi50(eta, lam) 을 얼마나 이동시키는가 — 그리고 그 이동은 ora
   (iv) 판정문 격하 (B1 의 상한 아님 → achievability 증명기) 는 예산과 무관하게
       유지 — 이는 solver class 의 성질이지 비용 문제가 아니다.
 8.4 blocker B1 종결 조건 갱신: 서버 벤치마크 실측 + (ii)/(iii) 택일 승인.
+9. 감사 반영 기록 r5 (2026-09-05 — 판정: B0 승인 (4줄 명문 조건), 봉인 실행)
+--------------------------------------------------------------------------------
+  판정: 28×100 무조건부 lite C 가 기본안으로 합리 (전 셀 동일 benchmark 의 이득 >
+  sentinel 축소의 복잡성). 4줄 조건 전부 B0 에 명문 후 **봉인 = b0_hash
+  e3fd7800003d34e1** (artifacts/r2b/b0_world_contract.json, exit =
+  B2_WORLD_CONTRACT_FROZEN):
+  (1) 전환 threshold 숫자 봉인: T_proj = 2800·t_lite_mean/N_shard, **≤14 h →
+      무조건부 lite 28×100 / >14 h → sentinel 6행×50 lite fallback** — benchmark
+      결과 열람 전 고정 (운영 예산). benchmark 는 mean + max 기록 (MISS_EPISODES
+      가 no-solution worst-case 라 conservative — 감사 지적 수용).
+  (2) C arm 전면 재명명: "oracle 상한" 폐기 → **sealed-budget optimization
+      achievability benchmark**. R2b 질문 문장 자체 개정 (B0 "question" 필드).
+      C(s)=1 의 정의 = "sealed search 가 admissible plan 을 하나 이상 발견해
+      capture 달성" — p̂_C = **search procedure 의 scenario-wise attainment rate**,
+      물리적 achievability 확률 아님 (명문).
+  (3) S_C = S_AB[0:100] nested 사전 지정 + solver-search seed 를 scenario RNG 와
+      분리 관리.
+  (4) 3-경우 판독 표 봉인: B+/C+ = 협력 성립 + rule 이 benchmark 개선의 몇 % 실현
+      (서술적) / B null/C+ = "motivates a learned or more expressive cooperative
+      controller" (MARL 단정 금지) / B null/C null = 봉인 문장 그대로 ("No
+      cooperative boundary gain was detected either with the rule-based controller
+      or by the sealed p2prime solver class at the tested lite search budget") —
+      "genuine physical null"·"협력 대신 τ 단축" 금지.
+  + docs/87 §7 append-only amendment 기록 완료. 순서 확정: **B0 freeze (완료) →
+  서버 benchmark → A/B Phase 1 (22,400 ep) → lite C** (threshold 분기 기계 적용).
 ================================================================================

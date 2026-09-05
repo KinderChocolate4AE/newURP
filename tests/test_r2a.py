@@ -378,3 +378,20 @@ def test_stage3_protocol_sealed():
         for e in ("2.1", "3.0", "3.9"):
             cs = sorted(c[1] for c in p3["cells"] if c[0] == sl and abs(c[2] - float(e)) < 1e-9)
             assert cs[0] <= src[e][key] <= cs[1] + 0.02, (sl, e, cs, src[e][key])
+
+
+@pytest.mark.skipif(not (ROOT / "artifacts/r2b/b0_world_contract.json").exists(),
+                    reason="B0 not sealed")
+def test_r2b_b0_sealed():
+    import json as _j
+    b0 = _j.loads((ROOT / "artifacts/r2b/b0_world_contract.json").read_text(encoding="utf-8"))
+    l3 = _j.loads((ROOT / "artifacts/r2a/lattice_R2a_P3.json").read_text(encoding="utf-8"))
+    assert b0["exit"] == "B2_WORLD_CONTRACT_FROZEN"
+    assert b0["world"]["inherits"]["lattice_R2a_P3"] == l3["lattice_hash"]
+    assert "NOT an upper bound" in b0["arms"]["C"]["name"]
+    assert "attainment rate" in b0["arms"]["C"]["estimand"]
+    assert "S_AB[0:100]" in b0["arms"]["C"]["pairing"]
+    assert "14 h" in b0["arms"]["C"]["scale_rule"]                 # threshold 사전 고정
+    assert "FORBIDDEN" in b0["readout_3cases"]["B_null_C_null"]
+    assert ">=12/14" in b0["estimands"]["p1_positive_rule"]
+    assert "bundle effect" in b0["treatment"]["machine_assert"]

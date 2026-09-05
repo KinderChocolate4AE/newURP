@@ -131,6 +131,7 @@ prop1·arXiv 의 자체 달력은 없다 — K1/K2 = §3A 의 W8/W10, arXiv 일�
 - **oracle-lite 상한 arm (null 2분기 판정용 — v0.7 Δ3/B-6 승계)**: 경계 6~10셀 × n≥100 으로 p2prime solver 확장 (기존 n=7 은 통계 불가). 판정문 사전 등록: "oracle 도 못 밀면 진짜 null ('협력 대신 τ 단축') / oracle 은 미는데 scripted 가 못 밀면 방법 문제 (Paper 1 에서 학습 협력으로)". **양쪽 다 논문이다.**
 - **paper-R3**: 이종 vs 동종 rule-based + **selection-only arm** (조향 없이 할당만 — "selection 으로 충분하지 않냐" 차단). R2b positive 조건부.
 - Δ_coop(Π) = P_coop − P_single 층은 docs/84 §7 대로 신규 작업 — 기존 재료 재구축 금지.
+- **[2026-09-05 amendment — append-only]** §7 execution design superseded by **B0 seal `e3fd7800003d34e1`** (`artifacts/r2b/b0_world_contract.json`; 사유 = C045 PARTIAL_3D 로 2-D 좌표 잠금 무효 + "oracle 상한" 어휘 폐기 → sealed-budget optimization achievability benchmark 로 재정의). historical text retained; 승계 원칙 (동일 세계·적대자·판정, 단독 arm 신규 실측, null 2분기 격하 어휘, 머니 피규어 정의) 은 B0 에 명기.
 
 ## §8. 게이트 (전부 사전 선언 — 판정은 금요일 감사, 판정형 제목 기록. [W] = 문헌 트랙, [R] = 연구 트랙)
 
