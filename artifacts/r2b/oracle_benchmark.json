@@ -11,5 +11,28 @@
   "sentinel6_x_n100": 232.0,
   "sentinel6_x_n50_lite(3seed_384rollout, ~/10 scale est.)": 11.6
  },
- "verdict": "unconditional oracle arm at audit-suggested scales is INFEASIBLE at this cost; conditional + sentinel + lite-budget redesign required (brief r3)"
+ "verdict": "SUPERSEDED by correction_r4 — unconditional oracle arms ARE feasible on the lab server at lite budget (28x100 ~ 11 h wall) and at full budget for sentinel rows (~21 h wall); choice is budget/priority, made at B0",
+ "correction_r4": {
+  "what_was_wrong": "the 'INFEASIBLE' verdict projected SERIAL hours from a LOCAL measurement; oracle solves are embarrassingly parallel and belong on the lab server (long-run policy). Feasibility is a budget choice, not an impossibility.",
+  "scaling": "local per-core ~1.85 s/ep vs server anchor 1.49 s/ep (~1.24x) -> server full-budget solve ~1,120 s; lite budget (3 seeds x 384 = 1/10 rollouts) ~112 s ESTIMATED (must be measured on the server before sealing)",
+  "server_wall_hours_8shard": {
+   "28cells_x100": {
+    "full_budget_8shard_wall_h": 108.9,
+    "lite_budget_8shard_wall_h": 10.9
+   },
+   "14cells_x100": {
+    "full_budget_8shard_wall_h": 54.4,
+    "lite_budget_8shard_wall_h": 5.4
+   },
+   "sentinel6_x100": {
+    "full_budget_8shard_wall_h": 23.3,
+    "lite_budget_8shard_wall_h": 2.3
+   },
+   "sentinel6_x50": {
+    "full_budget_8shard_wall_h": 11.7,
+    "lite_budget_8shard_wall_h": 1.2
+   }
+  },
+  "next_action": "server-side benchmark: 3 solves x {full, lite} budgets on old MISS_EPISODES (no new R2b seeds) -> replace estimates with measurements"
+ }
 }
