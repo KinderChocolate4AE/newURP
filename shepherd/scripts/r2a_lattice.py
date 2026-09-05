@@ -436,15 +436,35 @@ def build_lattice_3d() -> dict:
             "lam2_band_source": "sealed exploratory scout (stage_scout_l2) — mirrors the "
                                 "Stage 0 role; envelope chi50 +/- 0.10",
             "family_envelope": {
-                "estimand": "p_worst(chi, eta, lam) = min over sealed family F of p_f",
+                "estimand": "p_worst,A2(chi, eta, lam) = min over F_primary of p_f",
                 "bootstrap": "family minimization re-performed inside EVERY resample "
                              "(selection uncertainty inside the estimator); the "
                              "post-hoc single-worst-family narrative is forbidden",
-                "F_proposed_PENDING_CONFIRMATION": [
-                    {"name": "A1", "jink_amp": 0.0, "route_gain": 0.0},
+                "F_primary_CONFIRMED": [
                     {"name": "A2-nom", "jink_amp": 0.6, "route_gain": 0.5},
                     {"name": "A2-J+", "jink_amp": 0.9, "route_gain": 0.5},
-                    {"name": "A2-R+", "jink_amp": 0.6, "route_gain": 0.75}]},
+                    {"name": "A2-R+", "jink_amp": 0.6, "route_gain": 0.75},
+                    {"name": "A2-J+R+", "jink_amp": 0.9, "route_gain": 0.75,
+                     "role": "interaction corner — accel clamp and direction "
+                             "competition make effect(J+,R+) != effect(J+)+effect(R+) "
+                             "plausible; without this corner the high-side worst-case "
+                             "claim is not closed"}],
+                "A1_secondary_anchor": {
+                    "jink_amp": 0.0, "route_gain": 0.0,
+                    "role": "NOT in the min — qualitatively different low-reactivity "
+                            "regime; run on the same cells/CRN and reported only as "
+                            "the direction statistic p_A1 - p_A2nom",
+                    "rationale": "if A1 entered the min, an unexpected low-p cell "
+                                 "would silently redefine the A2 worst-case statistic"},
+                "vocabulary_cap": "results speak of the worst case over the "
+                    "prespecified LOCAL A2 evasion family (2x2 high-side: jink in "
+                    "{0.6, 0.9} x route in {0.5, 0.75}). FORBIDDEN: 'worst-case "
+                    "attacker', 'worst case over evasion behaviors'. Untested behavior "
+                    "dimensions: jink/route low side, jink_freq, sense_range, "
+                    "dodge_amp, other scripted families.",
+                "n_scope": "n3 = 680 is the per-family paired precision for this "
+                           "prespecified four-member local family — not a claim of "
+                           "covering all possible behaviors"},
             "n_rule": "n3 = max(650 floor, n from nuisance-only re-estimation over the "
                       "worst paired discordance observed in Stage 1 and Stage 4) — "
                       "effect sizes never consulted. Measured: worst q = 0.522 "
@@ -456,6 +476,9 @@ def build_lattice_3d() -> dict:
             "3 q_dec = 1/12 boundary mini-map (appendix, after core)",
             "4 remaining pins: one-at-a-time screening vs delta_chi 0.05; promote only "
             "movers (hierarchical identification, not exhaustive sweep)"],
+        "supersedes_p3": {"d9d93e20d76859a8": "family F confirmed (audit r3): J+R+ "
+                          "interaction corner added, A1 moved to secondary anchor, "
+                          "vocabulary cap sealed"},
         "supersedes": {"R2a-P_2d_lock": lat_p["lattice_hash"],
                        "reason": "C045 candidate PARTIAL_3D — the 2-D coordinate lock "
                                  "for R2b is void per the sealed rule; R2a data stands, "

@@ -51,3 +51,7 @@ Stage 3 재설계에서). Stage 2 지도는 3-D 표면의 λ=4.644 slice.
 - **재등록**: R2a-P3 `d9d93e20d76859a8` (λ = 단일 cone DOF, 2-D 잠금 해제, n3=680 =
   max(650, Stage 4 실측 worst q 0.522 재추정), family envelope 규칙, 계층 계획).
 - **λ2 scout 봉인**: `fa3d149eb846c00d` (exploratory, 3,360 ep). F 4종은 봉인 전 확인 대기.
+
+- **family F 확정 (감사 r3)**: F_primary = 2×2 high-side {nom, J+, R+, **J+R+**} (interaction
+  corner), A1 = secondary anchor (min 불포함, p_A1−p_A2nom 방향만). 어휘 상한 = "prespecified
+  local A2 evasion family". P3 재봉인 `b7b3f6440e5b83eb`. resolver 에 jink/route 주입점.

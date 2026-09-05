@@ -330,8 +330,25 @@ def test_lattice3d_and_scout_sealed():
     assert "algebraically locked" in l3["coordinates"]["lam"]          # 단일 DOF
     assert l3["stage3_design"]["n3"] == 680 and "650 floor" in l3["stage3_design"]["n_rule"]
     assert "ONLY after the lambda2 boundary slice" in l3["claim_status"]["unlock_rule"]
-    assert "min over sealed family F" in l3["stage3_design"]["family_envelope"]["estimand"]
-    assert "EVERY resample" in l3["stage3_design"]["family_envelope"]["bootstrap"]
+    fe = l3["stage3_design"]["family_envelope"]
+    assert "min over F_primary" in fe["estimand"] and "EVERY resample" in fe["bootstrap"]
+    F = fe["F_primary_CONFIRMED"]
+    assert [(f["jink_amp"], f["route_gain"]) for f in F] ==         [(0.6, 0.5), (0.9, 0.5), (0.6, 0.75), (0.9, 0.75)]        # J+R+ interaction corner
+    assert fe["A1_secondary_anchor"]["jink_amp"] == 0.0 and "NOT in the min" in fe["A1_secondary_anchor"]["role"]
+    assert "FORBIDDEN" in fe["vocabulary_cap"] and "four-member local family" in fe["n_scope"]
+    assert "d9d93e20d76859a8" in l3["supersedes_p3"]
     sc = _j.loads((ROOT / "artifacts/r2a/scout_l2_protocol.json").read_text(encoding="utf-8"))
     assert sc["status"].startswith("exploratory") and sc["lattice3d_hash"] == l3["lattice_hash"]
     assert len(sc["chi_grid"]) == 8 and abs(sc["R_max"] - 8.22 * 1.77 / 2.30) < 1e-9
+
+
+def test_resolver_behavior_injection_default_bitexact():
+    """family 주입점: 기본값 = A2-nom bit 동일, override 는 attacker spec 에만 반영."""
+    from shepherd.scripts.r2a_stage1 import resolve
+    im = L.impls(0.45)["R-ref"]
+    base = resolve(im, 0.55, 3.0)
+    jr = resolve(im, 0.55, 3.0, jink_amp=0.9, route_gain=0.75)
+    assert (base["attacker"].jink_amp, base["attacker"].route_gain) == (0.6, 0.5)
+    assert (jr["attacker"].jink_amp, jr["attacker"].route_gain) == (0.9, 0.75)
+    assert base["extra_cfg"] == jr["extra_cfg"]                     # 물리·기하 무변경
+    assert base["attacker"].fwd_gain == jr["attacker"].fwd_gain

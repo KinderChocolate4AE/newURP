@@ -142,4 +142,17 @@ kill screen 12,000 ep (6 경계 셀 × 400 paired CRN × 5구현), HARD_KILL 0:
   (6) 계층 계획 (P3 에 봉인): ① core 3-D 경계 → ② evasion family (Stage 3 내) →
       ③ q_dec 1/12 mini-map (부록, core 후) → ④ 잔여 pin one-at-a-time screening
       (delta_chi 0.05 문턱, 이동 축만 승격). SIM corner 4점은 QA 로만 (증거 아님).
+8. 감사 반영 기록 r3 (2026-09-05 — family F 수정 승인)
+--------------------------------------------------------------------------------
+  F_primary = {A2-nom(0.6,0.5), A2-J+(0.9,0.5), A2-R+(0.6,0.75), **A2-J+R+(0.9,0.75)**}
+  — interaction corner 필수 (clamp·방향 경쟁으로 비가법 가능; 없으면 high-side
+  worst-case 주장이 닫히지 않음). **A1 은 secondary anchor 로 강등** (min 에 불포함;
+  동일 셀/CRN 에서 p_A1 − p_A2nom 방향 통계로만 보고 — A1 이 min 을 결정하면 "A2
+  family worst-case" 해석이 붕괴). 어휘 상한 봉인: "worst case over the prespecified
+  LOCAL A2 evasion family (2×2 high-side)" 까지 — "worst-case attacker" 금지, 미시험
+  behavior 차원 명시. n=680 은 4-member local family 의 per-family 정밀도로만 서술.
+  n 재개방 불필요 (bootstrap 내 재최소화가 selection uncertainty 흡수).
+  반영: P3 재봉인 **b7b3f6440e5b83eb** (supersedes d9d93e20d76859a8) + resolver 에
+  jink/route 주입점 (기본값 bit 동일). scout (fa3d149eb846c00d) 는 family 와 독립 —
+  재봉인 불필요, 진행 그대로.
 ================================================================================

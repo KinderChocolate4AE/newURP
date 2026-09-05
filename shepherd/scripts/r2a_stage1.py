@@ -54,8 +54,11 @@ MU, NU, ADV_V = 0.35, 1.0, 1.5    # CAPABILITY_RATIOS (conditioning vector)
 
 
 # ------------------------------------------------------------------ resolver
-def resolve(im: dict, chi: float, eta: float) -> dict:
-    """구현 im + 무차원 좌표 → build_m4_env kwargs. ledger inject 와 단일 정의원."""
+def resolve(im: dict, chi: float, eta: float, *,
+            jink_amp: float = 0.6, route_gain: float = 0.5) -> dict:
+    """구현 im + 무차원 좌표 → build_m4_env kwargs. ledger inject 와 단일 정의원.
+    jink_amp/route_gain 은 Stage 3 evasion-family 주입점 (기본 = sealed A2-nom —
+    기존 호출 전부 bit 동일). 무차원 비율이므로 co-scale 대상 아님."""
     inj = _inject(im)
     tau, rho = im["tau"], im["rho"]
     a, v = dims_from(chi, eta, tau, rho)
@@ -80,7 +83,7 @@ def resolve(im: dict, chi: float, eta: float) -> dict:
         "train.layout.x_fire": inj["x_fire"],
         "train.layout.target_radius": inj["target_radius"],
     }
-    attacker = AttackerSpec(level="A2", jink_amp=0.6, route_gain=0.5,
+    attacker = AttackerSpec(level="A2", jink_amp=jink_amp, route_gain=route_gain,
                             jink_freq=inj["jink_freq"],
                             jink_terminal_r=inj["jink_terminal_r"],
                             sense_range=inj["sense_range"],
