@@ -1,0 +1,20 @@
+{
+ "b0_hash": "e3fd7800003d34e1",
+ "code_commit": "48f0254",
+ "benchmark_cases": [
+  2,
+  26,
+  35
+ ],
+ "t_lite_mean": 89.63147080739338,
+ "t_lite_max": 98.43796043395996,
+ "t_full_mean": 826.0316735903422,
+ "n_shard": 8,
+ "T_proj_hours": 8.71,
+ "threshold_hours": 14.0,
+ "selected_C_design": "FULL_28x100",
+ "S_C_rule": "S_C = S_AB[0:100] per cell (all 28 cells)",
+ "decision_timestamp": "2026-09-05T22:53:30",
+ "note": "sealed BEFORE any Phase 1 readout; the readout asserts this file",
+ "branch_hash": "f1bd9a459d97e693"
+}

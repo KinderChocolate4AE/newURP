@@ -1,0 +1,28 @@
+{
+ "episodes": [
+  2,
+  26,
+  35
+ ],
+ "b0_hash": "e3fd7800003d34e1",
+ "full": {
+  "sec_per_solve_mean": 826.0316735903422,
+  "sec_per_solve_max": 913.6358435153961,
+  "solves_per_ep": [
+   1,
+   1,
+   1
+  ],
+  "method": "elapsed / len(records) per episode"
+ },
+ "lite": {
+  "sec_per_solve_mean": 89.63147080739338,
+  "sec_per_solve_max": 98.43796043395996,
+  "solves_per_ep": [
+   5,
+   5,
+   5
+  ],
+  "method": "elapsed / len(records) per episode"
+ }
+}
