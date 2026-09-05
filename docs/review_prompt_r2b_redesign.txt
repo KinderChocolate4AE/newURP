@@ -1,0 +1,183 @@
+================================================================================
+R2B 재설계 (협력 경계 이동, 3-D 좌표) — 외부 감사 브리프 r1 (2026-09-05)
+전제: R2a 종결 (G3 = PARTIAL_3D, closure 브리프 §8 정본) · C045 에 따라 2-D 좌표
+잠금 무효 → R2b 는 (chi, eta, lam) 재설계 + 새 hash. 원 사전등록 = docs/87 §7
+(2-D 시절 최소 설계 — 본 브리프가 supersede 후보). B0 원칙: 코드보다 문서 먼저,
+B0 봉인 전 실행 금지 (docs/81).
+================================================================================
+
+0. 문서 지위 / 질문
+--------------------------------------------------------------------------------
+실행 전 설계 감사. R2b 질문 (사전 선언): "제한기 협력은 단독 (hold) nominal 경계
+chi50(eta, lam) 을 얼마나 이동시키는가 — 그리고 그 이동은 oracle 상한 대비 어디까지
+인가." 종결 감사 제약 승계: **primary = nominal cooperative boundary shift**
+(p_worst primary 금지 — worst member identity 교체 효과와 협력 효과 혼합 방지).
+
+1. 세계·좌표 (R2a 와 동일성이 주장의 전제)
+--------------------------------------------------------------------------------
+- 좌표 (chi, eta, lam) — R2a-P3 계약 승계 (lam = 단일 cone-기하 DOF, alpha 종속).
+- 세계 = legacy 24 m 회랑 · A2-nominal sealed evasion vector · q_dec = 1/6 ·
+  capability family · 판정 계약 동일 (같은 judge, 같은 라벨). **단독/협력 경계는
+  동일 세계·동일 적대자·동일 판정** — docs/87 §7 문구를 B0 exit 조건으로 유지.
+- ★단 하나의 실질 세계 변화: 협력 arm 에서 **limiter 가 움직인다** → A2 의
+  route_gain (각도 틈 회피) 이 처음으로 동적 장애물과 상호작용. 이것이 R2b 의
+  기전이자, B0 가 봉인해야 할 유일한 신규 결합이다 (§3).
+
+2. arm 3종 + 2단 구조 (Stage 3 displacement 규율의 재사용)
+--------------------------------------------------------------------------------
+2.1 arm:
+  A. 단독 (hold) — **신규 실측** (docs/84 §7 규칙 "Δ_coop 층은 신규 작업 — 기존
+     재료 재구축 금지": R2a 데이터 재사용 대신 paired CRN 로 같은 scenario 에서
+     다시 잰다. R2a 값과의 정합은 무료 교차검증으로 보고만.)
+  B. rule-based 협력 — curve_intercept 하한 재사용 (기존 MODES 의 intercept arm).
+     협력 rule 의 정확한 스펙 (역할·게인) 은 B0 에서 resolved config 로 봉인.
+  C. oracle-lite 상한 — p2prime solver 확장 (기존 n=7 → 셀당 n≥100). null 2분기
+     판정문 사전 등록 (docs/87 §7 승계):
+       "oracle 도 못 밀면 진짜 null ('협력 대신 τ 단축') / oracle 은 미는데
+        scripted 가 못 밀면 방법 문제 (Paper 1 에서 학습 협력으로)" — 양쪽 다 논문.
+2.2 2단 구조 (R2a Stage 3 의 교훈 이식 — 밴드에서 crossing 이 밀려나면 위치 추정
+  대신 displaced 보고):
+  Phase 1 (효과 존재·크기): Stage 3 확정 nominal band 셀에서 paired Δp_coop =
+    p_B − p_A (+ oracle Δp_C − p_A). 협력이 p 를 올리므로 crossing 은 밴드
+    **오른쪽**으로 이동 예상 — 양쪽 셀 모두 p_B > 0.5 면 "cooperative boundary
+    displaced above the tested nominal band" 로 보고, 외삽 금지.
+  Phase 2 (위치, Phase 1 displaced 시 조건부): coop boundary scout (λ slice 별
+    coarse chi grid, exploratory) → coop band confirmatory → **머니 피규어 =
+    같은 (eta, lam) 축 위 nominal 곡선 vs 협력 곡선** (docs/86 의 R2b 정의).
+2.3 slice: **λ0 + λ2 양쪽** (Stage 3 와 같은 이유 — 협력 효과가 λ 에 의존하는지가
+  3-D 좌표 채택의 첫 소비처; λ0 단독이면 "3-D 로 갔는데 협력은 1 slice" 비판).
+
+3. B0 world-contract 결정 목록 (7A~7E, docs/81 — 봉인 전 실행 금지)
+--------------------------------------------------------------------------------
+  7A observability: attacker 는 이미 sense_range 30 (σ_dt 17) 로 limiter 관측 —
+     협력 arm 에서 추가 변경 없음 선언 (defender 측 full state, 현행 유지) [제안].
+  7B commit 채널: ① global instantaneous commit-bit (현행) 유지 [제안 — R2a 와의
+     동일성 우선; sense-gated 는 별도 캠페인].
+  7C 시간 분해 (T_pre/T_react): R2b 1차 측정에서는 **미도입** [제안 — 축 추가는
+     결과 보고 후 금지이므로 지금 결정 필요: 도입 안 하면 이번 캠페인 내 금지].
+  7D route post-commit semantics: 현행 유지 명시 [제안].
+  7E train/eval parity: scripted arm 만 쓰므로 blocker 아님 — learned arm 진입
+     시점에 재확인 [승계].
+  Exit = B2_WORLD_CONTRACT_FROZEN (별도 봉인 문서 + hash).
+
+4. CRN·n·판정 (제안 — 봉인 전 감사 대상)
+--------------------------------------------------------------------------------
+- paired CRN: R2a 방식 그대로 — scenario 무차원 추첨 공유, arm 간 paired (ns
+  "r2b_p1", 신규 seed0). 단독/협력이 같은 scenario 를 본다.
+- Phase 1 셀: Stage 3 band 셀 28개 전부? vs 행별 chi50 최근접 1셀 × 14 행? [후자
+  제안 — 협력 효과는 Δp 로 재므로 행별 1셀이면 족하고 예산 절반.]
+- n: 초기 400 (screen 급). Δp_coop 기대가 크면 (oracle n=7 힌트 ~+0.3?) 충분;
+  paired discordance 실측 후 confirmatory n 재산정 (R2a 규칙 재사용, nuisance-only).
+- 판정문 (사전 등록 초안):
+    P1-positive: 다수 행 sign-consistent Δp_coop > 0 (CI 하한 > 0).
+    P1-null: oracle 2분기 문장으로 처리 (§2.1C).
+    Phase 2 진입 조건: P1-positive AND displaced 행 존재.
+- 예산 (앵커 1.49 s/ep): Phase 1 = 14셀 × 2 arm × 400 = 11,200 ep ≈ 4.6h 직렬
+  (~35분 8샤드) + oracle-lite 14셀 × 100 (solver, 비용 별도 산정 필요 — Q3).
+  Phase 2 (조건부) = scout ~3,400 + band ~confirmatory n × 14 × 2.
+
+5. 감사 질문
+--------------------------------------------------------------------------------
+  Q1 §2.3 양-slice 설계 승인 (vs λ0 primary + λ2 robustness 축소).
+  Q2 §3 의 7A~7D 제안 (전부 "현행 유지 + 명시 봉인") 승인 — 특히 7C 미도입 결정.
+  Q3 oracle-lite: p2prime solver 의 셀당 비용·실현성 실사 후 n≥100 이 감당되는지
+     — 불가 시 대안 (oracle arm 축소 vs 판정문 수정) 판정.
+  Q4 Phase 1 셀 규칙 (행별 1셀 × 14 vs Stage 3 28셀 전부).
+  Q5 단독 arm 신규 실측 원칙 (재구축 금지) 의 유지 확인 — R2a 재사용 유혹 차단.
+  Q6 이 브리프가 docs/87 §7 을 supersede 하는 절차 (개정 기록 위치).
+6. 감사 반영 기록 r2 (2026-09-05 — 판정: 설계 방향 승인, B0 봉인 보류, blocker 4)
+--------------------------------------------------------------------------------
+6.1 판정 요약: Q1 승인 (양 slice + secondary Δλ_coop 사전 정의) / Q2 7A·7B·7D 승인,
+  7C = 실험축 미도입이되 **descriptive diagnostic 로깅 허용** (inference·gate 사용
+  금지) / Q3 oracle 의미 재검증 선행 / Q4 **28셀 채택** / Q5 강승인 + 문구 보강 /
+  Q6 supersession record 절차 지정. + 신규 B0 의무: **단일 treatment 차이 기계
+  검증** (A/B 는 limiter controller/motion 만 달라야 함 — 아니면 bundle effect).
+
+6.2 blocker 해소 상태:
+  (B1) oracle-lite ≠ upper bound — **코드 실사 완료** (recoverability_probe.py):
+    ✓ 공격자·finisher·발사 규칙 closed-loop 유지 (고정 궤적 재생 금지 계약, docs/56
+      §2) — 감사가 우려한 "fixed evader 상대 최적화" 아님.
+    ✗ 그러나 CEM (pop 64 × 2 iter × 3 seed) × K_SEG=4 조각상수 plan class — 제한
+      class 내 탐색, optimality 무보장. **따라서 상한 아님 — oracle 성능의 하계
+      (achievability 증명기)**.
+    → 판정문 개정 (봉인):
+      positive: "oracle-lite search FOUND a shift" = 협력 잠재력의 achievability
+        증명 (유효 — scripted 와의 격차 해석 가능).
+      null: "oracle-lite search also failed to produce a measurable shift within
+        the sealed solver class (K_SEG=4 piecewise-constant, CEM budget) and
+        scenario subset" 까지만. **"진짜 null" · "협력 대신 τ 단축" 문구 금지.**
+    → 비용: infrastructure benchmark 진행 중 (구 MISS_EPISODES 사용 — 신규 R2b
+      seed 무접촉). sec/solve 실측 후 n 결정: 감당되면 28셀 × n=100, 아니면
+      **sentinel 6행 (η low/mid/high × λ 2) 에 n 집중 + null claim 을 "tested
+      sentinel rows" 로 축소** (감사 선호안 채택).
+    → C−A 비교는 A/B 와 **동일 scenario stream 의 사전 지정 nested subset**
+      (각 셀 첫 100 scenario id) 에서 paired 계산 — 독립 seed 금지.
+  (B2) P1-positive 수치 규칙 (봉인 확정):
+      "14행 중 ≥12행 point estimate Δp_coop > 0, AND 각 λ slice 에서 ≥5/7 행
+       positive, AND equal-weight global paired Δp 의 CI95 하한 > 0 (scenario-
+       paired bootstrap B=4000)." null/inconclusive = 위 불충족 시 oracle 2분기
+      (B1 개정 문안) 로 이관.
+  (B3) Phase 1 = **Stage 3 band 28셀 전부** (행별 2점 → 3-경우 분류 가능:
+      crossing-in-band / right-displaced / unexpected-left). 예산 28 × 2 arm ×
+      400 = 22,400 ep ≈ 직렬 9.3h → 8샤드 ~70분. shift 가 작으면 Phase 1 데이터로
+      cooperative χ50 추정 가능, 크면 scout 이관 — 사전 분기 명문.
+  (B4) n 재산정 규칙 (봉인 확정, nuisance-only·blinded):
+      "Phase 2 confirmatory n₂ = max(400, ⌈(1.96² · q̂)/(δχ_p)²⌉), q̂ = Phase 1
+       전 셀 pooled paired discordance (부호 blind), δχ_p = 0.05 (반폭 목표),
+       상한 1,000. effect size 참조 금지."
+
+6.3 기타 봉인 예정 항목:
+  - secondary estimand: Δλ_coop(η) = Δχ50(η,λ2) − Δχ50(η,λ0) — "협력 효과의 λ
+    의존" 판독용. 연속 함수형 주장 금지, two-slice 어휘 유지.
+  - 7C diagnostic: commit step · 첫 limiter 반응 step 등 event timestamp 를 원자료
+    에 기록 — "descriptive only, inference/게이트 사용 금지" 문구로 봉인.
+  - 단일 treatment 차이 assert: A/B 의 resolve/config 산출물이 limiter arm 플래그
+    외 전 항목 동일함을 러너가 기계 검증 (commit·fire·attacker·capability·judge·
+    IC 분포 일치).
+  - curve_intercept "재사용" = controller/config/code 의 재사용이지 구 결과 재사용
+    아님 — B0 명문.
+  - supersession: B0 문서에 supersedes(docs/87 §7, 구 hash/commit, 사유 = C045
+    PARTIAL_3D → 2-D lock invalidated, 승계 항목 목록) + docs/87 에 append-only
+    amendment ("§7 execution design superseded by [B0 hash]; historical text
+    retained") + manifest 가 B0 seal timestamp < 모든 R2b 실행을 검증.
+
+6.4 환경 fidelity 분리 (감사 판정 — scope 봉인):
+  - R2b 는 현 환경 **완전 동결**. 현재 맵의 정확한 지위 = χ50 = F(η, λ | M_3DOF,
+    sealed world) — conditional map 이지 보편 물리 경계 아님.
+  - 3DOF↔6DOF 는 scalar 교란이 아니라 **model-class perturbation** — k_f·τ
+    robustness 가 6DOF robustness 를 대신하지 못함 (attitude dynamics · thrust
+    coupling · rate saturation · orientation-종속 effector 기하가 신규 유입;
+    후보 신규 무차원군: ω_max·τ, T_max/mg, τ_attitude/τ, θ_max; cone 축이 body
+    자세에 묶이면 τ 에 attitude-settling 지연이 사실상 추가).
+  - fidelity 는 **별도 transportability gate**: R2b 종료 후 동일 (χ,η,λ) 셀
+    일부를 고충실도 dynamics 에서 재실행, Δ_fidelity = χ50^6DOF − χ50^3DOF (또는
+    Δp_fidelity) 만 측정. shift 작으면 "reduced-order map robust", 크면 신규 Π
+    승격. full map 재구축 아님.
+  - 논문 어휘: 지금 = "cooperative capture boundary of the sealed reduced-order
+    interception model" / 이후 통과 시 "transfers to a higher-fidelity vehicle
+    model with … shift".
+7. B1 확정 (2026-09-05 — infrastructure benchmark 실측) + oracle arm 재설계 제안 r3
+--------------------------------------------------------------------------------
+7.1 실측 (artifacts/r2b/oracle_benchmark.json; 구 MISS_EPISODES 사용, 신규 seed 0):
+  - 1 solve = **1,390 s (~23 min)** (run_p2prime 예산: 10 seed × 1280 rollouts).
+    해당 miss 상태에서 no_solution_within_budget=True — 예산을 다 쓰고도 미발견.
+  - 투영 비용 (직렬): 28셀×100 = **~1,081 h** / sentinel 6행×100 = **~232 h** /
+    sentinel 6행×50 + 경량예산 (3 seed × 384, ~1/10 추정) = **~11.6 h**.
+  → 감사가 제시한 어떤 무조건 실행안도 현 예산으로 불가. 축소만으로 부족.
+
+7.2 oracle arm 재설계 (봉인 제안 — B0 최종 승인 대상):
+  (i) **조건부 발동**: oracle arm 은 P1 판정이 positive 가 아닐 때만 (null/
+      inconclusive 분기) 실행한다. P1-positive 면 oracle 없이도 "협력이 경계를
+      민다" 가 성립하고 null 분기 판정문 자체가 불필요 — oracle 의 봉인된 역할
+      (null 2분기) 과 정확히 일치한다. 발동 조건을 결과 열람 전 봉인.
+  (ii) 발동 시 규모: **sentinel 6행** (η {2.1, 3.0, 3.9} × λ {0, 2}, 행별 nominal
+      band 고정 1셀) × **n=50** × **경량예산 (3 solver seeds × 384 rollouts —
+      §7.1 선언 상수로 회귀)**. nested paired: 각 셀 A/B stream 의 첫 50 scenario.
+  (iii) 어휘 (이중 축소): "within the sealed solver class (K_SEG=4 piecewise-
+      constant), sealed budget (3×384), and the tested sentinel rows". 경량예산
+      채택은 이미 격하된 판정문("search failed") 을 더 약화시키지 않는다 — 탐색
+      실패 진술은 예산 명기로 정직성이 유지된다.
+  (iv) 발동 전 의무: 경량예산 sec/solve 재실측 1회 (구 scenario) — ~1/10 추정
+      (139 s) 검증 후 예산 한도 (직렬 ≤12 h / 8샤드 ≤2 h) 사전 결정.
+7.3 이 재설계로 blocker B1 종결 제안. B0 봉인 잔여 = 본 §7.2 승인 1건.
+================================================================================

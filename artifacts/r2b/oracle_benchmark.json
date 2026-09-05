@@ -1,0 +1,15 @@
+{
+ "status": "infrastructure benchmark — old MISS_EPISODES only (no new R2b seeds touched)",
+ "solver": "recoverability_probe.run_p2prime (CEM, 10 solver seeds, budget_per_ep 1280, K_SEG 4 piecewise-constant; attacker/fire closed-loop; final judgment = full-fidelity replay label)",
+ "measured": {
+  "sec_per_solve": 1390.1,
+  "episodes": 1,
+  "outcome": "PENETRATED, no_solution_within_budget=True (informative: even 12.8k-rollout budget found no recovery on this miss state)"
+ },
+ "cost_projection_serial_hours": {
+  "28cells_x_n100": 1081.0,
+  "sentinel6_x_n100": 232.0,
+  "sentinel6_x_n50_lite(3seed_384rollout, ~/10 scale est.)": 11.6
+ },
+ "verdict": "unconditional oracle arm at audit-suggested scales is INFEASIBLE at this cost; conditional + sentinel + lite-budget redesign required (brief r3)"
+}
