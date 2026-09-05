@@ -675,6 +675,131 @@ def run_scout(shard: int, n_shards: int = 8) -> dict:
     return {"n_done": len(records), "stopped": False}
 
 
+# =============================================================== Stage 3 ====
+def seal_stage3() -> dict:
+    """Stage 3 confirmatory 최종 봉인 — P3 골격 (b7b3f6440e5b83eb) 이행.
+    2 slice (lam0/lam2) x 행별 chi50 감싸는 micro-grid 2셀 x (F_primary 4 + A1
+    anchor) x n=680 uniform (anchor 도 동일 n — CRN 장부 단일화). 총 95,200 ep.
+    H-SIM/H-DOM(k_f*tau) 등가성 팔은 재실행하지 않는다: Stage 1 이 이미 그 팔들을
+    confirmatory 정밀도로 닫았다 (SIM 불일치 0/4,800 = 추가 n 이 정보를 더하지
+    않음; k_f*tau 는 q 0.048 -> n 70 이면 족한데 400 으로 측정됨)."""
+    from shepherd.scripts.r2a_lattice import RHO_REF, RHO_B, R_MAX_REF
+    l3 = json.loads((ART / "lattice_R2a_P3.json").read_text(encoding="utf-8"))
+    s2 = json.loads((ART / "stage2_readout.json").read_text(encoding="utf-8"))
+    sc = json.loads((ART / "scout_l2_envelope.json").read_text(encoding="utf-8"))
+    lam0, lam2 = R_MAX_REF / RHO_REF, R_MAX_REF / RHO_B
+
+    def band(c50):
+        lo = math.floor(c50 / 0.02) * 0.02
+        return [round(lo, 3), round(lo + 0.02, 3)]
+
+    cells = []
+    for e in ("2.1", "2.4", "2.7", "3.0", "3.3", "3.6", "3.9"):
+        for c in band(s2["rows"][e]["chi50_isotonic"]):
+            cells.append([0, c, float(e)])                 # slice 0 = lam0
+        for c in band(sc["rows"][e]["chi50"]):
+            cells.append([2, c, float(e)])                 # slice 2 = lam2
+    F = l3["stage3_design"]["family_envelope"]["F_primary_CONFIRMED"]
+    payload = {
+        "schema": "r2a-stage3-protocol-v1", "contract": "R2a-P3",
+        "lattice3d_hash": l3["lattice_hash"],
+        "band_sources": {"lam0": "stage2_readout (protocol 3bc9dba2fe01385f)",
+                         "lam2": f"scout_l2_envelope hash {sc['hash']} (exploratory)"},
+        "slices": {"0": {"lam": lam0, "R_max": R_MAX_REF},
+                   "2": {"lam": lam2, "R_max": lam2 * RHO_REF}},
+        "cells": cells, "cells_rule": "per eta row and slice: two micro-grid (0.02) "
+                                      "points bracketing that slice's chi50",
+        "configs": [{"name": f["name"], "jink_amp": f["jink_amp"],
+                     "route_gain": f["route_gain"]} for f in F] +
+                   [{"name": "A1-anchor", "jink_amp": 0.0, "route_gain": 0.0,
+                     "role": "NOT in the min; direction statistic only"}],
+        "n_per_cell": 680, "n_note": "uniform 680 incl. anchor (single CRN ledger); "
+                                     "per-family precision claim only (P3 n_scope)",
+        "seed0": 3000, "crn_ns": "r2a_s3", "jitter": {"chi": 0.01, "eta": 0.15},
+        "crn": "all 5 configs run inside one scenario (paired); one scenario carries "
+               "ONE (slice, cell)",
+        "estimand": "primary p_worst,A2 = min over F_primary per cell; bootstrap "
+                    "re-minimizes in every resample; A1 reported as p_A1 - p_A2nom",
+        "readout_plan": "per-slice chi50_worst(eta) bands -> local 3-D surface unlock "
+                        "check (P3 rule) + D_chi vs delta_chi 0.05 between slices "
+                        "reported descriptively; C044/C045/C046 registration after "
+                        "readout; repo-R1 REQUIRED before readout",
+        "sharding": "by scenario: s in [0, 19040), cell = s // 680; 8 shards "
+                    "~2,380 scenarios (~11,900 ep, ~5 h) each",
+        "stop_sentinel": "artifacts/r2a/stage3/HARD_KILL_STOP",
+        "q_dec_gate": "runtime assert 1/6",
+        "total_ep": len(cells) * 680 * 5,
+    }
+    payload["protocol_hash"] = hashlib.sha256(
+        json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
+    (ART / "stage3_protocol.json").write_text(
+        json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
+    return payload
+
+
+def run_shard3(shard: int, n_shards: int = 8) -> dict:
+    proto = json.loads((ART / "stage3_protocol.json").read_text(encoding="utf-8"))
+    base = impls(_lattice()["tau_B"])["R-ref"]
+    slices = {int(k): v for k, v in proto["slices"].items()}
+    cells, n_cell = proto["cells"], proto["n_per_cell"]
+    total = len(cells) * n_cell
+    lo, hi = shard * total // n_shards, (shard + 1) * total // n_shards
+    out_dir = ART / "stage3"; out_dir.mkdir(parents=True, exist_ok=True)
+    sentinel = out_dir / "HARD_KILL_STOP"
+    path = out_dir / f"shard{shard:02d}.json"
+    records = []
+    if path.exists():
+        prev = json.loads(path.read_text(encoding="utf-8"))
+        if prev["protocol_hash"] == proto["protocol_hash"]:
+            records = prev["records"]
+
+    def _save(stopped=False):
+        path.write_text(json.dumps(
+            {"shard": shard, "n_shards": n_shards, "scenario_range": [lo, hi],
+             "protocol_hash": proto["protocol_hash"],
+             "stopped_by_sentinel": stopped, "records": records},
+            ensure_ascii=False), encoding="utf-8")
+
+    n_cfg = len(proto["configs"])
+    for s in range(lo + len(records) // n_cfg, hi):
+        if sentinel.exists():
+            _save(stopped=True)
+            return {"n_done": len(records), "stopped": True}
+        sl, chi_c, eta_c = cells[s // n_cell]
+        im = dict(base, R_max=slices[sl]["R_max"],
+                  target=([] if sl == 0 else ["alpha", "lam"]))
+        chi, eta = draw_cell_jitter(proto["seed0"], s, chi_c, eta_c,
+                                    ns=proto["crn_ns"], jc=proto["jitter"]["chi"],
+                                    je=proto["jitter"]["eta"])
+        for cfg in proto["configs"]:
+            kw = resolve(im, chi, eta, jink_amp=cfg["jink_amp"],
+                         route_gain=cfg["route_gain"])
+            q = kw["extra_cfg"]["physics.dt"] / kw["extra_cfg"]["physics.tau_deploy"]
+            assert abs(q - 1.0 / 6.0) < 1e-12
+            st = build_m4_env(proto["seed0"], s, **kw)
+            r = run_episode(st.env, st.scn, st.lay, seed=proto["seed0"] + s,
+                            limiter_mode="hold", fire_mode="clean", policy=None,
+                            baseline_commit=False)
+            records.append({"s": s, "slice": sl, "config": cfg["name"],
+                            "cell": [chi_c, eta_c], "chi": chi, "eta": eta,
+                            "label": r.label})
+            if r.label == "HARD_KILL":
+                sentinel.parent.mkdir(parents=True, exist_ok=True)
+                try:
+                    with open(sentinel, "x", encoding="utf-8") as f:
+                        json.dump({"shard": shard, "scenario": s,
+                                   "config": cfg["name"]}, f)
+                except FileExistsError:
+                    pass
+                _save(stopped=True)
+                raise SystemExit(f"HARD_KILL STOP: stage3 shard {shard} scenario {s}")
+        if (s - lo + 1) % 20 == 0 or s + 1 == hi:
+            _save()
+            print(f"[s3 shard {shard}] {s - lo + 1}/{hi - lo} scenarios", flush=True)
+    _save()
+    return {"n_done": len(records), "stopped": False}
+
+
 def main(argv=None) -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--feasibility", action="store_true")
@@ -688,6 +813,8 @@ def main(argv=None) -> None:
     ap.add_argument("--run-stage4", action="store_true")
     ap.add_argument("--seal-scout", action="store_true")
     ap.add_argument("--run-scout", action="store_true")
+    ap.add_argument("--seal-stage3", action="store_true")
+    ap.add_argument("--run-stage3", action="store_true")
     ap.add_argument("--shard", type=int, default=0)
     ap.add_argument("--n-shards", type=int, default=8)
     a = ap.parse_args(argv)
@@ -732,6 +859,12 @@ def main(argv=None) -> None:
               f"{len(ps['chi_grid']) * len(ps['eta_grid']) * ps['n_per_cell']}")
     if a.run_scout:
         run_scout(a.shard, a.n_shards)
+    if a.seal_stage3:
+        p3 = seal_stage3()
+        print(f"stage3 protocol_hash {p3['protocol_hash']}  cells {len(p3['cells'])}  "
+              f"configs {len(p3['configs'])}  total ep {p3['total_ep']}")
+    if a.run_stage3:
+        run_shard3(a.shard, a.n_shards)
 
 
 if __name__ == "__main__":

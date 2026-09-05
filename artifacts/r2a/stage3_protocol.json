@@ -1,0 +1,206 @@
+{
+ "schema": "r2a-stage3-protocol-v1",
+ "contract": "R2a-P3",
+ "lattice3d_hash": "b7b3f6440e5b83eb",
+ "band_sources": {
+  "lam0": "stage2_readout (protocol 3bc9dba2fe01385f)",
+  "lam2": "scout_l2_envelope hash fc1927add6785a91 (exploratory)"
+ },
+ "slices": {
+  "0": {
+   "lam": 4.6440677966101696,
+   "R_max": 8.22
+  },
+  "2": {
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523
+  }
+ },
+ "cells": [
+  [
+   0,
+   0.6,
+   2.1
+  ],
+  [
+   0,
+   0.62,
+   2.1
+  ],
+  [
+   2,
+   0.54,
+   2.1
+  ],
+  [
+   2,
+   0.56,
+   2.1
+  ],
+  [
+   0,
+   0.58,
+   2.4
+  ],
+  [
+   0,
+   0.6,
+   2.4
+  ],
+  [
+   2,
+   0.54,
+   2.4
+  ],
+  [
+   2,
+   0.56,
+   2.4
+  ],
+  [
+   0,
+   0.56,
+   2.7
+  ],
+  [
+   0,
+   0.58,
+   2.7
+  ],
+  [
+   2,
+   0.5,
+   2.7
+  ],
+  [
+   2,
+   0.52,
+   2.7
+  ],
+  [
+   0,
+   0.56,
+   3.0
+  ],
+  [
+   0,
+   0.58,
+   3.0
+  ],
+  [
+   2,
+   0.5,
+   3.0
+  ],
+  [
+   2,
+   0.52,
+   3.0
+  ],
+  [
+   0,
+   0.54,
+   3.3
+  ],
+  [
+   0,
+   0.56,
+   3.3
+  ],
+  [
+   2,
+   0.46,
+   3.3
+  ],
+  [
+   2,
+   0.48,
+   3.3
+  ],
+  [
+   0,
+   0.52,
+   3.6
+  ],
+  [
+   0,
+   0.54,
+   3.6
+  ],
+  [
+   2,
+   0.44,
+   3.6
+  ],
+  [
+   2,
+   0.46,
+   3.6
+  ],
+  [
+   0,
+   0.52,
+   3.9
+  ],
+  [
+   0,
+   0.54,
+   3.9
+  ],
+  [
+   2,
+   0.42,
+   3.9
+  ],
+  [
+   2,
+   0.44,
+   3.9
+  ]
+ ],
+ "cells_rule": "per eta row and slice: two micro-grid (0.02) points bracketing that slice's chi50",
+ "configs": [
+  {
+   "name": "A2-nom",
+   "jink_amp": 0.6,
+   "route_gain": 0.5
+  },
+  {
+   "name": "A2-J+",
+   "jink_amp": 0.9,
+   "route_gain": 0.5
+  },
+  {
+   "name": "A2-R+",
+   "jink_amp": 0.6,
+   "route_gain": 0.75
+  },
+  {
+   "name": "A2-J+R+",
+   "jink_amp": 0.9,
+   "route_gain": 0.75
+  },
+  {
+   "name": "A1-anchor",
+   "jink_amp": 0.0,
+   "route_gain": 0.0,
+   "role": "NOT in the min; direction statistic only"
+  }
+ ],
+ "n_per_cell": 680,
+ "n_note": "uniform 680 incl. anchor (single CRN ledger); per-family precision claim only (P3 n_scope)",
+ "seed0": 3000,
+ "crn_ns": "r2a_s3",
+ "jitter": {
+  "chi": 0.01,
+  "eta": 0.15
+ },
+ "crn": "all 5 configs run inside one scenario (paired); one scenario carries ONE (slice, cell)",
+ "estimand": "primary p_worst,A2 = min over F_primary per cell; bootstrap re-minimizes in every resample; A1 reported as p_A1 - p_A2nom",
+ "readout_plan": "per-slice chi50_worst(eta) bands -> local 3-D surface unlock check (P3 rule) + D_chi vs delta_chi 0.05 between slices reported descriptively; C044/C045/C046 registration after readout; repo-R1 REQUIRED before readout",
+ "sharding": "by scenario: s in [0, 19040), cell = s // 680; 8 shards ~2,380 scenarios (~11,900 ep, ~5 h) each",
+ "stop_sentinel": "artifacts/r2a/stage3/HARD_KILL_STOP",
+ "q_dec_gate": "runtime assert 1/6",
+ "total_ep": 95200,
+ "protocol_hash": "11dbf6114425b49c"
+}

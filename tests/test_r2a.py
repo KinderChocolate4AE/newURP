@@ -354,3 +354,24 @@ def test_resolver_behavior_injection_default_bitexact():
     assert (jr["attacker"].jink_amp, jr["attacker"].route_gain) == (0.9, 0.75)
     assert base["extra_cfg"] == jr["extra_cfg"]                     # 물리·기하 무변경
     assert base["attacker"].fwd_gain == jr["attacker"].fwd_gain
+
+
+@pytest.mark.skipif(not (ROOT / "artifacts/r2a/stage3_protocol.json").exists(),
+                    reason="stage3 not sealed")
+def test_stage3_protocol_sealed():
+    import json as _j
+    p3 = _j.loads((ROOT / "artifacts/r2a/stage3_protocol.json").read_text(encoding="utf-8"))
+    l3 = _j.loads((ROOT / "artifacts/r2a/lattice_R2a_P3.json").read_text(encoding="utf-8"))
+    assert p3["lattice3d_hash"] == l3["lattice_hash"] and p3["n_per_cell"] == 680
+    assert len(p3["cells"]) == 28 and p3["total_ep"] == 95200
+    assert [c["name"] for c in p3["configs"]] == \
+        ["A2-nom", "A2-J+", "A2-R+", "A2-J+R+", "A1-anchor"]
+    assert "NOT in the min" in p3["configs"][-1]["role"]
+    assert "repo-R1 REQUIRED before readout" in p3["readout_plan"]
+    # slice 별 셀이 각 slice 의 chi50 을 실제로 감싸는지 (밴드 규칙)
+    s2 = _j.loads((ROOT / "artifacts/r2a/stage2_readout.json").read_text(encoding="utf-8"))
+    sc = _j.loads((ROOT / "artifacts/r2a/scout_l2_envelope.json").read_text(encoding="utf-8"))
+    for sl, src, key in ((0, s2["rows"], "chi50_isotonic"), (2, sc["rows"], "chi50")):
+        for e in ("2.1", "3.0", "3.9"):
+            cs = sorted(c[1] for c in p3["cells"] if c[0] == sl and abs(c[2] - float(e)) < 1e-9)
+            assert cs[0] <= src[e][key] <= cs[1] + 0.02, (sl, e, cs, src[e][key])
