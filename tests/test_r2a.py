@@ -395,3 +395,31 @@ def test_r2b_b0_sealed():
     assert "FORBIDDEN" in b0["readout_3cases"]["B_null_C_null"]
     assert ">=12/14" in b0["estimands"]["p1_positive_rule"]
     assert "bundle effect" in b0["treatment"]["machine_assert"]
+
+
+def test_r2b_phase1_single_treatment_and_order():
+    """B0 이행: A/B resolve kwargs 동일 (단일 treatment) + branch seal 필드 스펙."""
+    from shepherd.scripts.r2b_phase1 import B0_HASH, THRESHOLD_H, _cells
+    from shepherd.scripts.r2a_stage1 import resolve, _lattice
+    from shepherd.scripts.r2a_lattice import impls
+    assert B0_HASH == "e3fd7800003d34e1" and THRESHOLD_H == 14.0
+    cells = _cells()
+    assert len(cells) == 28
+    im = impls(_lattice()["tau_B"])["R-ref"]
+    a, b = resolve(im, 0.55, 3.0), resolve(im, 0.55, 3.0)
+    assert a["extra_cfg"] == b["extra_cfg"] and a["attacker"] == b["attacker"]
+
+
+@pytest.mark.skipif(not (ROOT / "artifacts/r2b/c_budget_branch.json").exists(),
+                    reason="C-budget branch not sealed yet (server benchmark pending)")
+def test_r2b_branch_sealed_before_readout():
+    import json as _j
+    br = _j.loads((ROOT / "artifacts/r2b/c_budget_branch.json").read_text(encoding="utf-8"))
+    for k in ("b0_hash", "code_commit", "benchmark_cases", "t_lite_mean", "t_lite_max",
+              "n_shard", "T_proj_hours", "threshold_hours", "selected_C_design",
+              "decision_timestamp", "branch_hash"):
+        assert k in br, k
+    assert br["threshold_hours"] == 14.0
+    assert (br["T_proj_hours"] <= 14.0) == (br["selected_C_design"] == "FULL_28x100")
+    assert ("0:100" in br["S_C_rule"]) if br["selected_C_design"] == "FULL_28x100" \
+        else ("0:50" in br["S_C_rule"])
