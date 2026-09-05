@@ -1,0 +1,297 @@
+{
+ "pass": "repo-R1 (scoped: R2a campaign chain; docs/81 §R1)",
+ "principle": "historical preservation first — sidecar manifest only, no retro-edit",
+ "world_lineage": "results/curve_hold_reactive.manifest.json (commit 43acc39) -> provenance_route_sense.json CONFIRMED -> sealed conditioning vector",
+ "campaigns": {
+  "stage0": {
+   "threat_class": "A2-reactive sealed evasion vector (jink 0.6, route 0.5, sense 30) — see conditioning_vector",
+   "contract": "R2a-L/P design input",
+   "campaign_status": "exploratory",
+   "artifacts": [
+    {
+     "file": "artifacts/r2a/stage0_envelope.json",
+     "git_commit": "45756e9"
+    },
+    {
+     "file": "artifacts/r2a/stage0_rows.png",
+     "git_commit": "a9fee8c"
+    }
+   ]
+  },
+  "lattices": {
+   "threat_class": "A2-reactive sealed evasion vector (jink 0.6, route 0.5, sense 30) — see conditioning_vector",
+   "contract": "seal chain (supersession recorded in-file)",
+   "campaign_status": "sealed",
+   "artifacts": [
+    {
+     "file": "artifacts/r2a/lattice_R2a_L.json",
+     "git_commit": "45756e9"
+    },
+    {
+     "file": "artifacts/r2a/lattice_R2a_P.json",
+     "git_commit": "45756e9"
+    },
+    {
+     "file": "artifacts/r2a/lattice_R2a_P3.json",
+     "git_commit": "583dddc"
+    }
+   ]
+  },
+  "provenance": {
+   "threat_class": "A2-reactive sealed evasion vector (jink 0.6, route 0.5, sense 30) — see conditioning_vector",
+   "contract": "D-2 evidence",
+   "campaign_status": "verification",
+   "artifacts": [
+    {
+     "file": "artifacts/r2a/provenance_route_sense.json",
+     "git_commit": "35e2c8f"
+    }
+   ]
+  },
+  "stage1": {
+   "threat_class": "A2-reactive sealed evasion vector (jink 0.6, route 0.5, sense 30) — see conditioning_vector",
+   "contract": "1496a4769876b438",
+   "campaign_status": "kill screen (falsification)",
+   "artifacts": [
+    {
+     "file": "artifacts/r2a/stage1_protocol.json",
+     "git_commit": "45756e9"
+    },
+    {
+     "file": "artifacts/r2a/stage1_feasibility.json",
+     "git_commit": "45756e9"
+    },
+    {
+     "file": "artifacts/r2a/stage1_pathwise.json",
+     "git_commit": "f058bd8"
+    },
+    {
+     "file": "artifacts/r2a/stage1_dt_check.json",
+     "git_commit": "957c0ef"
+    },
+    {
+     "file": "artifacts/r2a/stage1_dt_review.json",
+     "git_commit": "957c0ef"
+    },
+    {
+     "file": "artifacts/r2a/stage1_readout.json",
+     "git_commit": "53709ff"
+    },
+    {
+     "file": "artifacts/r2a/stage1_viz_ep0.png",
+     "git_commit": "f058bd8"
+    },
+    {
+     "file": "artifacts/r2a/stage1_viz_ep1.png",
+     "git_commit": "f058bd8"
+    },
+    {
+     "file": "artifacts/r2a/stage1/shard00.json",
+     "git_commit": "42ccec6"
+    },
+    {
+     "file": "artifacts/r2a/stage1/shard01.json",
+     "git_commit": "42ccec6"
+    },
+    {
+     "file": "artifacts/r2a/stage1/shard02.json",
+     "git_commit": "42ccec6"
+    },
+    {
+     "file": "artifacts/r2a/stage1/shard03.json",
+     "git_commit": "42ccec6"
+    },
+    {
+     "file": "artifacts/r2a/stage1/shard04.json",
+     "git_commit": "42ccec6"
+    },
+    {
+     "file": "artifacts/r2a/stage1/shard05.json",
+     "git_commit": "42ccec6"
+    },
+    {
+     "file": "artifacts/r2a/stage1/shard06.json",
+     "git_commit": "42ccec6"
+    },
+    {
+     "file": "artifacts/r2a/stage1/shard07.json",
+     "git_commit": "42ccec6"
+    }
+   ]
+  },
+  "stage2": {
+   "threat_class": "A2-reactive sealed evasion vector (jink 0.6, route 0.5, sense 30) — see conditioning_vector",
+   "contract": "3bc9dba2fe01385f",
+   "campaign_status": "lam0 reference slice",
+   "artifacts": [
+    {
+     "file": "artifacts/r2a/stage2_protocol.json",
+     "git_commit": "ab88025"
+    },
+    {
+     "file": "artifacts/r2a/stage2_readout.json",
+     "git_commit": "c3e70cb"
+    },
+    {
+     "file": "artifacts/r2a/stage2/shard00.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage2/shard01.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage2/shard02.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage2/shard03.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage2/shard04.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage2/shard05.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage2/shard06.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage2/shard07.json",
+     "git_commit": "4feef54"
+    }
+   ]
+  },
+  "stage4": {
+   "threat_class": "A2-reactive sealed evasion vector (jink 0.6, route 0.5, sense 30) — see conditioning_vector",
+   "contract": "59c4de1889ed72dc",
+   "campaign_status": "orthogonal lambda test (POSITIVE)",
+   "artifacts": [
+    {
+     "file": "artifacts/r2a/stage4_protocol.json",
+     "git_commit": "ab88025"
+    },
+    {
+     "file": "artifacts/r2a/stage4_readout.json",
+     "git_commit": "c3e70cb"
+    },
+    {
+     "file": "artifacts/r2a/stage4/shard00.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage4/shard01.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage4/shard02.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage4/shard03.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage4/shard04.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage4/shard05.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage4/shard06.json",
+     "git_commit": "4feef54"
+    },
+    {
+     "file": "artifacts/r2a/stage4/shard07.json",
+     "git_commit": "4feef54"
+    }
+   ]
+  },
+  "scout_l2": {
+   "threat_class": "A2-reactive sealed evasion vector (jink 0.6, route 0.5, sense 30) — see conditioning_vector",
+   "contract": "fa3d149eb846c00d",
+   "campaign_status": "exploratory",
+   "artifacts": [
+    {
+     "file": "artifacts/r2a/scout_l2_protocol.json",
+     "git_commit": "caf1bc2"
+    },
+    {
+     "file": "artifacts/r2a/scout_l2_envelope.json",
+     "git_commit": "d0eb0b0"
+    },
+    {
+     "file": "artifacts/r2a/scout_l2/shard00.json",
+     "git_commit": "106a91d"
+    },
+    {
+     "file": "artifacts/r2a/scout_l2/shard01.json",
+     "git_commit": "106a91d"
+    },
+    {
+     "file": "artifacts/r2a/scout_l2/shard02.json",
+     "git_commit": "106a91d"
+    },
+    {
+     "file": "artifacts/r2a/scout_l2/shard03.json",
+     "git_commit": "106a91d"
+    }
+   ]
+  },
+  "stage3": {
+   "threat_class": "A2-reactive sealed evasion vector (jink 0.6, route 0.5, sense 30) — see conditioning_vector",
+   "contract": "eb3a85e702020167",
+   "campaign_status": "confirmatory (readout pending)",
+   "artifacts": [
+    {
+     "file": "artifacts/r2a/stage3_protocol.json",
+     "git_commit": "b397720"
+    },
+    {
+     "file": "artifacts/r2a/stage3/shard00.json",
+     "git_commit": "94bbebd"
+    },
+    {
+     "file": "artifacts/r2a/stage3/shard01.json",
+     "git_commit": "94bbebd"
+    },
+    {
+     "file": "artifacts/r2a/stage3/shard02.json",
+     "git_commit": "94bbebd"
+    },
+    {
+     "file": "artifacts/r2a/stage3/shard03.json",
+     "git_commit": "94bbebd"
+    },
+    {
+     "file": "artifacts/r2a/stage3/shard04.json",
+     "git_commit": "94bbebd"
+    },
+    {
+     "file": "artifacts/r2a/stage3/shard05.json",
+     "git_commit": "94bbebd"
+    },
+    {
+     "file": "artifacts/r2a/stage3/shard06.json",
+     "git_commit": "94bbebd"
+    },
+    {
+     "file": "artifacts/r2a/stage3/shard07.json",
+     "git_commit": "94bbebd"
+    }
+   ]
+  }
+ },
+ "orphan_artifacts": [],
+ "uncommitted_artifacts": [],
+ "frozen_results_unmodified": true,
+ "quarantine_rule": "if this pass had failed, the Stage 3 run would be quarantined and re-executed under a new lineage (protocol eb3a85e702020167 run_lineage)",
+ "note": "repo-R2 (semantic rename) and repo-R3 (derived-assert) remain W2 items — NOT prerequisites of this readout gate",
+ "verdict": "PASS"
+}
