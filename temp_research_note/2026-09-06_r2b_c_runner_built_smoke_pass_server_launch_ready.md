@@ -9,8 +9,12 @@ branch seal `f1bd9a459d97e693` (FULL_28x100 lite) 의 기계 이행.
   - `solve_scenario`: s0=0 full-episode limiter plan (K_SEG=4 piecewise-constant),
     CEM P=64 × I=2 × elite16 × solver seed {0,1,2} = **384 lite rollouts/scenario**
     (§7.1 상수를 `recoverability_probe` 에서 import — 복제 없음, benchmark 비용
-    기반과 동일). 구조 후보 {intercept, hold} 1세대 포함 → **rule-based B 는
-    search class 의 원소** (C 가 B 를 구조적으로 놓칠 수 없음).
+    기반과 동일). 구조 후보 {intercept, hold} 1세대 포함 → rule-based plan 은
+    admissible search class 의 원소 — **단, 유한예산 stochastic search + lite
+    proxy 선별이라 C 가 B 이상을 발견한다는 보장은 없다** (per-scenario
+    C_N ≥ B_N 비보장; "구조적으로 놓칠 수 없다"는 초기 표현은 과대 — 정정
+    2026-09-06). C_N < B_N 셀이 나와도 계약 위반이 아니라 search-budget 한계의
+    표현이다.
   - rollout = 경량 클론 env (viability.n_samples=16) 1개 재사용, proxy 선택 전용.
     **판정 = full-fidelity env 1회 replay 라벨만**: C_N = (label == NET_CAPTURE),
     CAPTURE_WITH_CONTACT·HARD_KILL 불인정 (Phase 1 판독과 동일 판정층). C_H/C_U

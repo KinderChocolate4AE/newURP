@@ -13,8 +13,11 @@ rate 이지 물리적 achievability 확률이 아니다 (B0 estimand 조항).
 search 절차 (§7.1 lite budget, recoverability_probe 상수 재사용 — 복제 금지):
   s0 = 0 (에피소드 전체) · limiter 별 K_SEG=4 piecewise-constant 가속 plan ·
   CEM P=64 × I=2 × elite 16 × solver seed {0,1,2} = 384 rollouts/scenario ·
-  구조 후보 {intercept, hold} 를 1세대에 포함 (rule-based arm 은 search class 의
-  원소 — C 가 B 를 놓칠 수 없다) · rollout = 경량 클론 (viability.n_samples=16)
+  구조 후보 {intercept, hold} 를 1세대에 포함 — rule-based plan 은 admissible
+  search class 의 원소이므로 C 가 B 를 재현하는 것이 구조적으로 금지되진 않지만,
+  유한예산 stochastic search 가 lite-proxy 로 후보를 선별하므로 **B 이상의 결과
+  발견이 보장되지는 않는다** (per-scenario C_N ≥ B_N 비보장) ·
+  rollout = 경량 클론 (viability.n_samples=16)
   proxy 선택 전용 · 최종 판정 = full-fidelity env 1회 replay 라벨만.
 solver RNG = default_rng([20260906, seed, s]) — scenario CRN (SHA-256, r2b_p1_v2)
 과 완전 분리. S_C = S_AB_v2[0:100] per cell (28×100 = 2,800). torch-free.
