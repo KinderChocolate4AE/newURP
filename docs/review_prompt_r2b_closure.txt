@@ -1,0 +1,107 @@
+================================================================================
+R2B 종결 감사 브리프 r1 (2026-09-07) — P1 null + C_POSITIVE, 3-way = B_null_C_pos
+전제: R2a 종결 (G3 = PARTIAL_3D) · B0 v2 cba024d7ee3d9f61 (arm-A-only STOP,
+2-layer estimand, C_N semantics) · branch seal f1bd9a459d97e693 (FULL_28x100
+lite C, T_proj<=14h 규칙으로 결과 열람 전 선택). 모든 판정 규칙은 결과 열람 전
+봉인 — 본 브리프는 봉인 규칙의 기계 적용 결과와 그 caveat 만 보고한다.
+================================================================================
+
+0. 문서 지위 / 감사 질문
+--------------------------------------------------------------------------------
+캠페인 종결 감사. 질문 셋:
+  (Q1) 봉인 사슬이 온전한가 (규칙 선봉인 -> 실행 -> 기계 판독, 소급 개입 0).
+  (Q2) 3-way 봉인 문장 B_null_C_pos 의 발화가 데이터로 정당한가.
+  (Q3) 아래 §5 caveat 문안이 과소/과대 없이 등록 문안으로 적절한가.
+claim 등록 후보 = §6. 등록·freeze 는 감사 통과 후 사용자 트랙.
+
+1. 봉인 사슬 (전부 결과 열람 전; commit hash = lineage)
+--------------------------------------------------------------------------------
+  B0 v2 cba024d7ee3d9f61: 2-layer estimand (Δp_net primary / Δp_U secondary /
+    p_H 보고), P1-positive 규칙 (>=12/14 행 + slice >=5/7 + paired CI95 하한>0,
+    B=4000), C_N = replay NET_CAPTURE 만 (HARD_KILL·CAPTURE_WITH_CONTACT 불인정),
+    3-way 문장 3종 원문, v1 quarantine (578 records, 삭제 금지).
+  branch seal f1bd9a459d97e693: t_lite 실측 -> T_proj 8.71h <= 14h ->
+    FULL_28x100 lite C. threshold 는 benchmark 결과 열람 전 고정.
+  C 러너 56049b5(+82b3145 문구): §7.1 상수 재사용 (P64*I2*seed3 = 384 lite
+    rollouts/scenario), s0=0 K_SEG4 plan, 구조 후보 {intercept, hold} 포함,
+    solver RNG [20260906,seed,s] ≠ scenario CRN, smoke = phase1 3점 bit-parity
+    + env-재사용 결정론 + 비-S_C 1판 solve.
+  C 판독기 55c6bcc: **로컬 샤드 부재 상태에서 커밋** — C-positivity 규칙 =
+    P1 규칙의 기계 이식 (contrast 만 Δp_CA = p_C_net − p_A_net, 새 상수 0).
+  실행: 서버 8샤드, 전 샤드 code 82b3145, manifest 에 b0/branch/commit/solver_ns.
+  판독: 59826d3 (c_readout.json). assert: 2800 records 유일성 · hash 일치 ·
+    phase1 S_C 쌍 5600 · B verdict == P1_NOT_POSITIVE.
+
+2. Phase 1 (A/B, 22,400 ep paired) — 기존 판독 재인용
+--------------------------------------------------------------------------------
+  P1_NOT_POSITIVE: 행 5/14, 전역 Δp_net −0.001 [−0.004, +0.001]. treatment
+  배선 검증 (기계 차이 26.8%, 라벨 flip 1.59% 상쇄). 저 η kinetic 1:1 치환
+  (Δp_net<0, p_H>0, Δp_U≈0). phase2_trigger False.
+
+3. C arm (28셀 x 100, S_C = S_AB_v2[0:100]) — 봉인 판독 결과
+--------------------------------------------------------------------------------
+  C rule: **14/14 행 양수 · slice {0:7/7, 2:7/7} · 전역 paired Δp_CA_net
+  +0.370, CI95 [+0.353, +0.388]** -> C_POSITIVE. 발화된 봉인 문장 (원문):
+    "cooperation-is-meaningless is rejected; the rule-based controller failed
+     to realize exploitable cooperative geometry — 'motivates a learned or
+     more expressive cooperative controller' (NOT 'MARL will solve it')"
+  secondary: Δp_U(C−A) +0.409 [+0.390, +0.426]. Δp_CB +0.370 (descriptive).
+  구조 확인 (전부 descriptive):
+    - p_C_hard 셀별 0~0.14 — C 이득은 순수 net capture (kinetic substitution
+      경로로 만든 가짜 positive 아님; B0 C_N semantics 가 막은 loophole 실측
+      비구속 확인).
+    - η gradient: Δp_CA 저 η 최대 (+0.44~+0.62 @ η2.1–2.4, p_C_net .90–.98),
+      고 η 최소 (+0.10~+0.24 @ η3.9) + lite_no_solution 9.7% 전역, 고 η 집중
+      (최대 0.40) — "at the tested lite search budget" 한정어의 실구속 영역.
+    - best plan: accels 70.1% / intercept 29.2% / hold 0.7%. nosol 271판 중
+      13판 replay C_N=1 (lite/full 역전, 판정층 = replay 라벨이므로 무해).
+
+4. 정합성
+--------------------------------------------------------------------------------
+  - A arm S_C 부분집합의 p_A_net 은 phase1 기록에서 직접 취함 (재측정 아님 —
+    같은 레코드, paired 정의상 옳음).
+  - P1 의 "저 η kinetic 치환" 영역과 C 의 최대 이득 영역이 일치 — rule 이
+    kill 로 바꿔버린 바로 그 지대에 net-capture plan 이 실재.
+  - λ slice 정성 동일 (slice2 baseline 높고 Δ 소폭 작음) — 3-D 좌표 소비 유지.
+
+5. 정직 caveat (등록 문안 후보 — Q3 감사 대상)
+--------------------------------------------------------------------------------
+  c1. p_C_hat = 봉인 search 절차의 attainment rate. 물리적 achievability 확률
+      아님 (미발견 feasible plan 존재 가능 — 특히 고 η nosol 영역은 하한).
+  c2. C plan 은 scenario 별 privileged open-loop search 산물 (공격자 closed-
+      loop 반응 포함). 배치가능 controller 가 아니다. "upper bound" 어휘 금지
+      (retired) — "search-based achievability benchmark" 만.
+  c3. per-scenario C_N >= B_N 비보장 (유한예산 stochastic + lite proxy 선별).
+      Δp_CB 는 descriptive 전용.
+  c4. 방법 교훈: branch benchmark 의 sec/solve 정의 (elapsed/len(records)) 가
+      CEM 없는 싼 record 를 섞어 ~4x 과소추정 (T_proj 8.71h vs 실측 ~37h).
+      분기 결정 자체는 봉인 규칙대로 유효 (규칙·threshold 는 열람 전 고정,
+      과소추정은 양쪽 설계에 동일 방향). 차기 threshold 설계 시 per-CEM-solve
+      실측으로 교정할 것.
+  c5. 판정 = scenario 당 full-fidelity replay 1회 (결정론이므로 반복 불요).
+  c6. 세계 동결 유지: 결론은 M_3DOF sealed world 내부. 6DOF 는 docs/93 gate.
+
+6. claim 등록 후보 (문안 — 감사 수정 대상)
+--------------------------------------------------------------------------------
+  C047 (P1): Under the frozen R2b world, rule-based limiter interception
+    produced no positive shift of the net-capture rate (paired Δp_net −0.001,
+    CI95 [−0.004, +0.001]; 5/14 rows positive); at low η it substituted
+    kinetic kills for net captures, leaving neutralization unchanged.
+  C048 (C): A sealed-budget CEM search (384 lite rollouts/scenario, full-
+    fidelity replay judgment, NET_CAPTURE only) attained cooperative net-
+    capture plans on the same scenarios: Δp_CA_net +0.370 [+0.353, +0.388],
+    14/14 rows, both λ slices — with per-cell hard-kill ≤ 0.14.
+  C049 (3-way, 봉인 문장 그대로): cooperation-is-meaningless is rejected; the
+    rule-based controller failed to realize exploitable cooperative geometry —
+    motivates a learned or more expressive cooperative controller (NOT "MARL
+    will solve it").
+
+7. 감사 후 next (의존 순서; 브리프 승인 전 착수 금지 항목 없음 — 1 은 병행 가능)
+--------------------------------------------------------------------------------
+  1. viz-first (정책 의무): 대표 C 성공 궤적 최소 3판 (저 η 고이득 2 + 고 η
+     nosol 1) — judge artifact 여부 육안 확정, 그림을 본 브리프 r2 에 첨부.
+  2. 감사 통과 -> C047~C049 등록 + R2b freeze (사용자 트랙).
+  3. docs/89 hybrid MARL 동기 사슬 완성 지점 명시 (opportunity exists ->
+     simple rule cannot exploit -> learned controller; 'motivates' 어휘 준수).
+  4. 대기열 불변: q_dec 1/12 mini-map -> OAT screen -> prop1 -> 6DOF gate.
+================================================================================
