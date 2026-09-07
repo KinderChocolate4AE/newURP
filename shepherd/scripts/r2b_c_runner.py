@@ -106,7 +106,9 @@ def _proxy_c(r: MissionResult) -> tuple:
             -int(r.contact_steps))
 
 
-def solve_scenario(s: int, cells: list, sls: dict) -> dict:
+def search_plan(s: int, cells: list, sls: dict) -> tuple:
+    """봉인 CEM search — (meta, best_plan, best_score, rollouts). RNG 소비 순서는
+    캠페인 실행 코드(82b3145)와 동일 (viz 의 replay-parity gate 가 검증)."""
     sl, chi_c, eta_c, chi, eta, kw = scenario_kwargs(s, cells, sls)
     kw_lite = dict(kw, extra_cfg=dict(kw["extra_cfg"],
                                       **{"viability.n_samples": CLONE_N_SAMPLES}))
@@ -139,7 +141,12 @@ def solve_scenario(s: int, cells: list, sls: dict) -> dict:
             if elite:
                 e = np.stack(elite)
                 mean, std = e.mean(axis=0), e.std(axis=0) + 1e-3
+    return (sl, chi_c, eta_c, chi, eta, kw), best_plan, best_score, rollouts
 
+
+def solve_scenario(s: int, cells: list, sls: dict) -> dict:
+    (sl, chi_c, eta_c, chi, eta, kw), best_plan, best_score, rollouts = \
+        search_plan(s, cells, sls)
     stf = build_m4_env(SEED0, s, **kw)              # full-fidelity replay 판정
     r = _rollout(stf, s, best_plan)
     return {"s": s, "slice": sl, "cell": [chi_c, eta_c], "chi": chi, "eta": eta,

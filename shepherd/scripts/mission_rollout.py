@@ -310,7 +310,8 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
         if telemetry is not None:
             telemetry.append({"t": t,
                               "p_att": env._p(att).tolist(), "v_att": env._v(att).tolist(),
-                              "p_fin": env._p(fin).tolist(), "e_fin": env._e(fin).tolist()})
+                              "p_fin": env._p(fin).tolist(), "e_fin": env._e(fin).tolist(),
+                              "p_lims": [env._p(s).tolist() for s in lims]})
 
         # --- 접촉 집계: env L353 과 동일 술어 · 동일(이동 전) 상태 -------------
         for i, s in enumerate(lims):
