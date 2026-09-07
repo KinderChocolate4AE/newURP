@@ -1,10 +1,15 @@
 ================================================================================
-R2B 종결 감사 브리프 r2 (2026-09-07) — P1 null + C_POSITIVE, 3-way = B_null_C_pos
-(r1 -> r2: §8 viz-first 추가 — 본문 §0~§7 무수정)
+R2B 종결 감사 브리프 r3 (2026-09-07) — 외부 감사 반영판 = 등록 문안 정본
+(r2 -> r3: 외부 감사 판정 [Q1 PASS-w-edits / Q2 FAIL / Q3 PASS-w-edits /
+ Q4 C047·C048 PASS-w-edits·C049 FAIL] 전면 반영 — §1 봉인 지위 정정 (B0-
+ preregistered 아님), §3.4b plan-class 분해 추가, §5 caveat 개정 c1·c4 + 신설
+ c7~c9, §6 claim 3종 감사 문안으로 교체, §9 감사 기록. **B0 v2 의 B_null_C_pos
+ 봉인 문장의 mechanism 어휘 ('cooperation-is-meaningless is rejected' ·
+ 'exploitable cooperative geometry') 는 본 감사로 폐기** — §9.2, 선례 = v1
+ 'oracle upper bound' 어휘 폐기. r1 -> r2: §8 viz-first 추가.)
 전제: R2a 종결 (G3 = PARTIAL_3D) · B0 v2 cba024d7ee3d9f61 (arm-A-only STOP,
 2-layer estimand, C_N semantics) · branch seal f1bd9a459d97e693 (FULL_28x100
-lite C, T_proj<=14h 규칙으로 결과 열람 전 선택). 모든 판정 규칙은 결과 열람 전
-봉인 — 본 브리프는 봉인 규칙의 기계 적용 결과와 그 caveat 만 보고한다.
+lite C, T_proj<=14h 규칙으로 결과 열람 전 선택).
 ================================================================================
 
 0. 문서 지위 / 감사 질문
@@ -26,9 +31,17 @@ claim 등록 후보 = §6. 등록·freeze 는 감사 통과 후 사용자 트랙
   C 러너 56049b5(+82b3145 문구): §7.1 상수 재사용 (P64*I2*seed3 = 384 lite
     rollouts/scenario), s0=0 K_SEG4 plan, 구조 후보 {intercept, hold} 포함,
     solver RNG [20260906,seed,s] ≠ scenario CRN, smoke = phase1 3점 bit-parity
-    + env-재사용 결정론 + 비-S_C 1판 solve.
-  C 판독기 55c6bcc: **로컬 샤드 부재 상태에서 커밋** — C-positivity 규칙 =
-    P1 규칙의 기계 이식 (contrast 만 Δp_CA = p_C_net − p_A_net, 새 상수 0).
+    + env-재사용 결정론 + 비-S_C 1판 solve. proxy lexicographic 은 **pre-
+    execution locked (러너 커밋, 실행 전) — B0-preregistered 아님** [감사 NIT].
+  C 판독기 55c6bcc — 지위 [감사 Q1 정정]: **pre-outcome analysis rule,
+    mechanically transplanted from the preregistered P1 rule — B0-preregistered
+    아님.** C-positivity 규칙 = P1 규칙의 기계 이식 (contrast 만 Δp_CA =
+    p_C_net − p_A_net, 새 상수 0). timestamp 증거: seal 커밋 2026-09-07
+    21:40:52 KST < 로컬 shard 회수 21:44:43 (mtime) < 판독 21:46:20 — **회수
+    전 봉인은 기계 증명**; 단 서버측 라벨 생성은 봉인보다 선행하므로 outcome
+    blindness 는 기록된 채널 (ntfy = 건수만 · stdout = s/solve 만, 라벨 무전송)
+    에 근거한 워크플로 주장이다. 등록 표기: "pre-retrieval locked per recorded
+    workflow; not B0-preregistered".
   실행: 서버 8샤드, 전 샤드 code 82b3145, manifest 에 b0/branch/commit/solver_ns.
   판독: 59826d3 (c_readout.json). assert: 2800 records 유일성 · hash 일치 ·
     phase1 S_C 쌍 5600 · B verdict == P1_NOT_POSITIVE.
@@ -42,7 +55,9 @@ claim 등록 후보 = §6. 등록·freeze 는 감사 통과 후 사용자 트랙
 3. C arm (28셀 x 100, S_C = S_AB_v2[0:100]) — 봉인 판독 결과
 --------------------------------------------------------------------------------
   C rule: **14/14 행 양수 · slice {0:7/7, 2:7/7} · 전역 paired Δp_CA_net
-  +0.370, CI95 [+0.353, +0.388]** -> C_POSITIVE. 발화된 봉인 문장 (원문):
+  +0.370, CI95 [+0.353, +0.388]** -> C_POSITIVE.
+  발화된 B0 봉인 문장 (기록용 원문 — **mechanism 어휘는 §9.2 감사로 폐기,
+  등록 해석문은 §6 C049 로 대체**):
     "cooperation-is-meaningless is rejected; the rule-based controller failed
      to realize exploitable cooperative geometry — 'motivates a learned or
      more expressive cooperative controller' (NOT 'MARL will solve it')"
@@ -55,7 +70,18 @@ claim 등록 후보 = §6. 등록·freeze 는 감사 통과 후 사용자 트랙
       고 η 최소 (+0.10~+0.24 @ η3.9) + lite_no_solution 9.7% 전역, 고 η 집중
       (최대 0.40) — "at the tested lite search budget" 한정어의 실구속 영역.
     - best plan: accels 70.1% / intercept 29.2% / hold 0.7%. nosol 271판 중
-      13판 replay C_N=1 (lite/full 역전, 판정층 = replay 라벨이므로 무해).
+      13판 replay C_N=1 — 감사 판정: final C_N classification is valid by
+      contract; proxy misses remain uninformative about infeasibility (proxy
+      false-negative evidence 이며 positive bias 아님; "무해" 일반화 금지).
+    - **plan-class 분해 (감사 요청 반영, post-audit descriptive; 2026-09-07)**:
+        class      n     p_C_N  p_A_N  in-class dCA  전역 기여
+        accels     1962  0.864  0.340  +0.524        **+0.3675 (99.2%)**
+        intercept   818  0.930  0.921  +0.010        +0.0029 (0.8%)
+        hold         20  0.450  0.450  +0.000        +0.0000
+      intercept-best 818판에서 C_N == B_N 일치 818/818 (1.000) — C 는 그
+      판들에서 B 를 정확히 재생. **C_POSITIVE 는 전적으로 CEM accels plan 이
+      구동** (감사 §8d 해소). 단 이 분해는 plan class 단위이며 multi-limiter
+      상호의존성 (협력 필요성) 은 여전히 미확립 — c8·§7-5 참조.
 
 4. 정합성
 --------------------------------------------------------------------------------
@@ -65,47 +91,81 @@ claim 등록 후보 = §6. 등록·freeze 는 감사 통과 후 사용자 트랙
     kill 로 바꿔버린 바로 그 지대에 net-capture plan 이 실재.
   - λ slice 정성 동일 (slice2 baseline 높고 Δ 소폭 작음) — 3-D 좌표 소비 유지.
 
-5. 정직 caveat (등록 문안 후보 — Q3 감사 대상)
+5. 정직 caveat (감사 반영 확정 문안 — 등록 정본)
 --------------------------------------------------------------------------------
-  c1. p_C_hat = 봉인 search 절차의 attainment rate. 물리적 achievability 확률
-      아님 (미발견 feasible plan 존재 가능 — 특히 고 η nosol 영역은 하한).
+  c1. p_C_hat = 봉인 search 절차의 attainment rate — 그 자체로는 정확한
+      estimand. 물리적 achievability 확률 아님: search misses (nosol 포함) 는
+      infeasibility 로 해석 불가; observed replay successes 는 existence
+      witness 이므로 관측 성공률은 search-class feasibility 의 witness-based
+      lower bound 일 뿐이다 [감사 c1 정정 반영].
   c2. C plan 은 scenario 별 privileged open-loop search 산물 (공격자 closed-
       loop 반응 포함). 배치가능 controller 가 아니다. "upper bound" 어휘 금지
-      (retired) — "search-based achievability benchmark" 만.
+      (retired) — "search-based attainment/achievability benchmark" 만.
   c3. per-scenario C_N >= B_N 비보장 (유한예산 stochastic + lite proxy 선별).
       Δp_CB 는 descriptive 전용.
-  c4. 방법 교훈: branch benchmark 의 sec/solve 정의 (elapsed/len(records)) 가
-      CEM 없는 싼 record 를 섞어 ~4x 과소추정 (T_proj 8.71h vs 실측 ~37h).
-      분기 결정 자체는 봉인 규칙대로 유효 (규칙·threshold 는 열람 전 고정,
-      과소추정은 양쪽 설계에 동일 방향). 차기 threshold 설계 시 per-CEM-solve
-      실측으로 교정할 것.
+  c4. [감사 문안] The FULL branch was selected in procedural compliance with
+      the sealed branch rule, but the runtime estimator was mis-specified
+      (elapsed/len(records) 가 CEM 없는 싼 record 를 희석) and underestimated
+      realized cost by ~4x (8.71 h -> ~37 h); **therefore the intended 14-h
+      resource gate was not actually satisfied.** This affected resource
+      accounting, not the already completed outcome comparison. 차기 threshold
+      는 per-CEM-solve 실측으로 교정.
   c5. 판정 = scenario 당 full-fidelity replay 1회 (결정론이므로 반복 불요).
   c6. 세계 동결 유지: 결론은 M_3DOF sealed world 내부. 6DOF 는 docs/93 gate.
+  c7. [감사 BLOCKER 1] C arm does not estimate a shifted chi50 or a new
+      capture boundary. It measures search-pipeline NET_CAPTURE attainment on
+      the pre-specified boundary-local S_C scenarios. +0.370 을 "경계를 0.37
+      밀었다" 로 읽는 것 금지.
+  c8. [감사 BLOCKER 2] The C-vs-A gain is not decomposed into single-limiter,
+      independent multi-limiter, or genuinely cooperative components;
+      C_POSITIVE establishes exploitable limiter-control opportunity under
+      the search procedure, **not necessity of cooperation.** (plan-class
+      분해 §3 은 class 단위일 뿐 상호의존성 증거가 아니다.)
+  c9. [감사 BLOCKER 3] The C-positive numerical rule was not part of B0; it
+      was locked before recorded C-outcome retrieval by mechanical
+      transplantation of the P1 rule. It must not be described as
+      B0-preregistered. (동일 지위: proxy = pre-execution locked.)
 
-6. claim 등록 후보 (문안 — 감사 수정 대상)
+6. claim 등록 정본 (감사 확정 문안 — 이대로 등록)
 --------------------------------------------------------------------------------
-  C047 (P1): Under the frozen R2b world, rule-based limiter interception
-    produced no positive shift of the net-capture rate (paired Δp_net −0.001,
-    CI95 [−0.004, +0.001]; 5/14 rows positive); at low η it substituted
-    kinetic kills for net captures, leaving neutralization unchanged.
-  C048 (C): A sealed-budget CEM search (384 lite rollouts/scenario, full-
-    fidelity replay judgment, NET_CAPTURE only) attained cooperative net-
-    capture plans on the same scenarios: Δp_CA_net +0.370 [+0.353, +0.388],
-    14/14 rows, both λ slices — with per-cell hard-kill ≤ 0.14.
-  C049 (3-way, 봉인 문장 그대로): cooperation-is-meaningless is rejected; the
-    rule-based controller failed to realize exploitable cooperative geometry —
-    motivates a learned or more expressive cooperative controller (NOT "MARL
-    will solve it").
+  C047 (P1) [감사 PASS-w-edits 반영]: Under the frozen R2b world, rule-based
+    limiter interception did not meet the pre-specified P1 positive-effect
+    criterion for NET_CAPTURE (paired global Δp_net = −0.001, 95% CI
+    [−0.004, +0.001]; 5/14 rows positive). In the low-η cells, decreases in
+    NET_CAPTURE were accompanied by approximately offsetting increases in
+    HARD_KILL, while total-neutralization change was near zero. No Δchi50
+    boundary shift was estimated.
+  C048 (C) [감사 PASS-w-edits 반영]: On the pre-specified paired S_C scenario
+    IDs, the sealed-budget CEM limiter-plan search pipeline (384 lite
+    rollouts/scenario; one deterministic full-fidelity replay for final
+    judgment; NET_CAPTURE-only primary success) produced a NET_CAPTURE
+    attainment increase over hold of Δp_CA_net = +0.370, 95% CI
+    [+0.353, +0.388], with positive contrasts in 14/14 rows and both λ
+    slices. Per-cell HARD_KILL under C was ≤ 0.14. This is a search-based
+    attainment benchmark, not a deployable policy or an estimated Δchi50.
+  C049 (해석) [감사 FAIL -> 교체 문안]: The R2b P1 null result does not
+    support the stronger interpretation that limiter control offers no
+    exploitable opportunity in the sealed M_3DOF world: the rule-based
+    intercept arm failed the pre-specified positive-effect criterion, while
+    the privileged sealed-budget limiter-plan search achieved substantially
+    higher paired NET_CAPTURE attainment. The result motivates evaluation of
+    more expressive deployable controllers, including learned cooperative
+    controllers, but does not establish that cooperation itself is necessary,
+    that the observed gain is a cooperative-geometry mechanism, or that MARL
+    will recover the search benchmark.
 
-7. 감사 후 next (의존 순서; 브리프 승인 전 착수 금지 항목 없음 — 1 은 병행 가능)
+7. 감사 후 next
 --------------------------------------------------------------------------------
-  1. viz-first (정책 의무): 대표 C 성공 궤적 최소 3판 (저 η 고이득 2 + 고 η
-     nosol 1) — judge artifact 여부 육안 확정, 그림을 본 브리프 r2 에 첨부.
-     [r2 에서 완료 -> §8]
-  2. 감사 통과 -> C047~C049 등록 + R2b freeze (사용자 트랙).
-  3. docs/89 hybrid MARL 동기 사슬 완성 지점 명시 (opportunity exists ->
-     simple rule cannot exploit -> learned controller; 'motivates' 어휘 준수).
+  1. viz-first [r2 에서 완료 -> §8].
+  2. C047~C049 (§6 감사 확정 문안) 등록 + R2b freeze (사용자 트랙).
+  3. docs/89 hybrid MARL 동기 문장은 C049 교체 문안으로 갱신 — "opportunity
+     exists" 는 "limiter-control opportunity" 로, "cooperative geometry" 사용
+     금지.
   4. 대기열 불변: q_dec 1/12 mini-map -> OAT screen -> prop1 -> 6DOF gate.
+  5. [신규 deferred, 감사 유래] C-mechanism decomposition 실험 — single-
+     limiter / independent multi-limiter / coordinated plan 의 necessity
+     ablation. 협력 어휘를 되살리려면 이것이 선행 조건. docs/89 lane 편입
+     여부는 사용자 결정.
 
 8. viz-first 결과 (r2 추가) — figures/r2b_c_viz_trajectories.png
 --------------------------------------------------------------------------------
@@ -127,4 +187,25 @@ claim 등록 후보 = §6. 등록·freeze 는 감사 통과 후 사용자 트랙
   배치(각도 틈)를 재구성해 회피 선택을 좁히는 패턴에 가깝다. 포획은 A 대비
   더 이르고 asset 에서 더 먼 지점에서 발생. B(intercept rule) 가 이 패턴 계열을
   표현하지 못함이 P1 null 의 기전 후보와 정합 (§3 η gradient 와도 일관).
+  [r3 주: 이 관찰은 c8 아래에 있다 — "협력 기하" 기전 주장으로 승격 금지.]
+
+9. 외부 감사 기록 (r3, 2026-09-07)
+--------------------------------------------------------------------------------
+  9.1 판정: Q1 봉인사슬 PASS-with-edits (C rule = pre-outcome transplant 로
+      지위 정정, blindness 는 recorded-workflow 주장으로 강등, c4 재문안) ·
+      Q2 3-way 봉인 문장 FAIL (mechanism 어휘 과잉) · Q3 caveat PASS-with-
+      edits (BLOCKER 4건 -> c1·c4 개정 + c7~c9 신설) · Q4 C047/C048
+      PASS-with-edits·C049 FAIL (교체 문안 §6).
+  9.2 **봉인 문장 어휘 폐기 (append-only amendment)**: B0 v2 readout_3cases
+      의 B_null_C_pos 문장 중 "cooperation-is-meaningless is rejected" ·
+      "exploitable cooperative geometry" 는 C arm 의 구성 (plan-class 조작,
+      협력 필요성 미분해) 이 지지할 수 있는 수준을 넘는 mechanism 어휘로
+      판정되어 폐기. 등록 해석문 = §6 C049. B0 원문은 역사 기록으로 보존
+      (수정 금지). 선례: B0 v1 "oracle upper bound" 어휘 폐기.
+  9.3 감사 대응 신규 증거: plan-class 분해 (§3 — 이득의 99.2% 가 CEM accels
+      plan; intercept-best 는 B 완전 재생 818/818) · seal timestamp 사슬
+      (§1 — 회수 4분 전 봉인 기계 증명, 서버 생성은 선행).
+  9.4 기각된 자체 주장: "어떤 합리적 규칙에도 강건" (미검증 — 임의 규칙
+      변형은 시험 안 함) · nosol 역전 "방향성 무해" 일반화 (proxy false-
+      negative 증거로만 기록).
 ================================================================================
