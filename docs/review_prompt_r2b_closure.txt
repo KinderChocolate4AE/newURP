@@ -1,5 +1,6 @@
 ================================================================================
-R2B 종결 감사 브리프 r1 (2026-09-07) — P1 null + C_POSITIVE, 3-way = B_null_C_pos
+R2B 종결 감사 브리프 r2 (2026-09-07) — P1 null + C_POSITIVE, 3-way = B_null_C_pos
+(r1 -> r2: §8 viz-first 추가 — 본문 §0~§7 무수정)
 전제: R2a 종결 (G3 = PARTIAL_3D) · B0 v2 cba024d7ee3d9f61 (arm-A-only STOP,
 2-layer estimand, C_N semantics) · branch seal f1bd9a459d97e693 (FULL_28x100
 lite C, T_proj<=14h 규칙으로 결과 열람 전 선택). 모든 판정 규칙은 결과 열람 전
@@ -100,8 +101,30 @@ claim 등록 후보 = §6. 등록·freeze 는 감사 통과 후 사용자 트랙
 --------------------------------------------------------------------------------
   1. viz-first (정책 의무): 대표 C 성공 궤적 최소 3판 (저 η 고이득 2 + 고 η
      nosol 1) — judge artifact 여부 육안 확정, 그림을 본 브리프 r2 에 첨부.
+     [r2 에서 완료 -> §8]
   2. 감사 통과 -> C047~C049 등록 + R2b freeze (사용자 트랙).
   3. docs/89 hybrid MARL 동기 사슬 완성 지점 명시 (opportunity exists ->
      simple rule cannot exploit -> learned controller; 'motivates' 어휘 준수).
   4. 대기열 불변: q_dec 1/12 mini-map -> OAT screen -> prop1 -> 6DOF gate.
+
+8. viz-first 결과 (r2 추가) — figures/r2b_c_viz_trajectories.png
+--------------------------------------------------------------------------------
+  절차: 3판 (저 η A->C flip 2 + 고 η nosol 1), plan 은 봉인 search 결정론
+  재실행으로 재현, **replay-parity gate** (재현 plan 의 full replay (label,
+  fire_step, steps) == c_arm shard 기록; A(hold) == phase1_v2 기록) 통과 후에만
+  렌더 — 3/3 통과 (서버-로컬 bit-exact 재현 확인). 스크립트 r2b_c_viz.py;
+  telemetry 는 run_episode 기존 훅에 limiter 위치 additive 추가 (기본 None =
+  bit-identical, tests/test_r2a.py 28 green 유지).
+  육안 판정: **PASS — judge artifact 아님.**
+    - s=2001 (0, .60, 2.4): A PENETRATED(34) -> C NET_CAPTURE(25), contact=0,
+      포획 x≈7 (회랑 중간). fire step 동일(16) — 이득은 발사 후 회피 기하 변화.
+    - s=2800 (2, .56, 2.4): A 는 target 주위 대회피(59 steps) 후 침투 -> C 는
+      limiter 산개 배치 후 NET_CAPTURE(30), contact=0, 포획 x≈5.
+    - s=10002 (0, .54, 3.9, nosol): best plan = policy(hold) -> A 와 동일 궤적
+      동일 PENETRATED — 고 η search 한계의 정직한 노출.
+  정성 관찰 (n=2, qualitative — claim 아님): 발견된 plan 은 추격형이 아니다.
+  일부 limiter 는 attacker 반대 방향으로 이동 — attacker 가 감지하는 limiter
+  배치(각도 틈)를 재구성해 회피 선택을 좁히는 패턴에 가깝다. 포획은 A 대비
+  더 이르고 asset 에서 더 먼 지점에서 발생. B(intercept rule) 가 이 패턴 계열을
+  표현하지 못함이 P1 null 의 기전 후보와 정합 (§3 η gradient 와도 일관).
 ================================================================================

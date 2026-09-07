@@ -44,10 +44,13 @@ science 커밋 `59826d3` (샤드 9파일 + c_readout.json). 판독 규칙은 회
 
 ## 다음 수 (의존 순서)
 
-1. **★viz-first (정책 의무)**: 대표 C 성공 궤적 시각화 — 저 η 고이득 셀
-   (0.6,2.4)/(0.56,2.4) + 고 η nosol 셀 (0.54,3.9) 최소 3판. C plan 이
-   물리적으로 말이 되는 포획인지 (judge artifact 아님) 눈으로 확정한 뒤에만
-   심층 수치 슬라이싱. → 종결 감사 브리프에 궤적 그림 첨부.
+1. ~~★viz-first~~ **완료 (같은 날, PASS)**: `figures/r2b_c_viz_trajectories.png`
+   + `r2b_c_viz.py`. 3판 전부 replay-parity gate 통과 (봉인 search 결정론
+   재실행 = 서버 기록 bit-exact — 플랫폼 FP 발산 없음). 육안: C 성공 2판은
+   접촉 0·회랑 중간 포획·정상 fire→capture 시퀀스 (judge artifact 아님);
+   nosol 판은 best=hold 로 A 와 동일 (고 η 한계 정직 노출). 정성 (n=2):
+   발견 plan 은 추격형 아님 — limiter 배치 재구성으로 회피 선택을 좁히는
+   패턴, B rule 이 표현 못 하는 계열. 브리프 r2 §8 에 수록.
 2. R2b 종결 감사 브리프 (txt) 발송 → 감사 통과 시 claim 등록 (C047+?) +
    campaign freeze.
 3. docs/89 hybrid MARL plan 의 동기 사슬이 이것으로 완성 — "physics says
