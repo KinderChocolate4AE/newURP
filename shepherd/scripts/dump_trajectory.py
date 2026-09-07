@@ -72,18 +72,27 @@ def _build_t1(ep: int):
 
 def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
                  t1: bool = False, limiter_mode: str = "hold",
-                 commit: bool = False, lead=None, lead_delta=None) -> dict:
+                 commit: bool = False, lead=None, lead_delta=None,
+                 builder=None, reset_ep=None, plan=None) -> dict:
     # lead_delta: E4-1c uniform lead (docs/83 §27). 네 limiter 에 동일 delta.
     #   frozen strong pursuit baseline = 0.125 s. limiter_mode="intercept" 에서만 의미.
     # lead: 리드타임 진단(docs/83 §17) 재생 -- lead_time_diag._build 와 동일 세계
-    if lead is not None:
+    # builder/reset_ep/plan (2026-09-07, R2b C-arm 재생): builder = ep→(env,scn,lay)
+    #   외부 세계 주입 (R2b scenario_kwargs 경유), reset_ep = _Driver reset seed 용
+    #   ep (R2b 는 SEED0 7000 이 ep 에 접혀 있어 0+reset_ep 로 맞춘다), plan =
+    #   (n_lim, K_SEG, 3) open-loop 가속 — 스텝별 limiter_override 로 주입 (seg
+    #   경계 = lay.episode_len 기준, r2b_c_runner._plan_policy 와 동일 산식).
+    #   기본 None = 기존 경로와 bit-identical.
+    if builder is not None:
+        env, scn, lay = builder(ep)
+    elif lead is not None:
         from shepherd.scripts.lead_time_diag import _build as _build_lead
         st = _build_lead(ep, float(lead))
         env, scn, lay = st.env, st.scn, st.lay
     else:
         env, scn, lay = (_build_t1(ep) if t1 else _build_v3(ep) if v3
                          else _build_v2(ep) if v2 else _build(ep))
-    d = _Driver(env, scn, lay, ep)
+    d = _Driver(env, scn, lay, ep if reset_ep is None else reset_ep)
     se = d.se
     inner = se.inner
 
@@ -133,10 +142,18 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
     hard_kill_step = None          # 하드킬이 성립한 스텝 (2026-08-13)
     terminal_step = None           # 에피소드가 실제로 끝난 스텝
     n_events = 0
-    for t in range(int(lay.episode_len)):
+    from shepherd.scripts.recoverability_probe import K_SEG as _K_SEG
+    horizon = int(lay.episode_len)
+    for t in range(horizon):
         lims, fin, att = env._states()
         prev_state = inner.fsm.state.value
-        fi = d.step(limiter_mode=limiter_mode, baseline_commit=commit,
+        override = None
+        if plan is not None:
+            seg = min(t * _K_SEG // max(horizon, 1), _K_SEG - 1)
+            override = {lid: np.array([*plan[i, seg], 0.0], np.float32)
+                        for i, lid in enumerate(env.limiter_ids)}
+        fi = d.step(limiter_override=override,
+                    limiter_mode=limiter_mode, baseline_commit=commit,
                     limiter_kw=(None if lead_delta is None else
                                 {"lead_deltas": [float(lead_delta)] * len(env.limiter_ids)}))
         lims2, fin2, att2 = env._states()
