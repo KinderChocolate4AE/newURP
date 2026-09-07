@@ -24,10 +24,12 @@
 
 ## 감사 대응 신규 증거 (이 세션 계산)
 
-- **plan-class 분해**: Δp_CA +0.370 중 **+0.3675 (99.2%) 가 CEM accels plan**
+- **plan-class 분해**: Δp_CA +0.370 중 +0.3675 (99.2%) 가 accels-best class
   (1962판, in-class +0.524); intercept-best 818판은 **C_N == B_N 818/818
-  완전 재생** (기여 0.8%); hold-best 20판 기여 0. → C_POSITIVE 는 전적으로
-  search plan 구동 (감사 §8d 해소). 단 협력 필요성 증거는 아님 (c8).
+  완전 재생** (기여 0.8%); hold-best 20판 기여 0. → 해석 (2차 감사 톤):
+  **gain 은 hold/intercept 재생만으로 설명되지 않고 accels-best class 에
+  집중** — class 별 Σ(C_N−A_N) descriptive attribution 이지 기전 증거 아님
+  (감사 §8d 해소, 협력 필요성 미확립 c8).
 - **기각된 자체 주장**: "어떤 합리적 규칙에도 강건" · nosol 역전 "무해" 일반화.
 
 ## 가장 안전한 최종 결론 (감사 문장)
@@ -37,7 +39,22 @@
 > ablation (single / independent / coordinated) 이 선행 조건** (브리프 §7-5
 > deferred, docs/89 편입 여부 사용자 결정).
 
+## 2차 감사 (같은 날) — 하향 4건 + 경로 확정 → 브리프 r4
+
+- 하향: "규칙 무능"→"해당 rule 이 exploit 못함" · "협력 효과"→**limiter-control
+  opportunity** (사슬 중간 칸 명칭) · attribution 톤다운 · η gradient 는
+  "기회의 지도" 아니라 tested S_C 위 descriptive gradient.
+- **최종 서사 정본** = 브리프 r4 §10.1 ("R2b separated controller failure
+  from opportunity absence...").
+- **경로 확정: R2b freeze → B0 v3 → MARL (docs/89).** necessity ablation 은
+  조건부 카드 (논문이 cooperative shaping 을 title/claim 급으로 원할 때만).
+- **전방 지표**: search-benchmark recovery R_rec = (p_learned−p_A)/(p_C−p_A),
+  같은 S_C·world·semantics 한정, R_rec>1 가능 ("upper bound 회수율" 명명 금지).
+  B0 v3 에서 정식 봉인.
+- 저비용 진단 카드 (blocker 아님): 성공 plan counterfactual replay (한 기씩
+  hold/제거) — plan 미저장이라 scenario 당 re-search ~6 min, 소표본만 유효.
+
 ## 사용자 트랙
 
-- C047~C049 등록은 **브리프 r3 §6 문안 그대로** + R2b freeze.
+- C047~C049 등록은 **브리프 r4 §6 문안 그대로** + R2b freeze.
 - docs/89 의 동기 문장에서 "cooperative geometry" 계열 어휘 제거 필요 (§7-3).

@@ -1,5 +1,8 @@
 ================================================================================
-R2B 종결 감사 브리프 r3 (2026-09-07) — 외부 감사 반영판 = 등록 문안 정본
+R2B 종결 감사 브리프 r4 (2026-09-07) — 외부 감사 반영판 = 등록 문안 정본
+(r3 -> r4: 2차 감사 하향 4건 반영 — §3.4b attribution 서술 톤다운 ("전적으로
+ 구동" 삭제), §10 신설: 최종 서사 정본 + R_recovery 전방 지표 + 어휘 규율 +
+ plan-level dependence 진단 카드. 수치·판정 무변경.)
 (r2 -> r3: 외부 감사 판정 [Q1 PASS-w-edits / Q2 FAIL / Q3 PASS-w-edits /
  Q4 C047·C048 PASS-w-edits·C049 FAIL] 전면 반영 — §1 봉인 지위 정정 (B0-
  preregistered 아님), §3.4b plan-class 분해 추가, §5 caveat 개정 c1·c4 + 신설
@@ -79,9 +82,11 @@ claim 등록 후보 = §6. 등록·freeze 는 감사 통과 후 사용자 트랙
         intercept   818  0.930  0.921  +0.010        +0.0029 (0.8%)
         hold         20  0.450  0.450  +0.000        +0.0000
       intercept-best 818판에서 C_N == B_N 일치 818/818 (1.000) — C 는 그
-      판들에서 B 를 정확히 재생. **C_POSITIVE 는 전적으로 CEM accels plan 이
-      구동** (감사 §8d 해소). 단 이 분해는 plan class 단위이며 multi-limiter
-      상호의존성 (협력 필요성) 은 여전히 미확립 — c8·§7-5 참조.
+      판들에서 B 를 정확히 재생. 해석 (r4 톤): **C 의 gain 은 hold/intercept
+      재생만으로 설명되지 않으며, gain 기여는 accels-best class 에 집중**
+      (class 별 Σ(C_N−A_N) descriptive attribution — 감사 §8d 해소). 이
+      분해는 selected-plan class 단위이며 기전 증거가 아니다: multi-limiter
+      상호의존성 (협력 필요성) 미확립 — c8·§7-5 참조.
 
 4. 정합성
 --------------------------------------------------------------------------------
@@ -208,4 +213,38 @@ claim 등록 후보 = §6. 등록·freeze 는 감사 통과 후 사용자 트랙
   9.4 기각된 자체 주장: "어떤 합리적 규칙에도 강건" (미검증 — 임의 규칙
       변형은 시험 안 함) · nosol 역전 "방향성 무해" 일반화 (proxy false-
       negative 증거로만 기록).
+  9.5 2차 감사 하향 4건 (r4 반영): (i) "규칙이 무능" -> "해당 rule 이 exploit
+      하지 못함" (B 는 rule class 하나, C 는 privileged search — 일반 무능
+      주장 불가); (ii) 사슬 중간 칸 명칭 "협력 효과" -> **limiter-control
+      opportunity**; (iii) attribution 서술 톤다운 (§3.4b); (iv) η gradient
+      는 "기회의 지도" 아님 — "tested S_C cells 에서의 descriptive gradient"
+      (2 λ slice · fixed S_C · 고 η 는 nosol 동반 상승).
+
+10. 최종 서사 정본 + 전방 지표 (r4)
+--------------------------------------------------------------------------------
+  10.1 R2b 최종 서사 (등록·논문용 정본):
+    "R2b separated controller failure from opportunity absence. Under the
+     sealed M_3DOF world, the rule-based intercept arm failed the
+     preregistered positive-effect criterion for clean net capture. In
+     contrast, a privileged sealed-budget limiter-plan search achieved
+     substantially higher NET_CAPTURE attainment on the paired boundary-local
+     scenarios. Therefore, the rule-based null cannot be interpreted as
+     evidence that limiter control offers no exploitable non-destructive
+     capture opportunity. The result motivates testing whether a deployable
+     closed-loop controller can recover part of this search-based gain; it
+     does not establish that multi-agent cooperation is necessary, that
+     chi50 shifted, or that MARL will recover the benchmark."
+  10.2 사슬 명칭 정본: R2a boundary coordinates -> **R2b limiter-control
+     opportunity** -> deployable learned controller. ("협력 효과" 명칭 금지.)
+  10.3 전방 지표 (docs/89 학습 평가용 — B0 v3 에서 정식 봉인할 것):
+     **search-benchmark recovery**  R_rec = (p_learned − p_A) / (p_C − p_A).
+     scope lock: 같은 S_C · 같은 world · 같은 success semantics (NET_CAPTURE
+     only) 에서만 정의. p_C 는 upper bound 가 아니므로 R_rec > 1 가능 —
+     "fraction of upper bound recovered" 명명 금지. 0 = hold 수준 / 1 = C
+     search attainment 동률.
+  10.4 조건부 진단 카드 (blocker 아님): plan-level multi-limiter dependence —
+     성공 C plan 의 counterfactual replay (limiter i 만 plan, 나머지 hold ×4
+     + 한 기씩 제거). reoptimization 없으므로 necessity 증명 아님 (descriptive
+     dependence 만). 비용 정직 표기: plan 은 미저장이라 scenario 당 결정론
+     re-search ~6 min 필요 — "비용 0" 아님, 소표본 (수~수십 판) 에서만 싸다.
 ================================================================================
