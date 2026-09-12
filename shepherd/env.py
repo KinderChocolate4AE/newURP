@@ -304,8 +304,11 @@ class ShapingParallelEnv(ParallelEnv):
         prev_wasted = self.fsm.wasted_fire
         # PHYSICAL capture (judge-independent): the ACTUAL attacker is inside the
         # net sphere (frozen net_center, net_radius) at deploy resolution. We freeze
-        # it at the DEPLOYING->LOCKED transition and resolve it at lock end. v_shot
-        # is the SURROGATE the limiters move; capture is the real outcome.
+        # it at the FIRE event (`if fire_event:` below) and resolve it at lock end.
+        # v_shot is the SURROGATE the limiters move; capture is the real outcome.
+        # [2026-09-13 comment-only hygiene, B0 v3 §2-2 F1] the previous wording said
+        # "frozen at the DEPLOYING->LOCKED transition", which never matched the code.
+        # No executable code or runtime semantics changed (docs/09 freeze exception).
         self.fsm = step_fsm(self.fsm, fire_cmd, vfull.v_shot_soft,
                             finisher_spec=self.sc.finisher, fire_gate=self.sc.fire_gate,
                             dt=self.dt, commit_meta=commit_meta,

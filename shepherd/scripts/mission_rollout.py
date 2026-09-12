@@ -259,6 +259,27 @@ def scripted_role_actions(env, scn, lay, *, roles: Sequence[str] = ROLES,
     return acts
 
 
+def terminal_label(fi: dict) -> str:
+    """종료 tick 의 outcome 라벨 — **same-tick precedence 의 단일 정의원** (B0 v3 §2-12).
+
+    Same-tick capture-penetration precedence (B0 v3 봉인 문안): NET_PENDING 중
+    **해소 tick 이전**의 침투는 PENETRATED 로 종료시킨다. 지연 capture 가 침투
+    술어가 참이 되는 **같은 이산 tick** 에 해소되면 **CAPTURE 가 우선**한다.
+    이것은 **sealed discrete-time tie rule** 이며 연속시간 물리 순서를 주장하지
+    않는다. hard_kill 은 사슬 최상단 (NET_PENDING 중 contact 이면 H_illegal).
+
+    호출부는 `run_episode` 와 `recoverability_probe._Driver` 둘뿐이며 **여기서만**
+    정의한다 (사슬 복제 금지 — 두 곳이 갈리면 라벨이 갈린다).
+    """
+    if fi.get("hard_kill"):
+        return "HARD_KILL"                 # M4: 파괴적 성공 (docs/29 §4)
+    if fi.get("captured"):
+        return "CAPTURED"                  # ④ tie: capture 가 침투를 이긴다
+    if fi.get("penetrated"):
+        return "PENETRATED"
+    return "SPENT_FAIL"                    # env L356: SPENT and not captured
+
+
 def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
                 fire_mode: str = "clean", max_steps: Optional[int] = None,
                 attacker_name: str = "", policy=None,
@@ -360,14 +381,7 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
         terminated = bool(term[env.finisher_id]) if term else False
         truncated = bool(trunc[env.finisher_id]) if trunc else False
         if terminated:
-            if fi.get("hard_kill"):
-                outcome = "HARD_KILL"          # M4: 파괴적 성공 (docs/29 §4)
-            elif fi.get("captured"):
-                outcome = "CAPTURED"
-            elif fi.get("penetrated"):
-                outcome = "PENETRATED"
-            else:
-                outcome = "SPENT_FAIL"       # env L349: SPENT and not captured
+            outcome = terminal_label(fi)
             break
         if truncated:
             outcome = "TRUNCATED"

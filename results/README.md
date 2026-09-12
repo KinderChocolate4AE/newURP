@@ -122,7 +122,7 @@ R4 권위값(`_Driver.d_min`)은 같은 driver 위에 있으면서 덤프되지 
 2. scale_v2/v3 (300 m 대, docs/59~69) 는 **MARL/train branch 의 세계**다. v0 본문과
    무관하며 (docs/84 §2 뺌 항목), branch 재개 시의 동결 계약이다.
 
-상태 어휘 4종:
+상태 어휘 5종:
 
 - **RETIRED** — 연구 노선 자체가 폐기됨. 수치 인용 금지, 방법론 이력으로만.
 - **LEGACY-REGIME** — 결론은 그 세계에서 참이나, 인용 시 **"legacy small-scale regime 한정"**
@@ -130,6 +130,19 @@ R4 권위값(`_Driver.d_min`)은 같은 driver 위에 있으면서 덤프되지 
 - **NEXT-BRANCH** — v0 밖. MARL/train branch (docs/84 §7) 재개 시의 정본 계약·기준선.
   성능 결과는 docs/74 Phase-II exploratory 규율 적용 (confirmatory 사용 금지).
 - **CANONICAL** — v0 line (Phase III T0/T1). 위 R4/뷰어 계약 절이 우선한다.
+- **R2-CAMPAIGN** *(2026-09-13 신설)* — R2a/R2b 사전등록 confirmatory 캠페인 라인
+  (registry C044~C049, 봉인 = `artifacts/r2a/lattice_*`·`artifacts/r2b/b0_world_contract.json`).
+  본체 산출물은 `artifacts/` 에 있고 `results/` 에는 **파생 시각화만** 놓인다.
+  NEXT-BRANCH 의 exploratory 규율 대상이 **아니다**.
+  인용 시 legacy 24 m 회랑 한정 caveat 는 캠페인 봉인 문서를 따른다.
+  - **세탁 방지 (필수)**: `R2-CAMPAIGN` 은 **R2 계열 캠페인의 lineage 분류일 뿐이며, 그
+    artifact 가 자동으로 confirmatory / canonical evidence 임을 뜻하지 않는다.** 증거
+    등급은 언제나 해당 캠페인의 봉인 문서와 registry 항목이 정한다 — lineage category 를
+    evidence grade 로 승격해 읽는 것은 금지.
+  - 왜 기존 4종에 못 넣는가: RETIRED/LEGACY-REGIME 은 거짓이고, NEXT-BRANCH 는
+    "confirmatory 사용 금지" 를 달고 있어 C047~C049 의 지위와 충돌하며, CANONICAL 은
+    정의가 v0 (Phase III T0/T1) 라인이다. 이 표가 R2 캠페인보다 먼저 쓰였기 때문에
+    생긴 빈칸이다.
 
 | 패턴 | 캠페인 | 상태 |
 |---|---|---|
@@ -144,6 +157,7 @@ R4 권위값(`_Driver.d_min`)은 같은 driver 위에 있으면서 덤프되지 
 | `threat_v3_* · v6_*` | 위협 v3 게이트 + TRAIN 분포 동결 계약 (docs/60~69 FINAL FREEZE) | NEXT-BRANCH |
 | `m4_v3_train* · iid_abl/ · viz_ls* · viz_arc · viz_hold · arc_tuning_* · shaping_ceiling*` | MARL LS/SS 학습·ablation (docs/69~72) | NEXT-BRANCH |
 | `phase3/ · curve_*_reactive* · e1* · e2b_* · e3_* · e4* · eta_sensitivity · analytic_bands · lead* · viz_traj_t1_hk* · viz_e4c_* · viz_lead_compare` | Phase III T0/T1 feasibility (v0 정본) | CANONICAL |
+| `viz_r2b_*` | R2b C-arm 궤적 뷰어 재생 덤프 (cd74b63, 09-07) — 판독은 `artifacts/r2b/c_readout.json` 이 정본이고 이 파일들은 육안 검증용 파생물 | R2-CAMPAIGN |
 
 가드: `tests/test_results_lineage.py` 가 results/ 최상위 전 항목이 위 표에 분류됨을 강제한다.
 새 아티팩트를 만들면 표에 행(또는 패턴)을 추가해야 GREEN 이다.

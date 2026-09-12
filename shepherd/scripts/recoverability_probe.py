@@ -28,7 +28,8 @@ from shepherd.agents.attacker_ladder import AttackerSpec
 from shepherd.env_sys import RewardSpec, SystemSpec, _seg_min_dist
 from shepherd.m4_env import build_m4_env
 from shepherd.scripts.boxed_arm_audit import _sysenv
-from shepherd.scripts.mission_rollout import scripted_role_actions
+from shepherd.scripts.mission_rollout import (scripted_role_actions,
+                                              terminal_label)
 from shepherd.spawn_rand import SpawnSpec
 
 __all__ = ["run_probe", "MISS_EPISODES"]
@@ -176,9 +177,7 @@ class _Driver:
 
         if term.get(self.fid):
             self.done = True
-            self.label = ("HARD_KILL" if fi.get("hard_kill") else
-                          "CAPTURED" if fi.get("captured") else
-                          "PENETRATED" if fi.get("penetrated") else "SPENT_FAIL")
+            self.label = terminal_label(fi)   # B0 v3 §2-12 단일 정의원
         elif trunc.get(self.fid):
             self.done = True
             self.label = "TRUNCATED"

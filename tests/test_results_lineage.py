@@ -41,6 +41,9 @@ LINEAGE = {
         "eta_sensitivity.json", "analytic_bands.json", "lead*",
         "viz_traj_t1_hk*", "viz_e4c_*", "viz_lead_compare.json",
     ],
+    # R2a/R2b 사전등록 confirmatory 캠페인 (registry C044~C049). 본체는 artifacts/ 에
+    # 있고 results/ 에는 파생 시각화만 — README 상태 어휘 5종 중 R2-CAMPAIGN.
+    "R2-CAMPAIGN": ["viz_r2b_*"],
     "META": ["README.md", ".gitkeep"],
 }
 
