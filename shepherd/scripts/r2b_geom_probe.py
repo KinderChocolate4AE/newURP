@@ -118,7 +118,9 @@ def _counterfactual(env, p_att, v_att, lim_pos, fin, seed: int) -> tuple:
     lf_full, lf_hold, T = _lf(lim_pos), _lf(hold_pos), union.turn_feasible
     m_close = T & lf_hold & ~lf_full
     m_open = T & ~lf_hold & lf_full
-    return res[0], res[1], union, m_close, m_open
+    # [r1.2] 구조적 비활성의 **올바른** 검사 = 절대 blocked 수 (차분이 아니라)
+    n_bf, n_bh = int((T & ~lf_full).sum()), int((T & ~lf_hold).sum())
+    return res[0], res[1], union, m_close, m_open, (n_bf, n_bh)
 
 
 def _logged_replay(st, s: int, plan) -> tuple:
@@ -134,7 +136,7 @@ def _logged_replay(st, s: int, plan) -> tuple:
         p_att, v_att = env._p(att), env._v(att)
         lim_pos = [env._p(x) for x in lims]
         seed = env._seed * 100003 + (env._step_i + 1)      # env 의 step_seed 와 동일
-        full, hold, union, m_close, m_open = _counterfactual(
+        full, hold, union, m_close, m_open, (n_bf, n_bh) = _counterfactual(
             env, p_att, v_att, lim_pos, fin, seed)
 
         out = orig(*a, **k)
@@ -158,8 +160,13 @@ def _logged_replay(st, s: int, plan) -> tuple:
             "p_blocked_hold": float(hold.p_limiter_blocked),
             "dG_close": dG,
             "n_close": n_cl, "n_open": n_op, "n_total": n_tot,
-            # [r1.1] H1 채널의 **활성 여부** 판별용 validity 스칼라 (양의 H1 을 만들 수
-            # 없고, null 을 "측정된 0" vs "구조적 0" 으로 구분만 한다)
+            # [r1.2] 구조적 비활성의 정본 판정: n_block_full == 0 ∧ n_block_hold == 0.
+            #        (둘 다 >0 이고 N_close=N_open=0 이면 "비활성" 이 아니라
+            #         "full 과 hold 가 동일한 blocking geometry" 라는 뜻.)
+            "n_block_full": n_bf, "n_block_hold": n_bh,
+            "channel_inactive": bool(n_bf == 0 and n_bh == 0),
+            # [r1.1] 보조 스칼라 (그 자체로는 비활성 증명이 아님 — 도달집합은 전진하는
+            # tube 이지 현재 위치 중심의 구가 아니다)
             "min_dist_att_lim": float(min(
                 np.linalg.norm(np.asarray(c, float) - p_att) for c in lim_pos)),
             "max_lim_disp": float(max(
@@ -385,6 +392,10 @@ def smoke(pick: int | None = None) -> None:
           f"denom={[sum(a['h_denom']) for a in ang]} "
           f"close={[sum(a['h_close']) for a in ang]} open={[sum(a['h_open']) for a in ang]}")
     print(f"  n_plus (pre-fire): {[t['n_plus'] for t in r['ticks'][:r['fire_step'] + 1]][-6:]}")
+    pre = r["ticks"][:r["fire_step"] + 1]
+    print(f"  n_block full/hold (pre-fire): "
+          f"{[(t['n_block_full'], t['n_block_hold']) for t in pre][-6:]}")
+    print(f"  channel_inactive ticks: {sum(t['channel_inactive'] for t in pre)}/{len(pre)}")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     sp = OUT_DIR / f"smoke_s{s}.json"
     sp.write_text(json.dumps(r, ensure_ascii=False), encoding="utf-8")

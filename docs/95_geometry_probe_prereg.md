@@ -2,6 +2,16 @@
 
 - **일자**: 2026-09-13 · **지위**: **sealed pre-run** (**r1 amendment 반영**, 140건 실행 전).
   실행 전 커밋 (dep-probe 선례 `29bc681`).
+- **r1.2 amendment (2026-09-13, 실행 전 — 정정 1 + 추가 2)**: ① **[정정]** r1.1 의
+  "기하학적으로 강제된 0" 은 **과한 주장**이었다. 최근접 거리(5.13 m) vs `kill_radius`
+  (0.75 m) 만으로는 증명되지 않는다 — 표적의 도달집합은 현재 위치 중심의 작은 구가 아니라
+  **속도로 전진하는 tube** 다. 정본 검사는 **`n_block_full == 0 ∧ n_block_hold == 0`**
+  (절대 blocked 수) 이며 이를 틱마다 기록한다. ② 결과 문장 형식 + 판독 3-분기 고정 (§7.5).
+  ③ attacker 의 `kill_radius` 의존 modeling caveat 명시 (§7.6).
+- **[프레이밍 정정]** **state steering 이 원래의 주가설**이고, H1 (instantaneous
+  escape-channel closure) 은 *그 효과가 FIRE 직전 순간 차단으로 설명되는가* 를 보는
+  **하위 메커니즘 검사**다. s=3 관찰은 새 방향 전환이 아니라 **원래 steering 해석으로
+  중심이 되돌아온 것**이다. 본 문서 전체를 이 위계로 읽는다.
 - **r1 amendment (2026-09-13, 실행 전)**: ① smoke 의 지위를 **wiring/parity 전용**으로 고정
   (결과 방향이 실행 여부를 gate 하지 않음) ② H1 의 **directional operationalization**
   (closure mask + 좌표계 + 고정 snapshot 시각) 추가 ③ "전체/모집단" 표현을 **prespecified
@@ -269,6 +279,43 @@ plan 이 비자명함의 증거) · `kill_radius`.
   (c_arm pull 충돌 재발 방지 규율).
 - **판독 전 확인**: 전 레코드 `cf_parity_ok == true` (GO 조건 3~5 의 런타임 판). 하나라도
   false 면 그 판을 제외하고 제외 사유·건수를 판독문에 명시한다.
+
+## §7.5 [r1.2] 판독 3-분기와 **허용 문장 형식**
+
+| 분기 | 조건 | 결론 | 다음 카드 |
+|---|---|---|---|
+| **1** | multi-dependent 층에서 FIRE 이전 ΔG_close > 0 이 반복되고 authoritative 진입과 맞물림 | **direct cooperative closure geometry 가 메커니즘** | 그 기하의 정형화 |
+| **2** | H1 이 대부분 **structurally inactive** (`channel_inactive`) 인데 multi-dependence 는 강함 | **instantaneous blocking 은 메커니즘이 아니다** | **trajectory-level state steering probe** (별도 사전등록) |
+| **3** | H1 도 없고 steering 도 약함 | CEM gain 의 출처를 따로 봐야 함 | FIRE timing · capturer alignment · 종축 상태 · scenario-specific exploitation · **search artifact** |
+
+**허용 문장 (H1 이 약할 때, 이 형식으로만)**:
+
+> Under the sealed A2-reactive world and its fixed interaction semantics,
+> multi-agent-dependent successful plans were **not generally explained by
+> instantaneous limiter-induced escape-channel closure near FIRE**.
+
+**금지 문장**: "therefore cooperation works by physically herding realistic attackers"
+— 현재 세계의 적대자 상호작용 규약(§7.6)이 조건으로 붙지 않은 일반화는 쓰지 않는다.
+
+## §7.6 [r1.2] Modeling caveat — attacker 의 `kill_radius` 의존
+
+현재 세계의 scripted A2 는 **탐지**를 `sense_range` 로 하지만, **회피 기하의 척도**가
+수비측 `kill_radius` 에 묶여 있다: `r_block = repel_margin · lam_range · kill_radius`
+(`attacker_ladder.py:194`). 코드 주석이 이미 선언하듯 **"물리적 동일성 주장이 아니라 신규
+자유도를 더하지 않기 위한 nominal modeling choice" (docs/60 §3.2)** 다.
+
+- **귀결**: 본 probe 에서 steering 효과가 관측되더라도, 그 일부는 **표적이 수비측 lethality
+  envelope 에 비례하는 반경에서 반응하도록 모델링된 결과**일 수 있다. 따라서 steering 결과는
+  **"이 세계의 상호작용 규약 하에서"** 로 조건화해서만 서술한다.
+- **B0 를 지금 재개봉하지 않는다.** 이 caveat 는 결과 해석을 좁히는 조항이지 세계 변경이 아니다.
+- **[다음 세계 카드]** learned/PFSP attacker 로 갈 때 두 축을 **분리**한다:
+  - **κ = r_kill/ρ** — *defender* 의 kinetic exclusion 능력비 (성공/안전 판정 전용,
+    **attacker 관측 입력 금지**)
+  - **σ = R_sense/ρ** (또는 learned observation 구조) — attacker 의 **행동적 상호작용 범위**
+  - attacker 는 상대 위치·속도·closing rate·bearing·time-to-CPA 같은 **관측 가능한 cue**
+    로만 반응해야 하며, 숨은 lethality 반경을 입력받지 않는다.
+  - PFSP 의 역할도 "어떤 반경을 피하라" 를 코딩하는 게 아니라 **살아남는 행동을 스스로
+    찾게** 하는 것이다.
 
 ## §7. 지위 선언 (사후 상향 금지)
 
