@@ -1,9 +1,13 @@
-# 94 — B0 v3 world contract 초안 (DRAFT — seal candidate)
+# 94 — B0 v3 world contract (**SEALED** — `b0_hash 5e7b5b486b9d8a4a`)
 
-- **일자**: 2026-09-13 · **상태**: **DRAFT (seal candidate)**. 13항 서술 완료 ·
-  결재 **①~⑦** 전부 반영 · contract tests **12 passed** · 전체 regression **0 failed** ·
-  평가 격자·G 확정 (§2-10a) · payload 생성 (`b0_hash 5e7b5b486b9d8a4a`).
-  **남은 것 = 사용자 봉인 승인**. 봉인 전 협력 학습 실험 금지 (docs/89 §2 불변 조항).
+- **일자**: 2026-09-13 · **상태**: **SEALED (사용자 승인 2026-09-13)**.
+  - **`b0_hash = 5e7b5b486b9d8a4a`** · exit **`B2_WORLD_CONTRACT_FROZEN`**
+  - 기계 정본 = `artifacts/b0/b0_v3_world_contract.json` · 서술 정본 = 본 문서
+  - 결재 **①~⑦** 전부 반영 · contract tests **12 passed** · 전체 regression **0 failed**
+- **봉인 이후 규율**: world-contract 조항 · 격자 · 판정 규칙이 바뀌면 **v4 + 새 hash** 로
+  가고 **기존 v3 결과와 pooling 금지**. 본 문서의 사후 편집은 오탈자·상호참조 수준으로
+  제한한다 (내용 변경은 판올림). 봉인 전 협력 학습 실험 금지 조항은 이로써 해제되며,
+  **다음 단계는 B2 scripted** — B0 를 더 만지지 않는다.
 - **정본 관계**: docs/89 r4 **§5 체크리스트 13항의 이행 문서**. 봉인 시
   `artifacts/b0/b0_v3_world_contract.json` (schema `b0-v3-hybrid`) 로 해시 고정 —
   그 JSON 이 **기계 정본**, 본 문서가 **서술 정본**. exit = `B2_WORLD_CONTRACT_FROZEN`.
@@ -634,9 +638,11 @@ semantics (**NET_CAPTURE only**) 에서만 정의된다.
 - **t7 (F1) 완료**: `env.py` 주석 수정 — `git diff` 상 **non-comment 변경 줄 0** 확인
   (comment-only diff) ✅ · docs/09 §13 에 **비준 예외 2** 등록 ✅ · **전체 regression** ✅
   (아래).
-- **전체 regression (결재 ③ 둘째 검증) — 0 failed**: 전 테스트 파일 실행 완료
-  (**735 passed · 34 skipped · 1 failed**) 후, 유일한 실패였던
-  `test_results_lineage.py::test_every_entry_classified` 를 **해소**했다 → 재실행 **64 passed**.
+- **전체 regression (결재 ③ 둘째 검증) — 0 failed**: 봉인 직전 단일 완전 실행
+  **770 passed · 65 skipped · 0 failed** (29.5 분). skip 수는 torch 가용성에 따른 기지
+  변동 (conftest 가 설명하는 stub 경로; 로컬은 torch 미설치 모드).
+  그 전 실행에서 유일한 실패였던 `test_results_lineage.py::test_every_entry_classified`
+  는 봉인 전에 **해소**됐다 (→ 재실행 64 passed).
   - 그 실패는 **이번 세션과 무관한 기존 RED** 였다: `results/viz_r2b_c_pick{0,1,2}.json`
     이 커밋 **cd74b63 (2026-09-07)** 에서 `results/README.md` 계보 표 갱신 없이 들어왔다
     (가드가 설계대로 작동). 조치 = **`R2-CAMPAIGN` 상태 신설 + `viz_r2b_*` 행 추가**
@@ -683,8 +689,18 @@ semantics (**NET_CAPTURE only**) 에서만 정의된다.
 **0 failed**) · 2-2 ✅ (comment-only diff + docs/09 등록) · 3 ✅ (평가 격자 · G 확정, §2-10a) ·
 4 ✅ (**payload `5e7b5b486b9d8a4a`**) · **남은 것 = 5 사용자 봉인 승인 하나**.
 
-> payload 는 생성됐지만 **봉인은 승인 행위**다. 조항이 하나라도 바뀌면 `b0_hash` 가
-> 바뀌므로 지금 값은 *승인 대상 후보*다 (registry 등재·seal 선언은 사용자 트랙).
+> **봉인 선언 (2026-09-13)**: 후보 payload `5e7b5b486b9d8a4a` 가 사용자 승인으로 봉인됐다.
+> 봉인 직전 기계 체크 8종 전부 통과 — ① `b0_v3.py` 재실행 시 **byte-identical** 재생성
+> ② contract tests 12/12 ③ 전체 regression 0 failed ④ bracket `lo < χ50 ≤ hi` **14/14**
+> ⑤ base cells **56 = 14×4, 중복 0** ⑥ G=14 · row gate 12/14 · slice gate 5/7 직렬화 확인
+> ⑦ A2-nominal primary / exact `S_C` secondary 분리 확인 ⑧ extension rule + 방향당 최대
+> 2 회 직렬화 확인.
+>
+> **claim registry (C0xx) 등재는 사용자 트랙**이다 (docs/89 말미 규율). 본 봉인은 *계약*
+> 이지 *claim* 이 아니므로 자동 등재하지 않았다 — 별도 항목이 필요하면 연번을 지정해 달라.
+
+**심야 졸속 봉인 금지** (late-seal 감사 지적 이력). 봉인은 결재 · 테스트 · 격자 셋이 다
+갖춰진 세션에서만.
 
 ---
 
