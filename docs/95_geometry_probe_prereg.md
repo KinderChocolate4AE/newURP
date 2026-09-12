@@ -264,17 +264,25 @@ plan 이 비자명함의 증거) · `kill_radius`.
 
 - **비용 실측**: 시나리오당 **10 분+** (search 재실행 384 rollout 이 지배). 140 건 로컬
   직렬 = 20 h+ → **30분+ 실험은 랩서버** 규율 대상.
-- **실행** (dep-probe 와 동일 규약: 연속 샤드 · incremental 저장 · resume · ntfy):
+- **실행** (r2b C-runner 선례 승계 — `temp_research_note/2026-09-06_*`):
 
   ```bash
-  tmux new -s geom
-  for k in 0 1 2 3 4 5 6 7; do
-    python -m shepherd.scripts.r2b_geom_probe --run --shard $k --n-shards 8       > /data/geom_shard$k.log 2>&1 &
-  done; wait
+  cd /data/hjhong/l2/newURP && source .venv-l2/bin/activate
+  git pull                                        # 사전등록 커밋 포함
+  export NTFY_TOPIC=hj_URP_x7k2q9                 # 없으면 알림 off (notify.py)
+
+  # 0) 서버 smoke 필수 — bit-parity 는 머신별 재확인이다 (GO 조건 1~6)
+  python -m shepherd.scripts.r2b_geom_probe --smoke
+
+  # 1) 샤드마다 **독립** tmux 세션 (한 세션에 &로 묶지 않는다 — 세션 死 시 전멸)
+  for K in 0 1 2 3 4 5 6 7; do
+    tmux new-session -d -s geom$K       "python -m shepherd.scripts.r2b_geom_probe --run --shard $K --n-shards 8"
+  done
+  tmux ls                                         # 8개 확인
   ```
 
-  예상 **2~3 h** (8 샤드 병렬, dep-probe 와 같은 규모). 중단 시 같은 명령으로 **resume**
-  (`b0_hash` + `b0_v3_hash` 가 같을 때만 이어붙인다).
+  예상 **2~3 h** (dep-probe 와 같은 규모 — search 재실행이 지배). 중단 시 같은 명령
+  재실행 → shard 파일에서 **resume** (`b0_hash` + `b0_v3_hash` 가 같을 때만 이어붙는다).
 - **산출물**: `artifacts/r2b/geom_probe/shard{00..07}.json` — **서버가 커밋**
   (c_arm pull 충돌 재발 방지 규율).
 - **판독 전 확인**: 전 레코드 `cf_parity_ok == true` (GO 조건 3~5 의 런타임 판). 하나라도
