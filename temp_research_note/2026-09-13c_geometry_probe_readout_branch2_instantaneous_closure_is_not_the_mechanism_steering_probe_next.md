@@ -118,7 +118,14 @@ peak ΔG_close 와 ΔV 는 **전 η 에서 평평하게 0** 이다.
 
 - **necessity 아님** — 재최적화 없음. 다른 단독 plan 이 성공할 수 있다. N_L ablation /
   strong necessity 는 별도 카드.
-- L2 paired trajectory 층은 본 판독에 넣지 않았다 (사전등록상 secondary, 그리고 branch 2 의
-  후속이 바로 궤적 층이므로 steering probe 에서 제대로 설계한다).
+- **[DEVIATION — 사전등록 대비]** docs/95 §4 는 L2 paired trajectory 를 **secondary 로
+  선언하고 "논문에서도 두 층을 분리 보고한다"** 고 적었을 뿐, branch 2 에서 생략해도 된다는
+  조항은 **없다**. 따라서 조용히 넘기지 않고 기록한다:
+  > **preregistered secondary (L2 paired trajectory) not executed; superseded by a
+  > separately preregistered trajectory-level steering analysis.**
+  사유: branch 2 의 후속이 곧 궤적 층이고, L2 의 약점(서로 다른 궤적이라 인과 귀속이 약함)을
+  branch-replay 설계(공통 prefix + 동일 시각 비교)가 정면으로 고친다. 즉 **더 약한 secondary 를
+  더 강한 사전등록으로 대체**하는 것이지 누락이 아니다. docs/95 는 봉인 문서이므로 **수정하지
+  않는다** — 이 deviation 은 결과물 쪽에만 남는다.
 - solo 층 잔여 closure 11/94 중 1건은 ΔV 가 양으로 움직였다 — 대조군이므로 판정에 쓰지
   않고 기록만 한다.

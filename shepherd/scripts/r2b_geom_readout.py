@@ -330,6 +330,10 @@ def main():
         "residual_closure_solo": residual_closure(solo),
         "by_eta": by_eta,
         "verdict": {"branch": vkey, "sentence": sentence},
+        # docs/95 §4 는 L2 를 secondary 로 두되 생략 조항을 두지 않았다 -> 조용한 skip 금지.
+        "deviations": [
+            "preregistered secondary (L2 paired trajectory) not executed; superseded "
+            "by a separately preregistered trajectory-level steering analysis"],
     }
     (ROOT / "artifacts/r2b/geom_readout.json").write_text(
         json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")

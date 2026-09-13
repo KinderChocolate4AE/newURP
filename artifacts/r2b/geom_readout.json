@@ -515,5 +515,8 @@
  "verdict": {
   "branch": "BRANCH_2",
   "sentence": "Under the sealed A2-reactive world and its fixed interaction semantics, multi-agent-dependent successful plans were not generally explained by instantaneous limiter-induced escape-channel closure near FIRE. H1 was structurally inactive in 98.0% of pre-fire ticks (n_block_full == 0 and n_block_hold == 0). Newly blocked escape directions appeared before FIRE in only 4/46 records of the multi-dependent stratum, confined to the final ticks, and in none of them did that closure coincide with a positive move of the capturability proxy. Next card: trajectory-level state steering probe (separate pre-registration)."
- }
+ },
+ "deviations": [
+  "preregistered secondary (L2 paired trajectory) not executed; superseded by a separately preregistered trajectory-level steering analysis"
+ ]
 }
