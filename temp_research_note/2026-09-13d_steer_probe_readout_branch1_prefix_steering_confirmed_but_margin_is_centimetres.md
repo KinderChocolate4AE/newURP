@@ -1,4 +1,28 @@
-# 2026-09-13d — steering probe 판독: **BRANCH 1**. prefix steering 확인, 단 그 여유는 **센티미터**다
+# 2026-09-13d — steering probe 판독: **BRANCH 1**. prefix steering 확인 (제목의 "센티미터 여유" 는 **철회됨 — §3 정정 참조**)
+
+> ## ⚠ [정정 2026-09-13, 같은 날 · 소급 삭제 없이 추가]
+>
+> **§3 의 "성공한 plan 들은 포획 경계 위에 정확히 걸쳐 있다" 는 결론은 철회한다.** 논리
+> 오류다:
+>
+> `v_shot_worst` 는 **이진** 술어이고 (`1.0 iff EVERY feasible escape is caught`),
+> **성공은 그 술어로 정의된다.** 따라서 성공한 46 판이 전부 1.0 인 것은 **동어반복**이며
+> "얼마나 여유 있게 합격했는가" 에 대해 **아무 정보도 주지 않는다.** 모든 escape 가 네트
+> 안쪽 1 m 에 있어도 1.0, 가장 바깥 것이 경계 안쪽 1 mm 여도 1.0 이다.
+>
+> 마찬가지로 $\lVert\Delta p_A(t_F^C)\rVert$ = 9.6 cm 는 **개입이 만든 변위**이지
+> **포획 경계까지의 거리가 아니다.** branch 는 위치·속도·heading·이후 도달집합을 **동시에**
+> 바꾸므로, 술어를 뒤집은 원인이 위치 10 cm 라고 단정할 수 없다.
+>
+> **살아남는 문장** (이것은 그대로 유효):
+> > Centimeter-scale changes in the attacker's FIRE-time position, induced by early
+> > limiter-command withdrawal, were sufficient to **coincide with** loss of the
+> > authoritative capture condition.
+>
+> **죽는 문장**: "the capture margin was 9.6 cm" · "정밀 threading" · "경계에 얹는다".
+>
+> §1·§2·§4 의 prefix dependence 결과는 **영향받지 않는다** (개입 대비 결과만 쓴다).
+> 실제 여유는 **docs/98 capture-margin audit** 이 signed geometric margin 으로 측정한다.
 
 - **입력**: `artifacts/r2b/steer_probe/shard{00..07}.json` — 140/140, **제외 0**.
   세계 해시 단일 (`b0_v3 5e7b5b486b9d8a4a` · `r2b_b0 cba024d7ee3d9f61`).
@@ -52,7 +76,7 @@
 **coast 로 설명되지 않는다**: 개입 후 limiter 최대 변위 median 이 전 ρ 에서 **1 m 미만**
 (0.46 / 0.67 / 0.53 m). "지령을 거둬도 멀리 날아가서 효과가 남았다" 는 설명은 성립하지 않는다.
 
-## 3. ⚠ 그러나 여유는 **센티미터**다 — 주장의 톤을 여기서 정한다
+## 3. ⚠ [철회됨] 여유가 센티미터라는 해석 — 아래는 오류이며 기록으로만 남긴다
 
 | 척도 | 값 |
 |---|---|
@@ -86,20 +110,24 @@
 
 **어휘 (docs/96 §7 금지어 준수)**: "cooperation works by physically herding realistic
 attackers" 는 쓰지 않는다. 후보 명칭 (*cooperative capture-state steering* ·
-*trajectory-mediated capture-set shaping*) 은 분기 1 성립으로 **채택 후보 자격을 얻었고**,
-실제 채택은 §3 의 threading caveat 을 문장에 넣는 조건에서만.
+*trajectory-mediated capture-set shaping*) 은 분기 1 성립으로 **채택 후보 자격만** 얻었다.
+실제 채택은 **docs/98 margin audit 이후** — 그 전에는 *positional threading* 계열의
+명칭을 쓰지 않는다.
 
 ## 5. training contract — HOLD 를 **경고로 격상**
 
 geometry probe 가 "성공 plan 46/46 이 `delta_headline` 을 전혀 안 움직였다" 를 보였고,
 본 probe 가 "그 plan 들의 이른 구간 지령이 실제로 결과를 결정한다" 를 보였다. 둘을 합치면:
 
-> **M2 dense reward 의 기반량은 실제로 작동한 메커니즘에 대해 blind 하다**, 그리고 그
-> 메커니즘의 여유는 **센티미터**다.
+> The legacy **instantaneous** dense signal is empirically **blind to the observed
+> trajectory-mediated dependence** in the preregistered multi-dependent sample.
 
 ⇒ W6 전 training contract 봉인에서 `delta_headline` / `coma_D` 기반 dense shaping 을
-**무검토 승계 금지**. 최소한 (i) 메커니즘을 볼 수 있는 항이 있는지, (ii) 센티미터 여유를
-학습 신호가 분해할 수 있는지 감사한 뒤 봉인한다.
+**무검토 승계 금지**. 의심의 핵심은 계수 크기가 아니라 **credit assignment 의 causal
+horizon** 이다 — 같은 현재 상태에서의 순간 반사실은 이미 누적되어 만들어진 x_A(t) 를
+고정하므로 과거 기여가 사라진다. 따라서 **계수를 키우는 방식으로 해결하지 않는다.**
+대안 후보는 state-progress / future-value 계열의 potential Φ(x_t) — 단 **docs/98 이후**에
+설계한다.
 
 ## 6. 미실시 / 범위 밖
 
