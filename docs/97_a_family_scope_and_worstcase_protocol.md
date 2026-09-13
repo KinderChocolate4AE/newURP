@@ -176,6 +176,38 @@ $$ \boxed{\ \text{이 knob 이 이 campaign support 에서 실제로 causal 하�
   차원에서 제거**. 완전히 flat 한 차원은 exploration budget 만 먹는다.
 - 한 번이라도 바뀌면 → **그대로 유지**.
 
+### §B.4b [2026-09-14 결과] knob-efficacy gate 실행 — **CEM 차원 7 → 5**
+
+`shepherd/scripts/r2b_knob_efficacy.py` → `artifacts/r2b/knob_efficacy.json`.
+smoke state = geom_probe 표본 `s` 오름차순 앞 5 판 (사전 선언, 결정론적). nominal replay
+parity 5/5. 비교는 시뮬레이터 `diag` 와만 했다.
+
+| knob | nominal | z_nom | 판정 |
+|---|---|---|---|
+| `jink_amp` | 0.6 | 0.600 | **KEEP** |
+| `jink_freq` | 1.5 | 0.400 | **KEEP** |
+| `route_gain` | 0.5 | 0.500 | **KEEP** |
+| `homing_gain` | 4.0 | 0.500 | **KEEP** |
+| `sense_range` | 30.0 | 0.400 | **KEEP** |
+| `jink_terminal_r` | 3.0 | 0.500 | **DROP** (사전 지목 적중) |
+| `bait_gain` | 0.0 | 0.000 | **DROP** |
+
+⇒ **CEM 탐색 차원 = 5.** 제거된 둘은 nominal 고정.
+
+**`bait_gain` DROP 의 의미 — 범위 축소로 기록한다.** 사전 지목은 `jink_terminal_r` 뿐이었고
+`bait_gain` 은 예상 밖이다. 원인은 사거리가 아니다 — attacker-finisher 거리가
+`bait_range`(4~16 m) 안에 든 tick 이 **63%** 다. `bait_gain` 은 **활성화 게이트
+(`readiness > bait_threshold = 0.5`) 가 열린 뒤에야 곱해지는 배율**인데, gain 을 0 → 1 로
+올려도 5 판 전 구간에서 출력이 **비트 단위로 불변**이었다 ⇒ **bait 항이 한 번도 활성화되지
+않는다.**
+
+> **귀결**: 본 campaign support 에서 **A3-fair 축은 `bait_gain` 만으로는 탐색 불가능**하다.
+> 활성화를 열려면 `bait_threshold` / `bait_range` / `bait_enclosure_r` 를 건드려야 하는데
+> 이들은 Class I 에 넣지 않았다. 따라서 §A.1 이 "A1 → A3" 를 A-family 로 선언했음에도
+> **본 arm 의 실효 탐색 공간은 A2 행동축 5 개**다. 이는 선택이 아니라 **support 의 한계**이며
+> 그대로 보고한다. A3 를 실제로 시험하려면 **별도 카드**가 필요하다 (활성화 파라미터를
+> Class I 로 승격할지부터 판단해야 하고, 그건 §A.3 의 좌표 판정을 다시 거쳐야 한다).
+
 **사전 지목**: `jink_terminal_r` 이 7 개 중 **가장 inert 할 위험이 크다** — `101` 계열
 표본에서 3 m 게이트가 **한 번도 활성화되지 않았다** ($d_{target}$ 최소 ~12.9 m, 3 m 도달
 0/36). 이 지목은 규칙을 바꾸지 않는다 (사후 해석 방지용 사전 기록).
