@@ -38,7 +38,6 @@ import argparse
 import hashlib
 import json
 import pathlib
-import subprocess
 import sys
 import time
 
@@ -47,6 +46,7 @@ import numpy as np
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+from shepherd.provenance import git_commit              # noqa: E402
 from shepherd.m4_env import build_m4_env                               # noqa: E402
 from shepherd.scripts.mission_rollout import run_episode               # noqa: E402
 from shepherd.scripts.r2b_c_runner import (                           # noqa: E402
@@ -61,14 +61,6 @@ OUT_DIR = ART2 / "steer_probe"
 # docs/96 §3.1 — 정수 분기 격자. label 은 넷 다 유지한다 (t_rho 가 겹쳐도 dedupe 금지).
 RHO_GRID = ((0, 1), (1, 4), (1, 2), (3, 4))
 TAU0 = 6                      # q_dec = 1/6 -> 1 tick = xi 1/6 (docs/95 시간축)
-
-
-def _commit() -> str:
-    try:
-        return subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
-                              capture_output=True, text=True).stdout.strip()
-    except Exception:                                      # pragma: no cover
-        return "unknown"
 
 
 def load_geom() -> dict:
@@ -272,7 +264,7 @@ def probe_scenario(s: int, g: dict, cells: list, sls: dict) -> dict:
                 "ticks": ref_ticks},          # reference 궤적만 전량 보존 (viz 원자료)
         "branches": branches,
         "plan_hash": g["plan_hash"], "plan_kind": g["plan_kind"],
-        "code_commit": _commit(), "b0_v3_hash": B0V3_HASH, "r2b_b0_hash": B0_HASH,
+        "code_commit": git_commit(), "b0_v3_hash": B0V3_HASH, "r2b_b0_hash": B0_HASH,
     }
 
 
@@ -360,7 +352,7 @@ def run_shard(shard: int, n_shards: int = 8) -> None:
         path.write_text(json.dumps(
             {"shard": shard, "n_shards": n_shards, "sample_size": len(scs),
              "b0_hash": B0_HASH, "b0_v3_hash": B0V3_HASH, "doc": "docs/96",
-             "rho_grid": [list(x) for x in RHO_GRID], "code_commit": _commit(),
+             "rho_grid": [list(x) for x in RHO_GRID], "code_commit": git_commit(),
              "records": records}, ensure_ascii=False), encoding="utf-8")
 
     t0 = time.time()

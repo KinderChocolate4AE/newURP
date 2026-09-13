@@ -35,6 +35,7 @@ import numpy as np
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+from shepherd.provenance import git_commit              # noqa: E402
 from shepherd.m4_env import build_m4_env                                # noqa: E402
 from shepherd.scripts.mission_rollout import MissionResult, run_episode  # noqa: E402
 from shepherd.scripts.r2b_phase1 import (                               # noqa: E402
@@ -163,7 +164,6 @@ def solve_scenario(s: int, cells: list, sls: dict) -> dict:
 
 # ------------------------------------------------------------------ shard ----
 def run_shard(shard: int, n_shards: int = 8) -> dict:
-    import subprocess
     from shepherd.notify import ntfy
     _assert_seals()
     cells, sls = _cells(), _slices()
@@ -171,8 +171,7 @@ def run_shard(shard: int, n_shards: int = 8) -> dict:
     lo, hi = shard * len(scs) // n_shards, (shard + 1) * len(scs) // n_shards
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     path = OUT_DIR / f"shard{shard:02d}.json"
-    code_commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
-                                 capture_output=True, text=True).stdout.strip()
+    code_commit = git_commit()
     records = []
     if path.exists():
         prev = json.loads(path.read_text(encoding="utf-8"))

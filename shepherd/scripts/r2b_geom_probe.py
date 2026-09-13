@@ -29,7 +29,6 @@ import argparse
 import hashlib
 import json
 import pathlib
-import subprocess
 import sys
 import time
 
@@ -38,6 +37,7 @@ import numpy as np
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+from shepherd.provenance import git_commit              # noqa: E402
 from shepherd.game import viability as V                               # noqa: E402
 from shepherd.m4_env import build_m4_env                               # noqa: E402
 from shepherd.scripts.mission_rollout import run_episode               # noqa: E402
@@ -49,14 +49,6 @@ from shepherd.scripts.r2b_phase1 import _cells, _slices                # noqa: E
 
 B0V3_HASH = json.loads(
     (ROOT / "artifacts/b0/b0_v3_world_contract.json").read_text(encoding="utf-8"))["b0_hash"]
-
-
-def _commit() -> str:
-    try:
-        return subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
-                              capture_output=True, text=True).stdout.strip()
-    except Exception:                                      # pragma: no cover
-        return "unknown"
 
 
 OUT_DIR = ART2 / "geom_probe"
@@ -209,96 +201,12 @@ def _logged_replay(st, s: int, plan) -> tuple:
     return r, ticks, snaps
 
 
-def _angular(snap, fire: int, t: int) -> dict:
-    """[r1] 한 snapshot 의 (theta, phi) 히스토그램. theta = e1 로부터의 극각."""
-    p_att, v_att, e_net, ends, m_close, m_open, T = snap
-    F = _frame(e_net, v_att)
-    d = np.asarray(ends, float) - p_att[None, :]
-    nrm = np.linalg.norm(d, axis=1)
-    d = d / np.where(nrm[:, None] > 1e-12, nrm[:, None], 1.0)
-    c = d @ F.T                                            # (N,3) in (e1,e2,e3)
-    theta = np.arccos(np.clip(c[:, 0], -1.0, 1.0))
-    phi = np.arctan2(c[:, 2], c[:, 1])
-    ti = np.clip((theta / np.pi * N_THETA).astype(int), 0, N_THETA - 1)
-    pi_ = np.clip(((phi + np.pi) / (2 * np.pi) * N_PHI).astype(int), 0, N_PHI - 1)
-    flat = ti * N_PHI + pi_
-
-    def _h(mask):
-        return np.bincount(flat[mask], minlength=N_THETA * N_PHI).tolist()
-    return {"t": t, "xi": round((t - fire) / 6.0, 4),
-            "n_theta": N_THETA, "n_phi": N_PHI,
-            "h_close": _h(m_close), "h_open": _h(m_open), "h_denom": _h(T),
-            "frame_e_net": [float(x) for x in F[0]], "p_att": [float(x) for x in p_att]}
-
-
-def probe_scenario(s: int, rec: dict, cells: list, sls: dict, dep: dict | None = None) -> dict:
-    meta, best_plan, _score, _n = search_plan(s, cells, sls)
-    assert best_plan[0] == "accels", f"s={s}: 재현 plan 이 accels 아님 ({best_plan[0]})"
-    kw, plan = meta[5], best_plan[1]
-
-    r, ticks, snaps = _logged_replay(build_m4_env(SEED0, s, **kw), s, plan)
-    # replay-parity gate (dep-probe 승계)
-    assert (r.label, r.fire_step, r.steps) == (rec["label"], rec["fire_step"], rec["steps"]), \
-        f"replay parity FAIL s={s}: {(r.label, r.fire_step, r.steps)}"
-    bad = [t["t"] for t in ticks if not t["parity"]]
-    fire = r.fire_step
-    ang = [_angular(snaps[t], fire, t)
-           for t in (int(fire + xi * 6) for xi in XI_SNAPSHOTS)
-           if fire is not None and 0 <= t < len(snaps)]
-    plan_arr = np.asarray(plan, float)
-    return {
-        "s": s, "slice": rec["slice"], "cell": rec["cell"],
-        "chi": rec["chi"], "eta": rec["eta"],
-        "label": r.label, "fire_step": r.fire_step, "steps": r.steps,
-        "cf_parity_ok": not bad, "cf_parity_bad_ticks": bad,
-        "dep": (dep or {}).get(s),                    # dep-probe 층화 라벨 (조인)
-        "angular": ang,                               # [r1] xi = -1.0 / -0.5 / 0
-        # ★ docs/95 r1: 영속화 필드 (다음 분석은 search=0, replay only)
-        "plan": plan_arr.tolist(), "plan_kind": "accels",
-        "plan_hash": hashlib.sha256(plan_arr.tobytes()).hexdigest()[:16],
-        "solver_ns": SOLVER_NS, "solver_seeds": list(SOLVER_SEEDS),
-        "code_commit": _commit(), "b0_v3_hash": B0V3_HASH, "r2b_b0_hash": B0_HASH,
-        "telemetry_hash": hashlib.sha256(
-            json.dumps(ticks, sort_keys=True).encode()).hexdigest()[:16],
-        "ticks": ticks,
-    }
-
-
-def run_shard(shard: int, n_shards: int = 8) -> None:
-    """dep-probe 와 동일한 서버 규약: 연속 샤드 · incremental 저장 · resume · ntfy."""
-    from shepherd.notify import ntfy
-    cells, sls = _cells(), _slices()
-    scs, recs = sample()
-    dep = dep_labels()
-    lo, hi = shard * len(scs) // n_shards, (shard + 1) * len(scs) // n_shards
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    path = OUT_DIR / f"shard{shard:02d}.json"
-    records = []
-    if path.exists():                                   # resume (같은 계약일 때만)
-        prev = json.loads(path.read_text(encoding="utf-8"))
-        if prev["b0_hash"] == B0_HASH and prev.get("b0_v3_hash") == B0V3_HASH:
-            records = prev["records"]
-
-    def _save():
-        path.write_text(json.dumps(
-            {"shard": shard, "n_shards": n_shards, "sample_size": len(scs),
-             "b0_hash": B0_HASH, "branch_hash": BRANCH_HASH, "b0_v3_hash": B0V3_HASH,
-             "code_commit": _commit(), "prereg": "docs/95 r1",
-             "hypotheses": "H1 dG_close (+directional mask) / H2 dV (+authoritative "
-                           "v_worst) / H3 coma_D, n_plus",
-             "records": records}, ensure_ascii=False), encoding="utf-8")
-
-    t0 = time.time()
-    for k in range(lo + len(records), hi):
-        s = scs[k]
-        records.append(probe_scenario(s, recs[s], cells, sls, dep))
-        _save()                                          # incremental (중단 복구)
-        bad = [r["s"] for r in records if not r["cf_parity_ok"]]
-        print(f"[geom shard {shard}] {len(records)}/{hi - lo} s={s} "
-              f"parity_bad={len(bad)} "
-              f"({(time.time() - t0) / len(records):.0f} s/scn)", flush=True)
-    ntfy(f"r2b geom-probe shard {shard} done: {len(records)}/{hi - lo}")
-
+# NOTE (R2 hygiene 2026-09-14): 이 지점에 `_angular` / `probe_scenario` / `run_shard`
+# 의 **죽은 사본**이 있었다 (뒤의 정의가 shadow). 삭제는 거동 불변이다 — 파이썬은 나중
+# 정의를 쓰므로 실행된 적이 없다. 다만 죽은 `run_shard` 에만 resume·incremental save·
+# ntfy 가 있었고 **살아있는 쪽에는 없다** (strided 샤딩, 마지막에 한 번 write).
+# 즉 docs/95 §6.8 런북의 "중단 시 재실행 -> shard 에서 resume" 는 geom-probe 에
+# 대해서는 사실이 아니었다. 거동을 바꾸지 않기 위해 여기서 고치지 않는다 (별도 카드).
 
 def _angular(snap, fire: int, t: int) -> dict:
     """[r1] 한 snapshot 의 (theta, phi) 히스토그램. theta = e1 로부터의 극각."""
@@ -348,7 +256,7 @@ def probe_scenario(s: int, rec: dict, cells: list, sls: dict, dep: dict | None =
         "plan": plan_arr.tolist(), "plan_kind": "accels",
         "plan_hash": hashlib.sha256(plan_arr.tobytes()).hexdigest()[:16],
         "solver_ns": SOLVER_NS, "solver_seeds": list(SOLVER_SEEDS),
-        "code_commit": _commit(), "b0_v3_hash": B0V3_HASH, "r2b_b0_hash": B0_HASH,
+        "code_commit": git_commit(), "b0_v3_hash": B0V3_HASH, "r2b_b0_hash": B0_HASH,
         "telemetry_hash": hashlib.sha256(
             json.dumps(ticks, sort_keys=True).encode()).hexdigest()[:16],
         "ticks": ticks,

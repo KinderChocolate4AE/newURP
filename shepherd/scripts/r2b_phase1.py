@@ -26,6 +26,7 @@ import time
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+from shepherd.provenance import git_commit              # noqa: E402
 from shepherd.m4_env import build_m4_env                                # noqa: E402
 from shepherd.scripts.mission_rollout import run_episode                # noqa: E402
 from shepherd.scripts.r2a_lattice import impls                          # noqa: E402
@@ -94,15 +95,13 @@ def benchmark(eps=(2, 26, 35)) -> dict:
 
 def seal_branch(n_shard: int = N_SHARD_DEFAULT) -> dict:
     """분기 기계 봉인 — P1 readout 전 필수 (B0 순서 조항). 감사 지정 필드 전부 기록."""
-    import subprocess
     bm = json.loads((ART2 / "oracle_server_benchmark.json").read_text(encoding="utf-8"))
     t_lite = bm["lite"]["sec_per_solve_mean"]
     t_proj_h = 2800 * t_lite / n_shard / 3600
     full = t_proj_h <= THRESHOLD_H
     branch = {
         "b0_hash": B0_HASH,
-        "code_commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
-                                      capture_output=True, text=True).stdout.strip(),
+        "code_commit": git_commit(),
         "benchmark_cases": bm["episodes"],
         "t_lite_mean": t_lite, "t_lite_max": bm["lite"]["sec_per_solve_max"],
         "t_full_mean": bm["full"]["sec_per_solve_mean"],
@@ -126,7 +125,6 @@ def seal_branch(n_shard: int = N_SHARD_DEFAULT) -> dict:
 def run_shard(shard: int, n_shards: int = N_SHARD_DEFAULT) -> dict:
     """A/B paired 러너: scenario 당 A(hold)·B(intercept) — 같은 resolve kwargs,
     limiter_mode 만 다름 (단일 treatment 기계 검증)."""
-    import subprocess
     _b0()
     cells = _cells()
     slices = _slices()
@@ -135,8 +133,7 @@ def run_shard(shard: int, n_shards: int = N_SHARD_DEFAULT) -> dict:
     out_dir = ART2 / "phase1_v2"; out_dir.mkdir(parents=True, exist_ok=True)
     sentinel = out_dir / "HARD_KILL_STOP"
     path = out_dir / f"shard{shard:02d}.json"
-    code_commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
-                                 capture_output=True, text=True).stdout.strip()
+    code_commit = git_commit()
     records = []
     if path.exists():
         prev = json.loads(path.read_text(encoding="utf-8"))
