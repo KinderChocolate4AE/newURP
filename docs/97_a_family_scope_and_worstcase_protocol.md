@@ -88,8 +88,37 @@ off, A3 baiting 도 off 다.
 | `sense_range` | 30.0 | [10.0, 60.0] m | 관측 한계. inf 는 제외 (legacy 전지 관측) |
 | `bait_gain` | 0.0 | [0.0, 1.0] | A3-fair 만 |
 
-**⚠ 이 7 개 구간은 제가 정한 제안값입니다.** nominal 을 중심에 두고 능력 상한에서 자른
-것이지 실측 근거가 있는 값이 아닙니다 — **봉인 전 결재 필요**.
+### §A.5.1 [2026-09-14 결재] **APPROVED AS PROPOSED** — 수치 변경 없음
+
+위 7 개 구간은 **제안된 숫자 그대로 승인**됐다. 여기서 구간을 손대면 근거 없는 임의값을
+하나 더 만드는 것이므로 조정하지 않는다. 아래 세 조항을 함께 박는다.
+
+**(1) 이것은 discovery domain 이지 "타당성이 입증된 robustness range" 가 아니다.**
+결과가 경계에 몰렸다고 **evaluation 을 보고 범위를 넓히거나 좁히지 않는다.** 확대가
+필요하면 **새 카드**로 간다. (이 조항이 없으면 §B.3 의 discovery/evaluation 분리가
+구간 선택을 통해 우회된다.)
+
+**(2) `0` endpoint 는 내부 점이 아니라 `behavior-off boundary anchor` 다.**
+`jink_amp=0` · `route_gain=0` · `homing_gain=0` · `jink_terminal_r=0` 은 같은 코드 경로를
+쓰더라도 **특정 행동 채널을 사실상 제거**한다. 따라서 *"Class I 안에서 매끄럽게 약해진
+정책"* 으로 해석하지 않는다. **0 은 구간에서 빼지 않는다** (capability envelope 의 끝점으로
+유용하다). 다만 **CEM 이 정확히 0 경계에 붙으면 그 사실을 별도로 보고**한다.
+
+**(3) CEM 좌표는 반드시 정규화한다.**
+
+$$ z_i \in [0, 1] \quad\text{에서 탐색하고 각 실제 구간으로 affine mapping} $$
+
+0–60 m · 0–8 /s · 0–1 이 **원 단위 그대로 같은 Gaussian 에 들어가면 구간 선택이 아니라
+optimizer metric 이 결과를 지배한다.** 구현 시 이 정규화를 기계 확인한다.
+
+**(4) `101-A` 를 보고 구간을 조정하지 않는다.** `route_gain` 주변을 촘촘하게 하거나
+`sense_range` 를 5–15 m 로 좁히는 식의 수정은 **금지**다 — 방금 발견한 A2 메커니즘을 다음
+discovery 설계에 되먹이는 것이고, 그러면 §B.8 transportability 시험의 **독립성이 약해진다**.
+
+**해석 주의 — `sense_range`**: 10 m 로 줄이는 것이 "더 강한 공격자" 라는 뜻은 아닐 수 있다.
+Class I 은 **동일 정책족의 capability/behavior variation** 이지 attacker-strength scalar 가
+아니다. 결과를 하나의 강도 축으로 정렬하지 않는다 (§A.3~A.4 의 Class I/II 분리가 이를
+보장한다).
 
 ---
 
@@ -126,8 +155,30 @@ selection bias 를 차단한다.
 
 - smoke 에서 **CEM 1 solve 의 벽시계 시간을 직접 측정**한 뒤 (셀당 1 회), 그 수치로
   D 의 크기와 population/iters 를 정한다.
-- **[사용자 결재 필요]** population · iters · |D| · |S_disc| · |S_eval| — smoke 실측 후
-  확정. 지금 숫자를 적지 않는다 (근거 없는 상수 금지).
+- **[HOLD — 결재 보류]** population · iters · |D| · |S_disc| · |S_eval| — 지금 숫자를 적지
+  않는다. **π\* 가 W6~W9 에 나온 뒤** per-CEM-solve 를 실측해 재상신한다.
+
+### §B.4a [2026-09-14 추가] **knob-efficacy gate** — 예산보다 먼저
+
+과학 결과를 보는 gate 가 **아니다**. 단 하나만 묻는다:
+
+$$ \boxed{\ \text{이 knob 이 이 campaign support 에서 실제로 causal 하게 연결돼 있는가?}\ } $$
+
+각 Class I 파라미터를 **min / nominal / max** 로 두고, 사전 선언된 smoke state 집합 중
+**적어도 하나**에서 시뮬레이터가 실제 쓴 attacker 출력이 달라지는지 본다:
+`a_final` · route request · jink/homing 관련 diag · sensing-active 술어.
+
+> **오늘의 규율 적용**: 비교는 **재구현 값이 아니라 시뮬레이터 `diag`** 와 한다.
+
+**사전 규칙 (결과 성능을 보고 고르는 것이 아니다 — 배선 확인이다)**:
+
+- min/nom/max **어디에서도** 출력이 한 번도 안 바뀌는 knob → **nominal 고정 후 CEM
+  차원에서 제거**. 완전히 flat 한 차원은 exploration budget 만 먹는다.
+- 한 번이라도 바뀌면 → **그대로 유지**.
+
+**사전 지목**: `jink_terminal_r` 이 7 개 중 **가장 inert 할 위험이 크다** — `101` 계열
+표본에서 3 m 게이트가 **한 번도 활성화되지 않았다** ($d_{target}$ 최소 ~12.9 m, 3 m 도달
+0/36). 이 지목은 규칙을 바꾸지 않는다 (사후 해석 방지용 사전 기록).
 
 ### §B.5 어휘 제한 (docs/89 §7 승계 — 위반 시 논문 문장 무효)
 
@@ -190,10 +241,13 @@ $$ \boxed{\ \text{A2 hard-argmax boundary exploitation 이 learned/adaptive atta
 
 ---
 
-## 잔여 (봉인 전 결재 2 건)
+## 잔여 (결재 현황 2026-09-14)
 
-1. **§A.5 Class I 7 개 탐색 구간** — 제안값이며 실측 근거 없음.
-2. **§B.4 CEM 예산 5 수치** — smoke 실측 후 확정 (지금 적지 않음).
+1. **§A.5 Class I 7 개 탐색 구간** — ✅ **APPROVED AS PROPOSED** (수치 변경 없음).
+   운영 조항 4 개 §A.5.1 에 등재 (discovery domain · 0 = behavior-off anchor ·
+   좌표 정규화 · 101-A 되먹임 금지).
+2. **§B.4 CEM 예산 5 수치** — ⏸ **HOLD**. π\* 가 없으므로 per-solve 실측이 불가능하다.
+   선행 = **§B.4a knob-efficacy gate** (정책 불요, 지금 실행 가능) → W6~W9 뒤 예산 재상신.
 
 그 외 구조 (3-class 분류 · discovery/evaluation 분리 · seed 서로소 · 어휘 제한 ·
 판독 3-분기) 는 docs/89 §7 · B0 v3 `attacker_primary` · docs/92 좌표 규율에서 **유도된
