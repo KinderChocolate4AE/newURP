@@ -70,8 +70,8 @@ B0 v3 `grid` 가 이미 기계 규칙을 봉인했다. **재선택 금지**:
 
 ⇒ **seed = 1 이면 승계한 확장 규칙도 row gate 도 정의되지 않는다.** 따라서:
 
-$$ oxed{\ 	ext{eval seeds} = 3\ } \qquad
-   56 	imes 300 	imes 2\ 	ext{arm} 	imes 3\ 	ext{seed} = \mathbf{100{,}800}\ 	ext{ep} $$
+$$ \boxed{\ \text{eval seeds} = 3\ } \qquad
+   56 \times 300 \times 2\ \text{arm} \times 3\ \text{seed} = \mathbf{100{,}800}\ \text{ep} $$
 
 paired Δ 는 **cell × seed 단위**로 `RULE_COOP − SOLO` 를 잡는다 (seed pooling 금지).
 
@@ -163,7 +163,7 @@ forced-fire 를 100,800 에 섞지 않는다. manifest 에 **별도 계정**으�
 - **비용**: 선택된 에피소드당 **replay 2 회** (pass 1 축좌표 기록 + pass 2 강제발사).
   pass 1 을 primary 산출물에서 재사용하지 않는 이유 = 100,800 판의 per-tick 축좌표를
   저장하지 않기 때문이며, 재실행이 **동일 CRN 을 구조적으로 보장**한다 (GO smoke 6 이 검증).
-- **상한**: $2 	imes 28 	imes 300 	imes 3 = 50{,}400$ ep-equivalent (전 판이 no-fire 인
+- **상한**: $2 \times 28 \times 300 \times 3 = 50{,}400$ ep-equivalent (전 판이 no-fire 인
   극단). **실제 비용 = 2 × (해당 28 cell 의 no-fire 에피소드 수)** — manifest 에 실측 기록.
 
 ### §5.5 판독 (이 조합만 본다)
