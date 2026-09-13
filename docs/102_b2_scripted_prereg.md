@@ -56,6 +56,25 @@ B0 v3 `grid` 가 이미 기계 규칙을 봉인했다. **재선택 금지**:
 ⇒ 기본 **14 × 4 = 56 cell**. `S_C` (R2b secondary replay set) 와 **혼합 금지**.
 실행 시 **cell ID 를 manifest 에 열거**해 사후 선택 자유도를 0 으로 만든다.
 
+### §2.1 [r1 amendment 2026-09-14, 실행 전] **eval seed = 3** — 예산 확정
+
+초안이 `n_per_cell_per_seed = 300` 만 인용하고 **seed 수를 명시하지 않았다.** 그 상태로는
+33,600 (seed 1 가정) 과 100,800 (seed 3) 이 둘 다 읽혀 blocker 다. **문서가 답을 준다**:
+
+- B0 v3 `grid.seeds_min = 3`
+- §2 가 승계한 **censoring 확장 규칙이 `arm × seed` 단위**다 — *"ANY arm × seed 의
+  isotonic fit 이 censored 면 그 행을 ALL arms × ALL seeds 에 동일 CRN 으로 확장"*
+- `boundary_rule.row` = **">= 2/3 seeds 에서 paired Δ > 0"**, `decisions.2_seed_rule` =
+  per-seed majority, `boundary_rule.rejected` = **seed-pooled point estimate 금지**
+- docs/89 평가 조항: *"B2 와 동일 world contract. **seed ≥ 3**"*
+
+⇒ **seed = 1 이면 승계한 확장 규칙도 row gate 도 정의되지 않는다.** 따라서:
+
+$$ oxed{\ 	ext{eval seeds} = 3\ } \qquad
+   56 	imes 300 	imes 2\ 	ext{arm} 	imes 3\ 	ext{seed} = \mathbf{100{,}800}\ 	ext{ep} $$
+
+paired Δ 는 **cell × seed 단위**로 `RULE_COOP − SOLO` 를 잡는다 (seed pooling 금지).
+
 ## §3. CRN / seed 계약
 
 - 두 arm 은 **같은 scenario 집합과 같은 seed** 를 소비한다 (paired).
@@ -134,7 +153,20 @@ trajectory · 제어기 · attacker · NET predicate 는 건드리지 않는다.
 $$ \mathcal{G}_{ff} = \{\,(\text{row}, \chi) : \chi \in \{\chi_{lo}, \chi_{hi}\}\,\}
    \qquad 14 \times 2 = 28\ \text{cell} $$
 
-### §5.4 판독 (이 조합만 본다)
+### §5.4 예산 — primary 와 **별도 계정**
+
+forced-fire 를 100,800 에 섞지 않는다. manifest 에 **별도 계정**으로 적는다.
+
+- **표본 (기계 규칙)**: §5.3 의 28 cell 에서 **`FIRE = 0` 으로 끝난 전 에피소드**.
+  "흥미로운 판" 을 고르는 것이 아니라 **censoring 질문의 정의상 대상 전체**다.
+  ⇒ primary run **이후**에 돌린다 (그 결과가 표본을 정한다 — 선택이 아니라 정의).
+- **비용**: 선택된 에피소드당 **replay 2 회** (pass 1 축좌표 기록 + pass 2 강제발사).
+  pass 1 을 primary 산출물에서 재사용하지 않는 이유 = 100,800 판의 per-tick 축좌표를
+  저장하지 않기 때문이며, 재실행이 **동일 CRN 을 구조적으로 보장**한다 (GO smoke 6 이 검증).
+- **상한**: $2 	imes 28 	imes 300 	imes 3 = 50{,}400$ ep-equivalent (전 판이 no-fire 인
+  극단). **실제 비용 = 2 × (해당 28 cell 의 no-fire 에피소드 수)** — manifest 에 실측 기록.
+
+### §5.5 판독 (이 조합만 본다)
 
 | 관측 | 읽기 |
 |---|---|
