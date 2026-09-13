@@ -1,0 +1,241 @@
+{
+ "doc": "docs/99",
+ "b0_v3_hash": "5e7b5b486b9d8a4a",
+ "stratum": "multi-dependent",
+ "n_records": 46,
+ "primary_rho": 0.75,
+ "ratio_floor": 1.5,
+ "by_rho": {
+  "0.0": {
+   "n_lost": 44,
+   "n_retained": 2,
+   "median": {
+    "abs_dv_par": {
+     "lost": 0.07704521769969266,
+     "retained": 0.2645603699706353
+    },
+    "dv_perp": {
+     "lost": 1.2240742550802366,
+     "retained": 2.097933356113686
+    },
+    "dtheta": {
+     "lost": 0.0790733551160191,
+     "retained": 0.15889295192950978
+    },
+    "abs_ds": {
+     "lost": 0.1416897133158903,
+     "retained": 0.3069378564334011
+    },
+    "dp_norm": {
+     "lost": 0.09387216133859996,
+     "retained": 0.7837341495506438
+    },
+    "ds": {
+     "lost": 0.1416897133158903,
+     "retained": 0.26754844035707404
+    },
+    "dv_par": {
+     "lost": 0.07704521769969266,
+     "retained": 0.09815355845094391
+    },
+    "dv_norm": {
+     "lost": 1.2264565314314395,
+     "retained": 2.1159273039879913
+    }
+   },
+   "ratio": {
+    "abs_dv_par": 0.29121979874855874,
+    "dv_perp": 0.5834667014150399,
+    "dtheta": 0.49765174701454773,
+    "abs_ds": 0.46162345356260714,
+    "dp_norm": 0.1197755149401386,
+    "ds": 0.5295852710888135,
+    "dv_par": 0.7849457413018707,
+    "dv_norm": 0.5796307506027627
+   },
+   "frac_null_effect": {
+    "lost": 0.0,
+    "retained": 0.0
+   },
+   "skipped": [],
+   "n_not_reached_ref_fire": 0
+  },
+  "0.25": {
+   "n_lost": 44,
+   "n_retained": 1,
+   "median": {
+    "abs_dv_par": {
+     "lost": 0.07300457349375497,
+     "retained": 0.3576526302568346
+    },
+    "dv_perp": {
+     "lost": 1.2322646994536883,
+     "retained": 2.31387661452658
+    },
+    "dtheta": {
+     "lost": 0.07803089252694533,
+     "retained": 0.18993903648134758
+    },
+    "abs_ds": {
+     "lost": 0.14096043195345054,
+     "retained": 0.5780634200728958
+    },
+    "dp_norm": {
+     "lost": 0.0957577806344882,
+     "retained": 0.24254559973292986
+    },
+    "ds": {
+     "lost": 0.14096043195345054,
+     "retained": 0.5780634200728958
+    },
+    "dv_par": {
+     "lost": 0.07300457349375497,
+     "retained": 0.3576526302568346
+    },
+    "dv_norm": {
+     "lost": 1.234628315383389,
+     "retained": 2.341354392479408
+    }
+   },
+   "ratio": {
+    "abs_dv_par": 0.20412145002632728,
+    "dv_perp": 0.5325541957239627,
+    "dtheta": 0.41082072423068294,
+    "abs_ds": 0.24384942388445016,
+    "dp_norm": 0.3948032070667468,
+    "ds": 0.24384942388445016,
+    "dv_par": 0.20412145002632728,
+    "dv_norm": 0.5273137289037065
+   },
+   "frac_null_effect": {
+    "lost": 0.0,
+    "retained": 0.0
+   },
+   "skipped": [],
+   "n_not_reached_ref_fire": 1
+  },
+  "0.5": {
+   "n_lost": 38,
+   "n_retained": 8,
+   "median": {
+    "abs_dv_par": {
+     "lost": 0.07940286116747629,
+     "retained": 0.006636697105762504
+    },
+    "dv_perp": {
+     "lost": 1.1270740083496125,
+     "retained": 0.29676746688983
+    },
+    "dtheta": {
+     "lost": 0.05517911465329556,
+     "retained": 0.01366792277791031
+    },
+    "abs_ds": {
+     "lost": 0.1366280485022795,
+     "retained": 0.006808542740086132
+    },
+    "dp_norm": {
+     "lost": 0.07245923317821726,
+     "retained": 0.09543352792832704
+    },
+    "ds": {
+     "lost": 0.1366280485022795,
+     "retained": 0.006808542740086132
+    },
+    "dv_par": {
+     "lost": 0.07940286116747629,
+     "retained": 0.006636697105762504
+    },
+    "dv_norm": {
+     "lost": 1.1284925078900145,
+     "retained": 0.29676755494444773
+    }
+   },
+   "ratio": {
+    "abs_dv_par": 11.96421350893541,
+    "dv_perp": 3.7978354573751845,
+    "dtheta": 4.037125139635293,
+    "abs_ds": 20.067150008160347,
+    "dp_norm": 0.7592639059999536,
+    "ds": 20.067150008160347,
+    "dv_par": 11.96421350893541,
+    "dv_norm": 3.8026141641435784
+   },
+   "frac_null_effect": {
+    "lost": 0.0,
+    "retained": 0.125
+   },
+   "skipped": [],
+   "n_not_reached_ref_fire": 0
+  },
+  "0.75": {
+   "n_lost": 15,
+   "n_retained": 31,
+   "median": {
+    "abs_dv_par": {
+     "lost": 0.07234426424499328,
+     "retained": 0.0003282487285667942
+    },
+    "dv_perp": {
+     "lost": 0.8298571753129041,
+     "retained": 0.0028988906990533064
+    },
+    "dtheta": {
+     "lost": 0.039718661923757406,
+     "retained": 0.00015993405844355875
+    },
+    "abs_ds": {
+     "lost": 0.10524027599193175,
+     "retained": 0.00032801691288497636
+    },
+    "dp_norm": {
+     "lost": 0.04175935629064359,
+     "retained": 0.00022622518702153927
+    },
+    "ds": {
+     "lost": 0.10524027599193175,
+     "retained": -1.3176755611965518e-05
+    },
+    "dv_par": {
+     "lost": 0.07234426424499328,
+     "retained": -1.6092199466479556e-05
+    },
+    "dv_norm": {
+     "lost": 0.8351114907106455,
+     "retained": 0.00291741572506619
+    }
+   },
+   "ratio": {
+    "abs_dv_par": 220.3946518265712,
+    "dv_perp": 286.2671488731574,
+    "dtheta": 248.34398820545312,
+    "abs_ds": 320.837956391705,
+    "dp_norm": 184.5919848291146,
+    "ds": 7986.812466671644,
+    "dv_par": 4495.610708510552,
+    "dv_norm": 286.25042483161997
+   },
+   "frac_null_effect": {
+    "lost": 0.0,
+    "retained": 0.6774193548387096
+   },
+   "skipped": [],
+   "n_not_reached_ref_fire": 0
+  }
+ },
+ "verdict": {
+  "branch": "99-P",
+  "sentence": "AUTH-LOST records are distinguished primarily by abs_ds (median ratio 320.84 vs retained) -> speed / timing steering. DEGENERATE CELL: 68% of the RETAINED stratum has |dp| < 1 mm, i.e. the intervention did essentially nothing there. The median ratio then divides by ~0 and every component inflates together, so this cell cannot say WHICH component separates the strata. Read a cell where both strata actually moved."
+ },
+ "secondary_rho_verdicts": {
+  "0.25": {
+   "branch": "99-N",
+   "sentence": "No component separates the strata (max median ratio 0.53 on dv_perp, below the declared floor 1.5). Attacker velocity alone does not distinguish AUTH-LOST from AUTH-RETAINED -- capturer-relative geometry / pointing state is the next place to look."
+  },
+  "0.5": {
+   "branch": "99-P",
+   "sentence": "AUTH-LOST records are distinguished primarily by abs_ds (median ratio 20.07 vs retained) -> speed / timing steering."
+  }
+ },
+ "vocabulary": "association only -- the same intervention moves all four components at once, so no component is called the cause; reachable-set shape is not measured here"
+}
