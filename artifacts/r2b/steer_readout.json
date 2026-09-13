@@ -1,0 +1,418 @@
+{
+ "doc": "docs/96 §6·§7 readout",
+ "b0_v3_hash": "5e7b5b486b9d8a4a",
+ "r2b_b0_hash": "cba024d7ee3d9f61",
+ "sample": {
+  "kept": 140,
+  "excluded": [],
+  "multi_dependent": 46,
+  "solo_sufficient": 94
+ },
+ "primary_multi_dependent": {
+  "0.0": {
+   "n": 46,
+   "categories": {
+    "S": 0,
+    "L": 46,
+    "P": 0,
+    "T": 0
+   },
+   "destroyed": 46,
+   "destroyed_frac": 1.0,
+   "n_reached_ref_fire": 46,
+   "dp_norm": {
+    "median": 0.09812605952944108,
+    "min": 0.028355806704044702,
+    "max": 3.0921178250667833,
+    "mean": 0.2574880060008109
+   },
+   "dheading_rad": {
+    "median": 0.0803883173022016,
+    "min": 0.02755291897899362,
+    "max": 0.946953337322599,
+    "mean": 0.1049598720424634
+   },
+   "d_v_worst": {
+    "median": -1.0,
+    "min": -1.0,
+    "max": 0.0,
+    "mean": -0.9565217391304348
+   },
+   "n_dp_exactly_zero": 0,
+   "n_lost_authoritative": 44,
+   "n_boxed_changed": 0,
+   "coast_disp_max_per_record": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "mean": 0.0
+   },
+   "t_withdraw": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "mean": 0.0
+   }
+  },
+  "0.25": {
+   "n": 46,
+   "categories": {
+    "S": 1,
+    "L": 44,
+    "P": 1,
+    "T": 0
+   },
+   "destroyed": 45,
+   "destroyed_frac": 0.9782608695652174,
+   "n_reached_ref_fire": 45,
+   "dp_norm": {
+    "median": 0.0965336291376274,
+    "min": 0.02623022534171602,
+    "max": 0.8146540679158646,
+    "mean": 0.14667097102020676
+   },
+   "dheading_rad": {
+    "median": 0.07948359574594671,
+    "min": 0.028111748235567162,
+    "max": 0.2544997199457974,
+    "mean": 0.08558446045885604
+   },
+   "d_v_worst": {
+    "median": -1.0,
+    "min": -1.0,
+    "max": 0.0,
+    "mean": -0.9777777777777777
+   },
+   "n_dp_exactly_zero": 0,
+   "n_lost_authoritative": 44,
+   "n_boxed_changed": 0,
+   "coast_disp_max_per_record": {
+    "median": 0.4627368531564565,
+    "min": 0.19994641319439263,
+    "max": 4.467494445965077,
+    "mean": 0.6770415605900564
+   },
+   "t_withdraw": {
+    "median": 3.0,
+    "min": 2.0,
+    "max": 12.0,
+    "mean": 3.1739130434782608
+   }
+  },
+  "0.5": {
+   "n": 46,
+   "categories": {
+    "S": 8,
+    "L": 38,
+    "P": 0,
+    "T": 0
+   },
+   "destroyed": 38,
+   "destroyed_frac": 0.8260869565217391,
+   "n_reached_ref_fire": 46,
+   "dp_norm": {
+    "median": 0.09220453476508032,
+    "min": 0.00013853857933307254,
+    "max": 0.37178829993316465,
+    "mean": 0.1133548944812638
+   },
+   "dheading_rad": {
+    "median": 0.05231755029595496,
+    "min": 5.405098551741325e-05,
+    "max": 0.22543031564085145,
+    "mean": 0.07267483829724322
+   },
+   "d_v_worst": {
+    "median": -1.0,
+    "min": -1.0,
+    "max": 0.0,
+    "mean": -0.8260869565217391
+   },
+   "n_dp_exactly_zero": 0,
+   "n_lost_authoritative": 38,
+   "n_boxed_changed": 0,
+   "coast_disp_max_per_record": {
+    "median": 0.6731584038696828,
+    "min": 0.2682204771767039,
+    "max": 10.636891538012103,
+    "mean": 1.0603845422570897
+   },
+   "t_withdraw": {
+    "median": 6.0,
+    "min": 4.0,
+    "max": 24.0,
+    "mean": 6.826086956521739
+   }
+  },
+  "0.75": {
+   "n": 46,
+   "categories": {
+    "S": 27,
+    "L": 19,
+    "P": 0,
+    "T": 0
+   },
+   "destroyed": 19,
+   "destroyed_frac": 0.41304347826086957,
+   "n_reached_ref_fire": 46,
+   "dp_norm": {
+    "median": 0.0016327810388157837,
+    "min": 1.0831813651858434e-06,
+    "max": 0.25941040608223465,
+    "mean": 0.03302944063052027
+   },
+   "dheading_rad": {
+    "median": 0.0010770213664117948,
+    "min": 1.5139169105458235e-06,
+    "max": 0.1956983667873003,
+    "mean": 0.02496729463003607
+   },
+   "d_v_worst": {
+    "median": 0.0,
+    "min": -1.0,
+    "max": 0.0,
+    "mean": -0.32608695652173914
+   },
+   "n_dp_exactly_zero": 0,
+   "n_lost_authoritative": 15,
+   "n_boxed_changed": 0,
+   "coast_disp_max_per_record": {
+    "median": 0.5338529456925676,
+    "min": 0.20116535788252765,
+    "max": 8.296775399649446,
+    "mean": 0.8423519049015221
+   },
+   "t_withdraw": {
+    "median": 9.0,
+    "min": 6.0,
+    "max": 36.0,
+    "mean": 10.23913043478261
+   }
+  }
+ },
+ "control_solo_sufficient": {
+  "0.0": {
+   "n": 94,
+   "categories": {
+    "S": 44,
+    "L": 50,
+    "P": 0,
+    "T": 0
+   },
+   "destroyed": 50,
+   "destroyed_frac": 0.5319148936170213,
+   "n_reached_ref_fire": 94,
+   "dp_norm": {
+    "median": 0.2720895871521102,
+    "min": 9.111677856880258e-05,
+    "max": 2.8327292778526107,
+    "mean": 0.4489276345637249
+   },
+   "dheading_rad": {
+    "median": 0.10281325394229715,
+    "min": 5.256119689659362e-05,
+    "max": 0.3514054254281143,
+    "mean": 0.1075560733759157
+   },
+   "d_v_worst": {
+    "median": 0.0,
+    "min": -1.0,
+    "max": 0.0,
+    "mean": -0.4787234042553192
+   },
+   "n_dp_exactly_zero": 0,
+   "n_lost_authoritative": 45,
+   "n_boxed_changed": 0,
+   "coast_disp_max_per_record": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "mean": 0.0
+   },
+   "t_withdraw": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "mean": 0.0
+   }
+  },
+  "0.25": {
+   "n": 94,
+   "categories": {
+    "S": 54,
+    "L": 40,
+    "P": 0,
+    "T": 0
+   },
+   "destroyed": 40,
+   "destroyed_frac": 0.425531914893617,
+   "n_reached_ref_fire": 94,
+   "dp_norm": {
+    "median": 0.1351783467089005,
+    "min": 0.00026459916872800473,
+    "max": 1.5241821214086453,
+    "mean": 0.28347448227371214
+   },
+   "dheading_rad": {
+    "median": 0.08048137608818408,
+    "min": 0.00010418764573089331,
+    "max": 0.2759470133913577,
+    "mean": 0.08778436236306732
+   },
+   "d_v_worst": {
+    "median": 0.0,
+    "min": -1.0,
+    "max": 0.0,
+    "mean": -0.39361702127659576
+   },
+   "n_dp_exactly_zero": 0,
+   "n_lost_authoritative": 37,
+   "n_boxed_changed": 0,
+   "coast_disp_max_per_record": {
+    "median": 0.5986184761016411,
+    "min": 0.0999318978902635,
+    "max": 2.136690832653176,
+    "mean": 0.7355912049204517
+   },
+   "t_withdraw": {
+    "median": 3.0,
+    "min": 1.0,
+    "max": 7.0,
+    "mean": 3.3191489361702127
+   }
+  },
+  "0.5": {
+   "n": 94,
+   "categories": {
+    "S": 73,
+    "L": 21,
+    "P": 0,
+    "T": 0
+   },
+   "destroyed": 21,
+   "destroyed_frac": 0.22340425531914893,
+   "n_reached_ref_fire": 94,
+   "dp_norm": {
+    "median": 0.015397856960613635,
+    "min": 7.503752941917218e-06,
+    "max": 0.8850584816778863,
+    "mean": 0.09258014505748607
+   },
+   "dheading_rad": {
+    "median": 0.00713448581012727,
+    "min": 6.2132124443459485e-06,
+    "max": 0.29635914109348294,
+    "mean": 0.03508780284734563
+   },
+   "d_v_worst": {
+    "median": 0.0,
+    "min": -1.0,
+    "max": 0.0,
+    "mean": -0.18085106382978725
+   },
+   "n_dp_exactly_zero": 0,
+   "n_lost_authoritative": 17,
+   "n_boxed_changed": 0,
+   "coast_disp_max_per_record": {
+    "median": 0.9311842961580976,
+    "min": 0.1998637957805294,
+    "max": 2.8489211102042487,
+    "mean": 1.0518617707805837
+   },
+   "t_withdraw": {
+    "median": 7.0,
+    "min": 3.0,
+    "max": 14.0,
+    "mean": 7.148936170212766
+   }
+  },
+  "0.75": {
+   "n": 94,
+   "categories": {
+    "S": 80,
+    "L": 14,
+    "P": 0,
+    "T": 0
+   },
+   "destroyed": 14,
+   "destroyed_frac": 0.14893617021276595,
+   "n_reached_ref_fire": 94,
+   "dp_norm": {
+    "median": 0.0003437062250899411,
+    "min": 1.5132346404319932e-06,
+    "max": 0.1422516844362081,
+    "mean": 0.007762656812379884
+   },
+   "dheading_rad": {
+    "median": 0.0002548971780519968,
+    "min": 1.302722885130316e-06,
+    "max": 0.07274922920850582,
+    "mean": 0.004491576511580206
+   },
+   "d_v_worst": {
+    "median": 0.0,
+    "min": -1.0,
+    "max": 0.0,
+    "mean": -0.0425531914893617
+   },
+   "n_dp_exactly_zero": 0,
+   "n_lost_authoritative": 4,
+   "n_boxed_changed": 0,
+   "coast_disp_max_per_record": {
+    "median": 0.7316448041242194,
+    "min": 0.16655316315044102,
+    "max": 2.1366908326531795,
+    "mean": 0.8353906323549805
+   },
+   "t_withdraw": {
+    "median": 10.0,
+    "min": 5.0,
+    "max": 21.0,
+    "mean": 10.797872340425531
+   }
+  }
+ },
+ "prefix_sufficiency_pattern": {
+  "patterns": {
+   "LLLL": 19,
+   "LLLS": 19,
+   "LLSS": 6,
+   "LSSS": 1,
+   "LPSS": 1
+  },
+  "n_nonmonotone": 0,
+  "n_records": 46
+ },
+ "loo_destruction_map": {
+  "0.0": [
+   0.6086956521739131,
+   0.5434782608695652,
+   0.5652173913043478,
+   0.6956521739130435
+  ],
+  "0.25": [
+   0.391304347826087,
+   0.45652173913043476,
+   0.5217391304347826,
+   0.5869565217391305
+  ],
+  "0.5": [
+   0.2608695652173913,
+   0.2391304347826087,
+   0.30434782608695654,
+   0.34782608695652173
+  ],
+  "0.75": [
+   0.06521739130434782,
+   0.08695652173913043,
+   0.06521739130434782,
+   0.06521739130434782
+  ]
+ },
+ "reference_authoritative_at_fire": 46,
+ "verdict": {
+  "branch": "BRANCH_1",
+  "sentence": "Under the sealed A2-reactive world and its fixed interaction semantics, withdrawing limiter acceleration commands from t_rho onward changed the reactive target's state at the original firing time t_F^C and removed the capture-ready condition that the original plan had reached there (destroyed 98% at rho=0.25, falling to 41% at rho=0.75; 45/45 survivors show a non-zero attacker-state displacement at t_F^C)."
+ },
+ "caveat_asymmetry": "The realized plan is constant acceleration, so v_L(t_rho) ~ a_L*t_rho is already built up and late withdrawal is an intrinsically weak intervention (limiters coast). A null at late rho is NOT strong evidence against steering (docs/96 §2b)."
+}
