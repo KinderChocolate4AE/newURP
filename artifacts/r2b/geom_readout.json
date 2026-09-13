@@ -1,0 +1,519 @@
+{
+ "doc": "docs/95 §5 readout",
+ "b0_v3_hash": "5e7b5b486b9d8a4a",
+ "r2b_b0_hash": "cba024d7ee3d9f61",
+ "sample": {
+  "kept": 140,
+  "excluded": [],
+  "multi_dependent": 46,
+  "solo_sufficient": 94,
+  "note": "deterministic selected analysis set (K=5 per cell); fractions are 'of the analysis sample'"
+ },
+ "primary_multi_dependent": {
+  "n_records": 46,
+  "n_prefire_ticks": 555,
+  "channel_inactive_frac": 0.9801801801801802,
+  "geom_inactive_frac": 1.0,
+  "records_with_prefire_n_close": 4,
+  "records_with_prefire_n_open": 0,
+  "prefire_peak_dG_close": {
+   "median": 0.0,
+   "max": 0.41373801916932906
+  },
+  "prefire_peak_dV": {
+   "median": 0.0,
+   "max": 0.0
+  }
+ },
+ "control_solo_sufficient": {
+  "n_records": 94,
+  "n_prefire_ticks": 1170,
+  "channel_inactive_frac": 0.9829059829059829,
+  "geom_inactive_frac": 0.9965811965811966,
+  "records_with_prefire_n_close": 11,
+  "records_with_prefire_n_open": 0,
+  "prefire_peak_dG_close": {
+   "median": 0.0,
+   "max": 0.2547923322683706
+  },
+  "prefire_peak_dV": {
+   "median": 0.0,
+   "max": 0.0008243221102646192
+  }
+ },
+ "H1_series": {
+  "xi": [
+   -2.0,
+   -1.8333333333333333,
+   -1.6666666666666667,
+   -1.5,
+   -1.3333333333333333,
+   -1.1666666666666667,
+   -1.0,
+   -0.8333333333333334,
+   -0.6666666666666666,
+   -0.5,
+   -0.3333333333333333,
+   -0.16666666666666666,
+   0.0
+  ],
+  "dG_close": {
+   "q25": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "median": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "q75": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "n_per_k": [
+    27,
+    33,
+    39,
+    42,
+    46,
+    46,
+    46,
+    46,
+    46,
+    46,
+    46,
+    46,
+    46
+   ]
+  }
+ },
+ "H2": {
+  "dV": {
+   "q25": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "median": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "q75": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "n_per_k": [
+    27,
+    33,
+    39,
+    42,
+    46,
+    46,
+    46,
+    46,
+    46,
+    46,
+    46,
+    46,
+    46
+   ]
+  },
+  "authoritative_at_fire": {
+   "n": 46,
+   "not_boxed_at_fire": 46,
+   "capture_predicate_at_fire": 46
+  }
+ },
+ "H3": {
+  "n_plus_prefire_max_hist": [
+   46,
+   0,
+   0,
+   0,
+   0
+  ],
+  "n_plus_at_fire_hist": [
+   46,
+   0,
+   0,
+   0,
+   0
+  ],
+  "sum_D_prefire_max": 0.0
+ },
+ "residual_closure_multi": {
+  "records": [
+   {
+    "s": 3609,
+    "eta": 2.742765941850066,
+    "chi": 0.5849818832185014,
+    "n_hit_ticks": 1,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     0,
+     0
+    ],
+    "max_dG_close": 0.017971246006389774,
+    "dV_at_closure_ticks": [
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 1205,
+    "eta": 1.9788107724619675,
+    "chi": 0.5581047926253648,
+    "n_hit_ticks": 4,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     -3,
+     0
+    ],
+    "max_dG_close": 0.01876996805111819,
+    "dV_at_closure_ticks": [
+     -0.001745337737063396,
+     -0.0067302978644832034,
+     -0.0006233138809347283,
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 1600,
+    "eta": 2.4703882408571807,
+    "chi": 0.5780309851127307,
+    "n_hit_ticks": 3,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     -2,
+     0
+    ],
+    "max_dG_close": 0.41373801916932906,
+    "dV_at_closure_ticks": [
+     -0.0033378310968248392,
+     0.0,
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 1200,
+    "eta": 1.954243999216355,
+    "chi": 0.553910316538488,
+    "n_hit_ticks": 3,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     -2,
+     0
+    ],
+    "max_dG_close": 0.016773162939297093,
+    "dV_at_closure_ticks": [
+     -0.00040526920222327956,
+     -0.0006153981690932842,
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   }
+  ],
+  "n_with_closure": 4,
+  "n_closure_coupled_to_positive_dV": 0
+ },
+ "residual_closure_solo": {
+  "records": [
+   {
+    "s": 0,
+    "eta": 2.2319139791565927,
+    "chi": 0.591009152042181,
+    "n_hit_ticks": 1,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     0,
+     0
+    ],
+    "max_dG_close": 0.02515974440894564,
+    "dV_at_closure_ticks": [
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 4403,
+    "eta": 2.724416481319694,
+    "chi": 0.5223786752472552,
+    "n_hit_ticks": 3,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     -3,
+     0
+    ],
+    "max_dG_close": 0.004792332268370614,
+    "dV_at_closure_ticks": [
+     3.49420950450513e-05,
+     0.0008243221102646192,
+     0.0
+    ],
+    "dV_positive_anywhere": true
+   },
+   {
+    "s": 405,
+    "eta": 1.9802837296612175,
+    "chi": 0.6281124042394148,
+    "n_hit_ticks": 3,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     -2,
+     0
+    ],
+    "max_dG_close": 0.2547923322683706,
+    "dV_at_closure_ticks": [
+     -0.009569879472153486,
+     -0.004829473904640058,
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 2001,
+    "eta": 2.3038705112123457,
+    "chi": 0.6045367922679775,
+    "n_hit_ticks": 2,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     -1,
+     0
+    ],
+    "max_dG_close": 0.045527156549520775,
+    "dV_at_closure_ticks": [
+     0.0,
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 4000,
+    "eta": 2.658627566125527,
+    "chi": 0.5097635850099251,
+    "n_hit_ticks": 2,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     -1,
+     0
+    ],
+    "max_dG_close": 0.07228434504792336,
+    "dV_at_closure_ticks": [
+     -0.0009758500167250661,
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 2004,
+    "eta": 2.381119890452811,
+    "chi": 0.6049371900988496,
+    "n_hit_ticks": 2,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     -1,
+     0
+    ],
+    "max_dG_close": 0.07587859424920129,
+    "dV_at_closure_ticks": [
+     -0.0005464246895688918,
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 1601,
+    "eta": 2.417594249627533,
+    "chi": 0.5720299711741167,
+    "n_hit_ticks": 1,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     0,
+     0
+    ],
+    "max_dG_close": 0.0031948881789137795,
+    "dV_at_closure_ticks": [
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 3604,
+    "eta": 2.7563787938654216,
+    "chi": 0.5719553370529044,
+    "n_hit_ticks": 1,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     0,
+     0
+    ],
+    "max_dG_close": 0.0007987220447284171,
+    "dV_at_closure_ticks": [
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 401,
+    "eta": 2.16078665849242,
+    "chi": 0.6226459174623221,
+    "n_hit_ticks": 1,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     0,
+     0
+    ],
+    "max_dG_close": 0.05231629392971249,
+    "dV_at_closure_ticks": [
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 806,
+    "eta": 2.115355425390772,
+    "chi": 0.5453715477260566,
+    "n_hit_ticks": 2,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     -6,
+     -5
+    ],
+    "max_dG_close": 0.00439297124600635,
+    "dV_at_closure_ticks": [
+     0.0,
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   },
+   {
+    "s": 402,
+    "eta": 2.1085184238822623,
+    "chi": 0.6273983527339976,
+    "n_hit_ticks": 2,
+    "n_prefire_ticks": 13,
+    "k_range": [
+     -1,
+     0
+    ],
+    "max_dG_close": 0.08785942492012777,
+    "dV_at_closure_ticks": [
+     -9.348787438290262e-05,
+     0.0
+    ],
+    "dV_positive_anywhere": false
+   }
+  ],
+  "n_with_closure": 11,
+  "n_closure_coupled_to_positive_dV": 1
+ },
+ "by_eta": {
+  "eta": [
+   2.1,
+   2.4,
+   2.7,
+   3.0,
+   3.3,
+   3.6,
+   3.9
+  ],
+  "multi_dependent_frac": [
+   0.25,
+   0.25,
+   0.25,
+   0.3,
+   0.3,
+   0.5,
+   0.45
+  ],
+  "peak_dG_median": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "peak_dV_median": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "verdict": {
+  "branch": "BRANCH_2",
+  "sentence": "Under the sealed A2-reactive world and its fixed interaction semantics, multi-agent-dependent successful plans were not generally explained by instantaneous limiter-induced escape-channel closure near FIRE. H1 was structurally inactive in 98.0% of pre-fire ticks (n_block_full == 0 and n_block_hold == 0). Newly blocked escape directions appeared before FIRE in only 4/46 records of the multi-dependent stratum, confined to the final ticks, and in none of them did that closure coincide with a positive move of the capturability proxy. Next card: trajectory-level state steering probe (separate pre-registration)."
+ }
+}
