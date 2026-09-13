@@ -61,9 +61,13 @@ $\Delta p$ 를 규칙 안에 넣지 않았다. docs/98 은 봉인 문서이므�
 도달집합이 통째로 평행이동한 것이라면 $\Delta p < m_{cap}$ 일 때 술어는 유지돼야 한다.
 유지되지 않았다.
 
-⇒ **평행이동만으로 설명되지 않는다.** 속도·heading 변화가 **도달집합의 모양 자체**를 바꿔
-원뿔 밖으로 witness 를 밀어낸다. 이것이 분기 B 가 원래 말하려던 것이며, 봉인 규칙이
-쓴 근거보다 **이 비교가 훨씬 강한 논거**다.
+⇒ **증명된 것은 단 하나다**: 
+
+> **position translation alone is insufficient to explain the predicate loss.**
+
+**속도·heading 이 도달집합의 모양을 바꿨다는 것은 아직 가장 유력한 후보일 뿐 증명이
+아니다** — branch 는 $t_F^C$ 에서 위치·속력·진행방향·capturer 상대기하를 동시에 바꿀 수
+있기 때문이다. 어느 성분이 갈랐는지는 **docs/99 velocity decomposition** 이 분리한다.
 
 ## 5. 그래서 지금 확정된 것 / 아닌 것
 
@@ -78,7 +82,7 @@ $\Delta p$ 를 규칙 안에 넣지 않았다. docs/98 은 봉인 문서이므�
 **확정 아님**
 
 - "경계에 얹는다 / precision threading" — **기각됨** (§1).
-- 속도·heading 중 **무엇이** 도달집합을 얼마나 바꾸는지 — 미측정. $\Delta v$ ·
+- **속도·heading 이 원인이라는 것 자체** — 후보일 뿐 미증명. 어느 성분이지도 미측정. $\Delta v$ ·
   $\Delta\hat v$ 는 이미 steer probe 에 저장돼 있으므로 **재실행 없이** 분해 가능.
 - 왜 하필 여유가 ~11 cm 인가 (CEM 이 최적화를 멈춘 지점인지, 세계의 성질인지).
 
@@ -87,8 +91,11 @@ $\Delta p$ 를 규칙 안에 넣지 않았다. docs/98 은 봉인 문서이므�
 - ✅ **"trajectory-mediated cooperative state steering"** — 채택 가능.
 - ❌ **"precision capture-state threading"** · "경계에 얹는다" — **기각** (여유 11 cm).
 - ❌ "the capture margin was 9.6 cm" — 9.6 cm 는 변위, 여유는 11.2 cm. 둘을 섞지 않는다.
-- 새로 허용: **"the withdrawal-induced state change is commensurate with the available
-  capture margin, and is not accounted for by translation of the attacker alone."**
+- 새로 허용: **"The cooperative effect is trajectory-mediated, and the loss of capture
+  after limiter-command withdrawal cannot be explained by FIRE-time position translation
+  alone."**
+- ❌ **아직 안 됨**: "reachable-set shape change is specifically caused by heading /
+  velocity steering" — docs/99 이후.
 
 ## 7. training contract 함의 (유지·강화)
 
