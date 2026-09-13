@@ -1,0 +1,14 @@
+{
+ "platform": "Windows-AMD64-py(3, 14)",
+ "picks": [
+  0,
+  1,
+  3
+ ],
+ "telemetry_hash": {
+  "0": "50eb9b8822a63e3f",
+  "1": "5073047f0b61725b",
+  "3": "fecb1e958182a308"
+ },
+ "note": "same-machine bit-level baseline; NOT portable across machines"
+}
