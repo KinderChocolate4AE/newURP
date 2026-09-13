@@ -148,6 +148,40 @@ selection bias 를 차단한다.
 
 **분기 2 는 실패가 아니다.** 그것이 이 arm 을 만든 이유다.
 
+### §B.8 [2026-09-14 추가] PFSP 의 역할이 바뀌었다 — **mechanism transportability test**
+
+`101-A` (`d9329be`) 가 sealed A2 에서 메커니즘을 끝까지 닫았다:
+
+$$ 11\,\text{cm} \rightarrow 0.013\,\text{rad} \rightarrow
+   \delta_g \approx 0.021\,\text{rad 의 near-tie 교차} \rightarrow 107°\ \text{route 전환}
+   \rightarrow 16.1\,\text{m/s}^2 \rightarrow 0.84\,\text{m/s} \rightarrow 42\,\text{mm}
+   \rightarrow \text{capture 상실} $$
+
+이 메커니즘은 **A2 의 hard argmax 에 얹혀 있다** — physics-only 가 아니다. 그래서
+learned/PFSP 적대자의 질문이 날카로워졌다. 예전에는 막연히 *"scripted 보다 강한 적대자를
+쓰자"* 였는데, 지금은:
+
+$$ \boxed{\ \text{A2 hard-argmax boundary exploitation 이 learned/adaptive attacker 에서도
+   나타나는가?}\ } $$
+
+⇒ **PFSP 는 단순 난이도 상승이 아니라 메커니즘의 이식 가능성 시험(transportability test)**
+이다. 두 갈래 모두 의미가 있다:
+
+| 결과 | 의미 |
+|---|---|
+| learned attacker 에서도 연속 섭동이 **자기 decision boundary** 를 통해 확대됨 | 메커니즘이 정책 종류를 넘어 성립 — 주장 범위가 넓어진다 |
+| 나타나지 않음 | `101-A` 는 **A2 argmax 의 brittleness artifact** — 주장을 A2 조건부로 영구 한정 |
+
+**본 문서의 Class I/II 분류가 이 시험의 전제다** (§A.3~A.4): 좌표를 움직이는 축을 탐색에서
+빼두어야 "적대자가 더 강해졌다" 와 "다른 세계로 갔다" 가 섞이지 않는다.
+
+> **[DEFERRED — reviewer-defense card]** *CEM enrichment near A2 route-choice boundaries*.
+> 질문: $P(\text{near-tie} \mid C\text{-success})$ 가 baseline / random / rule 성공 상태보다
+> **높은가** (CEM 이 A2 의 불연속을 *찾아간* 것인가, 우연인가).
+> **현재 critical path 아님** — `101-A` 의 메커니즘 존재 주장에 필요하지 않다.
+> 용도: A2-specific exploitation 진단 · PFSP 결과 해석 보조 · 심사자가 "CEM 이 scripted
+> discontinuity 만 exploit 한 것 아닌가" 라고 물을 때 수행.
+
 ### §B.7 지위 선언
 
 - 층3 **frozen-policy robustness** — 학습 재실행 없음, B0 v3 불변.
