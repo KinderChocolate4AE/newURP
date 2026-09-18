@@ -59,6 +59,25 @@ def git_commit(short: bool = True) -> str:
         return "unknown"
 
 
+def git_dirty(paths=("shepherd", "tests")) -> list:
+    """실행 코드 경로의 미커밋 상태 목록 (tracked 수정 + untracked 신규).
+
+    B2 가 잡은 구멍 (2026-09-18): manifest·shard 는 `git_commit()` 으로 HEAD 만
+    적는데, 구현이 untracked/미커밋이면 그 커밋 번호로는 재현이 안 된다 — B2
+    manifest 의 `ac7cf2a` 가 실제로 그랬다 (B2 스크립트 untracked + mission_rollout
+    미커밋 상태의 HEAD). 실행기는 --run 전에 이 목록이 비어 있는지 확인한다.
+    git 이 실패하면 **확인 불능도 dirty 로 취급**한다 (fail-closed).
+    """
+    try:
+        out = subprocess.run(["git", "status", "--porcelain", "--"] + list(paths),
+                             cwd=ROOT, capture_output=True, text=True)
+        if out.returncode != 0:
+            return ["<git status 실패 -- snapshot 확인 불능>"]
+        return [ln for ln in out.stdout.splitlines() if ln.strip()]
+    except Exception:                                      # pragma: no cover
+        return ["<git 실행 불능 -- snapshot 확인 불능>"]
+
+
 def _prune(m: dict, paths=SCENARIO_VARYING) -> dict:
     """manifest 에서 선언된 leaf 경로들을 제거한 사본 (원본 불변).
 

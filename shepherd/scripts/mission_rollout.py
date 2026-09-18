@@ -52,6 +52,7 @@ from shepherd.agents.baselines import (arc_redeploy_limiter, arc_slots,
 
 __all__ = ["MissionResult", "run_episode", "run_batch", "summarize",
            "intercept_limiter", "intercept_lead_time", "scripted_role_actions",
+           "terminal_label", "partition_bin", "BINS",
            "LABELS", "LIMITER_MODES", "ROLES"]
 
 LABELS = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL",
@@ -280,12 +281,55 @@ def terminal_label(fi: dict) -> str:
     return "SPENT_FAIL"                    # env L356: SPENT and not captured
 
 
+BINS = ("N", "H_fb", "H_illegal", "F_other")
+
+
+def partition_bin(r: "MissionResult") -> str:
+    """B0 v3 `metrics.partition` — 에피소드당 **정확히 한 bin** (단일 정의원).
+
+        N          clean net capture (CAPTURED ∧ contact == 0)
+        H_fb       post-NET_FAIL 의 정당한 kinetic 무력화
+        H_illegal  NET_PRE / NET_PENDING 중 kinetic contact (비가역 latch)
+        F_other    timeout · 침투 · crash · out-of-bounds 등 나머지
+
+    **시점 규약 (여기서만 맞춘다)**: 접촉은 0-based 루프 `t` 의 **이동 전** 상태에서
+    잡히므로 env_sys 의 1-based `_step_i` 로는 `t + 1` 이다. KINETIC 은 NET_SPENT
+    확인 **다음** 제어 tick 부터 시작하므로 (B0 v3 same_tick_precedence ③),
+    `t + 1 <= net_spent_step` 인 접촉이 NET_PRE/NET_PENDING 중 접촉이다.
+    `net_spent_step` 이 None 이면 네트가 소진된 적이 없으므로 모든 접촉이 불법이다.
+
+    `CAPTURE_WITH_CONTACT` 를 명시적으로 H_illegal 로 쓴 것은 same_tick_precedence ①
+    ("raw CAPTURED ∧ body contact -> H_illegal") 를 도달가능성 논증에 의존하지 않고
+    코드에 박아두기 위함이다.
+    """
+    ns = r.meta.get("net_spent_step")
+
+    def _pre_kinetic(t) -> bool:
+        """0-based 루프 t 의 접촉이 NET_PRE/NET_PENDING 중인가."""
+        return t is not None and (ns is None or int(t) + 1 <= int(ns))
+
+    # 접촉은 두 소스로 본다: 계약 술어(이동 전 스캔) + env resolver 의 engagement
+    # event (이동 전/후). 후자가 없으면 NET_PRE 중의 kinetic kill 이 H_fb 로
+    # 새어나간다 (실측). 마지막 절은 commit 경로의 kill 까지 덮는 안전망이다.
+    if (_pre_kinetic(r.meta.get("first_contact_t"))
+            or _pre_kinetic(r.meta.get("first_engage_t"))
+            or (r.meta.get("hard_kill") and (ns is None or int(r.steps) <= int(ns)))):
+        return "H_illegal"
+    if r.label == "CAPTURE_WITH_CONTACT":
+        return "H_illegal"                          # same_tick_precedence ①
+    if r.label == "NET_CAPTURE":
+        return "N"
+    if r.meta.get("hard_kill") or r.label == "HARD_KILL":
+        return "H_fb"                               # 접촉이 KINETIC 이후 = 정당
+    return "F_other"
+
+
 def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
                 fire_mode: str = "clean", max_steps: Optional[int] = None,
                 attacker_name: str = "", policy=None,
                 baseline_commit: bool = False,
                 scripted_roles: Sequence[str] = (),
-                limiter_kw=None,
+                limiter_kw=None, kinetic_fallback: Optional[dict] = None,
                 telemetry: Optional[list] = None) -> MissionResult:
     """한 에피소드. env.step / env termination 을 그대로 호출한다 (술어 복제 금지).
 
@@ -299,6 +343,25 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
       signature: policy(obs, flags) -> {agent_id: action}. limiter_mode/fire_mode
       는 무시된다. **주지 않으면 기존 경로와 bit-identical** 이다.
 
+    kinetic_fallback: **reference fallback (PN takeover)** 배선 (B0 v3
+      `mission.kinetic_fallback` · docs/89 §3.2). `{"limiter_mode": "intercept",
+      "baseline_commit": True, "limiter_kw": {...}}` 형태. 기본 None = **기존 경로와
+      bit-identical**.
+
+      왜 여기인가: B0 v3 는 "NET_FAIL 이후 scripted PN 이 takeover 한다" 를 world
+      조항으로 적었지만 **env 에는 kill chain (contact -> veto -> Pk) 만 있고 조종
+      전환은 없다** -- 소진 후에도 limiter 는 arm 의 컨트롤러를 계속 쓴다. 전환을
+      러너마다 적으면 arm 마다 다른 fallback 이 되므로 (그러면 "limiter control 만
+      다르다" 계약이 깨진다) 공용 rollout 인 여기 한 곳에 둔다.
+
+      전환 시점은 B0 v3 same_tick_precedence ③ 그대로 — `net_spent` 확정 **다음**
+      제어 tick 부터다 (마지막 유효 tick 의 접촉이 legitimate 으로 오분류되는
+      off-by-one 차단).
+
+      ponytail: 학습 정책 경로에서는 limiter 를 `scripted_roles` 로 넘긴 경우에만
+      적용된다 (정책이 limiter 를 몰면 NET 단계까지 스크립트가 되므로). 학습 arm 의
+      system-evaluation sidecar 는 별도 배선이 필요하다 -- W5 이후 과제.
+
     scripted_roles: 역할 분리(docs/48). 여기 든 역할은 `policy` 가 무엇을 내든
       **스크립트로 덮어쓴다** -- 그 역할에 한해 `limiter_mode` / `fire_mode` 가
       다시 유효해진다. 기본 `()` 이면 기존 경로와 bit-identical.
@@ -311,13 +374,19 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
 
     contact: set = set()
     contact_steps = 0
+    first_contact_t: Optional[int] = None      # 0-based 루프 t (== _step_i - 1)
+    first_engage_t: Optional[int] = None       # env resolver 가 실제로 낸 engagement
+    n_engage = 0
     loss_sum = 0.0
     fire_step: Optional[int] = None
     clean_crossings = 0
     min_dist = float("inf")
     outcome = "TRUNCATED"
+    fi: dict = {}
     prev_clean = False
     steps = 0
+    kinetic = False                            # KINETIC 단계 진입 여부 (fallback)
+    kinetic_from_t: Optional[int] = None
     target = np.asarray(lay.target, float)
 
     for t in range(horizon):
@@ -339,24 +408,35 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
             if float(np.linalg.norm(p_att - env._p(s))) <= env.kill_radius:
                 contact.add(i)
                 contact_steps += 1
+                if first_contact_t is None:
+                    first_contact_t = t
 
         min_dist = min(min_dist, float(np.linalg.norm(p_att - target)))
+
+        # KINETIC 단계면 arm 컨트롤러 대신 **공통** reference fallback 이 몬다.
+        mode, commit, lkw = limiter_mode, baseline_commit, limiter_kw
+        if kinetic and kinetic_fallback:
+            mode = kinetic_fallback.get("limiter_mode", limiter_mode)
+            commit = bool(kinetic_fallback.get("baseline_commit", baseline_commit))
+            lkw = kinetic_fallback.get("limiter_kw")
+            if kinetic_from_t is None:
+                kinetic_from_t = t
 
         if policy is not None:
             # 학습 정책 평가 경로. limiter_mode / fire_mode 는 무시된다.
             acts = dict(policy(obs, flags))
             if scripted_roles:              # 역할 분리 (docs/48): 해당 역할만 덮어쓴다
                 acts.update(scripted_role_actions(
-                    env, scn, lay, roles=scripted_roles, limiter_mode=limiter_mode,
+                    env, scn, lay, roles=scripted_roles, limiter_mode=mode,
                     fire_mode=fire_mode, prev_clean=prev_clean,
-                    baseline_commit=baseline_commit, states=(lims, fin, att),
-                    limiter_kw=limiter_kw))
+                    baseline_commit=commit, states=(lims, fin, att),
+                    limiter_kw=lkw))
         else:
             acts = scripted_role_actions(
-                env, scn, lay, roles=ROLES, limiter_mode=limiter_mode,
+                env, scn, lay, roles=ROLES, limiter_mode=mode,
                 fire_mode=fire_mode, prev_clean=prev_clean,
-                baseline_commit=baseline_commit, states=(lims, fin, att),
-                limiter_kw=limiter_kw)
+                baseline_commit=commit, states=(lims, fin, att),
+                limiter_kw=lkw)
         acts[env.adversary_id] = np.zeros(3, np.float32)   # env-scripted; 무시됨
 
         obs_next, _, term, trunc, info = env.step(acts)
@@ -366,6 +446,16 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
             obs, flags = obs_next[env.limiter_ids[0]], fi
 
         loss_sum += float(fi.get("limiter_loss", 0.0))
+        # ★ env_sys 의 engagement resolver 는 **이동 전/후 상태를 모두** 본다.
+        #   위의 접촉 스캔(계약 술어 = 이동 전)이 놓치는 접촉이 실재한다
+        #   (실측 s=901: pre 0.764 > kill_radius 0.75, post 0.501 -> KILL).
+        #   latch 를 이동 전 스캔에만 걸면 **NET_PRE 중의 kinetic kill 이 legitimate
+        #   fallback 으로 오분류**되므로 권위 있는 event 도 함께 기록한다.
+        ev = len(fi.get("contacts") or ())
+        if ev:
+            n_engage += ev
+            if first_engage_t is None:
+                first_engage_t = t
         # A3-privileged 채널: 직전 스텝 v_shot_soft 를 공격자에게 흘린다(1스텝 지연).
         # fair 변형은 이 값을 무시하고 관측 대리량만 쓴다.
         try:
@@ -373,6 +463,8 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
                 float(fi.get("v_shot_soft", 0.0))
         except Exception:                                      # pragma: no cover
             pass
+        # ★ 스텝 **이후**에 읽는다 -> 다음 tick 부터 KINETIC (B0 v3 precedence ③).
+        kinetic = bool(getattr(env, "net_spent", False))
         prev_clean = bool(fi.get("clean_net_threshold_crossed", False))
         clean_crossings += int(prev_clean)
         if fi.get("fire_event") and fire_step is None:
@@ -398,8 +490,17 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
         label = "NET_CAPTURE" if not contact else "CAPTURE_WITH_CONTACT"
     else:
         label = outcome
-    sysinfo = {k: fi.get(k) for k in ("n_committed", "n_retired", "veto_events")} \
-        if "fi" in dir() else {}
+    # ★ B0 v3 partition 이 필요로 하는 **에피소드 사실**만 싣는다 (집계 아님).
+    #   `net_spent_step` 은 env_sys 의 1-based `_step_i`, `first_contact_t` 는
+    #   0-based 루프 t 다 -- 시점 규약이 다르므로 `partition_bin` 에서만 맞춘다.
+    meta = {"first_contact_t": first_contact_t,
+            "first_engage_t": first_engage_t, "n_engage": n_engage,
+            "net_spent_step": getattr(env, "net_spent_step", None),
+            "net_spent": bool(fi.get("net_spent", False)),
+            "hard_kill": bool(fi.get("hard_kill", False)),
+            "veto_events": int(fi.get("veto_events", 0) or 0),
+            "kinetic_from_t": kinetic_from_t,
+            "n_committed": fi.get("n_committed"), "n_retired": fi.get("n_retired")}
 
     return MissionResult(
         label=label, outcome=outcome, seed=int(seed), steps=steps,
@@ -407,7 +508,7 @@ def run_episode(env, scn, lay, *, seed: int = 0, limiter_mode: str = "hold",
         contact_steps=contact_steps, env_limiter_loss_sum=loss_sum,
         fire_step=fire_step, wasted_fire=int(env.fsm.wasted_fire),
         min_target_dist=min_dist, clean_crossings=clean_crossings,
-        limiter_mode=limiter_mode, attacker=attacker_name,
+        limiter_mode=limiter_mode, attacker=attacker_name, meta=meta,
     )
 
 

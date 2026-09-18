@@ -1,0 +1,1785 @@
+{
+ "schema": "b2-scripted-manifest-v1",
+ "campaign": "B2 scripted baseline (SOLO vs RULE_COOP)",
+ "prereg": {
+  "doc": "docs/102_b2_scripted_prereg.md",
+  "seal_commits": [
+   "f3f92c9",
+   "b44ba42"
+  ],
+  "status": "sealed pre-run — arm/cell/CRN/forced-fire/metrics/readout only"
+ },
+ "b0_v3_hash": "5e7b5b486b9d8a4a",
+ "code_commit": "ac7cf2a",
+ "arms": {
+  "SOLO": {
+   "limiter_mode": "hold",
+   "limiter_kw": null,
+   "basis": "B0 v3 B-arm 과 동일 의미 (hold_position_limiter = zeros(4))"
+  },
+  "RULE_COOP": {
+   "limiter_mode": "arc",
+   "limiter_kw": {
+    "r_d": 9.0,
+    "dphi": 0.5235987755982988
+   },
+   "basis": "docs/63 sect-7 SELECTED c5 — 이미 선택된 점 (새 자유도 0)"
+  }
+ },
+ "common": {
+  "fire_mode": "clean",
+  "policy": null,
+  "scripted_roles": [],
+  "baseline_commit_net_phase": false,
+  "note": "FIRE 경로 · attacker · world 는 양 arm 공통 — 실행기가 한 코드 경로로 돌린다. NET 단계에서 limiter commit bit 는 off (R2a/R2b 전 캠페인과 동일; 공짜 하드킬 금지)"
+ },
+ "fallback": {
+  "status": "NOT an arm — 기록만. P_U 는 primary pass 가 될 수 없다 (docs/102 §1)",
+  "controller": "intercept",
+  "baseline_commit": true,
+  "switch": "NET_SPENT 확정 다음 control tick (B0 v3 same_tick_precedence ③)",
+  "wiring": "mission_rollout.run_episode(kinetic_fallback=...) — 양 arm 공통 경로",
+  "open_item": "docs/102 는 fallback 을 'world 기본' 으로 전제했으나 실제로는 미배선이었다. 이 필드가 그 배선의 유일한 정의원"
+ },
+ "grid_source": {
+  "file": "artifacts/b0/b0_v3_world_contract.json",
+  "field": "grid.rows",
+  "G": 14,
+  "base_points_per_row": 4,
+  "reselection": "FORBIDDEN — 이 manifest 가 유일한 격자 정의원"
+ },
+ "cells": [
+  {
+   "cell_id": "r00c0",
+   "row": 0,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.1,
+   "chi": 0.56,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.6049
+  },
+  {
+   "cell_id": "r00c1",
+   "row": 0,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.1,
+   "chi": 0.6,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.6049
+  },
+  {
+   "cell_id": "r00c2",
+   "row": 0,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.1,
+   "chi": 0.62,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.6049
+  },
+  {
+   "cell_id": "r00c3",
+   "row": 0,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.1,
+   "chi": 0.66,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.6049
+  },
+  {
+   "cell_id": "r01c0",
+   "row": 1,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.4,
+   "chi": 0.54,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5867
+  },
+  {
+   "cell_id": "r01c1",
+   "row": 1,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.4,
+   "chi": 0.58,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.5867
+  },
+  {
+   "cell_id": "r01c2",
+   "row": 1,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.4,
+   "chi": 0.6,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.5867
+  },
+  {
+   "cell_id": "r01c3",
+   "row": 1,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.4,
+   "chi": 0.64,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5867
+  },
+  {
+   "cell_id": "r02c0",
+   "row": 2,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.7,
+   "chi": 0.52,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5769
+  },
+  {
+   "cell_id": "r02c1",
+   "row": 2,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.7,
+   "chi": 0.56,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.5769
+  },
+  {
+   "cell_id": "r02c2",
+   "row": 2,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.7,
+   "chi": 0.58,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.5769
+  },
+  {
+   "cell_id": "r02c3",
+   "row": 2,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 2.7,
+   "chi": 0.62,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5769
+  },
+  {
+   "cell_id": "r03c0",
+   "row": 3,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.0,
+   "chi": 0.52,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.568
+  },
+  {
+   "cell_id": "r03c1",
+   "row": 3,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.0,
+   "chi": 0.56,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.568
+  },
+  {
+   "cell_id": "r03c2",
+   "row": 3,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.0,
+   "chi": 0.58,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.568
+  },
+  {
+   "cell_id": "r03c3",
+   "row": 3,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.0,
+   "chi": 0.62,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.568
+  },
+  {
+   "cell_id": "r04c0",
+   "row": 4,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.3,
+   "chi": 0.5,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5417
+  },
+  {
+   "cell_id": "r04c1",
+   "row": 4,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.3,
+   "chi": 0.54,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.5417
+  },
+  {
+   "cell_id": "r04c2",
+   "row": 4,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.3,
+   "chi": 0.56,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.5417
+  },
+  {
+   "cell_id": "r04c3",
+   "row": 4,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.3,
+   "chi": 0.6,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5417
+  },
+  {
+   "cell_id": "r05c0",
+   "row": 5,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.6,
+   "chi": 0.48,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5382
+  },
+  {
+   "cell_id": "r05c1",
+   "row": 5,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.6,
+   "chi": 0.52,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.5382
+  },
+  {
+   "cell_id": "r05c2",
+   "row": 5,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.6,
+   "chi": 0.54,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.5382
+  },
+  {
+   "cell_id": "r05c3",
+   "row": 5,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.6,
+   "chi": 0.58,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5382
+  },
+  {
+   "cell_id": "r06c0",
+   "row": 6,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.9,
+   "chi": 0.48,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.525
+  },
+  {
+   "cell_id": "r06c1",
+   "row": 6,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.9,
+   "chi": 0.52,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.525
+  },
+  {
+   "cell_id": "r06c2",
+   "row": 6,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.9,
+   "chi": 0.54,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.525
+  },
+  {
+   "cell_id": "r06c3",
+   "row": 6,
+   "lam_slice": 0,
+   "lam": 4.6440677966101696,
+   "R_max": 8.22,
+   "eta": 3.9,
+   "chi": 0.58,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.525
+  },
+  {
+   "cell_id": "r07c0",
+   "row": 7,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.1,
+   "chi": 0.5,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5445
+  },
+  {
+   "cell_id": "r07c1",
+   "row": 7,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.1,
+   "chi": 0.54,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.5445
+  },
+  {
+   "cell_id": "r07c2",
+   "row": 7,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.1,
+   "chi": 0.56,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.5445
+  },
+  {
+   "cell_id": "r07c3",
+   "row": 7,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.1,
+   "chi": 0.6,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5445
+  },
+  {
+   "cell_id": "r08c0",
+   "row": 8,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.4,
+   "chi": 0.5,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.546
+  },
+  {
+   "cell_id": "r08c1",
+   "row": 8,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.4,
+   "chi": 0.54,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.546
+  },
+  {
+   "cell_id": "r08c2",
+   "row": 8,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.4,
+   "chi": 0.56,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.546
+  },
+  {
+   "cell_id": "r08c3",
+   "row": 8,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.4,
+   "chi": 0.6,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.546
+  },
+  {
+   "cell_id": "r09c0",
+   "row": 9,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.7,
+   "chi": 0.46,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5014
+  },
+  {
+   "cell_id": "r09c1",
+   "row": 9,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.7,
+   "chi": 0.5,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.5014
+  },
+  {
+   "cell_id": "r09c2",
+   "row": 9,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.7,
+   "chi": 0.52,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.5014
+  },
+  {
+   "cell_id": "r09c3",
+   "row": 9,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 2.7,
+   "chi": 0.56,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5014
+  },
+  {
+   "cell_id": "r10c0",
+   "row": 10,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.0,
+   "chi": 0.46,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5092
+  },
+  {
+   "cell_id": "r10c1",
+   "row": 10,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.0,
+   "chi": 0.5,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.5092
+  },
+  {
+   "cell_id": "r10c2",
+   "row": 10,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.0,
+   "chi": 0.52,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.5092
+  },
+  {
+   "cell_id": "r10c3",
+   "row": 10,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.0,
+   "chi": 0.56,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.5092
+  },
+  {
+   "cell_id": "r11c0",
+   "row": 11,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.3,
+   "chi": 0.42,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.4763
+  },
+  {
+   "cell_id": "r11c1",
+   "row": 11,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.3,
+   "chi": 0.46,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.4763
+  },
+  {
+   "cell_id": "r11c2",
+   "row": 11,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.3,
+   "chi": 0.48,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.4763
+  },
+  {
+   "cell_id": "r11c3",
+   "row": 11,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.3,
+   "chi": 0.52,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.4763
+  },
+  {
+   "cell_id": "r12c0",
+   "row": 12,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.6,
+   "chi": 0.4,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.4529
+  },
+  {
+   "cell_id": "r12c1",
+   "row": 12,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.6,
+   "chi": 0.44,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.4529
+  },
+  {
+   "cell_id": "r12c2",
+   "row": 12,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.6,
+   "chi": 0.46,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.4529
+  },
+  {
+   "cell_id": "r12c3",
+   "row": 12,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.6,
+   "chi": 0.5,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.4529
+  },
+  {
+   "cell_id": "r13c0",
+   "row": 13,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.9,
+   "chi": 0.38,
+   "chi_role": "lo_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.4394
+  },
+  {
+   "cell_id": "r13c1",
+   "row": 13,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.9,
+   "chi": 0.42,
+   "chi_role": "lo",
+   "boundary_band": true,
+   "r2a_chi50": 0.4394
+  },
+  {
+   "cell_id": "r13c2",
+   "row": 13,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.9,
+   "chi": 0.44,
+   "chi_role": "hi",
+   "boundary_band": true,
+   "r2a_chi50": 0.4394
+  },
+  {
+   "cell_id": "r13c3",
+   "row": 13,
+   "lam_slice": 2,
+   "lam": 3.5739130434782616,
+   "R_max": 6.325826086956523,
+   "eta": 3.9,
+   "chi": 0.48,
+   "chi_role": "hi_out",
+   "boundary_band": false,
+   "r2a_chi50": 0.4394
+  }
+ ],
+ "crn": {
+  "seed_ns": "b2_scripted_v1",
+  "seed0": 20000,
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "n_per_cell_per_seed": 300,
+  "scenario_seed": "build_m4_env(seed0, s) · run_episode(seed=seed0 + s) — 기존 SEED0 + s 규약 승계 (docs/102 §3)",
+  "attacker_seed": "AttackerSpec(seed=0) + derive_phase(seed0, s) — resolve() 가 유일한 정의원 (arm 간 동일)",
+  "evaluation_seed": "seeds = scenario 블록 index (학습 seed 아님 — B2 는 scripted). MARL training seed 와 namespace 분리",
+  "arm_pairing": "두 arm 이 같은 scenario id 열을 같은 순서로 소비 (assert ids_solo == ids_rule + 초기 world-state hash 동일)",
+  "jitter": {
+   "chi": 0.01,
+   "eta": 0.15,
+   "fn": "r2a_stage1.draw_cell_jitter(seed0, s, chi_c, eta_c, ns)",
+   "provenance": "R2a Stage1/2 (chi50 의 출처) · R2b Phase 1 과 동일 추첨 규약 승계. docs/102 는 명시하지 않았고 이 필드가 그 승계를 드러낸다"
+  }
+ },
+ "units": [
+  {
+   "cell_id": "r00c0",
+   "seed": 0,
+   "s_lo": 0,
+   "s_hi": 300
+  },
+  {
+   "cell_id": "r00c0",
+   "seed": 1,
+   "s_lo": 300,
+   "s_hi": 600
+  },
+  {
+   "cell_id": "r00c0",
+   "seed": 2,
+   "s_lo": 600,
+   "s_hi": 900
+  },
+  {
+   "cell_id": "r00c1",
+   "seed": 0,
+   "s_lo": 900,
+   "s_hi": 1200
+  },
+  {
+   "cell_id": "r00c1",
+   "seed": 1,
+   "s_lo": 1200,
+   "s_hi": 1500
+  },
+  {
+   "cell_id": "r00c1",
+   "seed": 2,
+   "s_lo": 1500,
+   "s_hi": 1800
+  },
+  {
+   "cell_id": "r00c2",
+   "seed": 0,
+   "s_lo": 1800,
+   "s_hi": 2100
+  },
+  {
+   "cell_id": "r00c2",
+   "seed": 1,
+   "s_lo": 2100,
+   "s_hi": 2400
+  },
+  {
+   "cell_id": "r00c2",
+   "seed": 2,
+   "s_lo": 2400,
+   "s_hi": 2700
+  },
+  {
+   "cell_id": "r00c3",
+   "seed": 0,
+   "s_lo": 2700,
+   "s_hi": 3000
+  },
+  {
+   "cell_id": "r00c3",
+   "seed": 1,
+   "s_lo": 3000,
+   "s_hi": 3300
+  },
+  {
+   "cell_id": "r00c3",
+   "seed": 2,
+   "s_lo": 3300,
+   "s_hi": 3600
+  },
+  {
+   "cell_id": "r01c0",
+   "seed": 0,
+   "s_lo": 3600,
+   "s_hi": 3900
+  },
+  {
+   "cell_id": "r01c0",
+   "seed": 1,
+   "s_lo": 3900,
+   "s_hi": 4200
+  },
+  {
+   "cell_id": "r01c0",
+   "seed": 2,
+   "s_lo": 4200,
+   "s_hi": 4500
+  },
+  {
+   "cell_id": "r01c1",
+   "seed": 0,
+   "s_lo": 4500,
+   "s_hi": 4800
+  },
+  {
+   "cell_id": "r01c1",
+   "seed": 1,
+   "s_lo": 4800,
+   "s_hi": 5100
+  },
+  {
+   "cell_id": "r01c1",
+   "seed": 2,
+   "s_lo": 5100,
+   "s_hi": 5400
+  },
+  {
+   "cell_id": "r01c2",
+   "seed": 0,
+   "s_lo": 5400,
+   "s_hi": 5700
+  },
+  {
+   "cell_id": "r01c2",
+   "seed": 1,
+   "s_lo": 5700,
+   "s_hi": 6000
+  },
+  {
+   "cell_id": "r01c2",
+   "seed": 2,
+   "s_lo": 6000,
+   "s_hi": 6300
+  },
+  {
+   "cell_id": "r01c3",
+   "seed": 0,
+   "s_lo": 6300,
+   "s_hi": 6600
+  },
+  {
+   "cell_id": "r01c3",
+   "seed": 1,
+   "s_lo": 6600,
+   "s_hi": 6900
+  },
+  {
+   "cell_id": "r01c3",
+   "seed": 2,
+   "s_lo": 6900,
+   "s_hi": 7200
+  },
+  {
+   "cell_id": "r02c0",
+   "seed": 0,
+   "s_lo": 7200,
+   "s_hi": 7500
+  },
+  {
+   "cell_id": "r02c0",
+   "seed": 1,
+   "s_lo": 7500,
+   "s_hi": 7800
+  },
+  {
+   "cell_id": "r02c0",
+   "seed": 2,
+   "s_lo": 7800,
+   "s_hi": 8100
+  },
+  {
+   "cell_id": "r02c1",
+   "seed": 0,
+   "s_lo": 8100,
+   "s_hi": 8400
+  },
+  {
+   "cell_id": "r02c1",
+   "seed": 1,
+   "s_lo": 8400,
+   "s_hi": 8700
+  },
+  {
+   "cell_id": "r02c1",
+   "seed": 2,
+   "s_lo": 8700,
+   "s_hi": 9000
+  },
+  {
+   "cell_id": "r02c2",
+   "seed": 0,
+   "s_lo": 9000,
+   "s_hi": 9300
+  },
+  {
+   "cell_id": "r02c2",
+   "seed": 1,
+   "s_lo": 9300,
+   "s_hi": 9600
+  },
+  {
+   "cell_id": "r02c2",
+   "seed": 2,
+   "s_lo": 9600,
+   "s_hi": 9900
+  },
+  {
+   "cell_id": "r02c3",
+   "seed": 0,
+   "s_lo": 9900,
+   "s_hi": 10200
+  },
+  {
+   "cell_id": "r02c3",
+   "seed": 1,
+   "s_lo": 10200,
+   "s_hi": 10500
+  },
+  {
+   "cell_id": "r02c3",
+   "seed": 2,
+   "s_lo": 10500,
+   "s_hi": 10800
+  },
+  {
+   "cell_id": "r03c0",
+   "seed": 0,
+   "s_lo": 10800,
+   "s_hi": 11100
+  },
+  {
+   "cell_id": "r03c0",
+   "seed": 1,
+   "s_lo": 11100,
+   "s_hi": 11400
+  },
+  {
+   "cell_id": "r03c0",
+   "seed": 2,
+   "s_lo": 11400,
+   "s_hi": 11700
+  },
+  {
+   "cell_id": "r03c1",
+   "seed": 0,
+   "s_lo": 11700,
+   "s_hi": 12000
+  },
+  {
+   "cell_id": "r03c1",
+   "seed": 1,
+   "s_lo": 12000,
+   "s_hi": 12300
+  },
+  {
+   "cell_id": "r03c1",
+   "seed": 2,
+   "s_lo": 12300,
+   "s_hi": 12600
+  },
+  {
+   "cell_id": "r03c2",
+   "seed": 0,
+   "s_lo": 12600,
+   "s_hi": 12900
+  },
+  {
+   "cell_id": "r03c2",
+   "seed": 1,
+   "s_lo": 12900,
+   "s_hi": 13200
+  },
+  {
+   "cell_id": "r03c2",
+   "seed": 2,
+   "s_lo": 13200,
+   "s_hi": 13500
+  },
+  {
+   "cell_id": "r03c3",
+   "seed": 0,
+   "s_lo": 13500,
+   "s_hi": 13800
+  },
+  {
+   "cell_id": "r03c3",
+   "seed": 1,
+   "s_lo": 13800,
+   "s_hi": 14100
+  },
+  {
+   "cell_id": "r03c3",
+   "seed": 2,
+   "s_lo": 14100,
+   "s_hi": 14400
+  },
+  {
+   "cell_id": "r04c0",
+   "seed": 0,
+   "s_lo": 14400,
+   "s_hi": 14700
+  },
+  {
+   "cell_id": "r04c0",
+   "seed": 1,
+   "s_lo": 14700,
+   "s_hi": 15000
+  },
+  {
+   "cell_id": "r04c0",
+   "seed": 2,
+   "s_lo": 15000,
+   "s_hi": 15300
+  },
+  {
+   "cell_id": "r04c1",
+   "seed": 0,
+   "s_lo": 15300,
+   "s_hi": 15600
+  },
+  {
+   "cell_id": "r04c1",
+   "seed": 1,
+   "s_lo": 15600,
+   "s_hi": 15900
+  },
+  {
+   "cell_id": "r04c1",
+   "seed": 2,
+   "s_lo": 15900,
+   "s_hi": 16200
+  },
+  {
+   "cell_id": "r04c2",
+   "seed": 0,
+   "s_lo": 16200,
+   "s_hi": 16500
+  },
+  {
+   "cell_id": "r04c2",
+   "seed": 1,
+   "s_lo": 16500,
+   "s_hi": 16800
+  },
+  {
+   "cell_id": "r04c2",
+   "seed": 2,
+   "s_lo": 16800,
+   "s_hi": 17100
+  },
+  {
+   "cell_id": "r04c3",
+   "seed": 0,
+   "s_lo": 17100,
+   "s_hi": 17400
+  },
+  {
+   "cell_id": "r04c3",
+   "seed": 1,
+   "s_lo": 17400,
+   "s_hi": 17700
+  },
+  {
+   "cell_id": "r04c3",
+   "seed": 2,
+   "s_lo": 17700,
+   "s_hi": 18000
+  },
+  {
+   "cell_id": "r05c0",
+   "seed": 0,
+   "s_lo": 18000,
+   "s_hi": 18300
+  },
+  {
+   "cell_id": "r05c0",
+   "seed": 1,
+   "s_lo": 18300,
+   "s_hi": 18600
+  },
+  {
+   "cell_id": "r05c0",
+   "seed": 2,
+   "s_lo": 18600,
+   "s_hi": 18900
+  },
+  {
+   "cell_id": "r05c1",
+   "seed": 0,
+   "s_lo": 18900,
+   "s_hi": 19200
+  },
+  {
+   "cell_id": "r05c1",
+   "seed": 1,
+   "s_lo": 19200,
+   "s_hi": 19500
+  },
+  {
+   "cell_id": "r05c1",
+   "seed": 2,
+   "s_lo": 19500,
+   "s_hi": 19800
+  },
+  {
+   "cell_id": "r05c2",
+   "seed": 0,
+   "s_lo": 19800,
+   "s_hi": 20100
+  },
+  {
+   "cell_id": "r05c2",
+   "seed": 1,
+   "s_lo": 20100,
+   "s_hi": 20400
+  },
+  {
+   "cell_id": "r05c2",
+   "seed": 2,
+   "s_lo": 20400,
+   "s_hi": 20700
+  },
+  {
+   "cell_id": "r05c3",
+   "seed": 0,
+   "s_lo": 20700,
+   "s_hi": 21000
+  },
+  {
+   "cell_id": "r05c3",
+   "seed": 1,
+   "s_lo": 21000,
+   "s_hi": 21300
+  },
+  {
+   "cell_id": "r05c3",
+   "seed": 2,
+   "s_lo": 21300,
+   "s_hi": 21600
+  },
+  {
+   "cell_id": "r06c0",
+   "seed": 0,
+   "s_lo": 21600,
+   "s_hi": 21900
+  },
+  {
+   "cell_id": "r06c0",
+   "seed": 1,
+   "s_lo": 21900,
+   "s_hi": 22200
+  },
+  {
+   "cell_id": "r06c0",
+   "seed": 2,
+   "s_lo": 22200,
+   "s_hi": 22500
+  },
+  {
+   "cell_id": "r06c1",
+   "seed": 0,
+   "s_lo": 22500,
+   "s_hi": 22800
+  },
+  {
+   "cell_id": "r06c1",
+   "seed": 1,
+   "s_lo": 22800,
+   "s_hi": 23100
+  },
+  {
+   "cell_id": "r06c1",
+   "seed": 2,
+   "s_lo": 23100,
+   "s_hi": 23400
+  },
+  {
+   "cell_id": "r06c2",
+   "seed": 0,
+   "s_lo": 23400,
+   "s_hi": 23700
+  },
+  {
+   "cell_id": "r06c2",
+   "seed": 1,
+   "s_lo": 23700,
+   "s_hi": 24000
+  },
+  {
+   "cell_id": "r06c2",
+   "seed": 2,
+   "s_lo": 24000,
+   "s_hi": 24300
+  },
+  {
+   "cell_id": "r06c3",
+   "seed": 0,
+   "s_lo": 24300,
+   "s_hi": 24600
+  },
+  {
+   "cell_id": "r06c3",
+   "seed": 1,
+   "s_lo": 24600,
+   "s_hi": 24900
+  },
+  {
+   "cell_id": "r06c3",
+   "seed": 2,
+   "s_lo": 24900,
+   "s_hi": 25200
+  },
+  {
+   "cell_id": "r07c0",
+   "seed": 0,
+   "s_lo": 25200,
+   "s_hi": 25500
+  },
+  {
+   "cell_id": "r07c0",
+   "seed": 1,
+   "s_lo": 25500,
+   "s_hi": 25800
+  },
+  {
+   "cell_id": "r07c0",
+   "seed": 2,
+   "s_lo": 25800,
+   "s_hi": 26100
+  },
+  {
+   "cell_id": "r07c1",
+   "seed": 0,
+   "s_lo": 26100,
+   "s_hi": 26400
+  },
+  {
+   "cell_id": "r07c1",
+   "seed": 1,
+   "s_lo": 26400,
+   "s_hi": 26700
+  },
+  {
+   "cell_id": "r07c1",
+   "seed": 2,
+   "s_lo": 26700,
+   "s_hi": 27000
+  },
+  {
+   "cell_id": "r07c2",
+   "seed": 0,
+   "s_lo": 27000,
+   "s_hi": 27300
+  },
+  {
+   "cell_id": "r07c2",
+   "seed": 1,
+   "s_lo": 27300,
+   "s_hi": 27600
+  },
+  {
+   "cell_id": "r07c2",
+   "seed": 2,
+   "s_lo": 27600,
+   "s_hi": 27900
+  },
+  {
+   "cell_id": "r07c3",
+   "seed": 0,
+   "s_lo": 27900,
+   "s_hi": 28200
+  },
+  {
+   "cell_id": "r07c3",
+   "seed": 1,
+   "s_lo": 28200,
+   "s_hi": 28500
+  },
+  {
+   "cell_id": "r07c3",
+   "seed": 2,
+   "s_lo": 28500,
+   "s_hi": 28800
+  },
+  {
+   "cell_id": "r08c0",
+   "seed": 0,
+   "s_lo": 28800,
+   "s_hi": 29100
+  },
+  {
+   "cell_id": "r08c0",
+   "seed": 1,
+   "s_lo": 29100,
+   "s_hi": 29400
+  },
+  {
+   "cell_id": "r08c0",
+   "seed": 2,
+   "s_lo": 29400,
+   "s_hi": 29700
+  },
+  {
+   "cell_id": "r08c1",
+   "seed": 0,
+   "s_lo": 29700,
+   "s_hi": 30000
+  },
+  {
+   "cell_id": "r08c1",
+   "seed": 1,
+   "s_lo": 30000,
+   "s_hi": 30300
+  },
+  {
+   "cell_id": "r08c1",
+   "seed": 2,
+   "s_lo": 30300,
+   "s_hi": 30600
+  },
+  {
+   "cell_id": "r08c2",
+   "seed": 0,
+   "s_lo": 30600,
+   "s_hi": 30900
+  },
+  {
+   "cell_id": "r08c2",
+   "seed": 1,
+   "s_lo": 30900,
+   "s_hi": 31200
+  },
+  {
+   "cell_id": "r08c2",
+   "seed": 2,
+   "s_lo": 31200,
+   "s_hi": 31500
+  },
+  {
+   "cell_id": "r08c3",
+   "seed": 0,
+   "s_lo": 31500,
+   "s_hi": 31800
+  },
+  {
+   "cell_id": "r08c3",
+   "seed": 1,
+   "s_lo": 31800,
+   "s_hi": 32100
+  },
+  {
+   "cell_id": "r08c3",
+   "seed": 2,
+   "s_lo": 32100,
+   "s_hi": 32400
+  },
+  {
+   "cell_id": "r09c0",
+   "seed": 0,
+   "s_lo": 32400,
+   "s_hi": 32700
+  },
+  {
+   "cell_id": "r09c0",
+   "seed": 1,
+   "s_lo": 32700,
+   "s_hi": 33000
+  },
+  {
+   "cell_id": "r09c0",
+   "seed": 2,
+   "s_lo": 33000,
+   "s_hi": 33300
+  },
+  {
+   "cell_id": "r09c1",
+   "seed": 0,
+   "s_lo": 33300,
+   "s_hi": 33600
+  },
+  {
+   "cell_id": "r09c1",
+   "seed": 1,
+   "s_lo": 33600,
+   "s_hi": 33900
+  },
+  {
+   "cell_id": "r09c1",
+   "seed": 2,
+   "s_lo": 33900,
+   "s_hi": 34200
+  },
+  {
+   "cell_id": "r09c2",
+   "seed": 0,
+   "s_lo": 34200,
+   "s_hi": 34500
+  },
+  {
+   "cell_id": "r09c2",
+   "seed": 1,
+   "s_lo": 34500,
+   "s_hi": 34800
+  },
+  {
+   "cell_id": "r09c2",
+   "seed": 2,
+   "s_lo": 34800,
+   "s_hi": 35100
+  },
+  {
+   "cell_id": "r09c3",
+   "seed": 0,
+   "s_lo": 35100,
+   "s_hi": 35400
+  },
+  {
+   "cell_id": "r09c3",
+   "seed": 1,
+   "s_lo": 35400,
+   "s_hi": 35700
+  },
+  {
+   "cell_id": "r09c3",
+   "seed": 2,
+   "s_lo": 35700,
+   "s_hi": 36000
+  },
+  {
+   "cell_id": "r10c0",
+   "seed": 0,
+   "s_lo": 36000,
+   "s_hi": 36300
+  },
+  {
+   "cell_id": "r10c0",
+   "seed": 1,
+   "s_lo": 36300,
+   "s_hi": 36600
+  },
+  {
+   "cell_id": "r10c0",
+   "seed": 2,
+   "s_lo": 36600,
+   "s_hi": 36900
+  },
+  {
+   "cell_id": "r10c1",
+   "seed": 0,
+   "s_lo": 36900,
+   "s_hi": 37200
+  },
+  {
+   "cell_id": "r10c1",
+   "seed": 1,
+   "s_lo": 37200,
+   "s_hi": 37500
+  },
+  {
+   "cell_id": "r10c1",
+   "seed": 2,
+   "s_lo": 37500,
+   "s_hi": 37800
+  },
+  {
+   "cell_id": "r10c2",
+   "seed": 0,
+   "s_lo": 37800,
+   "s_hi": 38100
+  },
+  {
+   "cell_id": "r10c2",
+   "seed": 1,
+   "s_lo": 38100,
+   "s_hi": 38400
+  },
+  {
+   "cell_id": "r10c2",
+   "seed": 2,
+   "s_lo": 38400,
+   "s_hi": 38700
+  },
+  {
+   "cell_id": "r10c3",
+   "seed": 0,
+   "s_lo": 38700,
+   "s_hi": 39000
+  },
+  {
+   "cell_id": "r10c3",
+   "seed": 1,
+   "s_lo": 39000,
+   "s_hi": 39300
+  },
+  {
+   "cell_id": "r10c3",
+   "seed": 2,
+   "s_lo": 39300,
+   "s_hi": 39600
+  },
+  {
+   "cell_id": "r11c0",
+   "seed": 0,
+   "s_lo": 39600,
+   "s_hi": 39900
+  },
+  {
+   "cell_id": "r11c0",
+   "seed": 1,
+   "s_lo": 39900,
+   "s_hi": 40200
+  },
+  {
+   "cell_id": "r11c0",
+   "seed": 2,
+   "s_lo": 40200,
+   "s_hi": 40500
+  },
+  {
+   "cell_id": "r11c1",
+   "seed": 0,
+   "s_lo": 40500,
+   "s_hi": 40800
+  },
+  {
+   "cell_id": "r11c1",
+   "seed": 1,
+   "s_lo": 40800,
+   "s_hi": 41100
+  },
+  {
+   "cell_id": "r11c1",
+   "seed": 2,
+   "s_lo": 41100,
+   "s_hi": 41400
+  },
+  {
+   "cell_id": "r11c2",
+   "seed": 0,
+   "s_lo": 41400,
+   "s_hi": 41700
+  },
+  {
+   "cell_id": "r11c2",
+   "seed": 1,
+   "s_lo": 41700,
+   "s_hi": 42000
+  },
+  {
+   "cell_id": "r11c2",
+   "seed": 2,
+   "s_lo": 42000,
+   "s_hi": 42300
+  },
+  {
+   "cell_id": "r11c3",
+   "seed": 0,
+   "s_lo": 42300,
+   "s_hi": 42600
+  },
+  {
+   "cell_id": "r11c3",
+   "seed": 1,
+   "s_lo": 42600,
+   "s_hi": 42900
+  },
+  {
+   "cell_id": "r11c3",
+   "seed": 2,
+   "s_lo": 42900,
+   "s_hi": 43200
+  },
+  {
+   "cell_id": "r12c0",
+   "seed": 0,
+   "s_lo": 43200,
+   "s_hi": 43500
+  },
+  {
+   "cell_id": "r12c0",
+   "seed": 1,
+   "s_lo": 43500,
+   "s_hi": 43800
+  },
+  {
+   "cell_id": "r12c0",
+   "seed": 2,
+   "s_lo": 43800,
+   "s_hi": 44100
+  },
+  {
+   "cell_id": "r12c1",
+   "seed": 0,
+   "s_lo": 44100,
+   "s_hi": 44400
+  },
+  {
+   "cell_id": "r12c1",
+   "seed": 1,
+   "s_lo": 44400,
+   "s_hi": 44700
+  },
+  {
+   "cell_id": "r12c1",
+   "seed": 2,
+   "s_lo": 44700,
+   "s_hi": 45000
+  },
+  {
+   "cell_id": "r12c2",
+   "seed": 0,
+   "s_lo": 45000,
+   "s_hi": 45300
+  },
+  {
+   "cell_id": "r12c2",
+   "seed": 1,
+   "s_lo": 45300,
+   "s_hi": 45600
+  },
+  {
+   "cell_id": "r12c2",
+   "seed": 2,
+   "s_lo": 45600,
+   "s_hi": 45900
+  },
+  {
+   "cell_id": "r12c3",
+   "seed": 0,
+   "s_lo": 45900,
+   "s_hi": 46200
+  },
+  {
+   "cell_id": "r12c3",
+   "seed": 1,
+   "s_lo": 46200,
+   "s_hi": 46500
+  },
+  {
+   "cell_id": "r12c3",
+   "seed": 2,
+   "s_lo": 46500,
+   "s_hi": 46800
+  },
+  {
+   "cell_id": "r13c0",
+   "seed": 0,
+   "s_lo": 46800,
+   "s_hi": 47100
+  },
+  {
+   "cell_id": "r13c0",
+   "seed": 1,
+   "s_lo": 47100,
+   "s_hi": 47400
+  },
+  {
+   "cell_id": "r13c0",
+   "seed": 2,
+   "s_lo": 47400,
+   "s_hi": 47700
+  },
+  {
+   "cell_id": "r13c1",
+   "seed": 0,
+   "s_lo": 47700,
+   "s_hi": 48000
+  },
+  {
+   "cell_id": "r13c1",
+   "seed": 1,
+   "s_lo": 48000,
+   "s_hi": 48300
+  },
+  {
+   "cell_id": "r13c1",
+   "seed": 2,
+   "s_lo": 48300,
+   "s_hi": 48600
+  },
+  {
+   "cell_id": "r13c2",
+   "seed": 0,
+   "s_lo": 48600,
+   "s_hi": 48900
+  },
+  {
+   "cell_id": "r13c2",
+   "seed": 1,
+   "s_lo": 48900,
+   "s_hi": 49200
+  },
+  {
+   "cell_id": "r13c2",
+   "seed": 2,
+   "s_lo": 49200,
+   "s_hi": 49500
+  },
+  {
+   "cell_id": "r13c3",
+   "seed": 0,
+   "s_lo": 49500,
+   "s_hi": 49800
+  },
+  {
+   "cell_id": "r13c3",
+   "seed": 1,
+   "s_lo": 49800,
+   "s_hi": 50100
+  },
+  {
+   "cell_id": "r13c3",
+   "seed": 2,
+   "s_lo": 50100,
+   "s_hi": 50400
+  }
+ ],
+ "budget": {
+  "scenarios": 50400,
+  "episodes_primary": 100800,
+  "formula": "56 cell x 300 x 2 arm x 3 seed = 100,800 ep",
+  "forced_fire": "별도 계정 (docs/102 §5.4) — 이 예산에 섞지 않는다"
+ },
+ "scenario_ids": {
+  "rule": "units 의 [s_lo, s_hi) 연속 블록 · 전역 0..N-1",
+  "n": 50400,
+  "digest": "77b46155cb615154"
+ },
+ "outcome_fields": [
+  "s",
+  "arm",
+  "cell_id",
+  "seed",
+  "chi",
+  "eta",
+  "fire",
+  "fire_step",
+  "label",
+  "bin",
+  "steps",
+  "hard_kill",
+  "veto_events",
+  "n_contact"
+ ],
+ "aggregation": "실행기는 집계하지 않는다 — raw outcome 만 저장하고 집계는 b2_readout.py 에서만 (docs/102 §4 raw count identity)",
+ "readout_scope": "B2 는 측정만. W5 stop rule 은 별도 봉인 규칙 (docs/102 §6)",
+ "manifest_hash": "2f887776be47f538"
+}
