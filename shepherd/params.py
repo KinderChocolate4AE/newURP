@@ -45,6 +45,9 @@ STATUS legend (measured vs assumed -- the review's key ask):
   RESERVED    present in the contract but intentionally inert (parsed-but-unwired).
   DEAD        accepted by code but has NO effect on behavior (documented bug-level
               finding; kept for the frozen contract's sake).
+  SYNTHETIC_EXPLORATORY
+              pilot 임의값 -- 외부·repo 근거 없음 (docs/106 §2; Track B mode_switch
+              전용). 이 status 값이 붙은 결과는 F1-E exploratory 해석까지만.
 
 WIRED legend (can you change it HERE and have it take effect?):
   config       yes -- flows through as_config() -> make_train_env()/ScenarioSpec.
@@ -56,6 +59,9 @@ WIRED legend (can you change it HERE and have it take effect?):
   frozen-code  hardcoded inside FROZEN shepherd/env.py -- changing requires a
                ratified freeze exception (docs/09 SS0). Listed for visibility only.
   doc-only     prototype / evidence constant; not consumed by the live pipeline.
+  registry-direct
+               consumed by direct PARAMS[...] lookup in the cited consumer --
+               as_config() 를 거치지 않는다 (docs/105 §3: wired=config 표기 금지).
 """
 from __future__ import annotations
 
@@ -414,6 +420,114 @@ PARAMS: Dict[str, Param] = {
     "demo.episode_len": Param(70, "steps", "TUNED", "doc-only",
         "rollout_gif.build_env demo default",
         "!= train contract 80; rendering-only legacy -- training must use make_train_env"),
+
+    # ========================================================================
+    # 10. MODE-SWITCH TRACK B (docs/105-106). Track A(B0 v3/B2)와 격리.
+    #     10a mode_switch.toy.*  -- D1 finite toy DP. 소비 코드 있음(registry-direct).
+    #         전부 toy 예시값 -- F1-E 물리값과 수치적으로 연결되지 않으며
+    #         (docs/106 §3), G2 통과 증거로 쓰지 않는다.
+    #     10b mode_switch.f1e.*  -- G0 계약값 (docs/106 r3 §1). 소비 코드 미구현
+    #         (D2 전) -> wired=doc-only. D2 구현 시 registry-direct 로 갱신하는
+    #         것이 D2 완료 조건 (docs/106 §2).
+    # ========================================================================
+    "mode_switch.toy.T": Param(5, "steps", "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "mode_switch/toy_dp.py:default_params", "docs/106 §3 (horizon; t==T = breach)"),
+    "mode_switch.toy.t_cue": Param(1, "step", "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "mode_switch/toy_dp.py:default_params",
+        "docs/106 §3 (늦게 도착하는 cue 시각; None = 정보-null 마스킹)"),
+    "mode_switch.toy.t_roe": Param(1, "step", "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "mode_switch/toy_dp.py:default_params",
+        "docs/106 §3 (kinetic 합법 마지막 시각 -- 닫히는 ROE 창)"),
+    "mode_switch.toy.tau_net": Param(2, "steps", "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "mode_switch/toy_dp.py:default_params",
+        "docs/106 §3 (net 전개 지연; tau_net > t_roe-t 면 net-first 가 kinetic "
+        "fallback 을 잃는다 -- '사라지는 fallback' 구조의 toy 구현)"),
+    "mode_switch.toy.p_net": Param((0.85, 0.25), "-", "SYNTHETIC_EXPLORATORY",
+        "registry-direct", "mode_switch/toy_dp.py:default_params",
+        "docs/106 §3 (P(net 성공 | branch=direct/evasive))"),
+    "mode_switch.toy.p_kin": Param((0.60, 0.90), "-", "SYNTHETIC_EXPLORATORY",
+        "registry-direct", "mode_switch/toy_dp.py:default_params",
+        "docs/106 §3 (P(kinetic 성공 | branch) -- p_net 과 역순이라 branch 간 "
+        "mode-rank reversal 이 설계상 가능)"),
+    "mode_switch.toy.pu0": Param(0.01, "-", "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "mode_switch/toy_dp.py:default_params", "docs/106 §3 (kinetic 안전위반확률 절편)"),
+    "mode_switch.toy.pu_slope": Param(0.01, "1/step", "SYNTHETIC_EXPLORATORY",
+        "registry-direct", "mode_switch/toy_dp.py:default_params",
+        "docs/106 §3 (접근할수록 위반확률 증가)"),
+    "mode_switch.toy.prior": Param(0.5, "-", "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "mode_switch/toy_dp.py:default_params", "docs/106 §3 (P(branch=evasive) 사전확률)"),
+    "mode_switch.toy.q": Param(0.85, "-", "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "mode_switch/toy_dp.py:default_params", "docs/106 §3 (cue 정확도 P(cue=branch))"),
+    "mode_switch.toy.rho": Param(2.0, "c_N", "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "mode_switch/toy_dp.py:default_params", "docs/106 §1.9 (kinetic 비용비, c_N=1)"),
+    "mode_switch.toy.alpha": Param(0.75, "-", "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "mode_switch/toy_dp.py:default_params", "docs/106 §3 (P_prot 하한 문턱)"),
+    "mode_switch.toy.beta": Param(0.05, "-", "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "mode_switch/toy_dp.py:default_params", "docs/106 §3 (P_unsafe 상한 문턱)"),
+    "mode_switch.toy.grid_p0": Param((0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+        "-", "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "scripts/mode_switch_toy_dp.py (strict-region 격자 prior 축)", "docs/105 §4.2-5"),
+    "mode_switch.toy.grid_rho": Param((0.5, 1.0, 2.0, 4.0, 8.0), "c_N",
+        "SYNTHETIC_EXPLORATORY", "registry-direct",
+        "scripts/mode_switch_toy_dp.py (strict-region 격자 비용비 축)", "docs/105 §4.2-5"),
+
+    # --- 10b. F1-E G0 계약값 (docs/106 r3 §1; D2 전 wired=doc-only) --------------
+    "mode_switch.f1e.r_k_contact": Param(0.75, "m", "ASSUMED", "doc-only",
+        "docs/106 §1.1 (D2 world 미구현)",
+        "docs/34 §6 A7 기하 유도 = m4_config physics.kill_radius override -- "
+        "env_sys 고정 실측 충돌 반경 아님",
+        "F1-E 새 의미: 근접 효과판정 반경 (물리 충돌·살상 해석 금지). "
+        "sweep (0.6, 0.75, 0.9) 승계"),
+    "mode_switch.f1e.p_kill_sweep": Param((0.7, 0.85, 1.0), "-",
+        "SYNTHETIC_EXPLORATORY", "doc-only", "docs/106 §1.1",
+        "외부 effect 근거 없음 -- 1.0 단일 봉인 금지 (docs/105 §3)"),
+    "mode_switch.f1e.tau_aperture": Param(0.15, "s", "DERIVED", "doc-only",
+        "docs/106 §1.2", "m4_config TAU_DECOMPOSITION tau_flight (Xu Fig.6 0.13 s "
+        "+ dt 격자)",
+        "F1-E 새 의미: in-flight 개구 ramp. B0 v3 tau_deploy 0.30(flight+sense+"
+        "decide)·params 기본 0.4 와 다른 의미 -- sense/decide 미포함 낙관, 미검증"),
+    "mode_switch.f1e.r_net": Param(1.77, "m", "DERIVED", "doc-only",
+        "docs/106 §1.2", "docs/42 A3: Xu 등가면적 1.997 x 내접비 0.888 (낙관 상한)",
+        "F1-E 새 의미: 이동 원판 full-aperture 반경 -- 물리 검증 아님. "
+        "sweep (1.77, 2.0)"),
+    "mode_switch.f1e.v_net": Param(55.0, "m/s", "DERIVED", "doc-only",
+        "docs/106 §1.2", "net_forward baseline 병진 8.22 m / tau_flight 0.15 s",
+        "등속 유지는 발사 후 감속을 무시한 낙관 대리. sweep (20, 55)"),
+    "mode_switch.f1e.t_active": Param(0.3, "s", "SYNTHETIC_EXPLORATORY", "doc-only",
+        "docs/106 §1.2", "pilot 임의값",
+        "등속 가정 하 active 종료까지 중심 이동 24.75 m -- anchor(전개 완료 시점 "
+        "계산 병진 8.22 m)가 근거하는 구간 밖 외삽 낙관, sensitivity 축"),
+    "mode_switch.f1e.t_horizon": Param(8.0, "s", "SYNTHETIC_EXPLORATORY", "doc-only",
+        "docs/106 §1.8", "pilot 임의값 (160 tick @ dt 0.05)"),
+    "mode_switch.f1e.r_nk": Param(6.0, "m", "ASSUMED", "doc-only",
+        "docs/106 §1.8", "env_sys.py SystemSpec.r_nk 재사용 (외부 ROE 검증 아님)"),
+    "mode_switch.f1e.rho_k_sweep": Param((0.5, 1.0, 2.0, 4.0, 8.0), "c_N",
+        "SYNTHETIC_EXPLORATORY", "doc-only", "docs/106 §1.9", "pilot 임의 비용비"),
+    "mode_switch.f1e.shooter_p0": Param((8.0, 3.0, 0.0), "m", "SYNTHETIC_EXPLORATORY",
+        "doc-only", "docs/106 §1.3",
+        "전방 8 m = train.layout.ring_center 관례; 횡 +3 m = 탐색용 가정",
+        "단일 배치 결론 금지 -- 배치 sensitivity 축 명시 (docs/106 §1.3)"),
+    "mode_switch.f1e.kinetic_p0": Param((8.0, -3.0, 0.0), "m", "SYNTHETIC_EXPLORATORY",
+        "doc-only", "docs/106 §1.3", "shooter 대칭 배치 (탐색용 가정)"),
+    "mode_switch.f1e.attacker_r0": Param((20.0, 28.0), "m", "SYNTHETIC_EXPLORATORY",
+        "doc-only", "docs/106 §1.3",
+        "spawn 거리 구간 (train.layout 24 m 점값 대신 randomize)"),
+    "mode_switch.f1e.attacker_psi_deg": Param((-30.0, 30.0), "deg",
+        "SYNTHETIC_EXPLORATORY", "doc-only", "docs/106 §1.3",
+        "spawn 방위각 구간 (x축 기준, z=0 평면)"),
+    "mode_switch.f1e.aim_eps": Param(1e-6, "m", "SYNTHETIC_EXPLORATORY", "doc-only",
+        "docs/106 r3 §1.2 (조준 규칙 -- D2 world 미구현)",
+        "수치 guard 임의값 (물리 의미 없음)",
+        "조준 퇴화 판정 절대 허용오차: ||r|| <= eps 이면 NET_COMMIT 사전 거부, "
+        "n-hat 분모 <= eps 이면 lead 해 없음 처리 (pure-pursuit fallback)"),
+    "mode_switch.f1e.d_net_anchor": Param(8.22, "m", "DERIVED", "doc-only",
+        "docs/106 r3 §1.2 (D2 거리 진단 기준선 -- D2 미구현)",
+        "prototypes/net_forward baseline (Xu 45deg/60m s^-1/35g, rho_air 1.513 "
+        "보정) 중심 병진 @ tau_flight 0.15 s = m4_config viability.cone.range_max "
+        "와 동일 수치·동일 유도",
+        "실측 최대 유효사거리 아님 -- 원논문(Drones 2025, 9:190)에 교전거리·사거리 "
+        "수치 없음 (PDF 직접 확인, docs/106 r3). 진단 전용: 포획 시 FIRE 시점 "
+        "shooter 위치 기준 d_cap 분포·초과 비율 보고. 포획 차단·판정 기준 아님"),
 }
 
 
