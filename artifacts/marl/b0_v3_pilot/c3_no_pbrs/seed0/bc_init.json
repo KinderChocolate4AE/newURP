@@ -1,0 +1,11 @@
+{
+  "loss": 0.08076510578393936,
+  "axis_loss": 0.00029968773014843464,
+  "fire_loss": 0.0804654210805893,
+  "steps": 400,
+  "n_samples": 597,
+  "mean_axis_cosine": 0.9996563792228699,
+  "fire_tpr": 1.0,
+  "fire_tnr": 0.9774011373519897,
+  "limiter_mean_zero": true
+}

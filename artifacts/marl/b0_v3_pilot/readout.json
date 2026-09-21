@@ -1,0 +1,70 @@
+{
+  "schema": "b0-v3-mappo-pilot-readout-v1",
+  "manifest_hash": "ba64bc15fdbbd4f2",
+  "completion": {
+    "pass": true,
+    "missing": [],
+    "bad": [],
+    "code_commits": [
+      "226088f"
+    ],
+    "bc_dataset_hashes": [
+      "b48aad5eab4a92bd"
+    ],
+    "evaluation_scenario_signatures": [
+      "5b63d689cc4f3189"
+    ]
+  },
+  "decision": "NO_SELECTION",
+  "selected": null,
+  "candidates": [
+    {
+      "candidate": "c0_base",
+      "mean_p_N": 0.03214285714285714,
+      "mean_p_H_illegal": 0.0,
+      "mean_p_FIRE": 0.11964285714285715,
+      "seed_p_N": [
+        0.03571428571428571,
+        0.02857142857142857
+      ],
+      "p_N_range": 0.007142857142857142,
+      "eligible": false
+    },
+    {
+      "candidate": "c1_entropy",
+      "mean_p_N": 0.030357142857142857,
+      "mean_p_H_illegal": 0.0,
+      "mean_p_FIRE": 0.14107142857142857,
+      "seed_p_N": [
+        0.039285714285714285,
+        0.02142857142857143
+      ],
+      "p_N_range": 0.017857142857142856,
+      "eligible": false
+    },
+    {
+      "candidate": "c2_low_lr",
+      "mean_p_N": 0.02142857142857143,
+      "mean_p_H_illegal": 0.0,
+      "mean_p_FIRE": 0.10535714285714286,
+      "seed_p_N": [
+        0.02142857142857143,
+        0.02142857142857143
+      ],
+      "p_N_range": 0.0,
+      "eligible": false
+    },
+    {
+      "candidate": "c3_no_pbrs",
+      "mean_p_N": 0.03571428571428571,
+      "mean_p_H_illegal": 0.0,
+      "mean_p_FIRE": 0.13214285714285712,
+      "seed_p_N": [
+        0.02142857142857143,
+        0.05
+      ],
+      "p_N_range": 0.028571428571428574,
+      "eligible": false
+    }
+  ]
+}
