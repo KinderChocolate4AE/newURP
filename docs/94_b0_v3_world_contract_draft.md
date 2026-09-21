@@ -1,5 +1,9 @@
 # 94 — B0 v3 world contract (**SEALED** — `b0_hash 5e7b5b486b9d8a4a`)
 
+> **Amendment A1 (2026-09-22)**: [docs/108](108_b0v3_amendment_a1_illegal_engagement.md)
+> — illegal engagement 정의를 실효 판정자(swept resolver)에 일치 (docs/103 U-11 근거,
+> hash·구현·결과 무변경).
+
 - **일자**: 2026-09-13 · **상태**: **SEALED (사용자 승인 2026-09-13)**.
   - **`b0_hash = 5e7b5b486b9d8a4a`** · exit **`B2_WORLD_CONTRACT_FROZEN`**
   - 기계 정본 = `artifacts/b0/b0_v3_world_contract.json` · 서술 정본 = 본 문서

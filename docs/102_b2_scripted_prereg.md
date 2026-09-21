@@ -1,5 +1,9 @@
 # 102 — B2 scripted baseline 사전등록 (봉인 — 실행 전)
 
+> **Amendment A1 (2026-09-22)**: [docs/108](108_b0v3_amendment_a1_illegal_engagement.md)
+> — `H_illegal` 정의 문안을 실효 판정자(swept resolver)에 일치 (docs/103 U-11 근거,
+> 봉인 내용·측정·결과 무변경).
+
 - **일자**: 2026-09-14 · **지위**: **sealed pre-run**. docs/89 **W4** 항목의 이행.
 - **역할 한정**: 본 문서는 **W4 scripted baseline 을 봉인**하는 데까지다. **W5 stop rule 을
   여기로 끌어오지 않는다.** B2 는 W5 가 소비할 **net-side evidence 를 생산**한다.
