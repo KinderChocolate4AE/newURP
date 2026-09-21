@@ -235,8 +235,12 @@ class M4Runner(MAPPORunner):
         """Episode-local wrapper hook. 기본은 항등이라 기존 M4 경로는 불변."""
         return env
 
+    def _build_episode_stack(self):
+        """Episode world hook. 기본 M4 sampling을 한 곳에 둔다."""
+        return build_m4_env(self.seed, self._ep_idx, **self._m4)
+
     def _begin_episode(self) -> None:
-        st = build_m4_env(self.seed, self._ep_idx, **self._m4)
+        st = self._build_episode_stack()
         episode_env = self._wrap_episode_env(st.env)
         self._adapter = ShepherdAdapter(episode_env, self.live_dims)
         # ★ P5: 이 에피소드의 실제 권한으로 행동 스케일을 갱신한다 (a_lim = 0.35·a_att).
