@@ -6,6 +6,7 @@ from collections import Counter, defaultdict
 import hashlib
 import json
 import pathlib
+import subprocess
 import time
 
 import numpy as np
@@ -102,6 +103,15 @@ def _dataset_hash(arrays: dict[str, np.ndarray]) -> str:
     return h.hexdigest()[:16]
 
 
+def _code_tree() -> str:
+    """Commit의 shepherd tree: 데이터 수확만 커밋해도 생산 코드 계보는 불변."""
+    result = subprocess.run(["git", "rev-parse", "HEAD:shepherd"],
+                            cwd=ROOT, capture_output=True, text=True)
+    if result.returncode or not result.stdout.strip():
+        raise RuntimeError("cannot verify committed shepherd code tree")
+    return result.stdout.strip()
+
+
 def prepare_bc(path: pathlib.Path = BC_FILE, *, smoke: bool = False) -> dict:
     manifest, b2 = load_pilot_manifest(), load_b2_manifest()
     if not smoke and git_dirty():
@@ -184,6 +194,7 @@ def prepare_bc(path: pathlib.Path = BC_FILE, *, smoke: bool = False) -> dict:
         "attempt_outcomes": dict(sorted(outcomes.items())),
         "excluded_outcomes": init["exclude"],
         "code_commit": git_commit(),
+        "code_tree": _code_tree(),
         "code_dirty_scoped": git_dirty(),
     }
     path.with_suffix(".json").write_text(json.dumps(meta, indent=2, ensure_ascii=False),
@@ -199,6 +210,8 @@ def load_bc(path: pathlib.Path, manifest: dict) -> tuple[dict, dict]:
         arrays = {k: z[k] for k in z.files}
     if _dataset_hash(arrays) != meta["dataset_hash"]:
         raise ValueError("BC dataset hash mismatch")
+    if meta.get("code_tree") != _code_tree():
+        raise ValueError("BC dataset producer code tree mismatch")
     return arrays, meta
 
 
@@ -377,20 +390,26 @@ def run_combo(candidate: str, seed: int, device: str, *, bc_path: pathlib.Path =
     if not smoke and git_dirty():
         raise SystemExit(f"dirty training code; run refused: {git_dirty()}")
     data, bc_meta = load_bc(bc_path, manifest)
-    if not smoke and (bc_meta.get("code_dirty_scoped")
-                      or bc_meta.get("code_commit") != git_commit()):
-        raise SystemExit("BC dataset was not prepared from this clean execution commit")
+    if not smoke and bc_meta.get("code_dirty_scoped"):
+        raise SystemExit("BC dataset was prepared from dirty execution code")
+    seed_everything(int(seed))
     steps = 128 if smoke else None
     rollout = 128 if smoke else None
     bc_steps = 20 if smoke else None
     runner = PilotRunner(manifest, b2, candidate, seed, device,
                          steps=steps, rollout=rollout, bc_steps=bc_steps)
     run_dir = out_root / candidate / f"seed{seed}"
+    if not smoke and (run_dir / ".done").exists():
+        raise SystemExit(f"completed pilot run exists: {run_dir}")
+    if not smoke and not resume and (run_dir / "ckpt_mappo_latest.pt").exists():
+        raise SystemExit(f"partial run exists; use --resume: {run_dir}")
     run_dir.mkdir(parents=True, exist_ok=True)
     start_update = 0
     bc_init = None
     if resume:
         restored = runner.restore(run_dir)
+        if restored == 0:
+            raise SystemExit(f"--resume requested but no valid checkpoint exists: {run_dir}")
         start_update = restored // runner.rollout_env_steps
         pilot_state = run_dir / "pilot_state.json"
         if restored and pilot_state.exists():
@@ -463,7 +482,19 @@ def run_combo(candidate: str, seed: int, device: str, *, bc_path: pathlib.Path =
 
 def check(out_root: pathlib.Path = OUT) -> dict:
     manifest = load_pilot_manifest()
-    missing, bad, commits, bc_hashes = [], [], set(), set()
+    missing, bad, commits, bc_hashes, eval_signatures = [], [], set(), set(), set()
+    b2 = load_b2_manifest()
+    ev_spec = manifest["evaluation"]
+    n_pc = int(ev_spec["episodes_per_cell"])
+    cells = boundary_cells(b2)
+    n_eval = len(cells) * n_pc
+    expected_signature = []
+    for ci, cell in enumerate(cells):
+        for j in range(n_pc):
+            sid = ci * n_pc + j
+            chi, eta, _ = scenario_kwargs(
+                b2, cell, sid, seed0=ev_spec["seed0"], seed_ns=ev_spec["seed_ns"])
+            expected_signature.append((cell["cell_id"], sid, chi, eta))
     for cand in manifest["candidates"]:
         for seed in manifest["training"]["seeds"]:
             d = out_root / cand / f"seed{seed}"
@@ -471,15 +502,31 @@ def check(out_root: pathlib.Path = OUT) -> dict:
                 missing.append(f"{cand}/seed{seed}")
                 continue
             s = json.loads((d / "summary.json").read_text(encoding="utf-8"))
+            marker = json.loads((d / ".done").read_text(encoding="utf-8"))
             commits.add(s.get("code_commit"))
             bc_hashes.add(s.get("bc_dataset_hash"))
+            ev = s.get("evaluation", {})
+            records = ev.get("records", [])
+            signature = [(r.get("cell_id"), r.get("scenario_id"),
+                          r.get("chi"), r.get("eta")) for r in records]
+            eval_signatures.add(hashlib.sha256(json.dumps(
+                signature, sort_keys=True).encode()).hexdigest()[:16])
             if (s.get("manifest_hash") != manifest["manifest_hash"]
-                    or s.get("code_dirty_scoped") or s.get("status") != "PASS"):
+                    or s.get("b0_v3_hash") != manifest["prerequisites"]["b0_v3_hash"]
+                    or s.get("code_dirty_scoped") or s.get("status") != "PASS"
+                    or s.get("schema") != "b0-v3-mappo-pilot-run-v1"
+                    or s.get("training", {}).get("steps") != manifest["training"]["total_env_steps"]
+                    or s.get("training", {}).get("updates") != manifest["training"]["updates"]
+                    or ev.get("n") != n_eval or len(records) != n_eval
+                    or signature != expected_signature
+                    or marker.get("manifest_hash") != manifest["manifest_hash"]
+                    or marker.get("code_commit") != s.get("code_commit")):
                 bad.append(f"{cand}/seed{seed}")
     result = {"pass": not missing and not bad and len(commits) == 1
-              and len(bc_hashes) == 1,
+              and len(bc_hashes) == 1 and len(eval_signatures) == 1,
               "missing": missing, "bad": bad, "code_commits": sorted(commits),
-              "bc_dataset_hashes": sorted(bc_hashes)}
+              "bc_dataset_hashes": sorted(bc_hashes),
+              "evaluation_scenario_signatures": sorted(eval_signatures)}
     return result
 
 

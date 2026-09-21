@@ -49,6 +49,8 @@ reference” 조건은 아직 미충족이다. 따라서 pilot PASS만으로 본
 
 row는 `(episode + 5×seed) mod 14`로 순환한다. sampler는 pilot에서 적응하지 않는다.
 candidate마다 32,768 env step, rollout 512, seed 2개를 사용한다. 총 8 run이다.
+에피소드 길이는 정책마다 다를 수 있으므로 동일 seed의 cell 순서는 같아도 고정 step
+예산에서 소비한 episode 수와 실현 cell 빈도는 달라질 수 있다. 이를 run별로 전부 기록한다.
 
 | ID | learning rate | capturer entropy | PBRS beta |
 |---|---:|---:|---:|
@@ -109,6 +111,9 @@ python -m shepherd.scripts.b0_v3_mappo_pilot --readout
 `NTFY_TOPIC`이 설정돼 있으면 시작·완료 알림을 보낸다. checkpoint는 8 update마다 저장되며
 중단 run은 같은 명령에 `--resume`을 붙여 이어갈 수 있다. resume은 bit-identical 재현이
 아니며 summary에 표시된다.
+BC dataset은 현재 commit의 `shepherd` 코드 tree hash와 배열 hash를 함께 기록하고,
+run마다 이를 확인한다. 산출물만 커밋하여 HEAD가 바뀌어도 코드 tree가 같으면 동일한
+dataset을 소비할 수 있다.
 
 ## 6. pilot 뒤 남는 gate
 
