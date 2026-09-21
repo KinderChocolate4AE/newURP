@@ -1,5 +1,14 @@
 # 2026-09-18 — Track B 착수: D0(106 G0 카드)·D1(toy DP) 완료, DP=전수 일치, strict band 존재(설계된 양성)
 
+> **2026-09-22 사후 정정·후속:** 아래 D0 수치와 `106 r0` 표기는 9/18 당시의
+> 작업 기록이다. 현행 계약은 [106 r3](../docs/106_mode_switch_g0_contract.md)·
+> [105 r4](../docs/105_mode_switch_execution_plan.md)이다. 현재 net은 전개 완료 후
+> `[t_FIRE+0.15, t_FIRE+0.45)`에서만 포획 가능한 이동 원판이며,
+> `R_net=1.77 m`, `v_net=55 m/s`(20 m/s sweep)이다. 8.22 m는 시뮬레이션에서
+> 계산한 전개 완료 시점의 중심 이동거리이지 실측 유효사거리가 아니다.
+> B2 W5 판정은 9/22 PASS로 끝나 D2의 시간 게이트는 해제됐지만, D2 세계는
+> 아직 구현되지 않았다. [9/22 현재 위치 노트](2026-09-22c_role_swap_capturer_bottleneck_current_gates.md)를 참조한다.
+
 ## 판정
 
 - **D0 완료:** `docs/106_mode_switch_g0_contract.md` r0 — 105 §3의 10행 결정을 한 버전으로

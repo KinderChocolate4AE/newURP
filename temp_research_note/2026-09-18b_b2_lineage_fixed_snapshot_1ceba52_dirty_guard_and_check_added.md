@@ -1,5 +1,10 @@
 # B2 계보 정정 — snapshot 1ceba52 확정, dirty-guard·완료 점검기 추가 (2026-09-18)
 
+> **2026-09-22 후속:** 아래 `다음 사건`은 9/18 시점의 상태다. B2 primary
+> 100,800 ep와 forced-fire 436 probe를 회수했고 W5는 PASS로 판정했다.
+> [B2 판독·W5 기록](2026-09-21_to_22_b2_primary_forced_fire_w5_early_pass.md)에
+> 날짜·정본 산출물·판정 한계를 따로 정리했다.
+
 **판정: B2 primary 는 이제 재현 가능한 snapshot 에서만 돈다. manifest 는 무수정.**
 
 ## 무엇이 문제였나
