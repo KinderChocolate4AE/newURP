@@ -1,0 +1,75 @@
+{
+  "schema": "b0-v3-mappo-preflight-v1",
+  "status": "PASS",
+  "scope": "interface smoke only; not learning evidence",
+  "code_commit": "17baf59",
+  "code_dirty_scoped": [],
+  "w5_decision": "artifacts/r2b/b2_scripted/w5_decision.json",
+  "b0_v3_hash": "5e7b5b486b9d8a4a",
+  "source_cell": {
+    "cell_id": "r03c1",
+    "source_s": 11700,
+    "chi": 0.5548004504799475,
+    "eta": 3.085068861920544
+  },
+  "world_hash": "cf389b6638a9ddcd",
+  "credit": {
+    "schema": "b0-v3-rl-credit-v1",
+    "task": "clean NET_CAPTURE",
+    "cuts": [
+      "H_illegal",
+      "NET_SPENT"
+    ],
+    "failure_reward": 0.0,
+    "potential": "p_feasible>0 ? clip(v_shot_soft,0,1) : 0",
+    "gamma": 0.99,
+    "beta": 0.2,
+    "r_clean": 1.0,
+    "r_illegal": -1.0,
+    "credit_hash": "43b81c6670b1895f"
+  },
+  "run": {
+    "seed": 0,
+    "device": "cpu",
+    "steps": 128,
+    "updates": 1,
+    "actor": "heterogeneous limiter/capturer",
+    "limiter_commit": false
+  },
+  "observed": {
+    "credit_cuts": 4,
+    "credit_outcomes": {
+      "PENETRATED": 4
+    },
+    "reward_min": -0.020287539809942245,
+    "reward_max": 0.020004792138934135,
+    "completed_episodes": 4,
+    "optimizer": {
+      "clip_fraction_action": 0.3037109375,
+      "critic/explained_var": -1.8615387584797451,
+      "critic/value_loss": 0.7112736999988556,
+      "epochs_ran": 2.0,
+      "finisher/approx_kl": 1.5223165974020958e-05,
+      "finisher/clip_fraction": 0.0,
+      "finisher/entropy": 4.949475526809692,
+      "finisher/log_std": -0.0004027376417070627,
+      "finisher/policy_loss": -0.0017313472926616669,
+      "freeze/finisher": 0.0,
+      "freeze/limiter": 0.0,
+      "grad_norm": 1.804154634475708,
+      "limiter/approx_kl": 1.1516327504068613e-05,
+      "limiter/clip_fraction": 0.0,
+      "limiter/entropy": 4.256874680519104,
+      "limiter/log_std": -8.008517761481926e-05,
+      "limiter/policy_loss": -0.00038337334990501404
+    }
+  },
+  "checks": {
+    "w5_pass": true,
+    "limiter_commit_head_absent": true,
+    "rollout_full": true,
+    "reward_finite": true,
+    "optimizer_stats_finite": true,
+    "optimizer_update_exactly_one": true
+  }
+}
