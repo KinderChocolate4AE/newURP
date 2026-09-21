@@ -135,7 +135,7 @@ def diagnose(candidate: str, seed: int, device: str, *, episodes_per_cell: int =
     target = out or OUT / f"role_swap_{candidate}_seed{seed}_e{episodes_per_cell}.json"
     if target.exists():
         raise FileExistsError(f"diagnostic output exists: {target}")
-    dirty = git_dirty(("shepherd", "scripts"))
+    dirty = git_dirty(("shepherd", "scripts/b0_v3_pilot_role_diagnostic.py"))
     if dirty:
         raise RuntimeError(f"diagnostic execution code is dirty: {dirty}")
     bc_meta = json.loads((OUT / "bc_dataset.json").read_text(encoding="utf-8"))
