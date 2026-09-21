@@ -1,0 +1,55 @@
+{
+  "schema": "b0-v3-capturer-bc-v1",
+  "manifest_hash": "ba64bc15fdbbd4f2",
+  "b0_v3_hash": "5e7b5b486b9d8a4a",
+  "dataset_hash": "b48aad5eab4a92bd",
+  "n_samples": 597,
+  "n_fire_positive": 66,
+  "success_cells": [
+    "r00c1",
+    "r00c2",
+    "r01c1",
+    "r01c2",
+    "r02c1",
+    "r02c2",
+    "r03c1",
+    "r03c2",
+    "r04c1",
+    "r04c2",
+    "r05c1",
+    "r05c2",
+    "r06c1",
+    "r06c2",
+    "r07c1",
+    "r07c2",
+    "r08c1",
+    "r08c2",
+    "r09c1",
+    "r10c1",
+    "r10c2",
+    "r11c1",
+    "r12c1",
+    "r12c2",
+    "r13c1",
+    "r13c2"
+  ],
+  "n_success_cells": 26,
+  "success_cells_by_slice": {
+    "0": 14,
+    "2": 12
+  },
+  "attempt_outcomes": {
+    "H_illegal": 2,
+    "N": 26,
+    "NET_SPENT": 34
+  },
+  "excluded_outcomes": [
+    "H_illegal",
+    "NET_SPENT",
+    "PENETRATED",
+    "TRUNCATED"
+  ],
+  "code_commit": "eb8bb87",
+  "code_tree": "dea5a7a357a090ed0db3106d96100d424cc8fc12",
+  "code_dirty_scoped": []
+}
