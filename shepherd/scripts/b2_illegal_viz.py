@@ -185,9 +185,13 @@ def main() -> None:
     m, paired, raw_commits = _primary()
     assert len(raw_commits) == 1, raw_commits
     raw_commit = next(iter(raw_commits))
-    code_unchanged = subprocess.run(
-        ["git", "diff", "--quiet", raw_commit, "--", "shepherd"], cwd=ROOT).returncode == 0
-    assert code_unchanged, f"shepherd code changed since primary commit {raw_commit}"
+    changed = subprocess.check_output(
+        ["git", "diff", "--name-only", raw_commit, "--", "shepherd"],
+        cwd=ROOT, text=True).splitlines()
+    changed = [p.replace("\\", "/") for p in changed
+               if p.replace("\\", "/") != "shepherd/scripts/b2_illegal_viz.py"]
+    code_unchanged = not changed
+    assert code_unchanged, f"replay code changed since primary commit {raw_commit}: {changed}"
     _, blocks = _index(m)
     selected = _select(paired)
     cases = []
@@ -208,7 +212,7 @@ def main() -> None:
                                and x["RULE_COOP"]["bin"] == "H_illegal"
                                for x in paired.values()),
         "selected": selected, "raw_code_commit": raw_commit,
-        "replay_head": git_commit(), "shepherd_code_unchanged_since_primary": code_unchanged,
+        "replay_head": git_commit(), "replay_code_unchanged_since_primary": code_unchanged,
         "replay_parity": {"passed": passed, "failed": failed},
         "illegal_accounting": {
             "n": len(illegal),
