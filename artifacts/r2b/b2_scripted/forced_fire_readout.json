@@ -1,0 +1,70 @@
+{
+ "schema": "b2-forced-fire-readout-v1",
+ "account": "diagnostic_forced_fire",
+ "manifest_hash": "2f887776be47f538",
+ "shards": [
+  {
+   "file": "shard00.json",
+   "finished": true,
+   "n": 55,
+   "code_commit": "fbe3f65"
+  },
+  {
+   "file": "shard01.json",
+   "finished": true,
+   "n": 55,
+   "code_commit": "fbe3f65"
+  },
+  {
+   "file": "shard02.json",
+   "finished": true,
+   "n": 55,
+   "code_commit": "fbe3f65"
+  },
+  {
+   "file": "shard03.json",
+   "finished": true,
+   "n": 55,
+   "code_commit": "fbe3f65"
+  },
+  {
+   "file": "shard04.json",
+   "finished": true,
+   "n": 54,
+   "code_commit": "fbe3f65"
+  },
+  {
+   "file": "shard05.json",
+   "finished": true,
+   "n": 54,
+   "code_commit": "fbe3f65"
+  },
+  {
+   "file": "shard06.json",
+   "finished": true,
+   "n": 54,
+   "code_commit": "fbe3f65"
+  },
+  {
+   "file": "shard07.json",
+   "finished": true,
+   "n": 54,
+   "code_commit": "fbe3f65"
+  }
+ ],
+ "n_probed": 436,
+ "n_selected": 436,
+ "n_skipped_no_axial": 0,
+ "n_forced_fired": 436,
+ "n_in_band_at_t_star": 436,
+ "pre_intervention_identical_all": true,
+ "n_net_capture_after_force": 0,
+ "recovery_rate_given_forced": 0.0,
+ "bins": {
+  "F_other": 392,
+  "H_illegal": 29,
+  "H_fb": 15
+ },
+ "reading": "P(FIRE) 매우 낮음 + forced-fire 가 capture 회복 -> gate-limited; FIRE 는 나오는데 P(N|FIRE) 낮음 -> attainability/controller-limited; forced 해도 실패 -> gate 가 핵심 원인 아님 (docs/102 §5.5)",
+ "pooling": "primary 와 pooling 금지"
+}
