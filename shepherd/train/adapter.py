@@ -39,6 +39,9 @@ SHARED_FLAG_KEYS = ("fire_event", "wasted_fire", "fsm_state", "k_remaining",
                     "v_shot_soft", "v_shot_worst", "p_feasible", "boxed_in",
                     "threshold_crossed", "clean_net_threshold_crossed",
                     "captured", "penetrated", "limiter_loss")
+OPTIONAL_SHARED_FLAG_KEYS = ("b0_credit_cut", "b0_rl_outcome",
+                             "b0_reward_task", "b0_reward_shape",
+                             "b0_phi_next", "b0_illegal_engagement")
 
 
 @dataclass
@@ -101,6 +104,8 @@ class ShepherdAdapter:
         fin_info = infos[self.finisher_id]
         coma = {lid: float(infos[lid]["coma_D"]) for lid in self.limiter_ids}
         flags = {k: fin_info[k] for k in SHARED_FLAG_KEYS}
+        flags.update({k: fin_info[k] for k in OPTIONAL_SHARED_FLAG_KEYS
+                      if k in fin_info})
         return StepResult(
             obs=obs, rewards={a: float(r) for a, r in rewards.items()},
             terminated=terminated, truncated=truncated,

@@ -231,9 +231,14 @@ class M4Runner(MAPPORunner):
         self._ep_env = None
 
     # --------------------------------------------------------------- 에피소드 ---
+    def _wrap_episode_env(self, env):
+        """Episode-local wrapper hook. 기본은 항등이라 기존 M4 경로는 불변."""
+        return env
+
     def _begin_episode(self) -> None:
         st = build_m4_env(self.seed, self._ep_idx, **self._m4)
-        self._adapter = ShepherdAdapter(st.env, self.live_dims)
+        episode_env = self._wrap_episode_env(st.env)
+        self._adapter = ShepherdAdapter(episode_env, self.live_dims)
         # ★ P5: 이 에피소드의 실제 권한으로 행동 스케일을 갱신한다 (a_lim = 0.35·a_att).
         self.lim_scale = self._adapter.action_bounds(
             self._adapter.limiter_ids[0])[1].astype(np.float32)
@@ -243,7 +248,7 @@ class M4Runner(MAPPORunner):
                     "coma_sum": 0.0, "fire_events": 0.0, "steps": 0.0,
                     "clean": 0.0}
         self._ep_params = st.threat
-        self._ep_env = st.env
+        self._ep_env = episode_env
         self._scn, self._lay = st.scn, st.lay
         self._prev_clean = False            # 발사 트리거는 **직전 스텝**의 플래그다
 
