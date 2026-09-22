@@ -1,0 +1,23 @@
+/data/hjhong/l2/newURP/.venv-l2/lib/python3.10/site-packages/torch/nn/modules/linear.py:125: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:217.)
+  return F.linear(input, self.weight, self.bias)
+/data/hjhong/l2/newURP/.venv-l2/lib/python3.10/site-packages/torch/autograd/graph.py:823: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:217.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+final_scripted_limiter: N=14/280 FIRE=44 cross=32
+bcrecon_scripted_limiter: N=9/280 FIRE=22 cross=25
+bcrecon_scripted_limiter_mean_axis: N=63/280 FIRE=75 cross=146
+bcrecon_learned_limiter: N=8/280 FIRE=19 cross=21
+final_weights_bc_norm_scripted: N=11/280 FIRE=19 cross=52
+bcrecon_weights_final_norm_scripted: N=6/280 FIRE=38 cross=22
+trace scripted_both/r00c1: N steps=32 cross=3
+trace bcrecon_scripted_limiter/r00c1: F_other steps=42 cross=0
+trace final_scripted_limiter/r00c1: F_other steps=42 cross=0
+trace scripted_both/r00c2: N steps=30 cross=3
+trace bcrecon_scripted_limiter/r00c2: F_other steps=40 cross=2
+trace final_scripted_limiter/r00c2: F_other steps=40 cross=0
+trace scripted_both/r07c1: N steps=31 cross=2
+trace bcrecon_scripted_limiter/r07c1: F_other steps=38 cross=0
+trace final_scripted_limiter/r07c1: F_other steps=38 cross=0
+trace scripted_both/r13c2: N steps=21 cross=2
+trace bcrecon_scripted_limiter/r13c2: F_other steps=23 cross=1
+trace final_scripted_limiter/r13c2: F_other steps=20 cross=1
+saved: /data/hjhong/l2/newURP/artifacts/marl/b0_v3_pilot/diagnostic/capturer_diag_c0_base_s0.json
