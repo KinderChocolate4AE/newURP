@@ -1,0 +1,228 @@
+{
+  "schema": "b0-v3-capturer-clbc1-f2-posthoc-v1",
+  "manifest_hash": "567f134a862335ce",
+  "sealed_decision": "STOP_F2",
+  "read_only": true,
+  "lineage_and_pairing_valid": true,
+  "scope": "mechanism readout only; sealed gate and decisions unchanged",
+  "seeds": {
+    "0": {
+      "fire_judge": {
+        "control": {
+          "accepted_FIRE": 75,
+          "capture_per_FIRE": 0.3466666666666667,
+          "robust_ready_matches_N": true,
+          "mismatch_scenario_ids": [],
+          "policy_input_vs_authoritative_robust": {
+            "neither": 49,
+            "input_only": 0,
+            "authoritative_only": 0,
+            "both": 26,
+            "policy_input_robust_in_N": 26,
+            "policy_input_robust_in_SPENT_FAIL": 0,
+            "v_shot_soft_abs_diff_p50": 0.0003993707343031838
+          },
+          "by_terminal": {
+            "N": {
+              "n": 26,
+              "robust_ready": 26,
+              "v_shot_soft_p50": 1.0,
+              "attitude_to_teacher_deg_p50": 3.6088232541935596,
+              "command_to_teacher_deg_p50": 22.723457634006312,
+              "fire_step_p50": 11.0,
+              "boxed_in": 0
+            },
+            "SPENT_FAIL": {
+              "n": 49,
+              "robust_ready": 0,
+              "v_shot_soft_p50": 0.9688498402555911,
+              "attitude_to_teacher_deg_p50": 5.205599969541901,
+              "command_to_teacher_deg_p50": 27.131229717664798,
+              "fire_step_p50": 15.0,
+              "boxed_in": 0
+            }
+          }
+        },
+        "f2_low_std": {
+          "accepted_FIRE": 171,
+          "capture_per_FIRE": 0.3391812865497076,
+          "robust_ready_matches_N": true,
+          "mismatch_scenario_ids": [],
+          "policy_input_vs_authoritative_robust": {
+            "neither": 111,
+            "input_only": 2,
+            "authoritative_only": 0,
+            "both": 58,
+            "policy_input_robust_in_N": 58,
+            "policy_input_robust_in_SPENT_FAIL": 2,
+            "v_shot_soft_abs_diff_p50": 0.0007987014782695478
+          },
+          "by_terminal": {
+            "N": {
+              "n": 58,
+              "robust_ready": 58,
+              "v_shot_soft_p50": 1.0,
+              "attitude_to_teacher_deg_p50": 3.1468338362976254,
+              "command_to_teacher_deg_p50": 8.45569774763953,
+              "fire_step_p50": 11.0,
+              "boxed_in": 0
+            },
+            "SPENT_FAIL": {
+              "n": 113,
+              "robust_ready": 0,
+              "v_shot_soft_p50": 0.9672523961661342,
+              "attitude_to_teacher_deg_p50": 5.055068784824049,
+              "command_to_teacher_deg_p50": 8.436969980692904,
+              "fire_step_p50": 14.0,
+              "boxed_in": 0
+            }
+          }
+        }
+      },
+      "paired": {
+        "N_discordance": {
+          "neither": 213,
+          "control_only": 9,
+          "f2_only": 41,
+          "both": 17
+        },
+        "FIRE_discordance": {
+          "neither": 100,
+          "control_only": 9,
+          "f2_only": 105,
+          "both": 66
+        },
+        "crossing_discordance": {
+          "neither": 89,
+          "control_only": 2,
+          "f2_only": 104,
+          "both": 85
+        },
+        "terminal_transitions": {
+          "CAPTURED->CAPTURED": 17,
+          "CAPTURED->PENETRATED": 4,
+          "CAPTURED->SPENT_FAIL": 5,
+          "PENETRATED->CAPTURED": 34,
+          "PENETRATED->PENETRATED": 100,
+          "PENETRATED->SPENT_FAIL": 71,
+          "SPENT_FAIL->CAPTURED": 7,
+          "SPENT_FAIL->PENETRATED": 5,
+          "SPENT_FAIL->SPENT_FAIL": 37
+        },
+        "f2_only_FIRE_outcomes": {
+          "CAPTURED": 34,
+          "SPENT_FAIL": 71
+        }
+      }
+    },
+    "1": {
+      "fire_judge": {
+        "control": {
+          "accepted_FIRE": 85,
+          "capture_per_FIRE": 0.3176470588235294,
+          "robust_ready_matches_N": true,
+          "mismatch_scenario_ids": [],
+          "policy_input_vs_authoritative_robust": {
+            "neither": 57,
+            "input_only": 1,
+            "authoritative_only": 0,
+            "both": 27,
+            "policy_input_robust_in_N": 27,
+            "policy_input_robust_in_SPENT_FAIL": 1,
+            "v_shot_soft_abs_diff_p50": 0.0015974545631164405
+          },
+          "by_terminal": {
+            "N": {
+              "n": 27,
+              "robust_ready": 27,
+              "v_shot_soft_p50": 1.0,
+              "attitude_to_teacher_deg_p50": 2.9540546921084383,
+              "command_to_teacher_deg_p50": 23.13384736170614,
+              "fire_step_p50": 11.0,
+              "boxed_in": 0
+            },
+            "SPENT_FAIL": {
+              "n": 58,
+              "robust_ready": 0,
+              "v_shot_soft_p50": 0.9738418530351438,
+              "attitude_to_teacher_deg_p50": 5.312601677557089,
+              "command_to_teacher_deg_p50": 25.002772718932146,
+              "fire_step_p50": 12.0,
+              "boxed_in": 0
+            }
+          }
+        },
+        "f2_low_std": {
+          "accepted_FIRE": 189,
+          "capture_per_FIRE": 0.3333333333333333,
+          "robust_ready_matches_N": true,
+          "mismatch_scenario_ids": [],
+          "policy_input_vs_authoritative_robust": {
+            "neither": 125,
+            "input_only": 1,
+            "authoritative_only": 2,
+            "both": 61,
+            "policy_input_robust_in_N": 61,
+            "policy_input_robust_in_SPENT_FAIL": 1,
+            "v_shot_soft_abs_diff_p50": 0.000798743372908084
+          },
+          "by_terminal": {
+            "N": {
+              "n": 63,
+              "robust_ready": 63,
+              "v_shot_soft_p50": 1.0,
+              "attitude_to_teacher_deg_p50": 3.210644242135447,
+              "command_to_teacher_deg_p50": 7.509484343116143,
+              "fire_step_p50": 11.0,
+              "boxed_in": 0
+            },
+            "SPENT_FAIL": {
+              "n": 126,
+              "robust_ready": 0,
+              "v_shot_soft_p50": 0.9730431309904153,
+              "attitude_to_teacher_deg_p50": 5.1430115030280295,
+              "command_to_teacher_deg_p50": 7.620683464956027,
+              "fire_step_p50": 12.0,
+              "boxed_in": 0
+            }
+          }
+        }
+      },
+      "paired": {
+        "N_discordance": {
+          "neither": 208,
+          "control_only": 9,
+          "f2_only": 45,
+          "both": 18
+        },
+        "FIRE_discordance": {
+          "neither": 82,
+          "control_only": 9,
+          "f2_only": 113,
+          "both": 76
+        },
+        "crossing_discordance": {
+          "neither": 67,
+          "control_only": 8,
+          "f2_only": 116,
+          "both": 89
+        },
+        "terminal_transitions": {
+          "CAPTURED->CAPTURED": 18,
+          "CAPTURED->PENETRATED": 1,
+          "CAPTURED->SPENT_FAIL": 8,
+          "PENETRATED->CAPTURED": 34,
+          "PENETRATED->PENETRATED": 82,
+          "PENETRATED->SPENT_FAIL": 79,
+          "SPENT_FAIL->CAPTURED": 11,
+          "SPENT_FAIL->PENETRATED": 8,
+          "SPENT_FAIL->SPENT_FAIL": 39
+        },
+        "f2_only_FIRE_outcomes": {
+          "CAPTURED": 34,
+          "SPENT_FAIL": 79
+        }
+      }
+    }
+  }
+}
