@@ -1,0 +1,150 @@
+{
+  "schema": "b0-v3-capturer-clbc1-readout-v1",
+  "status": "COMPLETE",
+  "manifest_hash": "ad79a6801c494c8d",
+  "scope": {
+    "question": "does one round of F1 self-trajectory collection and analytic teacher relabel reduce closed-loop aim drift versus equal-budget original-dataset replay",
+    "rl_updates": 0,
+    "not_evidence_for": [
+      "scientific significance",
+      "pilot selection",
+      "W6 entry",
+      "learned cooperation"
+    ],
+    "f1_status_unchanged": "STOP_F1"
+  },
+  "integrity": {
+    "lineage": true,
+    "pairing": true,
+    "finite": true,
+    "completion": true,
+    "common_parent": true,
+    "frozen_state": true,
+    "budget": true
+  },
+  "per_seed": {
+    "seed0": {
+      "replay": {
+        "n": 280,
+        "counts": {
+          "F_other": 275,
+          "N": 5
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 5,
+          "PENETRATED": 246,
+          "SPENT_FAIL": 29
+        },
+        "N": 5,
+        "H_illegal": 0,
+        "FIRE_episodes": 34,
+        "FIRE_commands": 279,
+        "clean_crossing_episodes": 38,
+        "clean_crossings_total": 63,
+        "mean_to_teacher_deg_median": 38.52496656289293,
+        "sampled_to_mean_deg_median": 33.28066969784072,
+        "attitude_to_teacher_deg_median": 46.98273038639924,
+        "mean_norm_median": 0.8212160389763968,
+        "v_shot_soft_max_median": 0.3358626216650009
+      },
+      "clbc1": {
+        "n": 280,
+        "counts": {
+          "F_other": 262,
+          "N": 18
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 18,
+          "PENETRATED": 212,
+          "SPENT_FAIL": 50
+        },
+        "N": 18,
+        "H_illegal": 0,
+        "FIRE_episodes": 68,
+        "FIRE_commands": 528,
+        "clean_crossing_episodes": 77,
+        "clean_crossings_total": 114,
+        "mean_to_teacher_deg_median": 4.824821184592232,
+        "sampled_to_mean_deg_median": 29.044688206507416,
+        "attitude_to_teacher_deg_median": 38.30077185640309,
+        "mean_norm_median": 0.9591771121503729,
+        "v_shot_soft_max_median": 0.6992811560630798
+      }
+    },
+    "seed1": {
+      "replay": {
+        "n": 280,
+        "counts": {
+          "F_other": 265,
+          "N": 15
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 15,
+          "PENETRATED": 240,
+          "SPENT_FAIL": 25
+        },
+        "N": 15,
+        "H_illegal": 0,
+        "FIRE_episodes": 40,
+        "FIRE_commands": 268,
+        "clean_crossing_episodes": 45,
+        "clean_crossings_total": 69,
+        "mean_to_teacher_deg_median": 35.259234370253566,
+        "sampled_to_mean_deg_median": 32.74391890720112,
+        "attitude_to_teacher_deg_median": 46.7859490799492,
+        "mean_norm_median": 0.8213796103015885,
+        "v_shot_soft_max_median": 0.3650159686803818
+      },
+      "clbc1": {
+        "n": 280,
+        "counts": {
+          "F_other": 265,
+          "N": 15
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 15,
+          "PENETRATED": 207,
+          "SPENT_FAIL": 58
+        },
+        "N": 15,
+        "H_illegal": 0,
+        "FIRE_episodes": 73,
+        "FIRE_commands": 480,
+        "clean_crossing_episodes": 89,
+        "clean_crossings_total": 131,
+        "mean_to_teacher_deg_median": 6.235403454495708,
+        "sampled_to_mean_deg_median": 27.89181387584501,
+        "attitude_to_teacher_deg_median": 36.921125553367176,
+        "mean_norm_median": 0.98838730280598,
+        "v_shot_soft_max_median": 0.7703674137592316
+      }
+    }
+  },
+  "gate": {
+    "decision": "STOP_CLBC1",
+    "clauses": {
+      "seed0_crossing_increase": true,
+      "seed0_N_increase": true,
+      "seed0_mean_angle_decrease": true,
+      "seed1_crossing_increase": true,
+      "seed1_N_increase": false,
+      "seed1_mean_angle_decrease": true,
+      "both_arms_pooled_H_illegal_zero": true
+    },
+    "pooled_H_illegal": {
+      "replay": 0,
+      "clbc1": 0
+    },
+    "integrity": {
+      "lineage": true,
+      "pairing": true,
+      "finite": true,
+      "completion": true,
+      "common_parent": true,
+      "frozen_state": true,
+      "budget": true
+    }
+  },
+  "decision": "STOP_CLBC1",
+  "promotion": "none; STOP_F1 and NO_SELECTION stand; W6 remains closed"
+}
