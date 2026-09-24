@@ -1,0 +1,18 @@
+{
+  "schema": "b0-v3-capturer-clbc1-f3-collection-v1",
+  "manifest_hash": "00a9e45ff4b0506d",
+  "code_commit": "09f3e0b",
+  "actor_seed": 1,
+  "dataset_hash": "af6738caa5330e07",
+  "n_rows": 3259,
+  "n_episodes": 112,
+  "train_rows": 2429,
+  "validation_rows": 830,
+  "train_positive": 30,
+  "validation_positive": 12,
+  "train_soft_negative": 88,
+  "validation_soft_negative": 32,
+  "scenario_signature": "9f7b5f0220459d07",
+  "fire_suppression": "collection only; sampled Bernoulli consumed then env FIRE bit set to 0",
+  "rl_updates": 0
+}
