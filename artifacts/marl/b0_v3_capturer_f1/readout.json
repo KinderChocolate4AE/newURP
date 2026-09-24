@@ -1,0 +1,529 @@
+{
+  "schema": "b0-v3-capturer-f1-readout-v1",
+  "manifest_hash": "aca08029be1a2fb9",
+  "scope": {
+    "question": "does replacing the cosine aim loss with unit-teacher-axis MSE make the post-BC stochastic capturer produce more clean crossings and clean N on new paired scenarios",
+    "rl_updates": 0,
+    "not_evidence_for": [
+      "scientific significance",
+      "candidate selection",
+      "W6 entry",
+      "learned cooperation"
+    ],
+    "reconstruction": "cosine control is a metric-anchored reconstruction, not the (never-saved) original post-BC checkpoint"
+  },
+  "integrity": {
+    "lineage": true,
+    "pairing": true,
+    "finite": true,
+    "completion": true
+  },
+  "per_seed": {
+    "seed0": {
+      "self_trajectory": {
+        "cosine_control": {
+          "n": 280,
+          "counts": {
+            "F_other": 253,
+            "H_illegal": 20,
+            "N": 7
+          },
+          "N": 7,
+          "H_illegal": 20,
+          "FIRE": 23,
+          "clean_crossing_episodes": 19,
+          "clean_crossings_total": 25,
+          "mu_norm_mean__median_over_episodes": 0.13389474019315672,
+          "ang_mean_teacher_deg_mean__median_over_episodes": 39.468939010530875,
+          "ang_cmd_teacher_deg_mean__median_over_episodes": 79.96137665789595,
+          "ang_att_teacher_deg_mean__median_over_episodes": 58.08647989330838
+        },
+        "unit_axis_mse_f1": {
+          "n": 280,
+          "counts": {
+            "F_other": 242,
+            "H_illegal": 20,
+            "N": 18
+          },
+          "N": 18,
+          "H_illegal": 20,
+          "FIRE": 35,
+          "clean_crossing_episodes": 37,
+          "clean_crossings_total": 68,
+          "mu_norm_mean__median_over_episodes": 0.8763703572930712,
+          "ang_mean_teacher_deg_mean__median_over_episodes": 36.650876390697206,
+          "ang_cmd_teacher_deg_mean__median_over_episodes": 50.41022889881404,
+          "ang_att_teacher_deg_mean__median_over_episodes": 48.75183865452429
+        }
+      },
+      "teacher_fit": {
+        "cosine_control": {
+          "bc_metrics": {
+            "loss": 0.08076510578393936,
+            "axis_loss": 0.00029968773014843464,
+            "fire_loss": 0.0804654210805893,
+            "steps": 400,
+            "n_samples": 597,
+            "mean_axis_cosine": 0.9996563792228699,
+            "fire_tpr": 1.0,
+            "fire_tnr": 0.9774011373519897,
+            "limiter_mean_zero": true
+          },
+          "fit_on_teacher_states": {
+            "n": 597,
+            "mean_axis_cosine": 0.9996563792228699,
+            "axis_angle_deg_p50": 1.0181795358657837,
+            "axis_angle_deg_p90": 2.226074695587158,
+            "mean_mu_norm": 0.16207335889339447,
+            "p10_mu_norm": 0.10442306846380234,
+            "sigma_axis": [
+              0.3678794801235199,
+              0.3678794801235199,
+              0.3678794801235199
+            ],
+            "sampled_axis_angle_to_mean_deg_p50": 75.15335083007812,
+            "sampled_axis_angle_to_mean_deg_p90": 141.4651641845703,
+            "fire_tpr": 1.0,
+            "fire_tnr": 0.9774011299435028,
+            "fire_bce": 0.047798942774534225
+          }
+        },
+        "unit_axis_mse_f1": {
+          "bc_metrics": {
+            "loss": 0.08102939277887344,
+            "axis_loss": 0.0005639698356389999,
+            "fire_loss": 0.0804654210805893,
+            "steps": 400,
+            "n_samples": 597,
+            "mean_axis_cosine": 0.9994561076164246,
+            "fire_tpr": 1.0,
+            "fire_tnr": 0.9774011373519897,
+            "limiter_mean_zero": true
+          },
+          "fit_on_teacher_states": {
+            "n": 597,
+            "mean_axis_cosine": 0.9994561076164246,
+            "axis_angle_deg_p50": 0.9624582529067993,
+            "axis_angle_deg_p90": 2.496453285217285,
+            "mean_mu_norm": 0.9993460774421692,
+            "p10_mu_norm": 0.977778434753418,
+            "sigma_axis": [
+              0.3678794801235199,
+              0.3678794801235199,
+              0.3678794801235199
+            ],
+            "sampled_axis_angle_to_mean_deg_p50": 25.356882095336914,
+            "sampled_axis_angle_to_mean_deg_p90": 44.175472259521484,
+            "fire_tpr": 1.0,
+            "fire_tnr": 0.9774011299435028,
+            "fire_bce": 0.047798942774534225
+          }
+        }
+      },
+      "anchor_verdict": "exact-metric-match",
+      "paired_discordance": {
+        "clean_N": {
+          "both_success": 2,
+          "f1_only": 16,
+          "control_only": 5,
+          "both_fail": 257
+        },
+        "clean_crossing_episode": {
+          "both_success": 7,
+          "f1_only": 30,
+          "control_only": 12,
+          "both_fail": 231
+        }
+      },
+      "cell_signs": {
+        "delta_N": {
+          "pos": 10,
+          "neg": 4,
+          "zero": 14
+        },
+        "delta_crossing": {
+          "pos": 15,
+          "neg": 4,
+          "zero": 9
+        },
+        "per_cell": {
+          "r00c1": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r00c2": {
+            "dN": 1,
+            "dcross": 1
+          },
+          "r01c1": {
+            "dN": 0,
+            "dcross": 1
+          },
+          "r01c2": {
+            "dN": -1,
+            "dcross": 0
+          },
+          "r02c1": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r02c2": {
+            "dN": 1,
+            "dcross": 1
+          },
+          "r03c1": {
+            "dN": 0,
+            "dcross": 1
+          },
+          "r03c2": {
+            "dN": 0,
+            "dcross": 1
+          },
+          "r04c1": {
+            "dN": 0,
+            "dcross": -1
+          },
+          "r04c2": {
+            "dN": 0,
+            "dcross": -1
+          },
+          "r05c1": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r05c2": {
+            "dN": 0,
+            "dcross": 1
+          },
+          "r06c1": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r06c2": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r07c1": {
+            "dN": 2,
+            "dcross": 3
+          },
+          "r07c2": {
+            "dN": -1,
+            "dcross": -1
+          },
+          "r08c1": {
+            "dN": 1,
+            "dcross": 0
+          },
+          "r08c2": {
+            "dN": 0,
+            "dcross": 1
+          },
+          "r09c1": {
+            "dN": -1,
+            "dcross": 0
+          },
+          "r09c2": {
+            "dN": 3,
+            "dcross": 3
+          },
+          "r10c1": {
+            "dN": 1,
+            "dcross": 2
+          },
+          "r10c2": {
+            "dN": -1,
+            "dcross": -1
+          },
+          "r11c1": {
+            "dN": 2,
+            "dcross": 1
+          },
+          "r11c2": {
+            "dN": 1,
+            "dcross": 1
+          },
+          "r12c1": {
+            "dN": 1,
+            "dcross": 2
+          },
+          "r12c2": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r13c1": {
+            "dN": 2,
+            "dcross": 2
+          },
+          "r13c2": {
+            "dN": 0,
+            "dcross": 1
+          }
+        }
+      }
+    },
+    "seed1": {
+      "self_trajectory": {
+        "cosine_control": {
+          "n": 280,
+          "counts": {
+            "F_other": 254,
+            "H_illegal": 20,
+            "N": 6
+          },
+          "N": 6,
+          "H_illegal": 20,
+          "FIRE": 24,
+          "clean_crossing_episodes": 26,
+          "clean_crossings_total": 41,
+          "mu_norm_mean__median_over_episodes": 0.13796968601712709,
+          "ang_mean_teacher_deg_mean__median_over_episodes": 42.91003508075734,
+          "ang_cmd_teacher_deg_mean__median_over_episodes": 79.67488497139473,
+          "ang_att_teacher_deg_mean__median_over_episodes": 57.883068519221425
+        },
+        "unit_axis_mse_f1": {
+          "n": 280,
+          "counts": {
+            "F_other": 249,
+            "H_illegal": 21,
+            "N": 10
+          },
+          "N": 10,
+          "H_illegal": 21,
+          "FIRE": 29,
+          "clean_crossing_episodes": 44,
+          "clean_crossings_total": 68,
+          "mu_norm_mean__median_over_episodes": 0.8785403983745995,
+          "ang_mean_teacher_deg_mean__median_over_episodes": 35.79995704568174,
+          "ang_cmd_teacher_deg_mean__median_over_episodes": 49.64235625043469,
+          "ang_att_teacher_deg_mean__median_over_episodes": 47.115374372081675
+        }
+      },
+      "teacher_fit": {
+        "cosine_control": {
+          "bc_metrics": {
+            "loss": 0.07193993777036667,
+            "axis_loss": 0.000405716011300683,
+            "fire_loss": 0.07153422385454178,
+            "steps": 400,
+            "n_samples": 597,
+            "mean_axis_cosine": 0.9995908141136169,
+            "fire_tpr": 1.0,
+            "fire_tnr": 0.9792843461036682,
+            "limiter_mean_zero": true
+          },
+          "fit_on_teacher_states": {
+            "n": 597,
+            "mean_axis_cosine": 0.9995908737182617,
+            "axis_angle_deg_p50": 1.0535056591033936,
+            "axis_angle_deg_p90": 2.296337127685547,
+            "mean_mu_norm": 0.16422122716903687,
+            "p10_mu_norm": 0.10608059912919998,
+            "sigma_axis": [
+              0.3678794801235199,
+              0.3678794801235199,
+              0.3678794801235199
+            ],
+            "sampled_axis_angle_to_mean_deg_p50": 74.9603271484375,
+            "sampled_axis_angle_to_mean_deg_p90": 141.1408233642578,
+            "fire_tpr": 1.0,
+            "fire_tnr": 0.9792843691148776,
+            "fire_bce": 0.04353806748986244
+          }
+        },
+        "unit_axis_mse_f1": {
+          "bc_metrics": {
+            "loss": 0.07215471565723419,
+            "axis_loss": 0.0006204941309988499,
+            "fire_loss": 0.07153422385454178,
+            "steps": 400,
+            "n_samples": 597,
+            "mean_axis_cosine": 0.9994372725486755,
+            "fire_tpr": 1.0,
+            "fire_tnr": 0.9792843461036682,
+            "limiter_mean_zero": true
+          },
+          "fit_on_teacher_states": {
+            "n": 597,
+            "mean_axis_cosine": 0.9994373917579651,
+            "axis_angle_deg_p50": 0.9883375763893127,
+            "axis_angle_deg_p90": 2.278470039367676,
+            "mean_mu_norm": 1.0009478330612183,
+            "p10_mu_norm": 0.9794341921806335,
+            "sigma_axis": [
+              0.3678794801235199,
+              0.3678794801235199,
+              0.3678794801235199
+            ],
+            "sampled_axis_angle_to_mean_deg_p50": 25.32394790649414,
+            "sampled_axis_angle_to_mean_deg_p90": 44.05525207519531,
+            "fire_tpr": 1.0,
+            "fire_tnr": 0.9792843691148776,
+            "fire_bce": 0.04353806748986244
+          }
+        }
+      },
+      "anchor_verdict": "exact-metric-match",
+      "paired_discordance": {
+        "clean_N": {
+          "both_success": 3,
+          "f1_only": 7,
+          "control_only": 3,
+          "both_fail": 267
+        },
+        "clean_crossing_episode": {
+          "both_success": 16,
+          "f1_only": 28,
+          "control_only": 10,
+          "both_fail": 226
+        }
+      },
+      "cell_signs": {
+        "delta_N": {
+          "pos": 7,
+          "neg": 3,
+          "zero": 18
+        },
+        "delta_crossing": {
+          "pos": 14,
+          "neg": 4,
+          "zero": 10
+        },
+        "per_cell": {
+          "r00c1": {
+            "dN": 0,
+            "dcross": 1
+          },
+          "r00c2": {
+            "dN": 1,
+            "dcross": 1
+          },
+          "r01c1": {
+            "dN": 0,
+            "dcross": 2
+          },
+          "r01c2": {
+            "dN": 1,
+            "dcross": 0
+          },
+          "r02c1": {
+            "dN": -1,
+            "dcross": -1
+          },
+          "r02c2": {
+            "dN": 0,
+            "dcross": 1
+          },
+          "r03c1": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r03c2": {
+            "dN": -1,
+            "dcross": 1
+          },
+          "r04c1": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r04c2": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r05c1": {
+            "dN": 1,
+            "dcross": 0
+          },
+          "r05c2": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r06c1": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r06c2": {
+            "dN": 0,
+            "dcross": 2
+          },
+          "r07c1": {
+            "dN": 1,
+            "dcross": 2
+          },
+          "r07c2": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r08c1": {
+            "dN": 0,
+            "dcross": 2
+          },
+          "r08c2": {
+            "dN": 0,
+            "dcross": 1
+          },
+          "r09c1": {
+            "dN": -1,
+            "dcross": -1
+          },
+          "r09c2": {
+            "dN": 1,
+            "dcross": 1
+          },
+          "r10c1": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r10c2": {
+            "dN": 0,
+            "dcross": -1
+          },
+          "r11c1": {
+            "dN": 0,
+            "dcross": 3
+          },
+          "r11c2": {
+            "dN": 0,
+            "dcross": -1
+          },
+          "r12c1": {
+            "dN": 0,
+            "dcross": 0
+          },
+          "r12c2": {
+            "dN": 1,
+            "dcross": 2
+          },
+          "r13c1": {
+            "dN": 0,
+            "dcross": 2
+          },
+          "r13c2": {
+            "dN": 1,
+            "dcross": 1
+          }
+        }
+      }
+    }
+  },
+  "gate": {
+    "clauses": {
+      "seed0_clean_crossing_episodes_increase": true,
+      "seed0_clean_N_increase": true,
+      "seed1_clean_crossing_episodes_increase": true,
+      "seed1_clean_N_increase": true,
+      "pooled_H_illegal_not_increased": false,
+      "lineage": true,
+      "pairing": true,
+      "finite": true,
+      "completion": true
+    },
+    "pooled_H_illegal": {
+      "cosine_control": 40,
+      "unit_axis_mse_f1": 41
+    },
+    "decision": "STOP_F1"
+  },
+  "decision": "STOP_F1",
+  "promotion": "none; W6 remains closed"
+}

@@ -1,0 +1,13 @@
+anchor s1: exact-metric-match
+cosine_control/s1: 70/280
+cosine_control/s1: 140/280
+cosine_control/s1: 210/280
+cosine_control/s1: 280/280
+cosine_control/s1: done n=280
+unit_axis_mse_f1/s1: 70/280
+unit_axis_mse_f1/s1: 140/280
+unit_axis_mse_f1/s1: 210/280
+unit_axis_mse_f1/s1: 280/280
+unit_axis_mse_f1/s1: done n=280
+cosine_control/s1: N=6 cross=26 FIRE=24 H=20
+unit_axis_mse_f1/s1: N=10 cross=44 FIRE=29 H=21
