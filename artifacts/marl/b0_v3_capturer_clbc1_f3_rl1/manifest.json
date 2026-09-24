@@ -1,0 +1,194 @@
+{
+  "schema": "b0-v3-capturer-clbc1-f3-rl1-manifest-v1",
+  "status": "sealed pre-run; small capturer-only PPO mechanism experiment",
+  "design_doc": "docs/115_b0v3_capturer_clbc1_f3_rl1_contract.md",
+  "scope": {
+    "question": "starting from the exact sealed F3 policy, can PPO update only the capturer aim mean and critic while preserving the robust FIRE head",
+    "depends_on_scripted_limiter": true,
+    "not_evidence_for": [
+      "scientific significance",
+      "pilot selection",
+      "W6 entry",
+      "learned cooperation",
+      "learned limiter performance"
+    ],
+    "prior_decisions_unchanged": [
+      "NO_SELECTION",
+      "STOP_F1",
+      "STOP_CLBC1",
+      "STOP_F2"
+    ]
+  },
+  "prerequisites": {
+    "b0_v3_hash": "5e7b5b486b9d8a4a",
+    "f3_manifest": "artifacts/marl/b0_v3_capturer_clbc1_f3/manifest.json",
+    "f3_manifest_hash": "00a9e45ff4b0506d",
+    "f3_readout": "artifacts/marl/b0_v3_capturer_clbc1_f3/readout.json",
+    "f3_decision_required": "PASS_F3_TO_CAPTURER_ONLY_RL_CONTRACT_DRAFT",
+    "f3_source_code_commit": "09f3e0b",
+    "f3_collection_hashes": {
+      "0": "a8f80fc39851ff63",
+      "1": "af6738caa5330e07"
+    },
+    "f3_parent_state": {
+      "0": {
+        "lim_actor": "9a0883845677f930",
+        "fin_mean": "267e5b409333bf9e",
+        "fin_fire_logit": "b24edc79b20c3a32",
+        "fin_log_std": "8ccb527509c0022e",
+        "critic": "1e1a657f3f42abb1",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "9a25cf483fd16c23"
+      },
+      "1": {
+        "lim_actor": "45f8b8f0e22143d4",
+        "fin_mean": "6f26075e07355c22",
+        "fin_fire_logit": "ca3dcdc105271dbc",
+        "fin_log_std": "8ccb527509c0022e",
+        "critic": "22b477760d907046",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "6ee15517b35ad5d7"
+      }
+    }
+  },
+  "arms": {
+    "f3_frozen_control": "exact F3 parent; no PPO update",
+    "f3_aim_ppo": "same F3 parent; PPO updates fin_actor.mean and critic only"
+  },
+  "training": {
+    "actor_seeds": [
+      0,
+      1
+    ],
+    "total_env_steps": 32768,
+    "rollout_env_steps": 512,
+    "updates": 64,
+    "checkpoint_every_updates": 8,
+    "seed0": 151000,
+    "namespace": "b0v3_capturer_clbc1_f3_rl1_train_v1",
+    "torch_seed": "151000 + actor_seed",
+    "minibatch_rng": "np.random.default_rng(151000 + actor_seed)",
+    "limiter": "scripted hold; sampled limiter proposal is discarded and its PPO loss is disabled",
+    "capturer": "stochastic learned aim and frozen learned Bernoulli FIRE; no forced FIRE",
+    "trainable": [
+      "fin_actor.mean",
+      "critic",
+      "critic.value_norm"
+    ],
+    "frozen_bit_identical": [
+      "lim_actor",
+      "fin_actor.fire_logit",
+      "fin_actor.log_std",
+      "obs_norm"
+    ],
+    "hyperparameters": {
+      "lr": 0.0003,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "clip_eps": 0.2,
+      "epochs": 5,
+      "minibatch_size": 128,
+      "vf_coef": 0.5,
+      "max_grad_norm": 0.5,
+      "target_kl": 0.02,
+      "ent_coef_finisher": 0.003,
+      "lr_anneal_floor": 0.1,
+      "beta": 0.2,
+      "r_clean": 1.0,
+      "r_illegal": -1.0
+    },
+    "credit_cut": [
+      "NET_SPENT",
+      "H_illegal"
+    ],
+    "resume": "allowed but marked; resumed runs are not bit-identical to uninterrupted runs"
+  },
+  "evaluation": {
+    "namespace": "b0v3_capturer_clbc1_f3_rl1_eval_v1",
+    "seed0": 161000,
+    "cells": "28 boundary cells (B2 manifest order)",
+    "episodes_per_cell": 10,
+    "episodes_per_arm_per_seed": 280,
+    "episodes_total": 1120,
+    "torch_seed": "161000 + 1_000_000 * actor_seed + scenario_id",
+    "paired": "within actor seed, both arms use identical scenarios and torch seeds",
+    "limiter": "scripted hold",
+    "capturer": "stochastic learned aim plus frozen F3 Bernoulli FIRE head",
+    "metrics": [
+      "clean N",
+      "FIRE",
+      "robust-ready FIRE",
+      "nonrobust FIRE",
+      "SPENT_FAIL",
+      "FIRE-to-N",
+      "clean crossing",
+      "H_illegal"
+    ],
+    "sealed_pilot_280_reused": false
+  },
+  "traces": {
+    "scenarios": [
+      [
+        "r00c1",
+        0
+      ],
+      [
+        "r00c2",
+        10
+      ],
+      [
+        "r07c1",
+        140
+      ],
+      [
+        "r13c2",
+        270
+      ]
+    ],
+    "selection": "fixed before results; same fresh evaluation episodes"
+  },
+  "gate": {
+    "invalid": [
+      "lineage",
+      "pairing",
+      "finite",
+      "completion",
+      "exact F3 parent",
+      "partial-optimizer identity",
+      "frozen-component identity",
+      "budget"
+    ],
+    "evaluation_per_seed": [
+      "aim-PPO clean N > frozen control",
+      "robust-ready FIRE >= control",
+      "nonrobust FIRE <= control",
+      "SPENT_FAIL <= control",
+      "FIRE-to-N >= control",
+      "clean crossing episodes >= control"
+    ],
+    "safety": "pooled H_illegal == 0 for both arms",
+    "pass": "PASS_RL1_MECHANISM_ONLY",
+    "fail": "STOP_RL1",
+    "invalid_decision": "INVALID_RL1"
+  },
+  "stop": [
+    "prerequisite mismatch",
+    "namespace collision",
+    "F3 parent mismatch",
+    "dirty execution code",
+    "frozen component drift",
+    "non-finite value",
+    "pairing mismatch",
+    "budget mismatch",
+    "CUDA run without CUBLAS_WORKSPACE_CONFIG in {:4096:8, :16:8}"
+  ],
+  "runtime": {
+    "cublas_workspace_config": [
+      ":4096:8",
+      ":16:8"
+    ],
+    "deterministic": "seed_everything plus declared training/evaluation seeds"
+  },
+  "promotion": "none; PASS supports only a separately sealed follow-up. The policy depends on a scripted hold limiter and is not learned cooperation.",
+  "manifest_hash": "8ea53634ec08e9d9"
+}
