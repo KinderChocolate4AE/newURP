@@ -1,0 +1,185 @@
+{
+  "schema": "b0-v3-capturer-clbc1-f2-readout-v1",
+  "status": "COMPLETE",
+  "manifest_hash": "567f134a862335ce",
+  "scope": {
+    "question": "after reconstructing the sealed CLBC1 parent, does lowering only the three Gaussian aim log standard deviations from -1.0 to -2.3 improve robust-ready FIRE and clean N",
+    "rl_updates": 0,
+    "not_evidence_for": [
+      "scientific significance",
+      "pilot selection",
+      "W6 entry",
+      "learned cooperation"
+    ],
+    "prior_decisions_unchanged": [
+      "NO_SELECTION",
+      "STOP_F1",
+      "STOP_CLBC1"
+    ]
+  },
+  "integrity": {
+    "lineage": true,
+    "pairing": true,
+    "finite": true,
+    "completion": true,
+    "exact_parent": true,
+    "single_factor": true,
+    "authoritative_fire_logging": true,
+    "budget": true
+  },
+  "per_seed": {
+    "0": {
+      "control": {
+        "n": 280,
+        "counts": {
+          "F_other": 254,
+          "N": 26
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 26,
+          "PENETRATED": 205,
+          "SPENT_FAIL": 49
+        },
+        "N": 26,
+        "H_illegal": 0,
+        "FIRE_episodes": 75,
+        "FIRE_commands": 564,
+        "clean_crossing_episodes": 87,
+        "clean_crossings_total": 120,
+        "mean_to_teacher_deg_median": 4.923125405370762,
+        "sampled_to_mean_deg_median": 29.039918378952812,
+        "attitude_to_teacher_deg_median": 38.31794657901888,
+        "mean_norm_median": 0.956014429529508,
+        "v_shot_soft_max_median": 0.7414137423038483,
+        "SPENT_FAIL": 49,
+        "accepted_FIRE": 75,
+        "robust_ready_FIRE": 26,
+        "FIRE_to_N": 0.3466666666666667,
+        "accepted_fire_v_soft_median": 0.9964057507987221,
+        "accepted_fire_attitude_deg_median": 4.655578099523284
+      },
+      "f2_low_std": {
+        "n": 280,
+        "counts": {
+          "F_other": 222,
+          "N": 58
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 58,
+          "PENETRATED": 109,
+          "SPENT_FAIL": 113
+        },
+        "N": 58,
+        "H_illegal": 0,
+        "FIRE_episodes": 171,
+        "FIRE_commands": 1185,
+        "clean_crossing_episodes": 189,
+        "clean_crossings_total": 303,
+        "mean_to_teacher_deg_median": 6.33244831219759,
+        "sampled_to_mean_deg_median": 7.618141098281281,
+        "attitude_to_teacher_deg_median": 25.463568150087045,
+        "mean_norm_median": 0.9527451789804867,
+        "v_shot_soft_max_median": 0.9688498377799988,
+        "SPENT_FAIL": 113,
+        "accepted_FIRE": 171,
+        "robust_ready_FIRE": 58,
+        "FIRE_to_N": 0.3391812865497076,
+        "accepted_fire_v_soft_median": 0.987220447284345,
+        "accepted_fire_attitude_deg_median": 4.47830842325482
+      }
+    },
+    "1": {
+      "control": {
+        "n": 280,
+        "counts": {
+          "F_other": 253,
+          "N": 27
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 27,
+          "PENETRATED": 195,
+          "SPENT_FAIL": 58
+        },
+        "N": 27,
+        "H_illegal": 0,
+        "FIRE_episodes": 85,
+        "FIRE_commands": 565,
+        "clean_crossing_episodes": 97,
+        "clean_crossings_total": 147,
+        "mean_to_teacher_deg_median": 5.73576636048176,
+        "sampled_to_mean_deg_median": 27.810370966061214,
+        "attitude_to_teacher_deg_median": 36.62116183560131,
+        "mean_norm_median": 0.9829969401160876,
+        "v_shot_soft_max_median": 0.7466054260730743,
+        "SPENT_FAIL": 58,
+        "accepted_FIRE": 85,
+        "robust_ready_FIRE": 27,
+        "FIRE_to_N": 0.3176470588235294,
+        "accepted_fire_v_soft_median": 0.9876198083067093,
+        "accepted_fire_attitude_deg_median": 4.681789731339229
+      },
+      "f2_low_std": {
+        "n": 280,
+        "counts": {
+          "F_other": 217,
+          "N": 63
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 63,
+          "PENETRATED": 91,
+          "SPENT_FAIL": 126
+        },
+        "N": 63,
+        "H_illegal": 0,
+        "FIRE_episodes": 189,
+        "FIRE_commands": 1158,
+        "clean_crossing_episodes": 205,
+        "clean_crossings_total": 340,
+        "mean_to_teacher_deg_median": 8.104161587954895,
+        "sampled_to_mean_deg_median": 7.431860658250242,
+        "attitude_to_teacher_deg_median": 21.96323865455348,
+        "mean_norm_median": 0.9892820106311278,
+        "v_shot_soft_max_median": 0.9818290770053864,
+        "SPENT_FAIL": 126,
+        "accepted_FIRE": 189,
+        "robust_ready_FIRE": 63,
+        "FIRE_to_N": 0.3333333333333333,
+        "accepted_fire_v_soft_median": 0.9896166134185304,
+        "accepted_fire_attitude_deg_median": 4.682345824105533
+      }
+    }
+  },
+  "gate": {
+    "decision": "STOP_F2",
+    "clauses": {
+      "seed0_sample_angle_decrease": true,
+      "seed0_robust_ready_FIRE_increase": true,
+      "seed0_N_increase": true,
+      "seed0_SPENT_FAIL_not_increase": false,
+      "seed0_crossing_not_decrease": true,
+      "seed1_sample_angle_decrease": true,
+      "seed1_robust_ready_FIRE_increase": true,
+      "seed1_N_increase": true,
+      "seed1_SPENT_FAIL_not_increase": false,
+      "seed1_crossing_not_decrease": true,
+      "both_arms_pooled_H_illegal_zero": true
+    },
+    "pooled_H_illegal": {
+      "control": 0,
+      "f2_low_std": 0
+    },
+    "integrity": {
+      "lineage": true,
+      "pairing": true,
+      "finite": true,
+      "completion": true,
+      "exact_parent": true,
+      "single_factor": true,
+      "authoritative_fire_logging": true,
+      "budget": true
+    }
+  },
+  "decision": "STOP_F2",
+  "code_commit": "549a4fa",
+  "readout_code_commit": "549a4fa"
+}
