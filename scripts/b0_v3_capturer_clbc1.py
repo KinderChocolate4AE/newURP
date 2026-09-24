@@ -439,7 +439,9 @@ def evaluate(runner, manifest: dict, b2: dict, plan: list[dict], *, arm: str,
                **_episode_stats(rows, result.fire_step)}
         records.append(rec)
         if (p["cell_id"], sid) in trace_keys:
-            cone = kw.get("extra_cfg", {}).get("viability", {}).get("cone", {})
+            extra = kw.get("extra_cfg", {})
+            cone = {"half_angle": extra.get("viability.cone.half_angle"),
+                    "range_max": extra.get("viability.cone.range_max")}
             trace = {
                 "schema": "b0-v3-capturer-clbc1-trace-v1", "arm": arm,
                 "actor_seed": seed, "cell_id": p["cell_id"], "scenario_id": sid,

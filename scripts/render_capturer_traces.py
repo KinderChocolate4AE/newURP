@@ -38,7 +38,8 @@ def render_trace(trace: dict, out_png: Path) -> None:
     res = trace["result"]
 
     fig, axes = plt.subplots(1, 3, figsize=(16, 5))
-    fig.suptitle(f"{trace['mode']} | {trace['cell_id']} sid={trace['scenario_id']} "
+    mode = trace.get("mode", trace.get("arm", "trace"))
+    fig.suptitle(f"{mode} | {trace['cell_id']} sid={trace['scenario_id']} "
                  f"| {res['bin']} ({res['outcome']}, {res['steps']} steps, "
                  f"fire@{res['fire_step']}, crossings={res['clean_crossings']})")
 

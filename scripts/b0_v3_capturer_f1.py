@@ -358,7 +358,9 @@ def evaluate(runner, manifest: dict, b2: dict, plan: list, *, objective: str,
                         "H_illegal": b == "H_illegal", "steps": r.steps,
                         **_episode_diag(rows, r.fire_step)})
         if trace_dir is not None and (p["cell_id"], sid) in trace_keys:
-            cone = kw.get("extra_cfg", {}).get("viability", {}).get("cone", {})
+            extra = kw.get("extra_cfg", {})
+            cone = {"half_angle": extra.get("viability.cone.half_angle"),
+                    "range_max": extra.get("viability.cone.range_max")}
             trace = {
                 "schema": "b0-v3-capturer-trace-v1",
                 "mode": f"{objective}_bcseed{bc_seed}", "cell_id": p["cell_id"],

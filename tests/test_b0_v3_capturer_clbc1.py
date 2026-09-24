@@ -150,4 +150,8 @@ def test_smoke_uses_hold_limiter_and_never_runs_ppo(tmp_path, monkeypatch):
     assert pair_keys(summary["evaluation"]["replay"]["records"]) == pair_keys(
         summary["evaluation"]["clbc1"]["records"])
     assert all(summary["evaluation"][a]["n"] == 2 for a in ARMS)
+    trace = json.loads(next((tmp_path / "smoke" / "seed0" / "traces")
+                            .glob("trace_*.json")).read_text(encoding="utf-8"))
+    assert trace["cone_half_angle_rad"] == pytest.approx(0.2121, abs=1e-4)
+    assert trace["cone_range_max"] == pytest.approx(8.22)
     assert not (tmp_path / "smoke" / "seed0" / ".done").exists()

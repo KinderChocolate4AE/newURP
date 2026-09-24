@@ -214,7 +214,9 @@ def _episode_env(manifest, b2, cell, sid, credit_spec):
     chi, eta, kw = scenario_kwargs(b2, cell, sid, seed0=ev["seed0"],
                                    seed_ns=ev["seed_ns"])
     stack = build_m4_env(ev["seed0"], sid, **kw)
-    cone = kw.get("extra_cfg", {}).get("viability", {}).get("cone", {})
+    extra = kw.get("extra_cfg", {})
+    cone = {"half_angle": extra.get("viability.cone.half_angle"),
+            "range_max": extra.get("viability.cone.range_max")}
     return chi, eta, stack, B0V3CreditEnv(stack.env, credit_spec), cone
 
 

@@ -71,6 +71,12 @@ def test_trace_renderer_writes_a_png(tmp_path):
     render_trace(trace, out)
     assert out.exists() and out.stat().st_size > 0
 
+    trace["arm"] = "clbc1"
+    del trace["mode"]
+    out_arm = tmp_path / "trace_arm_schema.png"
+    render_trace(trace, out_arm)
+    assert out_arm.exists() and out_arm.stat().st_size > 0
+
 
 @pytest.mark.torch
 def test_bc_reconstruction_is_deterministic_and_metric_anchored():

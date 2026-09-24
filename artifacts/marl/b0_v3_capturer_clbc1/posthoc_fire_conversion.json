@@ -1,0 +1,190 @@
+{
+  "schema": "b0-v3-capturer-clbc1-posthoc-v1",
+  "source": "artifacts\\marl\\b0_v3_capturer_clbc1",
+  "manifest_hash": "ad79a6801c494c8d",
+  "read_only": true,
+  "lineage_and_pairing_valid": true,
+  "semantics": {
+    "soft_gate": "clean/FIRE gate uses v_shot_soft >= theta_fire",
+    "capture": "env freezes pending capture at FIRE from not boxed_in and v_shot_worst >= 1",
+    "trace_limit": "at_fire values are the policy-input observation; env.step recomputes the judge with the next step_seed, so they are diagnostic rather than the authoritative FIRE judge",
+    "scope": "post-hoc mechanism readout only; no gate or promotion decision"
+  },
+  "seeds": {
+    "0": {
+      "replay": {
+        "episodes": 280,
+        "clean_crossing_episodes": 38,
+        "fired": 34,
+        "captured_N": 5,
+        "spent_fail": 29,
+        "policy_input_soft_gate_only": 27,
+        "policy_input_robust_ready": 5,
+        "policy_input_other": 2,
+        "capture_per_fire": 0.14705882352941177,
+        "policy_input_robust_matches_N": {
+          "all": true,
+          "mismatch_scenario_ids": []
+        },
+        "at_fire_medians": {
+          "v_shot_soft": 0.9660543203353882,
+          "v_shot_worst": 0.0,
+          "fire_probability": 0.8458590684969745,
+          "attitude_to_teacher_deg": 5.578260676187132
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 5,
+          "PENETRATED": 246,
+          "SPENT_FAIL": 29
+        }
+      },
+      "clbc1": {
+        "episodes": 280,
+        "clean_crossing_episodes": 77,
+        "fired": 68,
+        "captured_N": 18,
+        "spent_fail": 50,
+        "policy_input_soft_gate_only": 50,
+        "policy_input_robust_ready": 18,
+        "policy_input_other": 0,
+        "capture_per_fire": 0.2647058823529412,
+        "policy_input_robust_matches_N": {
+          "all": true,
+          "mismatch_scenario_ids": []
+        },
+        "at_fire_medians": {
+          "v_shot_soft": 0.9766373634338379,
+          "v_shot_worst": 0.0,
+          "fire_probability": 0.8321509234969078,
+          "attitude_to_teacher_deg": 5.542086930060986
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 18,
+          "PENETRATED": 212,
+          "SPENT_FAIL": 50
+        }
+      },
+      "paired": {
+        "terminal_transitions": {
+          "CAPTURED->CAPTURED": 3,
+          "CAPTURED->PENETRATED": 2,
+          "PENETRATED->CAPTURED": 10,
+          "PENETRATED->PENETRATED": 203,
+          "PENETRATED->SPENT_FAIL": 33,
+          "SPENT_FAIL->CAPTURED": 5,
+          "SPENT_FAIL->PENETRATED": 7,
+          "SPENT_FAIL->SPENT_FAIL": 17
+        },
+        "N_discordance": {
+          "neither": 260,
+          "replay_only": 2,
+          "clbc1_only": 15,
+          "both": 3
+        },
+        "FIRE_discordance": {
+          "neither": 203,
+          "replay_only": 9,
+          "clbc1_only": 43,
+          "both": 25
+        },
+        "clbc1_only_FIRE_outcomes": {
+          "CAPTURED": 10,
+          "SPENT_FAIL": 33
+        },
+        "replay_only_FIRE_outcomes": {
+          "CAPTURED": 2,
+          "SPENT_FAIL": 7
+        }
+      }
+    },
+    "1": {
+      "replay": {
+        "episodes": 280,
+        "clean_crossing_episodes": 45,
+        "fired": 40,
+        "captured_N": 15,
+        "spent_fail": 25,
+        "policy_input_soft_gate_only": 24,
+        "policy_input_robust_ready": 15,
+        "policy_input_other": 1,
+        "capture_per_fire": 0.375,
+        "policy_input_robust_matches_N": {
+          "all": true,
+          "mismatch_scenario_ids": []
+        },
+        "at_fire_medians": {
+          "v_shot_soft": 0.9886182248592377,
+          "v_shot_worst": 0.0,
+          "fire_probability": 0.9488596933529791,
+          "attitude_to_teacher_deg": 4.7039014203011735
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 15,
+          "PENETRATED": 240,
+          "SPENT_FAIL": 25
+        }
+      },
+      "clbc1": {
+        "episodes": 280,
+        "clean_crossing_episodes": 89,
+        "fired": 73,
+        "captured_N": 15,
+        "spent_fail": 58,
+        "policy_input_soft_gate_only": 53,
+        "policy_input_robust_ready": 16,
+        "policy_input_other": 4,
+        "capture_per_fire": 0.2054794520547945,
+        "policy_input_robust_matches_N": {
+          "all": false,
+          "mismatch_scenario_ids": [
+            43
+          ]
+        },
+        "at_fire_medians": {
+          "v_shot_soft": 0.9672523736953735,
+          "v_shot_worst": 0.0,
+          "fire_probability": 0.8540958815149315,
+          "attitude_to_teacher_deg": 5.537429604925093
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 15,
+          "PENETRATED": 207,
+          "SPENT_FAIL": 58
+        }
+      },
+      "paired": {
+        "terminal_transitions": {
+          "CAPTURED->CAPTURED": 7,
+          "CAPTURED->PENETRATED": 1,
+          "CAPTURED->SPENT_FAIL": 7,
+          "PENETRATED->CAPTURED": 4,
+          "PENETRATED->PENETRATED": 196,
+          "PENETRATED->SPENT_FAIL": 40,
+          "SPENT_FAIL->CAPTURED": 4,
+          "SPENT_FAIL->PENETRATED": 10,
+          "SPENT_FAIL->SPENT_FAIL": 11
+        },
+        "N_discordance": {
+          "neither": 257,
+          "replay_only": 8,
+          "clbc1_only": 8,
+          "both": 7
+        },
+        "FIRE_discordance": {
+          "neither": 196,
+          "replay_only": 11,
+          "clbc1_only": 44,
+          "both": 29
+        },
+        "clbc1_only_FIRE_outcomes": {
+          "CAPTURED": 4,
+          "SPENT_FAIL": 40
+        },
+        "replay_only_FIRE_outcomes": {
+          "CAPTURED": 1,
+          "SPENT_FAIL": 10
+        }
+      }
+    }
+  }
+}
