@@ -1,0 +1,173 @@
+{
+  "schema": "b0-v3-capturer-clbc1-f2-manifest-v1",
+  "status": "sealed pre-run; CLBC1 aim variance single-factor diagnostic",
+  "design_doc": "docs/113_b0v3_capturer_clbc1_f2_contract.md",
+  "scope": {
+    "question": "after reconstructing the sealed CLBC1 parent, does lowering only the three Gaussian aim log standard deviations from -1.0 to -2.3 improve robust-ready FIRE and clean N",
+    "rl_updates": 0,
+    "not_evidence_for": [
+      "scientific significance",
+      "pilot selection",
+      "W6 entry",
+      "learned cooperation"
+    ],
+    "prior_decisions_unchanged": [
+      "NO_SELECTION",
+      "STOP_F1",
+      "STOP_CLBC1"
+    ]
+  },
+  "prerequisites": {
+    "b0_v3_hash": "5e7b5b486b9d8a4a",
+    "pilot_decision_required": "NO_SELECTION",
+    "f1_decision_required": "STOP_F1",
+    "clbc1_manifest": "artifacts/marl/b0_v3_capturer_clbc1/manifest.json",
+    "clbc1_manifest_hash": "ad79a6801c494c8d",
+    "clbc1_readout": "artifacts/marl/b0_v3_capturer_clbc1/readout.json",
+    "clbc1_decision_required": "STOP_CLBC1",
+    "clbc1_source_code_commit": "9a45102",
+    "collection_hashes": {
+      "0": "455db20611f9e059",
+      "1": "beb8748a10957b37"
+    },
+    "clbc1_parent_state": {
+      "0": {
+        "lim_actor": "9a0883845677f930",
+        "fin_mean": "267e5b409333bf9e",
+        "fin_fire_logit": "80e69a00972add08",
+        "fin_log_std": "912bf63f01def143",
+        "critic": "1e1a657f3f42abb1",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "fac81491938019eb"
+      },
+      "1": {
+        "lim_actor": "45f8b8f0e22143d4",
+        "fin_mean": "6f26075e07355c22",
+        "fin_fire_logit": "5cfb779b11db5727",
+        "fin_log_std": "912bf63f01def143",
+        "critic": "22b477760d907046",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "20be6ed66411994f"
+      }
+    }
+  },
+  "parent": {
+    "policy": "sealed CLBC1 arm, reconstructed from F1 plus sealed collection",
+    "actor_seeds": [
+      0,
+      1
+    ],
+    "anchor": "all component hashes exactly match clbc1_parent_state",
+    "reconstruction_steps": 400,
+    "new_training_steps": 0
+  },
+  "arms": {
+    "control": {
+      "aim_log_std": -1.0
+    },
+    "f2_low_std": {
+      "aim_log_std": -2.3
+    },
+    "single_factor": "only fin_actor.log_std[0:3] differs; finisher mean, FIRE head, limiter, critic, obs_norm and world are identical"
+  },
+  "evaluation": {
+    "namespace": "b0v3_capturer_clbc1_f2_eval_v1",
+    "seed0": 121000,
+    "cells": "28 boundary cells (chi_role lo/hi), B2 manifest order",
+    "episodes_per_cell": 10,
+    "episodes_per_arm_per_seed": 280,
+    "episodes_total": 1120,
+    "scenario_id": "cell_index * 10 + within_cell_index",
+    "env_seed": "121000 + scenario_id",
+    "torch_seed": "121000 + 1_000_000 * actor_seed + scenario_id",
+    "paired": "within actor seed, both arms reset the same torch seed, so Gaussian z and Bernoulli draw streams are paired",
+    "limiter": "scripted hold",
+    "capturer": "stochastic Gaussian aim plus unchanged Bernoulli FIRE head",
+    "fire_mode": "clean argument is inert on learned capturer path",
+    "authoritative_fire_log": [
+      "v_shot_soft",
+      "v_shot_worst",
+      "p_feasible",
+      "boxed_in",
+      "robust_ready",
+      "attitude angle",
+      "command angle",
+      "net phase"
+    ],
+    "metrics": [
+      "clean N",
+      "FIRE",
+      "SPENT_FAIL",
+      "clean crossing",
+      "H_illegal",
+      "robust-ready FIRE",
+      "sampled-to-mean angle"
+    ],
+    "smoke": "seed 0, first 2 cells x 1 episode x 2 arms; gate excluded"
+  },
+  "traces": {
+    "scenarios": [
+      [
+        "r00c1",
+        0
+      ],
+      [
+        "r00c2",
+        10
+      ],
+      [
+        "r07c1",
+        140
+      ],
+      [
+        "r13c2",
+        270
+      ]
+    ],
+    "selection": "fixed before results; same evaluation episodes"
+  },
+  "gate": {
+    "invalid": [
+      "lineage",
+      "pairing",
+      "finite",
+      "completion",
+      "exact CLBC1 parent",
+      "single-factor identity",
+      "authoritative FIRE logging",
+      "budget"
+    ],
+    "per_seed": [
+      "f2 sampled-to-mean angle < control",
+      "f2 robust-ready FIRE > control",
+      "f2 clean N > control",
+      "f2 SPENT_FAIL <= control",
+      "f2 clean crossing episodes >= control"
+    ],
+    "safety": "pooled H_illegal == 0 for both arms",
+    "pass": "PASS_TO_CAPTURER_ONLY_RL_CONTRACT",
+    "fail": "STOP_F2",
+    "invalid_decision": "INVALID_F2"
+  },
+  "stop": [
+    "prerequisite mismatch",
+    "namespace collision",
+    "CLBC1 parent hash mismatch",
+    "dirty execution code",
+    "single-factor mismatch",
+    "non-finite value",
+    "pairing mismatch",
+    "FIRE audit mismatch",
+    "budget mismatch",
+    "CUDA run without CUBLAS_WORKSPACE_CONFIG in {:4096:8, :16:8}"
+  ],
+  "runtime": {
+    "cublas_workspace_config": [
+      ":4096:8",
+      ":16:8"
+    ],
+    "deterministic": "seed_everything plus per-episode torch seed"
+  },
+  "promotion": "none; PASS only permits drafting a small capturer-only RL contract; W6 and PFSP remain closed",
+  "manifest_hash": "567f134a862335ce"
+}
