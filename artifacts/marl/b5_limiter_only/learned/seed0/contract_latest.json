@@ -1,0 +1,107 @@
+{
+  "schema": "resolved-contract-v1",
+  "system": {
+    "tau_kill": 0.15,
+    "p_kill": 1.0,
+    "r_nk": 6.0,
+    "a_lim_max": null,
+    "commit_threshold": 0.5,
+    "enabled": true,
+    "contact_resolver": true,
+    "r_commit": null,
+    "r_contact": null,
+    "miss_terminates": false,
+    "capture_terminates": true,
+    "force_commit_step": null,
+    "perfect_aim_at_commit": false,
+    "seed_ns": "m4_hardkill"
+  },
+  "reward": {
+    "b_net": 1.0,
+    "w_kill": 0.5,
+    "c_pen": 1.0,
+    "c_trunc": 1.0,
+    "c_lim": 0.1,
+    "dense_scale": 1.0,
+    "terminal_scale": 1.0,
+    "enabled": true
+  },
+  "attacker": {
+    "level": "A2",
+    "lam_gain": 1.0,
+    "lam_range": 1.0,
+    "jink_amp": 0.6,
+    "jink_freq": 1.5,
+    "jink_terminal_r": 3.0,
+    "route_gain": 0.5,
+    "fwd_gain": 4.0,
+    "homing_gain": 4.0,
+    "sprint_range": 0.0,
+    "sprint_frac": 1.0,
+    "slowdown_range": [
+      0.0,
+      0.0
+    ],
+    "slowdown_frac": 1.0,
+    "sense_range": 30.0,
+    "bait_gain": 0.0,
+    "bait_privileged": false,
+    "bait_threshold": 0.5,
+    "bait_range": [
+      4.0,
+      16.0
+    ],
+    "bait_enclosure_r": 3.0,
+    "seed": 0,
+    "label": ""
+  },
+  "spawn": {
+    "dx": 2.0,
+    "r_lat": 5.0,
+    "psi": 0.0,
+    "speed_frac": 0.0,
+    "r_range": null,
+    "azimuth": 0.0,
+    "enabled": true,
+    "seed_ns": "m4_spawn"
+  },
+  "standby": null,
+  "randomize_threat": false,
+  "threat_obs": true,
+  "extra_cfg": {
+    "attitude.omega_max": 2.0,
+    "physics.a_att_max": 24.34549539377589,
+    "physics.a_lim_max": 8.520923387821561,
+    "physics.att_speed": 13.175882552165907,
+    "physics.dt": 0.05,
+    "physics.kill_radius": 0.75,
+    "physics.net_radius": 1.77,
+    "physics.tau_deploy": 0.3,
+    "physics.tau_lock": 0.1,
+    "train.layout.adversary_start_x": 24.0,
+    "train.layout.finisher_p0": [
+      2.0,
+      0.0,
+      0.0
+    ],
+    "train.layout.r_ring": 2.1,
+    "train.layout.ring_center": [
+      8.0,
+      0.0,
+      0.0
+    ],
+    "train.layout.ring_radius": 5.0,
+    "train.layout.target_radius": 1.0,
+    "train.layout.x_fire": 16.0,
+    "train.limits.adversary_omega": 10.0,
+    "train.limits.adversary_v_max": 19.76382382824886,
+    "train.limits.limiter_omega": 2.5,
+    "train.limits.limiter_v_max": 13.175882552165907,
+    "viability.cone.half_angle": 0.21209009342092547,
+    "viability.cone.range_max": 8.22
+  },
+  "episode_len": 160,
+  "judge": "se3_cone",
+  "n_segments": 4,
+  "hash": "9887c1f320169317"
+}

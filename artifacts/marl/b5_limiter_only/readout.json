@@ -1,0 +1,90 @@
+{
+  "schema": "b5-limiter-only-readout-v1",
+  "manifest_hash": "451d371873103f3b",
+  "scope": {
+    "question": "does limiter learning move clean N when the capturer is the functioning scripted clean-fire launcher",
+    "depends_on_scripted_launcher": true,
+    "not_evidence_for": [
+      "learned cooperation",
+      "frontier extension",
+      "B-5 main campaign",
+      "W6 entry"
+    ],
+    "fire_rule": "scripted clean-crossing proposal; FSM gate decides; no external forced fire in training or evaluation",
+    "log_prob_rule": "scripted capturer actions never enter any policy log-prob; finisher actor frozen (no_grad, loss coefficient 0)"
+  },
+  "arms": {
+    "hold_limiter": {
+      "n": 280,
+      "counts": {
+        "F_other": 140,
+        "N": 140
+      },
+      "p_N": 0.5,
+      "p_H_illegal": 0.0,
+      "p_FIRE": 0.9892857142857143,
+      "episodes_with_clean_crossing": 280
+    },
+    "c5_limiter": {
+      "n": 280,
+      "counts": {
+        "F_other": 116,
+        "H_illegal": 15,
+        "N": 149
+      },
+      "p_N": 0.5321428571428571,
+      "p_H_illegal": 0.05357142857142857,
+      "p_FIRE": 0.9785714285714285,
+      "episodes_with_clean_crossing": 279
+    },
+    "learned_seed0": {
+      "n": 280,
+      "counts": {
+        "F_other": 141,
+        "N": 139
+      },
+      "p_N": 0.49642857142857144,
+      "p_H_illegal": 0.0,
+      "p_FIRE": 0.9892857142857143,
+      "episodes_with_clean_crossing": 280
+    },
+    "learned_seed1": {
+      "n": 280,
+      "counts": {
+        "F_other": 135,
+        "N": 145
+      },
+      "p_N": 0.5178571428571429,
+      "p_H_illegal": 0.0,
+      "p_FIRE": 0.9892857142857143,
+      "episodes_with_clean_crossing": 280
+    }
+  },
+  "paired_delta_N": {
+    "learned_seed0_vs_hold_limiter": {
+      "cells_pos": 4,
+      "cells_neg": 5,
+      "cells_zero": 19,
+      "delta_N_total": -1
+    },
+    "learned_seed0_vs_c5_limiter": {
+      "cells_pos": 5,
+      "cells_neg": 8,
+      "cells_zero": 15,
+      "delta_N_total": -10
+    },
+    "learned_seed1_vs_hold_limiter": {
+      "cells_pos": 5,
+      "cells_neg": 0,
+      "cells_zero": 23,
+      "delta_N_total": 5
+    },
+    "learned_seed1_vs_c5_limiter": {
+      "cells_pos": 6,
+      "cells_neg": 7,
+      "cells_zero": 15,
+      "delta_N_total": -4
+    }
+  },
+  "promotion": "none; regardless of outcome this does not open W6"
+}
