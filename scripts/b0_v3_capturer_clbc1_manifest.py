@@ -1,0 +1,159 @@
+"""B0 v3 capturer CLBC1의 결과-맹검 계약을 생성한다.
+
+CLBC1은 F1 정책의 자기 궤적을 한 번 수집해 analytic teacher axis로 relabel한
+BC-only 기제 실험이다. Track B D1과 무관하며 PPO/RL update는 없다.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import pathlib
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+MANIFEST = ROOT / "artifacts" / "marl" / "b0_v3_capturer_clbc1" / "manifest.json"
+ARMS = ("replay", "clbc1")
+
+
+def build() -> dict:
+    body = {
+        "schema": "b0-v3-capturer-clbc1-manifest-v1",
+        "status": "sealed pre-run; one-round closed-loop BC aggregation",
+        "design_doc": "docs/112_b0v3_capturer_clbc1_contract.md",
+        "not_related_to": "mode-switch Track B D1",
+        "scope": {
+            "question": ("does one round of F1 self-trajectory collection and analytic "
+                         "teacher relabel reduce closed-loop aim drift versus equal-budget "
+                         "original-dataset replay"),
+            "rl_updates": 0,
+            "not_evidence_for": ["scientific significance", "pilot selection",
+                                 "W6 entry", "learned cooperation"],
+            "f1_status_unchanged": "STOP_F1",
+        },
+        "prerequisites": {
+            "b0_v3_hash": "5e7b5b486b9d8a4a",
+            "pilot_manifest_hash": "ba64bc15fdbbd4f2",
+            "pilot_readout": "artifacts/marl/b0_v3_pilot/readout.json",
+            "pilot_decision_required": "NO_SELECTION",
+            "bc_dataset": "artifacts/marl/b0_v3_pilot/bc_dataset.json",
+            "bc_dataset_hash": "b48aad5eab4a92bd",
+            "bc_code_tree": "dea5a7a357a090ed0db3106d96100d424cc8fc12",
+            "f1_manifest": "artifacts/marl/b0_v3_capturer_f1/manifest.json",
+            "f1_manifest_hash": "aca08029be1a2fb9",
+            "f1_readout": "artifacts/marl/b0_v3_capturer_f1/readout.json",
+            "f1_decision_required": "STOP_F1",
+        },
+        "parent": {
+            "objective": "unit_axis_mse_f1",
+            "actor_seeds": [0, 1],
+            "bc_steps": 400,
+            "anchor": ("reconstructed F1 BC metrics must match the harvested F1 "
+                       "teacher-fit metrics within abs 1e-6"),
+            "anchor_tolerance_abs": 1e-6,
+            "common_parent": ("replay and clbc1 independently reconstruct the same F1 "
+                              "weights and frozen state; added-stage Adam starts empty"),
+        },
+        "collection": {
+            "namespace": "b0v3_capturer_clbc1_collect_v1",
+            "seed0": 91000,
+            "cells": "28 boundary cells (chi_role lo/hi), B2 manifest order",
+            "episodes_per_cell": 1,
+            "episodes_per_seed": 28,
+            "episodes_total": 56,
+            "policy": "F1 stochastic Gaussian aim plus Bernoulli FIRE",
+            "limiter": "scripted hold",
+            "fire_mode": "clean; no force or suppression",
+            "keep": ("every visited policy state with FSM LOADED, before an accepted "
+                     "FIRE; finite analytic teacher axis; no outcome filter"),
+            "exclude": ["non-LOADED", "after accepted FIRE", "NET_SPENT",
+                        "terminal credit cut", "non-finite teacher axis"],
+            "labels": "shepherd.train.bc_aim.teacher_axis, normalized to unit length",
+        },
+        "training": {
+            "arms": {
+                "replay": "128 original + 128 independently sampled original rows",
+                "clbc1": "128 original + 128 closed-loop relabeled rows",
+            },
+            "steps": 400,
+            "batch": 256,
+            "half_batch": 128,
+            "lr": 0.001,
+            "optimizer": "fresh Adam per arm; identical empty initial state",
+            "rng": "np.random.default_rng(actor_seed + 17301) in both arms",
+            "loss": "unit teacher-axis MSE on fin_actor.mean only",
+            "replacement_sampling": True,
+            "trainable": ["fin_actor.mean"],
+            "frozen_bit_identical": ["fin_actor.fire_logit", "fin_actor.log_std",
+                                     "lim_actor", "critic", "obs_norm"],
+            "shared_trunk": False,
+            "note": ("MixedActor has independent mean and fire_logit MLPs, so aim-only "
+                     "updates cannot change FIRE logits"),
+        },
+        "evaluation": {
+            "namespace": "b0v3_capturer_clbc1_eval_v1",
+            "seed0": 101000,
+            "cells": "28 boundary cells (chi_role lo/hi), B2 manifest order",
+            "episodes_per_cell": 10,
+            "episodes_per_arm_per_seed": 280,
+            "episodes_total": 1120,
+            "scenario_id": "cell_index * 10 + within_cell_index",
+            "env_seed": "101000 + scenario_id",
+            "torch_seed": "101000 + 1_000_000 * actor_seed + scenario_id",
+            "paired": "within actor seed, arms share scenario and environment noise",
+            "limiter": "scripted hold",
+            "capturer": "stochastic Gaussian aim plus Bernoulli FIRE",
+            "fire_mode": "clean; no force or suppression",
+            "metrics": ["clean N", "FIRE episodes", "FIRE commands",
+                        "clean crossing episodes", "H_illegal", "terminal outcomes",
+                        "mean-to-teacher angle", "sampled-to-mean angle",
+                        "attitude-to-teacher angle", "mean norm", "std",
+                        "v_shot_soft", "net phase"],
+            "smoke": "seed 0, first 2 cells x 1 episode x 2 arms; gate excluded",
+        },
+        "traces": {
+            "scenarios": [["r00c1", 0], ["r00c2", 10], ["r07c1", 140],
+                          ["r13c2", 270]],
+            "selection": "fixed before results; same evaluation episodes",
+            "gate": "excluded except their rows contribute to aggregate angle metrics",
+        },
+        "gate": {
+            "invalid": ["lineage", "pairing", "finite", "completion",
+                        "common parent", "frozen-state identity", "budget"],
+            "per_seed": ["clbc1 clean crossing episodes > replay",
+                         "clbc1 clean N > replay",
+                         "clbc1 median episode-mean mean-to-teacher angle < replay"],
+            "safety": "pooled H_illegal == 0 for both arms",
+            "pass": "PASS_TO_CAPTURER_ONLY_RL_CONTRACT",
+            "fail": "STOP_CLBC1",
+            "invalid_decision": "INVALID_CLBC1",
+            "meaning": "eligibility to draft a small capturer-only RL contract only",
+        },
+        "stop": [
+            "sealed prerequisite mismatch", "namespace collision", "F1 anchor mismatch",
+            "dirty execution code", "common parent mismatch", "non-finite value",
+            "pairing mismatch", "budget mismatch",
+            "CUDA run without CUBLAS_WORKSPACE_CONFIG in {:4096:8, :16:8}",
+        ],
+        "runtime": {"cublas_workspace_config": [":4096:8", ":16:8"],
+                    "deterministic": "seed_everything plus per-episode torch seed"},
+        "promotion": "none; STOP_F1 and NO_SELECTION stand; W6 remains closed",
+    }
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    return {**body, "manifest_hash": hashlib.sha256(raw.encode()).hexdigest()[:16]}
+
+
+def load() -> dict:
+    data = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    if data != build():
+        raise ValueError(f"capturer-CLBC1 manifest drift: {MANIFEST}")
+    return data
+
+
+def main() -> None:
+    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    MANIFEST.write_text(json.dumps(build(), indent=2, ensure_ascii=False) + "\n",
+                        encoding="utf-8")
+    print(f"{MANIFEST} {build()['manifest_hash']}")
+
+
+if __name__ == "__main__":
+    main()
