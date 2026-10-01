@@ -1,0 +1,450 @@
+{
+  "schema": "b0-v3-capturer-clbc1-f3-rl2-posthoc-v1",
+  "manifest_hash": "297d0e271393f388",
+  "sealed_decision": "STOP_RL2",
+  "read_only": true,
+  "lineage_and_pairing_valid": true,
+  "scope": "mechanism readout only; sealed gate and STOP_RL2 unchanged",
+  "seeds": {
+    "0": {
+      "N_discordance": {
+        "neither": 150,
+        "control_only": 36,
+        "ppo_only": 51,
+        "both": 43
+      },
+      "FIRE_discordance": {
+        "neither": 146,
+        "control_only": 36,
+        "ppo_only": 54,
+        "both": 44
+      },
+      "terminal_transitions": {
+        "CAPTURED->CAPTURED": 43,
+        "CAPTURED->PENETRATED": 36,
+        "PENETRATED->CAPTURED": 51,
+        "PENETRATED->PENETRATED": 146,
+        "PENETRATED->SPENT_FAIL": 3,
+        "SPENT_FAIL->SPENT_FAIL": 1
+      },
+      "gained_N_scenarios": [
+        1,
+        13,
+        19,
+        31,
+        43,
+        51,
+        57,
+        58,
+        59,
+        66,
+        71,
+        73,
+        81,
+        83,
+        86,
+        89,
+        94,
+        123,
+        124,
+        129,
+        133,
+        145,
+        150,
+        160,
+        164,
+        175,
+        178,
+        186,
+        196,
+        200,
+        206,
+        210,
+        215,
+        222,
+        230,
+        231,
+        233,
+        242,
+        244,
+        247,
+        253,
+        254,
+        256,
+        257,
+        259,
+        263,
+        266,
+        268,
+        274,
+        277,
+        279
+      ],
+      "lost_N_scenarios": [
+        12,
+        18,
+        22,
+        23,
+        32,
+        44,
+        47,
+        50,
+        53,
+        72,
+        77,
+        79,
+        82,
+        84,
+        87,
+        95,
+        98,
+        100,
+        101,
+        104,
+        119,
+        128,
+        136,
+        147,
+        157,
+        166,
+        176,
+        183,
+        184,
+        214,
+        227,
+        229,
+        235,
+        243,
+        252,
+        262
+      ],
+      "nonrobust_FIRE": {
+        "f3_frozen_control": [
+          {
+            "scenario_id": 5,
+            "cell_id": "r00c1",
+            "outcome": "SPENT_FAIL",
+            "kind": "interior",
+            "policy_input_robust": false,
+            "policy_input": {
+              "v_shot_soft": 0.9980031847953796,
+              "v_shot_worst": 0.0,
+              "p_feasible": 1.0,
+              "net_phase": "LOADED",
+              "fire_prob": 0.0010649712957313375,
+              "ang_att_teacher_deg": 3.555231347296899
+            },
+            "authoritative": {
+              "t": 19,
+              "net_phase_before": "LOADED",
+              "v_shot_soft": 0.9992012779552716,
+              "v_shot_worst": 0.0,
+              "p_feasible": 1.0,
+              "boxed_in": false,
+              "robust_ready": false,
+              "fire_command": 1.0,
+              "ang_att_teacher_deg": 3.555231347296899,
+              "ang_cmd_teacher_deg": 5.248704696099671
+            }
+          }
+        ],
+        "f3_aim_ppo": [
+          {
+            "scenario_id": 5,
+            "cell_id": "r00c1",
+            "outcome": "SPENT_FAIL",
+            "kind": "interior",
+            "policy_input_robust": false,
+            "policy_input": {
+              "v_shot_soft": 0.9189296960830688,
+              "v_shot_worst": 0.0,
+              "p_feasible": 1.0,
+              "net_phase": "LOADED",
+              "fire_prob": 0.0007092157234578183,
+              "ang_att_teacher_deg": 5.863262424740831
+            },
+            "authoritative": {
+              "t": 19,
+              "net_phase_before": "LOADED",
+              "v_shot_soft": 0.9041533546325878,
+              "v_shot_worst": 0.0,
+              "p_feasible": 1.0,
+              "boxed_in": false,
+              "robust_ready": false,
+              "fire_command": 1.0,
+              "ang_att_teacher_deg": 5.863262424740831,
+              "ang_cmd_teacher_deg": 8.494300531803507
+            }
+          },
+          {
+            "scenario_id": 105,
+            "cell_id": "r05c1",
+            "outcome": "SPENT_FAIL",
+            "kind": "draw_flip",
+            "policy_input_robust": true,
+            "policy_input": {
+              "v_shot_soft": 1.0,
+              "v_shot_worst": 1.0,
+              "p_feasible": 1.0,
+              "net_phase": "LOADED",
+              "fire_prob": 0.9999868755206631,
+              "ang_att_teacher_deg": 4.625958149125406
+            },
+            "authoritative": {
+              "t": 7,
+              "net_phase_before": "LOADED",
+              "v_shot_soft": 0.9996006389776357,
+              "v_shot_worst": 0.0,
+              "p_feasible": 1.0,
+              "boxed_in": false,
+              "robust_ready": false,
+              "fire_command": 1.0,
+              "ang_att_teacher_deg": 4.625958149125406,
+              "ang_cmd_teacher_deg": 10.361955519139242
+            }
+          },
+          {
+            "scenario_id": 225,
+            "cell_id": "r11c1",
+            "outcome": "SPENT_FAIL",
+            "kind": "draw_flip",
+            "policy_input_robust": true,
+            "policy_input": {
+              "v_shot_soft": 1.0,
+              "v_shot_worst": 1.0,
+              "p_feasible": 1.0,
+              "net_phase": "LOADED",
+              "fire_prob": 0.9999877320241471,
+              "ang_att_teacher_deg": 6.639313634532205
+            },
+            "authoritative": {
+              "t": 14,
+              "net_phase_before": "LOADED",
+              "v_shot_soft": 0.9996006389776357,
+              "v_shot_worst": 0.0,
+              "p_feasible": 1.0,
+              "boxed_in": false,
+              "robust_ready": false,
+              "fire_command": 1.0,
+              "ang_att_teacher_deg": 6.639313634532205,
+              "ang_cmd_teacher_deg": 1.171302939228443
+            }
+          },
+          {
+            "scenario_id": 258,
+            "cell_id": "r12c2",
+            "outcome": "SPENT_FAIL",
+            "kind": "draw_flip",
+            "policy_input_robust": true,
+            "policy_input": {
+              "v_shot_soft": 1.0,
+              "v_shot_worst": 1.0,
+              "p_feasible": 1.0,
+              "net_phase": "LOADED",
+              "fire_prob": 0.9999820722349405,
+              "ang_att_teacher_deg": 6.183487233801273
+            },
+            "authoritative": {
+              "t": 10,
+              "net_phase_before": "LOADED",
+              "v_shot_soft": 0.9996006389776357,
+              "v_shot_worst": 0.0,
+              "p_feasible": 1.0,
+              "boxed_in": false,
+              "robust_ready": false,
+              "fire_command": 1.0,
+              "ang_att_teacher_deg": 6.183487233801273,
+              "ang_cmd_teacher_deg": 5.187876967522512
+            }
+          }
+        ]
+      },
+      "nonrobust_kind_counts": {
+        "f3_frozen_control": {
+          "interior": 1
+        },
+        "f3_aim_ppo": {
+          "interior": 1,
+          "draw_flip": 3
+        }
+      },
+      "spent_fail_scenarios": {
+        "f3_frozen_control": [
+          5
+        ],
+        "f3_aim_ppo": [
+          5,
+          105,
+          225,
+          258
+        ]
+      },
+      "spent_equals_nonrobust": {
+        "f3_frozen_control": true,
+        "f3_aim_ppo": true
+      },
+      "all_nonrobust_are_draw_flips": {
+        "f3_frozen_control": false,
+        "f3_aim_ppo": false
+      }
+    },
+    "1": {
+      "N_discordance": {
+        "neither": 137,
+        "control_only": 34,
+        "ppo_only": 47,
+        "both": 62
+      },
+      "FIRE_discordance": {
+        "neither": 136,
+        "control_only": 34,
+        "ppo_only": 48,
+        "both": 62
+      },
+      "terminal_transitions": {
+        "CAPTURED->CAPTURED": 62,
+        "CAPTURED->PENETRATED": 34,
+        "PENETRATED->CAPTURED": 47,
+        "PENETRATED->PENETRATED": 136,
+        "PENETRATED->SPENT_FAIL": 1
+      },
+      "gained_N_scenarios": [
+        5,
+        21,
+        42,
+        50,
+        53,
+        55,
+        56,
+        60,
+        67,
+        68,
+        69,
+        70,
+        77,
+        85,
+        86,
+        88,
+        93,
+        99,
+        110,
+        115,
+        118,
+        121,
+        122,
+        128,
+        135,
+        148,
+        167,
+        168,
+        169,
+        173,
+        174,
+        179,
+        182,
+        183,
+        196,
+        199,
+        202,
+        204,
+        220,
+        221,
+        223,
+        229,
+        244,
+        251,
+        253,
+        258,
+        279
+      ],
+      "lost_N_scenarios": [
+        6,
+        10,
+        14,
+        20,
+        31,
+        32,
+        43,
+        81,
+        82,
+        98,
+        104,
+        108,
+        114,
+        123,
+        130,
+        138,
+        144,
+        160,
+        162,
+        164,
+        165,
+        170,
+        172,
+        200,
+        222,
+        224,
+        241,
+        247,
+        250,
+        255,
+        264,
+        271,
+        272,
+        276
+      ],
+      "nonrobust_FIRE": {
+        "f3_frozen_control": [],
+        "f3_aim_ppo": [
+          {
+            "scenario_id": 11,
+            "cell_id": "r00c2",
+            "outcome": "SPENT_FAIL",
+            "kind": "draw_flip",
+            "policy_input_robust": true,
+            "policy_input": {
+              "v_shot_soft": 1.0,
+              "v_shot_worst": 1.0,
+              "p_feasible": 1.0,
+              "net_phase": "LOADED",
+              "fire_prob": 0.9998581763770528,
+              "ang_att_teacher_deg": 1.2878028358042897
+            },
+            "authoritative": {
+              "t": 19,
+              "net_phase_before": "LOADED",
+              "v_shot_soft": 0.9996006389776357,
+              "v_shot_worst": 0.0,
+              "p_feasible": 1.0,
+              "boxed_in": false,
+              "robust_ready": false,
+              "fire_command": 1.0,
+              "ang_att_teacher_deg": 1.2878028358042897,
+              "ang_cmd_teacher_deg": 11.296520381748094
+            }
+          }
+        ]
+      },
+      "nonrobust_kind_counts": {
+        "f3_frozen_control": {},
+        "f3_aim_ppo": {
+          "draw_flip": 1
+        }
+      },
+      "spent_fail_scenarios": {
+        "f3_frozen_control": [],
+        "f3_aim_ppo": [
+          11
+        ]
+      },
+      "spent_equals_nonrobust": {
+        "f3_frozen_control": true,
+        "f3_aim_ppo": true
+      },
+      "all_nonrobust_are_draw_flips": {
+        "f3_frozen_control": true,
+        "f3_aim_ppo": true
+      }
+    }
+  }
+}
