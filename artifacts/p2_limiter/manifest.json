@@ -1,0 +1,172 @@
+{
+  "schema": "p2-limiter-v2-manifest-v1",
+  "status": "sealed pre-run; limiter-only learning on the declared attacker mix",
+  "design_doc": "docs/120_p2_limiter_only_v2_contract_draft.md",
+  "scope": {
+    "question": "on the declared attacker coupling-gain mix, does limiter-only PPO (scripted launcher fixed) consistently improve clean N over the hold limiter, and how does the improvement depend on route_gain",
+    "depends_on_scripted_launcher": true,
+    "single_axis_vs_b5": "only the attacker axis differs from the closed b5 experiment (same world, roles, hyperparameters)",
+    "not_evidence_for": [
+      "learned cooperation",
+      "frontier extension",
+      "PFSP readiness",
+      "mode-switch evidence"
+    ],
+    "f3_excluded": "the F3 keeper is a hold-limiter-world artifact; using it under c5/learned limiters would mix a capturer distribution shift into the limiter effect (RL2 lesson)",
+    "null_is_a_result": "P2_NULL combines with b5 into 'limiter shaping value is insensitive to attacker coupling' and shifts focus to docs/104 Track B (docs/117 exit)"
+  },
+  "prerequisites": {
+    "b0_v3_hash": "5e7b5b486b9d8a4a",
+    "p1_readout": "artifacts/p1_ladder/readout.json",
+    "p1_decision_required": "COMPLETE_P1",
+    "p1_premise_required": "P2_PREMISE_SUPPORTED",
+    "plant_precheck": "artifacts/p1b2_row9/readout.json",
+    "plant_verdict_required": "ROW9_FLIP_NOISE",
+    "b5_closed": "artifacts/marl/b5_limiter_only/readout.json"
+  },
+  "attacker_mix": {
+    "base": "suite-resolved AttackerSpec; dataclasses.replace per config",
+    "configs": [
+      {
+        "label": "m_r02_j0",
+        "overrides": {
+          "route_gain": 0.2,
+          "jink_amp": 0.0,
+          "sense_range": 30.0
+        }
+      },
+      {
+        "label": "m_r02_j06",
+        "overrides": {
+          "route_gain": 0.2,
+          "jink_amp": 0.6,
+          "sense_range": 30.0
+        }
+      },
+      {
+        "label": "m_r05_j0",
+        "overrides": {
+          "route_gain": 0.5,
+          "jink_amp": 0.0,
+          "sense_range": 30.0
+        }
+      },
+      {
+        "label": "m_r05_j06",
+        "overrides": {
+          "route_gain": 0.5,
+          "jink_amp": 0.6,
+          "sense_range": 30.0
+        }
+      },
+      {
+        "label": "m_r08_j0",
+        "overrides": {
+          "route_gain": 0.8,
+          "jink_amp": 0.0,
+          "sense_range": 30.0
+        }
+      },
+      {
+        "label": "m_r08_j06",
+        "overrides": {
+          "route_gain": 0.8,
+          "jink_amp": 0.6,
+          "sense_range": 30.0
+        }
+      }
+    ],
+    "training_sampler": "per episode, config index = sha256('p2-mix', train_seed, ep_idx) mod 6 — declared, uniform, independent of the cell schedule",
+    "high_coupling": [
+      "m_r08_j0",
+      "m_r08_j06"
+    ]
+  },
+  "arms": {
+    "hold": {
+      "limiter": "hold (zeros)",
+      "trained": false
+    },
+    "c5": {
+      "limiter": "arc c5 (B2 RULE_COOP kw)",
+      "trained": false
+    },
+    "learned": {
+      "limiter": "MAPPO limiter, final mean layer zeroed at t=0, no commit head; finisher frozen scripted clean-fire (b5 lineage)",
+      "trained": true
+    }
+  },
+  "training": {
+    "seeds": [
+      0,
+      1
+    ],
+    "total_env_steps": 131072,
+    "rollout_env_steps": 512,
+    "updates": 256,
+    "checkpoint_every_updates": 16,
+    "seed0": 221000,
+    "seed_ns": "p2_train_v1",
+    "sampler": "pilot 70/20/10 row schedule (scheduled_cell) x the declared attacker-mix sampler",
+    "budget_rationale": "4x the b5 budget to offset the 1/6 per-config exposure of the mix",
+    "hyperparameters": {
+      "note": "b5 pre-declared defaults verbatim (NO_SELECTION stands; no candidate is blessed)",
+      "lr": 0.0003,
+      "ent_coef_finisher": 0.003,
+      "beta": 0.2,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "clip_eps": 0.2,
+      "epochs": 5,
+      "minibatch_size": 128,
+      "vf_coef": 0.5,
+      "max_grad_norm": 0.5,
+      "target_kl": 0.02,
+      "hidden_sizes": [
+        128,
+        128
+      ],
+      "init_log_std": -1.0,
+      "ortho_init": true,
+      "value_norm": true,
+      "ent_coef_limiter": 0.0,
+      "coma_mix": 0.0,
+      "lr_anneal": "linear",
+      "lr_anneal_floor": 0.1,
+      "r_clean": 1.0,
+      "r_illegal": -1.0
+    }
+  },
+  "evaluation": {
+    "namespace": "p2_eval_v1",
+    "seed0": 231000,
+    "cells": "28 boundary cells (B2 manifest order)",
+    "episodes_per_cell": 10,
+    "episodes_per_config_per_arm": 280,
+    "episodes_per_arm": 1680,
+    "arms_total": 4,
+    "paired": "within each mix config, all arms share identical (seed0, namespace, scenario_id) draws and episode seeds",
+    "policy": "learned arms stochastic with per-episode fixed torch seed"
+  },
+  "gate": {
+    "invalid": [
+      "lineage",
+      "completion",
+      "budget",
+      "paired draws",
+      "neutral limiter init verified at t=0",
+      "finisher frozen (no PPO params, no log-prob)"
+    ],
+    "positive": "per seed: pooled delta N(learned - hold) >= +34 over the 1,680 paired episodes AND delta N >= 0 on both high-coupling configs; AND pooled H_illegal of hold and both learned arms == 0",
+    "pass": "P2_POSITIVE",
+    "fail": "P2_NULL",
+    "invalid_decision": "INVALID_P2",
+    "report_only": [
+      "per-config delta-N curve (foundation figure)",
+      "c5 arm (H_illegal reported, never gated)",
+      "crossing counts (saturated in P1a; never gated)"
+    ]
+  },
+  "promotion": "P2_POSITIVE opens only a separately sealed follow-up (PFSP re-judgment per docs/117 P3). P2_NULL closes the limiter-learning line and moves focus to Track B.",
+  "manifest_hash": "8ba6d0df420d6631"
+}

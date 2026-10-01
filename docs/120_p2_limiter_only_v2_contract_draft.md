@@ -1,4 +1,15 @@
-# 120 — P2 limiter-only 학습 v2 계약 (초안 · 미봉인 — §6 결재 후 manifest 봉인)
+# 120 — P2 limiter-only 학습 v2 계약 (**봉인 2026-10-02** — manifest `8ba6d0df420d6631`)
+
+- **봉인**: 2026-10-02 사용자 승인 ("ㄱㄱ" — §6 제안값 그대로). 정본 수치 =
+  `artifacts/p2_limiter/manifest.json` (`scripts/p2_limiter_manifest.py`).
+- **결재 결과**: ① mix = 6 config 균등 (route × jink, sense 30 · λ REF 고정)
+  ② `P2_POSITIVE` 문턱 = 양 seed 각각 pooled ΔN ≥ +34/1,680 + 고결합 2 config
+  ΔN ≥ 0 ③ 학습 131,072 step × seed {0, 1} (b5 hyperparameter 그대로 — NO_SELECTION
+  유지) ④ c5 arm 포함 (보고 전용) ⑤ 평가 config 당 280 유지 (arm 당 1,680).
+- **실행기**: `scripts/p2_limiter.py` — b5 runner 상속 + mix 주입
+  (`sha256("p2-mix", seed, ep)` 균등), neutral-init·finisher-freeze 를 INVALID
+  조건으로 검증, 전제조건 (COMPLETE_P1 + P2_PREMISE_SUPPORTED + ROW9_FLIP_NOISE)
+  를 실행 시 강제.
 
 - **일자**: 2026-10-02 · **상위**: docs/117 P2 · docs/89 r5 · **선행 충족**:
   P1a `COMPLETE_P1` + `P2_PREMISE_SUPPORTED` (spread 127) · plant pre-check 종결
