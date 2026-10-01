@@ -1,5 +1,17 @@
-# 118 — P1 공격자 사다리 설계 계약 (초안 · 미봉인 — §6 결재 후 manifest 봉인)
+# 118 — P1 공격자 사다리 설계 계약 (**봉인 2026-10-01** — manifest `b2524bf5e860f14c`)
 
+- **봉인**: 2026-10-01 사용자 승인 ("ㅇㅇ 봉인") — §6 의 결재 항목은 아래 **결재
+  결과**로 확정. 정본 수치 = `artifacts/p1_ladder/manifest.json`
+  (`scripts/p1_ladder_manifest.py`, hash `b2524bf5e860f14c`, config 24종).
+- **봉인 시 §4 정정 (초안 대비)**: 초안의 "B2 경계 cell 재사용 부적합" 판단을
+  철회한다 — B2 28-cell suite 는 14행 × 2 slice 구조로 **행별 χ50 추정을 이미
+  지원**하며, config 간 paired 비교에는 공통 고정 cell 이 오히려 필요하다.
+  경계 이동이 커서 χ50 이 행 범위를 벗어나면 censored 로 보고만 하고 외삽하지
+  않는다. 10 ep/cell 은 지도 해상도이지 B2급 confirmatory 추정이 아니다.
+- **봉인 시 §3 축소 (초안 대비)**: 종축 속도 프로파일 (sprint/slowdown) 변형은
+  **후속 판올림으로 유보** — 오늘 기준 근거 있는 값이 없어 ungrounded constant
+  봉인을 피한다 (Δ6 전례). bait_gain = 0.5 는 route 공칭과 동일 크기로 선언
+  (신규 스케일 자유도 최소화).
 - **일자**: 2026-10-01 · **상위**: docs/117 P1 · docs/89 r5 · **규율**: docs/80
   (T 표기 · 단일축 이동 · T2 역-허수아비 금지 · null 해석), docs/27 §4 (행동
   파라미터 선언 후 고정 — 최적화 금지).
@@ -62,10 +74,22 @@ defender 를 완전 동결한 상태에서, 선언된 공격자 설정 격자가
 - 판독: Δχ50^AF vs δ_χ = 0.03 (docs/93 §4 — 양쪽 다 논문이 되는 구조).
   **P2 학습 착수 전 완료**가 목적 — 점질량 세계에서의 학습 투자 타당성 측정.
 
-## 6. 결재 목록 (봉인 전 사용자 결정)
+## 6. 결재 결과 (2026-10-01 봉인 — manifest 가 정본)
 
-1. §3 격자 값 (특히 sense_range ∞ 포함 여부, bait 포함 범위) 과 총 설정 수 상한.
-2. §4 χ 슬라이스·episode 예산 (서버 시간 추정 후).
-3. P2 전제 판독의 사전 문턱 (예: 주 격자 내 clean-N 최대–최소 차의 하한).
-4. P1b plant 옵션 (1차 지연 vs 방향 변화율 제한) 과 τ_a/τ₀ 값.
-5. capturer = scripted launcher 고정 승인 (F3 는 P2 에서).
+1. **격자**: 주 격자 18 (route {0.2, 0.5, 0.8} × sense {15, 30, ∞} × λ {REF, ANTIC})
+   + anchor 2 (T0 route=0 · A1 pure) + depth 4 (jink0 ablation · LAM_ZERO 음성 대조 ·
+   bait fair 0.5 · bait privileged 0.5) = **24 config**. 속도 프로파일 유보.
+2. **예산**: 공통 28-cell suite × 10 ep = config 당 280, P1a 총 6,720 + P1b 560.
+   전 config 동일 (seed0 191000, `p1_ladder_v1`) draw 공유 = paired CRN.
+3. **P2 전제 판독 (사전 등록, gate 아님)**: 주 격자 18 config 의 clean N 최대−최소
+   ≥ 28/280 → `P2_PREMISE_SUPPORTED`, 미만 → `P2_PREMISE_WEAK`. sense_range 효과는
+   보조 서술자.
+4. **P1b**: docs/93 옵션 1 (1차 가속 지연, defender 병진 a_cmd 한정, 공격자 불변).
+   τ_a/τ₀ ∈ {0.1, 0.3} (τ₀ = cell 의 tau_deploy), 공칭 공격자, τ=0 은 P1a 와 공유.
+   판독 = 행별 Δχ50^AF vs δ_χ = 0.03. **P2 학습 착수 전 완료.**
+5. **capturer = scripted launcher 고정** 승인. F3 arm 은 P2 계약에서.
+
+## 7. 실행 전 잔여
+
+- 실행 스크립트 + manifest 정합 테스트 (결과 전 커밋) → smoke → 서버 샤딩 실행
+  → harvest → 판독 노트. gate 는 완결성만 (`COMPLETE_P1` / `INVALID_P1`).
