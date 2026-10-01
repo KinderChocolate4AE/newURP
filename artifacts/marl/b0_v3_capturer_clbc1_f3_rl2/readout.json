@@ -1,0 +1,206 @@
+{
+  "schema": "b0-v3-capturer-clbc1-f3-rl2-readout-v1",
+  "manifest_hash": "297d0e271393f388",
+  "code_commit": "84b4517",
+  "current_code_commit": "84b4517",
+  "decision": "STOP_RL2",
+  "gate": {
+    "decision": "STOP_RL2",
+    "clauses": {
+      "seed0_N_increase": true,
+      "seed0_robust_FIRE_not_decrease": true,
+      "seed0_nonrobust_FIRE_not_increase": false,
+      "seed0_SPENT_FAIL_not_increase": false,
+      "seed0_FIRE_to_N_not_decrease": false,
+      "seed1_N_increase": true,
+      "seed1_robust_FIRE_not_decrease": true,
+      "seed1_nonrobust_FIRE_not_increase": false,
+      "seed1_SPENT_FAIL_not_increase": false,
+      "seed1_FIRE_to_N_not_decrease": false,
+      "both_arms_pooled_H_illegal_zero": true
+    },
+    "crossing_reported_not_gated": {
+      "seed0": {
+        "f3_frozen_control": {
+          "episodes": 195,
+          "total": 299
+        },
+        "f3_aim_ppo": {
+          "episodes": 183,
+          "total": 312
+        }
+      },
+      "seed1": {
+        "f3_frozen_control": {
+          "episodes": 207,
+          "total": 367
+        },
+        "f3_aim_ppo": {
+          "episodes": 227,
+          "total": 399
+        }
+      }
+    },
+    "pooled_H_illegal": {
+      "f3_frozen_control": 0,
+      "f3_aim_ppo": 0
+    },
+    "integrity": {
+      "lineage": true,
+      "pairing": true,
+      "finite": true,
+      "completion": true,
+      "exact_parent": true,
+      "partial_optimizer": true,
+      "frozen_identity": true,
+      "authoritative_fire_logging": true,
+      "rl1_stop_acknowledged": true,
+      "budget": true
+    }
+  },
+  "per_seed": {
+    "0": {
+      "f3_frozen_control": {
+        "n": 280,
+        "counts": {
+          "F_other": 201,
+          "N": 79
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 79,
+          "PENETRATED": 200,
+          "SPENT_FAIL": 1
+        },
+        "N": 79,
+        "H_illegal": 0,
+        "FIRE_episodes": 80,
+        "FIRE_commands": 298,
+        "clean_crossing_episodes": 195,
+        "clean_crossings_total": 299,
+        "mean_to_teacher_deg_median": 5.708440568640029,
+        "sampled_to_mean_deg_median": 7.865510886516519,
+        "attitude_to_teacher_deg_median": 31.970579529422153,
+        "mean_norm_median": 0.9551513830041574,
+        "v_shot_soft_max_median": 0.9716453850269318,
+        "SPENT_FAIL": 1,
+        "accepted_FIRE": 80,
+        "robust_ready_FIRE": 79,
+        "FIRE_to_N": 0.9875,
+        "accepted_fire_v_soft_median": 1.0,
+        "accepted_fire_attitude_deg_median": 3.0029380575962334,
+        "nonrobust_FIRE": 1
+      },
+      "f3_aim_ppo": {
+        "n": 280,
+        "counts": {
+          "F_other": 186,
+          "N": 94
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 94,
+          "PENETRATED": 182,
+          "SPENT_FAIL": 4
+        },
+        "N": 94,
+        "H_illegal": 0,
+        "FIRE_episodes": 98,
+        "FIRE_commands": 355,
+        "clean_crossing_episodes": 183,
+        "clean_crossings_total": 312,
+        "mean_to_teacher_deg_median": 10.963162502007393,
+        "sampled_to_mean_deg_median": 7.710951450482018,
+        "attitude_to_teacher_deg_median": 32.18607909561682,
+        "mean_norm_median": 0.9773886015189105,
+        "v_shot_soft_max_median": 0.9752396047115326,
+        "SPENT_FAIL": 4,
+        "accepted_FIRE": 98,
+        "robust_ready_FIRE": 94,
+        "FIRE_to_N": 0.9591836734693877,
+        "accepted_fire_v_soft_median": 1.0,
+        "accepted_fire_attitude_deg_median": 3.2100578272451035,
+        "nonrobust_FIRE": 4
+      }
+    },
+    "1": {
+      "f3_frozen_control": {
+        "n": 280,
+        "counts": {
+          "F_other": 184,
+          "N": 96
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 96,
+          "PENETRATED": 184
+        },
+        "N": 96,
+        "H_illegal": 0,
+        "FIRE_episodes": 96,
+        "FIRE_commands": 355,
+        "clean_crossing_episodes": 207,
+        "clean_crossings_total": 367,
+        "mean_to_teacher_deg_median": 6.92335962661859,
+        "sampled_to_mean_deg_median": 7.562572991951207,
+        "attitude_to_teacher_deg_median": 28.869246054390985,
+        "mean_norm_median": 0.9815595926520246,
+        "v_shot_soft_max_median": 0.9810303449630737,
+        "SPENT_FAIL": 0,
+        "accepted_FIRE": 96,
+        "robust_ready_FIRE": 96,
+        "FIRE_to_N": 1.0,
+        "accepted_fire_v_soft_median": 1.0,
+        "accepted_fire_attitude_deg_median": 3.0544393787489748,
+        "nonrobust_FIRE": 0
+      },
+      "f3_aim_ppo": {
+        "n": 280,
+        "counts": {
+          "F_other": 171,
+          "N": 109
+        },
+        "terminal_outcomes": {
+          "CAPTURED": 109,
+          "PENETRATED": 170,
+          "SPENT_FAIL": 1
+        },
+        "N": 109,
+        "H_illegal": 0,
+        "FIRE_episodes": 110,
+        "FIRE_commands": 396,
+        "clean_crossing_episodes": 227,
+        "clean_crossings_total": 399,
+        "mean_to_teacher_deg_median": 9.332732740606112,
+        "sampled_to_mean_deg_median": 7.557528469307603,
+        "attitude_to_teacher_deg_median": 27.80733409370656,
+        "mean_norm_median": 1.0519634409771337,
+        "v_shot_soft_max_median": 0.990015983581543,
+        "SPENT_FAIL": 1,
+        "accepted_FIRE": 110,
+        "robust_ready_FIRE": 109,
+        "FIRE_to_N": 0.990909090909091,
+        "accepted_fire_v_soft_median": 1.0,
+        "accepted_fire_attitude_deg_median": 2.843569882642247,
+        "nonrobust_FIRE": 1
+      }
+    }
+  },
+  "scope": {
+    "question": "starting from the exact sealed F3 policy, can PPO update only the capturer aim mean and critic while preserving the robust FIRE head — replicated on fresh namespaces under a gate that does not forbid trajectory change, which is the treatment itself",
+    "depends_on_scripted_limiter": true,
+    "not_evidence_for": [
+      "scientific significance",
+      "pilot selection",
+      "W6 entry",
+      "learned cooperation",
+      "learned limiter performance"
+    ],
+    "prior_decisions_unchanged": [
+      "NO_SELECTION",
+      "STOP_F1",
+      "STOP_CLBC1",
+      "STOP_F2",
+      "STOP_RL1"
+    ],
+    "gate_change_rationale": "crossing-episode invariance was an identity property of the FIRE-head-only F3 intervention; an aim intervention changes trajectories by construction. RL2 gates only on N gain, FIRE discipline preservation, and safety; clean crossing episode and total counts are reported, not gated. STOP_RL1 stands and is not re-judged; RL2 reuses no RL1 training or evaluation draws."
+  },
+  "promotion": "none; PASS supports only a separately sealed follow-up (a W6 training-contract update is a separate decision). The policy depends on a scripted hold limiter and is not learned cooperation."
+}

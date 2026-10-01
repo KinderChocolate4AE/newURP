@@ -1,0 +1,434 @@
+{
+  "schema": "b0-v3-capturer-clbc1-f3-rl2-run-v1",
+  "status": "PASS",
+  "scope": {
+    "question": "starting from the exact sealed F3 policy, can PPO update only the capturer aim mean and critic while preserving the robust FIRE head — replicated on fresh namespaces under a gate that does not forbid trajectory change, which is the treatment itself",
+    "depends_on_scripted_limiter": true,
+    "not_evidence_for": [
+      "scientific significance",
+      "pilot selection",
+      "W6 entry",
+      "learned cooperation",
+      "learned limiter performance"
+    ],
+    "prior_decisions_unchanged": [
+      "NO_SELECTION",
+      "STOP_F1",
+      "STOP_CLBC1",
+      "STOP_F2",
+      "STOP_RL1"
+    ],
+    "gate_change_rationale": "crossing-episode invariance was an identity property of the FIRE-head-only F3 intervention; an aim intervention changes trajectories by construction. RL2 gates only on N gain, FIRE discipline preservation, and safety; clean crossing episode and total counts are reported, not gated. STOP_RL1 stands and is not re-judged; RL2 reuses no RL1 training or evaluation draws."
+  },
+  "actor_seed": 1,
+  "provenance": {
+    "manifest_hash": "297d0e271393f388",
+    "b0_v3_hash": "5e7b5b486b9d8a4a",
+    "code_commit": "84b4517",
+    "code_dirty_scoped": [],
+    "cublas_workspace_config": ":4096:8",
+    "device": "cuda",
+    "resumed_from_update": 0
+  },
+  "prerequisites": {
+    "F3_manifest": true,
+    "F3_PASS": true,
+    "F3_source": true,
+    "b0_v3": true,
+    "F3_summary_source": true,
+    "RL1_STOP_acknowledged": true
+  },
+  "parent": {
+    "bc_dataset_hash": "b48aad5eab4a92bd",
+    "clbc1": {
+      "f1_bc_metrics": {
+        "loss": 0.07215471565723419,
+        "axis_loss": 0.0006204941309988499,
+        "fire_loss": 0.07153422385454178,
+        "steps": 400,
+        "n_samples": 597,
+        "mean_axis_cosine": 0.9994372725486755,
+        "fire_tpr": 1.0,
+        "fire_tnr": 0.9792843461036682,
+        "limiter_mean_zero": true
+      },
+      "collection_hash": "beb8748a10957b37",
+      "reconstruction": {
+        "arm": "clbc1",
+        "steps": 400,
+        "batch": 256,
+        "old_rows_per_batch": 128,
+        "closed_loop_rows_per_batch": 128,
+        "replacement_sampling": true,
+        "lr": 0.001,
+        "optimizer_initial_signature": "c15a525dae70b5ce",
+        "first_half_original_index_hash": "64f38666aedaa3fc",
+        "second_half_index_hash": "56a6f64bff18a831",
+        "last_loss": 0.0016919749323278666,
+        "min_loss": 0.0016919749323278666,
+        "max_loss": 0.136641725897789
+      },
+      "actual_state": {
+        "lim_actor": "45f8b8f0e22143d4",
+        "fin_mean": "6f26075e07355c22",
+        "fin_fire_logit": "5cfb779b11db5727",
+        "fin_log_std": "912bf63f01def143",
+        "critic": "22b477760d907046",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "20be6ed66411994f"
+      },
+      "expected_state": {
+        "lim_actor": "45f8b8f0e22143d4",
+        "fin_mean": "6f26075e07355c22",
+        "fin_fire_logit": "5cfb779b11db5727",
+        "fin_log_std": "912bf63f01def143",
+        "critic": "22b477760d907046",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "20be6ed66411994f"
+      },
+      "exact_parent": true,
+      "smoke_short_reconstruction": false
+    },
+    "f2_intervention": {
+      "arm": "f2_low_std",
+      "aim_log_std": -2.3,
+      "before": {
+        "lim_actor": "45f8b8f0e22143d4",
+        "fin_mean": "6f26075e07355c22",
+        "fin_fire_logit": "5cfb779b11db5727",
+        "fin_log_std": "912bf63f01def143",
+        "critic": "22b477760d907046",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "20be6ed66411994f"
+      },
+      "after": {
+        "lim_actor": "45f8b8f0e22143d4",
+        "fin_mean": "6f26075e07355c22",
+        "fin_fire_logit": "5cfb779b11db5727",
+        "fin_log_std": "8ccb527509c0022e",
+        "critic": "22b477760d907046",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "d0aec2ae27911745"
+      },
+      "only_log_std_changed": true,
+      "log_std_values": [
+        -2.299999952316284,
+        -2.299999952316284,
+        -2.299999952316284
+      ]
+    },
+    "f3_collection": {
+      "checks": {
+        "manifest": true,
+        "source_commit": true,
+        "seed": true,
+        "receipt_hash": true,
+        "content_hash": true
+      },
+      "schema": "b0-v3-capturer-clbc1-f3-collection-v1",
+      "manifest_hash": "00a9e45ff4b0506d",
+      "code_commit": "09f3e0b",
+      "actor_seed": 1,
+      "dataset_hash": "af6738caa5330e07",
+      "n_rows": 3259,
+      "n_episodes": 112,
+      "train_rows": 2429,
+      "validation_rows": 830,
+      "train_positive": 30,
+      "validation_positive": 12,
+      "train_soft_negative": 88,
+      "validation_soft_negative": 32,
+      "scenario_signature": "9f7b5f0220459d07",
+      "fire_suppression": "collection only; sampled Bernoulli consumed then env FIRE bit set to 0",
+      "rl_updates": 0
+    },
+    "f3_training": {
+      "steps": 400,
+      "batch": 256,
+      "lr": 0.001,
+      "pos_weight": 79.96666666666667,
+      "support": {
+        "train_positive": 30,
+        "train_negative": 2399,
+        "val_positive": 12,
+        "val_negative": 818,
+        "train_soft_negative": 88,
+        "val_soft_negative": 32
+      },
+      "minibatch_index_hash": "d8561ff7711fe8ac",
+      "last_loss": 4.3941214244114235e-05,
+      "min_loss": 1.9777566194534302e-05,
+      "max_loss": 0.09392151981592178,
+      "fit": {
+        "train": {
+          "n": 2429,
+          "positive": 30,
+          "negative": 2399,
+          "tp": 30,
+          "tn": 2399,
+          "fp": 0,
+          "fn": 0,
+          "loss": 1.9509916455717757e-05,
+          "tpr": 1.0,
+          "tnr": 1.0,
+          "fpr": 0.0,
+          "balanced_accuracy": 1.0,
+          "prob_positive_mean": 0.9999731183052063,
+          "prob_negative_mean": 1.9412231267779134e-05
+        },
+        "validation": {
+          "n": 830,
+          "positive": 12,
+          "negative": 818,
+          "tp": 12,
+          "tn": 818,
+          "fp": 0,
+          "fn": 0,
+          "loss": 1.894241177069489e-05,
+          "tpr": 1.0,
+          "tnr": 1.0,
+          "fpr": 0.0,
+          "balanced_accuracy": 1.0,
+          "prob_positive_mean": 0.9999713897705078,
+          "prob_negative_mean": 1.8805025320034474e-05
+        },
+        "validation_soft_gate": {
+          "n": 44,
+          "positive": 12,
+          "negative": 32,
+          "tp": 12,
+          "tn": 32,
+          "fp": 0,
+          "fn": 0,
+          "loss": 0.0001956099586095661,
+          "tpr": 1.0,
+          "tnr": 1.0,
+          "fpr": 0.0,
+          "balanced_accuracy": 1.0,
+          "prob_positive_mean": 0.9999713897705078,
+          "prob_negative_mean": 0.00025821762392297387
+        }
+      }
+    },
+    "actual_state": {
+      "lim_actor": "45f8b8f0e22143d4",
+      "fin_mean": "6f26075e07355c22",
+      "fin_fire_logit": "ca3dcdc105271dbc",
+      "fin_log_std": "8ccb527509c0022e",
+      "critic": "22b477760d907046",
+      "obs_norm": "a271b80685c8ec1c",
+      "all": "6ee15517b35ad5d7"
+    },
+    "expected_state": {
+      "lim_actor": "45f8b8f0e22143d4",
+      "fin_mean": "6f26075e07355c22",
+      "fin_fire_logit": "ca3dcdc105271dbc",
+      "fin_log_std": "8ccb527509c0022e",
+      "critic": "22b477760d907046",
+      "obs_norm": "a271b80685c8ec1c",
+      "all": "6ee15517b35ad5d7"
+    },
+    "exact_parent": true,
+    "smoke_short_reconstruction": false
+  },
+  "training": {
+    "steps": 32768,
+    "updates": 64,
+    "setup": {
+      "optimizer_names": [
+        "critic.v.0.bias",
+        "critic.v.0.weight",
+        "critic.v.2.bias",
+        "critic.v.2.weight",
+        "critic.v.4.bias",
+        "critic.v.4.weight",
+        "fin_actor.mean.0.bias",
+        "fin_actor.mean.0.weight",
+        "fin_actor.mean.2.bias",
+        "fin_actor.mean.2.weight",
+        "fin_actor.mean.4.bias",
+        "fin_actor.mean.4.weight"
+      ],
+      "expected_names": [
+        "critic.v.0.bias",
+        "critic.v.0.weight",
+        "critic.v.2.bias",
+        "critic.v.2.weight",
+        "critic.v.4.bias",
+        "critic.v.4.weight",
+        "fin_actor.mean.0.bias",
+        "fin_actor.mean.0.weight",
+        "fin_actor.mean.2.bias",
+        "fin_actor.mean.2.weight",
+        "fin_actor.mean.4.bias",
+        "fin_actor.mean.4.weight"
+      ],
+      "optimizer_exact": true,
+      "total_env_steps": 32768,
+      "rollout_env_steps": 512,
+      "updates": 64,
+      "scripted_limiter": true,
+      "fire_frozen": true,
+      "log_std_frozen": true,
+      "obs_norm_frozen": true
+    },
+    "credit_outcomes": {
+      "PENETRATED": 801,
+      "N": 404,
+      "NET_SPENT": 6
+    },
+    "cell_exposure": {
+      "r05c1": 33,
+      "r06c2": 32,
+      "r07c2": 36,
+      "r08c2": 19,
+      "r09c1": 33,
+      "r10c1": 31,
+      "r11c1": 35,
+      "r12c3": 14,
+      "r13c0": 16,
+      "r00c0": 13,
+      "r01c2": 36,
+      "r02c1": 35,
+      "r03c2": 32,
+      "r04c2": 30,
+      "r07c1": 34,
+      "r08c3": 17,
+      "r09c3": 10,
+      "r10c3": 16,
+      "r11c2": 35,
+      "r12c2": 28,
+      "r13c1": 38,
+      "r00c1": 31,
+      "r01c1": 33,
+      "r03c1": 37,
+      "r04c3": 13,
+      "r05c3": 10,
+      "r06c3": 12,
+      "r08c1": 41,
+      "r09c2": 36,
+      "r12c1": 32,
+      "r00c3": 12,
+      "r01c3": 10,
+      "r06c1": 26,
+      "r11c0": 10,
+      "r13c2": 30,
+      "r02c2": 27,
+      "r04c1": 29,
+      "r05c2": 37,
+      "r06c0": 17,
+      "r07c3": 15,
+      "r10c2": 27,
+      "r00c2": 30,
+      "r02c0": 11,
+      "r03c3": 6,
+      "r04c0": 14,
+      "r12c0": 12,
+      "r09c0": 8,
+      "r05c0": 7,
+      "r01c0": 7,
+      "r03c0": 11,
+      "r08c0": 10,
+      "r02c3": 13,
+      "r10c0": 13,
+      "r11c3": 7,
+      "r07c0": 2,
+      "r13c3": 2
+    },
+    "value_norm_before": "8248025981ac940f",
+    "value_norm_after": "4194851f7e8ddb2c"
+  },
+  "identity": {
+    "parent": {
+      "lim_actor": "45f8b8f0e22143d4",
+      "fin_mean": "6f26075e07355c22",
+      "fin_fire_logit": "ca3dcdc105271dbc",
+      "fin_log_std": "8ccb527509c0022e",
+      "critic": "22b477760d907046",
+      "obs_norm": "a271b80685c8ec1c",
+      "all": "6ee15517b35ad5d7"
+    },
+    "after": {
+      "lim_actor": "45f8b8f0e22143d4",
+      "fin_mean": "f8016312b4f1c94f",
+      "fin_fire_logit": "ca3dcdc105271dbc",
+      "fin_log_std": "8ccb527509c0022e",
+      "critic": "7be280e950f88cb9",
+      "obs_norm": "a271b80685c8ec1c",
+      "all": "ac8539bff72d2b0a"
+    },
+    "exact_f3_parent": true,
+    "frozen_exact": true,
+    "trainable_changed": true
+  },
+  "scenario_signature": {
+    "plan": "5ac6165852e34dfa",
+    "f3_frozen_control": "5ac6165852e34dfa",
+    "f3_aim_ppo": "5ac6165852e34dfa"
+  },
+  "evaluation": {
+    "f3_frozen_control": {
+      "n": 280,
+      "counts": {
+        "F_other": 184,
+        "N": 96
+      },
+      "terminal_outcomes": {
+        "CAPTURED": 96,
+        "PENETRATED": 184
+      },
+      "N": 96,
+      "H_illegal": 0,
+      "FIRE_episodes": 96,
+      "FIRE_commands": 355,
+      "clean_crossing_episodes": 207,
+      "clean_crossings_total": 367,
+      "mean_to_teacher_deg_median": 6.92335962661859,
+      "sampled_to_mean_deg_median": 7.562572991951207,
+      "attitude_to_teacher_deg_median": 28.869246054390985,
+      "mean_norm_median": 0.9815595926520246,
+      "v_shot_soft_max_median": 0.9810303449630737,
+      "SPENT_FAIL": 0,
+      "accepted_FIRE": 96,
+      "robust_ready_FIRE": 96,
+      "FIRE_to_N": 1.0,
+      "accepted_fire_v_soft_median": 1.0,
+      "accepted_fire_attitude_deg_median": 3.0544393787489748,
+      "nonrobust_FIRE": 0
+    },
+    "f3_aim_ppo": {
+      "n": 280,
+      "counts": {
+        "F_other": 171,
+        "N": 109
+      },
+      "terminal_outcomes": {
+        "CAPTURED": 109,
+        "PENETRATED": 170,
+        "SPENT_FAIL": 1
+      },
+      "N": 109,
+      "H_illegal": 0,
+      "FIRE_episodes": 110,
+      "FIRE_commands": 396,
+      "clean_crossing_episodes": 227,
+      "clean_crossings_total": 399,
+      "mean_to_teacher_deg_median": 9.332732740606112,
+      "sampled_to_mean_deg_median": 7.557528469307603,
+      "attitude_to_teacher_deg_median": 27.80733409370656,
+      "mean_norm_median": 1.0519634409771337,
+      "v_shot_soft_max_median": 0.990015983581543,
+      "SPENT_FAIL": 1,
+      "accepted_FIRE": 110,
+      "robust_ready_FIRE": 109,
+      "FIRE_to_N": 0.990909090909091,
+      "accepted_fire_v_soft_median": 1.0,
+      "accepted_fire_attitude_deg_median": 2.843569882642247,
+      "nonrobust_FIRE": 1
+    }
+  },
+  "pairing": true,
+  "authoritative_fire_logging": true,
+  "finite": true,
+  "elapsed_s": 2910.0
+}
