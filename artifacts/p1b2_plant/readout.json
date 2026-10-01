@@ -1,0 +1,153 @@
+{
+  "schema": "p1b2-plant-readout-v1",
+  "manifest_hash": "b0d84cd58cc091f9",
+  "code_commit": "5c73054",
+  "current_code_commit": "5c73054",
+  "decision": "COMPLETE_P1B2",
+  "integrity": {
+    "completion": true,
+    "budget": true,
+    "paired_draws": true,
+    "lineage": true,
+    "power": true
+  },
+  "missing": [],
+  "power_check": {
+    "0.1": {
+      "paired_records_differing_from_tau0": 20,
+      "nonvacuous": true
+    },
+    "0.3": {
+      "paired_records_differing_from_tau0": 57,
+      "nonvacuous": true
+    }
+  },
+  "summary": {
+    "0.0": {
+      "counts": {
+        "F_other": 108,
+        "H_illegal": 20,
+        "N": 152
+      },
+      "episodes_with_clean_crossing": 280,
+      "clean_crossings_total": 983
+    },
+    "0.1": {
+      "counts": {
+        "F_other": 109,
+        "H_illegal": 22,
+        "N": 149
+      },
+      "episodes_with_clean_crossing": 280,
+      "clean_crossings_total": 983
+    },
+    "0.3": {
+      "counts": {
+        "F_other": 117,
+        "H_illegal": 20,
+        "N": 143
+      },
+      "episodes_with_clean_crossing": 280,
+      "clean_crossings_total": 1013
+    }
+  },
+  "chi50_by_row": {
+    "0.0": {
+      "0": 0.6050913911111168,
+      "1": 0.5765364585596714,
+      "2": 0.5607531393680754,
+      "3": 0.5876847667777553,
+      "4": 0.5363125222819372,
+      "5": 0.517018003437806,
+      "6": 0.5284963742232515,
+      "7": null,
+      "8": null,
+      "9": 0.5294552032676166,
+      "10": null,
+      "11": 0.48787586724377086,
+      "12": 0.46255913082083033,
+      "13": 0.42906037874063174
+    },
+    "0.1": {
+      "0": 0.6050913911111168,
+      "1": 0.5765364585596714,
+      "2": 0.5607531393680754,
+      "3": 0.5876847667777553,
+      "4": 0.5353420047244865,
+      "5": null,
+      "6": 0.5284963742232515,
+      "7": null,
+      "8": null,
+      "9": 0.4934784214726269,
+      "10": null,
+      "11": 0.48786512618180206,
+      "12": 0.46255913082083033,
+      "13": 0.42906037874063174
+    },
+    "0.3": {
+      "0": 0.6017955066435907,
+      "1": 0.5768225125580383,
+      "2": 0.5607531393680754,
+      "3": 0.5881380061070444,
+      "4": 0.5353420047244865,
+      "5": null,
+      "6": 0.528439148352939,
+      "7": null,
+      "8": null,
+      "9": 0.4934784214726269,
+      "10": null,
+      "11": 0.48322118052802854,
+      "12": 0.46255913082083033,
+      "13": 0.42906037874063174
+    }
+  },
+  "delta_chi50_vs_tau0": {
+    "0.1": {
+      "0": 0.0,
+      "1": 0.0,
+      "2": 0.0,
+      "3": 0.0,
+      "4": -0.0009705175574507008,
+      "5": null,
+      "6": 0.0,
+      "7": null,
+      "8": null,
+      "9": -0.035976781794989754,
+      "10": null,
+      "11": -1.0741061968799759e-05,
+      "12": 0.0,
+      "13": 0.0
+    },
+    "0.3": {
+      "0": -0.0032958844675260446,
+      "1": 0.0002860539983668975,
+      "2": 0.0,
+      "3": 0.00045323932928909016,
+      "4": -0.0009705175574507008,
+      "5": null,
+      "6": -5.722587031242732e-05,
+      "7": null,
+      "8": null,
+      "9": -0.035976781794989754,
+      "10": null,
+      "11": -0.004654686715742318,
+      "12": 0.0,
+      "13": 0.0
+    }
+  },
+  "classification": {
+    "max_abs_delta_chi50": 0.035976781794989754,
+    "threshold": 0.03,
+    "verdict": "AIRFRAME_RESIDUAL_CANDIDATE"
+  },
+  "scope": {
+    "question": "does a first-order defender accel lag (tau_a = ratio x tau_deploy) move the per-row chi50 boundary of the c5 arc limiter + scripted launcher world by more than delta_chi = 0.03",
+    "not_evidence_for": [
+      "learned anything",
+      "P2 outcomes",
+      "6DOF fidelity"
+    ],
+    "blocking": "P2 training may not start before this readout exists"
+  },
+  "promotion": "none; the readout feeds the P2 contract's world declaration only."
+}
