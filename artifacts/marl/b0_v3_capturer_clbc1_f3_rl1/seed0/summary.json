@@ -1,0 +1,430 @@
+{
+  "schema": "b0-v3-capturer-clbc1-f3-rl1-run-v1",
+  "status": "PASS",
+  "scope": {
+    "question": "starting from the exact sealed F3 policy, can PPO update only the capturer aim mean and critic while preserving the robust FIRE head",
+    "depends_on_scripted_limiter": true,
+    "not_evidence_for": [
+      "scientific significance",
+      "pilot selection",
+      "W6 entry",
+      "learned cooperation",
+      "learned limiter performance"
+    ],
+    "prior_decisions_unchanged": [
+      "NO_SELECTION",
+      "STOP_F1",
+      "STOP_CLBC1",
+      "STOP_F2"
+    ]
+  },
+  "actor_seed": 0,
+  "provenance": {
+    "manifest_hash": "8ea53634ec08e9d9",
+    "b0_v3_hash": "5e7b5b486b9d8a4a",
+    "code_commit": "430756e",
+    "code_dirty_scoped": [],
+    "cublas_workspace_config": ":4096:8",
+    "device": "cuda",
+    "resumed_from_update": 0
+  },
+  "prerequisites": {
+    "F3_manifest": true,
+    "F3_PASS": true,
+    "F3_source": true,
+    "b0_v3": true,
+    "F3_summary_source": true
+  },
+  "parent": {
+    "bc_dataset_hash": "b48aad5eab4a92bd",
+    "clbc1": {
+      "f1_bc_metrics": {
+        "loss": 0.08102939277887344,
+        "axis_loss": 0.0005639698356389999,
+        "fire_loss": 0.0804654210805893,
+        "steps": 400,
+        "n_samples": 597,
+        "mean_axis_cosine": 0.9994561076164246,
+        "fire_tpr": 1.0,
+        "fire_tnr": 0.9774011373519897,
+        "limiter_mean_zero": true
+      },
+      "collection_hash": "455db20611f9e059",
+      "reconstruction": {
+        "arm": "clbc1",
+        "steps": 400,
+        "batch": 256,
+        "old_rows_per_batch": 128,
+        "closed_loop_rows_per_batch": 128,
+        "replacement_sampling": true,
+        "lr": 0.001,
+        "optimizer_initial_signature": "c15a525dae70b5ce",
+        "first_half_original_index_hash": "46ef9dc5a7fbb146",
+        "second_half_index_hash": "0f142cf5a7892879",
+        "last_loss": 0.0017863716930150986,
+        "min_loss": 0.001373058883473277,
+        "max_loss": 0.10253524035215378
+      },
+      "actual_state": {
+        "lim_actor": "9a0883845677f930",
+        "fin_mean": "267e5b409333bf9e",
+        "fin_fire_logit": "80e69a00972add08",
+        "fin_log_std": "912bf63f01def143",
+        "critic": "1e1a657f3f42abb1",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "fac81491938019eb"
+      },
+      "expected_state": {
+        "lim_actor": "9a0883845677f930",
+        "fin_mean": "267e5b409333bf9e",
+        "fin_fire_logit": "80e69a00972add08",
+        "fin_log_std": "912bf63f01def143",
+        "critic": "1e1a657f3f42abb1",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "fac81491938019eb"
+      },
+      "exact_parent": true,
+      "smoke_short_reconstruction": false
+    },
+    "f2_intervention": {
+      "arm": "f2_low_std",
+      "aim_log_std": -2.3,
+      "before": {
+        "lim_actor": "9a0883845677f930",
+        "fin_mean": "267e5b409333bf9e",
+        "fin_fire_logit": "80e69a00972add08",
+        "fin_log_std": "912bf63f01def143",
+        "critic": "1e1a657f3f42abb1",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "fac81491938019eb"
+      },
+      "after": {
+        "lim_actor": "9a0883845677f930",
+        "fin_mean": "267e5b409333bf9e",
+        "fin_fire_logit": "80e69a00972add08",
+        "fin_log_std": "8ccb527509c0022e",
+        "critic": "1e1a657f3f42abb1",
+        "obs_norm": "a271b80685c8ec1c",
+        "all": "bc3bd8b54156d604"
+      },
+      "only_log_std_changed": true,
+      "log_std_values": [
+        -2.299999952316284,
+        -2.299999952316284,
+        -2.299999952316284
+      ]
+    },
+    "f3_collection": {
+      "checks": {
+        "manifest": true,
+        "source_commit": true,
+        "seed": true,
+        "receipt_hash": true,
+        "content_hash": true
+      },
+      "schema": "b0-v3-capturer-clbc1-f3-collection-v1",
+      "manifest_hash": "00a9e45ff4b0506d",
+      "code_commit": "09f3e0b",
+      "actor_seed": 0,
+      "dataset_hash": "a8f80fc39851ff63",
+      "n_rows": 3259,
+      "n_episodes": 112,
+      "train_rows": 2429,
+      "validation_rows": 830,
+      "train_positive": 22,
+      "validation_positive": 11,
+      "train_soft_negative": 63,
+      "validation_soft_negative": 18,
+      "scenario_signature": "75fb33eee563789d",
+      "fire_suppression": "collection only; sampled Bernoulli consumed then env FIRE bit set to 0",
+      "rl_updates": 0
+    },
+    "f3_training": {
+      "steps": 400,
+      "batch": 256,
+      "lr": 0.001,
+      "pos_weight": 109.4090909090909,
+      "support": {
+        "train_positive": 22,
+        "train_negative": 2407,
+        "val_positive": 11,
+        "val_negative": 819,
+        "train_soft_negative": 63,
+        "val_soft_negative": 18
+      },
+      "minibatch_index_hash": "c49d5d535a1393a4",
+      "last_loss": 2.722174031077884e-05,
+      "min_loss": 1.0259449481964111e-05,
+      "max_loss": 0.07715509831905365,
+      "fit": {
+        "train": {
+          "n": 2429,
+          "positive": 22,
+          "negative": 2407,
+          "tp": 22,
+          "tn": 2407,
+          "fp": 0,
+          "fn": 0,
+          "loss": 1.2722623978334013e-05,
+          "tpr": 1.0,
+          "tnr": 1.0,
+          "fpr": 0.0,
+          "balanced_accuracy": 1.0,
+          "prob_positive_mean": 0.9999841451644897,
+          "prob_negative_mean": 1.2694891665887553e-05
+        },
+        "validation": {
+          "n": 830,
+          "positive": 11,
+          "negative": 819,
+          "tp": 11,
+          "tn": 819,
+          "fp": 0,
+          "fn": 0,
+          "loss": 1.1133124644402415e-05,
+          "tpr": 1.0,
+          "tnr": 1.0,
+          "fpr": 0.0,
+          "balanced_accuracy": 1.0,
+          "prob_positive_mean": 0.9999790191650391,
+          "prob_negative_mean": 1.0996284800057765e-05
+        },
+        "validation_soft_gate": {
+          "n": 29,
+          "positive": 11,
+          "negative": 18,
+          "tp": 11,
+          "tn": 18,
+          "fp": 0,
+          "fn": 0,
+          "loss": 0.0001071193182724528,
+          "tpr": 1.0,
+          "tnr": 1.0,
+          "fpr": 0.0,
+          "balanced_accuracy": 1.0,
+          "prob_positive_mean": 0.9999790191650391,
+          "prob_negative_mean": 0.00015967107901815325
+        }
+      }
+    },
+    "actual_state": {
+      "lim_actor": "9a0883845677f930",
+      "fin_mean": "267e5b409333bf9e",
+      "fin_fire_logit": "b24edc79b20c3a32",
+      "fin_log_std": "8ccb527509c0022e",
+      "critic": "1e1a657f3f42abb1",
+      "obs_norm": "a271b80685c8ec1c",
+      "all": "9a25cf483fd16c23"
+    },
+    "expected_state": {
+      "lim_actor": "9a0883845677f930",
+      "fin_mean": "267e5b409333bf9e",
+      "fin_fire_logit": "b24edc79b20c3a32",
+      "fin_log_std": "8ccb527509c0022e",
+      "critic": "1e1a657f3f42abb1",
+      "obs_norm": "a271b80685c8ec1c",
+      "all": "9a25cf483fd16c23"
+    },
+    "exact_parent": true,
+    "smoke_short_reconstruction": false
+  },
+  "training": {
+    "steps": 32768,
+    "updates": 64,
+    "setup": {
+      "optimizer_names": [
+        "critic.v.0.bias",
+        "critic.v.0.weight",
+        "critic.v.2.bias",
+        "critic.v.2.weight",
+        "critic.v.4.bias",
+        "critic.v.4.weight",
+        "fin_actor.mean.0.bias",
+        "fin_actor.mean.0.weight",
+        "fin_actor.mean.2.bias",
+        "fin_actor.mean.2.weight",
+        "fin_actor.mean.4.bias",
+        "fin_actor.mean.4.weight"
+      ],
+      "expected_names": [
+        "critic.v.0.bias",
+        "critic.v.0.weight",
+        "critic.v.2.bias",
+        "critic.v.2.weight",
+        "critic.v.4.bias",
+        "critic.v.4.weight",
+        "fin_actor.mean.0.bias",
+        "fin_actor.mean.0.weight",
+        "fin_actor.mean.2.bias",
+        "fin_actor.mean.2.weight",
+        "fin_actor.mean.4.bias",
+        "fin_actor.mean.4.weight"
+      ],
+      "optimizer_exact": true,
+      "total_env_steps": 32768,
+      "rollout_env_steps": 512,
+      "updates": 64,
+      "scripted_limiter": true,
+      "fire_frozen": true,
+      "log_std_frozen": true,
+      "obs_norm_frozen": true
+    },
+    "credit_outcomes": {
+      "PENETRATED": 751,
+      "N": 458,
+      "NET_SPENT": 2
+    },
+    "cell_exposure": {
+      "r00c2": 36,
+      "r01c2": 33,
+      "r02c1": 42,
+      "r03c1": 22,
+      "r04c2": 40,
+      "r05c1": 31,
+      "r06c1": 34,
+      "r07c0": 17,
+      "r08c0": 7,
+      "r09c2": 32,
+      "r10c1": 30,
+      "r11c2": 30,
+      "r12c1": 42,
+      "r13c1": 32,
+      "r03c3": 12,
+      "r04c3": 13,
+      "r05c2": 32,
+      "r07c1": 25,
+      "r08c1": 34,
+      "r10c2": 39,
+      "r11c1": 33,
+      "r13c0": 16,
+      "r00c3": 10,
+      "r01c0": 18,
+      "r03c2": 42,
+      "r06c2": 36,
+      "r07c2": 31,
+      "r09c0": 7,
+      "r10c3": 9,
+      "r11c3": 10,
+      "r02c2": 28,
+      "r04c1": 29,
+      "r05c3": 16,
+      "r06c3": 9,
+      "r08c2": 34,
+      "r13c2": 32,
+      "r00c1": 34,
+      "r01c3": 12,
+      "r02c3": 9,
+      "r11c0": 13,
+      "r12c0": 7,
+      "r01c1": 24,
+      "r08c3": 11,
+      "r09c1": 30,
+      "r12c2": 27,
+      "r09c3": 17,
+      "r10c0": 8,
+      "r05c0": 8,
+      "r06c0": 8,
+      "r07c3": 13,
+      "r02c0": 8,
+      "r12c3": 10,
+      "r03c0": 11,
+      "r13c3": 6,
+      "r00c0": 7,
+      "r04c0": 5
+    },
+    "value_norm_before": "8248025981ac940f",
+    "value_norm_after": "51faaf5efaf89acb"
+  },
+  "identity": {
+    "parent": {
+      "lim_actor": "9a0883845677f930",
+      "fin_mean": "267e5b409333bf9e",
+      "fin_fire_logit": "b24edc79b20c3a32",
+      "fin_log_std": "8ccb527509c0022e",
+      "critic": "1e1a657f3f42abb1",
+      "obs_norm": "a271b80685c8ec1c",
+      "all": "9a25cf483fd16c23"
+    },
+    "after": {
+      "lim_actor": "9a0883845677f930",
+      "fin_mean": "8af990064af06084",
+      "fin_fire_logit": "b24edc79b20c3a32",
+      "fin_log_std": "8ccb527509c0022e",
+      "critic": "0f28249bf10841ab",
+      "obs_norm": "a271b80685c8ec1c",
+      "all": "90fce2908fdfe2b9"
+    },
+    "exact_f3_parent": true,
+    "frozen_exact": true,
+    "trainable_changed": true
+  },
+  "scenario_signature": {
+    "plan": "f8a1873a05cb6081",
+    "f3_frozen_control": "f8a1873a05cb6081",
+    "f3_aim_ppo": "f8a1873a05cb6081"
+  },
+  "evaluation": {
+    "f3_frozen_control": {
+      "n": 280,
+      "counts": {
+        "F_other": 200,
+        "N": 80
+      },
+      "terminal_outcomes": {
+        "CAPTURED": 80,
+        "PENETRATED": 200
+      },
+      "N": 80,
+      "H_illegal": 0,
+      "FIRE_episodes": 80,
+      "FIRE_commands": 293,
+      "clean_crossing_episodes": 194,
+      "clean_crossings_total": 293,
+      "mean_to_teacher_deg_median": 5.508985490799583,
+      "sampled_to_mean_deg_median": 7.776623918813924,
+      "attitude_to_teacher_deg_median": 30.90608729829233,
+      "mean_norm_median": 0.9564391128364064,
+      "v_shot_soft_max_median": 0.9634584784507751,
+      "SPENT_FAIL": 0,
+      "accepted_FIRE": 80,
+      "robust_ready_FIRE": 80,
+      "FIRE_to_N": 1.0,
+      "accepted_fire_v_soft_median": 1.0,
+      "accepted_fire_attitude_deg_median": 2.8140048937642215,
+      "nonrobust_FIRE": 0
+    },
+    "f3_aim_ppo": {
+      "n": 280,
+      "counts": {
+        "F_other": 167,
+        "N": 113
+      },
+      "terminal_outcomes": {
+        "CAPTURED": 113,
+        "PENETRATED": 167
+      },
+      "N": 113,
+      "H_illegal": 0,
+      "FIRE_episodes": 113,
+      "FIRE_commands": 414,
+      "clean_crossing_episodes": 232,
+      "clean_crossings_total": 412,
+      "mean_to_teacher_deg_median": 8.820986606847008,
+      "sampled_to_mean_deg_median": 7.586511962618619,
+      "attitude_to_teacher_deg_median": 29.14037801854937,
+      "mean_norm_median": 0.9958182637566242,
+      "v_shot_soft_max_median": 0.9958066940307617,
+      "SPENT_FAIL": 0,
+      "accepted_FIRE": 113,
+      "robust_ready_FIRE": 113,
+      "FIRE_to_N": 1.0,
+      "accepted_fire_v_soft_median": 1.0,
+      "accepted_fire_attitude_deg_median": 3.2936413341584254,
+      "nonrobust_FIRE": 0
+    }
+  },
+  "pairing": true,
+  "authoritative_fire_logging": true,
+  "finite": true,
+  "elapsed_s": 1353.09
+}

@@ -1,0 +1,74 @@
+f3_frozen_control/s0: 70/280
+f3_frozen_control/s0: 140/280
+f3_frozen_control/s0: 210/280
+f3_frozen_control/s0: 280/280
+rl1/s0: update 1/64 steps=512
+rl1/s0: update 2/64 steps=1024
+rl1/s0: update 3/64 steps=1536
+rl1/s0: update 4/64 steps=2048
+rl1/s0: update 5/64 steps=2560
+rl1/s0: update 6/64 steps=3072
+rl1/s0: update 7/64 steps=3584
+rl1/s0: update 8/64 steps=4096
+rl1/s0: update 9/64 steps=4608
+rl1/s0: update 10/64 steps=5120
+rl1/s0: update 11/64 steps=5632
+rl1/s0: update 12/64 steps=6144
+rl1/s0: update 13/64 steps=6656
+rl1/s0: update 14/64 steps=7168
+rl1/s0: update 15/64 steps=7680
+rl1/s0: update 16/64 steps=8192
+rl1/s0: update 17/64 steps=8704
+rl1/s0: update 18/64 steps=9216
+rl1/s0: update 19/64 steps=9728
+rl1/s0: update 20/64 steps=10240
+rl1/s0: update 21/64 steps=10752
+rl1/s0: update 22/64 steps=11264
+rl1/s0: update 23/64 steps=11776
+rl1/s0: update 24/64 steps=12288
+rl1/s0: update 25/64 steps=12800
+rl1/s0: update 26/64 steps=13312
+rl1/s0: update 27/64 steps=13824
+rl1/s0: update 28/64 steps=14336
+rl1/s0: update 29/64 steps=14848
+rl1/s0: update 30/64 steps=15360
+rl1/s0: update 31/64 steps=15872
+rl1/s0: update 32/64 steps=16384
+rl1/s0: update 33/64 steps=16896
+rl1/s0: update 34/64 steps=17408
+rl1/s0: update 35/64 steps=17920
+rl1/s0: update 36/64 steps=18432
+rl1/s0: update 37/64 steps=18944
+rl1/s0: update 38/64 steps=19456
+rl1/s0: update 39/64 steps=19968
+rl1/s0: update 40/64 steps=20480
+rl1/s0: update 41/64 steps=20992
+rl1/s0: update 42/64 steps=21504
+rl1/s0: update 43/64 steps=22016
+rl1/s0: update 44/64 steps=22528
+rl1/s0: update 45/64 steps=23040
+rl1/s0: update 46/64 steps=23552
+rl1/s0: update 47/64 steps=24064
+rl1/s0: update 48/64 steps=24576
+rl1/s0: update 49/64 steps=25088
+rl1/s0: update 50/64 steps=25600
+rl1/s0: update 51/64 steps=26112
+rl1/s0: update 52/64 steps=26624
+rl1/s0: update 53/64 steps=27136
+rl1/s0: update 54/64 steps=27648
+rl1/s0: update 55/64 steps=28160
+rl1/s0: update 56/64 steps=28672
+rl1/s0: update 57/64 steps=29184
+rl1/s0: update 58/64 steps=29696
+rl1/s0: update 59/64 steps=30208
+rl1/s0: update 60/64 steps=30720
+rl1/s0: update 61/64 steps=31232
+rl1/s0: update 62/64 steps=31744
+rl1/s0: update 63/64 steps=32256
+rl1/s0: update 64/64 steps=32768
+f3_aim_ppo/s0: 70/280
+f3_aim_ppo/s0: 140/280
+f3_aim_ppo/s0: 210/280
+f3_aim_ppo/s0: 280/280
+f3_frozen_control/s0: N=80 FIRE=80 robust=80 nonrobust=0 spent=0 cross=194
+f3_aim_ppo/s0: N=113 FIRE=113 robust=113 nonrobust=0 spent=0 cross=232
