@@ -1,0 +1,66 @@
+{
+  "schema": "p1b2-row9-readout-v1",
+  "manifest_hash": "98bf85915d0762c3",
+  "code_commit": "30502c0",
+  "current_code_commit": "30502c0",
+  "decision": "COMPLETE_ROW9",
+  "integrity": {
+    "completion": true,
+    "budget": true,
+    "paired_draws": true,
+    "lineage": true,
+    "power": true
+  },
+  "missing": [],
+  "power_check": {
+    "0.1": {
+      "paired_records_differing_from_tau0": 20,
+      "nonvacuous": true
+    },
+    "0.3": {
+      "paired_records_differing_from_tau0": 55,
+      "nonvacuous": true
+    }
+  },
+  "summary": {
+    "0.0": {
+      "F_other": 57,
+      "H_illegal": 36,
+      "N": 107
+    },
+    "0.1": {
+      "F_other": 56,
+      "H_illegal": 39,
+      "N": 105
+    },
+    "0.3": {
+      "F_other": 56,
+      "H_illegal": 37,
+      "N": 107
+    }
+  },
+  "judgment": {
+    "chi50_row9": {
+      "0.0": 0.5087200526903605,
+      "0.1": 0.5087200526903605,
+      "0.3": 0.510701179371907
+    },
+    "delta_vs_tau0": {
+      "0.1": 0.0,
+      "0.3": 0.0019811266815464856
+    },
+    "threshold": 0.03,
+    "verdict": "ROW9_FLIP_NOISE",
+    "censoring_note": "verdict None = chi50 censored in some arm; report, do not extrapolate"
+  },
+  "scope": {
+    "question": "with 100 episodes per cell instead of 10, does row 9 of the c5-arc world still show |delta chi50| >= 0.03 under the first-order defender accel lag",
+    "not_evidence_for": [
+      "other rows",
+      "P2 outcomes",
+      "6DOF fidelity"
+    ],
+    "relation": "P1b-2 classification (AIRFRAME_RESIDUAL_CANDIDATE) is not re-judged; this probe resolves the candidate one way only"
+  },
+  "promotion": "none; feeds the P2 world-declaration annotation only."
+}
