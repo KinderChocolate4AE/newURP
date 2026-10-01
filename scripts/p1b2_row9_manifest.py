@@ -1,0 +1,74 @@
+"""Seal the P1b-2 row-9 confirmatory probe (2026-10-02 판독 노트 선택지 (a))."""
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+MANIFEST = ROOT / "artifacts" / "p1b2_row9" / "manifest.json"
+TAUS = [0.0, 0.1, 0.3]
+
+
+def build() -> dict:
+    body = {
+        "schema": "p1b2-row9-probe-manifest-v1",
+        "status": "sealed pre-run; 10x-sample confirmation of the single row-9 "
+                  "residual candidate from P1b-2 (b0d84cd58cc091f9)",
+        "design_doc": "temp_research_note/2026-10-02_p1b2_readout_complete_"
+                      "residual_candidate_is_single_episode_flip_row9.md",
+        "scope": {
+            "question": ("with 100 episodes per cell instead of 10, does row 9 of "
+                         "the c5-arc world still show |delta chi50| >= 0.03 under "
+                         "the first-order defender accel lag"),
+            "not_evidence_for": ["other rows", "P2 outcomes", "6DOF fidelity"],
+            "relation": "P1b-2 classification (AIRFRAME_RESIDUAL_CANDIDATE) is not "
+                        "re-judged; this probe resolves the candidate one way only",
+        },
+        "world": "identical to P1b-2: c5 arc limiter (B2 RULE_COOP limiter_kw) + "
+                 "scripted launcher, suite-nominal attacker "
+                 "(route_gain 0.5, sense_range 30), limiter-only accel lag",
+        "arms": {"tau_a_over_tau0": TAUS},
+        "evaluation": {
+            "namespace": "p1b2_row9_v1",
+            "seed0": 211000,
+            "cells": "the 2 boundary cells of row 9 only (B2 manifest order)",
+            "episodes_per_cell": 100,
+            "episodes_per_arm": 200,
+            "episodes_total": 200 * len(TAUS),
+            "paired": "all arms share identical (seed0, namespace, scenario_id) draws",
+        },
+        "gate": {
+            "invalid": ["lineage", "completion", "budget", "paired draws",
+                        "power check (tau > 0 arms must differ from tau = 0)"],
+            "complete": "COMPLETE_ROW9",
+            "invalid_decision": "INVALID_ROW9",
+            "judgment": ("pre-registered: both taus |delta chi50(row 9)| < 0.03 -> "
+                         "ROW9_FLIP_NOISE (the P1b-2 candidate was map-resolution "
+                         "noise; PM abstraction holds on all tested rows); any tau "
+                         ">= 0.03 -> ROW9_RESIDUAL_DIRECTIONAL (still directional "
+                         "evidence, not B2-grade confirmatory)"),
+        },
+        "promotion": "none; feeds the P2 world-declaration annotation only.",
+    }
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    return {**body, "manifest_hash": hashlib.sha256(raw.encode()).hexdigest()[:16]}
+
+
+def load() -> dict:
+    saved = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    if saved != build():
+        raise ValueError(f"row-9 probe manifest drift: {MANIFEST}")
+    return saved
+
+
+def main() -> None:
+    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    MANIFEST.write_text(json.dumps(build(), indent=2, ensure_ascii=False) + "\n",
+                        encoding="utf-8")
+    print(f"{MANIFEST} {build()['manifest_hash']}")
+
+
+if __name__ == "__main__":
+    main()

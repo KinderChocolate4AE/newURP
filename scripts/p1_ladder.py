@@ -82,14 +82,16 @@ def _cells(b2: dict, *, smoke: bool) -> list:
 
 def _run_config(manifest: dict, b2: dict, label: str, overrides: dict, *,
                 tau_ratio: float | None = None, smoke: bool = False,
-                limiter_mode: str = "hold", limiter_kw: dict | None = None) -> dict:
+                limiter_mode: str = "hold", limiter_kw: dict | None = None,
+                cells: list | None = None) -> dict:
     from shepherd.m4_env import build_m4_env
     from shepherd.provenance import git_commit, git_dirty
     from shepherd.scripts.b0_v3_mappo_pilot import scenario_kwargs
     from shepherd.scripts.mission_rollout import partition_bin, run_episode
 
     ev = manifest["evaluation"]
-    cells = _cells(b2, smoke=smoke)
+    if cells is None:
+        cells = _cells(b2, smoke=smoke)
     epc = 1 if smoke else int(ev["episodes_per_cell"])
     sealed_epc = int(ev["episodes_per_cell"])
     rows = []
