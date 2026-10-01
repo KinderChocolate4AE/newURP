@@ -1,8 +1,13 @@
-# 118 — P1 공격자 사다리 설계 계약 (**봉인 2026-10-01** — manifest `b2524bf5e860f14c`)
+# 118 — P1 공격자 사다리 설계 계약 (**봉인 2026-10-01** — manifest `4629158d387c938b`)
 
 - **봉인**: 2026-10-01 사용자 승인 ("ㅇㅇ 봉인") — §6 의 결재 항목은 아래 **결재
   결과**로 확정. 정본 수치 = `artifacts/p1_ladder/manifest.json`
-  (`scripts/p1_ladder_manifest.py`, hash `b2524bf5e860f14c`, config 24종).
+  (`scripts/p1_ladder_manifest.py`, hash `4629158d387c938b`, config 24종).
+- **v1.1 pre-run 정정 (2026-10-01, 결과 0건 시점 — manifest `b2524bf5e860f14c` →
+  `4629158d387c938b`)**: 초판의 P1b 전용 namespace (`p1b_plant_v1`/201000) 는
+  "τ=0 baseline 을 P1a 와 공유(same draws)" 선언과 모순 (namespace 가 다르면 draw
+  가 다름). P1b 를 P1a namespace (`p1_ladder_v1`/191000) 로 통일해 행별 Δχ50 이
+  진짜 paired 가 되도록 정정. cell 서술도 "14행 × chi_role {lo, hi}" 로 교정.
 - **봉인 시 §4 정정 (초안 대비)**: 초안의 "B2 경계 cell 재사용 부적합" 판단을
   철회한다 — B2 28-cell suite 는 14행 × 2 slice 구조로 **행별 χ50 추정을 이미
   지원**하며, config 간 paired 비교에는 공통 고정 cell 이 오히려 필요하다.
@@ -84,9 +89,12 @@ defender 를 완전 동결한 상태에서, 선언된 공격자 설정 격자가
 3. **P2 전제 판독 (사전 등록, gate 아님)**: 주 격자 18 config 의 clean N 최대−최소
    ≥ 28/280 → `P2_PREMISE_SUPPORTED`, 미만 → `P2_PREMISE_WEAK`. sense_range 효과는
    보조 서술자.
-4. **P1b**: docs/93 옵션 1 (1차 가속 지연, defender 병진 a_cmd 한정, 공격자 불변).
-   τ_a/τ₀ ∈ {0.1, 0.3} (τ₀ = cell 의 tau_deploy), 공칭 공격자, τ=0 은 P1a 와 공유.
-   판독 = 행별 Δχ50^AF vs δ_χ = 0.03. **P2 학습 착수 전 완료.**
+4. **P1b**: docs/93 옵션 1 (1차 가속 지연, defender 병진 a_cmd 한정, 공격자 불변 —
+   capturer 병진은 `FinisherSpec.a_max=0` 기본에서 정확히 0 이므로 limiter lag 가
+   계약을 정확히 구현; 실행기가 a_max==0 을 assert). τ_a/τ₀ ∈ {0.1, 0.3} (τ₀ =
+   cell 의 tau_deploy), 공칭 공격자, **P1a 와 동일 namespace/draw** (v1.1) — τ=0
+   baseline = `t1f_r05_s30_ref` 그 자체. 판독 = 행별 paired Δχ50^AF vs δ_χ = 0.03.
+   **P2 학습 착수 전 완료.**
 5. **capturer = scripted launcher 고정** 승인. F3 arm 은 P2 계약에서.
 
 ## 7. 실행 전 잔여

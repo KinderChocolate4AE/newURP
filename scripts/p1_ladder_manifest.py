@@ -80,7 +80,7 @@ def build() -> dict:
         "evaluation": {
             "namespace": "p1_ladder_v1",
             "seed0": 191000,
-            "cells": "28 cells (B2 manifest order; 14 rows x 2 slices)",
+            "cells": "28 boundary cells (B2 manifest order; 14 rows x chi_role {lo, hi})",
             "episodes_per_cell": 10,
             "episodes_per_config": 280,
             "episodes_total_p1a": 280 * len(configs),
@@ -92,16 +92,25 @@ def build() -> dict:
             "resolution_caveat": ("10 ep/cell chi50 is directional map resolution, not "
                                   "B2-grade confirmatory estimation"),
         },
+        "amendments": [
+            "v1.1 (2026-10-01, pre-run — no results existed): p1b namespace unified "
+            "with p1a (p1_ladder_v1/191000) so the tau=0 baseline truly shares draws "
+            "with t1f_r05_s30_ref; the originally declared p1b_plant_v1/201000 would "
+            "have broken the paired delta-chi50 readout. Cell description corrected "
+            "to '14 rows x chi_role {lo, hi}'.",
+        ],
         "p1b_plant_swap": {
-            "namespace": "p1b_plant_v1",
-            "seed0": 201000,
+            "namespace": "p1_ladder_v1",
+            "seed0": 191000,
             "plant": ("docs/93 option 1: first-order accel lag tau_a*da/dt = a_cmd - a "
                       "on defender translational a_cmd only (limiter and capturer); "
                       "attacker plant unchanged (single-axis discipline)"),
             "tau_a_over_tau0": [0.1, 0.3],
             "tau0": "per-cell tau_deploy (im['tau'])",
             "attacker_config": "suite nominal (= t1f_r05_s30_ref)",
-            "baseline": "tau_a = 0 shared with p1a t1f_r05_s30_ref (same draws)",
+            "baseline": ("tau_a = 0 is p1a t1f_r05_s30_ref itself — identical "
+                         "(seed0, namespace, scenario_id) draws, so per-row "
+                         "delta chi50 is paired"),
             "episodes": 280 * 2,
             "readout": ("delta chi50^AF per row vs delta_chi = 0.03 (docs/92/93); "
                         "both outcomes publishable; completes before any P2 training"),
