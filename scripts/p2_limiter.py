@@ -17,6 +17,7 @@ from collections import Counter
 from dataclasses import replace
 import hashlib
 import json
+import os
 import pathlib
 import time
 
@@ -234,6 +235,8 @@ def run_seed(seed: int, device: str, *, smoke=False) -> dict:
         "manifest_hash": manifest["manifest_hash"],
         "b0_v3_hash": b2["b0_v3_hash"], "seed": seed, "device": device,
         "code_commit": git_commit(), "code_dirty_scoped": git_dirty(EXEC_PATHS),
+        # b5 판독 처분 4 (2026-09-24): 재현성 provenance 에 환경변수 값을 직접 기록
+        "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
         "setup": {"neutral_init_verified": neutral, "finisher_frozen": fin_frozen},
         "training": {"steps": runner.env_steps, "updates": total_updates,
                      "episodes": runner._ep_idx,
