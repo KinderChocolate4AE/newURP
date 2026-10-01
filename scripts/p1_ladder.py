@@ -81,7 +81,8 @@ def _cells(b2: dict, *, smoke: bool) -> list:
 
 
 def _run_config(manifest: dict, b2: dict, label: str, overrides: dict, *,
-                tau_ratio: float | None = None, smoke: bool = False) -> dict:
+                tau_ratio: float | None = None, smoke: bool = False,
+                limiter_mode: str = "hold", limiter_kw: dict | None = None) -> dict:
     from shepherd.m4_env import build_m4_env
     from shepherd.provenance import git_commit, git_dirty
     from shepherd.scripts.b0_v3_mappo_pilot import scenario_kwargs
@@ -102,7 +103,8 @@ def _run_config(manifest: dict, b2: dict, label: str, overrides: dict, *,
             stack = build_m4_env(ev["seed0"], sid, **kw)
             env = stack.env if tau_ratio is None else PlantLagEnv(stack.env, tau_ratio)
             r = run_episode(env, stack.scn, stack.lay, seed=int(ev["seed0"]) + sid,
-                            policy=None, limiter_mode="hold", fire_mode="clean")
+                            policy=None, limiter_mode=limiter_mode,
+                            limiter_kw=limiter_kw, fire_mode="clean")
             rows.append({"cell_id": cell["cell_id"], "row": int(cell["row"]),
                          "chi_role": cell["chi_role"], "scenario_id": sid,
                          "chi": chi, "eta": eta, "bin": partition_bin(r),
