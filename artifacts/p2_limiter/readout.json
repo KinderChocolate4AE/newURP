@@ -1,0 +1,114 @@
+{
+  "schema": "p2-limiter-readout-v1",
+  "manifest_hash": "8ba6d0df420d6631",
+  "code_commit": "b5e39ab",
+  "current_code_commit": "b5e39ab",
+  "decision": "P2_NULL",
+  "gate": {
+    "decision": "P2_NULL",
+    "clauses": {
+      "seed0_pooled_delta_N_ge_34": false,
+      "seed0_m_r08_j0_delta_N_nonneg": true,
+      "seed0_m_r08_j06_delta_N_nonneg": false,
+      "seed1_pooled_delta_N_ge_34": true,
+      "seed1_m_r08_j0_delta_N_nonneg": true,
+      "seed1_m_r08_j06_delta_N_nonneg": true,
+      "pooled_H_illegal_zero_hold_and_learned": false
+    },
+    "pooled_H_illegal": {
+      "hold": 0,
+      "c5": 98,
+      "learned_s0": 20,
+      "learned_s1": 1
+    },
+    "integrity": {
+      "completion": true,
+      "budget": true,
+      "paired_draws": true,
+      "lineage": true,
+      "neutral_init": true,
+      "finisher_frozen": true
+    }
+  },
+  "missing": [],
+  "per_seed_per_config_N": {
+    "0": {
+      "m_r02_j0": {
+        "hold": 279,
+        "c5": 274,
+        "learned": 272
+      },
+      "m_r02_j06": {
+        "hold": 209,
+        "c5": 215,
+        "learned": 211
+      },
+      "m_r05_j0": {
+        "hold": 207,
+        "c5": 208,
+        "learned": 211
+      },
+      "m_r05_j06": {
+        "hold": 130,
+        "c5": 142,
+        "learned": 134
+      },
+      "m_r08_j0": {
+        "hold": 45,
+        "c5": 55,
+        "learned": 50
+      },
+      "m_r08_j06": {
+        "hold": 100,
+        "c5": 97,
+        "learned": 99
+      }
+    },
+    "1": {
+      "m_r02_j0": {
+        "hold": 279,
+        "c5": 274,
+        "learned": 279
+      },
+      "m_r02_j06": {
+        "hold": 209,
+        "c5": 215,
+        "learned": 222
+      },
+      "m_r05_j0": {
+        "hold": 207,
+        "c5": 208,
+        "learned": 216
+      },
+      "m_r05_j06": {
+        "hold": 130,
+        "c5": 142,
+        "learned": 139
+      },
+      "m_r08_j0": {
+        "hold": 45,
+        "c5": 55,
+        "learned": 52
+      },
+      "m_r08_j06": {
+        "hold": 100,
+        "c5": 97,
+        "learned": 101
+      }
+    }
+  },
+  "scope": {
+    "question": "on the declared attacker coupling-gain mix, does limiter-only PPO (scripted launcher fixed) consistently improve clean N over the hold limiter, and how does the improvement depend on route_gain",
+    "depends_on_scripted_launcher": true,
+    "single_axis_vs_b5": "only the attacker axis differs from the closed b5 experiment (same world, roles, hyperparameters)",
+    "not_evidence_for": [
+      "learned cooperation",
+      "frontier extension",
+      "PFSP readiness",
+      "mode-switch evidence"
+    ],
+    "f3_excluded": "the F3 keeper is a hold-limiter-world artifact; using it under c5/learned limiters would mix a capturer distribution shift into the limiter effect (RL2 lesson)",
+    "null_is_a_result": "P2_NULL combines with b5 into 'limiter shaping value is insensitive to attacker coupling' and shifts focus to docs/104 Track B (docs/117 exit)"
+  },
+  "promotion": "P2_POSITIVE opens only a separately sealed follow-up (PFSP re-judgment per docs/117 P3). P2_NULL closes the limiter-learning line and moves focus to Track B."
+}

@@ -1,0 +1,10 @@
+{"decision": "P2_NULL", "missing": []}
+{
+ "seed0_pooled_delta_N_ge_34": false,
+ "seed0_m_r08_j0_delta_N_nonneg": true,
+ "seed0_m_r08_j06_delta_N_nonneg": false,
+ "seed1_pooled_delta_N_ge_34": true,
+ "seed1_m_r08_j0_delta_N_nonneg": true,
+ "seed1_m_r08_j06_delta_N_nonneg": true,
+ "pooled_H_illegal_zero_hold_and_learned": false
+}
