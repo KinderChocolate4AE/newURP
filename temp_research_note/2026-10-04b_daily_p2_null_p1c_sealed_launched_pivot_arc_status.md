@@ -1,0 +1,57 @@
+# 2026-10-04b daily — P2_NULL 판독 + P1c 봉인·발사; 10/01 pivot arc 현황 종합 (오늘의 수정사항은 전부 이 md 에 추가 기록)
+
+세션 마감 기록 (notion 대체, 판정형 관례). 오늘(10/04) 이후의 추가 수정사항도
+본 문서 §5 에 덧붙인다.
+
+## 1. 오늘의 사슬 (10/04)
+
+1. **서버 git 인증 SSH 전환** — PAT 만료 반복 → ed25519 키 등록, remote SSH 화.
+   이후 서버 push (orchestrator 자동 push 포함) 무프롬프트.
+2. **P2 harvest pull + 판독 = `P2_NULL`** (`8880aba`, 상세 = 2026-10-04 판독 노트):
+   pooled ΔN +7/+39 (문턱 +34, seed 불일치) · seed0 고결합 1 config 음수 ·
+   learned_s0 H_illegal 20. integrity 6/6. **PFSP 닫힘, limiter-learning 현 세계
+   종결** (docs/117 출구). 보고 전용 핵심 관찰: **c5−hold 격차가 결합 이득과
+   함께 커짐** (r02 −5 → r05_j06 +12, r08_j0 +10) — foundation 곡선 1차 측정.
+3. **P1c standoff probe 봉인 + 서버 발사** (`38e885d`, manifest `6fc93fde71b38a30`,
+   docs/121): k∈{1,2,4} × 공격자 {r05, r08, 전부 sense ∞} × {hold, c5},
+   3,360 ep. k>1 = **B0 v3 밖 v4 pre-check 변형** (start_x·episode_len 만 k배,
+   episode_len 기준값은 k=1 빌드에서 직접 읽음). 사전 등록: G(4)−G(1) ≥ +28 →
+   `STANDOFF_OPENS_SHAPING` (B0 v4 go/no-go 입력). power gate = hold 평균 step
+   k=1→4 증가 (P1b 교훈). smoke 44→178 step 실증. orchestrator
+   `run_p1c_server.sh` (2-shard → readout → push, tmux 자동 종료).
+
+## 2. pivot arc 종합 (10/01~10/04, 핸드오프 문맥)
+
+| 날짜 | 사건 | 판정 |
+|---|---|---|
+| 10/01 | capturer RL1/RL2 STOP + 사후감사 (추가 위반 = 전부 draw flip) → **체인 동결, F3 keeper** | docs/117 + 89 r5 |
+| 10/01 | W6~W9 재배치: P1 공격자 사다리 → P2 limiter-only v2 | 사용자 승인 |
+| 10/01 | **P1a 완료**: route 지배 (229→102) · jink 제2축 · sense 30≡∞ 포화 · λ/bait null · `P2_PREMISE_SUPPORTED` (spread 127) | COMPLETE_P1 |
+| 10/01~02 | plant pre-check: P1b 무효 (hold a_cmd≡0, 검정력 0 — 설계 실수 기록) → P1b-2 (c5) → row-9 probe | **ROW9_FLIP_NOISE — PM 추상화 전 행 유지, pre-check 종결** |
+| 10/02 | **P2 봉인** (6-config mix, 131,072 step ×2 seed) | manifest `8ba6d0df420d6631` |
+| 10/03 | 궤적 뷰어 (P1a 144 ep 재생일치 144/144, `viz/attacker_patterns_viewer.html`) · P2 freeze-check 버그 수정 (`b5e39ab`) | — |
+| 10/03 | 사용자 지적: **접근거리 과소** → P1c 구상 · **sense_range 30 nominal 제거** (전지 관측 한계 사례, 6DOF 철회와 동형 논리) | docs/121 §0 |
+| 10/04 | P2_NULL · P1c 봉인·발사 | 위 §1 |
+
+## 3. 현재 상태 / 대기
+
+- **서버**: P1c 실행 중 (tmux `p1c`, 자동 push). 완료 신호 = origin 에 harvest
+  커밋 (ntfy 는 서버에서 침묵 — 신뢰하지 말 것).
+- **다음**: P1c pull → 판독 → `OPENS` 면 B0 v4 (진입 게이트 + 전지 관측) 결재안,
+  `DOES_NOT_OPEN` 이면 standoff 설명 기각 기록 + Track B 전면 이동.
+- **병렬 필수**: **K1 손증명 (사용자, ≤10/31)** — docs/119 §6 체크리스트.
+  K2 ≤11/15. G3 는 9/5 조기 완료 (PARTIAL_3D) — 미착수로 착각 금지.
+- 달력: 오늘 W4 말 — r5 의 W6~W9 배치분을 ~5주 선행 소화. buffer 큼.
+- foundation 자산 확보분: P1a 공격자 지도 · P2 4-arm × 6-config 곡선 (결합-의존
+  조형 가치) · plant transport 결과 · 궤적 뷰어.
+
+## 4. 유지 중인 판정·규율 (불변)
+
+`NO_SELECTION` · `STOP_F1/CLBC1/F2/RL1/RL2` · b5 종결 · `P2_NULL` · PFSP 닫힘 ·
+B0 v3 재개봉 금지 (변경 = v4 + 새 hash) · 어휘 ("cooperation" 금지 →
+limiter-control opportunity) · 결과 전 봉인 + fresh namespace + gate 소급 변경
+금지 · seed 사다리 최신 = 241000 (P1c).
+
+## 5. 오늘의 추가 수정사항 (이후 발생분 기록)
+
+- (없음 — 발생 시 여기에 추가)
