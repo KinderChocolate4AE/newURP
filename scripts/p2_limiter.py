@@ -187,9 +187,11 @@ def run_seed(seed: int, device: str, *, smoke=False) -> dict:
                         steps=128 if smoke else None,
                         rollout=128 if smoke else None)
     neutral = _neutral_init_verified(runner)
-    fin_frozen = bool(runner.tr.cfg.freeze_finisher) and not any(
-        p.requires_grad for p in runner.tr.fin_actor.parameters())
-    if not smoke and not (neutral and fin_frozen):
+    # 동결 메커니즘 = loss 계수 0 + no_grad forward (mappo.py:410-417) —
+    # requires_grad 는 설계상 그대로이므로 cfg 플래그가 검증 대상이다 (b5 assert 동일).
+    fin_frozen = bool(runner.tr.cfg.freeze_finisher) and not bool(
+        runner.tr.cfg.freeze_limiter)
+    if not (neutral and fin_frozen):
         raise SystemExit(f"P2 setup check failed: neutral={neutral} "
                          f"finisher_frozen={fin_frozen}")
     run_dir = OUT / ("smoke/learned" if smoke else "learned") / f"seed{seed}"
