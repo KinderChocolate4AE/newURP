@@ -1,0 +1,21 @@
+{
+  "decision": "COMPLETE_P1C",
+  "integrity": {
+    "completion": true,
+    "budget": true,
+    "paired_draws": true,
+    "lineage": true,
+    "power_steps_increase": true
+  },
+  "classification": {
+    "G_by_scale_pooled_560": {
+      "1": 0,
+      "2": 9,
+      "4": 10
+    },
+    "G4_minus_G1": 10,
+    "threshold": 28,
+    "verdict": "STANDOFF_DOES_NOT_OPEN",
+    "scope_note": "tested range and declared scaling model only"
+  }
+}
