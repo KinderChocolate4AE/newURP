@@ -1,0 +1,99 @@
+"""Seal P1c: standoff 축 probe (docs/121 — B0 v4 go/no-go 입력)."""
+from __future__ import annotations
+
+import hashlib
+import json
+import pathlib
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+MANIFEST = ROOT / "artifacts" / "p1c_standoff" / "manifest.json"
+SCALES = [1, 2, 4]
+ATTACKERS = [
+    {"label": "a_r05", "overrides": {"route_gain": 0.5, "sense_range": "inf"}},
+    {"label": "a_r08", "overrides": {"route_gain": 0.8, "sense_range": "inf"}},
+]
+ARMS = ("hold", "c5")
+
+
+def build() -> dict:
+    body = {
+        "schema": "p1c-standoff-manifest-v1",
+        "status": "sealed pre-run; scripted standoff-axis probe feeding the B0 v4 decision",
+        "design_doc": "docs/121_p1c_standoff_probe_draft.md",
+        "scope": {
+            "question": ("does the c5-vs-hold shaping gap open as the attacker start "
+                         "distance scales x1 -> x2 -> x4 with the defense layout fixed"),
+            "motivation": ("P2_NULL + b5 null + cm-scale steering margins (09-13d): "
+                           "the suspected cause is a short shaping runway, not the "
+                           "absence of shaping value (the c5 curve is coupling-"
+                           "dependent, P2 readout 2026-10-04)"),
+            "not_evidence_for": ["learned anything", "B0 v3 claims at k > 1",
+                                 "entry-gate distribution design (v4 설계는 별도)"],
+            "nominal_attacker": ("fully observing (sense_range inf) — 2026-10-03 "
+                                 "결정: 근거 없는 30 m 를 nominal 에서 제거, 한계 "
+                                 "사례 선언 (방어자-보수적)"),
+        },
+        "world_variants": {
+            "rule": ("k = 1 is the unmodified sealed suite world (B0 v3). k > 1 "
+                     "worlds are declared v4 pre-check variants OUTSIDE the sealed "
+                     "B0 v3 contract: only adversary_start_x and episode_len scale "
+                     "by k (episode_len base read from the k = 1 build per episode, "
+                     "never guessed); spawn jitter width, defense layout, and the "
+                     "chi/eta nondimensionalization are untouched. k > 1 results "
+                     "are never pooled with B0 v3 results."),
+            "scales": SCALES,
+        },
+        "attackers": ATTACKERS,
+        "arms": {"hold": "scripted hold limiter", "c5": "arc c5 (B2 RULE_COOP kw)",
+                 "capturer": "scripted launcher (both arms)"},
+        "evaluation": {
+            "namespace": "p1c_standoff_v1",
+            "seed0": 241000,
+            "cells": "28 boundary cells (B2 manifest order)",
+            "episodes_per_cell": 10,
+            "episodes_per_arm_per_scale_per_attacker": 280,
+            "episodes_total": 280 * len(SCALES) * len(ATTACKERS) * len(ARMS),
+            "paired": ("within (scale, attacker), both arms share identical draws; "
+                       "across scales the same (seed0, namespace, sid) draw stream "
+                       "is reused so cross-scale contrasts are also draw-matched"),
+        },
+        "gate": {
+            "invalid": ["lineage", "completion", "budget", "paired draws",
+                        "power: mean steps of the hold arm must strictly increase "
+                        "from k=1 to k=4 (scaling must actually lengthen the "
+                        "approach — P1b vacuity lesson)"],
+            "complete": "COMPLETE_P1C",
+            "invalid_decision": "INVALID_P1C",
+            "classification": ("pre-registered, pooled over both attackers "
+                               "(560 ep per arm per scale): G(k) = N_c5 - N_hold; "
+                               "STANDOFF_OPENS_SHAPING iff G(4) - G(1) >= +28 "
+                               "(+5%p); else STANDOFF_DOES_NOT_OPEN (tested range "
+                               "and declared scaling model only). G(2), per-attacker "
+                               "breakdown, H_illegal, and step statistics are "
+                               "reported, not gated."),
+        },
+        "promotion": ("STANDOFF_OPENS_SHAPING feeds the B0 v4 (entry-gate world) "
+                      "결재 only; DOES_NOT_OPEN closes the standoff explanation for "
+                      "the limiter-learning null and strengthens the Track B move. "
+                      "Neither reopens learning by itself."),
+    }
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    return {**body, "manifest_hash": hashlib.sha256(raw.encode()).hexdigest()[:16]}
+
+
+def load() -> dict:
+    data = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    if data != build():
+        raise ValueError(f"P1c manifest drift: {MANIFEST}")
+    return data
+
+
+def main() -> None:
+    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    MANIFEST.write_text(json.dumps(build(), indent=2, ensure_ascii=False) + "\n",
+                        encoding="utf-8")
+    print(f"{MANIFEST} {build()['manifest_hash']}")
+
+
+if __name__ == "__main__":
+    main()
