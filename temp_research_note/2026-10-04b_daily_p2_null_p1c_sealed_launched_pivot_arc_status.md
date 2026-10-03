@@ -54,4 +54,16 @@ limiter-control opportunity) · 결과 전 봉인 + fresh namespace + gate 소�
 
 ## 5. 오늘의 추가 수정사항 (이후 발생분 기록)
 
-- (없음 — 발생 시 여기에 추가)
+- **Track B 학습·PFSP 순서 합의 (사용자 승인)**: "PFSP 닫힘" = docs/117 P3 (현 세계
+  limiter-only 위 PFSP) 한정 — docs/104 §6.4 A2 league/PFSP 는 살아 있음 (G4/G5 뒤).
+  순서: ① P1c 판독 → ② F1-E D2 scripted 3정책 (limiter 없음, viz-first) → ③ 학습
+  상위 switch (PPO WAIT/NET/KINETIC, 하위 scripted, 고정 공격자 pool, DP oracle 회수)
+  → ④ limiter 학습 추가 (MAPPO/HAPPO, P1c OPENS 시만) → ⑤ PFSP (진입 = ③·④ policy 가
+  scripted threshold switch 를 seed-일관 초과). 근거: PFSP 는 학습 가능성이 아니라
+  적응형 공격자 강건성 도구; 빈 self-play 금지. 요격률 저조의 상당 부분은 28 boundary
+  cell 선택 효과 — 실제 병목은 조형 이득 ≤ +12/280 (P1c 가 활주로 축 측정 중).
+- **P1c 판독 = `STANDOFF_DOES_NOT_OPEN`** (harvest `2ead989`, integrity 5/5):
+  G(1..4) = 0/+9/+10, Δ=+10 < +28. 궤적상 c5 limiter 는 k=4 에서도 layout 근처에만
+  머물러 늘어난 거리를 쓰지 않음 (layout-고정 스케일링 모형 한정). B0 v4 결재 없음,
+  limiter 학습 보류, **Track B F1-E D2 로 이동**. 상세 = 2026-10-04c 판독 노트.
+  뷰어 `viz/p1c_standoff_viewer.html` (재생일치 70/72).

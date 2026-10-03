@@ -73,7 +73,10 @@ def _build_t1(ep: int):
 def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
                  t1: bool = False, limiter_mode: str = "hold",
                  commit: bool = False, lead=None, lead_delta=None,
-                 builder=None, reset_ep=None, plan=None) -> dict:
+                 builder=None, reset_ep=None, plan=None,
+                 limiter_kw=None) -> dict:
+    # limiter_kw (2026-10-04, P1c 재생): run_episode 의 limiter_kw 그대로 전달
+    #   (예: c5 = B2 RULE_COOP kw). 기본 None = 기존 경로와 bit-identical.
     # lead_delta: E4-1c uniform lead (docs/83 §27). 네 limiter 에 동일 delta.
     #   frozen strong pursuit baseline = 0.125 s. limiter_mode="intercept" 에서만 의미.
     # lead: 리드타임 진단(docs/83 §17) 재생 -- lead_time_diag._build 와 동일 세계
@@ -154,7 +157,8 @@ def dump_episode(ep: int, *, v2: bool = False, v3: bool = False,
                         for i, lid in enumerate(env.limiter_ids)}
         fi = d.step(limiter_override=override,
                     limiter_mode=limiter_mode, baseline_commit=commit,
-                    limiter_kw=(None if lead_delta is None else
+                    limiter_kw=(limiter_kw if limiter_kw is not None else
+                                None if lead_delta is None else
                                 {"lead_deltas": [float(lead_delta)] * len(env.limiter_ids)}))
         lims2, fin2, att2 = env._states()
         if fi.get("fire_event") and fire_step is None:
