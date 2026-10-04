@@ -190,12 +190,16 @@ def main(argv=None):
     ap.add_argument("--lam", type=float, default=0.95)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--ckpt-every", type=int, default=20)
+    ap.add_argument("--torch-threads", type=int, default=2)
+    ap.add_argument("--total-steps", type=float, default=None,
+                    help="이 env step 수에 도달하면 종료 (워커 수와 무관한 예산)")
     a = ap.parse_args(argv)
 
     import torch
     from shepherd.fs1.nets import Team, ppo_update
     from shepherd.fs1.world import FS1Env, FS1Spec
     torch.manual_seed(a.seed)
+    torch.set_num_threads(a.torch_threads)      # 공용 서버: 총 코어 = workers + torch_threads
     out = pathlib.Path(a.out); out.mkdir(parents=True, exist_ok=True)
     spec = FS1Spec()
     probe = FS1Env(spec, seed=0)
@@ -259,12 +263,15 @@ def main(argv=None):
                    "snapped": snapped, "sps": round(n / (time.time() - t0), 1), **st}
             log.write(json.dumps(rec) + "\n"); log.flush()
             print(json.dumps(rec), flush=True)
-            if (it + 1) % a.ckpt_every == 0 or it == a.iters - 1:
+            last = it == a.iters - 1 or (a.total_steps is not None and total >= a.total_steps)
+            if (it + 1) % a.ckpt_every == 0 or last:
                 torch.save({"teams": {s: t.snapshot() for s, t in teams.items()},
                             "pools": {s: [{k: v for k, v in e.items() if k != "snap"} for e in p]
                                       for s, p in pools.items()},
                             "pool_snaps": {s: [e.get("snap") for e in p] for s, p in pools.items()},
                             "wr": wr, "it": it, "total_steps": total}, out / "ckpt.pt")
+            if last:
+                break
     log.close()
 
 
