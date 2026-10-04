@@ -112,7 +112,7 @@ handoff 0회) / **24/24 (HARD_KILL 14)** · 16: 0 / 2 · 24: 0 / 1 · 40: 4 (HAR
 kfirst50: 24 / 24. → homing 상대로 pool `scripted_fin12` ≡ net-only (fallback 구조적 불가),
 사다리 상대로는 fallback 유효. net 포획은 r_fire ≤ 12 m 에서만 성립 → "넓은 r_fire 로
 net-후-kinetic" 은 K_FIRST 에 지배됨 (A안 근거 보강). 최강 scripted = kfirst50 (평가 계약 불변).
-**정정 (10-05)**: 이 사다리 열은 jink 0 변형 사다리 — 공칭 사다리 재측정은 §8.1.
+**정정 (10/04 추가)**: 이 사다리 열은 jink 0 변형 사다리 — 공칭 사다리 재측정은 §8.1.
 
 mode 퇴화 판정 기준 (보고): 직선·사다리 공격자에게도 K_FIRST 만 쓰면 퇴화 (net +1 기회를
 버림). 기대 결과: 예측 가능한 공격자 → net-first, 회피 공격자 → K_FIRST (mode-rank reversal).
@@ -135,7 +135,7 @@ manifest `artifacts/fs1/eval_v1_manifest.json` (`scripts/fs1_eval_manifest.py`, 
 
 exploiter 공정성: 학습 방어 exploiter 는 판정 대상과 같은 결정적 정책을 상대로 학습한다.
 
-### 8.1 사다리 spec 버그 + v2 addendum (봉인, run3 harvest 전 — 2026-10-05)
+### 8.1 사다리 spec 버그 + v2 addendum (봉인, run3 harvest 전 — 2026-10-04 세션)
 
 **버그** (JAX 세션 보고, main 재확인): FS1 의 train `_set_opponent` · bc `collect` · eval 이 사다리
 공격자를 `AttackerSpec(level="A2", **ov)` (dataclass 기본값 위) 로 만들었다. P1a 는 cell 공칭 spec
@@ -161,7 +161,7 @@ t0_route0 ≡ a1_pure. 별도로 lean 에서는 `_last_v_shot_soft` 미설정 �
 legacy 는 net 10 + HARD_KILL 14) · 16: 1 · 24: 0 · 40: 7 · kfirst50 24/24 → 결론 불변 (12 m 밖 붕괴,
 kfirst50 최강). jink 가 net 을 거의 무력화하고 fallback 이 대신 막는다.
 
-## 9. 개정 r4 + 반복 계약 (2026-10-05 — 사용자 결정 "(a), 고칠 거 다 고쳐서 한 번에")
+## 9. 개정 r4 + 반복 계약 (2026-10-04 세션 — 사용자 결정 "(a), 고칠 거 다 고쳐서 한 번에")
 
 run3 (r3, legacy 사다리) 는 **pilot** 으로 격하 — 평가·보고는 하되 확정에 세지 않고 r4 와 pooling 금지.
 확정 = r4 seed {0,1,2} 를 새로 학습. manifest `artifacts/fs1/r4_replication_manifest.json`
