@@ -27,7 +27,7 @@ ATT_ROLES = {"att": (3, 0, 1)}
 DEF_WIN = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL")
 SNAP_WIN, SNAP_EVERY = 0.6, 20          # G&B 문턱 미기재 → 선언값
 LAMBDA_DIST = 1e-5                      # 방어 거리 shaping /m/step (G&B 비율 맞춤)
-LAMBDA_DIV = 1e-3                       # 공격자 다양성 보상 /step (≤ 침투 +1 의 소수)
+LAMBDA_DIV = 5e-3                       # 공격자 다양성 패널티 /step (≤0: episode 늘려 보상 긁기 방지)
 DISC_IN = 6                             # 판별기 입력: LOS 좌표계 속도 3 + 가속 3
 FIRE_D = 12.0                           # scripted 방어 발사 거리 (sanity sweep 최적)
 
@@ -46,22 +46,24 @@ def _r_fire_c(r, env):
 
 
 def def_actions(out, env):
-    """정책 출력 (정규화) → FCS 전술 행동."""
-    lim_a = float(env.inner.sc.limiter.a_max)
-    fin_a = float(env.inner.backend.by_name("finisher_0").limits.a_max)
+    """정책 출력 (정규화) → FCS 전술 행동. 이동 3채널 = 위치 목표 c∈[-1,1]³."""
     acts = {}
     for i, lid in enumerate(env.limiter_ids):
         a = out["lim"][1][i]
-        acts[lid] = np.r_[np.clip(a[:3], -1, 1) * lim_a, a[3]]
+        acts[lid] = np.r_[np.clip(a[:3], -1, 1), a[3]]
     c = out["fin"][1][0]
-    acts["finisher_0"] = np.r_[np.clip(c[:3], -1, 1) * fin_a, _r_fire(c[3], env), c[4]]
+    acts["finisher_0"] = np.r_[np.clip(c[:3], -1, 1), _r_fire(c[3], env), c[4]]
     return acts
 
 
 def scripted_def_actions(env):
-    """scripted 방어 (FCS 공간): finisher 정지·무장·r_fire = FIRE_D, limiter 정지·비무장."""
-    acts = {l: np.zeros(4) for l in env.limiter_ids}
-    acts["finisher_0"] = np.r_[0.0, 0.0, 0.0, FIRE_D, 1.0]
+    """scripted 방어 (FCS 공간): 전원 시작 위치 유지, finisher 무장·r_fire = FIRE_D.
+    limiter 는 net 소진 (miss handoff) 후 무장 → FCS PN 인계 = B0 v3 'NET_FAIL 후 PN
+    takeover' 조항. (run1: limiter 무장 0 을 BC 로 배워 kinetic fallback 이 탐색되지 않았다.)"""
+    arm = 1.0 if env.sys.net_spent else 0.0
+    st = env.start_station
+    acts = {l: np.r_[st[l], arm] for l in env.limiter_ids}
+    acts["finisher_0"] = np.r_[st["finisher_0"], FIRE_D, 1.0]
     return acts
 
 
@@ -171,7 +173,7 @@ def rollout(args):
                 f, v_prev = att_feat(env, v_prev)          # 다양성 (DIAYN 식): z 를 맞힐수록 +
                 with torch.no_grad():
                     zh = me.disc(torch.as_tensor(f)[None])[0].numpy()
-                r += LAMBDA_DIV * float(np.clip(1.0 - 3.0 * np.mean((zh - z_t) ** 2), -1, 1))
+                r -= LAMBDA_DIV * float(np.clip(3.0 * np.mean((zh - z_t) ** 2), 0, 1))
                 feats.append(f); zs.append(z_t)
             ti = len(buf["rew"])
             buf["obs"].append(oo); buf["obs_n"].append(on); buf["val"].append(v)
@@ -223,7 +225,9 @@ def main(argv=None):
     ap.add_argument("--workers", type=int, default=max(1, mp.cpu_count() - 2))
     ap.add_argument("--iters", type=int, default=1000)
     ap.add_argument("--steps-per-worker", type=int, default=4096)
-    ap.add_argument("--lr", type=float, default=1e-4)
+    ap.add_argument("--lr", type=float, default=3e-5,
+                    help="방어 팀 lr (BC 초기화된 좁은 정책 — 1e-4 에서 step 당 KL 0.1~0.3)")
+    ap.add_argument("--lr-att", type=float, default=1e-4, help="공격 팀 lr")
     ap.add_argument("--gamma", type=float, default=0.997)
     ap.add_argument("--lam", type=float, default=0.95)
     ap.add_argument("--seed", type=int, default=0)
@@ -255,7 +259,8 @@ def main(argv=None):
             for r_, v_ in INIT_LOG_STD["def"].items():
                 teams["def"].actors[r_].log_std.fill_(v_)
         tag = "bc"
-    opts = {s: torch.optim.Adam(t.parameters(), lr=a.lr) for s, t in teams.items()}
+    lrs = {"def": a.lr, "att": a.lr_att}
+    opts = {s: torch.optim.Adam(t.parameters(), lr=lrs[s]) for s, t in teams.items()}
     pools = {"def": [{"kind": "script", "name": "scripted_fin12"},
                      {"kind": "nn", "name": f"def_{tag}", "snap": teams["def"].snapshot()}],
              "att": ladder_pool() + [{"kind": "nn", "name": f"att_{tag}",

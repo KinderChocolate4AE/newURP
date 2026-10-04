@@ -67,3 +67,23 @@ RL 공격자는 1 m 자산을 탐색 노이즈 (~15 m/s²) 때문에 못 맞힘.
 
 관찰 (보고 전용): homing 공격자에 8 m/s² 무작위 흔들림만 더해도 scripted net 방어 포획
 19/30 → 3/30 — 속도 기반 net 중심 예측이 무력화. 다양한 회피 기동이 방어 학습의 실질 압력.
+
+## 6. 개정 r2 (2026-10-04, run1 진단 후 — 사용자 승인)
+
+run1 (8.2×10⁶ step) 진단: 방어 승률 1~5% 정체. 궤적 = net 발사 유도 → 회피 → 재진입 침투
+(공격자의 **미끼 전술 창발**), 그동안 limiter 무장 0.00 — kinetic fallback 미탐색 (BC 가
+"limiter 비무장" 을 가르쳐 무장 확률 ≈ 0). 공격자 스타일 z 무시 (판별기 MSE 0.33 = 무작위).
+
+| 변경 | 내용 | 근거 |
+|---|---|---|
+| **scripted/BC 방어에 kinetic fallback** | net 소진 (miss handoff) 후 limiter 무장 → FCS PN 인계 (= B0 v3 "NET_FAIL 후 PN takeover") | 사다리 상대 scripted+fallback 방어 40판 중 HARD_KILL 18, 침투 1 |
+| **방어자 이동 = 위치 목표 (station point)** | 이동 3채널 c∈[−1,1]³ → 자산 + c·(80, 80, 10) m, 하위 PD (kp 8, kd 4) | 가속 행동은 탐색 노이즈가 적분 → limiter 산개 → fallback 이 결정적 23/24 vs 확률적 2/24. 위치 목표로 확률적 17/32 (결정적 31/32) |
+| 탐색 std | lim·fin log_std −2.0 (위치목표 ≈ 11 m), att −1.6 | 확률적 BC 검증 최적 |
+| 팀별 lr | 방어 3e-5, 공격 1e-4 | 방어 1e-4 에서 step 당 KL 0.1~0.3, 공격 3e-5 에서 KL 1e-4 (정체) |
+| 다양성 | **패널티** −5e-3·clip(3·MSE, 0, 1) /step | 양수 보상은 episode 연장으로 긁기 가능; 1e-3 은 무시됨 |
+| BC fit 스레드 | min(4, workers) | run1 BC fit 단일 코어 |
+
+구조적 관찰: 곧장 들어오는 (homing+흔들림) 공격자는 net miss 후 0.5 s 안에 자산 도달 +
+limiter 출발점 (2 m) 이 no-kinetic zone (6 m) 안 → fallback 불가. kinetic 으로 막으려면
+**limiter 가 6 m 밖 공격 경로 위에 사전 배치** 돼야 한다 — failsafe·shaping 배치 학습의
+구조적 동기.

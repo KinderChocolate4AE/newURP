@@ -2,7 +2,7 @@
 
     python -m shepherd.fs1.bc --out artifacts/fs1/bc --episodes 3000 --workers 8
 
-방어 (FCS 전술 공간): finisher = 정지·무장·r_fire=FIRE_D, limiter = 정지·비무장.
+방어 (FCS 전술 공간): finisher = 정지·무장·r_fire=FIRE_D, limiter = 정지, net 소진 후 무장 (PN 인계).
 공격: P1a 사다리 24 config 의 실제 가속 (att_a_max 로 정규화).
 critic 은 같은 rollout 의 할인 return (학습 루프와 같은 보상·shaping) 으로 사전학습.
 초기화일 뿐 — 이후 PFSP RL 에서 정책은 제약 없이 벗어날 수 있다.
@@ -19,9 +19,10 @@ import numpy as np
 from shepherd.fs1.train import (ATT_ROLES, DEF_ROLES, LAMBDA_DIST, _W, _init_worker,
                                 _r_fire_c, ladder_pool, scripted_def_actions)
 
-INIT_LOG_STD = {"def": {"lim": -1.0, "fin": -1.0}, "att": {"att": -1.6}}   # att = residual (×2·a_max)
+# def: 위치목표 노이즈 0.135×STATION ≈ 11 m (확률적 BC 검증에서 fallback 유지가 가장 좋음)
+INIT_LOG_STD = {"def": {"lim": -2.0, "fin": -2.0}, "att": {"att": -1.6}}   # att = residual (×2·a_max)
 GAMMA = 0.997
-DART = 0.3                                  # 실행 노이즈 (a_max 대비 표준편차)
+DART = 0.15                                 # 실행 위치목표 노이즈 (정규화 단위, ×STATION)
 
 
 def _returns(r, gamma=GAMMA):
@@ -38,7 +39,7 @@ def collect(args):
     env = _W["env"]
     rng = np.random.default_rng(seed)
     pool = ladder_pool()
-    O, FIN_T, FIRE, ATT_T, RD, RA, labels = [], [], [], [], [], [], []
+    O, FIN_T, FIRE, LIM_T, LIM_ARM, ATT_T, RD, RA, labels = [], [], [], [], [], [], [], [], []
     for _ in range(n_eps):
         cfg = pool[int(rng.integers(len(pool)))]
         base = make_attacker(AttackerSpec(level="A2", **cfg["ov"]))
@@ -49,18 +50,20 @@ def collect(args):
         env.set_scripted_attacker(cb)
         obs, _ = env.reset(seed=int(rng.integers(2**31)))
         inn, done, rd, ra = env.inner, False, [], []
-        fa = float(inn.backend.by_name("finisher_0").limits.a_max); la = float(inn.sc.limiter.a_max)
         prev_phi = -float(np.linalg.norm(inn._p(inn._states()[2]) - np.asarray(inn.layout.target))) / 100
         while not done:
             o = obs["finisher_0"]
             acts = scripted_def_actions(env)
-            f = acts["finisher_0"]
-            # 라벨 = scripted 전술 행동 (FCS 공간): 정지 · r_fire=FIRE_D · 무장
-            O.append(o); FIN_T.append(np.r_[0.0, 0.0, 0.0, _r_fire_c(f[3], env)]); FIRE.append(f[4])
-            # DART: 실행 행동에만 무작위 가속 (방어자 상태 분포 확장, 라벨 불변)
-            acts["finisher_0"] = np.r_[rng.normal(0, DART * fa, 3), f[3], f[4]]
+            f = acts["finisher_0"].copy()
+            # 라벨 = scripted 전술 행동 (FCS 공간): 시작위치 유지 · r_fire=FIRE_D · 무장,
+            # limiter 는 net 소진 후 무장
+            O.append(o); FIN_T.append(np.r_[f[:3], _r_fire_c(f[3], env)]); FIRE.append(f[4])
+            LIM_T.append(np.stack([acts[l][:3] for l in env.limiter_ids]))
+            LIM_ARM.append(acts[env.limiter_ids[0]][3])
+            # DART: 실행 위치목표에만 노이즈 (상태 분포 확장, 라벨 불변)
+            acts["finisher_0"] = np.r_[f[:3] + rng.normal(0, DART, 3), f[3], f[4]]
             for lid in env.limiter_ids:
-                acts[lid] = np.r_[rng.normal(0, DART * la, 3), 0.0]
+                acts[lid] = np.r_[acts[lid][:3] + rng.normal(0, DART, 3), acts[lid][3]]
             obs, rew, done, info = env.step(acts)
             ATT_T.append(np.clip(last.get("a", np.zeros(3)) / env.att_a_max, -1, 1))
             _, fin, att = inn._states()
@@ -70,7 +73,8 @@ def collect(args):
         RD.append(_returns(np.array(rd))); RA.append(_returns(np.array(ra)))
         labels.append(info["finisher_0"]["fs1_label"])
     return {"obs": np.array(O, np.float32), "fin": np.array(FIN_T, np.float32),
-            "fire": np.array(FIRE, np.float32), "att": np.array(ATT_T, np.float32),
+            "fire": np.array(FIRE, np.float32), "lim_arm": np.array(LIM_ARM, np.float32),
+            "lim_t": np.array(LIM_T, np.float32), "att": np.array(ATT_T, np.float32),
             "ret_def": np.concatenate(RD).astype(np.float32),
             "ret_att": np.concatenate(RA).astype(np.float32), "labels": labels}
 
@@ -97,7 +101,9 @@ def fit(team, obs, targets: dict, ret, *, epochs=8, mb=4096, lr=1e-3, pos_weight
                 xi = x if n == 1 else torch.cat(
                     [x.repeat_interleave(n, 0), torch.eye(n).repeat(len(idx), 1)], 1)
                 out = team.actors[r].net(xi)
-                c_t = torch.as_tensor(ct[idx]).repeat_interleave(n, 0)
+                # 공유 라벨 (T, d) 는 복제, 개체별 라벨 (T, n, d) 는 xi 순서대로 펼침
+                c_t = (torch.as_tensor(ct[idx]).reshape(len(idx) * n, -1) if ct.ndim == 3
+                       else torch.as_tensor(ct[idx]).repeat_interleave(n, 0))
                 loss = loss + F.mse_loss(out[:, :team.roles[r][0]], c_t)
                 if bt is not None:
                     b_t = torch.as_tensor(bt[idx]).repeat_interleave(n, 0)
@@ -128,6 +134,7 @@ def main(argv=None):
     from shepherd.fs1.nets import Team
     from shepherd.fs1.world import FS1Spec
     torch.manual_seed(a.seed); np.random.seed(a.seed)
+    torch.set_num_threads(min(4, a.workers))     # fit 단계 (수집 후 워커는 종료됨)
     out = pathlib.Path(a.out); out.mkdir(parents=True, exist_ok=True)
     per = -(-a.episodes // a.workers)
     with mp.get_context("spawn").Pool(a.workers, initializer=_init_worker,
@@ -138,14 +145,14 @@ def main(argv=None):
     labels = Counter(l for p in parts for l in p["labels"])
     n_pos = max(int(fire.sum()), 1)
     D = Team(obs.shape[1], DEF_ROLES, INIT_LOG_STD["def"])
-    zl = np.zeros((len(obs), 3), np.float32)
-    hd = fit(D, obs, {"lim": (zl, np.zeros((len(obs), 1), np.float32)),
+    lim_arm = cat("lim_arm")
+    hd = fit(D, obs, {"lim": (cat("lim_t"), lim_arm[:, None]),
                       "fin": (cat("fin"), fire[:, None])}, cat("ret_def"), epochs=a.epochs)
     torch.save({"def": D.snapshot(), "init_log_std": INIT_LOG_STD},
                out / "bc_snapshots.pt")
     rep = {"episodes": sum(len(p["labels"]) for p in parts), "samples": int(len(obs)),
            "arm_positives": n_pos, "scripted_labels": dict(labels),
-           "loss_def": hd}
+           "lim_arm_frac": float(lim_arm.mean()), "loss_def": hd}
     (out / "bc_report.json").write_text(json.dumps(rep, indent=2), encoding="utf-8")
     print(json.dumps(rep, indent=2))
 

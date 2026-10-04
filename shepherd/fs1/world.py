@@ -12,6 +12,9 @@ B0 v3 물리 (χ, η 무차원 resolver, kill chain, net FSM, 포획 판정) 를
           arm ∧ LOADED ∧ d ≤ r_fire 이면 발사.
           limiter 행동 [가속3, arm]: arm 이면 기존 PN 종말유도 (mission_rollout
           intercept) 가 조종하고 commit_margin 기하가 맞을 때 commit.
+          이동 3채널 = **위치 목표 (station point)**: 자산 + c·STATION (c∈[-1,1]),
+          하위 PD autopilot (kp 8, kd 4 — scripted limiter 선언값) 이 비행. 가속 행동은
+          탐색 노이즈가 적분돼 방어자가 흩어졌다 (BC 검증 2026-10-04).
   - 공격자 (사용자 2026-10-04): 가속 = 자산 homing autopilot + 학습 residual (전권:
           |residual| ≤ 2·a_max, 합산은 백엔드가 a_max 로 clip) — homing 을 잠시 완전히
           덮어써 이탈·baiting 가능, 풀면 다시 유도. 기동 스타일 잠재변수 z (Z_DIM,
@@ -36,6 +39,8 @@ DEFENDED = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL")
 Z_DIM = 3
 Z_SWITCH_S = 2.0          # 스타일 재추출 평균 간격 (지수분포)
 K_HOME = 4.0              # autopilot 속도추종 이득 (1/s)
+STATION = np.array([80.0, 80.0, 10.0])   # 방어자 위치 목표 범위 (자산 기준, m)
+KP_ST, KD_ST = 8.0, 4.0                  # station PD (shepherd.agents.baselines arc 선언값)
 
 
 @dataclass(frozen=True)
@@ -157,11 +162,26 @@ class FS1Env:
         self._att_a = np.zeros(3)
         self.z = self._rng.uniform(-1, 1, Z_DIM)
         obs, infos = self.env.reset(seed=int(self._rng.integers(2**31)))
+        self.start_station = {a: self.station_of(a) for a in self.limiter_ids + [FIN]}
         return obs, infos
 
     # ---- 사격통제 (FCS) -------------------------------------------------------
+    def station_accel(self, agent, c):
+        """위치 목표 c∈[-1,1]³ (자산 기준 ×STATION) → PD 가속 (a_max clip)."""
+        b = self.inner.backend.by_name(agent)
+        p_cmd = np.asarray(self.inner.layout.target, float) + np.clip(c, -1, 1) * STATION
+        a = KP_ST * (p_cmd - np.asarray(b.p, float)) - KD_ST * np.asarray(b.v, float)
+        n = np.linalg.norm(a)
+        return a * (b.limits.a_max / n) if n > b.limits.a_max else a
+
+    def station_of(self, agent):
+        """현재 위치 → 위치 목표 c (위치 유지 라벨용)."""
+        b = self.inner.backend.by_name(agent)
+        return (np.asarray(b.p, float) - np.asarray(self.inner.layout.target, float)) / STATION
+
     def fcs(self, hl: dict) -> dict:
-        """전술 행동 → env 행동. hl[limiter] = [a3, arm], hl[finisher] = [a3, r_fire, arm]."""
+        """전술 행동 → env 행동. hl[limiter] = [c3, arm], hl[finisher] = [c3, r_fire, arm]
+        (c = 위치 목표, station_accel 참조)."""
         from shepherd.scripts.mission_rollout import _limiter_actions
         inn = self.inner
         lims, fin, att = inn._states()
@@ -172,13 +192,13 @@ class FS1Env:
         for lid in self.limiter_ids:
             a = np.asarray(hl.get(lid, np.zeros(4)), float)
             acts[lid] = (np.asarray(pn[lid], float) if a[3] > 0.5
-                         else np.r_[a[:3], 0.0])
+                         else np.r_[self.station_accel(lid, a[:3]), 0.0])
         f = np.asarray(hl.get(FIN, np.zeros(5)), float)
         nc = np.asarray(inn._net_center(p_att, v_att))
         axis = (nc - p_fin) / max(np.linalg.norm(nc - p_fin), 1e-9)
         fire = float(f[4] > 0.5 and inn.fsm.state.value == "LOADED"
                      and np.linalg.norm(p_att - p_fin) <= f[3])
-        acts[FIN] = np.r_[axis, 1.0, fire, f[:3]]
+        acts[FIN] = np.r_[axis, 1.0, fire, self.station_accel(FIN, f[:3])]
         return acts
 
     def step(self, actions: dict):
