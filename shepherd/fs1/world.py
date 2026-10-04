@@ -7,6 +7,16 @@ B0 v3 물리 (χ, η 무차원 resolver, kill chain, net FSM, 포획 판정) 를
           전진 ring 같은 사전 배치 없음 (편향 금지, 사용자 2026-10-04).
   - env 플래그: lean (viability 는 FIRE tick 에만) · fire gate 제거 · finisher 학습 병진.
   - 공격자: RL 정책 (매 step `set_attacker_action`) 또는 scripted callable (초기 pool).
+  - 사격통제 분리 (FCS, 사용자 2026-10-04): 정책 = 전술, FCS = 정밀 실행.
+          finisher 행동 [가속3, r_fire(m), arm]: 포탑이 예측 net 중심 자동 추적,
+          arm ∧ LOADED ∧ d ≤ r_fire 이면 발사.
+          limiter 행동 [가속3, arm]: arm 이면 기존 PN 종말유도 (mission_rollout
+          intercept) 가 조종하고 commit_margin 기하가 맞을 때 commit.
+  - 공격자 (사용자 2026-10-04): 가속 = 자산 homing autopilot + 학습 residual (전권:
+          |residual| ≤ 2·a_max, 합산은 백엔드가 a_max 로 clip) — homing 을 잠시 완전히
+          덮어써 이탈·baiting 가능, 풀면 다시 유도. 기동 스타일 잠재변수 z (Z_DIM,
+          U[-1,1]) 를 episode 시작과 평균 Z_SWITCH_S 초 간격 무작위 시점에 재추출,
+          공격자 관측에만 붙인다 (다양성 보상은 학습 루프의 판별기).
   - 보상: env_sys RewardSpec (net +1, HARD_KILL +0.5, 침투/timeout −1, limiter 소모 −0.1)
           + net 소진 전 kinetic 무력화 (H_illegal) → −1 로 대체, net 발사 −0.05.
           공격자: 침투 +1, 무력화·timeout −1.
@@ -23,6 +33,9 @@ ADV = "adversary_0"
 FIN = "finisher_0"
 
 DEFENDED = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL")
+Z_DIM = 3
+Z_SWITCH_S = 2.0          # 스타일 재추출 평균 간격 (지수분포)
+K_HOME = 4.0              # autopilot 속도추종 이득 (1/s)
 
 
 @dataclass(frozen=True)
@@ -36,6 +49,7 @@ class FS1Spec:
     w_kill: float = 0.5
     r_illegal: float = -1.0
     c_fire: float = 0.05
+    r_fire_range: tuple = (4.0, 16.0)   # FCS 발사 거리 행동의 범위 (m)
 
 
 def _physics_kwargs(spec: FS1Spec) -> dict:
@@ -78,6 +92,7 @@ class FS1Env:
         self.limiter_ids = list(inn.limiter_ids)
         self.agents = self.limiter_ids + [FIN, ADV]
         self._rng = np.random.default_rng(seed)
+        self.z = np.zeros(Z_DIM)
 
     # ---- attacker plumbing ------------------------------------------------
     def _attacker_cb(self, p_att, v_att, **kw):
@@ -92,9 +107,23 @@ class FS1Env:
         """None → RL 공격자 (step 의 adversary 행동 사용)."""
         self._scripted = cb
 
+    def autopilot(self):
+        """자산 향한 순항속도 추종 (residual 0 이면 이것만으로 침투)."""
+        inn = self.inner
+        att = inn._states()[2]
+        p, v = inn._p(att), inn._v(att)
+        d = np.asarray(inn.layout.target, float) - p
+        v_des = self.att_speed * d / max(np.linalg.norm(d), 1e-9)
+        a = K_HOME * (v_des - v)
+        n = np.linalg.norm(a)
+        return a * (self.att_a_max / n) if n > self.att_a_max else a
+
+    def att_obs(self, obs_vec):
+        return np.r_[obs_vec, self.z].astype(np.float32)
+
     def action_space(self, agent):
-        if agent == ADV:
-            a = self.att_a_max
+        if agent == ADV:                                   # residual (전권)
+            a = 2.0 * self.att_a_max
             return spaces.Box(-a, a, (3,), np.float32)
         return self.inner.action_space(agent)
 
@@ -126,12 +155,40 @@ class FS1Env:
             self._rng = np.random.default_rng(seed)
         self._place()
         self._att_a = np.zeros(3)
+        self.z = self._rng.uniform(-1, 1, Z_DIM)
         obs, infos = self.env.reset(seed=int(self._rng.integers(2**31)))
         return obs, infos
 
+    # ---- 사격통제 (FCS) -------------------------------------------------------
+    def fcs(self, hl: dict) -> dict:
+        """전술 행동 → env 행동. hl[limiter] = [a3, arm], hl[finisher] = [a3, r_fire, arm]."""
+        from shepherd.scripts.mission_rollout import _limiter_actions
+        inn = self.inner
+        lims, fin, att = inn._states()
+        p_att, v_att, p_fin = inn._p(att), inn._v(att), inn._p(fin)
+        acts = {}
+        if any(hl.get(l, np.zeros(4))[3] > 0.5 for l in self.limiter_ids):
+            pn = _limiter_actions(self.env, inn.sc, inn.layout, "intercept", lims, p_att, v_att)
+        for lid in self.limiter_ids:
+            a = np.asarray(hl.get(lid, np.zeros(4)), float)
+            acts[lid] = (np.asarray(pn[lid], float) if a[3] > 0.5
+                         else np.r_[a[:3], 0.0])
+        f = np.asarray(hl.get(FIN, np.zeros(5)), float)
+        nc = np.asarray(inn._net_center(p_att, v_att))
+        axis = (nc - p_fin) / max(np.linalg.norm(nc - p_fin), 1e-9)
+        fire = float(f[4] > 0.5 and inn.fsm.state.value == "LOADED"
+                     and np.linalg.norm(p_att - p_fin) <= f[3])
+        acts[FIN] = np.r_[axis, 1.0, fire, f[:3]]
+        return acts
+
     def step(self, actions: dict):
-        if ADV in actions and self._scripted is None:
-            self._att_a = np.asarray(actions[ADV], float)
+        """actions = 전술 행동 (FCS 가 env 행동으로 변환) + adversary 가속."""
+        actions = {**self.fcs(actions), **({ADV: actions[ADV]} if ADV in actions else {})}
+        if ADV in actions and self._scripted is None:   # autopilot + residual
+            self._att_a = self.autopilot() + np.clip(actions[ADV], -2 * self.att_a_max,
+                                                     2 * self.att_a_max)
+        if self._rng.random() < self.inner.dt / Z_SWITCH_S:
+            self.z = self._rng.uniform(-1, 1, Z_DIM)
         acts = {k: v for k, v in actions.items() if k != ADV}
         acts[ADV] = np.zeros(3)                         # 백엔드 프록시가 교체
         obs, rew, terms, truncs, infos = self.env.step(acts)

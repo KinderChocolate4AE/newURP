@@ -11,7 +11,8 @@ import torch.nn as nn
 from torch.distributions import Bernoulli, Normal
 
 HID = (256, 256)                      # G&B: 2×256 ReLU
-BIN_INIT_LOGIT = -5.0                 # FIRE/commit 초기 p≈0.7%/step (gate 제거 후 즉시 발사 방지)
+BIN_INIT_LOGIT = -5.0
+STD_FLOOR = 1.0                       # RunningNorm std 하한 (원 단위)                 # FIRE/commit 초기 p≈0.7%/step (gate 제거 후 즉시 발사 방지)
 
 
 def mlp(i, o, hid=HID, head_gain=0.01):
@@ -28,13 +29,13 @@ def mlp(i, o, hid=HID, head_gain=0.01):
 class Actor(nn.Module):
     """연속 n_cont (Gaussian) + 이산 n_bin (Bernoulli)."""
 
-    def __init__(self, obs_dim, n_cont, n_bin=0):
+    def __init__(self, obs_dim, n_cont, n_bin=0, init_log_std=-0.5):
         super().__init__()
         self.n_cont, self.n_bin = n_cont, n_bin
         self.net = mlp(obs_dim, n_cont + n_bin)
         with torch.no_grad():
             self.net[-1].bias[n_cont:] = BIN_INIT_LOGIT
-        self.log_std = nn.Parameter(torch.full((n_cont,), -0.5))
+        self.log_std = nn.Parameter(torch.full((n_cont,), float(init_log_std)))
 
     def dists(self, obs):
         out = self.net(obs)
@@ -75,7 +76,10 @@ class RunningNorm:
             self.n = tot
 
     def __call__(self, x):
-        return np.clip((x - self.mean) / np.sqrt(self.m2 / self.n + 1e-8), -10, 10).astype(np.float32)
+        # std 하한: 데이터에서 상수였던 채널 (예: BC 의 정지 방어자 속도) 이 작은 변화에
+        # ±10 으로 폭주하지 않게 한다 (BC 검증 2026-10-04).
+        std = np.maximum(np.sqrt(self.m2 / self.n), STD_FLOOR)
+        return np.clip((x - self.mean) / std, -10, 10).astype(np.float32)
 
     def state(self):
         return {"n": self.n, "mean": self.mean.copy(), "m2": self.m2.copy()}
@@ -86,13 +90,19 @@ class RunningNorm:
 
 class Team(nn.Module):
     """한 팀의 actor 묶음 + 중앙 critic. roles = {name: (n_cont, n_bin, n_copies)}.
-    n_copies > 1 이면 parameter sharing + one-hot id 를 관측에 붙인다."""
+    n_copies > 1 이면 parameter sharing + one-hot id 를 관측에 붙인다.
+    init_log_std = {role: float} (기본 −0.5)."""
 
-    def __init__(self, obs_dim, roles: dict):
+    def __init__(self, obs_dim, roles: dict, init_log_std: dict | None = None,
+                 disc: tuple | None = None):
         super().__init__()
         self.roles = roles
+        # 다양성 판별기 (공격자 스타일 z 예측, DIAYN 식): disc = (in_dim, z_dim)
+        self.disc = mlp(disc[0], disc[1], hid=(128, 128), head_gain=1.0) if disc else None
+        ils = init_log_std or {}
         self.actors = nn.ModuleDict({
-            r: Actor(obs_dim + (n if n > 1 else 0), c, b) for r, (c, b, n) in roles.items()})
+            r: Actor(obs_dim + (n if n > 1 else 0), c, b, ils.get(r, -0.5))
+            for r, (c, b, n) in roles.items()})
         self.critic = mlp(obs_dim, 1, head_gain=1.0)
         self.norm = RunningNorm(obs_dim)
 
@@ -136,11 +146,13 @@ def gae(rew, val, done, gamma, lam):
 
 
 def ppo_update(team: Team, opt, batch: dict, *, epochs=5, mb=4096, clip=0.2,
-               ent=0.01, vf=0.5, max_grad=0.5):
-    """batch: obs_n (T,D), ret (T,), adv (T,), roles {r: (x (M,·), a, lp_old, adv_idx (M,))}."""
+               ent=0.01, vf=0.5, max_grad=0.5, target_kl=0.03):
+    """batch: obs_n (T,D), ret (T,), adv (T,), roles {r: (x (M,·), a, lp_old, adv_idx (M,))}.
+    target_kl: 어느 role 이든 approx KL > 1.5·target_kl 이면 남은 epoch 중단 (좁은 BC
+    정책에서 Adam 초기 step 이 정책을 수십 nat 밀어내던 문제, 2026-10-04)."""
     adv = batch["adv"]; adv = (adv - adv.mean()) / (adv.std() + 1e-8)
     obs = torch.as_tensor(batch["obs_n"]); ret = torch.as_tensor(batch["ret"], dtype=torch.float32)
-    T = len(ret); stats = {}
+    T = len(ret); stats = {}; stop = False; n_ep = 0
     for _ in range(epochs):
         perm = np.random.permutation(T)
         for s in range(0, T, mb):
@@ -151,12 +163,20 @@ def ppo_update(team: Team, opt, batch: dict, *, epochs=5, mb=4096, clip=0.2,
                 if not m.any():
                     continue
                 lp, en = team.actors[r].evaluate(torch.as_tensor(x[m]), torch.as_tensor(a[m]))
-                ratio = (lp - torch.as_tensor(lp0[m])).exp()
+                logr = lp - torch.as_tensor(lp0[m])
+                ratio = logr.exp()
                 A = torch.as_tensor(adv[ti[m]], dtype=torch.float32)
                 pg = -torch.min(ratio * A, ratio.clamp(1 - clip, 1 + clip) * A).mean()
                 loss = loss + pg - ent * en.mean()
-                stats[f"{r}_ratio"] = float(ratio.mean().detach())
+                kl = float(((ratio - 1) - logr).mean().detach())       # approx KL (k3)
+                stats[f"{r}_ratio"] = float(ratio.mean().detach()); stats[f"{r}_kl"] = round(kl, 5)
+                stop = stop or kl > 1.5 * target_kl
             opt.zero_grad(); loss.backward()
             nn.utils.clip_grad_norm_(team.parameters(), max_grad); opt.step()
-    stats["loss"] = float(loss)
+            if stop:
+                break
+        n_ep += 1
+        if stop:
+            break
+    stats["loss"] = float(loss.detach()); stats["epochs"] = n_ep
     return stats

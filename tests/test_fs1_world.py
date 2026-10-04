@@ -6,15 +6,10 @@ from shepherd.fs1.world import ADV, FIN, FS1Env
 
 def _scripted_episode(env, seed, fire_d=12.0):
     obs, _ = env.reset(seed=seed)
-    inn, done = env.inner, False
+    done = False
     while not done:
-        lims, fin, att = inn._states()
-        pa, pf = inn._p(att), inn._p(fin)
-        nc = np.asarray(inn._net_center(pa, inn._v(att)))
-        ax = (nc - pf) / max(np.linalg.norm(nc - pf), 1e-9)
-        f = 1.0 if (np.linalg.norm(pa - pf) < fire_d and inn.fsm.state.value == "LOADED") else 0.0
         acts = {l: np.zeros(4) for l in env.limiter_ids}
-        acts[FIN] = np.r_[ax, 1.0, f, 0, 0, 0]
+        acts[FIN] = np.r_[0, 0, 0, fire_d, 1.0]          # FCS: 무장 + 발사거리
         acts[ADV] = np.zeros(3)
         obs, r, done, info = env.step(acts)
     return info[FIN]["fs1_label"], r
@@ -46,8 +41,15 @@ def test_rewards_penetration_zero_sum_sign():
     done = False
     while not done:
         acts = {l: np.zeros(4) for l in e.limiter_ids}
-        acts[FIN] = np.r_[1, 0, 0, 1, 0, 0, 0, 0]
+        acts[FIN] = np.r_[0, 0, 0, 12.0, 0.0]            # 무장 안 함
         acts[ADV] = np.zeros(3)
         obs, r, done, info = e.step(acts)
     assert info[FIN]["fs1_label"] == "PENETRATED"
     assert r[ADV] == 1.0 and r[FIN] == -1.0
+
+
+def test_fcs_fires_inside_range_and_captures_sometimes():
+    from collections import Counter
+    e = FS1Env(seed=0)
+    c = Counter(_scripted_episode(e, 200 + s)[0] for s in range(20))
+    assert c["NET_CAPTURE"] + c["CAPTURE_WITH_CONTACT"] >= 3     # 직진 공격자 ~50% 포획

@@ -20,18 +20,33 @@ from collections import Counter
 
 import numpy as np
 
-DEF_ROLES = {"lim": (3, 1, 4), "fin": (7, 1, 1)}
+from shepherd.fs1.world import Z_DIM
+
+DEF_ROLES = {"lim": (3, 1, 4), "fin": (4, 1, 1)}   # FCS 전술 행동: lim [a3|arm], fin [a3, r_fire|arm]
 ATT_ROLES = {"att": (3, 0, 1)}
 DEF_WIN = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL")
 SNAP_WIN, SNAP_EVERY = 0.6, 20          # G&B 문턱 미기재 → 선언값
 LAMBDA_DIST = 1e-5                      # 방어 거리 shaping /m/step (G&B 비율 맞춤)
+LAMBDA_DIV = 1e-3                       # 공격자 다양성 보상 /step (≤ 침투 +1 의 소수)
+DISC_IN = 6                             # 판별기 입력: LOS 좌표계 속도 3 + 가속 3
 FIRE_D = 12.0                           # scripted 방어 발사 거리 (sanity sweep 최적)
 
 _W: dict = {}                           # 워커 프로세스 전역 (env·팀 캐시)
 
 
 # ---------------------------------------------------------------- 행동 매핑 ---
+def _r_fire(c, env):
+    lo, hi = env.spec.r_fire_range
+    return lo + (np.clip(c, -1, 1) + 1) / 2 * (hi - lo)
+
+
+def _r_fire_c(r, env):
+    lo, hi = env.spec.r_fire_range
+    return 2 * (r - lo) / (hi - lo) - 1
+
+
 def def_actions(out, env):
+    """정책 출력 (정규화) → FCS 전술 행동."""
     lim_a = float(env.inner.sc.limiter.a_max)
     fin_a = float(env.inner.backend.by_name("finisher_0").limits.a_max)
     acts = {}
@@ -39,22 +54,31 @@ def def_actions(out, env):
         a = out["lim"][1][i]
         acts[lid] = np.r_[np.clip(a[:3], -1, 1) * lim_a, a[3]]
     c = out["fin"][1][0]
-    acts["finisher_0"] = np.r_[c[0:3], np.clip((c[3] + 1) / 2, 0, 1), c[7],
-                               np.clip(c[4:7], -1, 1) * fin_a]
+    acts["finisher_0"] = np.r_[np.clip(c[:3], -1, 1) * fin_a, _r_fire(c[3], env), c[4]]
     return acts
 
 
 def scripted_def_actions(env):
-    """고정 finisher 가 예측 net 중심 조준, FIRE_D 안에서 1회 발사. limiter 정지."""
-    inn = env.inner
-    lims, fin, att = inn._states()
-    pa, pf = inn._p(att), inn._p(fin)
-    nc = np.asarray(inn._net_center(pa, inn._v(att)))
-    ax = (nc - pf) / max(np.linalg.norm(nc - pf), 1e-9)
-    fire = 1.0 if (np.linalg.norm(pa - pf) < FIRE_D and inn.fsm.state.value == "LOADED") else 0.0
+    """scripted 방어 (FCS 공간): finisher 정지·무장·r_fire = FIRE_D, limiter 정지·비무장."""
     acts = {l: np.zeros(4) for l in env.limiter_ids}
-    acts["finisher_0"] = np.r_[ax, 1.0, fire, 0, 0, 0]
+    acts["finisher_0"] = np.r_[0.0, 0.0, 0.0, FIRE_D, 1.0]
     return acts
+
+
+def att_feat(env, v_prev):
+    """판별기 입력: 공격자 속도·가속을 자산-LOS 좌표계 (radial, tangential, z) 로."""
+    inn = env.inner
+    att = inn._states()[2]
+    p, v = inn._p(att), inn._v(att)
+    r = p - np.asarray(inn.layout.target, float); r[2] = 0.0
+    ur = r / max(np.linalg.norm(r), 1e-9); ut = np.array([-ur[1], ur[0], 0.0]); uz = np.array([0, 0, 1.0])
+    a = (v - v_prev) / inn.dt
+    return np.array([v @ ur / 25, v @ ut / 25, v @ uz / 25,
+                     a @ ur / 20, a @ ut / 20, a @ uz / 20], np.float32), v
+
+
+def att_action(out, env):
+    return np.clip(out["att"][1][0], -1, 1) * 2.0 * env.att_a_max      # 전권 residual
 
 
 def ladder_pool():
@@ -75,9 +99,9 @@ def _init_worker(spec_kw):
     _W["env"] = FS1Env(FS1Spec(**spec_kw), seed=os.getpid())
 
 
-def _team(roles, snap, obs_dim):
+def _team(roles, snap, obs_dim, disc=None):
     from shepherd.fs1.nets import Team
-    t = Team(obs_dim, roles); t.load_snapshot(snap); t.eval()
+    t = Team(obs_dim, roles, disc=disc); t.load_snapshot(snap); t.eval()
     return t
 
 
@@ -89,9 +113,9 @@ def _set_opponent(env, side, opp, obs_dim, cache):
             env.set_scripted_attacker(make_attacker(AttackerSpec(level="A2", **opp["ov"])))
             return None
         env.set_scripted_attacker(None)
-        t = cache.setdefault(id(opp["snap"]), _team(ATT_ROLES, opp["snap"], obs_dim))
-        att_a = env.att_a_max
-        return lambda obs: {"adversary_0": np.clip(t.act(obs)[0]["att"][1][0], -1, 1) * att_a}
+        t = cache.setdefault(id(opp["snap"]), _team(ATT_ROLES, opp["snap"], obs_dim + Z_DIM,
+                                                    disc=(DISC_IN, Z_DIM)))
+        return lambda obs: {"adversary_0": att_action(t.act(env.att_obs(obs))[0], env)}
     env.set_scripted_attacker(None)            # 학습자 = 공격자 (RL)
     if opp["kind"] == "script":
         return lambda obs: scripted_def_actions(env)
@@ -100,13 +124,16 @@ def _set_opponent(env, side, opp, obs_dim, cache):
 
 
 def rollout(args):
+    import torch
     side, snap, opps, n_steps, gamma, lam, seed, deterministic = args
     env = _W["env"]
     np.random.seed(seed)
     obs0, _ = env.reset(seed=seed)
     obs_dim = len(next(iter(obs0.values())))
     roles = DEF_ROLES if side == "def" else ATT_ROLES
-    me = _team(roles, snap, obs_dim)
+    me = (_team(roles, snap, obs_dim) if side == "def"
+          else _team(roles, snap, obs_dim + Z_DIM, disc=(DISC_IN, Z_DIM)))
+    feats, zs = [], []
     cache: dict = {}
     buf = {"obs": [], "obs_n": [], "val": [], "rew": [], "done": [],
            "roles": {r: ([], [], [], []) for r in roles}}
@@ -118,16 +145,19 @@ def rollout(args):
         done, ep_len = False, 0
         inn = env.inner
         prev_phi = -float(np.linalg.norm(inn._p(inn._states()[2]) - np.asarray(inn.layout.target))) / 100.0
+        v_prev = inn._v(inn._states()[2])
         while not done:
             o = obs["finisher_0"]
-            out, v, on = me.act(o, deterministic)
+            z_t = env.z.copy()
+            oo = o if side == "def" else env.att_obs(o)      # 공격자 관측 = obs + 스타일 z
+            out, v, on = me.act(oo, deterministic)
             if side == "def":
                 acts = def_actions(out, env)
                 if opp_fn is not None:
                     acts.update(opp_fn(o))
             else:
                 acts = opp_fn(o)
-                acts["adversary_0"] = np.clip(out["att"][1][0], -1, 1) * env.att_a_max
+                acts["adversary_0"] = att_action(out, env)
             obs, rew, done, info = env.step(acts)
             r = rew["finisher_0"] if side == "def" else rew["adversary_0"]
             inn = env.inner; _, fin, att = inn._states()
@@ -138,8 +168,13 @@ def rollout(args):
                 if ep_len > 0:
                     r += gamma * (0.0 if done else phi) - prev_phi
                 prev_phi = phi
+                f, v_prev = att_feat(env, v_prev)          # 다양성 (DIAYN 식): z 를 맞힐수록 +
+                with torch.no_grad():
+                    zh = me.disc(torch.as_tensor(f)[None])[0].numpy()
+                r += LAMBDA_DIV * float(np.clip(1.0 - 3.0 * np.mean((zh - z_t) ** 2), -1, 1))
+                feats.append(f); zs.append(z_t)
             ti = len(buf["rew"])
-            buf["obs"].append(o); buf["obs_n"].append(on); buf["val"].append(v)
+            buf["obs"].append(oo); buf["obs_n"].append(on); buf["val"].append(v)
             buf["rew"].append(r); buf["done"].append(done)
             for rn, (x, a, lp) in out.items():
                 R = buf["roles"][rn]
@@ -156,7 +191,9 @@ def rollout(args):
                  for r, R in buf["roles"].items()}
     return {"obs": np.array(buf["obs"], np.float32), "obs_n": np.array(buf["obs_n"], np.float32),
             "adv": adv.astype(np.float32), "ret": ret.astype(np.float32),
-            "roles": roles_out, "results": results}
+            "roles": roles_out, "results": results,
+            "feat": np.array(feats, np.float32).reshape(-1, DISC_IN),
+            "z": np.array(zs, np.float32).reshape(-1, Z_DIM)}
 
 
 def merge(parts):
@@ -167,6 +204,7 @@ def merge(parts):
         off += len(p["ret"])
     cat = lambda k: np.concatenate([p[k] for p in parts])
     return {"obs": cat("obs"), "obs_n": cat("obs_n"), "adv": cat("adv"), "ret": cat("ret"),
+            "feat": cat("feat"), "z": cat("z"),
             "roles": {r: tuple(np.concatenate(z) for z in zip(*v)) for r, v in roles.items()},
             "results": [x for p in parts for x in p["results"]]}
 
@@ -185,12 +223,13 @@ def main(argv=None):
     ap.add_argument("--workers", type=int, default=max(1, mp.cpu_count() - 2))
     ap.add_argument("--iters", type=int, default=1000)
     ap.add_argument("--steps-per-worker", type=int, default=4096)
-    ap.add_argument("--lr", type=float, default=3e-4)
+    ap.add_argument("--lr", type=float, default=1e-4)
     ap.add_argument("--gamma", type=float, default=0.997)
     ap.add_argument("--lam", type=float, default=0.95)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--ckpt-every", type=int, default=20)
     ap.add_argument("--torch-threads", type=int, default=2)
+    ap.add_argument("--init", default=None, help="BC 스냅샷 (shepherd.fs1.bc 산출물)")
     ap.add_argument("--total-steps", type=float, default=None,
                     help="이 env step 수에 도달하면 종료 (워커 수와 무관한 예산)")
     a = ap.parse_args(argv)
@@ -205,11 +244,21 @@ def main(argv=None):
     probe = FS1Env(spec, seed=0)
     obs_dim = len(next(iter(probe.reset(seed=0)[0].values())))
     del probe
-    teams = {"def": Team(obs_dim, DEF_ROLES), "att": Team(obs_dim, ATT_ROLES)}
+    from shepherd.fs1.bc import INIT_LOG_STD
+    teams = {"def": Team(obs_dim, DEF_ROLES, INIT_LOG_STD["def"]),
+             "att": Team(obs_dim + Z_DIM, ATT_ROLES, INIT_LOG_STD["att"], disc=(DISC_IN, Z_DIM))}
+    tag = "init"
+    if a.init:                                   # BC 초기화 (docs/123 A안)
+        bc = torch.load(a.init, weights_only=False)
+        teams["def"].load_snapshot(bc["def"])      # 공격자는 autopilot + residual 0 에서 출발
+        with torch.no_grad():                      # 탐색 std 는 BC 스냅샷이 아니라 선언값
+            for r_, v_ in INIT_LOG_STD["def"].items():
+                teams["def"].actors[r_].log_std.fill_(v_)
+        tag = "bc"
     opts = {s: torch.optim.Adam(t.parameters(), lr=a.lr) for s, t in teams.items()}
     pools = {"def": [{"kind": "script", "name": "scripted_fin12"},
-                     {"kind": "nn", "name": "def_init", "snap": teams["def"].snapshot()}],
-             "att": ladder_pool() + [{"kind": "nn", "name": "att_init",
+                     {"kind": "nn", "name": f"def_{tag}", "snap": teams["def"].snapshot()}],
+             "att": ladder_pool() + [{"kind": "nn", "name": f"att_{tag}",
                                       "snap": teams["att"].snapshot()}]}
     other = {"def": "att", "att": "def"}
     wr = {s: [0.5] * len(pools[other[s]]) for s in teams}     # 학습자 s 의 상대별 승률 EMA
@@ -239,6 +288,8 @@ def main(argv=None):
             batch = merge(P.map(rollout, jobs))
             team = teams[side]
             st = ppo_update(team, opts[side], batch)
+            if side == "att":
+                st["disc_mse"] = train_disc(team, batch["feat"], batch["z"])
             team.norm.update(batch["obs"])
             n = len(batch["ret"]); total += n
             res = batch["results"]
@@ -273,6 +324,21 @@ def main(argv=None):
             if last:
                 break
     log.close()
+
+
+def train_disc(team, feat, z, epochs=3, mb=4096, lr=1e-3):
+    import torch
+    opt = getattr(team, "_disc_opt", None) or torch.optim.Adam(team.disc.parameters(), lr=lr)
+    team._disc_opt = opt
+    F, Z = torch.as_tensor(feat), torch.as_tensor(z)
+    loss = torch.zeros(())
+    for _ in range(epochs):
+        perm = torch.randperm(len(F))
+        for s in range(0, len(F), mb):
+            i = perm[s:s + mb]
+            loss = ((team.disc(F[i]) - Z[i]) ** 2).mean()
+            opt.zero_grad(); loss.backward(); opt.step()
+    return round(float(loss.detach()), 4)
 
 
 def _rate(c, kind):
