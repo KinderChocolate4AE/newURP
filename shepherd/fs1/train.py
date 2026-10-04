@@ -128,7 +128,7 @@ def _set_opponent(env, side, opp, obs_dim, cache):
     if opp["kind"] == "script":
         return lambda obs: scripted_def_actions(env, opp.get("kfirst_r"))
     t = cache.setdefault(id(opp["snap"]), _team(DEF_ROLES, opp["snap"], obs_dim))
-    return lambda obs: def_actions(t.act(obs)[0], env)
+    return lambda obs: def_actions(t.act(obs, opp.get("det", False))[0], env)
 
 
 def rollout(args):
@@ -242,6 +242,9 @@ def main(argv=None):
     ap.add_argument("--init", default=None, help="BC 스냅샷 (shepherd.fs1.bc 산출물)")
     ap.add_argument("--total-steps", type=float, default=None,
                     help="이 env step 수에 도달하면 종료 (워커 수와 무관한 예산)")
+    ap.add_argument("--exploit", default=None,
+                    help="fresh exploiter 모드: 고정 방어 상대로 새 공격자만 학습. "
+                         "ckpt 경로 (방어 팀, 결정적 행동) 또는 scripted:kfirst50")
     a = ap.parse_args(argv)
 
     import torch
@@ -272,6 +275,11 @@ def main(argv=None):
                      {"kind": "nn", "name": f"def_{tag}", "snap": teams["def"].snapshot()}],
              "att": ladder_pool() + [{"kind": "nn", "name": f"att_{tag}",
                                       "snap": teams["att"].snapshot()}]}
+    if a.exploit:                                # 평가용 held-out 공격자 (docs/123 §8)
+        pools["def"] = [{"kind": "script", "name": "scripted_kfirst50", "kfirst_r": KFIRST_R}
+                        if a.exploit == "scripted:kfirst50" else
+                        {"kind": "nn", "name": "def_frozen_det", "det": True,
+                         "snap": torch.load(a.exploit, weights_only=False)["teams"]["def"]}]
     other = {"def": "att", "att": "def"}
     wr = {s: [0.5] * len(pools[other[s]]) for s in teams}     # 학습자 s 의 상대별 승률 EMA
     since_snap = {"def": 0, "att": 0}                         # 자기 iter 수 (마지막 snapshot 이후)
@@ -288,10 +296,10 @@ def main(argv=None):
     with ctx.Pool(a.workers, initializer=_init_worker, initargs=(spec.__dict__,)) as P:
         for it in range(a.iters):
             t0 = time.time()
-            side = "att" if it % (DEF_PER_ATT + 1) == DEF_PER_ATT else "def"
+            side = "att" if a.exploit or it % (DEF_PER_ATT + 1) == DEF_PER_ATT else "def"
             opp_pool = pools[other[side]]
-            latest = {"kind": "nn", "name": f"{other[side]}_latest",
-                      "snap": teams[other[side]].snapshot()}
+            latest = (pools["def"][0] if a.exploit else
+                      {"kind": "nn", "name": f"{other[side]}_latest", "snap": teams[other[side]].snapshot()})
             cand = opp_pool + [latest]
             wr_s = wr[side] + [0.5]
             n_eps = max(8, math.ceil(a.steps_per_worker / 120))

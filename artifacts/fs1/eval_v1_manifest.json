@@ -1,0 +1,61 @@
+{
+  "schema": "fs1-eval-manifest-v1",
+  "status": "sealed before the run3 harvest (training outcome unseen except the in-training log and the iter-119 ad hoc probe recorded in note 2026-10-04e)",
+  "design_doc": "docs/123_fs1_full_stack_cotraining.md section 8",
+  "scope": {
+    "question": "does the FS1 co-trained defense (final checkpoint, deterministic actions) defend more often than the best scripted defense against adaptive attackers (attacker-pool snapshots and a fresh exploiter trained against it)",
+    "not_evidence_for": [
+      "6DOF or plant transfer",
+      "optimality of any policy",
+      "B0 v3 / P1 / P2 claims (new world, never pooled)",
+      "JAX-port results (parity unsealed)",
+      "cooperation (vocabulary: limiter-control opportunity)"
+    ]
+  },
+  "checkpoint": "final ckpt.pt of the training run (total_steps >= 1.1e+08); no iteration selection",
+  "defenders": {
+    "learned_det": "ckpt defense team, deterministic (mean action, p>0.5 arm) - GATED",
+    "learned_sto": "ckpt defense team, stochastic - reported",
+    "fin12": "scripted: hold start station, finisher armed r_fire 12 m, limiters never armed",
+    "fin12_fb": "fin12 + limiters armed after net spent (= training pool scripted_fin12)",
+    "kfirst50": "fin12_fb + limiters armed when attacker within 50 m of asset (= training pool scripted_kfirst50)"
+  },
+  "opponent_groups": {
+    "ladder": "P1a ladder 24 configs, episode i uses config i mod 24 (10 each)",
+    "rl_latest": "final attacker team of the same ckpt (co-training partner) - reported only",
+    "pool": "8 attacker-pool nn snapshots evenly spaced (np.linspace, rounded) over the final pool, episode i uses snapshot i mod 8 (30 each)",
+    "ex_learned": "fresh attacker trained from scratch against frozen learned_det only, 1e+07 env steps, seed 261100",
+    "ex_kfirst50": "fresh attacker trained from scratch against kfirst50 only, 1e+07 env steps, seed 261200",
+    "attacker_actions": "RL attackers act stochastically (as in training)"
+  },
+  "evaluation": {
+    "namespace": "fs1_eval_v1",
+    "seed0": 261000,
+    "episodes_per_cell": 240,
+    "paired": "episode i of every group uses seed seed0 + i for every defender (identical placements)",
+    "tool": "python -m shepherd.fs1.eval run (scripts/run_fs1_eval_server.sh)",
+    "defended": "label in {NET_CAPTURE, CAPTURE_WITH_CONTACT, HARD_KILL, K_FIRST}"
+  },
+  "gate": {
+    "invalid": [
+      "manifest hash recorded in summary",
+      "lineage: ckpt total_steps >= 1.1e8",
+      "completion: every (defender, group) cell n = 240",
+      "paired: identical seed lists across defenders within each group",
+      "exploiter budget: both exploiter logs reach total_steps >= 1e+07"
+    ],
+    "invalid_decision": "INVALID_FS1E",
+    "classification": "counts out of 240: D_pool = L(pool) - max_s S_s(pool); D_ex = L(ex_learned) - S_kfirst50(ex_kfirst50) (each defense vs its own exploiter, equal budget); D_ladder = L(ladder) - max_s S_s(ladder); L = learned_det defended, s over ['fin12', 'fin12_fb', 'kfirst50']. If D_pool >= +24 and D_ex >= +24: FS1_POSITIVE, relabelled FS1_POSITIVE_NARROW when D_ladder <= -24 (gain on adaptive attackers only; degeneration warning). Else FS1_NULL (this training seed).",
+    "reported_not_gated": [
+      "learned_sto",
+      "rl_latest",
+      "cross-exploiter cells",
+      "net / K_FIRST / fallback / penetrated per cell",
+      "mode-rank reversal: K_FIRST share ladder vs adaptive groups (docs/123 section 7)",
+      "arm distance and fire distance medians",
+      "trajectory figures (viz-first)"
+    ]
+  },
+  "replication": "run3 = training seed 0 -> provisional. Confirmed FS1_POSITIVE requires >= 2 of 3 training seeds {0, 1, 2} (same r3 design and budget) classified POSITIVE or POSITIVE_NARROW under this manifest; label NARROW if >= 2 of the passing seeds are NARROW.",
+  "manifest_hash": "f4271b12a1d50b39"
+}

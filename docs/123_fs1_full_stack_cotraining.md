@@ -108,3 +108,21 @@ net 소진 전 kinetic = −1 → 회피 기동 공격자에게 방어 수단이
 
 mode 퇴화 판정 기준 (보고): 직선·사다리 공격자에게도 K_FIRST 만 쓰면 퇴화 (net +1 기회를
 버림). 기대 결과: 예측 가능한 공격자 → net-first, 회피 공격자 → K_FIRST (mode-rank reversal).
+
+## 8. 평가 계약 v1 (봉인, run3 harvest 전 — 사용자 승인 2026-10-04)
+
+manifest `artifacts/fs1/eval_v1_manifest.json` (`scripts/fs1_eval_manifest.py`, hash 는 파일 참조),
+실행 `scripts/run_fs1_eval_server.sh`, 도구 `shepherd/fs1/eval.py`. §4 를 구체화한다.
+봉인 시점까지 본 결과 = 학습 로그와 iter 119 임시 평가 (노트 2026-10-04e) 뿐.
+
+| 항목 | 내용 |
+|---|---|
+| 정책 | 학습 run 의 **최종** ckpt (total_steps ≥ 1.1e8), iter 선택 없음. 판정 = `learned_det` (결정적), `learned_sto` 는 보고 |
+| 기준선 | `fin12` (fallback 없음) · `fin12_fb` (= 학습 pool scripted_fin12) · `kfirst50` (= scripted_kfirst50) |
+| 상대 | ladder (P1a 24 × 10) · pool (최종 공격 pool nn snapshot 8개 균등 × 30) · **ex_learned / ex_kfirst50** (각 방어 전용 fresh exploiter, 같은 예산 1e7 step, `train --exploit`) · rl_latest (보고만) |
+| 표본 | 셀당 240, seed0 261000, 그룹 안 episode i 시드 = seed0+i (모든 방어 paired) |
+| 판정 | D_pool = L − max scripted (pool), D_ex = L(ex_learned) − kfirst50(ex_kfirst50), 둘 다 **≥ +24 (+10%p)** → `FS1_POSITIVE`; 이때 D_ladder ≤ −24 면 `FS1_POSITIVE_NARROW` (적응형에서만 이득, 퇴화 경고). 아니면 `FS1_NULL` (해당 seed). 무효 조건 → `INVALID_FS1E` |
+| 보고 (판정 외) | net / K_FIRST / fallback / 침투, 상대 유형별 K_FIRST 비율 (mode-rank reversal), 무장·발사 거리, 교차 exploiter, 궤적 그림 |
+| 반복 | run3 = training seed 0 → 잠정. **확정 = seed {0,1,2} 중 ≥ 2 개 POSITIVE(또는 NARROW)** |
+
+exploiter 공정성: 학습 방어 exploiter 는 판정 대상과 같은 결정적 정책을 상대로 학습한다.
