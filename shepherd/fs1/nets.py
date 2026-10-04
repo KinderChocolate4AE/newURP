@@ -115,11 +115,14 @@ class Team(nn.Module):
         return out, v, on
 
     def snapshot(self):
-        return {"sd": {k: v.detach().clone() for k, v in self.state_dict().items()},
+        # numpy 로 보관: torch 텐서를 워커로 pickle 하면 Linux 에서 텐서마다 fd 를 열어
+        # "Too many open files" 로 멈춘다 (서버 run0 2026-10-04).
+        return {"sd": {k: v.detach().cpu().numpy().copy() for k, v in self.state_dict().items()},
                 "norm": self.norm.state()}
 
     def load_snapshot(self, s):
-        self.load_state_dict(s["sd"]); self.norm.load(s["norm"])
+        self.load_state_dict({k: torch.as_tensor(v) for k, v in s["sd"].items()})
+        self.norm.load(s["norm"])
 
 
 def gae(rew, val, done, gamma, lam):
