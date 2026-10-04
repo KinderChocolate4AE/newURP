@@ -106,6 +106,13 @@ net 소진 전 kinetic = −1 → 회피 기동 공격자에게 방어 수단이
 | 다양성 재설계 | 이산 스킬 8 (one-hot), 평균 4 s 유지, 판별기 cross-entropy, 패널티 −5e-3·(1−q(z|s)) |
 | mode 감시 | 로그 `labels_by_kind`: 상대 유형 (scripted / RL) 별 NET / K_FIRST / HARD_KILL / 침투 |
 
+관찰 (보고 전용, 2026-10-04 — JAX 세션 지적을 main 에서 재측정): scripted r_fire + fallback,
+24판씩 (homing = RL 공격자 base, residual 0 / P1a 사다리). r_fire 12: 16/24 (전부 net, miss
+handoff 0회) / **24/24 (HARD_KILL 14)** · 16: 0 / 2 · 24: 0 / 1 · 40: 4 (HARD_KILL만) / 7 ·
+kfirst50: 24 / 24. → homing 상대로 pool `scripted_fin12` ≡ net-only (fallback 구조적 불가),
+사다리 상대로는 fallback 유효. net 포획은 r_fire ≤ 12 m 에서만 성립 → "넓은 r_fire 로
+net-후-kinetic" 은 K_FIRST 에 지배됨 (A안 근거 보강). 최강 scripted = kfirst50 (평가 계약 불변).
+
 mode 퇴화 판정 기준 (보고): 직선·사다리 공격자에게도 K_FIRST 만 쓰면 퇴화 (net +1 기회를
 버림). 기대 결과: 예측 가능한 공격자 → net-first, 회피 공격자 → K_FIRST (mode-rank reversal).
 
