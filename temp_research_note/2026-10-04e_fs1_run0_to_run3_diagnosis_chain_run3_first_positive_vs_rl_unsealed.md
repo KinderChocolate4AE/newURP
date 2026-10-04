@@ -39,6 +39,9 @@
 4. 단일 seed. P2 seed 불일치 NULL 전례 → 양성이면 seed 2~3개 반복 필수.
 5. 평가 상대 "최신 RL" 은 학습 상대와 겹친다 → 봉인 계약에 held-out fresh exploiter 필요.
 
+> **정정 (10-05)**: 이 노트의 "사다리" (run1~3 pool·BC, iter 119 사다리 평가) 는 전부 **jink 0
+> 변형 사다리** (FS1 ladder spec 버그 — docs/123 §8.1). P1a 공칭 사다리 수치가 아니다.
+
 ## 4. 다음
 
 평가 스크립트 repo 편입 (`shepherd/fs1/eval.py`) → 평가 계약 봉인 (run3 harvest 전) →

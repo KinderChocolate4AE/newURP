@@ -1,0 +1,16 @@
+{
+  "schema": "fs1-eval-manifest-v2-addendum",
+  "status": "sealed before the run3 harvest; addendum to v1 (not a replacement) after the ladder-spec bug report 2026-10-05 (JAX session, verified by main)",
+  "design_doc": "docs/123_fs1_full_stack_cotraining.md section 8.1",
+  "v1_manifest_hash": "f4271b12a1d50b39",
+  "v1_deviation": "v1 'ladder' group was built as AttackerSpec(level=A2, **overrides) on the dataclass defaults, not on the cell nominal spec as P1a did: all 24 configs have jink_amp 0 (nominal 0.6), t0_route0 == a1_pure, and under lean depth_bait_priv == depth_bait_fair. v1 is run exactly as sealed (eval --ladder legacy) and reported with this deviation.",
+  "v2_ladder": "eval --ladder nominal: replace(FS1 cell resolve() attacker spec, sense_range=inf, **P1a overrides) (overrides win, so P1a sense 15/30 kept); jink phase = derive_phase(0, episode seed); depth_bait_priv kept as a labelled duplicate of depth_bait_fair (24 configs, 10 each)",
+  "evaluation": {
+    "cells": "['learned_det', 'learned_sto', 'fin12', 'fin12_fb', 'kfirst50'] x ladder_v2",
+    "episodes_per_cell": 240,
+    "seed0": 261000,
+    "paired": "same seeds as v1 (seed0 + i)"
+  },
+  "classification": "v2 decision = v1 rule with D_ladder recomputed on ladder_v2 (D_pool, D_ex from v1 unchanged — those groups do not use the ladder). INVALID if v1 is INVALID or the ladder_v2 cells fail completion/paired. Both v1 and v2 decisions are reported; where they differ, v2 governs (v1 ladder did not match its declared population). The replication rule of v1 applies to the v2 decision.",
+  "manifest_hash": "f9e819e0d1171054"
+}

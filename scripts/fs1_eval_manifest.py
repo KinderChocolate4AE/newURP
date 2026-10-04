@@ -1,6 +1,6 @@
 """Seal FS1 평가 계약 v1 (docs/123 §8) + 판독.
 
-    python scripts/fs1_eval_manifest.py                      # manifest 기록 (봉인)
+    python scripts/fs1_eval_manifest.py                      # manifest v1 + v2 addendum 기록 (봉인)
     python scripts/fs1_eval_manifest.py --readout artifacts/fs1/run3/eval_v1
 """
 from __future__ import annotations
@@ -94,6 +94,71 @@ def load() -> dict:
     return data
 
 
+# ---------------------------------------------------------------- v2 addendum ---
+MANIFEST_V2 = ROOT / "artifacts" / "fs1" / "eval_v2_addendum_manifest.json"
+
+
+def build_v2() -> dict:
+    body = {
+        "schema": "fs1-eval-manifest-v2-addendum",
+        "status": ("sealed before the run3 harvest; addendum to v1 (not a replacement) after the "
+                   "ladder-spec bug report 2026-10-05 (JAX session, verified by main)"),
+        "design_doc": "docs/123_fs1_full_stack_cotraining.md section 8.1",
+        "v1_manifest_hash": build()["manifest_hash"],
+        "v1_deviation": ("v1 'ladder' group was built as AttackerSpec(level=A2, **overrides) on the "
+                         "dataclass defaults, not on the cell nominal spec as P1a did: all 24 configs "
+                         "have jink_amp 0 (nominal 0.6), t0_route0 == a1_pure, and under lean "
+                         "depth_bait_priv == depth_bait_fair. v1 is run exactly as sealed "
+                         "(eval --ladder legacy) and reported with this deviation."),
+        "v2_ladder": ("eval --ladder nominal: replace(FS1 cell resolve() attacker spec, "
+                      "sense_range=inf, **P1a overrides) (overrides win, so P1a sense 15/30 kept); "
+                      "jink phase = derive_phase(0, episode seed); depth_bait_priv kept as a labelled "
+                      "duplicate of depth_bait_fair (24 configs, 10 each)"),
+        "evaluation": {"cells": f"{DEFENDERS} x ladder_v2", "episodes_per_cell": N, "seed0": SEED0,
+                       "paired": "same seeds as v1 (seed0 + i)"},
+        "classification": (
+            "v2 decision = v1 rule with D_ladder recomputed on ladder_v2 (D_pool, D_ex from v1 "
+            "unchanged — those groups do not use the ladder). INVALID if v1 is INVALID or the "
+            "ladder_v2 cells fail completion/paired. Both v1 and v2 decisions are reported; where "
+            "they differ, v2 governs (v1 ladder did not match its declared population). "
+            "The replication rule of v1 applies to the v2 decision."),
+    }
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    return {**body, "manifest_hash": hashlib.sha256(raw.encode()).hexdigest()[:16]}
+
+
+def load_v2() -> dict:
+    data = json.loads(MANIFEST_V2.read_text(encoding="utf-8"))
+    if data != build_v2():
+        raise ValueError(f"FS1 eval v2 manifest drift: {MANIFEST_V2}")
+    return data
+
+
+def readout_v2(d: pathlib.Path, v1: dict) -> dict:
+    m = load_v2()
+    s = json.loads((d / "eval_v2" / "summary.json").read_text(encoding="utf-8"))
+    cell = {r["defender"]: r for r in s["rows"] if r["group"] == "ladder"}
+    seeds = {}
+    for l in (d / "eval_v2" / "episodes.jsonl").read_text(encoding="utf-8").splitlines():
+        e = json.loads(l)
+        seeds.setdefault(e["defender"], []).append(e["seed"])
+    inv = [f"v1 {x}" for x in v1["invalid"]]
+    if s["meta"].get("manifest") != m["manifest_hash"] or s["meta"].get("ladder") != "nominal":
+        inv.append("manifest/ladder")
+    inv += [f"completion {x}" for x in DEFENDERS if cell.get(x, {}).get("n") != N]
+    if len({tuple(sorted(v)) for v in seeds.values()}) != 1:
+        inv.append("paired")
+    out = {"manifest_hash": m["manifest_hash"], "invalid": inv, "v1_decision": v1["decision"]}
+    if inv:
+        out["decision"] = "INVALID_FS1E"
+        return out
+    out["D_ladder_v2"] = cell["learned_det"]["defended"] - max(cell[x]["defended"] for x in SCRIPTED)
+    pos = v1["D_pool"] >= MARGIN and v1["D_ex"] >= MARGIN
+    out["decision"] = ("FS1_NULL" if not pos else
+                       "FS1_POSITIVE_NARROW" if out["D_ladder_v2"] <= -MARGIN else "FS1_POSITIVE")
+    return out
+
+
 def _last_steps(log):
     lines = pathlib.Path(log).read_text(encoding="utf-8").strip().splitlines()
     return json.loads(lines[-1])["total_steps"] if lines else 0
@@ -140,13 +205,17 @@ def main() -> None:
     ap.add_argument("--readout", default=None, help="평가 디렉터리 (exploit_*/, eval/ 포함)")
     a = ap.parse_args()
     if a.readout:
-        r = readout(pathlib.Path(a.readout))
-        (pathlib.Path(a.readout) / "readout.json").write_text(json.dumps(r, indent=2), "utf-8")
+        d = pathlib.Path(a.readout)
+        r = readout(d)
+        if (d / "eval_v2").exists():
+            r = {"v1": r, "v2": readout_v2(d, r)}
+        (d / "readout.json").write_text(json.dumps(r, indent=2), "utf-8")
         print(json.dumps(r, indent=2))
         return
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)
-    MANIFEST.write_text(json.dumps(build(), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"{MANIFEST} {build()['manifest_hash']}")
+    for path, body in ((MANIFEST, build()), (MANIFEST_V2, build_v2())):
+        path.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(f"{path} {body['manifest_hash']}")
 
 
 if __name__ == "__main__":

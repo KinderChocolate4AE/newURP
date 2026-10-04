@@ -18,7 +18,7 @@ import pathlib
 import numpy as np
 
 from shepherd.fs1.train import (ATT_ROLES, DEF_ROLES, KFIRST_R, LAMBDA_DIST, _W, _init_worker,
-                                _r_fire_c, ladder_pool, scripted_def_actions)
+                                _r_fire_c, ladder_attacker, ladder_pool, scripted_def_actions)
 
 # def: 위치목표 노이즈 0.135×STATION ≈ 11 m (확률적 BC 검증에서 fallback 유지가 가장 좋음)
 INIT_LOG_STD = {"def": {"lim": -2.0, "fin": -2.0}, "att": {"att": -1.6}}   # att = residual (×2·a_max)
@@ -37,14 +37,13 @@ def _returns(r, gamma=GAMMA):
 
 def collect(args):
     n_eps, seed = args
-    from shepherd.agents.attacker_ladder import AttackerSpec, make_attacker
     env = _W["env"]
     rng = np.random.default_rng(seed)
     pool = ladder_pool()
     O, FIN_T, FIRE, LIM_T, LIM_ARM, ATT_T, RD, RA, labels = [], [], [], [], [], [], [], [], []
     for _ in range(n_eps):
         cfg = pool[int(rng.integers(len(pool)))]
-        base = make_attacker(AttackerSpec(level="A2", **cfg["ov"]))
+        base = ladder_attacker(cfg["ov"])
         last = {}
 
         def cb(p, v, **kw):

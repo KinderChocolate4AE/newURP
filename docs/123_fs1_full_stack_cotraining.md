@@ -112,6 +112,7 @@ handoff 0회) / **24/24 (HARD_KILL 14)** · 16: 0 / 2 · 24: 0 / 1 · 40: 4 (HAR
 kfirst50: 24 / 24. → homing 상대로 pool `scripted_fin12` ≡ net-only (fallback 구조적 불가),
 사다리 상대로는 fallback 유효. net 포획은 r_fire ≤ 12 m 에서만 성립 → "넓은 r_fire 로
 net-후-kinetic" 은 K_FIRST 에 지배됨 (A안 근거 보강). 최강 scripted = kfirst50 (평가 계약 불변).
+**정정 (10-05)**: 이 사다리 열은 jink 0 변형 사다리 — 공칭 사다리 재측정은 §8.1.
 
 mode 퇴화 판정 기준 (보고): 직선·사다리 공격자에게도 K_FIRST 만 쓰면 퇴화 (net +1 기회를
 버림). 기대 결과: 예측 가능한 공격자 → net-first, 회피 공격자 → K_FIRST (mode-rank reversal).
@@ -133,3 +134,29 @@ manifest `artifacts/fs1/eval_v1_manifest.json` (`scripts/fs1_eval_manifest.py`, 
 | 반복 | run3 = training seed 0 → 잠정. **확정 = seed {0,1,2} 중 ≥ 2 개 POSITIVE(또는 NARROW)** |
 
 exploiter 공정성: 학습 방어 exploiter 는 판정 대상과 같은 결정적 정책을 상대로 학습한다.
+
+### 8.1 사다리 spec 버그 + v2 addendum (봉인, run3 harvest 전 — 2026-10-05)
+
+**버그** (JAX 세션 보고, main 재확인): FS1 의 train `_set_opponent` · bc `collect` · eval 이 사다리
+공격자를 `AttackerSpec(level="A2", **ov)` (dataclass 기본값 위) 로 만들었다. P1a 는 cell 공칭 spec
+(`resolve()`) 위에 `replace(nominal, **ov)`. 이 cell 에서 둘의 차이는 **jink_amp 0.6 → 0** 과
+sense 기본값뿐 (jink_freq·homing·fwd_gain 은 같은 값). 결과: 24 config 전부 jink 0,
+t0_route0 ≡ a1_pure. 별도로 lean 에서는 `_last_v_shot_soft` 미설정 → depth_bait_priv ≡ depth_bait_fair.
+또 FS1 은 jink 위상을 항상 0 으로 붙였다 (P1a = episode 별 `derive_phase`).
+
+**영향**: run1~3 의 BC·사다리 pool, 로그의 "vs scripted" (방어 측), §6~7 과 노트의 "사다리 상대"
+수치, 위 r_fire 관찰의 사다리 열, 봉인된 eval v1 의 ladder 그룹 — 전부 **jink 0 변형 사다리**.
+
+**처리** (규율: 소급 수정 없음):
+1. 코드: `train.ladder_attacker(ov, legacy=False)` 한 곳으로 모음 = `replace(FS1 공칭 spec,
+   sense_range=∞ 위에 ov)` (P1a sense 15/30 override 유지). jink 위상 = `derive_phase(0, reset seed)`
+   (해시라 기존 RNG 흐름 불변). bait_priv 는 24 개 유지·중복 표기. `legacy=True` 는 재현 전용.
+2. eval v1: **봉인 그대로** (`--ladder legacy`) 실행, 판독 노트에 deviation 명시.
+3. **v2 addendum** (manifest `artifacts/fs1/eval_v2_addendum_manifest.json`): 공칭 사다리 ×
+   방어 5 종 × 240 (같은 시드). v2 판정 = v1 규칙에서 D_ladder 만 공칭 사다리로 재계산
+   (D_pool·D_ex 는 사다리를 쓰지 않음). v1·v2 모두 보고, 다르면 **v2 가 governs**.
+4. 이후 run (seed 반복, run4) 은 수정된 pool·BC.
+
+공칭 사다리 재측정 (위 r_fire 관찰 보정, 24 판): r_fire 12 + fallback **24/24** (net 2, HARD_KILL 22;
+legacy 는 net 10 + HARD_KILL 14) · 16: 1 · 24: 0 · 40: 7 · kfirst50 24/24 → 결론 불변 (12 m 밖 붕괴,
+kfirst50 최강). jink 가 net 을 거의 무력화하고 fallback 이 대신 막는다.

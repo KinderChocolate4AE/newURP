@@ -10,6 +10,7 @@ snapshot: 학습자 iter 승률 ≥ SNAP_WIN 또는 SNAP_EVERY 자기 iter 경�
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import math
 import multiprocessing as mp
@@ -17,6 +18,7 @@ import os
 import pathlib
 import time
 from collections import Counter
+from dataclasses import replace
 
 import numpy as np
 
@@ -89,14 +91,33 @@ def att_action(out, env):
     return np.clip(out["att"][1][0], -1, 1) * 2.0 * env.att_a_max      # 전권 residual
 
 
-def ladder_pool():
+def ladder_pool(legacy=False):
+    """P1a 사다리 24 config. FS1 lean 에서는 depth_bait_priv ≡ depth_bait_fair (v_shot_soft
+    미설정 → 특권 경로가 fair 로 떨어짐) — 24 개 유지, 중복으로 표기 (docs/123 §8.1)."""
     from scripts.p1_ladder_manifest import load
     out = []
     for c in load()["attacker"]["configs"]:
         ov = {k: (float("inf") if v == "inf" else v) for k, v in c["overrides"].items()} \
             if "overrides" in c else {k: v for k, v in c.items() if k != "label"}
-        out.append({"kind": "script", "name": c["label"], "ov": ov})
+        out.append({"kind": "script", "name": c["label"], "ov": ov, "legacy": legacy})
     return out
+
+
+@functools.lru_cache(maxsize=1)
+def _nominal_attacker():
+    from shepherd.fs1.world import FS1Spec, _physics_kwargs
+    return _physics_kwargs(FS1Spec())["attacker"]
+
+
+def ladder_attacker(ov, legacy=False):
+    """사다리 공격자 callable. P1a 와 같이 FS1 cell 공칭 spec (resolve: jink 0.6 등) 위에
+    override 를 얹는다. sense 공칭은 FS1 의 ∞ (override 가 있으면 그것).
+    legacy=True: run1~3 pool·BC 와 eval v1 의 구성 (AttackerSpec 기본값 위 override → jink 0,
+    t0_route0 ≡ a1_pure). 재현 전용 (docs/123 §8.1)."""
+    from shepherd.agents.attacker_ladder import AttackerSpec, make_attacker
+    if legacy:
+        return make_attacker(AttackerSpec(level="A2", **ov))
+    return make_attacker(replace(_nominal_attacker(), **{"sense_range": float("inf"), **ov}))
 
 
 # ---------------------------------------------------------------- 워커 ---
@@ -115,10 +136,9 @@ def _team(roles, snap, obs_dim, disc=None):
 
 def _set_opponent(env, side, opp, obs_dim, cache):
     """opp: {"kind": "nn"|"script", ...}. 반환 = 상대 행동 함수 (obs → dict) 또는 None."""
-    from shepherd.agents.attacker_ladder import AttackerSpec, make_attacker
     if side == "def":                           # 상대 = 공격자
         if opp["kind"] == "script":
-            env.set_scripted_attacker(make_attacker(AttackerSpec(level="A2", **opp["ov"])))
+            env.set_scripted_attacker(ladder_attacker(opp["ov"], opp.get("legacy", False)))
             return None
         env.set_scripted_attacker(None)
         t = cache.setdefault(id(opp["snap"]), _team(ATT_ROLES, opp["snap"], obs_dim + Z_DIM,

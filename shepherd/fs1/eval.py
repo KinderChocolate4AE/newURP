@@ -23,7 +23,8 @@ from collections import Counter, defaultdict
 import numpy as np
 
 from shepherd.fs1.train import (ATT_ROLES, DEF_ROLES, DISC_IN, KFIRST_R, _W, _init_worker, _team,
-                                att_action, def_actions, ladder_pool, scripted_def_actions)
+                                att_action, def_actions, ladder_attacker, ladder_pool,
+                                scripted_def_actions)
 from shepherd.fs1.world import DEFENDED, Z_DIM
 
 DEFENDERS = ("learned_det", "learned_sto", "fin12", "fin12_fb", "kfirst50")
@@ -44,7 +45,6 @@ def _def_act(env, o, name, team):
 def episodes(job):
     """job = (방어 이름, 방어 snap|None, 상대, 시드들, 궤적 기록 수) → episode 기록 리스트."""
     import torch
-    from shepherd.agents.attacker_ladder import AttackerSpec, make_attacker
     dname, dsnap, opp, seeds, n_traj = job
     env = _W["env"]
     od = len(next(iter(env.reset(seed=0)[0].values())))
@@ -54,7 +54,7 @@ def episodes(job):
     out = []
     for j, s in enumerate(seeds):
         np.random.seed(s); torch.manual_seed(s)
-        env.set_scripted_attacker(None if ateam else make_attacker(AttackerSpec(level="A2", **opp["ov"])))
+        env.set_scripted_attacker(None if ateam else ladder_attacker(opp["ov"], opp.get("legacy", False)))
         obs, _ = env.reset(seed=s)
         inn, done, t = env.inner, False, 0
         tgt = np.asarray(inn.layout.target, float)
@@ -92,7 +92,7 @@ def opponent_groups(ck, a):
     att_pool = [dict(e, snap=s) for e, s in zip(ck["pools"]["att"], ck["pool_snaps"]["att"])
                 if e["kind"] == "nn"]
     idx = np.unique(np.linspace(0, len(att_pool) - 1, min(a.pool_k, len(att_pool))).round().astype(int))
-    g = {"ladder": ladder_pool(),
+    g = {"ladder": ladder_pool(legacy=a.ladder == "legacy"),
          "rl_latest": [{"kind": "nn", "name": "att_latest", "snap": ck["teams"]["att"]}],
          "pool": [att_pool[i] for i in idx]}
     g = {k: v for k, v in g.items() if k in a.groups}
@@ -186,7 +186,7 @@ def run(a):
     meta = {"ckpt": str(a.ckpt), "ckpt_it": ck.get("it"), "ckpt_total_steps": ck.get("total_steps"),
             "episodes": a.episodes, "seed": a.seed, "defenders": a.defenders,
             "groups": {g: [o["name"] for o in v] for g, v in groups.items()},
-            "exploiter": a.exploiter, "manifest": a.manifest,
+            "exploiter": a.exploiter, "manifest": a.manifest, "ladder": a.ladder,
             "git": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
             "seeds_by_group": {g: [r["seed"] for d, gg, r in recs if gg == g and d == a.defenders[0]]
                                for g in groups}}
@@ -242,6 +242,8 @@ def main(argv=None):
     r.add_argument("--traj", type=int, default=4, help="셀당 궤적 그림 episode 수")
     r.add_argument("--view", type=float, default=120.0, help="그림 반폭 (m, 자산 중심)")
     r.add_argument("--manifest", default=None, help="봉인 manifest hash (기록용)")
+    r.add_argument("--ladder", choices=["nominal", "legacy"], default="nominal",
+                   help="사다리 공격자 구성. legacy = eval v1 (jink 0 변형, docs/123 §8.1)")
     lg = sub.add_parser("log")
     lg.add_argument("--log", required=True)
     lg.add_argument("--window", type=int, default=30)

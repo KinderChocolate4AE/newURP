@@ -160,6 +160,9 @@ class FS1Env:
     def reset(self, seed: Optional[int] = None):
         if seed is not None:
             self._rng = np.random.default_rng(seed)
+            # scripted 사다리 jink 위상 (P1a 와 같은 derive_phase 규약). 해시라 _rng 흐름 불변
+            from shepherd.agents.attacker_ladder import derive_phase
+            self.inner._attacker_phase = derive_phase(0, seed)
         self._place()
         self._att_a = np.zeros(3)
         self.z = self._draw_skill()
