@@ -1,0 +1,24 @@
+{
+  "episodes": 3000,
+  "samples": 643967,
+  "arm_positives": 643967,
+  "scripted_labels": {
+    "PENETRATED": 1559,
+    "HARD_KILL": 894,
+    "TRUNCATED": 36,
+    "K_FIRST": 396,
+    "NET_CAPTURE": 110,
+    "CAPTURE_WITH_CONTACT": 5
+  },
+  "lim_arm_frac": 0.2504134476184845,
+  "loss_def": [
+    0.90004,
+    0.26936,
+    0.23113,
+    0.1954,
+    0.16604,
+    0.14375,
+    0.12765,
+    0.11527
+  ]
+}
