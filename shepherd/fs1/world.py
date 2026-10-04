@@ -17,12 +17,14 @@ B0 v3 물리 (χ, η 무차원 resolver, kill chain, net FSM, 포획 판정) 를
           탐색 노이즈가 적분돼 방어자가 흩어졌다 (BC 검증 2026-10-04).
   - 공격자 (사용자 2026-10-04): 가속 = 자산 homing autopilot + 학습 residual (전권:
           |residual| ≤ 2·a_max, 합산은 백엔드가 a_max 로 clip) — homing 을 잠시 완전히
-          덮어써 이탈·baiting 가능, 풀면 다시 유도. 기동 스타일 잠재변수 z (Z_DIM,
-          U[-1,1]) 를 episode 시작과 평균 Z_SWITCH_S 초 간격 무작위 시점에 재추출,
+          덮어써 이탈·baiting 가능, 풀면 다시 유도. 기동 스킬 z = one-hot (Z_DIM 개
+          이산 스킬) 을 episode 시작과 평균 Z_SWITCH_S 초 간격 무작위 시점에 재추출,
           공격자 관측에만 붙인다 (다양성 보상은 학습 루프의 판별기).
-  - 보상: env_sys RewardSpec (net +1, HARD_KILL +0.5, 침투/timeout −1, limiter 소모 −0.1)
-          + net 소진 전 kinetic 무력화 (H_illegal) → −1 로 대체, net 발사 −0.05.
-          공격자: 침투 +1, 무력화·timeout −1.
+  - 보상: env_sys RewardSpec (net +1, HARD_KILL +0.5, 침투/timeout −1, limiter 소모 −0.1),
+          net 발사 −0.05. 공격자: 침투 +1, 무력화·timeout −1.
+          ROE (r3, 사용자 2026-10-04 A안): net 소진 전 kinetic 무력화 = **K_FIRST**, 보상은
+          HARD_KILL 과 같은 +0.5 (r_kfirst=None). 6 m no-kinetic zone 은 env_sys 가 유지.
+          r2 까지는 −1 (H_ILLEGAL) 이라 kinetic-first mode 가 침투와 같은 값이었다.
 """
 from __future__ import annotations
 
@@ -35,9 +37,9 @@ from gymnasium import spaces
 ADV = "adversary_0"
 FIN = "finisher_0"
 
-DEFENDED = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL")
-Z_DIM = 3
-Z_SWITCH_S = 2.0          # 스타일 재추출 평균 간격 (지수분포)
+DEFENDED = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL", "K_FIRST")
+Z_DIM = 8                 # 이산 기동 스킬 수 (one-hot)
+Z_SWITCH_S = 4.0          # 스킬 재추출 평균 간격 (지수분포)
 K_HOME = 4.0              # autopilot 속도추종 이득 (1/s)
 STATION = np.array([80.0, 80.0, 10.0])   # 방어자 위치 목표 범위 (자산 기준, m)
 KP_ST, KD_ST = 8.0, 4.0                  # station PD (shepherd.agents.baselines arc 선언값)
@@ -52,7 +54,7 @@ class FS1Spec:
     episode_len: int = 800       # 40 s @ dt 0.05
     lim_start_r: float = 2.0
     w_kill: float = 0.5
-    r_illegal: float = -1.0
+    r_kfirst: Optional[float] = None   # net 소진 전 kinetic 보상. None = HARD_KILL 과 동일 (A안)
     c_fire: float = 0.05
     r_fire_range: tuple = (4.0, 16.0)   # FCS 발사 거리 행동의 범위 (m)
 
@@ -160,7 +162,7 @@ class FS1Env:
             self._rng = np.random.default_rng(seed)
         self._place()
         self._att_a = np.zeros(3)
-        self.z = self._rng.uniform(-1, 1, Z_DIM)
+        self.z = self._draw_skill()
         obs, infos = self.env.reset(seed=int(self._rng.integers(2**31)))
         self.start_station = {a: self.station_of(a) for a in self.limiter_ids + [FIN]}
         return obs, infos
@@ -208,7 +210,7 @@ class FS1Env:
             self._att_a = self.autopilot() + np.clip(actions[ADV], -2 * self.att_a_max,
                                                      2 * self.att_a_max)
         if self._rng.random() < self.inner.dt / Z_SWITCH_S:
-            self.z = self._rng.uniform(-1, 1, Z_DIM)
+            self.z = self._draw_skill()
         acts = {k: v for k, v in actions.items() if k != ADV}
         acts[ADV] = np.zeros(3)                         # 백엔드 프록시가 교체
         obs, rew, terms, truncs, infos = self.env.step(acts)
@@ -216,8 +218,9 @@ class FS1Env:
         label = fi.get("m4_outcome")
         r_def = float(rew.get(FIN, 0.0))
         if label == "HARD_KILL" and not self._kill_after_net(fi):
-            r_def += self.spec.r_illegal - self.sys.reward_spec.terminal("HARD_KILL")
-            label = "H_ILLEGAL"
+            if self.spec.r_kfirst is not None:
+                r_def += self.spec.r_kfirst - self.sys.reward_spec.terminal("HARD_KILL")
+            label = "K_FIRST"                          # B0 v3 의 H_illegal 과 같은 사건
         if fi.get("fire_event"):
             r_def -= self.spec.c_fire
         r_att = 0.0
@@ -232,6 +235,9 @@ class FS1Env:
             infos[a]["fs1_label"] = label
         return obs, rewards, done, infos
 
+    def _draw_skill(self):
+        return np.eye(Z_DIM)[int(self._rng.integers(Z_DIM))]
+
     def _kill_after_net(self, fi) -> bool:
-        # net 이 실제로 소모된 뒤(miss 확인 후 fallback)의 kinetic 만 합법
+        # net 이 실제로 소모된 뒤(miss 확인 후)의 kinetic = fallback, 그 전 = K_FIRST
         return bool(fi.get("net_spent", False) or self.sys.net_spent)

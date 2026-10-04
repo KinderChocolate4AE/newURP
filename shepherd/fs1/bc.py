@@ -3,6 +3,7 @@
     python -m shepherd.fs1.bc --out artifacts/fs1/bc --episodes 3000 --workers 8
 
 방어 (FCS 전술 공간): finisher = 정지·무장·r_fire=FIRE_D, limiter = 정지, net 소진 후 무장 (PN 인계).
+episode 의 KFIRST_P 는 kinetic-first 변형 (공격자 KFIRST_R m 안이면 limiter 무장, r3).
 공격: P1a 사다리 24 config 의 실제 가속 (att_a_max 로 정규화).
 critic 은 같은 rollout 의 할인 return (학습 루프와 같은 보상·shaping) 으로 사전학습.
 초기화일 뿐 — 이후 PFSP RL 에서 정책은 제약 없이 벗어날 수 있다.
@@ -16,13 +17,14 @@ import pathlib
 
 import numpy as np
 
-from shepherd.fs1.train import (ATT_ROLES, DEF_ROLES, LAMBDA_DIST, _W, _init_worker,
+from shepherd.fs1.train import (ATT_ROLES, DEF_ROLES, KFIRST_R, LAMBDA_DIST, _W, _init_worker,
                                 _r_fire_c, ladder_pool, scripted_def_actions)
 
 # def: 위치목표 노이즈 0.135×STATION ≈ 11 m (확률적 BC 검증에서 fallback 유지가 가장 좋음)
 INIT_LOG_STD = {"def": {"lim": -2.0, "fin": -2.0}, "att": {"att": -1.6}}   # att = residual (×2·a_max)
 GAMMA = 0.997
 DART = 0.15                                 # 실행 위치목표 노이즈 (정규화 단위, ×STATION)
+KFIRST_P = 0.3                              # kinetic-first 변형 episode 비율 (r3: 탐색 출발점)
 
 
 def _returns(r, gamma=GAMMA):
@@ -51,9 +53,10 @@ def collect(args):
         obs, _ = env.reset(seed=int(rng.integers(2**31)))
         inn, done, rd, ra = env.inner, False, [], []
         prev_phi = -float(np.linalg.norm(inn._p(inn._states()[2]) - np.asarray(inn.layout.target))) / 100
+        kfr = KFIRST_R if rng.random() < KFIRST_P else None
         while not done:
             o = obs["finisher_0"]
-            acts = scripted_def_actions(env)
+            acts = scripted_def_actions(env, kfr)
             f = acts["finisher_0"].copy()
             # 라벨 = scripted 전술 행동 (FCS 공간): 시작위치 유지 · r_fire=FIRE_D · 무장,
             # limiter 는 net 소진 후 무장

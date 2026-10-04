@@ -87,3 +87,24 @@ run1 (8.2×10⁶ step) 진단: 방어 승률 1~5% 정체. 궤적 = net 발사 �
 limiter 출발점 (2 m) 이 no-kinetic zone (6 m) 안 → fallback 불가. kinetic 으로 막으려면
 **limiter 가 6 m 밖 공격 경로 위에 사전 배치** 돼야 한다 — failsafe·shaping 배치 학습의
 구조적 동기.
+
+## 7. 개정 r3 (2026-10-04, run2 진단 후 — 사용자 승인 "A안 + 추천 묶음")
+
+run2 (1.6×10⁷ step) 진단: 학습은 됨 — 고정 사다리 상대 방어 승률 41% → 67% (확률적),
+결정적 평가 net 포획 44/48 (scripted net 25/48, 보상 환산 학습 ≈ +40 vs scripted ≈ +36.5).
+그러나 RL 공격자 상대 학습·scripted 방어 모두 ≈ 0/48. 원인 = ROE: net 은 16 m 에서 쏴도
+0.4 s 판정 → 공격자 ≈ 7 m, no-kinetic zone 6 m → **합법 kinetic 시간창 ≈ 0**, 그리고
+net 소진 전 kinetic = −1 → 회피 기동 공격자에게 방어 수단이 net 한 발뿐.
+측정: scripted kinetic-first (공격자 50 m 안에서 무장) 는 사다리 31/32, 흔들리는 homing 32/32.
+
+| 변경 | 내용 |
+|---|---|
+| **ROE A안** | net 소진 전 kinetic 무력화 = `K_FIRST`, 보상 +0.5 (fallback HARD_KILL 과 동일, `FS1Spec.r_kfirst=None`). 6 m no-kinetic zone 유지. H_illegal 사건은 `K_FIRST` 라벨로 계속 집계 |
+| BC kinetic-first 혼합 | episode 30% 가 kinetic-first 변형 (`KFIRST_R=50 m`) — 탐색 출발점 |
+| 초기 방어 pool | scripted net-first (`scripted_fin12`) + scripted kinetic-first (`scripted_kfirst50`) |
+| 학습 균형 | 방어 2 iter : 공격 1 iter, 승률 snapshot 최소 간격 10 자기 iter (run2: pool 105 vs 10) |
+| 다양성 재설계 | 이산 스킬 8 (one-hot), 평균 4 s 유지, 판별기 cross-entropy, 패널티 −5e-3·(1−q(z|s)) |
+| mode 감시 | 로그 `labels_by_kind`: 상대 유형 (scripted / RL) 별 NET / K_FIRST / HARD_KILL / 침투 |
+
+mode 퇴화 판정 기준 (보고): 직선·사다리 공격자에게도 K_FIRST 만 쓰면 퇴화 (net +1 기회를
+버림). 기대 결과: 예측 가능한 공격자 → net-first, 회피 공격자 → K_FIRST (mode-rank reversal).

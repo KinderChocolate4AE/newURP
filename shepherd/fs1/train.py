@@ -20,12 +20,15 @@ from collections import Counter
 
 import numpy as np
 
-from shepherd.fs1.world import Z_DIM
+from shepherd.fs1.world import DEFENDED, Z_DIM
 
 DEF_ROLES = {"lim": (3, 1, 4), "fin": (4, 1, 1)}   # FCS 전술 행동: lim [a3|arm], fin [a3, r_fire|arm]
 ATT_ROLES = {"att": (3, 0, 1)}
-DEF_WIN = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT", "HARD_KILL")
-SNAP_WIN, SNAP_EVERY = 0.6, 20          # G&B 문턱 미기재 → 선언값
+DEF_WIN = DEFENDED                      # net · fallback kinetic · K_FIRST (r3 A안)
+SNAP_WIN, SNAP_EVERY = 0.6, 20          # G&B 문턱 미기재 → 선언값 (자기 iter 단위)
+SNAP_MIN_OWN = 10                       # 승률 snapshot 최소 간격 (run2: 공격 pool 105 vs 방어 10)
+DEF_PER_ATT = 2                         # 방어 iter : 공격 iter (run2: 공격자가 3배 빠른 lr 로 앞지름)
+KFIRST_R = 50.0                         # scripted kinetic-first 변형 무장 거리 (31~32/32 성공 측정)
 LAMBDA_DIST = 1e-5                      # 방어 거리 shaping /m/step (G&B 비율 맞춤)
 LAMBDA_DIV = 5e-3                       # 공격자 다양성 패널티 /step (≤0: episode 늘려 보상 긁기 방지)
 DISC_IN = 6                             # 판별기 입력: LOS 좌표계 속도 3 + 가속 3
@@ -56,11 +59,14 @@ def def_actions(out, env):
     return acts
 
 
-def scripted_def_actions(env):
+def scripted_def_actions(env, kfirst_r=None):
     """scripted 방어 (FCS 공간): 전원 시작 위치 유지, finisher 무장·r_fire = FIRE_D.
     limiter 는 net 소진 (miss handoff) 후 무장 → FCS PN 인계 = B0 v3 'NET_FAIL 후 PN
-    takeover' 조항. (run1: limiter 무장 0 을 BC 로 배워 kinetic fallback 이 탐색되지 않았다.)"""
-    arm = 1.0 if env.sys.net_spent else 0.0
+    takeover' 조항. (run1: limiter 무장 0 을 BC 로 배워 kinetic fallback 이 탐색되지 않았다.)
+    kfirst_r 를 주면 kinetic-first 변형: 공격자가 자산 kfirst_r m 안이면 limiter 무장 (r3)."""
+    inn = env.inner
+    d_att = float(np.linalg.norm(inn._p(inn._states()[2]) - np.asarray(inn.layout.target)))
+    arm = 1.0 if (env.sys.net_spent or (kfirst_r is not None and d_att <= kfirst_r)) else 0.0
     st = env.start_station
     acts = {l: np.r_[st[l], arm] for l in env.limiter_ids}
     acts["finisher_0"] = np.r_[st["finisher_0"], FIRE_D, 1.0]
@@ -120,7 +126,7 @@ def _set_opponent(env, side, opp, obs_dim, cache):
         return lambda obs: {"adversary_0": att_action(t.act(env.att_obs(obs))[0], env)}
     env.set_scripted_attacker(None)            # 학습자 = 공격자 (RL)
     if opp["kind"] == "script":
-        return lambda obs: scripted_def_actions(env)
+        return lambda obs: scripted_def_actions(env, opp.get("kfirst_r"))
     t = cache.setdefault(id(opp["snap"]), _team(DEF_ROLES, opp["snap"], obs_dim))
     return lambda obs: def_actions(t.act(obs)[0], env)
 
@@ -170,10 +176,10 @@ def rollout(args):
                 if ep_len > 0:
                     r += gamma * (0.0 if done else phi) - prev_phi
                 prev_phi = phi
-                f, v_prev = att_feat(env, v_prev)          # 다양성 (DIAYN 식): z 를 맞힐수록 +
+                f, v_prev = att_feat(env, v_prev)          # 다양성 (DIAYN 식, 이산 스킬)
                 with torch.no_grad():
-                    zh = me.disc(torch.as_tensor(f)[None])[0].numpy()
-                r -= LAMBDA_DIV * float(np.clip(3.0 * np.mean((zh - z_t) ** 2), 0, 1))
+                    q = torch.softmax(me.disc(torch.as_tensor(f)[None])[0], 0).numpy()
+                r -= LAMBDA_DIV * (1.0 - float(q[int(np.argmax(z_t))]))   # 판별 실패만큼 패널티
                 feats.append(f); zs.append(z_t)
             ti = len(buf["rew"])
             buf["obs"].append(oo); buf["obs_n"].append(on); buf["val"].append(v)
@@ -262,23 +268,27 @@ def main(argv=None):
     lrs = {"def": a.lr, "att": a.lr_att}
     opts = {s: torch.optim.Adam(t.parameters(), lr=lrs[s]) for s, t in teams.items()}
     pools = {"def": [{"kind": "script", "name": "scripted_fin12"},
+                     {"kind": "script", "name": "scripted_kfirst50", "kfirst_r": KFIRST_R},
                      {"kind": "nn", "name": f"def_{tag}", "snap": teams["def"].snapshot()}],
              "att": ladder_pool() + [{"kind": "nn", "name": f"att_{tag}",
                                       "snap": teams["att"].snapshot()}]}
     other = {"def": "att", "att": "def"}
     wr = {s: [0.5] * len(pools[other[s]]) for s in teams}     # 학습자 s 의 상대별 승률 EMA
-    last_snap = {"def": 0, "att": 0}
+    since_snap = {"def": 0, "att": 0}                         # 자기 iter 수 (마지막 snapshot 이후)
     rng = np.random.default_rng(a.seed)
     total = 0
     log = open(out / "log.jsonl", "a", encoding="utf-8")
     (out / "config.json").write_text(json.dumps({**vars(a), "spec": spec.__dict__,
                                                  "snap_win": SNAP_WIN, "snap_every": SNAP_EVERY,
-                                                 "lambda_dist": LAMBDA_DIST}, default=str), "utf-8")
+                                                 "lambda_dist": LAMBDA_DIST, "lambda_div": LAMBDA_DIV,
+                                                 "snap_min_own": SNAP_MIN_OWN, "def_per_att": DEF_PER_ATT,
+                                                 "kfirst_r": KFIRST_R, "z_dim": Z_DIM},
+                                                default=str), "utf-8")
     ctx = mp.get_context("spawn")
     with ctx.Pool(a.workers, initializer=_init_worker, initargs=(spec.__dict__,)) as P:
         for it in range(a.iters):
             t0 = time.time()
-            side = "def" if it % 2 == 0 else "att"
+            side = "att" if it % (DEF_PER_ATT + 1) == DEF_PER_ATT else "def"
             opp_pool = pools[other[side]]
             latest = {"kind": "nn", "name": f"{other[side]}_latest",
                       "snap": teams[other[side]].snapshot()}
@@ -294,7 +304,7 @@ def main(argv=None):
             team = teams[side]
             st = ppo_update(team, opts[side], batch)
             if side == "att":
-                st["disc_mse"] = train_disc(team, batch["feat"], batch["z"])
+                st["disc_ce"], st["disc_acc"] = train_disc(team, batch["feat"], batch["z"])
             team.norm.update(batch["obs"])
             n = len(batch["ret"]); total += n
             res = batch["results"]
@@ -302,20 +312,25 @@ def main(argv=None):
                 if oi < len(wr[side]):
                     wr[side][oi] = 0.95 * wr[side][oi] + 0.05 * float(win)
             win_rate = float(np.mean([r[2] for r in res]))
-            own_iters = (it - last_snap[side]) // 2
+            since_snap[side] += 1
             snapped = False
-            if (win_rate >= SNAP_WIN and own_iters >= 2) or own_iters >= SNAP_EVERY:
+            if ((win_rate >= SNAP_WIN and since_snap[side] >= SNAP_MIN_OWN)
+                    or since_snap[side] >= SNAP_EVERY):
                 pools[side].append({"kind": "nn", "name": f"{side}_it{it}",
                                     "snap": team.snapshot()})
                 wr[other[side]].append(0.5)
-                last_snap[side] = it; snapped = True
+                since_snap[side] = 0; snapped = True
             labels = Counter(r[1] for r in res)
             by_kind = Counter((cand[r[0]]["kind"], r[2]) for r in res)
+            # mode 감시: 상대 유형별 종료 라벨 (net / K_FIRST / fallback HARD_KILL / 침투)
+            mode_by_kind = {k: dict(Counter(r[1] for r in res if cand[r[0]]["kind"] == k))
+                            for k in ("script", "nn")}
             rec = {"it": it, "side": side, "steps": n, "total_steps": total,
                    "win_rate": round(win_rate, 4), "n_eps": len(res),
                    "mean_len": round(float(np.mean([r[3] for r in res])), 1),
                    "labels": dict(labels), "vs_script_win": _rate(by_kind, "script"),
-                   "vs_nn_win": _rate(by_kind, "nn"), "pool": {s: len(p) for s, p in pools.items()},
+                   "vs_nn_win": _rate(by_kind, "nn"), "labels_by_kind": mode_by_kind,
+                   "pool": {s: len(p) for s, p in pools.items()},
                    "snapped": snapped, "sps": round(n / (time.time() - t0), 1), **st}
             log.write(json.dumps(rec) + "\n"); log.flush()
             print(json.dumps(rec), flush=True)
@@ -335,15 +350,18 @@ def train_disc(team, feat, z, epochs=3, mb=4096, lr=1e-3):
     import torch
     opt = getattr(team, "_disc_opt", None) or torch.optim.Adam(team.disc.parameters(), lr=lr)
     team._disc_opt = opt
-    F, Z = torch.as_tensor(feat), torch.as_tensor(z)
+    import torch.nn.functional as Fn
+    F, K = torch.as_tensor(feat), torch.as_tensor(z).argmax(1)   # one-hot 스킬 → 클래스
     loss = torch.zeros(())
     for _ in range(epochs):
         perm = torch.randperm(len(F))
         for s in range(0, len(F), mb):
             i = perm[s:s + mb]
-            loss = ((team.disc(F[i]) - Z[i]) ** 2).mean()
+            loss = Fn.cross_entropy(team.disc(F[i]), K[i])
             opt.zero_grad(); loss.backward(); opt.step()
-    return round(float(loss.detach()), 4)
+    with torch.no_grad():
+        acc = float((team.disc(F).argmax(1) == K).float().mean())
+    return round(float(loss.detach()), 4), round(acc, 4)          # 우연 수준 acc = 1/Z_DIM
 
 
 def _rate(c, kind):
