@@ -44,7 +44,7 @@ from typing import Dict, List, Optional, Sequence
 
 import numpy as np
 
-from shepherd.agents.baselines import (arc_redeploy_limiter, arc_slots,
+from shepherd.agents.baselines import (arc_geometry, arc_redeploy_limiter, arc_slots,
                                        brake_limiter, hold_position_limiter,
                                        lambda_brake_limiter, min_cost_assignment,
                                        scripted_finisher,
@@ -178,8 +178,10 @@ def _limiter_actions(env, scn, lay, mode, lims, p_att, v_att, limiter_kw=None):
                 "limiter_mode='arc' 는 limiter_kw={'r_d':..,'dphi':..} 필수 "
                 "(docs/63 F4 grid)")
         n = len(env.limiter_ids)
-        slots = arc_slots(lay.target, p_att, limiter_kw["r_d"],
-                          limiter_kw["dphi"], n=n)
+        # rho (docs/122 P1d, 선택): 없으면 c5 와 bit-identical.
+        r, dphi = arc_geometry(lay.target, p_att, limiter_kw["r_d"],
+                               limiter_kw["dphi"], limiter_kw.get("rho"))
+        slots = arc_slots(lay.target, p_att, r, dphi, n=n)
         pos = [env._p(lims[i]) for i in range(n)]
         perm = min_cost_assignment(pos, slots)
         return {lid: arc_redeploy_limiter(pos[i], env._v(lims[i]),

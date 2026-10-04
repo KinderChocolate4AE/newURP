@@ -126,6 +126,19 @@ def arc_slots(target, p_att, r_d: float, dphi: float, n: int = 4):
             for k in range(n)]
 
 
+def arc_geometry(target, p_att, r_d: float, dphi: float, rho=None):
+    """docs/122 (P1d): (호 반경, slot 각간격). rho=None → (r_d, dphi) = c5 와
+    bit-identical. rho 를 주면 r = max(r_d, rho·R_h) (R_h = 공격자–자산 수평거리;
+    rho=0.5 = 중점 screen) 이고, slot 간 **호 길이를 c5 와 같게** 각간격을
+    dphi·r_d/r 로 줄인다 — c5 대형을 그대로 전진시킨 것 (각간격 고정이면 먼 반경에서
+    대형이 수십 m 로 벌어진다, smoke 궤적 2026-10-04). R_h ≤ r_d/rho 이면 c5 와 동일."""
+    if rho is None:
+        return float(r_d), float(dphi)
+    d = np.asarray(p_att, float) - np.asarray(target, float)
+    r = max(float(r_d), float(rho) * float(np.hypot(d[0], d[1])))
+    return r, float(dphi) * float(r_d) / r
+
+
 def min_cost_assignment(positions, slots):
     """docs/63 §2-2 (r1): permutation 전수에서 이동거리 제곱합 최소를 고른다.
 
