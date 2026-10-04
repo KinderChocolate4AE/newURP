@@ -160,3 +160,22 @@ t0_route0 ≡ a1_pure. 별도로 lean 에서는 `_last_v_shot_soft` 미설정 �
 공칭 사다리 재측정 (위 r_fire 관찰 보정, 24 판): r_fire 12 + fallback **24/24** (net 2, HARD_KILL 22;
 legacy 는 net 10 + HARD_KILL 14) · 16: 1 · 24: 0 · 40: 7 · kfirst50 24/24 → 결론 불변 (12 m 밖 붕괴,
 kfirst50 최강). jink 가 net 을 거의 무력화하고 fallback 이 대신 막는다.
+
+## 9. 개정 r4 + 반복 계약 (2026-10-05 — 사용자 결정 "(a), 고칠 거 다 고쳐서 한 번에")
+
+run3 (r3, legacy 사다리) 는 **pilot** 으로 격하 — 평가·보고는 하되 확정에 세지 않고 r4 와 pooling 금지.
+확정 = r4 seed {0,1,2} 를 새로 학습. manifest `artifacts/fs1/r4_replication_manifest.json`
+(r4 학습 전 봉인, v1·v2 hash 참조).
+
+| 변경 | 내용 | 근거 |
+|---|---|---|
+| 사다리 spec | pool·BC 공격자 = 공칭 사다리 (§8.1) | 버그 수정 |
+| 다양성 패널티 off | `LAMBDA_DIV` 0 (판별기 학습은 감시용 유지) | run3 판별기 acc ≈ 0.16 (우연 0.125) → 5e-3·(1−q) 는 episode 당 ≈ −0.74 의 순수 step 비용 (종료 보상 ±1 급). 기동 다양성은 PFSP pool + 공칭 사다리 jink 로 |
+| lr 자동조절 | 자기 iter 마다 갱신 KL > 0.02 → lr/1.5, < 0.005 → ×1.5, [1e-5, 3e-4], 시작 = r3 값 | run3 470 iter 동안 양측 KL ≈ 0.002~0.005 = early-stop 문턱의 1/10 (학습 속도 손실) |
+| 워커 torch 시드 | rollout job 시드로 `torch.manual_seed` | seed 반복 재현성 |
+| 실행 | `scripts/run_fs1_r4_server.sh`: seed 별 BC → 학습 (1.1e8) → 로그 push → 봉인 평가 v1+v2 → push. 3 seed 병렬 (각 6 워커 + torch 1, 배치 6×8192 = r3 와 같은 49,152/iter). git 단계 flock 직렬화, 스크립트는 `main()` 래핑 (실행 중 pull 안전) | 총 시간 ≈ 19 h 학습 + ≈ 4 h 평가 (순차 3 회 ≈ 28 h 대비) |
+
+확정 규칙: seed 별 판정 = v2 판정. ≥ 2/3 이 POSITIVE 또는 NARROW → `FS1_CONFIRMED`
+(통과 seed 중 ≥ 2 가 NARROW 면 `FS1_CONFIRMED_NARROW`), 아니면 `FS1_NOT_CONFIRMED`. INVALID seed 는
+평가만 재실행 (원인이 평가 쪽일 때); 판정을 바꾸려고 학습을 다시 돌리지 않는다.
+제외 (보류): 관측 스택 (기억) — 근거 약하고 관측 차원·BC·eval 동시 변경이라 한 번에 가는 run 의 위험이 큼.

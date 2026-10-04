@@ -134,6 +134,44 @@ def load_v2() -> dict:
     return data
 
 
+# ---------------------------------------------------------- r4 replication ---
+MANIFEST_R4 = ROOT / "artifacts" / "fs1" / "r4_replication_manifest.json"
+R4_SEEDS = [0, 1, 2]
+
+
+def build_r4() -> dict:
+    body = {
+        "schema": "fs1-r4-replication-manifest-v1",
+        "status": "sealed before any r4 training (user decision 2026-10-05: option (a))",
+        "design_doc": "docs/123_fs1_full_stack_cotraining.md section 9",
+        "v1_manifest_hash": build()["manifest_hash"], "v2_manifest_hash": build_v2()["manifest_hash"],
+        "design_r4": ("r3 + (1) ladder attackers on the cell nominal spec (train.ladder_attacker) in pool "
+                      "and BC, (2) attacker diversity penalty off (LAMBDA_DIV 0, discriminator kept as "
+                      "monitor), (3) KL-targeted lr (target 0.01, x/÷1.5 per own iter, bounds 1e-5..3e-4, "
+                      "start def 3e-5 / att 1e-4), (4) worker torch seeding per rollout job. Everything "
+                      "else as r3; batch 49152 steps per iter (6 workers x 8192); budget 1.1e8 env steps."),
+        "seeds": {"training_and_bc": R4_SEEDS, "out": "artifacts/fs1/r4_s{seed}",
+                  "orchestrator": "scripts/run_fs1_r4_server.sh (3 seeds in parallel)"},
+        "per_seed_evaluation": "scripts/run_fs1_eval_server.sh: v1 procedure + v2 addendum; the seed's decision = v2 decision",
+        "confirmation": ("FS1_CONFIRMED if >= 2 of the 3 r4 seeds are FS1_POSITIVE or FS1_POSITIVE_NARROW; "
+                         "labelled FS1_CONFIRMED_NARROW if >= 2 of the passing seeds are NARROW. "
+                         "Else FS1_NOT_CONFIRMED. An INVALID seed is re-evaluated (evaluation only, after "
+                         "fixing an evaluation-side cause); training is never rerun to change a decision."),
+        "pilot": ("run3 (r3, legacy ladder, seed 0) is a pilot: evaluated and reported under v1/v2, "
+                  "never counted toward confirmation and never pooled with r4."),
+    }
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    return {**body, "manifest_hash": hashlib.sha256(raw.encode()).hexdigest()[:16]}
+
+
+def confirm(decisions: list) -> str:
+    """r4 seed 별 v2 판정 리스트 → 확정 판정 (build_r4 'confirmation')."""
+    passing = [d for d in decisions if d.startswith("FS1_POSITIVE")]
+    if len(passing) < 2:
+        return "FS1_NOT_CONFIRMED"
+    return "FS1_CONFIRMED_NARROW" if sum(d.endswith("NARROW") for d in passing) >= 2 else "FS1_CONFIRMED"
+
+
 def readout_v2(d: pathlib.Path, v1: dict) -> dict:
     m = load_v2()
     s = json.loads((d / "eval_v2" / "summary.json").read_text(encoding="utf-8"))
@@ -213,7 +251,7 @@ def main() -> None:
         print(json.dumps(r, indent=2))
         return
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)
-    for path, body in ((MANIFEST, build()), (MANIFEST_V2, build_v2())):
+    for path, body in ((MANIFEST, build()), (MANIFEST_V2, build_v2()), (MANIFEST_R4, build_r4())):
         path.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"{path} {body['manifest_hash']}")
 

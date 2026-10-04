@@ -32,7 +32,10 @@ SNAP_MIN_OWN = 10                       # 승률 snapshot 최소 간격 (run2: �
 DEF_PER_ATT = 2                         # 방어 iter : 공격 iter (run2: 공격자가 3배 빠른 lr 로 앞지름)
 KFIRST_R = 50.0                         # scripted kinetic-first 변형 무장 거리 (31~32/32 성공 측정)
 LAMBDA_DIST = 1e-5                      # 방어 거리 shaping /m/step (G&B 비율 맞춤)
-LAMBDA_DIV = 5e-3                       # 공격자 다양성 패널티 /step (≤0: episode 늘려 보상 긁기 방지)
+LAMBDA_DIV = 0.0                        # 공격자 다양성 패널티 /step. r4: 0 — 판별기 acc ≈ 우연 (0.16)
+                                        # 이라 r3 의 5e-3 은 episode 당 ≈ −0.74 step 비용일 뿐 (판별기는 감시용 유지)
+KL_TARGET = 0.01                        # r4 lr 자동조절: 갱신 KL > 2× → lr/1.5, < ½× → lr×1.5
+LR_BOUNDS = (1e-5, 3e-4)                # (r3 run 470 iter 동안 KL ≈ 0.003, early-stop 문턱 0.045 의 1/10)
 DISC_IN = 6                             # 판별기 입력: LOS 좌표계 속도 3 + 가속 3
 FIRE_D = 12.0                           # scripted 방어 발사 거리 (sanity sweep 최적)
 
@@ -155,7 +158,7 @@ def rollout(args):
     import torch
     side, snap, opps, n_steps, gamma, lam, seed, deterministic = args
     env = _W["env"]
-    np.random.seed(seed)
+    np.random.seed(seed); torch.manual_seed(seed)       # 행동 샘플링까지 job 시드로 재현
     obs0, _ = env.reset(seed=seed)
     obs_dim = len(next(iter(obs0.values())))
     roles = DEF_ROLES if side == "def" else ATT_ROLES
@@ -310,7 +313,9 @@ def main(argv=None):
                                                  "snap_win": SNAP_WIN, "snap_every": SNAP_EVERY,
                                                  "lambda_dist": LAMBDA_DIST, "lambda_div": LAMBDA_DIV,
                                                  "snap_min_own": SNAP_MIN_OWN, "def_per_att": DEF_PER_ATT,
-                                                 "kfirst_r": KFIRST_R, "z_dim": Z_DIM},
+                                                 "kfirst_r": KFIRST_R, "z_dim": Z_DIM,
+                                                 "kl_target": KL_TARGET, "lr_bounds": LR_BOUNDS,
+                                                 "design": "r4"},
                                                 default=str), "utf-8")
     ctx = mp.get_context("spawn")
     with ctx.Pool(a.workers, initializer=_init_worker, initargs=(spec.__dict__,)) as P:
@@ -331,6 +336,12 @@ def main(argv=None):
             batch = merge(P.map(rollout, jobs))
             team = teams[side]
             st = ppo_update(team, opts[side], batch)
+            kl, g = max(v for k, v in st.items() if k.endswith("_kl")), opts[side].param_groups[0]
+            if kl > 2 * KL_TARGET:
+                g["lr"] = max(g["lr"] / 1.5, LR_BOUNDS[0])
+            elif kl < KL_TARGET / 2:
+                g["lr"] = min(g["lr"] * 1.5, LR_BOUNDS[1])
+            st["lr"] = g["lr"]
             if side == "att":
                 st["disc_ce"], st["disc_acc"] = train_disc(team, batch["feat"], batch["z"])
             team.norm.update(batch["obs"])

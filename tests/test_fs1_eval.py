@@ -55,6 +55,18 @@ def test_v2_ladder_governs_narrow(tmp_path):
     assert _fake_eval(tmp_path, pos, v2={"kfirst50": 24}) == "FS1_POSITIVE_NARROW"
 
 
+@pytest.mark.parametrize("ds, want", [
+    (["FS1_POSITIVE", "FS1_NULL", "FS1_POSITIVE_NARROW"], "FS1_CONFIRMED"),
+    (["FS1_POSITIVE_NARROW", "FS1_POSITIVE_NARROW", "FS1_POSITIVE"], "FS1_CONFIRMED_NARROW"),
+    (["FS1_POSITIVE", "FS1_NULL", "INVALID_FS1E"], "FS1_NOT_CONFIRMED"),
+])
+def test_r4_confirmation(ds, want):
+    import sys
+    sys.path.insert(0, "scripts")
+    import fs1_eval_manifest as M
+    assert M.confirm(ds) == want
+
+
 def test_ladder_nominal_restores_p1a_spec():
     from shepherd.fs1.train import ladder_attacker
     S = {p["name"]: ladder_attacker(p["ov"]).spec for p in ladder_pool()}
