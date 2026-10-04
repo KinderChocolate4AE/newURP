@@ -67,3 +67,21 @@ limiter-control opportunity) · 결과 전 봉인 + fresh namespace + gate 소�
   머물러 늘어난 거리를 쓰지 않음 (layout-고정 스케일링 모형 한정). B0 v4 결재 없음,
   limiter 학습 보류, **Track B F1-E D2 로 이동**. 상세 = 2026-10-04c 판독 노트.
   뷰어 `viz/p1c_standoff_viewer.html` (재생일치 70/72).
+- **P1c 메커니즘 정정** (`fdffae7`): c5 = 자산 중심 r_d 9 m 호 위 bearing-only 골키퍼라
+  늘어난 접근거리를 구조적으로 못 쓴다 → "짧은 활주로" 가설은 **기각이 아니라 미시험**.
+  판정 `STANDOFF_DOES_NOT_OPEN` 은 유지 (layout-고정 c5 한정).
+- **P1d (docs/122) 보류**: 전진 교전 scripted limiter 로 활주로 가설을 재는 계약 초안,
+  **미봉인·미실행**. fwd 규칙은 scripted 기준선으로만 남김 (`b0e67a5`).
+- **★ Track B 순서 합의 (위 첫 항목) → FS1 동시학습 결정으로 대체 (사용자, 10/04)**:
+  scripted 규칙 쌓기는 음성만 반복 → 검증된 방법론 (Gavin & Bronz 2026: MAPPO + PFSP
+  동시학습) 을 통째로 도입해 양성부터. 정본 = docs/123. 근거·예산 격차 = 노트 2026-10-04d.
+  선행 판정은 번복하지 않으며 FS1 은 새 세계·새 계약 (pooling 금지).
+- **FS1 run0~3** (상세 = 노트 2026-10-04e):
+  - run0 (r0, 9.1e6 step): 양측 성공 경험 0 → 신호 0 (FIRE 확률 붕괴, RL 공격자 자산 미적중).
+  - run1 (r1 FCS 분리·homing autopilot·방어 BC, 8.2e6): 방어 1~5% 정체, limiter 무장 0,
+    공격자 미끼 전술 창발.
+  - run2 (r2 fallback BC·station point·팀별 lr, 1.6e7): 사다리 상대 41→67% 학습 확인,
+    RL 공격자 상대 학습·scripted 모두 ≈0/48 — 원인 ROE (합법 kinetic 창 ≈ 0).
+  - run3 (r3 ROE A안 K_FIRST +0.5·BC kinetic-first 30%·방어 2:공격 1, 1.1e8 목표, 진행 중):
+    **초기 양성** — iter 119 결정적 평가 RL 공격자 상대 학습 9/48 vs scripted 5/48.
+    단 사다리 상대는 scripted 48/48 > 학습 33/48. 봉인 평가 전이라 주장 아님.
