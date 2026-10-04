@@ -40,6 +40,14 @@ _EPS = 1e-12
 _PHASES = [FinisherState.LOADED, FinisherState.DEPLOYING,
            FinisherState.LOCKED, FinisherState.SPENT]
 
+# ★ 2026-10-04 FS1 (docs/123) 인스턴스 플래그 — 생성 후 속성으로 켠다. 없으면(기본)
+#   기존 경로와 bit-identical:
+#   lean                    viability 를 FIRE 시도 tick 에만 계산 (gate·포획 판정용).
+#                           관측의 v_shot 3채널 = 0, dense 보상항 = 0, COMA = 0.
+#   fire_gate_on=False      R2 gate 제거 — LOADED 에서 FIRE 는 항상 유효 (포획 판정 불변).
+#   finisher_learned_accel  finisher 행동 [axis3, slew, fire, accel3] — 병진을 정책이 낸다.
+_LEAN_V = V.VShotResult(0.0, 0.0, 0, 0, False, 0.0, 0.0, "lean", 0)
+
 
 def _unit(v, fallback=(1.0, 0.0, 0.0)):
     v = np.asarray(v, float)
@@ -222,8 +230,8 @@ class ShapingParallelEnv(ParallelEnv):
         self._pending_capture = None
         self.agents = list(self.possible_agents)
         lims, fin, att = self._states()
-        vres = self._vshot(self._p(att), self._v(att),
-                           [self._p(s) for s in lims], fin, seed=self._seed)
+        vres = _LEAN_V if getattr(self, "lean", False) else self._vshot(
+            self._p(att), self._v(att), [self._p(s) for s in lims], fin, seed=self._seed)
         obs_vec = self._obs_vector(lims, fin, att, vres)
         obs = {a: obs_vec.copy() for a in self.agents}
         infos = {a: {} for a in self.agents}
@@ -238,62 +246,70 @@ class ShapingParallelEnv(ParallelEnv):
         lim_pos = [self._p(s) for s in lims]
 
         # --- viability metrics on the CURRENT (pre-move) state -----------------
-        accels = V.reachable_accels(self.a_att_max, self.n_samples, step_seed)
-        # S14/L2: on the conservative signal (n_segments>1) build the layout-
-        # INDEPENDENT reachable union ONCE and evaluate the headline + every COMA
-        # counterfactual against it (different limiter masks). Makes the shared-seed
-        # CRN manifest (identical endpoints/caught; only feasibility differs) and is
-        # ~(N+2)x cheaper. Numerically identical to per-layout v_shot(n_segments=K)
-        # (tests/test_union_equiv). n_segments==1 keeps the exact legacy accels path.
-        union = None
-        if self.n_segments > 1:
-            union = V.build_reachable_union(
-                p_att, v_att, tau=self.tau_deploy, a_att_max=self.a_att_max,
-                n=self.n_samples, n_segments=self.n_segments, seed=step_seed,
-                **self._vshot_kwargs(p_att, v_att, fin))
-
-        def _vs(limiter_pos):
-            if union is not None:
-                return V.eval_union_with_limiters(union, limiter_pos, self.kill_radius)
-            return self._vshot(p_att, v_att, limiter_pos, fin, accels=accels, seed=step_seed)
-
-        if union is not None:
-            # 2A batched shared-distance eval -- the SOLE ratified freeze
-            # exception on this file (docs/09 SS0/SS5/SS8 2026-07-03 (d)).
-            # Numerically IDENTICAL to the previous six per-layout
-            # eval_union_with_limiters calls (bit-locked by
-            # tests/test_batched_eval.py), ~2.4x cheaper: the six layouts
-            # (full, hold_position baseline, N counterfactuals) share <= 2N
-            # unique limiter positions, so each unique sphere's hit mask is
-            # computed once and every layout composes as a boolean any().
-            cfs = []
-            for i in range(len(self.limiter_ids)):
-                cf = list(lim_pos)
-                cf[i] = np.asarray(self.layout.limiter_p0[i], float)
-                cfs.append(cf)
-            res = V.eval_union_with_limiter_sets(
-                union, [lim_pos, self.layout.limiter_p0] + cfs, self.kill_radius)
-            vfull, vbase = res[0], res[1]
-            coma_D = {lid: float(vfull.v_shot_soft - res[2 + i].v_shot_soft)
-                      for i, lid in enumerate(self.limiter_ids)}
+        fin_act = np.asarray(actions.get(self.finisher_id, np.zeros(5)), float)
+        fire_cmd = 1 if (len(fin_act) >= 5 and fin_act[4] > 0.5) else 0
+        if getattr(self, "lean", False):
+            # FS1 (docs/123): gate·포획 판정이 쓰는 유일한 tick (LOADED ∧ FIRE) 에만 계산.
+            need = self.fsm.state is FinisherState.LOADED and fire_cmd == 1
+            vfull = (self._vshot(p_att, v_att, lim_pos, fin, seed=step_seed)
+                     if need else _LEAN_V)
+            vbase = vfull
+            coma_D = {lid: 0.0 for lid in self.limiter_ids}
         else:
-            vfull = _vs(lim_pos)
-            vbase = _vs(self.layout.limiter_p0)                  # hold_position baseline
-            # COMA D_i: swap limiter i to hold_position, same accel sample (CRN)
-            coma_D = {}
-            for i, lid in enumerate(self.limiter_ids):
-                cf = list(lim_pos)
-                cf[i] = np.asarray(self.layout.limiter_p0[i], float)
-                vcf = _vs(cf)
-                coma_D[lid] = float(vfull.v_shot_soft - vcf.v_shot_soft)
+            accels = V.reachable_accels(self.a_att_max, self.n_samples, step_seed)
+            # S14/L2: on the conservative signal (n_segments>1) build the layout-
+            # INDEPENDENT reachable union ONCE and evaluate the headline + every COMA
+            # counterfactual against it (different limiter masks). Makes the shared-seed
+            # CRN manifest (identical endpoints/caught; only feasibility differs) and is
+            # ~(N+2)x cheaper. Numerically identical to per-layout v_shot(n_segments=K)
+            # (tests/test_union_equiv). n_segments==1 keeps the exact legacy accels path.
+            union = None
+            if self.n_segments > 1:
+                union = V.build_reachable_union(
+                    p_att, v_att, tau=self.tau_deploy, a_att_max=self.a_att_max,
+                    n=self.n_samples, n_segments=self.n_segments, seed=step_seed,
+                    **self._vshot_kwargs(p_att, v_att, fin))
+
+            def _vs(limiter_pos):
+                if union is not None:
+                    return V.eval_union_with_limiters(union, limiter_pos, self.kill_radius)
+                return self._vshot(p_att, v_att, limiter_pos, fin, accels=accels, seed=step_seed)
+
+            if union is not None:
+                # 2A batched shared-distance eval -- the SOLE ratified freeze
+                # exception on this file (docs/09 SS0/SS5/SS8 2026-07-03 (d)).
+                # Numerically IDENTICAL to the previous six per-layout
+                # eval_union_with_limiters calls (bit-locked by
+                # tests/test_batched_eval.py), ~2.4x cheaper: the six layouts
+                # (full, hold_position baseline, N counterfactuals) share <= 2N
+                # unique limiter positions, so each unique sphere's hit mask is
+                # computed once and every layout composes as a boolean any().
+                cfs = []
+                for i in range(len(self.limiter_ids)):
+                    cf = list(lim_pos)
+                    cf[i] = np.asarray(self.layout.limiter_p0[i], float)
+                    cfs.append(cf)
+                res = V.eval_union_with_limiter_sets(
+                    union, [lim_pos, self.layout.limiter_p0] + cfs, self.kill_radius)
+                vfull, vbase = res[0], res[1]
+                coma_D = {lid: float(vfull.v_shot_soft - res[2 + i].v_shot_soft)
+                          for i, lid in enumerate(self.limiter_ids)}
+            else:
+                vfull = _vs(lim_pos)
+                vbase = _vs(self.layout.limiter_p0)                  # hold_position baseline
+                # COMA D_i: swap limiter i to hold_position, same accel sample (CRN)
+                coma_D = {}
+                for i, lid in enumerate(self.limiter_ids):
+                    cf = list(lim_pos)
+                    cf[i] = np.asarray(self.layout.limiter_p0[i], float)
+                    vcf = _vs(cf)
+                    coma_D[lid] = float(vfull.v_shot_soft - vcf.v_shot_soft)
         delta_headline = vfull.v_shot_soft - vbase.v_shot_soft
 
         threshold_crossed = bool(vfull.v_shot_soft >= self.theta_fire)
         clean_crossed = bool(threshold_crossed and not vfull.boxed_in)
 
         # --- finisher FSM (fire gate R2 enforced INSIDE the FSM) ---------------
-        fin_act = np.asarray(actions.get(self.finisher_id, np.zeros(5)), float)
-        fire_cmd = 1 if (len(fin_act) >= 5 and fin_act[4] > 0.5) else 0
         commit_meta = None
         if self.fsm.state is FinisherState.LOADED and fire_cmd == 1:
             nc = self._net_center(p_att, v_att)
@@ -309,7 +325,9 @@ class ShapingParallelEnv(ParallelEnv):
         # [2026-09-13 comment-only hygiene, B0 v3 §2-2 F1] the previous wording said
         # "frozen at the DEPLOYING->LOCKED transition", which never matched the code.
         # No executable code or runtime semantics changed (docs/09 freeze exception).
-        self.fsm = step_fsm(self.fsm, fire_cmd, vfull.v_shot_soft,
+        gate_v = (vfull.v_shot_soft if getattr(self, "fire_gate_on", True)
+                  else float("inf"))          # FS1: gate 제거 시 항상 통과
+        self.fsm = step_fsm(self.fsm, fire_cmd, gate_v,
                             finisher_spec=self.sc.finisher, fire_gate=self.sc.fire_gate,
                             dt=self.dt, commit_meta=commit_meta,
                             capture=self._pending_capture)
@@ -336,9 +354,12 @@ class ShapingParallelEnv(ParallelEnv):
         # ★ 병진 (docs/51). `FinisherSpec.a_max = 0.0` 이 기본이고 그때
         #   `mobile_finisher_accel` 은 정확히 zeros(3) 을 낸다 -- 즉 이 줄이
         #   바뀌기 전과 **비트 동일**하다 (P69). 0 이 아닐 때만 움직인다.
-        a_fin = mobile_finisher_accel(
-            p_fin, self._v(fin), p_att, v_att,
-            tau=self.tau_deploy, a_max=getattr(self.sc.finisher, "a_max", 0.0))
+        if getattr(self, "finisher_learned_accel", False):   # FS1: 정책이 병진
+            a_fin = fin_act[5:8] if len(fin_act) >= 8 else np.zeros(3)
+        else:
+            a_fin = mobile_finisher_accel(
+                p_fin, self._v(fin), p_att, v_att,
+                tau=self.tau_deploy, a_max=getattr(self.sc.finisher, "a_max", 0.0))
         bk_action[self.finisher_id] = {"a": a_fin, "e_cmd": axis}
         committed = self.fsm.state in (FinisherState.DEPLOYING, FinisherState.LOCKED)
         adv = scripted_adversary_action(
@@ -367,7 +388,8 @@ class ShapingParallelEnv(ParallelEnv):
         J = (delta_headline + self.l1 * (1.0 if clean_crossed else 0.0)
              - self.l2 * max(wasted_inc, 0) - self.l3 * limiter_loss)
 
-        vres2 = self._vshot(p_att2, self._v(att2), [self._p(s) for s in lims2], fin2,
+        vres2 = _LEAN_V if getattr(self, "lean", False) else self._vshot(
+            p_att2, self._v(att2), [self._p(s) for s in lims2], fin2,
                             seed=step_seed)
         obs_vec = self._obs_vector(lims2, fin2, att2, vres2)
 
