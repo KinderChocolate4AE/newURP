@@ -108,6 +108,13 @@ daily 2026-10-04b §5, run3 pilot 판독 상세 = 2026-10-04f.
   world r4 경로는 봉인 v2 와 bit-exact, spot-check 통과 — 델타 CLI 한정 확인·승인). 처리 =
   **결과 전 manifest v1.1 개정 1회** (r4 r2 전례): JAX 전체 스위트 green 최종 커밋으로 stage 1·2
   pin 동시 갱신 → 개정 push 후에만 stage 1 발사.
+- **발사 시점 교차 사고 (JAX 자진 보고, 18:08)**: hold 지시 도착 전 stage 1 sweep 발사 →
+  수신 즉시 중지. 진행분 = cell m0.35_n0.8/kfirst50 1 run **미완본** (~4분, done 플래그 없음),
+  나머지 29개 미시작. `stage1_prelaunch_quarantine_1808/` 격리. **main 처분 = 보존** (읽기 전용
+  사건 기록, 판독·집계 사용 금지). 결과 미열람 + 재발사 = v1.1 이후 1회차 → 계약 무결성 보존.
+- v1.1 봉인 전 체크리스트: 최종 커밋 hash + 테스트 수 수신 → manifest pin 2곳 갱신 + `revises`
+  필드 (v1 `97880faa933aca9c`) → **비기본 cell 1개 exploit 명령 dry-run** (이번 실수의 교훈:
+  pin 커밋으로 실제 실행 가능성 확인) → push → 발사 신호.
 
 ## 4. 다음 (의존 순서)
 
