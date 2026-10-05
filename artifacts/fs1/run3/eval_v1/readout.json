@@ -1,0 +1,24 @@
+{
+  "v1": {
+    "manifest_hash": "f4271b12a1d50b39",
+    "invalid": [],
+    "D_pool": -27,
+    "D_ex": 6,
+    "D_ladder": -159,
+    "decision": "FS1_NULL",
+    "kfirst_share": {
+      "ladder": 0.179,
+      "rl_latest": 0.316,
+      "pool": 0.098,
+      "ex_learned": 0.111,
+      "ex_kfirst50": 0.143
+    }
+  },
+  "v2": {
+    "manifest_hash": "f9e819e0d1171054",
+    "invalid": [],
+    "v1_decision": "FS1_NULL",
+    "D_ladder_v2": -171,
+    "decision": "FS1_NULL"
+  }
+}
