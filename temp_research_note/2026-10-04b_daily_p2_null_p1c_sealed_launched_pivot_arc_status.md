@@ -141,3 +141,4 @@ limiter-control opportunity) · 결과 전 봉인 + fresh namespace + gate 소�
   궤적: 학습 방어는 spawn 즉시 전원 무장 → PN 장거리 추격 산개 (iter 119 창발 소멸), exploiter 는
   5~10 m 종말 1 회 회피로 K_FIRST·net 동시 무력화. mode-rank reversal 없음. r4 는 계약대로 실행하되
   학습 우위 주장은 regime 축 (E3) 으로.
+- **(마감) 10/04 노트 고정 해제 (사용자, 10/05)**: 이후 기록 = `2026-10-05a_…` 부터 달력대로.
