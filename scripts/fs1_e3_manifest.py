@@ -37,12 +37,15 @@ IMPL = {                          # 구현 고정 (사전 기입 — 실행 로�
 def build() -> dict:
     cells = [{"cell": f"m{m:g}_n{n:g}", "mu": m, "nu": n} for m in GRID_MU for n in GRID_NU]
     body = {
-        "schema": "fs1-e3-regime-map-manifest-v1.1",
+        "schema": "fs1-e3-regime-map-manifest-v1.2",
         "status": "sealed before any stage-1 result (design doc: docs/124)",
-        "revises": ("97880faa933aca9c (v1 pinned e8806d9/28e350c which cannot execute the grid — "
-                    "no mu/nu or fin12_fb CLI; v1.1 pins the verified execution commit 0df35f3, "
-                    "delta CLI+golden only, before any stage-1 result. The 18:08 pre-signal partial "
-                    "launch is quarantined read-only and never counted)"),
+        "revises": ("8ed5a8b42dd41448 (v1.2: training host server5 -> server5 OR server6, both RTX "
+                    "4500 Ada; server6 gate passed — resolved world constants bit-exact vs server5 "
+                    "(sha c3ef48a58aa37429), f32 paired McNemar all |z|<3 (worst 2.138), exploit "
+                    "smoke 35-44k sps. Judgment evaluations unchanged on server4). Chain: v1.1 "
+                    "8ed5a8b42dd41448 revised 97880faa933aca9c (v1 pinned a commit that cannot "
+                    "execute the grid; v1.1 pinned verified 0df35f3; the 18:08 pre-signal partial "
+                    "launch stays quarantined and uncounted)"),
         "design_doc": "docs/124_e3_regime_map_contract_draft.md",
         "questions": {
             "Q1": "where in the (mu, nu) defender-capability plane does the dedicated-exploiter ceiling of the best scripted defense open",
@@ -75,7 +78,9 @@ def build() -> dict:
         "evaluation_discipline": {
             "namespace": "fs1_e3_v1", "seed0": SEED0, "cell_seed_stride": CELL_SEED_STRIDE,
             "paired": "within a cell, every defender/arm sees identical episode seeds",
-            "environment": "judgment evaluations and canonical exploiter evals on server4; training and exploiter training on JAX GPU (server5)",
+            "environment": ("judgment evaluations and canonical exploiter evals on server4; training "
+                            "and exploiter training on JAX GPU — server5 or server6 (same model, "
+                            "constants verified bit-exact; whichever frees first is valid)"),
             "pooling": "never pooled with B0 v3, pilot, or across cells; mu != 0.35 or nu != 1.0 cells are world variants outside B0 v3",
             "exploiter_budget": f"{EX_STEPS:.0e} fixed (pilot comparability); larger-budget exploiters are report-only",
         },
