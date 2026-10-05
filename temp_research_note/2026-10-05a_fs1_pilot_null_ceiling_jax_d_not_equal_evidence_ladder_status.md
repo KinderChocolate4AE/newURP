@@ -116,6 +116,21 @@ daily 2026-10-04b §5, run3 pilot 판독 상세 = 2026-10-04f.
   필드 (v1 `97880faa933aca9c`) → **비기본 cell 1개 exploit 명령 dry-run** (이번 실수의 교훈:
   pin 커밋으로 실제 실행 가능성 확인) → push → 발사 신호.
 
+## 3.10 E3 manifest 개정 사슬 + stage 1 발사 (10/05 밤)
+
+- **v1.1** `8ed5a8b42dd41448` (`49e84cb`): v1 pin (`e8806d9`/`28e350c`) 이 μ/ν·fin12_fb CLI 부재로
+  **실행 불가** (JAX 보고, main 승인 — 봉인 실수) → 실행 커밋 **`0df35f3`** (32/32 green, 델타 =
+  CLI+golden 한정) 으로 stage 1·2 pin 동시 갱신. **dry-run 통과** (server5, μ0.7/ν1.25 +
+  scripted:fin12_fb, config 에 mu/nu 기록). 교훈: 봉인 전 pin 커밋 실행 가능성 dry-run.
+- 18:08 발사 시점 교차 사고: 격리 보존 (§3.9), 재발사 = v1.1 이후 1회차.
+- **v1.2** `567ab158560bcfdf` (`cc9591a`): server5 GPU0 타 사용자 SAC 3h 점유 → **server6 대체 허용**
+  (사용자 승인). 게이트: 해소 world 상수 server5 와 bit-exact (sha `c3ef48a58aa37429`) · f32 짝지은
+  McNemar 전 config |z|<3 (worst 2.138) · exploit 스모크 35~44k sps. 판정 평가 = server4 불변.
+  server5 e3wait 자동 발사도 유효 (먼저 비는 쪽).
+- **기존 이슈 기록**: bench.py manifest 바이트 가드가 Windows(golden 생성지)↔Linux libm 1-ulp
+  차이로 교차 플랫폼에서 걸림 — 진단은 "파일 해시 일치 + params allclose 1e-12" 가드로 대체
+  (bench.py 미수정). server5 에서도 동일하게 걸렸을 검사 (그간 미실행이라 미발견).
+
 ## 4. 다음 (의존 순서)
 
 JAX 분리 실험 결과 → (범인 확정 → 수정 → (d) 재실험 1회) → 봉인 v2 → r4 manifest 최종 개정
