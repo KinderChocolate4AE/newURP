@@ -64,6 +64,24 @@ daily 2026-10-04b §5, run3 pilot 판독 상세 = 2026-10-04f.
   재컴파일 오버헤드 (정확성 무관). 처방 후보 = 고정 shape pad+mask / drop-last.
   **순서: 봉인 v2 → 재컴파일 수정 → parity 재실행 → E3 봉인이 그 commit 을 고정** (해시 churn 방지).
 
+## 3.7 학습 세션 핸드오프 처리 (10/05 저녁 — D1~D5 결정)
+
+핸드오프 = `docs/handoffs/HANDOFF_2026-10-05b_learning_research_to_main.md` (딥서치 보고서 +
+권고 패키지). **main 실측 확인**: F1 거리 shaping = **0.169/ep 평균, 최대 0.387** (예산 0.2 초과
+가능, 학습 세션 개략 산수 적중) · F2 = 65-D 관측에 **시간 채널 없음** (선형 채널 0개).
+
+| 결정 | 내용 |
+|---|---|
+| D1 | **potential 변환 채택** — 방어 거리 shaping 을 공격자 측과 같은 γΦ′−Φ 로 (손잡이 0). arm A 가 진짜 조형-중립이 됨 |
+| D2 | **arm A = r4′ = r4 + {D1, 남은 시간 obs 1채널, PFSP f_var=x(1−x)}**. critic 공격자-행동 조건화·HAPPO 는 보류 (parity 재검증 비용 — stage 2 1차 후 재고). **stage 1 exploiter 는 r4′ 미적용** (pilot 천장과 비교 가능성 — 봉인 v2 구현 고정) |
+| D3 | 진단 게이트 = **stage 1 안의 사전 등록 보고 항목** (별도 계약 아님, hard gate 아님): scripted limiter 4형 × fin12, 조형형 2종 (c5·fwd). credit vs 균형 vs opportunity 부재 판별용 |
+| D4 | arm B 서술 수정 채택 — non-potential·최적정책 변경·**B−A = 목적함수 변경 효과로만 보고** 명기 + R1/R2 smoke·공통 로그 |
+| D5 | JAX 에 F2 (done/bootstrap 의미론 + 절단 꼬리 손실 작음) 전달 |
+
+기타: graded ρ 철회 수용 (실패 쪽 비등급 — 붕괴 구간에서 역효과) · Shapley/difference reward 는
+**측정 도구로만** (E4 계약 후보, G&B 대비 방법론 차별점) · F3 (공격자 PBRS 첫 step telescoping)
+기록용 · G&B 예산 ~5e9/측 재확정. 미확인 고전 인용은 논문 인용 전 재검증 필요 (보고서 표기).
+
 ## 4. 다음 (의존 순서)
 
 JAX 분리 실험 결과 → (범인 확정 → 수정 → (d) 재실험 1회) → 봉인 v2 → r4 manifest 최종 개정

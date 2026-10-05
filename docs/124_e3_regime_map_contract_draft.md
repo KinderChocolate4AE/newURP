@@ -41,6 +41,13 @@ cell 마다: scripted 방어 2종 {kfirst50, fin12_fb} 각각에 **전용 exploi
 학습 → 정본 평가 240판 (paired). **ceiling_s(cell) = max over scripted of defended/240.**
 보고 추가: 공칭 사다리 vs scripted 96판 (포화 sanity), 궤적 그림 (viz-first).
 
+**진단 보고 (D3 — 사전 등록, 전부 scripted·학습 없음, hard gate 아님; stage 2 해석 입력)**:
+cell 마다 limiter {hold(추격 없음), c5-arc(조형형), fwd-arc(조형형 전진), kfirst-추격형} ×
+finisher fin12 조합의 기대 성과를 측정 ("현 학습 finisher" 는 새 cell 에 부재 → scripted 대체 명시,
+조형형은 단일 형태 위험 때문에 2종). 해석 규칙 (학습 세션 권고): 조형형 > 추격형 → credit/SNR
+문제 (추정기 층) · 조형형 ≤ 추격형이되 최적 finisher 와의 결합에서만 열림 → 균형 선택 문제 ·
+모든 조합 바닥 → 그 cell 은 opportunity 부재.
+
 ### Stage 2 — 학습 이득 (조건부, 선정 규칙 사전 고정, **2-arm**)
 **선정 규칙**: ceiling_s ∈ [48, 216]/240 (= 20%~90%) 인 **모든** cell — "열려 있되 자명하지 않음".
 하한 20% = 바닥끼리 비교 배제 (pilot D_ex=+6 교훈; 표본 오차 ±5%p 상회). 상한 90% = 포화 배제 **및
@@ -48,16 +55,27 @@ cell 마다: scripted 방어 2종 {kfirst50, fin12_fb} 각각에 **전용 exploi
 cherry-pick 금지: 규칙에 맞는 cell 전부, 하나도 없으면 stage 2 생략.
 
 각 선정 cell 에서 **두 arm** 을 같은 예산·같은 seed 로:
-- **arm A (r4 레시피, 조형 없음 control)**: docs/123 §9 그대로 — G&B식 종말 보상 + 거리 shaping.
-  (r4 단독 반복 계약 `a38993a8541264cd` 는 **미실행으로 보존** — pilot 의 천장 발견으로 닫힌 cell
-  3-seed 반복의 정보 가치가 소멸 (2026-10-05 결정). manifest 는 기록으로 유지, seed 규칙은 여기로 승계.)
+- **arm A (r4′ = r4 + 공통 스택 수정 3건, 조형-중립 control)** — 학습 세션 핸드오프 2026-10-05b
+  F1/F2 실측 확인 (main) 후 결정 D1·D2:
+  (i) **거리 shaping potential 변환** (D1): 기존 raw 벌점 −1e-5·d(fin,att)/step 은 실측 0.169/ep
+  (최대 0.387) 로 자체 예산 ≤0.2 를 넘고 non-potential "접근 prior" — 공격자 측과 같은
+  γΦ′−Φ (Φ=−1e-5·d·(1/(1−γ)) 스케일 환산, 손잡이 0) 로 교체. 이로써 arm A 가 진짜 조형-중립.
+  (ii) **남은 시간 관측 채널** (F2): t/episode_len 1채널 추가 (timeout 종단 하 Markov 복원).
+  (iii) **PFSP 가중 f_var = x(1−x)** (graded ρ 철회 대체; 판정·exploitability 는 이진 포획률 유지).
+  critic 공격자-행동 조건화·HAPPO 는 **보류** (구현·parity 재검증 비용 대비 — stage 2 1차 결과
+  후 재고). (r4 단독 반복 계약 `a38993a8541264cd` 는 **미실행으로 보존** — pilot 의 천장 발견으로
+  닫힌 cell 3-seed 반복의 정보 가치 소멸 (2026-10-05). manifest 기록 유지, seed 규칙 여기로 승계.)
+  **stage 1 의 exploiter 는 r4′ 미적용** — pilot (1e7, 동일 방법) 과의 천장 비교 가능성을 위해
+  봉인 v2 구현 그대로 고정.
 - **arm B (r5 = A + fire-tick viability 보너스, 단일 손잡이)**: 팀 보상에 **net 발사 tick 한 번만**
   r += κ·v_shot_soft (κ = 0.2). proxy 를 새로 만들지 않고 **env 의 비준된 포획 판정값** (B0 v3,
   lean 모드가 FIRE tick 에만 계산) 을 그대로 쓴다. 발사 ≈ 1회/episode 라 구조적으로 ≤ κ —
-  종말 보상 ±1 압도 불가 (r3 다양성 패널티 −0.74/ep 교훈). dense E_req 다항 보상 (수제 proxy +
-  가중 3 + β + arm 패널티) 은 **기각-보류**: 조형을 구매하면 메커니즘 주장이 순환하고 손잡이 6개
-  (2026-10-05 검토). arm B 로도 기울기 부재가 입증될 때만 별도 계약으로 재고.
-  봉인 전 현 cell **배관 smoke 1회** (비봉인, 보고용): κ 항 배선 + 행동 변화 궤적 확인만.
+  종말 보상 ±1 압도 불가 (r3 다양성 패널티 −0.74/ep 교훈). **성격 명시 (D4)**: 이 항은
+  non-potential 이라 **최적정책을 바꾸며**, 팀 공유라 limiter 기하까지 구매한다 — 따라서
+  **B − A 는 "목적함수 변경의 효과" 로만 보고** (창발 증거 아님; 창발 주장은 arm A 로그에서만).
+  효과가 나면 κ-annealing / κ=0 fine-tune 지속성 검정을 후속 계약으로. dense E_req 다항 보상은
+  **기각-보류** (순환성 + 손잡이 6개, 2026-10-05 검토). 봉인 전 현 cell **배관 smoke 1회** (비봉인):
+  κ 배선 + R1 (발사율·발사 시점 v_shot_soft 분포) + R2 (발사 시점 n_feasible) 확인.
 - **메커니즘 지표는 보상이 아니라 로그**: 발사 시점 v_shot_soft·E_req proxy·공격자 |v_⊥|/λ̇ 를
   **양 arm 공통 진단 로그**로 기록. arm A 에서의 자발 창발 = 순수 발견 주장 (E4 ①),
   arm B − A 결과 차 = 보상 설계 효과 주장 — 두 주장을 분리 (측정은 공짜, 구매는 안 함).
