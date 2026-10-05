@@ -34,11 +34,16 @@ def build() -> dict:
             "M2 kfirst_rand": "kfirst arming radius ~ U[30, 70] m per episode",
             "P pure": "stage-1 kfirst50/fin12_fb ceilings reused (0-4/240)",
         },
-        "exploiters": ("per cell x {M1, M2}: 1e7 steps, JAX 0df35f3 --stack r4, "
+        "exploiters": ("per cell x {M1, M2}: 1e7 steps, JAX 42f8835 (= 0df35f3 + canonical-mirrored "
+                       "mix/rand exploit targets, trainer suite 15/15) --stack r4, "
                        "--exploit scripted:mix5050 / scripted:kfirst_rand (training opponent drawn "
                        "from the distribution every episode); overfit-speed reported from the "
-                       "training-log win-rate trajectory (no extra runs)"),
-        "evaluation": {"n": N, "seed0": SEED0, "cell_seed_stride": STRIDE, "paired": True,
+                       "training-log win-rate trajectory (no extra runs). Launch precondition: "
+                       "host synced to 42f8835 (REVISION check) + a 2-iter scripted:mix5050 dry-run "
+                       "whose config/log is reported before the 6-run sweep (v1.1 lesson)"),
+        "evaluation": {"n": N, "seed0": SEED0, "cell_seed_stride": STRIDE,
+                       "cell_idx": "index in THIS manifest's cells list (0/1/2), not the stage-1 grid index",
+                       "seed_offsets": {"mix5050": 300, "kfirst_rand": 400}, "paired": True,
                        "environment": "canonical eval on server4; training on server5/6 (E3 v1.2 terms)",
                        "report_extras": ["M1/M2 vs stage-1 ex_kfirst50/ex_fin12_fb (arithmetic lower-bound check, free)",
                                          "R1/R2 fire-tick logs", "trajectories (viz-first)"]},
