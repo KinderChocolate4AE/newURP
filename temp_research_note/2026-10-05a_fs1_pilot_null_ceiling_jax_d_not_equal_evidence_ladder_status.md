@@ -93,6 +93,17 @@ daily 2026-10-04b §5, run3 pilot 판독 상세 = 2026-10-04f.
   obs t/T 66-D + f_var. 기본 r4 bit-exact — stage 1 exploiter 는 **sealed-v2 구현 동결**.
 - 다음 = JAX r4′ 이식 + 재컴파일 다듬기 + parity 재실행 (E3 manifest 가 그 commit 고정).
 
+## 3.9 E3 봉인 (10/05 밤)
+
+- 선행 완료: 정본 r4′ (`0399a28`) · arm B κ (`e94264c`) · μ/ν conditioning (`4eb0b73`, 기본
+  bit-exact·공격자 불변 테스트) · JAX #4 (r4′+arm B 이식 + 재컴파일 패딩, `28e350c`, 32/32,
+  episodic ~30k sps — 5배).
+- **E3 봉인** (사용자 승인): manifest `artifacts/fs1/e3_regime_map_manifest.json` hash
+  **`97880faa933aca9c`**. 격자 μ{0.35,0.5,0.7,1.0,1.4}×ν{0.8,1.0,1.25}, band [48,216]/240,
+  stage1 exploiter = sealed-v2 `e8806d9` 동결, stage2 = `28e350c` `--stack r4p` (+arm B κ0.2),
+  판정 평가 = server4, 비게이트 예측 μ* ∈ [0.5,1.0] 등록. 이후 변경 = v2 + 새 hash.
+- 남은 실행: stage 1 (server5 GPU 학습 + server4 평가 orchestration) → 판독 → stage 2.
+
 ## 4. 다음 (의존 순서)
 
 JAX 분리 실험 결과 → (범인 확정 → 수정 → (d) 재실험 1회) → 봉인 v2 → r4 manifest 최종 개정
