@@ -166,7 +166,12 @@ def _set_opponent(env, side, opp, obs_dim, cache):
         return lambda obs: {"adversary_0": att_action(t.act(env.att_obs(obs))[0], env)}
     env.set_scripted_attacker(None)            # 학습자 = 공격자 (RL)
     if opp["kind"] == "script":
-        return lambda obs: scripted_def_actions(env, opp.get("kfirst_r"))
+        kf = opp.get("kfirst_r")               # E3b-1: 혼합/무작위 방어는 episode 마다 추첨
+        if opp.get("mix"):
+            kf = KFIRST_R if np.random.random() < 0.5 else None
+        if opp.get("rand_kf"):
+            kf = float(np.random.uniform(*opp["rand_kf"]))
+        return lambda obs: scripted_def_actions(env, kf)
     t = cache.setdefault(id(opp["snap"]), _team(DEF_ROLES, opp["snap"], obs_dim))
     return lambda obs: def_actions(t.act(obs, opp.get("det", False))[0], env)
 
@@ -325,9 +330,15 @@ def main(argv=None):
                      {"kind": "nn", "name": f"def_{tag}", "snap": teams["def"].snapshot()}],
              "att": ladder_pool() + [{"kind": "nn", "name": f"att_{tag}",
                                       "snap": teams["att"].snapshot()}]}
-    if a.exploit:                                # 평가용 held-out 공격자 (docs/123 §8)
-        pools["def"] = [{"kind": "script", "name": "scripted_kfirst50", "kfirst_r": KFIRST_R}
-                        if a.exploit == "scripted:kfirst50" else
+    if a.exploit:                                # 평가용 held-out 공격자 (docs/123 §8, E3b-1 분포 타깃)
+        scripted_targets = {
+            "scripted:kfirst50": {"kind": "script", "name": "scripted_kfirst50", "kfirst_r": KFIRST_R},
+            "scripted:fin12_fb": {"kind": "script", "name": "scripted_fin12_fb"},
+            "scripted:mix5050": {"kind": "script", "name": "scripted_mix5050", "mix": True},
+            "scripted:kfirst_rand": {"kind": "script", "name": "scripted_kfirst_rand",
+                                     "rand_kf": (30.0, 70.0)},
+        }
+        pools["def"] = [scripted_targets[a.exploit] if a.exploit in scripted_targets else
                         {"kind": "nn", "name": "def_frozen_det", "det": True,
                          "snap": torch.load(a.exploit, weights_only=False)["teams"]["def"]}]
     other = {"def": "att", "att": "def"}

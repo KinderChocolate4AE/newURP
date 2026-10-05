@@ -27,7 +27,8 @@ from shepherd.fs1.train import (ATT_ROLES, DEF_ROLES, DISC_IN, KFIRST_R, _W, _in
                                 scripted_def_actions)
 from shepherd.fs1.world import DEFENDED, Z_DIM
 
-DEFENDERS = ("learned_det", "learned_sto", "fin12", "fin12_fb", "kfirst50", "c5_fb", "fwd_fb")
+DEFENDERS = ("learned_det", "learned_sto", "fin12", "fin12_fb", "kfirst50", "c5_fb", "fwd_fb",
+             "mix5050", "kfirst_rand")       # E3b-1: 혼합(시드 짝홀 50/50)·파라미터 무작위 scripted
 NET = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT")
 CHUNK = 8                                   # 워커 작업 단위 (episode 수)
 C5_R_D, C5_DPHI = 9.0, np.deg2rad(30.0)     # B2 RULE_COOP kw (P1c c5) — E3 D3 진단용
@@ -53,12 +54,24 @@ def _arc_act(env, fwd):
     return acts
 
 
-def _def_act(env, o, name, team):
+def _ep_kf_r(name, seed):
+    """episode 단위 방어 문맥 (결정론 — 같은 seed 면 같은 추첨). mix5050 = 시드 짝홀로 정확 50/50,
+    kfirst_rand = U[30, 70] (np.random 은 episodes() 가 seed 로 초기화한 뒤)."""
+    if name == "kfirst50":
+        return KFIRST_R
+    if name == "mix5050":
+        return KFIRST_R if seed % 2 == 0 else None     # None = fin12_fb (fallback 무장)
+    if name == "kfirst_rand":
+        return float(np.random.uniform(30.0, 70.0))
+    return None
+
+
+def _def_act(env, o, name, team, kf_r=None):
     if team is not None:
         return def_actions(team.act(o, name == "learned_det")[0], env)
     if name in ("c5_fb", "fwd_fb"):
         return _arc_act(env, name == "fwd_fb")
-    acts = scripted_def_actions(env, KFIRST_R if name == "kfirst50" else None)
+    acts = scripted_def_actions(env, kf_r)
     if name == "fin12":                     # fallback 없음: limiter 영구 비무장
         for l in env.limiter_ids:
             acts[l][3] = 0.0
@@ -77,6 +90,7 @@ def episodes(job):
     out = []
     for j, s in enumerate(seeds):
         np.random.seed(s); torch.manual_seed(s)
+        kf_r = _ep_kf_r(dname, s)
         env.set_scripted_attacker(None if ateam else ladder_attacker(opp["ov"], opp.get("legacy", False)))
         obs, _ = env.reset(seed=s)
         inn, done, t = env.inner, False, 0
@@ -86,7 +100,7 @@ def episodes(job):
         tr = [] if j < n_traj else None
         while not done:
             o = obs["finisher_0"]
-            acts = _def_act(env, o, dname, dteam)
+            acts = _def_act(env, o, dname, dteam, kf_r)
             if ateam:
                 acts["adversary_0"] = att_action(ateam.act(env.att_obs(o))[0], env)
             lims, fin, att = inn._states()

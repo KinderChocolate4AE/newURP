@@ -94,6 +94,22 @@ def test_r4p_stack_pieces():
     assert abs(pfsp_w(0.5, fvar=True) - 0.251) < 1e-9
 
 
+def test_e3b_mixture_defenders():
+    import numpy as np
+    from shepherd.fs1.eval import _ep_kf_r
+    from shepherd.fs1.train import KFIRST_R
+    assert _ep_kf_r("mix5050", 2) == KFIRST_R and _ep_kf_r("mix5050", 3) is None   # 짝홀 50/50
+    np.random.seed(7)
+    rs = {_ep_kf_r("kfirst_rand", 7) for _ in range(8)}
+    assert all(30.0 <= r <= 70.0 for r in rs) and len(rs) > 1
+    # paired 평가: mix5050 짝수 seed = kfirst 무장 (~50 m), 홀수 seed = fallback (늦은 무장)
+    _W["env"] = FS1Env(seed=0)
+    opp = dict(ladder_pool()[0], group="ladder")
+    recs = {r["seed"]: r for _, _, r in ev.episodes(("mix5050", None, opp, [2, 3], 0))}
+    assert recs[2]["arm_d"] is not None and recs[2]["arm_d"] > 25
+    assert recs[3]["arm_d"] is None or recs[3]["arm_d"] < 10
+
+
 def test_e3_band_selection_and_mu_nu():
     import sys
     sys.path.insert(0, "scripts")
