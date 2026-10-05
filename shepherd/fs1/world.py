@@ -62,17 +62,24 @@ class FS1Spec:
     k_viab: float = 0.0                 # arm B (r5, docs/124 D4): net 발사 tick 에 팀 보상
                                         # += k_viab·v_shot_soft (비준 판정값, non-potential —
                                         # B−A 는 목적함수 변경 효과로만 보고). 0 = off (bit-exact)
+    mu: float = 0.35                    # E3 (docs/124 §2): 방어 capability conditioning —
+    nu: float = 1.0                     # a_def = mu·a_att, v_def = nu·v_att (limiter·finisher 공통).
+                                        # 기본값 = r2a_stage1 의 MU/NU 상수 그대로 (bit-exact).
+                                        # 공격자 쪽은 불변 (비준 위협 고정)
 
 
 def _physics_kwargs(spec: FS1Spec) -> dict:
-    from shepherd.scripts.r2a_stage1 import MU, NU, resolve
+    from shepherd.scripts.r2a_stage1 import resolve
     from shepherd.scripts.r2b_phase1 import _slices
     kw = resolve(_slices()[spec.lam_slice], spec.chi, spec.eta)
     extra = dict(kw["extra_cfg"])
     a, v = extra["physics.a_att_max"], extra["physics.att_speed"]
     extra["train.episode_len"] = int(spec.episode_len)
-    extra["train.limits.finisher_a_max"] = MU * a        # = limiter 와 같은 기체급
-    extra["train.limits.finisher_v_max"] = NU * v
+    # E3 capability conditioning (기본 mu/nu = resolve 의 MU/NU 와 동일 → bit-exact)
+    extra["physics.a_lim_max"] = spec.mu * a
+    extra["train.limits.limiter_v_max"] = spec.nu * v
+    extra["train.limits.finisher_a_max"] = spec.mu * a   # = limiter 와 같은 기체급
+    extra["train.limits.finisher_v_max"] = spec.nu * v
     kw["extra_cfg"] = extra
     kw["reward"] = replace(kw["reward"], w_kill=spec.w_kill, dense_scale=0.0, enabled=True)
     return kw

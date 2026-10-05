@@ -94,6 +94,17 @@ def test_r4p_stack_pieces():
     assert abs(pfsp_w(0.5, fvar=True) - 0.251) < 1e-9
 
 
+def test_e3_band_selection_and_mu_nu():
+    import sys
+    sys.path.insert(0, "scripts")
+    import fs1_e3_manifest as E
+    assert E.select_cells({"a": 47, "b": 48, "c": 216, "d": 217, "e": 3}) == ["b", "c"]
+    from shepherd.fs1.world import FS1Env, FS1Spec
+    e = FS1Env(FS1Spec(mu=0.7), seed=0)
+    assert abs(e.inner.backend.by_name(e.limiter_ids[0]).limits.a_max / 7.1587 - 2.0) < 1e-3
+    assert abs(e.att_a_max - 20.453) < 1e-2          # 공격자 불변
+
+
 def test_k_viab_adds_fire_tick_bonus_only():
     import numpy as np
     from shepherd.fs1.world import FS1Env, FS1Spec
