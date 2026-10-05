@@ -135,3 +135,9 @@ limiter-control opportunity) · 결과 전 봉인 + fresh namespace + gate 소�
 - **r4 실행 전 남은 순서**: JAX 봉인 v2 (~03:30) → run3 완주 (~05:35) → pilot 정본 평가 → exploiter
   비교 → r4 manifest 개정 봉인 (구현 = JAX commit + parity hash, batch 구조, 예산 1.1e8, exploiter
   방식) → r4 BC (정본 CPU) → r4 JAX 3 seed + 정본 평가. **r4 실행 전까지의 기록은 이 노트 (10/04) 에.**
+- **★ run3 pilot 판독 = FS1_NULL (v1·v2 일치)** (harvest `d34a931`, 상세 = 노트 2026-10-04f):
+  D_pool −27 · D_ex +6 · D_ladder −171 (v2). **천장 발견: kfirst50 조차 전용 exploiter (1e7) 에
+  3/240 = 1.3%** — 이 cell 은 적응 공격자 앞에서 아무도 못 막는다 (학습 실패가 아니라 세계 구조).
+  궤적: 학습 방어는 spawn 즉시 전원 무장 → PN 장거리 추격 산개 (iter 119 창발 소멸), exploiter 는
+  5~10 m 종말 1 회 회피로 K_FIRST·net 동시 무력화. mode-rank reversal 없음. r4 는 계약대로 실행하되
+  학습 우위 주장은 regime 축 (E3) 으로.
