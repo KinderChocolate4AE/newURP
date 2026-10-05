@@ -138,6 +138,7 @@ def main(argv=None):
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--stack", choices=["r4", "r4p"], default="r4",
                     help="r4p = r4' (관측 t/T 채널 + potential 거리 shaping 의 BC 재현)")
+    ap.add_argument("--k-viab", type=float, default=0.0, help="arm B: critic return 에 κ 항 재현")
     a = ap.parse_args(argv)
     import torch
     from collections import Counter
@@ -148,7 +149,8 @@ def main(argv=None):
     out = pathlib.Path(a.out); out.mkdir(parents=True, exist_ok=True)
     per = -(-a.episodes // a.workers)
     with mp.get_context("spawn").Pool(a.workers, initializer=_init_worker,
-                                      initargs=(FS1Spec(obs_time=a.stack == "r4p").__dict__,)) as P:
+                                      initargs=(FS1Spec(obs_time=a.stack == "r4p",
+                                                        k_viab=a.k_viab).__dict__,)) as P:
         parts = P.map(collect, [(per, a.seed * 1000 + w) for w in range(a.workers)])
     cat = lambda k: np.concatenate([p[k] for p in parts])
     obs, fire = cat("obs"), cat("fire")

@@ -58,7 +58,8 @@ def episodes(job):
         obs, _ = env.reset(seed=s)
         inn, done, t = env.inner, False, 0
         tgt = np.asarray(inn.layout.target, float)
-        rec = {"seed": s, "opp": opp["name"], "arm_d": None, "fire_d": None, "n_fire": 0}
+        rec = {"seed": s, "opp": opp["name"], "arm_d": None, "fire_d": None, "n_fire": 0,
+               "v_fire": None, "p_feas": None}       # R1/R2 공통 진단 (docs/124 D4): 첫 발사 tick
         tr = [] if j < n_traj else None
         while not done:
             o = obs["finisher_0"]
@@ -76,6 +77,8 @@ def episodes(job):
                 rec["n_fire"] += 1
                 if rec["fire_d"] is None:
                     rec["fire_d"] = round(float(np.linalg.norm(p_att - inn._p(fin))), 2)
+                    rec["v_fire"] = round(float(fi.get("v_shot_soft") or 0.0), 4)
+                    rec["p_feas"] = round(float(fi.get("p_feasible") or 0.0), 4)
             if tr is not None:
                 tr.append(np.r_[p_att, inn._p(fin), np.concatenate([inn._p(x) for x in lims]),
                                 armed, float(bool(fi.get("fire_event")))])
@@ -117,6 +120,8 @@ def summarize(recs):
                      "def_rate": round(dfd / n, 4), "net": c["NET_CAPTURE"] + c["CAPTURE_WITH_CONTACT"],
                      "k_first": c["K_FIRST"], "fallback": c["HARD_KILL"],
                      "penetrated": c["PENETRATED"], "labels": dict(c),
+                     "v_fire_median": (round(float(np.median([r["v_fire"] for r in rs if r.get("v_fire") is not None])), 3)
+                                       if any(r.get("v_fire") is not None for r in rs) else None),
                      "arm_d_median": round(float(np.median(arm)), 1) if arm else None,
                      "fire_d_median": (round(float(np.median([r["fire_d"] for r in rs if r["fire_d"] is not None])), 1)
                                        if any(r["fire_d"] is not None for r in rs) else None)})

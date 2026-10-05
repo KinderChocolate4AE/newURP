@@ -289,6 +289,8 @@ def main(argv=None):
     ap.add_argument("--exploit", default=None,
                     help="fresh exploiter 모드: 고정 방어 상대로 새 공격자만 학습. "
                          "ckpt 경로 (방어 팀, 결정적 행동) 또는 scripted:kfirst50")
+    ap.add_argument("--k-viab", type=float, default=0.0,
+                    help="arm B (r5): 발사 tick κ·v_shot_soft 보너스. 0 = arm A")
     ap.add_argument("--stack", choices=["r4", "r4p"], default="r4",
                     help="r4p = r4' (docs/124 D1·D2): 거리 shaping potential 화 + 관측 t/T 채널 + "
                          "PFSP f_var. 기본 r4 = 기존 bit-exact (stage 1 exploiter 는 반드시 r4)")
@@ -301,7 +303,7 @@ def main(argv=None):
     torch.set_num_threads(a.torch_threads)      # 공용 서버: 총 코어 = workers + torch_threads
     out = pathlib.Path(a.out); out.mkdir(parents=True, exist_ok=True)
     r4p = a.stack == "r4p"
-    spec = FS1Spec(obs_time=r4p)
+    spec = FS1Spec(obs_time=r4p, k_viab=a.k_viab)
     probe = FS1Env(spec, seed=0)
     obs_dim = len(next(iter(probe.reset(seed=0)[0].values())))
     del probe

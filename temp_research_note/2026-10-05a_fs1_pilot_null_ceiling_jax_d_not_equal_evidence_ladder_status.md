@@ -82,6 +82,17 @@ daily 2026-10-04b §5, run3 pilot 판독 상세 = 2026-10-04f.
 **측정 도구로만** (E4 계약 후보, G&B 대비 방법론 차별점) · F3 (공격자 PBRS 첫 step telescoping)
 기록용 · G&B 예산 ~5e9/측 재확정. 미확인 고전 인용은 논문 인용 전 재검증 필요 (보고서 표기).
 
+## 3.8 (d) PASS + 봉인 v2 (10/05 저녁)
+
+- **(d) 재실험 PASS**: pen vs kfirst50 — 정본 5 {.969 .656 .938 .562 .781} vs JAX episodic 5 (B=256)
+  {.552 .854 .490 .833 .688}, 단측 MW U=17.0 **p=0.2103 ≥ 0.05** (사전 선언 기준). truncated →
+  episodic 수정 (`3a2e7dd`) 으로 1차 격차 (p=0.0225) 통계적으로 소멸.
+- **JAX 봉인 v2 발행**: commit `e8806d9`, **hash `14b9d56f20b1cfb9`** (world + trainer parity a~d,
+  33 tests, 구현 고정 `3a2e7dd`). fallback (E3 축소격자 밤샘) 불필요.
+- 정본 r4′ 구현 완료 (`0399a28`, `--stack r4p`): D1 potential shaping (할인합 = −Φ₀ 검증) +
+  obs t/T 66-D + f_var. 기본 r4 bit-exact — stage 1 exploiter 는 **sealed-v2 구현 동결**.
+- 다음 = JAX r4′ 이식 + 재컴파일 다듬기 + parity 재실행 (E3 manifest 가 그 commit 고정).
+
 ## 4. 다음 (의존 순서)
 
 JAX 분리 실험 결과 → (범인 확정 → 수정 → (d) 재실험 1회) → 봉인 v2 → r4 manifest 최종 개정

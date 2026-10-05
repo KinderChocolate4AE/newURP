@@ -94,6 +94,29 @@ def test_r4p_stack_pieces():
     assert abs(pfsp_w(0.5, fvar=True) - 0.251) < 1e-9
 
 
+def test_k_viab_adds_fire_tick_bonus_only():
+    import numpy as np
+    from shepherd.fs1.world import FS1Env, FS1Spec
+    # 같은 seed 로 arm A(0) vs arm B(0.2): 보상 차이는 발사 tick 의 0.2·v_shot_soft 하나뿐
+    def run(k):
+        e = FS1Env(FS1Spec(k_viab=k), seed=0)
+        obs, _ = e.reset(seed=205)
+        tot, vfire, done = 0.0, None, False
+        while not done:
+            acts = {l: np.zeros(4) for l in e.limiter_ids}
+            acts["finisher_0"] = np.r_[0, 0, 0, 12.0, 1.0]
+            acts["adversary_0"] = np.zeros(3)
+            obs, r, done, info = e.step(acts)
+            tot += r["finisher_0"]
+            if info["finisher_0"].get("fire_event"):
+                vfire = float(info["finisher_0"]["v_shot_soft"])
+        return tot, vfire
+    a, va = run(0.0)
+    b, vb = run(0.2)
+    assert va is not None and va == vb                 # 행동 불변 (보상만 다름)
+    assert abs((b - a) - 0.2 * va) < 1e-9
+
+
 def test_ladder_nominal_restores_p1a_spec():
     from shepherd.fs1.train import ladder_attacker
     S = {p["name"]: ladder_attacker(p["ov"]).spec for p in ladder_pool()}

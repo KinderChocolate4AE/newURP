@@ -59,6 +59,9 @@ class FS1Spec:
     r_fire_range: tuple = (4.0, 16.0)   # FCS 발사 거리 행동의 범위 (m)
     obs_time: bool = False              # r4' (docs/124 D2): 관측에 t/episode_len 1채널 추가
                                         # (timeout 종단 하 Markov 복원). False = 기존 65-D bit-exact
+    k_viab: float = 0.0                 # arm B (r5, docs/124 D4): net 발사 tick 에 팀 보상
+                                        # += k_viab·v_shot_soft (비준 판정값, non-potential —
+                                        # B−A 는 목적함수 변경 효과로만 보고). 0 = off (bit-exact)
 
 
 def _physics_kwargs(spec: FS1Spec) -> dict:
@@ -236,6 +239,8 @@ class FS1Env:
             label = "K_FIRST"                          # B0 v3 의 H_illegal 과 같은 사건
         if fi.get("fire_event"):
             r_def -= self.spec.c_fire
+            if self.spec.k_viab:
+                r_def += self.spec.k_viab * float(fi.get("v_shot_soft") or 0.0)
         r_att = 0.0
         if label == "PENETRATED":
             r_att = 1.0
