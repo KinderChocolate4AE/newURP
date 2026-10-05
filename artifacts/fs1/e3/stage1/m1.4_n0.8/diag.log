@@ -1,0 +1,4 @@
+| defender | group | defended/n | net | K_FIRST | fallback | pen | arm_d med | fire_d med |
+|---|---|---|---|---|---|---|---|---|
+| c5_fb | ladder | 2/96 | 2 | 0 | 0 | 92 | 2.2 | 11.4 |
+| fwd_fb | ladder | 12/96 | 2 | 0 | 10 | 82 | 2.2 | 11.4 |

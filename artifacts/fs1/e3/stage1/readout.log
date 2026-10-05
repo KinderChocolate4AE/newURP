@@ -1,0 +1,13 @@
+| mu \ nu | 0.8 | 1 | 1.25 |
+|---|---|---|---|
+| 0.35 | 2% | 0% | 2% |
+| 0.5 | 0% | 1% | 0% |
+| 0.7 | 0% | 2% | 1% |
+| 1 | 0% | 0% | 0% |
+| 1.4 | 0% | 0% | 0% |
+{
+  "manifest_hash": "567ab158560bcfdf",
+  "selected": [],
+  "decision": "E3_BAND_EMPTY",
+  "prediction_mu_monotone_within_noise": true
+}

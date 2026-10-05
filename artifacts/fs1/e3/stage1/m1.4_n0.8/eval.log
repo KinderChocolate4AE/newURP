@@ -1,0 +1,8 @@
+| defender | group | defended/n | net | K_FIRST | fallback | pen | arm_d med | fire_d med |
+|---|---|---|---|---|---|---|---|---|
+| fin12_fb | ex_fin12_fb | 0/240 | 0 | 0 | 0 | 240 | 1.1 | 11.4 |
+| fin12_fb | ex_kfirst50 | 122/240 | 1 | 0 | 121 | 117 | 8.8 | 11.4 |
+| fin12_fb | ladder | 175/240 | 17 | 0 | 158 | 61 | 2.0 | 11.4 |
+| kfirst50 | ex_fin12_fb | 67/240 | 2 | 42 | 23 | 170 | 49.2 | 11.5 |
+| kfirst50 | ex_kfirst50 | 1/240 | 1 | 0 | 0 | 239 | 49.1 | 11.4 |
+| kfirst50 | ladder | 237/240 | 0 | 237 | 0 | 3 | 49.5 | 10.9 |
