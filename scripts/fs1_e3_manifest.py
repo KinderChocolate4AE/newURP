@@ -25,8 +25,11 @@ SEEDS_S2 = [0, 1, 2]
 K_VIAB_B = 0.2
 IMPL = {                          # 구현 고정 (사전 기입 — 실행 로그의 commit 과 대조)
     "canonical_world_mu_nu": "shepherd.fs1.world FS1Spec(mu, nu): a_def = mu*a_att, v_def = nu*v_att, attacker unchanged",
-    "stage1_exploiters": "JAX sealed v2 e8806d9 (seal hash 14b9d56f20b1cfb9), --stack r4 (pilot-comparable)",
-    "stage2_training": "JAX 28e350c (32/32 parity incl. r4p/k_viab step-exact), --stack r4p; arm B adds --k-viab 0.2",
+    "stage1_exploiters": ("JAX 0df35f3 (= sealed v2 e8806d9 semantics + mu/nu & scripted:fin12_fb CLI "
+                          "plumbing only + golden regen; world r4 path bit-exact vs seal hash "
+                          "14b9d56f20b1cfb9, 32/32 green), --stack r4 (pilot-comparable)"),
+    "stage2_training": ("JAX 0df35f3 (32/32 parity incl. r4p/k_viab step-exact, mu-nu spot-check), "
+                        "--stack r4p; arm B adds --k-viab 0.2"),
     "judgment_eval": "canonical shepherd.fs1.eval on server4 (i9-12900K), commit recorded in each summary meta.git",
 }
 
@@ -34,8 +37,12 @@ IMPL = {                          # 구현 고정 (사전 기입 — 실행 로�
 def build() -> dict:
     cells = [{"cell": f"m{m:g}_n{n:g}", "mu": m, "nu": n} for m in GRID_MU for n in GRID_NU]
     body = {
-        "schema": "fs1-e3-regime-map-manifest-v1",
+        "schema": "fs1-e3-regime-map-manifest-v1.1",
         "status": "sealed before any stage-1 result (design doc: docs/124)",
+        "revises": ("97880faa933aca9c (v1 pinned e8806d9/28e350c which cannot execute the grid — "
+                    "no mu/nu or fin12_fb CLI; v1.1 pins the verified execution commit 0df35f3, "
+                    "delta CLI+golden only, before any stage-1 result. The 18:08 pre-signal partial "
+                    "launch is quarantined read-only and never counted)"),
         "design_doc": "docs/124_e3_regime_map_contract_draft.md",
         "questions": {
             "Q1": "where in the (mu, nu) defender-capability plane does the dedicated-exploiter ceiling of the best scripted defense open",
