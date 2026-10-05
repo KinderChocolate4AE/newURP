@@ -109,7 +109,8 @@ limiter-control opportunity) · 결과 전 봉인 + fresh namespace + gate 소�
   공칭 사다리 재측정: fin12+fallback 24/24 (net 2 + HARD_KILL 22 — jink 가 net 을 무력화, fallback
   이 대신 막음), kfirst50 24/24, r_fire 결론 불변.
 - **★ r4 결정 (사용자 "(a), 고칠 거 다 고쳐서 한 번에")** (`433dcbd`, 반복 manifest
-  `f6b1fc01e912497e`, docs/123 §9): run3 → **pilot** (확정에 안 셈, r4 와 pooling 금지).
+  `f6b1fc01e912497e` → r2 `a38993a8541264cd` — 판정 평가 환경 = **server4 고정** 추가 (i9-12900K;
+  kfirst50×jink 셀이 마이크로아키텍처 간 반올림에 민감, 사용자 지시). r4 학습 전 개정, docs/123 §9): run3 → **pilot** (확정에 안 셈, r4 와 pooling 금지).
   r4 = r3 + 공칭 사다리 (pool·BC) + 다양성 패널티 off + KL 목표 lr (0.01, ×/÷1.5, [1e-5, 3e-4]) +
   워커 torch 시드. 확정 = r4 seed {0,1,2} 중 ≥ 2 POSITIVE/NARROW (v2 판정 기준). 관측 스택은 보류.
   `scripts/run_fs1_r4_server.sh` (seed 별 BC → 학습 → 봉인 평가, flock git, main() 래핑).

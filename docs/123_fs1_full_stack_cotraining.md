@@ -165,7 +165,8 @@ kfirst50 최강). jink 가 net 을 거의 무력화하고 fallback 이 대신 �
 
 run3 (r3, legacy 사다리) 는 **pilot** 으로 격하 — 평가·보고는 하되 확정에 세지 않고 r4 와 pooling 금지.
 확정 = r4 seed {0,1,2} 를 새로 학습. manifest `artifacts/fs1/r4_replication_manifest.json`
-(r4 학습 전 봉인, v1·v2 hash 참조).
+(r4 학습 전 봉인, v1·v2 hash 참조; r2 개정 = 판정 평가 환경 **server4 고정** — kfirst50×jink 셀의
+마이크로아키텍처 간 반올림 민감성; launch 전 최종 개정 1회 예정 = JAX trainer commit + parity hash + 예산).
 
 | 변경 | 내용 | 근거 |
 |---|---|---|

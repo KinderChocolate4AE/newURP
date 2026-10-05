@@ -1,6 +1,8 @@
 {
   "schema": "fs1-r4-replication-manifest-v1",
   "status": "sealed before any r4 training (user decision 2026-10-05: option (a))",
+  "revises": "f6b1fc01e912497e (r2, still before any r4 training: adds evaluation_environment; one more pre-launch revision will fix the JAX trainer commit + parity hash and budget)",
+  "evaluation_environment": "all canonical judgment-evaluation stages (eval v1/v2 and canonical exploiter training) run on server4 (i9-12900K) - the machine run3 trained and the pilot evaluated on. Rounding-sensitive cells (kfirst50 x jink, 5-7% of episodes) can flip across CPU microarchitectures, so the judgment machine is pinned.",
   "design_doc": "docs/123_fs1_full_stack_cotraining.md section 9",
   "v1_manifest_hash": "f4271b12a1d50b39",
   "v2_manifest_hash": "f9e819e0d1171054",
@@ -17,5 +19,5 @@
   "per_seed_evaluation": "scripts/run_fs1_eval_server.sh: v1 procedure + v2 addendum; the seed's decision = v2 decision",
   "confirmation": "FS1_CONFIRMED if >= 2 of the 3 r4 seeds are FS1_POSITIVE or FS1_POSITIVE_NARROW; labelled FS1_CONFIRMED_NARROW if >= 2 of the passing seeds are NARROW. Else FS1_NOT_CONFIRMED. An INVALID seed is re-evaluated (evaluation only, after fixing an evaluation-side cause); training is never rerun to change a decision.",
   "pilot": "run3 (r3, legacy ladder, seed 0) is a pilot: evaluated and reported under v1/v2, never counted toward confirmation and never pooled with r4.",
-  "manifest_hash": "f6b1fc01e912497e"
+  "manifest_hash": "a38993a8541264cd"
 }

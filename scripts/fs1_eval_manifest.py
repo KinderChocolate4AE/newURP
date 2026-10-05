@@ -143,6 +143,13 @@ def build_r4() -> dict:
     body = {
         "schema": "fs1-r4-replication-manifest-v1",
         "status": "sealed before any r4 training (user decision 2026-10-05: option (a))",
+        "revises": ("f6b1fc01e912497e (r2, still before any r4 training: adds evaluation_environment; "
+                    "one more pre-launch revision will fix the JAX trainer commit + parity hash and budget)"),
+        "evaluation_environment": ("all canonical judgment-evaluation stages (eval v1/v2 and canonical "
+                                   "exploiter training) run on server4 (i9-12900K) - the machine run3 "
+                                   "trained and the pilot evaluated on. Rounding-sensitive cells "
+                                   "(kfirst50 x jink, 5-7% of episodes) can flip across CPU "
+                                   "microarchitectures, so the judgment machine is pinned."),
         "design_doc": "docs/123_fs1_full_stack_cotraining.md section 9",
         "v1_manifest_hash": build()["manifest_hash"], "v2_manifest_hash": build_v2()["manifest_hash"],
         "design_r4": ("r3 + (1) ladder attackers on the cell nominal spec (train.ladder_attacker) in pool "
