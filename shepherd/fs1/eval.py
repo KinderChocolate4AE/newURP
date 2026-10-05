@@ -27,14 +27,37 @@ from shepherd.fs1.train import (ATT_ROLES, DEF_ROLES, DISC_IN, KFIRST_R, _W, _in
                                 scripted_def_actions)
 from shepherd.fs1.world import DEFENDED, Z_DIM
 
-DEFENDERS = ("learned_det", "learned_sto", "fin12", "fin12_fb", "kfirst50")
+DEFENDERS = ("learned_det", "learned_sto", "fin12", "fin12_fb", "kfirst50", "c5_fb", "fwd_fb")
 NET = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT")
 CHUNK = 8                                   # 워커 작업 단위 (episode 수)
+C5_R_D, C5_DPHI = 9.0, np.deg2rad(30.0)     # B2 RULE_COOP kw (P1c c5) — E3 D3 진단용
+FWD_RHO = 0.5                               # P1d fwd (전진 호: r = max(r_d, rho·R_h))
+
+
+def _arc_act(env, fwd):
+    """D3 진단 방어 (docs/124 §3): c5/fwd arc limiter (조형형, FCS station 공간으로 번역) +
+    finisher fin12 + fallback 무장 (net 소진 후) — fin12_fb 와 같은 무장 규칙, 위치만 다름."""
+    from shepherd.agents.baselines import arc_geometry, arc_slots, min_cost_assignment
+    from shepherd.fs1.world import STATION
+    inn = env.inner
+    lims, _, att = inn._states()
+    tgt = np.asarray(inn.layout.target, float)
+    p_att = inn._p(att)
+    r, dphi = arc_geometry(tgt, p_att, C5_R_D, C5_DPHI, FWD_RHO if fwd else None)
+    slots = arc_slots(tgt, p_att, r, dphi, n=len(env.limiter_ids))
+    perm = min_cost_assignment([inn._p(l) for l in lims], slots)
+    arm = 1.0 if env.sys.net_spent else 0.0
+    acts = {lid: np.r_[np.clip((slots[perm[i]] - tgt) / STATION, -1, 1), arm]
+            for i, lid in enumerate(env.limiter_ids)}
+    acts["finisher_0"] = np.r_[env.start_station["finisher_0"], 12.0, 1.0]
+    return acts
 
 
 def _def_act(env, o, name, team):
     if team is not None:
         return def_actions(team.act(o, name == "learned_det")[0], env)
+    if name in ("c5_fb", "fwd_fb"):
+        return _arc_act(env, name == "fwd_fb")
     acts = scripted_def_actions(env, KFIRST_R if name == "kfirst50" else None)
     if name == "fin12":                     # fallback 없음: limiter 영구 비무장
         for l in env.limiter_ids:
@@ -181,7 +204,8 @@ def run(a):
                     jobs.append((d, dsnap, opp, seeds[c:c + CHUNK], nt if c == 0 else 0))
     from shepherd.fs1.world import FS1Spec
     with mp.get_context("spawn").Pool(a.workers, initializer=_init_worker,
-                                      initargs=(FS1Spec(obs_time=a.stack == "r4p").__dict__,)) as P:
+                                      initargs=(FS1Spec(obs_time=a.stack == "r4p",
+                                                        mu=a.mu, nu=a.nu).__dict__,)) as P:
         recs = [x for part in P.map(episodes, jobs) for x in part]
     with open(out / "episodes.jsonl", "w", encoding="utf-8") as f:
         for d, g, r in recs:
@@ -192,6 +216,7 @@ def run(a):
             "episodes": a.episodes, "seed": a.seed, "defenders": a.defenders,
             "groups": {g: [o["name"] for o in v] for g, v in groups.items()},
             "exploiter": a.exploiter, "manifest": a.manifest, "ladder": a.ladder, "stack": a.stack,
+            "mu": a.mu, "nu": a.nu,
             "git": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
             "seeds_by_group": {g: [r["seed"] for d, gg, r in recs if gg == g and d == a.defenders[0]]
                                for g in groups}}
@@ -251,6 +276,8 @@ def main(argv=None):
                    help="사다리 공격자 구성. legacy = eval v1 (jink 0 변형, docs/123 §8.1)")
     r.add_argument("--stack", choices=["r4", "r4p"], default="r4",
                    help="ckpt 의 학습 stack 과 일치시킬 것 (r4p = 관측 66-D)")
+    r.add_argument("--mu", type=float, default=0.35, help="E3 cell: 방어 가속비 (FS1Spec.mu)")
+    r.add_argument("--nu", type=float, default=1.0, help="E3 cell: 방어 속도비 (FS1Spec.nu)")
     lg = sub.add_parser("log")
     lg.add_argument("--log", required=True)
     lg.add_argument("--window", type=int, default=30)
