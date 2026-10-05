@@ -1,0 +1,67 @@
+{
+  "manifest_hash": "aad0416bfe4cdd2a",
+  "cells": [
+    {
+      "cell": "m0.35_n1",
+      "mu": 0.35,
+      "P_stage1": 0,
+      "ceil_M1": 5,
+      "ceil_M2": 4,
+      "ceil_M": 5,
+      "QA_open": false,
+      "cross": {
+        "kfirst_rand|ex_fin12_fb": 120,
+        "kfirst_rand|ex_kfirst50": 11,
+        "kfirst_rand|ex_mix5050": 21,
+        "mix5050|ex_fin12_fb": 86,
+        "mix5050|ex_kfirst50": 23,
+        "mix5050|ex_kfirst_rand": 60
+      }
+    },
+    {
+      "cell": "m0.7_n1",
+      "mu": 0.7,
+      "P_stage1": 4,
+      "ceil_M1": 4,
+      "ceil_M2": 4,
+      "ceil_M": 4,
+      "QA_open": false,
+      "cross": {
+        "kfirst_rand|ex_fin12_fb": 122,
+        "kfirst_rand|ex_kfirst50": 52,
+        "kfirst_rand|ex_mix5050": 33,
+        "mix5050|ex_fin12_fb": 63,
+        "mix5050|ex_kfirst50": 58,
+        "mix5050|ex_kfirst_rand": 67
+      }
+    },
+    {
+      "cell": "m1.4_n1",
+      "mu": 1.4,
+      "P_stage1": 1,
+      "ceil_M1": 1,
+      "ceil_M2": 5,
+      "ceil_M": 5,
+      "QA_open": false,
+      "cross": {
+        "kfirst_rand|ex_fin12_fb": 100,
+        "kfirst_rand|ex_kfirst50": 52,
+        "kfirst_rand|ex_mix5050": 30,
+        "mix5050|ex_fin12_fb": 38,
+        "mix5050|ex_kfirst50": 53,
+        "mix5050|ex_kfirst_rand": 43
+      }
+    }
+  ],
+  "invalid": [],
+  "QA": {
+    "m0.35_n1": false,
+    "m0.7_n1": false,
+    "m1.4_n1": false
+  },
+  "QB_mu_reopens": {
+    "M1": false,
+    "M2": false
+  },
+  "decision": "E3B1_FLOOR_EVERYWHERE"
+}

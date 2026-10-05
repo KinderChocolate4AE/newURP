@@ -1,0 +1,10 @@
+| defender | group | defended/n | net | K_FIRST | fallback | pen | arm_d med | fire_d med |
+|---|---|---|---|---|---|---|---|---|
+| kfirst_rand | ex_fin12_fb | 100/240 | 7 | 90 | 3 | 131 | 49.0 | 11.5 |
+| kfirst_rand | ex_kfirst50 | 52/240 | 0 | 50 | 2 | 188 | 49.0 | 11.4 |
+| kfirst_rand | ex_kfirst_rand | 5/240 | 0 | 4 | 1 | 235 | 49.1 | 11.4 |
+| kfirst_rand | ex_mix5050 | 30/240 | 1 | 28 | 1 | 210 | 48.7 | 11.6 |
+| mix5050 | ex_fin12_fb | 38/240 | 1 | 33 | 4 | 196 | 49.1 | 11.3 |
+| mix5050 | ex_kfirst50 | 53/240 | 0 | 0 | 53 | 187 | 31.1 | 11.4 |
+| mix5050 | ex_kfirst_rand | 43/240 | 13 | 0 | 30 | 197 | 48.6 | 11.5 |
+| mix5050 | ex_mix5050 | 1/240 | 0 | 0 | 1 | 239 | 49.0 | 11.4 |
