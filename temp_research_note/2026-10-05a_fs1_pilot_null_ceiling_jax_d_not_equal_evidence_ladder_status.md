@@ -52,6 +52,18 @@ daily 2026-10-04b §5, run3 pilot 판독 상세 = 2026-10-04f.
   설계 근거: FS1 r0~r4 보상엔 조형 목적이 전무 (팀 공유 스칼라 + K_FIRST 직접 경로가 limiter 를
   추격-산개로 수렴시킴 — pilot 의 메커니즘 음성은 상당 부분 설정 탓). 상세 = docs/124 §3.
 
+## 3.6 (d) 경과 (10/05 오후 추가)
+
+- **분리 실험 (exploit 모드, PFSP 제거) 완료 ~15:40**: 정본 95·96/96 vs JAX 92·89/96 침투 —
+  양쪽 포화 근처, **학습기 코어 동등 → 범인 = PFSP/상대 혼합 동역학** (main 1순위 용의자 일치).
+- JAX 처방 = **episodic 모드** (정본식 완주 batch). (d) 재실험 1회 GPU 실행 중 (5 seed 순차,
+  ~17:10 완료 예상). p ≥ 0.05 → 봉인 v2 / p < 0.05 → fallback.
+- **fallback 정정**: "정본 r4 밤샘" 은 철회된 참조 — r4 단독 반복은 미실행 보존 (§3.5).
+  유효 fallback = **E3 stage 1 축소 격자 (3 cell) 정본 밤샘** (docs/124 §7).
+- **r4 전 다듬기 등록 (JAX)**: episodic 모드의 가변 batch 크기 → PPO 마지막 minibatch jit
+  재컴파일 오버헤드 (정확성 무관). 처방 후보 = 고정 shape pad+mask / drop-last.
+  **순서: 봉인 v2 → 재컴파일 수정 → parity 재실행 → E3 봉인이 그 commit 을 고정** (해시 churn 방지).
+
 ## 4. 다음 (의존 순서)
 
 JAX 분리 실험 결과 → (범인 확정 → 수정 → (d) 재실험 1회) → 봉인 v2 → r4 manifest 최종 개정
