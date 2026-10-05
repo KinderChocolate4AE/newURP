@@ -67,6 +67,33 @@ def test_r4_confirmation(ds, want):
     assert M.confirm(ds) == want
 
 
+def test_r4p_stack_pieces():
+    import numpy as np
+    from shepherd.fs1.train import def_shaping, pfsp_w, LAMBDA_DIST
+    from shepherd.fs1.world import FS1Env, FS1Spec
+    # 시간 채널: 기본 65-D bit-exact, r4p 는 66-D 이고 마지막 채널 = t/episode_len
+    e = FS1Env(FS1Spec(obs_time=True), seed=0)
+    obs, _ = e.reset(seed=7)
+    assert len(obs["finisher_0"]) == 66 and obs["finisher_0"][-1] == 0.0
+    acts = {l: np.zeros(4) for l in e.limiter_ids}
+    acts["finisher_0"] = np.zeros(5); acts["adversary_0"] = np.zeros(3)
+    obs, _, _, _ = e.step(acts)
+    assert abs(obs["finisher_0"][-1] - 1 / 800) < 1e-9
+    assert len(FS1Env(FS1Spec(), seed=0).reset(seed=7)[0]["finisher_0"]) == 65
+    # potential shaping: 할인 합 = −Φ(s0) (PBRS 성질), raw 경로는 기존과 동일
+    g, dists = 0.997, [200.0, 150.0, 90.0, 30.0]
+    prev = -LAMBDA_DIST / (1 - g) * dists[0]
+    phi0, disc, acc = prev, 1.0, 0.0
+    for t, d in enumerate(dists[1:], 1):
+        dr, prev = def_shaping(d, prev, g, t == len(dists) - 1, True)
+        acc += disc * dr; disc *= g
+    assert abs(acc - (-phi0)) < 1e-12
+    assert def_shaping(123.0, 0.0, g, False, False)[0] == -LAMBDA_DIST * 123.0
+    # f_var: 붕괴 구간 (x≈0.055) 에서 전패 상대 가중이 낮아야 함
+    assert pfsp_w(0.055) > 0.8 and pfsp_w(0.055, fvar=True) < 0.06
+    assert abs(pfsp_w(0.5, fvar=True) - 0.251) < 1e-9
+
+
 def test_ladder_nominal_restores_p1a_spec():
     from shepherd.fs1.train import ladder_attacker
     S = {p["name"]: ladder_attacker(p["ov"]).spec for p in ladder_pool()}

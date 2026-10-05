@@ -176,7 +176,7 @@ def run(a):
                     jobs.append((d, dsnap, opp, seeds[c:c + CHUNK], nt if c == 0 else 0))
     from shepherd.fs1.world import FS1Spec
     with mp.get_context("spawn").Pool(a.workers, initializer=_init_worker,
-                                      initargs=(FS1Spec().__dict__,)) as P:
+                                      initargs=(FS1Spec(obs_time=a.stack == "r4p").__dict__,)) as P:
         recs = [x for part in P.map(episodes, jobs) for x in part]
     with open(out / "episodes.jsonl", "w", encoding="utf-8") as f:
         for d, g, r in recs:
@@ -186,7 +186,7 @@ def run(a):
     meta = {"ckpt": str(a.ckpt), "ckpt_it": ck.get("it"), "ckpt_total_steps": ck.get("total_steps"),
             "episodes": a.episodes, "seed": a.seed, "defenders": a.defenders,
             "groups": {g: [o["name"] for o in v] for g, v in groups.items()},
-            "exploiter": a.exploiter, "manifest": a.manifest, "ladder": a.ladder,
+            "exploiter": a.exploiter, "manifest": a.manifest, "ladder": a.ladder, "stack": a.stack,
             "git": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
             "seeds_by_group": {g: [r["seed"] for d, gg, r in recs if gg == g and d == a.defenders[0]]
                                for g in groups}}
@@ -244,6 +244,8 @@ def main(argv=None):
     r.add_argument("--manifest", default=None, help="봉인 manifest hash (기록용)")
     r.add_argument("--ladder", choices=["nominal", "legacy"], default="nominal",
                    help="사다리 공격자 구성. legacy = eval v1 (jink 0 변형, docs/123 §8.1)")
+    r.add_argument("--stack", choices=["r4", "r4p"], default="r4",
+                   help="ckpt 의 학습 stack 과 일치시킬 것 (r4p = 관측 66-D)")
     lg = sub.add_parser("log")
     lg.add_argument("--log", required=True)
     lg.add_argument("--window", type=int, default=30)

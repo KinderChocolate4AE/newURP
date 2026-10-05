@@ -57,6 +57,8 @@ class FS1Spec:
     r_kfirst: Optional[float] = None   # net 소진 전 kinetic 보상. None = HARD_KILL 과 동일 (A안)
     c_fire: float = 0.05
     r_fire_range: tuple = (4.0, 16.0)   # FCS 발사 거리 행동의 범위 (m)
+    obs_time: bool = False              # r4' (docs/124 D2): 관측에 t/episode_len 1채널 추가
+                                        # (timeout 종단 하 Markov 복원). False = 기존 65-D bit-exact
 
 
 def _physics_kwargs(spec: FS1Spec) -> dict:
@@ -157,6 +159,13 @@ class FS1Env:
         inn.layout = replace(inn.layout, limiter_p0=tuple(tuple(p) for p in ring),
                              finisher_p0=tuple(tgt))
 
+    def _aug(self, obs):
+        """r4' 시간 채널: 각 관측 벡터 끝에 t/episode_len 을 붙인다 (spec.obs_time 일 때만)."""
+        if not self.spec.obs_time:
+            return obs
+        f = np.float32(self._t / self.spec.episode_len)
+        return {k: np.r_[v, f].astype(np.float32) for k, v in obs.items()}
+
     def reset(self, seed: Optional[int] = None):
         if seed is not None:
             self._rng = np.random.default_rng(seed)
@@ -165,10 +174,11 @@ class FS1Env:
             self.inner._attacker_phase = derive_phase(0, seed)
         self._place()
         self._att_a = np.zeros(3)
+        self._t = 0
         self.z = self._draw_skill()
         obs, infos = self.env.reset(seed=int(self._rng.integers(2**31)))
         self.start_station = {a: self.station_of(a) for a in self.limiter_ids + [FIN]}
-        return obs, infos
+        return self._aug(obs), infos
 
     # ---- 사격통제 (FCS) -------------------------------------------------------
     def station_accel(self, agent, c):
@@ -236,7 +246,8 @@ class FS1Env:
         done = any(terms.values()) or any(truncs.values())
         for a in infos:
             infos[a]["fs1_label"] = label
-        return obs, rewards, done, infos
+        self._t += 1
+        return self._aug(obs), rewards, done, infos
 
     def _draw_skill(self):
         return np.eye(Z_DIM)[int(self._rng.integers(Z_DIM))]

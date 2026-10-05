@@ -32,6 +32,7 @@ SNAP_MIN_OWN = 10                       # 승률 snapshot 최소 간격 (run2: �
 DEF_PER_ATT = 2                         # 방어 iter : 공격 iter (run2: 공격자가 3배 빠른 lr 로 앞지름)
 KFIRST_R = 50.0                         # scripted kinetic-first 변형 무장 거리 (31~32/32 성공 측정)
 LAMBDA_DIST = 1e-5                      # 방어 거리 shaping /m/step (G&B 비율 맞춤)
+                                        # r4 raw 벌점 실측 0.169/ep (max 0.387) — 예산 0.2 초과 가능 (F1)
 LAMBDA_DIV = 0.0                        # 공격자 다양성 패널티 /step. r4: 0 — 판별기 acc ≈ 우연 (0.16)
                                         # 이라 r3 의 5e-3 은 episode 당 ≈ −0.74 step 비용일 뿐 (판별기는 감시용 유지)
 KL_TARGET = 0.01                        # r4 lr 자동조절: 갱신 KL > 2× → lr/1.5, < ½× → lr×1.5
@@ -92,6 +93,22 @@ def att_feat(env, v_prev):
 
 def att_action(out, env):
     return np.clip(out["att"][1][0], -1, 1) * 2.0 * env.att_a_max      # 전권 residual
+
+
+def def_shaping(dist, prev_phi, gamma, done, pot):
+    """방어 거리 shaping 1 step. r4 = raw 벌점 −λ·d (F1: non-potential 접근 prior).
+    r4' (docs/124 D1) = potential γΦ′−Φ, Φ = −λ/(1−γ)·d (Wiewiora 등가 스케일, 손잡이 0,
+    정책 불변). 반환 (r 증분, 새 prev_phi)."""
+    if not pot:
+        return -LAMBDA_DIST * dist, 0.0
+    phi = -LAMBDA_DIST / (1.0 - gamma) * dist
+    return gamma * (0.0 if done else phi) - prev_phi, phi
+
+
+def pfsp_w(x, fvar=False):
+    """PFSP 상대 가중. r4 = (1−x)² (어려운 상대 집중, G&B). r4' = x(1−x) (D2: 붕괴 구간에서
+    전패 상대로의 쏠림 방지 — AlphaStar struggling-agent 처방)."""
+    return (x * (1.0 - x) if fvar else (1.0 - x) ** 2) + 1e-3
 
 
 def ladder_pool(legacy=False):
@@ -156,7 +173,7 @@ def _set_opponent(env, side, opp, obs_dim, cache):
 
 def rollout(args):
     import torch
-    side, snap, opps, n_steps, gamma, lam, seed, deterministic = args
+    side, snap, opps, n_steps, gamma, lam, seed, deterministic, pot = args
     env = _W["env"]
     np.random.seed(seed); torch.manual_seed(seed)       # 행동 샘플링까지 job 시드로 재현
     obs0, _ = env.reset(seed=seed)
@@ -176,6 +193,8 @@ def rollout(args):
         done, ep_len = False, 0
         inn = env.inner
         prev_phi = -float(np.linalg.norm(inn._p(inn._states()[2]) - np.asarray(inn.layout.target))) / 100.0
+        _, fin0, att0 = inn._states()
+        prev_phi_d = -LAMBDA_DIST / (1.0 - gamma) * float(np.linalg.norm(inn._p(fin0) - inn._p(att0)))
         v_prev = inn._v(inn._states()[2])
         while not done:
             o = obs["finisher_0"]
@@ -193,7 +212,9 @@ def rollout(args):
             r = rew["finisher_0"] if side == "def" else rew["adversary_0"]
             inn = env.inner; _, fin, att = inn._states()
             if side == "def":
-                r -= LAMBDA_DIST * float(np.linalg.norm(inn._p(fin) - inn._p(att)))
+                dr, prev_phi_d = def_shaping(float(np.linalg.norm(inn._p(fin) - inn._p(att))),
+                                             prev_phi_d, gamma, done, pot)
+                r += dr
             else:   # potential-based (최적정책 불변): Φ = −d_asset/100
                 phi = -float(np.linalg.norm(inn._p(att) - np.asarray(inn.layout.target))) / 100.0
                 if ep_len > 0:
@@ -241,8 +262,8 @@ def merge(parts):
 
 
 # ---------------------------------------------------------------- 메인 ---
-def pfsp_pick(rng, pool, wr, n, latest_idx):
-    w = np.array([(1.0 - wr[i]) ** 2 + 1e-3 for i in range(len(pool))])
+def pfsp_pick(rng, pool, wr, n, latest_idx, fvar=False):
+    w = np.array([pfsp_w(wr[i], fvar) for i in range(len(pool))])
     w = w / w.sum()
     return [latest_idx if rng.random() < 0.5 else int(rng.choice(len(pool), p=w))
             for _ in range(n)]
@@ -268,6 +289,9 @@ def main(argv=None):
     ap.add_argument("--exploit", default=None,
                     help="fresh exploiter 모드: 고정 방어 상대로 새 공격자만 학습. "
                          "ckpt 경로 (방어 팀, 결정적 행동) 또는 scripted:kfirst50")
+    ap.add_argument("--stack", choices=["r4", "r4p"], default="r4",
+                    help="r4p = r4' (docs/124 D1·D2): 거리 shaping potential 화 + 관측 t/T 채널 + "
+                         "PFSP f_var. 기본 r4 = 기존 bit-exact (stage 1 exploiter 는 반드시 r4)")
     a = ap.parse_args(argv)
 
     import torch
@@ -276,7 +300,8 @@ def main(argv=None):
     torch.manual_seed(a.seed)
     torch.set_num_threads(a.torch_threads)      # 공용 서버: 총 코어 = workers + torch_threads
     out = pathlib.Path(a.out); out.mkdir(parents=True, exist_ok=True)
-    spec = FS1Spec()
+    r4p = a.stack == "r4p"
+    spec = FS1Spec(obs_time=r4p)
     probe = FS1Env(spec, seed=0)
     obs_dim = len(next(iter(probe.reset(seed=0)[0].values())))
     del probe
@@ -315,7 +340,7 @@ def main(argv=None):
                                                  "snap_min_own": SNAP_MIN_OWN, "def_per_att": DEF_PER_ATT,
                                                  "kfirst_r": KFIRST_R, "z_dim": Z_DIM,
                                                  "kl_target": KL_TARGET, "lr_bounds": LR_BOUNDS,
-                                                 "design": "r4"},
+                                                 "design": a.stack},
                                                 default=str), "utf-8")
     ctx = mp.get_context("spawn")
     with ctx.Pool(a.workers, initializer=_init_worker, initargs=(spec.__dict__,)) as P:
@@ -330,9 +355,9 @@ def main(argv=None):
             n_eps = max(8, math.ceil(a.steps_per_worker / 120))
             jobs = []
             for w in range(a.workers):
-                picks = pfsp_pick(rng, cand, wr_s, n_eps, len(cand) - 1)
+                picks = pfsp_pick(rng, cand, wr_s, n_eps, len(cand) - 1, r4p)
                 jobs.append((side, teams[side].snapshot(), [(i, cand[i]) for i in picks],
-                             a.steps_per_worker, a.gamma, a.lam, int(rng.integers(2**31)), False))
+                             a.steps_per_worker, a.gamma, a.lam, int(rng.integers(2**31)), False, r4p))
             batch = merge(P.map(rollout, jobs))
             team = teams[side]
             st = ppo_update(team, opts[side], batch)
