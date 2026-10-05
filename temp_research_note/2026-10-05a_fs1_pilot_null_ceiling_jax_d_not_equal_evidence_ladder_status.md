@@ -103,6 +103,11 @@ daily 2026-10-04b §5, run3 pilot 판독 상세 = 2026-10-04f.
   stage1 exploiter = sealed-v2 `e8806d9` 동결, stage2 = `28e350c` `--stack r4p` (+arm B κ0.2),
   판정 평가 = server4, 비게이트 예측 μ* ∈ [0.5,1.0] 등록. 이후 변경 = v2 + 새 hash.
 - 남은 실행: stage 1 (server5 GPU 학습 + server4 평가 orchestration) → 판독 → stage 2.
+- **lineage 주의 (JAX 보고, main 승인)**: manifest v1 의 stage1 pin `e8806d9` 는 μ/ν·fin12_fb
+  CLI 가 없어 **실행 불가** (봉인 실수). 실제 실행 커밋 = `0817f5b` (cd2be75 merge + CLI 플러밍만;
+  world r4 경로는 봉인 v2 와 bit-exact, spot-check 통과 — 델타 CLI 한정 확인·승인). 처리 =
+  **결과 전 manifest v1.1 개정 1회** (r4 r2 전례): JAX 전체 스위트 green 최종 커밋으로 stage 1·2
+  pin 동시 갱신 → 개정 push 후에만 stage 1 발사.
 
 ## 4. 다음 (의존 순서)
 
