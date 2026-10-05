@@ -51,13 +51,16 @@ cherry-pick 금지: 규칙에 맞는 cell 전부, 하나도 없으면 stage 2 �
 - **arm A (r4 레시피, 조형 없음 control)**: docs/123 §9 그대로 — G&B식 종말 보상 + 거리 shaping.
   (r4 단독 반복 계약 `a38993a8541264cd` 는 **미실행으로 보존** — pilot 의 천장 발견으로 닫힌 cell
   3-seed 반복의 정보 가치가 소멸 (2026-10-05 결정). manifest 는 기록으로 유지, seed 규칙은 여기로 승계.)
-- **arm B (r5 = A + E_req 조형)**: limiter 보상에 **spine B-5 목적함수의 첫 구현** 추가 —
-  net LOADED ∧ d_att ≤ 30 m 동안 r += −β·Ê(s), Ê = w₁(|v_⊥|/v_att)² + w₂(λ̇·d/v_att)² +
-  w₄(|Δp_net(τ_deploy)|/ρ)² (정규화, clip [0,1]; w₃ a_req 항은 1차 제외 — proxy 불안정).
-  w 균등 초기값, **β 는 episode 당 기대 크기 ≤ 0.2 로 캘리브레이션** (r3 다양성 패널티 −0.74 의
-  교훈 — 종말 보상 ±1 을 압도 금지). + 무장 상시화 방지 armed-step 패널티 −5e-4/step.
-  봉인 전 현 cell **배관 smoke 1회** (비봉인, 보고용): E_req 항이 limiter 행동을 추격→위치선정으로
-  바꾸는지 궤적 확인만.
+- **arm B (r5 = A + fire-tick viability 보너스, 단일 손잡이)**: 팀 보상에 **net 발사 tick 한 번만**
+  r += κ·v_shot_soft (κ = 0.2). proxy 를 새로 만들지 않고 **env 의 비준된 포획 판정값** (B0 v3,
+  lean 모드가 FIRE tick 에만 계산) 을 그대로 쓴다. 발사 ≈ 1회/episode 라 구조적으로 ≤ κ —
+  종말 보상 ±1 압도 불가 (r3 다양성 패널티 −0.74/ep 교훈). dense E_req 다항 보상 (수제 proxy +
+  가중 3 + β + arm 패널티) 은 **기각-보류**: 조형을 구매하면 메커니즘 주장이 순환하고 손잡이 6개
+  (2026-10-05 검토). arm B 로도 기울기 부재가 입증될 때만 별도 계약으로 재고.
+  봉인 전 현 cell **배관 smoke 1회** (비봉인, 보고용): κ 항 배선 + 행동 변화 궤적 확인만.
+- **메커니즘 지표는 보상이 아니라 로그**: 발사 시점 v_shot_soft·E_req proxy·공격자 |v_⊥|/λ̇ 를
+  **양 arm 공통 진단 로그**로 기록. arm A 에서의 자발 창발 = 순수 발견 주장 (E4 ①),
+  arm B − A 결과 차 = 보상 설계 효과 주장 — 두 주장을 분리 (측정은 공짜, 구매는 안 함).
 
 각 arm **3 seed** (1.1e8, JAX) + 봉인 평가 (eval v1 절차 + 공칭 사다리) → arm 판정 = seed 별 v2 판정
 2/3 확정. **arm B − arm A 가 귀속 (강한 결과 ②) 의 1차 증거** — 같은 cell·같은 seed paired.
