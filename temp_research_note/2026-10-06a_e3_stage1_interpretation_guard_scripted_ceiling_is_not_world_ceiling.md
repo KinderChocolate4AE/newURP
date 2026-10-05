@@ -102,3 +102,15 @@
   축 논의"). 단 ③ 이 ④·⑤ 사이의 빠진 계단이므로, phase 2 재개 여부는 ③ 의 결과를 보고 —
   ③ 양성이면 "상태-조건부 타이밍만으로 열림 → 학습의 여지는 그 위", ③ 음성이면 행동 공간
   자체가 닫혔다는 증거가 강해져 ⑤ 로.
+
+## 7. 1.5a 점유율 + phase 2 봉인 (10/06 새벽)
+
+- **1.5a (보고 전용, `9275722`) 전 cell 양성**: 적응 exploiter 12종 전부에서 robust 포획 조건
+  (worst ≥ 1 ∧ ¬boxed) 성립 step 이 18~22/24 ep 존재, 창 폭 ep 당 1~4 step (0.05~0.2 s).
+  → scripted 가 지는 건 "d≤12 무조건 발사" 가 그 좁은 창을 못 맞추기 때문일 가능성 — 상태-조건부
+  행동 (③·④) 의 과녁이 실재. caveat: 비발사 궤적은 분포 밖 (스크립트 docstring 기록).
+- **phase 2 addendum 봉인**: JAX 확인 ① nn-타깃 exploit 42f8835 그대로 동작 (추가 커밋 불요)
+  ② resync 180b0ef (fs1_jax 무변경). 계약 = {m0.35_n1, m1.4_n1} × {arm A, arm B} × 3 seed ×
+  1.1e8, BC = 정본 f525da0+ (--stack r4p --mu --nu), 판정 = 고정 learned_det vs 신규 전용
+  exploiter (1e7) ≥ ceil_ref(cell)+24 = **≥ 29/240**, seed 2/3, arm 별 판정, B−A = 목적함수 변경
+  효과만. hash 는 manifest 파일 참조. 예상 비용: 학습 12 run ≈ 11~12 h (episodic ~33k sps) + BC 12 (CPU 병렬).

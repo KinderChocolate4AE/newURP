@@ -1,0 +1,43 @@
+{
+  "schema": "fs1-e3b-phase2-addendum-v1",
+  "status": "sealed after the phase-1 readout (FLOOR_EVERYWHERE) and the 1.5a occupancy probe (report-only: robust capture-ok steps exist in 18-22/24 episodes vs every adapted exploiter, window 1-4 steps), before any phase-2 training (user approval)",
+  "lineage": {
+    "phase1": "aad0416bfe4cdd2a",
+    "occupancy": "artifacts/fs1/e3b/occupancy.json (9275722)",
+    "held_clause": "phase-1 floor held phase 2; re-opened by user decision with absolute criteria"
+  },
+  "question": "Q-C: can co-trained defense (frozen at the final checkpoint) exceed every scripted-family ceiling against a fresh dedicated exploiter — i.e., does within-episode state-adaptive behavior do what capability (mu-nu), episode-level unpredictability, and fixed fire rules could not",
+  "cells": [
+    {
+      "cell": "m0.35_n1",
+      "mu": 0.35,
+      "nu": 1.0,
+      "ceil_ref": 5
+    },
+    {
+      "cell": "m1.4_n1",
+      "mu": 1.4,
+      "nu": 1.0,
+      "ceil_ref": 5
+    }
+  ],
+  "production": {
+    "bc": "canonical shepherd.fs1.bc at f525da0+: --stack r4p [--k-viab 0.2 for arm B] --mu <mu> --nu <nu> --seed <seed> --episodes 3000, server6 CPU",
+    "train": "JAX 42f8835 semantics (execution tree 180b0ef = 42f8835 jax-code-identical + canonical merge; REVISION recorded): --stack r4p --mu --nu --seed <seed> --init <bc> --total-steps 1.1e+08; arm A = no k_viab, arm B = --k-viab 0.2",
+    "paths": "/data1/hjhong/fs1jax/e3b/phase2/<cell>/arm{A,B}/s<seed>/{bc/, ckpt.pt, log.jsonl, config.json}",
+    "seeds": {
+      "bc_and_train": [
+        0,
+        1,
+        2
+      ]
+    }
+  },
+  "judgment": {
+    "exploiter": "per (cell, arm, seed): fresh dedicated exploiter vs the frozen learned_det defense — JAX --exploit <ckpt> --stack r4p --mu --nu, 1e7 steps, seed = 271000 + cell_idx*1000 + {armA:0, armB:100} + seed",
+    "eval": "canonical eval on server4, 240 eps paired, --stack r4p --mu --nu, cell eval seed0 = 270000 + cell_idx*1000 (identical across arms/seeds); learned_sto, R1/R2 fire-tick logs and trajectories reported",
+    "criterion": "LEARNING_OPENS(cell, arm) if ceil_learned_det >= ceil_ref(cell) + 24 (ceil_ref = max over P/M1/M2 phase-1 ceilings, recorded above) on >= 2 of 3 seeds. Arms judged separately; B - A reported as objective-change effect only (never as emergence). Overall: E3B2_LEARNING_OPENS if any (cell, arm) confirmed, else E3B2_NULL. INVALID_E3B2 per budget/completion/paired/manifest/BC-lineage violation (cell excluded and reported)"
+  },
+  "discipline": "judgment on server4; no pooling with pilot/stage1/phase1; emergence claims from arm A logs only; quarantine rules and launch preconditions (REVISION check + dry-run report) as before",
+  "manifest_hash": "b74aabfc3e319246"
+}
