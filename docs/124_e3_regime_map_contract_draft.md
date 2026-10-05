@@ -41,13 +41,26 @@ cell 마다: scripted 방어 2종 {kfirst50, fin12_fb} 각각에 **전용 exploi
 학습 → 정본 평가 240판 (paired). **ceiling_s(cell) = max over scripted of defended/240.**
 보고 추가: 공칭 사다리 vs scripted 96판 (포화 sanity), 궤적 그림 (viz-first).
 
-### Stage 2 — 학습 이득 (조건부, 선정 규칙 사전 고정)
+### Stage 2 — 학습 이득 (조건부, 선정 규칙 사전 고정, **2-arm**)
 **선정 규칙**: ceiling_s ∈ [48, 216]/240 (= 20%~90%) 인 **모든** cell — "열려 있되 자명하지 않음".
 하한 20% = 바닥끼리 비교 배제 (pilot D_ex=+6 교훈; 표본 오차 ±5%p 상회). 상한 90% = 포화 배제 **및
 산술 가능성 보장**: ceiling_s > 216 이면 학습이 240/240 이어도 D < +24 라 통과가 불가능하다.
 cherry-pick 금지: 규칙에 맞는 cell 전부, 하나도 없으면 stage 2 생략.
-각 선정 cell: r4 레시피 동시학습 **3 seed** (1.1e8, JAX) + 봉인 평가 (eval v1 절차 + 공칭 사다리)
-→ cell 판정 = r4 반복 규칙 그대로 (seed 별 v2 판정, 2/3 확정).
+
+각 선정 cell 에서 **두 arm** 을 같은 예산·같은 seed 로:
+- **arm A (r4 레시피, 조형 없음 control)**: docs/123 §9 그대로 — G&B식 종말 보상 + 거리 shaping.
+  (r4 단독 반복 계약 `a38993a8541264cd` 는 **미실행으로 보존** — pilot 의 천장 발견으로 닫힌 cell
+  3-seed 반복의 정보 가치가 소멸 (2026-10-05 결정). manifest 는 기록으로 유지, seed 규칙은 여기로 승계.)
+- **arm B (r5 = A + E_req 조형)**: limiter 보상에 **spine B-5 목적함수의 첫 구현** 추가 —
+  net LOADED ∧ d_att ≤ 30 m 동안 r += −β·Ê(s), Ê = w₁(|v_⊥|/v_att)² + w₂(λ̇·d/v_att)² +
+  w₄(|Δp_net(τ_deploy)|/ρ)² (정규화, clip [0,1]; w₃ a_req 항은 1차 제외 — proxy 불안정).
+  w 균등 초기값, **β 는 episode 당 기대 크기 ≤ 0.2 로 캘리브레이션** (r3 다양성 패널티 −0.74 의
+  교훈 — 종말 보상 ±1 을 압도 금지). + 무장 상시화 방지 armed-step 패널티 −5e-4/step.
+  봉인 전 현 cell **배관 smoke 1회** (비봉인, 보고용): E_req 항이 limiter 행동을 추격→위치선정으로
+  바꾸는지 궤적 확인만.
+
+각 arm **3 seed** (1.1e8, JAX) + 봉인 평가 (eval v1 절차 + 공칭 사다리) → arm 판정 = seed 별 v2 판정
+2/3 확정. **arm B − arm A 가 귀속 (강한 결과 ②) 의 1차 증거** — 같은 cell·같은 seed paired.
 
 ## 4. 판정 (사전 등록)
 
@@ -75,7 +88,7 @@ cherry-pick 금지: 규칙에 맞는 cell 전부, 하나도 없으면 stage 2 �
 ## 7. 예산·fallback
 
 - Stage 1: 30 exploiter 학습 (3e8 step, JAX GPU 수십 분~수 시간) + 평가 15×~10 분 (server4 CPU).
-- Stage 2: 선정 n cell × 3 seed × 35 분 (JAX). n ≤ 4 가정 시 ≤ 7 h.
+- Stage 2: 선정 n cell × **2 arm** × 3 seed × 35 분 (JAX). n ≤ 4 가정 시 ≤ 14 h.
 - JAX 지연 fallback: stage 1 을 축소 격자 μ×ν = {0.35, 0.7, 1.4}×{1.0} 3 cell 로 정본 밤새 —
   축소분도 같은 선정 규칙·판정을 쓰되 `E3_BOUNDARY_MAPPED(reduced)` 로 표기.
 
