@@ -108,7 +108,7 @@ def run_slot(cell, mu, nu, name, root, sub, dfd, eps):
     om_bk = float(inn.backend.by_name(ADV).limits.omega_max)
 
     rows = {k: [] for k in ("ep", "step", "d", "closing", "p_feas", "ld1", "ld2", "ld3",
-                            "ld4", "rb_base", "rb_wbk", "rb_w8")}
+                            "ld4", "rb_base", "rb_wbk", "rb_w8", "pf_wbk", "soft_base")}
     per_ep = {lin: {"steps": [], "run": []} for lin in ("base", "wbk", "w8")}
     checked = 0
     for i in range(eps):
@@ -153,7 +153,8 @@ def run_slot(cell, mu, nu, name, root, sub, dfd, eps):
                              ("p_feas", base.p_feasible), ("ld1", ld[0]), ("ld2", ld[1]),
                              ("ld3", ld[2]), ("ld4", ld[3]),
                              ("rb_base", _robust(base)), ("rb_wbk", _robust(wbk)),
-                             ("rb_w8", _robust(w8))):
+                             ("rb_w8", _robust(w8)), ("pf_wbk", wbk.p_feasible),
+                             ("soft_base", base.v_shot_soft)):
                     rows[k].append(v)
                 flags["base"].append(_robust(base))
                 flags["wbk"].append(_robust(wbk))
