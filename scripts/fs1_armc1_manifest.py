@@ -1,0 +1,98 @@
+"""Seal arm C-1 canonical eval: 판정기-증류 발사 머리 — docs/127.
+
+    python scripts/fs1_armc1_manifest.py      # manifest 기록 (정본 평가 결과 보기 전 봉인)
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import pathlib
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+MANIFEST = ROOT / "artifacts" / "fs1" / "armc1_manifest.json"
+
+CELLS = [{"cell": "m0.35_n1", "mu": 0.35, "nu": 1.0, "ceil_ref": 5},
+         {"cell": "m1.4_n1", "mu": 1.4, "nu": 1.0, "ceil_ref": 5}]
+SEEDS = [0, 1, 2]
+N, MARGIN, TRAIN_STEPS, EX_STEPS = 240, 24, 1.1e8, 1e7
+SEED0, STRIDE = 272000, 1000
+
+
+def build_armc1() -> dict:
+    body = {
+        "schema": "fs1-armc1-manifest-v1",
+        "status": ("sealed after production + the JAX Q-C1a report (held-out AUCs visible), "
+                   "BEFORE any canonical eval result (contract: docs/127, sealed 2026-10-07 "
+                   "under the user's gate-chain approval)"),
+        "lineage": {"contract": "docs/127", "phase2": "b74aabfc3e319246 (E3B2_NULL)",
+                    "p0": "harvest 4d381c3 (AXIS3_NULL / AUC 0.887)",
+                    "jax_pin": "f6ef5af (= e66135a arm C-1 impl + golden regen; clean tree 34/34; "
+                               "wd=0 distill-dummy bit-identity test preserves PPO parity)"},
+        "question": ("Q-C1b: does a defense whose fire channel is supervised-distilled from the "
+                     "judge (oracle-distilled label: robust = worst>=1 and not boxed_in, per tick) "
+                     "open the dedicated judge-exploiter ceiling that pure RL (E3b phase 2) "
+                     "could not"),
+        "qc1a": {
+            "criterion": "held-out tick AUC >= 0.9 (rollout/env-unit split) -> C1_DISTILL_OK",
+            "aggregation": ("seed 2/3 per cell (the contract's own seed-family rule). HONESTY "
+                            "FLAG: the aggregation rule was fixed AFTER the per-seed AUCs were "
+                            "reported (contract left it to main); recorded, not re-judged"),
+            "reported": {"m0.35_n1": [0.974, 0.970, 0.971], "m1.4_n1": [0.969, 0.817, 0.968]},
+            "verdict": ("C1_DISTILL_OK on both cells (m0.35 3/3, m1.4 2/3); caveat: m1.4_n1/s1 "
+                        "0.817 — positive rate 0.08-0.2% (~80 positives in the rolling window), "
+                        "high estimator variance + late distribution shift"),
+        },
+        "production": {
+            "paths": "/data1/hjhong/fs1jax/e3b/armc1/<cell>/s<seed>/{ckpt.pt, judge_exploiter/}",
+            "train": "JAX f6ef5af --stack r4p + distill fire-head loss, 1.1e8, seeds 0/1/2",
+            "judge_exploiter": "fresh dedicated exploiter vs frozen defense, 1e7, jseed 273000-band",
+            "transfer": ("server4 input = /data/hjhong/l2/e3b_in/armc1 — stripped for eval: "
+                         "{teams, it, total_steps} + pools/pool_snaps truncated to the LAST "
+                         "snapshot only (eval uses --groups none; pool group unused). Count-"
+                         "verified 36 files / 12 ckpts on both ends"),
+        },
+        "evaluation": {"n": N, "seed0": SEED0, "cell_seed_stride": STRIDE,
+                       "cell_idx": "index in THIS manifest's cells list (0/1)",
+                       "paired": True, "stack": "r4p", "groups": "none",
+                       "defenders": ["learned_det (judgment)", "learned_sto (report)"],
+                       "environment": "canonical eval on server4 (.venv-l2); "
+                                      "seed band 272000+ never used in training/labeling",
+                       "report_extras": ["fire-tick hit rate (v_fire fields; did the distilled "
+                                         "head fire inside judge-robust ticks)",
+                                         "fire@None rate (vs phase-2 hold-and-penetrate signature)",
+                                         "trajectories --traj 2 (viz-first)"]},
+        "gates": {
+            "Q-C1b": (f"per cell: ceil_learned_det >= ceil_ref + {MARGIN} = 29/{N} on >= 2 of 3 "
+                      "seeds -> ARMC1_OPENS(cell); none -> ARMC1_NULL; budget/completion/paired/"
+                      "manifest violation -> cell excluded and reported (INVALID_ARMC1 if nothing "
+                      "remains)"),
+            "arm_D_condition": ("exploiter audit signature reported (train-side: 6/6 reach 99% "
+                                "penetration, 0.05->0.99 shape preserved on m1.4) — if the audit "
+                                "still penetrates ~97%+ after C-1, the docs/126 arm-D entry "
+                                "condition stands"),
+        },
+        "not_evidence_for": ["emergence (oracle-distilled label — capability claim only: "
+                             "'the window is detectable by distillation')",
+                             "cooperation vocabulary (limiter-control opportunity)",
+                             "pooling with phase 2 / P0 / pilot numbers"],
+    }
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    return {**body, "manifest_hash": hashlib.sha256(raw.encode()).hexdigest()[:16]}
+
+
+def load_armc1() -> dict:
+    data = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    if data != build_armc1():
+        raise ValueError(f"arm C-1 manifest drift: {MANIFEST}")
+    return data
+
+
+def main() -> None:
+    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    body = build_armc1()
+    MANIFEST.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"{MANIFEST} {body['manifest_hash']}")
+
+
+if __name__ == "__main__":
+    main()
