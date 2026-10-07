@@ -1,0 +1,58 @@
+{
+  "manifest_hash": "1173759cf5e4854b",
+  "cells": {
+    "m0.35_n1": {
+      "thr": 29,
+      "seeds": {
+        "0": {
+          "ceil_det": 3,
+          "ceil_sto": 10,
+          "v_fire_med": 0.501,
+          "pass": false
+        },
+        "1": {
+          "ceil_det": 4,
+          "ceil_sto": 23,
+          "v_fire_med": 0.859,
+          "pass": false
+        },
+        "2": {
+          "ceil_det": 2,
+          "ceil_sto": 27,
+          "v_fire_med": 0.819,
+          "pass": false
+        }
+      },
+      "n_pass": 0,
+      "opens": false
+    },
+    "m1.4_n1": {
+      "thr": 29,
+      "seeds": {
+        "0": {
+          "ceil_det": 1,
+          "ceil_sto": 6,
+          "v_fire_med": null,
+          "pass": false
+        },
+        "1": {
+          "ceil_det": 2,
+          "ceil_sto": 6,
+          "v_fire_med": null,
+          "pass": false
+        },
+        "2": {
+          "ceil_det": 4,
+          "ceil_sto": 5,
+          "v_fire_med": 0.0,
+          "pass": false
+        }
+      },
+      "n_pass": 0,
+      "opens": false
+    }
+  },
+  "invalid": [],
+  "decision": "ARMC1_NULL",
+  "opened": []
+}
