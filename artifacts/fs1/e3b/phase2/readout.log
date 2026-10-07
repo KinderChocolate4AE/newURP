@@ -1,0 +1,122 @@
+{
+  "manifest_hash": "b74aabfc3e319246",
+  "cells": {
+    "m0.35_n1": {
+      "armA": {
+        "thr": 29,
+        "seeds": {
+          "0": {
+            "ceil_det": 4,
+            "ceil_sto": 12,
+            "v_fire_med": 0.098,
+            "pass": false
+          },
+          "1": {
+            "ceil_det": 2,
+            "ceil_sto": 19,
+            "v_fire_med": 0.383,
+            "pass": false
+          },
+          "2": {
+            "ceil_det": 4,
+            "ceil_sto": 31,
+            "v_fire_med": 0.0,
+            "pass": false
+          }
+        },
+        "n_pass": 0,
+        "opens": false
+      },
+      "armB": {
+        "thr": 29,
+        "seeds": {
+          "0": {
+            "ceil_det": 4,
+            "ceil_sto": 18,
+            "v_fire_med": 0.0,
+            "pass": false
+          },
+          "1": {
+            "ceil_det": 7,
+            "ceil_sto": 12,
+            "v_fire_med": 0.071,
+            "pass": false
+          },
+          "2": {
+            "ceil_det": 1,
+            "ceil_sto": 26,
+            "v_fire_med": 0.0,
+            "pass": false
+          }
+        },
+        "n_pass": 0,
+        "opens": false
+      },
+      "B_minus_A_det": [
+        0,
+        5,
+        -3
+      ]
+    },
+    "m1.4_n1": {
+      "armA": {
+        "thr": 29,
+        "seeds": {
+          "0": {
+            "ceil_det": 3,
+            "ceil_sto": 9,
+            "v_fire_med": 0.0,
+            "pass": false
+          },
+          "1": {
+            "ceil_det": 4,
+            "ceil_sto": 12,
+            "v_fire_med": 0.039,
+            "pass": false
+          },
+          "2": {
+            "ceil_det": 2,
+            "ceil_sto": 25,
+            "v_fire_med": 0.957,
+            "pass": false
+          }
+        },
+        "n_pass": 0,
+        "opens": false
+      },
+      "armB": {
+        "thr": 29,
+        "seeds": {
+          "0": {
+            "ceil_det": 9,
+            "ceil_sto": 26,
+            "v_fire_med": 0.076,
+            "pass": false
+          },
+          "1": {
+            "ceil_det": 3,
+            "ceil_sto": 25,
+            "v_fire_med": 0.218,
+            "pass": false
+          },
+          "2": {
+            "ceil_det": 11,
+            "ceil_sto": 20,
+            "v_fire_med": 0.193,
+            "pass": false
+          }
+        },
+        "n_pass": 0,
+        "opens": false
+      },
+      "B_minus_A_det": [
+        6,
+        -1,
+        9
+      ]
+    }
+  },
+  "invalid": [],
+  "decision": "E3B2_NULL",
+  "opened": []
+}
