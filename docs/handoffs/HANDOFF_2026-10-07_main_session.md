@@ -23,7 +23,13 @@ JAX 세션·학습 방법론 세션의 핸드오프는 이 문서에 반영돼 �
 5. 학습 방법론 정본: `docs/handoffs/HANDOFF_2026-10-05b_learning_research_to_main.md` +
    `reports/Frontier MARL 보상 설계.md`.
 
-## 2. ★ 진행 중 (최우선)
+> **(판독 완료 — §2 는 기록용)** phase 2 정본 판정 = **`E3B2_NULL`** (`fc77ea9`, 무효 0): ceil_det
+> 1~11/240 (문턱 29), 전 arm 0/3. **보고 발견**: learned_sto > learned_det 전 slot (9~31 vs 1~11 —
+> 확률성 잔여 가치, arm D 간접 지지) · κ B−A 는 m1.4 2/3 양이나 미미. ρ 가설 첫 검정 통과.
+> 상세 = 노트 `2026-10-07b`. **다음 세션 첫 작업 = 사용자 一括 결재 (docs/126 ①~③ + phase 2.5/E7
+> 순서) 확인 후 승인분 실행.**
+
+## 2. ★ 진행 중 (최우선 — 판독 완료됨, 위 블록 참조)
 
 - **E3b phase 2 정본 평가**: server4 tmux `e3b2` (10-07 13:28 발사, WORKERS=6). 12 slot =
   {m0.35_n1, m1.4_n1} × {armA=r4′, armB=+κ0.2} × seed{0,1,2}, 각 240판 paired (seed0 =
