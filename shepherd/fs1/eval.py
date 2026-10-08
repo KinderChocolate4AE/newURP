@@ -81,10 +81,11 @@ def _def_act(env, o, name, team, kf_r=None):
 def episodes(job):
     """job = (방어 이름, 방어 snap|None, 상대, 시드들, 궤적 기록 수) → episode 기록 리스트."""
     import torch
-    dname, dsnap, opp, seeds, n_traj = job
+    dname, dsnap, opp, seeds, n_traj, *rest = job
+    dstack = rest[0] if rest else 1
     env = _W["env"]
     od = len(next(iter(env.reset(seed=0)[0].values())))
-    dteam = _team(DEF_ROLES, dsnap, od) if dsnap is not None else None
+    dteam = _team(DEF_ROLES, dsnap, od * max(dstack, 1)) if dsnap is not None else None
     ateam = (_team(ATT_ROLES, opp["snap"], od + Z_DIM, disc=(DISC_IN, Z_DIM))
              if opp["kind"] == "nn" else None)
     out = []
@@ -98,9 +99,16 @@ def episodes(job):
         rec = {"seed": s, "opp": opp["name"], "arm_d": None, "fire_d": None, "n_fire": 0,
                "v_fire": None, "p_feas": None}       # R1/R2 공통 진단 (docs/124 D4): 첫 발사 tick
         tr = [] if j < n_traj else None
+        prev = None                     # arm D 프레임 스택 (docs/128): k=4 최신-우선 타일-초기화
         while not done:
             o = obs["finisher_0"]
-            acts = _def_act(env, o, dname, dteam, kf_r)
+            if dstack > 1:
+                if prev is None:
+                    prev = [o] * (dstack - 1)
+                o_def = np.concatenate([o, *prev])
+            else:
+                o_def = o
+            acts = _def_act(env, o_def, dname, dteam, kf_r)
             if ateam:
                 acts["adversary_0"] = att_action(ateam.act(env.att_obs(o))[0], env)
             lims, fin, att = inn._states()
@@ -109,6 +117,8 @@ def episodes(job):
             if rec["arm_d"] is None and any(armed):
                 rec["arm_d"] = round(float(np.linalg.norm(p_att - tgt)), 2)
             obs, _, done, info = env.step(acts)
+            if dstack > 1:
+                prev = [o, *prev[:-1]]
             fi = info["finisher_0"]
             if fi.get("fire_event"):
                 rec["n_fire"] += 1
@@ -215,7 +225,8 @@ def run(a):
                 # 궤적: 단일 상대 그룹은 앞 traj 판, 다중 상대 그룹은 앞 traj 개 상대의 첫 판
                 nt = a.traj if len(opps) == 1 else int(k < a.traj)
                 for c in range(0, len(seeds), CHUNK):
-                    jobs.append((d, dsnap, opp, seeds[c:c + CHUNK], nt if c == 0 else 0))
+                    jobs.append((d, dsnap, opp, seeds[c:c + CHUNK], nt if c == 0 else 0,
+                                 a.def_stack))
     from shepherd.fs1.world import FS1Spec
     with mp.get_context("spawn").Pool(a.workers, initializer=_init_worker,
                                       initargs=(FS1Spec(obs_time=a.stack == "r4p",
@@ -230,7 +241,7 @@ def run(a):
             "episodes": a.episodes, "seed": a.seed, "defenders": a.defenders,
             "groups": {g: [o["name"] for o in v] for g, v in groups.items()},
             "exploiter": a.exploiter, "manifest": a.manifest, "ladder": a.ladder, "stack": a.stack,
-            "mu": a.mu, "nu": a.nu,
+            "mu": a.mu, "nu": a.nu, "def_stack": a.def_stack,
             "git": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
             "seeds_by_group": {g: [r["seed"] for d, gg, r in recs if gg == g and d == a.defenders[0]]
                                for g in groups}}
@@ -292,6 +303,9 @@ def main(argv=None):
                    help="ckpt 의 학습 stack 과 일치시킬 것 (r4p = 관측 66-D)")
     r.add_argument("--mu", type=float, default=0.35, help="E3 cell: 방어 가속비 (FS1Spec.mu)")
     r.add_argument("--nu", type=float, default=1.0, help="E3 cell: 방어 속도비 (FS1Spec.nu)")
+    r.add_argument("--def-stack", type=int, default=1,
+                   help="방어 obs 프레임 스택 k (arm D, docs/128: 최신-우선, 타일-초기화; "
+                        "학습 ckpt 와 일치시킬 것)")
     lg = sub.add_parser("log")
     lg.add_argument("--log", required=True)
     lg.add_argument("--window", type=int, default=30)

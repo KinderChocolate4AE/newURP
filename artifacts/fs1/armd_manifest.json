@@ -1,0 +1,47 @@
+{
+  "schema": "fs1-armd-manifest-v1",
+  "status": "sealed before any canonical eval result (contract: docs/128). HONESTY FLAG: the D-i inputs (exploiter training audit curves) already exist and their finals were reported by the JAX lane (5x .99, 1x .93) before this seal — D-i is therefore effectively known; it is still read out ONLY through the estimator declared here. D-ii (canonical ceilings) is unseen",
+  "lineage": {
+    "contract": "docs/128",
+    "armc1": "1173759cf5e4854b (ARMC1_NULL — detection ok, window generation is the bottleneck)",
+    "jax_pin": "b3031ed (35/35 green; fixed semantics = k=4 latest-first tile-init, BC first-layer transplant with start-tick BC-equivalence test, audit exploiter trained vs sto)"
+  },
+  "question": "Q-D: does history conditioning (defense obs frame stack k=4) + stochastic-policy judgment defeat the co-adapted exploiter's frozen-determinism exploit — (i) softening the audit signature, (ii) restoring window generation / opening the ceiling",
+  "judgment_defender": "learned_sto — PRE-DECLARED JUDGMENT-MODEL CHANGE, this contract only (docs/128 §1): the mechanism under test is unpredictability, so a determinized readout removes the mechanism itself. learned_det reported. No pooling with det-judged experiments",
+  "production": {
+    "defense": "JAX b3031ed: arm C-1 recipe (r4p + distilled fire head, docs/127 label unchanged) + defense obs frame stack k=4 (latest-first, tile-init), 264-D input, 1.1e8, seeds 0/1/2",
+    "exploiter": "fresh dedicated exploiter vs the FROZEN STOCHASTIC defense, 1e7, jseed 275000-band, audit curve logged",
+    "paths": "/data1/hjhong/fs1jax/e3b/armd/<cell>/s<seed>/{ckpt.pt, judge_exploiter/}",
+    "transfer": "strip = {teams, it, total_steps} + pools/pool_snaps last-1 truncate (armc1 precedent), count-verified both ends"
+  },
+  "evaluation": {
+    "n": 240,
+    "seed0": 274000,
+    "cell_seed_stride": 1000,
+    "paired": true,
+    "stack": "r4p",
+    "def_stack": 4,
+    "groups": "none",
+    "defenders": [
+      "learned_sto (judgment)",
+      "learned_det (report)"
+    ],
+    "mirror": "canonical eval frame-stack mirror = shepherd.fs1.eval --def-stack 4 (latest-first, tile-init — same declared semantics as the JAX pin); smoke on one slot before launch",
+    "environment": "server4 (.venv-l2); seed band 274000+ never used in training/labeling",
+    "report_extras": [
+      "fired-ep count / robust-fire conversion / window occurrence (reference comparison to armc1 under the same threshold family only — no pooling)",
+      "trajectories --traj 2 (viz-first)"
+    ]
+  },
+  "gates": {
+    "D-i": "audit softening: mean of the LAST 10 win_rate entries of judge_exploiter/log.jsonl <= 0.9 on >= 2 of 3 seeds, per cell -> AUDIT_SOFTENED(cell)",
+    "D-ii": "ceiling: ceil_learned_sto >= ceil_ref + 24 = 29/240 on >= 2 of 3 seeds, per cell -> ARMD_OPENS(cell)",
+    "decision": "any cell D-ii -> ARMD_OPENS; else any cell D-i -> ARMD_AUDIT_ONLY; else ARMD_NULL. INVALID per budget/completion/paired/manifest violation (cell excluded and reported)"
+  },
+  "not_evidence_for": [
+    "emergence (history conditioning is a design prescription)",
+    "cooperation vocabulary (limiter-control opportunity)",
+    "pooling with armc1/phase2/P0 numbers"
+  ],
+  "manifest_hash": "c21ab916d68e3e30"
+}
