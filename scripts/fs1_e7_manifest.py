@@ -172,9 +172,15 @@ MANIFEST_A2 = ROOT / "artifacts" / "fs1" / "e7a2_manifest.json"
 
 def build_e7a2() -> dict:
     body = {
-        "schema": "fs1-e7a2-manifest-v1",
+        "schema": "fs1-e7a2-manifest-v1.1",
         "status": ("sealed BEFORE any E7-b result (E7-b not yet launched) and before the "
-                   "E7-a′ run (contract: docs/129 section 7; user agreement 2026-10-08)"),
+                   "E7-a′ full run (contract: docs/129 section 7; user agreement 2026-10-08). "
+                   "v1.1 PRE-LAUNCH LABEL FIX: the 2-ep scratch smoke gave C = 0 at every rho; "
+                   "v1 would have labeled that NOT_SUPPORTED, but an all-zero C means the "
+                   "prediction is untestable, not falsified -> explicit UNDECIDABLE_C0 "
+                   "verdict. Criteria unchanged. Context: P0 rows show scripted limiters "
+                   "prune witnesses in 12% of window ticks (p_feas < 1), so C = 0 would mean "
+                   "pruning never flips the judgment, not a wiring fault"),
         "lineage": {"contract": "docs/129 section 7", "e7a": build_e7a()["manifest_hash"],
                     "e7b": build_e7b()["manifest_hash"],
                     "p_rho2": "rho* = 2.813 is the axis-2 = 0 boundary (K1 assumption A5)"},
@@ -189,6 +195,9 @@ def build_e7a2() -> dict:
         "predictions": {
             "P-2a": "per aim: argmax_rho C(rho) has rho <= 4.0 -> SUPPORTED if both aims",
             "P-2b": "per aim: max C over rho >= 6.0 <= (1/3) max C -> SUPPORTED if both aims",
+            "degenerate": ("if C = 0 at every rho for an aim -> UNDECIDABLE_C0 (scripted "
+                           "limiter geometry never flips the judgment; axis-2 test deferred "
+                           "to learned limiters: P-2c in E7-b and E7-c)"),
             "P-2c": ("E7-b readout: window-conditioned C-2 escape-shrinkage share of "
                      "t0.7_h1.0_cv (rho 3.93) > t0.5_h1.5_cv (rho 11.77) on >= 2 of 3 seeds; "
                      "undecidable if the log format does not allow window conditioning "

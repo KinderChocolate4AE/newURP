@@ -84,9 +84,13 @@ def coop_readout(npz, rho):
                 hi = max((out[v]["C"] for v in vs if out[v]["rho"] >= HIGH_RHO), default=0.0)
                 verdict[aim] = {"max_C_high": hi, "max_C": cmax,
                                 "pass": cmax > 0 and hi <= cmax / 3}
+        degenerate = any(v["pass"] is False and
+                         max(out[x]["C"] for x, *_r, am in VARIANTS if am == aim) == 0
+                         for aim, v in verdict.items())
         res[key] = {"criterion": crit, "by_aim": verdict,
-                    "verdict": "SUPPORTED" if all(v["pass"] for v in verdict.values())
-                    else "NOT_SUPPORTED"}
+                    "verdict": ("UNDECIDABLE_C0" if degenerate else
+                                "SUPPORTED" if all(v["pass"] for v in verdict.values())
+                                else "NOT_SUPPORTED")}
     return res
 
 
