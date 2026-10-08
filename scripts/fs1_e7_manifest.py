@@ -14,9 +14,14 @@ MANIFEST = ROOT / "artifacts" / "fs1" / "e7a_manifest.json"
 
 def build_e7a() -> dict:
     body = {
-        "schema": "fs1-e7a-manifest-v1",
-        "status": "sealed before any E7-a probe result (contract: docs/129; behavior-side "
-                  "prescriptions exhausted: E3B2_NULL / ARMC1_NULL / ARMD_NULL)",
+        "schema": "fs1-e7a-manifest-v1.1",
+        "status": ("sealed before any full E7-a probe result (contract: docs/129). v1.1 "
+                   "PRE-LAUNCH CORRECTION (E3 v1->v1.1 precedent): the 2-ep scratch smoke "
+                   "revealed the v1 instant-aim axis approximation dominates the map (anchor "
+                   "agree 0.70-0.90; the identity variant itself got promoted) -> replaced "
+                   "with a per-variant turret-slew simulation (great-circle, omega_fin*dt, "
+                   "shepherd.sim.analytic._slew; omega_fin runtime-recorded). Entry criterion "
+                   "and predictions unchanged. No full-run result was seen before this seal"),
         "lineage": {"contract": "docs/129", "armd": "c21ab916d68e3e30 (ARMD_NULL)",
                     "occupancy_15a": "artifacts/fs1/e3b/occupancy.json (9275722) — protocol "
                     "reused (SEED0 268000, no-fire, LOADED & d<=16)",
@@ -48,8 +53,10 @@ def build_e7a() -> dict:
         "probe_approximations": [
             "attackers = old-world adapted exploiters (non-co-evolved) — optimistic bias; "
             "selection only, positive claims E7-b only (fresh new-world exploiter + audit)",
-            "instant-aim axis n_F = unit(nc - p_fin) ignoring turret slew — optimistic; "
-            "quantified via the baseline-variant vs rollout-axis anchor agreement rate",
+            "aim axis = per-variant turret-slew simulation (v1.1): tracks desired = "
+            "unit(nc_v - p_fin) at omega_fin*dt per tick from the episode-start heading; "
+            "identity-variant vs rollout-axis anchor agree reported as simulation fidelity "
+            "(expected ~1)",
             "wiring self-check: (tau0, theta0, n_F = rollout e_fin) bit-exact vs inn._vshot",
         ],
         "jax_parity_note": ("risk-1 answer (JAX memo section 3): E7-a touches no world code. "

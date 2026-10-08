@@ -10,8 +10,11 @@ rollout 위에서, 매 window tick 에 12 변형 (τ{1,.7,.5} × θ{1,1.5} × �
 
 선언 (manifest `fs1_e7_manifest.py` 와 함께 봉인):
 - 조준: cv = nc = p_att + v·τ_v (현행 외삽). ma = + ½·â·τ_v², â = (v_t − v_{t−1})/dt,
-  ‖â‖ ≤ a_att_max clip (첫 tick â=0). 콘 축 n_F = unit(nc − p_fin) — **즉시 조준 근사**
-  (포탑 slew 무시 = 낙관 상한, 선별용; 기준 변형 vs rollout-축 anchor 로 근사 오차 정량).
+  ‖â‖ ≤ a_att_max clip (첫 tick â=0). 콘 축 n_F = **변형별 slew 시뮬레이션 축** — 매 tick
+  great-circle 로 ω_fin·dt 한도 내 desired = unit(nc_v − p_fin) 추적 (`shepherd.sim.analytic
+  ._slew` 재사용; v1.1 교정 — smoke dry-run 에서 즉시-조준 근사가 지배 변수로 판명
+  (agree 0.70~0.90, 항등 변형 승격) 되어 발사 전 교체). 항등 변형 vs rollout-축 anchor
+  agree 는 시뮬레이션 충실도 지표로 유지 (기대 ≈ 1).
 - ρ(변형) = d*·tan(θ_v) / (½·a_att·τ_v²), d* = cone_range_max (runtime 기록). 절대값은
   d* 관례 의존 — 단조성·상대비만 사용 (A.1 의 1.6 과 절대 비교 금지).
 - wiring 자기검증: (τ1, θ1, n_F = rollout e_fin) 직접 호출이 inn._vshot 과 bit-exact.
@@ -54,8 +57,9 @@ def run_slot(name, root, sub, dfd, eps):
     import torch as T
     from shepherd.fs1.eval import _ep_kf_r
     from shepherd.fs1.train import _team, ATT_ROLES, DISC_IN, att_action, scripted_def_actions
-    from shepherd.fs1.world import FS1Env, FS1Spec, Z_DIM
+    from shepherd.fs1.world import FIN, FS1Env, FS1Spec, Z_DIM
     from shepherd.game import viability as V
+    from shepherd.sim.analytic import _slew
 
     env = FS1Env(FS1Spec(mu=MU, nu=NU), seed=0)
     obs_dim = len(env.reset(seed=0)[0]["finisher_0"])
@@ -65,6 +69,7 @@ def run_slot(name, root, sub, dfd, eps):
     tau0, th0 = float(inn.tau_deploy), float(inn.cone_half_angle)
     rmin, rmax, dt = float(inn.cone_range_min), float(inn.cone_range_max), float(inn.dt)
     a_att = float(inn.a_att_max)
+    om_fin = float(inn.backend.by_name(FIN).limits.omega_max)
 
     per_ep = {vn: {"steps": [], "run": []} for vn, *_ in VARIANTS}
     rows = {f"{vn}.rb": [] for vn, *_ in VARIANTS}
@@ -77,6 +82,7 @@ def run_slot(name, root, sub, dfd, eps):
         obs, _ = env.reset(seed=s)
         done, v_prev = False, None
         flags = {vn: [] for vn, *_ in VARIANTS}
+        axis = {vn: inn._e(inn._states()[1]).copy() for vn, *_ in VARIANTS}
         while not done:
             o = obs["finisher_0"]
             acts = scripted_def_actions(env, kf_r)
@@ -89,6 +95,15 @@ def run_slot(name, root, sub, dfd, eps):
             ahat = np.zeros(3) if v_prev is None else (v_att - v_prev) / dt
             if (n := np.linalg.norm(ahat)) > a_att:
                 ahat = ahat * (a_att / n)
+            nc_v, ax_v = {}, {}
+            for vn, ts, hs, aim in VARIANTS:          # 포탑 slew 시뮬레이션 (매 tick 추적)
+                tv = tau0 * ts
+                nc = p_att + v_att * tv + (0.5 * ahat * tv * tv if aim == "ma" else 0.0)
+                des = nc - p_fin
+                nrm = np.linalg.norm(des)
+                if nrm > 1e-9:
+                    axis[vn] = _slew(axis[vn], des / nrm, om_fin * dt)
+                nc_v[vn], ax_v[vn] = nc, axis[vn]
             if inn.fsm.state.value == "LOADED" and d <= WINDOW_D:
                 lim_ps = [inn._p(l) for l in lims]
                 sd = inn._seed * 100003 + inn._step_i
@@ -107,12 +122,8 @@ def run_slot(name, root, sub, dfd, eps):
                 rows["ep"].append(i); rows["step"].append(inn._step_i)
                 rows["anchor_rb"].append(_robust(base))
                 for vn, ts, hs, aim in VARIANTS:
-                    tv = tau0 * ts
-                    nc = p_att + v_att * tv + (0.5 * ahat * tv * tv if aim == "ma" else 0.0)
-                    ax = nc - p_fin
-                    nrm = np.linalg.norm(ax)
-                    n_F = ax / nrm if nrm > 1e-9 else inn._e(fin)
-                    r = V.v_shot(p_att, v_att, tau=tv, theta_net=th0 * hs, n_F=n_F, **com)
+                    r = V.v_shot(p_att, v_att, tau=tau0 * ts, theta_net=th0 * hs,
+                                 n_F=ax_v[vn], **com)
                     rb = _robust(r)
                     rows[f"{vn}.rb"].append(rb)
                     flags[vn].append(rb)
@@ -123,7 +134,8 @@ def run_slot(name, root, sub, dfd, eps):
             per_ep[vn]["steps"].append(int(sum(flags[vn])))
             per_ep[vn]["run"].append(_max_run(flags[vn]))
 
-    consts = {"tau0": tau0, "theta0": th0, "range_max": rmax, "a_att": a_att, "dt": dt}
+    consts = {"tau0": tau0, "theta0": th0, "range_max": rmax, "a_att": a_att, "dt": dt,
+              "omega_fin": om_fin}
     summ = {vn: {"steps_med": float(np.median(p["steps"])),
                  "max_run_med": float(np.median(p["run"])),
                  "eps_with_window": int(sum(x > 0 for x in p["steps"]))}
