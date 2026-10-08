@@ -66,6 +66,11 @@ class FS1Spec:
     nu: float = 1.0                     # a_def = mu·a_att, v_def = nu·v_att (limiter·finisher 공통).
                                         # 기본값 = r2a_stage1 의 MU/NU 상수 그대로 (bit-exact).
                                         # 공격자 쪽은 불변 (비준 위협 고정)
+    tau_scale: float = 1.0              # E7-b (docs/129 §6): physics.tau_deploy 단일 config
+                                        # 소스 배율 — env.tau_deploy 와 FSM dep 타이머 동시 전파
+    theta_scale: float = 1.0            # E7-b: judge cone_half_angle 배율
+    aim: str = "cv"                     # E7-b FCS 조준: cv = p+v·τ (현행) / "ma" = +½·â·τ²
+                                        # (â = 속도 유한차분, a_att_max clip). 기본 전부 no-op
 
 
 def _physics_kwargs(spec: FS1Spec) -> dict:
@@ -80,6 +85,9 @@ def _physics_kwargs(spec: FS1Spec) -> dict:
     extra["train.limits.limiter_v_max"] = spec.nu * v
     extra["train.limits.finisher_a_max"] = spec.mu * a   # = limiter 와 같은 기체급
     extra["train.limits.finisher_v_max"] = spec.nu * v
+    if spec.tau_scale != 1.0:            # E7-b: config 단일 소스 (scenario 경유 FSM 까지 전파)
+        from shepherd.m4_config import M4_OVERRIDES
+        extra["physics.tau_deploy"] = float(M4_OVERRIDES["physics.tau_deploy"]) * spec.tau_scale
     kw["extra_cfg"] = extra
     kw["reward"] = replace(kw["reward"], w_kill=spec.w_kill, dense_scale=0.0, enabled=True)
     return kw
@@ -99,6 +107,9 @@ class FS1Env:
         self.inner = self.sys.inner                     # ShapingParallelEnv
         inn = self.inner
         inn.lean, inn.fire_gate_on, inn.finisher_learned_accel = True, False, True
+        if spec.theta_scale != 1.0:      # E7-b: judge 콘 반각 배율 (판정 의미론 불변)
+            inn.cone_half_angle = float(inn.cone_half_angle) * spec.theta_scale
+        self._fcs_v_prev = None          # E7-b ma 조준용 공격자 속도 이력 (cv 는 미사용)
         fa = float(inn.backend.by_name(FIN).limits.a_max)
         inn._act_spaces[FIN] = spaces.Box(
             np.array([-1, -1, -1, 0, 0, -fa, -fa, -fa], np.float32),
@@ -184,6 +195,7 @@ class FS1Env:
             self.inner._attacker_phase = derive_phase(0, seed)
         self._place()
         self._att_a = np.zeros(3)
+        self._fcs_v_prev = None
         self._t = 0
         self.z = self._draw_skill()
         obs, infos = self.env.reset(seed=int(self._rng.integers(2**31)))
@@ -220,6 +232,14 @@ class FS1Env:
                          else np.r_[self.station_accel(lid, a[:3]), 0.0])
         f = np.asarray(hl.get(FIN, np.zeros(5)), float)
         nc = np.asarray(inn._net_center(p_att, v_att))
+        if self.spec.aim == "ma":        # E7-b (docs/129 §6): 조준점만 보정, witness/판정 불변
+            ah = (np.zeros(3) if self._fcs_v_prev is None
+                  else (v_att - self._fcs_v_prev) / inn.dt)
+            n = np.linalg.norm(ah)
+            if n > inn.a_att_max:
+                ah = ah * (inn.a_att_max / n)
+            nc = nc + 0.5 * ah * inn.tau_deploy ** 2
+            self._fcs_v_prev = v_att.copy()
         axis = (nc - p_fin) / max(np.linalg.norm(nc - p_fin), 1e-9)
         fire = float(f[4] > 0.5 and inn.fsm.state.value == "LOADED"
                      and np.linalg.norm(p_att - p_fin) <= f[3])
