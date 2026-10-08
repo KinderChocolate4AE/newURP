@@ -256,9 +256,11 @@ C_SEED0, C_STRIDE = 278000, 1000
 
 def build_e7c() -> dict:
     body = {
-        "schema": "fs1-e7c-manifest-v1",
+        "schema": "fs1-e7c-manifest-v1.1",
         "status": ("sealed 2026-10-08 on user approval ('fixed'), BEFORE any E7-b result and "
-                   "before any E7-c production (contract: docs/130)"),
+                   "before any E7-c production (contract: docs/130). v1.1 (user-approved, "
+                   "still before any production/result): interpretation table fixed "
+                   "(docs/130 section 7); gates unchanged"),
         "lineage": {"contract": "docs/130", "e7b": "543cd9e4b3582687 (v1.1, seal-time literal)",
                     "e7a2": "57b4faafba5d27bf", "p_rho2": "rho* = 2.813 (note 2026-10-08c)"},
         "question": ("does limiter-control opportunity (stage 1 of the original design: "
@@ -300,6 +302,28 @@ def build_e7c() -> dict:
                                  "trajectory-shaping candidate, reported as a range only"),
             "invalid": "budget/completion/paired/manifest/BC-lineage or post_shot violation",
         },
+        "interpretation_P1_v1_1": {
+            "delta": "D_shot(armed) - D_shot(inert) at P1, same-seed pairs; row by 2/3 majority",
+            "closure_indicators": "C = armed coop-window share (3-seed pooled); K_sw = armed "
+                                  "shot-window kinetic kills (kill_phase = shot_window)",
+            "A_closure": "delta >= +24 and (C >= 0.01 or K_sw >= delta/2) -> contribution 3 "
+                         "returns in its original form",
+            "B_threat_shaping": "delta >= +24 and C < 0.01 and K_sw < delta/2 -> cooperation "
+                                "real but via kinetic-threat trajectory shaping; contribution 3 "
+                                "redefined",
+            "C_null": "-24 < delta < +24 -> no net-cooperation effect in this regime; Paper 1 "
+                      "without contribution 3, axis 2 explained by a geometry lemma, "
+                      "cooperation question moves to Paper 2 (mode switching)",
+            "D_harm": "delta <= -24 -> cooperation harmful near the boundary (boxed); as C_null "
+                      "plus harm-mechanism report",
+            "mixed": "no 2/3 majority -> MIXED, per-seed report only",
+            "scope": "two points x 3 seeds, this net geometry, post-shot ROE, 1e7 exploiter; "
+                     "no general statement about cooperation",
+        },
+        "follow_up_form_only": ("kappa = R_k / r (r = 0.5 a tau^2) as the axis-2 physical knob: "
+                                "user derivation -> registered prediction -> learning-free "
+                                "kill_radius probe after the E7-c readout; R_k x ROE learning "
+                                "sweep moved to Paper 2"),
         "implementation_preconditions": ["FS1Spec.limiter_roe in {a (default, bit-exact), "
                                          "post_shot}", "FS1Spec.limiter_inert",
                                          "tests: default no-op; post_shot pre-shot kinetic 0 "
