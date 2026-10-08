@@ -1,8 +1,9 @@
 # 129 — E7: ①축 net 물리 sweep (ρ vs ceiling 머니 커브)
 
-- **일자**: 2026-10-08 · **상태**: **E7-a 봉인 / E7-b 형식만** (게이트 사슬 기승인 (docs/126
-  §6) 의 종단. E7-b 기준 수치는 E7-a 판독 후·학습 전 addendum 봉인 — E3b phase 2 선례).
-  manifest = `scripts/fs1_e7_manifest.py` (E7-a 발사 전 build; pin dry-run 전제 유지).
+- **일자**: 2026-10-08 · **상태**: **E7-a 봉인·판독 완료 (`P_RHO1_SUPPORTED`, 노트 10-08b)
+  + E7-b addendum 봉인 (§6, 2026-10-08 — 학습 전; 사용자 scope 결재 + P-ρ2 등록 10-08c
+  반영)**. manifest = `scripts/fs1_e7_manifest.py` (E7-a `build_e7a` v1.1 + E7-b `build_e7b`;
+  pin dry-run 전제 유지).
 - **결정 근거**: 행동 측 처방 전부 소진 — E3 (`BAND_EMPTY`) · E3b p1 (`FLOOR`) · p2
   (`E3B2_NULL`) · arm C-① (`ARMC1_NULL` — 감지 ✓·robust발사→포획 ≈1:1·창 생성 ✗) · arm D
   (`ARMD_NULL` — 발사 빈도 복원·타이밍 ✗). 창 생성의 남은 손잡이 = 세계 (net 물리) 자체.
@@ -52,9 +53,40 @@
 변형별 계보 분리 (구세계 수치와 pooling 금지; 기준 변형 anchor 비교만) · 어휘 (세계 천장
 금지·"이 예산 착취자 조건부" 필수 병기) · 격리본 불사용 · JAX git 은 newURP-jax 만.
 
-## 5. 레인 분담
+## 5. 레인 분담 (v0 — E7-a 시점; 현황은 §6 이후 노트 참조)
 
 - main: ma 조준 구현 + 프로브 스크립트 (P0/1.5a 재사용) + manifest + 판독.
-- JAX: **ρ 손잡이 플러밍 사전 설계** (tau_deploy·theta_cone·aim 을 JAX 세계에 노출 —
-  E7-b 재학습 대비; 지시 = HANDOFF_2026-10-08_main_to_jax_e7.md).
-- 사용자: K1 손증명 (P-ρ2 경계 등록, ≤10/31).
+- JAX: ρ 손잡이 플러밍 사전 설계 (완료 — newURP-jax `103165d`).
+- 사용자: K1 손증명 (완료 — P-ρ2 등록 10-08c, ρ* 2.813).
+
+## 6. E7-b addendum (봉인 2026-10-08 — E7-a 판독 후·학습 전; 사용자 scope 결재 반영)
+
+- **승격·승인 변형 5** (E7-a `P_RHO1_SUPPORTED`, 노트 10-08b; 사용자 결재 = cv 사다리
+  4점 + ma 대조 1점): **t0.7_h1.0_cv (ρ 3.93) · t0.7_h1.5_cv (6.00) · t0.5_h1.0_cv (7.69)
+  · t0.5_h1.5_cv (11.77) + t0.5_h1.0_ma (7.69)** × seed {0,1,2} = 15 run. cell = m0.35_n1.
+- **생산**: 변형 세계 재학습 — arm C-① 레시피 (r4p + 증류 fire head, docs/127 라벨 불변;
+  arm D 스택 불포함). **변형별 BC 신규 생성** (구세계 BC 재사용 금지 — JAX 메모 ⑤).
+  예산 1.1e8 + 신세계 전용 judge exploiter 1e7 (jseed 277000대, 감사 곡선 로그).
+- **세계 변형 구현 전제 (canonical 선행, JAX 미러)**: ① τ = **`physics.tau_deploy` config
+  단일 소스 override** (0.30·scale → scenario 경유 env.tau_deploy 와 FSM dep 타이머 동시
+  전파 — JAX risk① 구조적 해소) ② θ = judge cone_half_angle·scale ③ ma = 조준점 식
+  (nc += ½·â·τ², â = 속도 유한차분 a_att_max clip) 을 터렛 추적 (env_sys) + net_center
+  (env) 2개 지점에 동일 적용. **기본값 (1.0/1.0/cv) = 현행 bit-exact 테스트 필수** +
+  JAX parity (기준 변형 golden + 비기본 1변형 f64 spot-check).
+- **정본 평가** (server4): 240판 paired, 변형 시드 = **276000 + variant_idx×1000** (학습
+  사용 금지), defenders = **learned_det (판정)** + learned_sto (보고) + fin12_fb·kfirst50
+  (**scripted 전이 참조** — 같은 judge exploiter 상대 paired; exploiter 는 학습 방어
+  상대로 훈련됐으므로 참조 전용 라벨, 게이트 아님).
+- **게이트**: 변형별 **ceil_det ≥ 29/240** (ceil_ref 5 + 24 — 기존 문턱 가족. 정직 플래그:
+  신세계 ceil_ref 재측정 생략, scripted 전이 참조로 보완 보고), seed 2/3 →
+  `E7_OPENS(variant)`; 전무 → `E7B_NULL`. 무효 = budget/completion/paired/manifest/BC-계보
+  위반 변형 제외·보고.
+- **사전 등록 P-ρ3 (머니 커브 본체)**: cv 사다리 4점의 seed-중앙 ceil_det 가 ρ 단조 —
+  Spearman ≥ 0.7 → `P_RHO3_SUPPORTED`. ma 1점은 cv 동일 ρ (t0.5_h1.0) 와 쌍대 비교 보고.
+- **P-ρ2 overlay (등록 10-08c 인용, 판독 시 수행)**: ρ* = **2.813** (V̄ 23.01, 4dt) /
+  2.427 (3.5dt 하한). E7-a rows.npz 에서 **shell-통과 encounter 조건부 창 중앙값** 재계산
+  (등록 모집단 정합) 후 머니 커브에 ρ* 선 + N = N∞(1 − ρ₀/ρ) 형상 (ρ₀ 1.238 연속 개방,
+  1/ρ 선형) 겹쳐 그리기. 등록값 변경 불가.
+- 보고 추가: 변형 전반 NET 점유율 vs 감사 관통률 상관 (m0.35_s2 단서 추적) · C-② 로그
+  유지 · fired-ep/robust 전환율 (arm C-①/D 와 같은 문턱 가족 참조만).
+

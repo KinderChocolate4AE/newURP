@@ -78,11 +78,99 @@ def load_e7a() -> dict:
     return data
 
 
+# ---------------------------------------------------------------- E7-b ------
+MANIFEST_B = ROOT / "artifacts" / "fs1" / "e7b_manifest.json"
+
+B_VARIANTS = [{"name": "t0.7_h1.0_cv", "tau_scale": 0.7, "theta_scale": 1.0, "aim": "cv", "rho": 3.925},
+              {"name": "t0.7_h1.5_cv", "tau_scale": 0.7, "theta_scale": 1.5, "aim": "cv", "rho": 6.002},
+              {"name": "t0.5_h1.0_cv", "tau_scale": 0.5, "theta_scale": 1.0, "aim": "cv", "rho": 7.692},
+              {"name": "t0.5_h1.5_cv", "tau_scale": 0.5, "theta_scale": 1.5, "aim": "cv", "rho": 11.765},
+              {"name": "t0.5_h1.0_ma", "tau_scale": 0.5, "theta_scale": 1.0, "aim": "ma", "rho": 7.692}]
+B_SEEDS = [0, 1, 2]
+B_N, B_MARGIN, B_CEIL_REF = 240, 24, 5
+B_TRAIN_STEPS, B_EX_STEPS = 1.1e8, 1e7
+B_SEED0, B_STRIDE = 276000, 1000
+
+
+def build_e7b() -> dict:
+    body = {
+        "schema": "fs1-e7b-manifest-v1",
+        "status": ("sealed after the E7-a readout (P_RHO1_SUPPORTED, harvest b5f8695) and the "
+                   "P-rho2 registration (note 2026-10-08c), BEFORE any E7-b training. Scope = "
+                   "user approval 2026-10-08 (5 variants: cv rho-ladder 4 + ma contrast 1)"),
+        "lineage": {"contract": "docs/129 section 6", "e7a": build_e7a()["manifest_hash"],
+                    "p_rho2": "note 2026-10-08c: rho* = 2.813 (4dt, V=23.01) / 2.427 (3.5dt); "
+                              "registered pre-E7-b, no flag",
+                    "recipe": "arm C-1 (docs/127, 1173759cf5e4854b) — distilled fire head; "
+                              "arm D stack excluded (ARMD_NULL)"},
+        "question": ("Q-E7b: in net-physics variants whose probe window opened (E7-a), does "
+                     "the retrained defense open the capture ceiling under a FRESH new-world "
+                     "dedicated judge exploiter — i.e., does rho buy capture capability, not "
+                     "just probe windows"),
+        "cell": {"cell": "m0.35_n1", "mu": 0.35, "nu": 1.0},
+        "variants": B_VARIANTS, "seeds": B_SEEDS,
+        "production": {
+            "world": ("canonical-first variant landing, JAX mirror: tau via the SINGLE config "
+                      "source physics.tau_deploy override (propagates to env.tau_deploy AND "
+                      "the FSM dep timer through the scenario — resolves JAX risk-1 by "
+                      "construction); theta via judge cone_half_angle scale; ma aim nc += "
+                      "0.5*ahat*tau^2 (finite-difference ahat, a_att_max clip) applied at BOTH "
+                      "the turret-tracking (env_sys) and net_center (env) sites. Baseline "
+                      "(1.0/1.0/cv) must be bit-exact with the current world (test required); "
+                      "JAX parity = baseline golden + one non-default variant f64 spot-check"),
+            "bc": "NEW per-variant BC (canonical bc.py, 3000 eps) — old-world BC reuse banned",
+            "train": f"arm C-1 recipe, {B_TRAIN_STEPS:.1e} steps, seeds {B_SEEDS}",
+            "exploiter": f"fresh dedicated judge exploiter vs the frozen defense, "
+                         f"{B_EX_STEPS:.0e}, jseed 277000-band, audit curve logged",
+        },
+        "evaluation": {"n": B_N, "seed0": B_SEED0, "variant_seed_stride": B_STRIDE,
+                       "variant_idx": "index in THIS manifest's variants list",
+                       "paired": True, "stack": "r4p", "groups": "none",
+                       "defenders": ["learned_det (judgment)", "learned_sto (report)",
+                                     "fin12_fb + kfirst50 (scripted TRANSFER reference vs the "
+                                     "same judge exploiter — exploiter was trained vs the "
+                                     "learned defense, so reference-only, never a gate)"],
+                       "environment": "server4; seed band 276000+ never used in training"},
+        "gates": {
+            "E7_OPENS": (f"per variant: ceil_learned_det >= {B_CEIL_REF} + {B_MARGIN} = "
+                         f"29/{B_N} on >= 2 of 3 seeds. HONESTY FLAG: new-world ceil_ref not "
+                         "re-measured (threshold family continuity); scripted transfer "
+                         "reference reported as the compensating context"),
+            "overall": "any variant opens -> E7_OPENS else E7B_NULL; INVALID per budget/"
+                       "completion/paired/manifest/BC-lineage violation (variant excluded)",
+            "P-rho3": "cv-ladder (4 points): seed-median ceil_det monotone in rho, "
+                      "Spearman >= 0.7 -> P_RHO3_SUPPORTED (money-curve claim); ma point "
+                      "reported as a pair contrast at equal rho",
+        },
+        "readout_extras": ["P-rho2 overlay: recompute the E7-a window median CONDITIONAL on "
+                           "shell-passing encounters (registered population) from "
+                           "artifacts/fs1/e7a/rows.npz, then overlay rho* = 2.813 and the "
+                           "N = N_inf*(1 - rho0/rho) shape (rho0 = 1.238) on the money curve; "
+                           "registered values immutable",
+                           "NET-occupancy vs audit-penetration correlation across variants "
+                           "(m0.35_s2 clue tracking)", "C-2 logs retained",
+                           "fired-ep / robust-fire conversion (same threshold family "
+                           "reference to armc1/armd only)"],
+        "not_evidence_for": ["world ceiling", "real-net representativeness",
+                             "positive claims unconditional on this exploiter budget (1e7)",
+                             "pooling with old-world numbers"],
+    }
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    return {**body, "manifest_hash": hashlib.sha256(raw.encode()).hexdigest()[:16]}
+
+
+def load_e7b() -> dict:
+    data = json.loads(MANIFEST_B.read_text(encoding="utf-8"))
+    if data != build_e7b():
+        raise ValueError(f"E7-b manifest drift: {MANIFEST_B}")
+    return data
+
+
 def main() -> None:
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)
-    body = build_e7a()
-    MANIFEST.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"{MANIFEST} {body['manifest_hash']}")
+    for path, body in ((MANIFEST, build_e7a()), (MANIFEST_B, build_e7b())):
+        path.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(f"{path} {body['manifest_hash']}")
 
 
 if __name__ == "__main__":
