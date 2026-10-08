@@ -4,7 +4,7 @@
   "lineage": {
     "contract": "docs/129 section 7",
     "e7a": "3a8c066156b6972e",
-    "e7b": "543cd9e4b3582687",
+    "e7b": "65ef3b86715458fa",
     "p_rho2": "rho* = 2.813 is the axis-2 = 0 boundary (K1 assumption A5)"
   },
   "question": "axis 2 (cooperation, docs/126): how much of the robust window exists ONLY because limiters close escape witnesses, as a function of rho",
@@ -33,5 +33,5 @@
     "learned-limiter contribution (lower bound only)",
     "world ceiling"
   ],
-  "manifest_hash": "a98ceca16622e309"
+  "manifest_hash": "57b4faafba5d27bf"
 }

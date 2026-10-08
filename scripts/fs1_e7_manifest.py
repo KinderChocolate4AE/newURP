@@ -201,7 +201,7 @@ def build_e7a2() -> dict:
                    "prune witnesses in 12% of window ticks (p_feas < 1), so C = 0 would mean "
                    "pruning never flips the judgment, not a wiring fault"),
         "lineage": {"contract": "docs/129 section 7", "e7a": build_e7a()["manifest_hash"],
-                    "e7b": build_e7b()["manifest_hash"],
+                    "e7b": "65ef3b86715458fa",   # 봉인 시점 E7-b v1 hash 고정 (이후 E7-b 정정이 이 봉인을 흔들지 않게)
                     "p_rho2": "rho* = 2.813 is the axis-2 = 0 boundary (K1 assumption A5)"},
         "question": ("axis 2 (cooperation, docs/126): how much of the robust window exists ONLY "
                      "because limiters close escape witnesses, as a function of rho"),
