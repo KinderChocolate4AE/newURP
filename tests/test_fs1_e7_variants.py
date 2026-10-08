@@ -49,3 +49,53 @@ def test_ma_aim_diverges_cv_identical():
     s_ma = _rollout_sig(FS1Env(FS1Spec(aim="ma"), seed=0), jink=jk)
     np.testing.assert_array_equal(s_def, s_cv)
     assert not np.array_equal(s_def, s_ma)
+
+
+# ---- E7-c (docs/130 §5) ----------------------------------------------------
+def _hl(env, arm=1.0):
+    hl = {l: np.array([0.0, 0.0, 0.0, arm], np.float32) for l in env.limiter_ids}
+    hl["finisher_0"] = np.array([0, 0, 0, 12.0, 0.0], np.float32)
+    return hl
+
+
+def test_limiter_defaults_noop():
+    env = FS1Env(FS1Spec(), seed=0)
+    env.reset(seed=1)
+    assert not env.limiters_harmless()
+    assert env.sys.spec.contact_resolver == env._contact0
+
+
+def test_post_shot_blocks_kinetic_until_first_fire():
+    env = FS1Env(FS1Spec(limiter_roe="post_shot"), seed=0)
+    env.reset(seed=1)
+    assert env.limiters_harmless()
+    acts = env.fcs(_hl(env, arm=1.0))
+    for l in env.limiter_ids:                          # 발사 전: 무장 채널 0 → PN 커밋 경로 없음
+        assert acts[l][3] == 0.0
+    env.step({**_hl(env), "adversary_0": np.zeros(3, np.float32)})
+    assert env.sys.spec.contact_resolver is False      # 발사 전: 접촉 kinetic 경로 꺼짐
+    env._fired = True                                  # 첫 발사 latch 이후
+    assert not env.limiters_harmless()
+    env.step({**_hl(env), "adversary_0": np.zeros(3, np.float32)})
+    assert env.sys.spec.contact_resolver == env._contact0
+
+
+def test_inert_kill_radius_zero_and_judge_ignores_limiters():
+    env = FS1Env(FS1Spec(limiter_inert=True), seed=0)
+    env.reset(seed=1)
+    inn = env.inner
+    assert inn.kill_radius == 0.0 and env.limiters_harmless()
+    lims, fin, att = inn._states()
+    p, v = inn._p(att), inn._v(att)
+    near = [p + np.array([0.3, 0, 0]), p - np.array([0.3, 0, 0])]   # 탈출 구 안쪽에 limiter
+    a = inn._vshot(p, v, near, fin, seed=7)
+    b = inn._vshot(p, v, [], fin, seed=7)
+    assert (a.v_shot_worst, a.v_shot_soft, a.boxed_in) == (b.v_shot_worst, b.v_shot_soft, b.boxed_in)
+
+
+def test_kill_phase_classification():
+    from shepherd.fs1.eval import _kill_phase
+    assert _kill_phase("K_FIRST", 0) == "pre_shot"
+    assert _kill_phase("K_FIRST", 1) == "shot_window"
+    assert _kill_phase("HARD_KILL", 1) == "fallback"
+    assert _kill_phase("NET_CAPTURE", 1) is None

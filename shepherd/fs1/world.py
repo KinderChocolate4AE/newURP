@@ -71,6 +71,9 @@ class FS1Spec:
     theta_scale: float = 1.0            # E7-b: judge cone_half_angle 배율
     aim: str = "cv"                     # E7-b FCS 조준: cv = p+v·τ (현행) / "ma" = +½·â·τ²
                                         # (â = 속도 유한차분, a_att_max clip). 기본 전부 no-op
+    limiter_roe: str = "a"              # E7-c (docs/130): "a" = 현행 (net 전 kinetic 허용) /
+                                        # "post_shot" = 첫 발사 전 limiter 무장·접촉 kinetic 차단
+    limiter_inert: bool = False         # E7-c: physics.kill_radius = 0 (판정 폐쇄·kinetic 동시 0)
 
 
 def _physics_kwargs(spec: FS1Spec) -> dict:
@@ -88,6 +91,8 @@ def _physics_kwargs(spec: FS1Spec) -> dict:
     if spec.tau_scale != 1.0:            # E7-b: config 단일 소스 (scenario 경유 FSM 까지 전파)
         from shepherd.m4_config import M4_OVERRIDES
         extra["physics.tau_deploy"] = float(M4_OVERRIDES["physics.tau_deploy"]) * spec.tau_scale
+    if spec.limiter_inert:               # E7-c: config 단일 소스 (scenario.limiter.kill_radius)
+        extra["physics.kill_radius"] = 0.0
     kw["extra_cfg"] = extra
     kw["reward"] = replace(kw["reward"], w_kill=spec.w_kill, dense_scale=0.0, enabled=True)
     return kw
@@ -110,6 +115,8 @@ class FS1Env:
         if spec.theta_scale != 1.0:      # E7-b: judge 콘 반각 배율 (판정 의미론 불변)
             inn.cone_half_angle = float(inn.cone_half_angle) * spec.theta_scale
         self._fcs_v_prev = None          # E7-b ma 조준용 공격자 속도 이력 (cv 는 미사용)
+        self._fired = False              # E7-c post_shot: 첫 발사 latch (K>1 재장전에도 유지)
+        self._contact0 = bool(self.sys.spec.contact_resolver)
         fa = float(inn.backend.by_name(FIN).limits.a_max)
         inn._act_spaces[FIN] = spaces.Box(
             np.array([-1, -1, -1, 0, 0, -fa, -fa, -fa], np.float32),
@@ -196,6 +203,7 @@ class FS1Env:
         self._place()
         self._att_a = np.zeros(3)
         self._fcs_v_prev = None
+        self._fired = False
         self._t = 0
         self.z = self._draw_skill()
         obs, infos = self.env.reset(seed=int(self._rng.integers(2**31)))
@@ -216,11 +224,18 @@ class FS1Env:
         b = self.inner.backend.by_name(agent)
         return (np.asarray(b.p, float) - np.asarray(self.inner.layout.target, float)) / STATION
 
+    def limiters_harmless(self) -> bool:
+        """E7-c: 지금 limiter kinetic 이 금지되는가 (inert 상시 / post_shot 은 첫 발사 전)."""
+        return self.spec.limiter_inert or (self.spec.limiter_roe == "post_shot" and not self._fired)
+
     def fcs(self, hl: dict) -> dict:
         """전술 행동 → env 행동. hl[limiter] = [c3, arm], hl[finisher] = [c3, r_fire, arm]
         (c = 위치 목표, station_accel 참조)."""
         from shepherd.scripts.mission_rollout import _limiter_actions
         inn = self.inner
+        if self.limiters_harmless():     # 무장 채널 0 강제 → PN 커밋 경로 차단
+            hl = {k: (np.r_[np.asarray(v, float)[:3], 0.0] if k in self.limiter_ids else v)
+                  for k, v in hl.items()}
         lims, fin, att = inn._states()
         p_att, v_att, p_fin = inn._p(att), inn._v(att), inn._p(fin)
         acts = {}
@@ -256,8 +271,13 @@ class FS1Env:
             self.z = self._draw_skill()
         acts = {k: v for k, v in actions.items() if k != ADV}
         acts[ADV] = np.zeros(3)                         # 백엔드 프록시가 교체
+        want = self._contact0 and not self.limiters_harmless()   # 접촉 kinetic 경로 (E7-c)
+        if self.sys.spec.contact_resolver != want:
+            self.sys.spec = replace(self.sys.spec, contact_resolver=want)
         obs, rew, terms, truncs, infos = self.env.step(acts)
         fi = infos.get(FIN, next(iter(infos.values()), {}))
+        if fi.get("fire_event"):
+            self._fired = True
         label = fi.get("m4_outcome")
         r_def = float(rew.get(FIN, 0.0))
         if label == "HARD_KILL" and not self._kill_after_net(fi):

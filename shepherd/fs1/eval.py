@@ -79,6 +79,17 @@ def _def_act(env, o, name, team, kf_r=None):
     return acts
 
 
+def _kill_phase(label, n_fire):
+    """E7-c (docs/130 §2): kinetic 무력화 시점. K_FIRST = net 소진 전 kinetic (world.py 라벨
+    규약) → 발사 전이면 pre_shot, 발사 후면 shot_window (net 비행 중 탈출 차단). HARD_KILL =
+    net 소진 뒤 = fallback."""
+    if label == "K_FIRST":
+        return "shot_window" if n_fire > 0 else "pre_shot"
+    if label == "HARD_KILL":
+        return "fallback"
+    return None
+
+
 def _eval_init(spec_kw, coop_window=False):
     _init_worker(spec_kw)
     _W["coop_window"] = bool(coop_window)
@@ -148,6 +159,7 @@ def episodes(job):
                                 armed, float(bool(fi.get("fire_event")))])
             t += 1
         rec.update(label=str(fi["fs1_label"]), len=t)
+        rec["kill_phase"] = _kill_phase(rec["label"], rec["n_fire"])
         if tr is not None:
             rec["traj"] = np.array(tr, np.float32).tolist()
         out.append(rec)
@@ -189,6 +201,9 @@ def summarize(recs):
                      "arm_d_median": round(float(np.median(arm)), 1) if arm else None,
                      "fire_d_median": (round(float(np.median([r["fire_d"] for r in rs if r["fire_d"] is not None])), 1)
                                        if any(r["fire_d"] is not None for r in rs) else None)})
+        kp = Counter(r.get("kill_phase") for r in rs if r.get("kill_phase"))
+        rows[-1]["kill_phase"] = dict(kp)          # E7-c: D_shot = net + shot_window kinetic
+        rows[-1]["d_shot"] = rows[-1]["net"] + kp.get("shot_window", 0)
         if "n_win" in rs[0]:                       # P-②c 창 tick 협력 (e7b v1.1)
             nw = sum(r["n_win"] for r in rs)
             rows[-1]["coop"] = {"n_win": nw, "n_rob": sum(r["n_rob"] for r in rs),
@@ -251,7 +266,8 @@ def run(a):
                                  a.def_stack))
     from shepherd.fs1.world import FS1Spec
     spec = FS1Spec(obs_time=a.stack == "r4p", mu=a.mu, nu=a.nu, tau_scale=a.tau_scale,
-                   theta_scale=a.theta_scale, aim=a.aim)
+                   theta_scale=a.theta_scale, aim=a.aim, limiter_roe=a.limiter_roe,
+                   limiter_inert=a.limiter_inert)
     with mp.get_context("spawn").Pool(a.workers, initializer=_eval_init,
                                       initargs=(spec.__dict__, a.coop_window)) as P:
         recs = [x for part in P.map(episodes, jobs) for x in part]
@@ -266,6 +282,7 @@ def run(a):
             "exploiter": a.exploiter, "manifest": a.manifest, "ladder": a.ladder, "stack": a.stack,
             "mu": a.mu, "nu": a.nu, "def_stack": a.def_stack, "tau_scale": a.tau_scale,
             "theta_scale": a.theta_scale, "aim": a.aim, "coop_window": a.coop_window,
+            "limiter_roe": a.limiter_roe, "limiter_inert": a.limiter_inert,
             "git": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
             "seeds_by_group": {g: [r["seed"] for d, gg, r in recs if gg == g and d == a.defenders[0]]
                                for g in groups}}
@@ -330,6 +347,10 @@ def main(argv=None):
     r.add_argument("--tau-scale", type=float, default=1.0, help="E7-b 세계 변형 (FS1Spec)")
     r.add_argument("--theta-scale", type=float, default=1.0, help="E7-b 세계 변형 (FS1Spec)")
     r.add_argument("--aim", choices=["cv", "ma"], default="cv", help="E7-b FCS 조준 (FS1Spec)")
+    r.add_argument("--limiter-roe", choices=["a", "post_shot"], default="a",
+                   help="E7-c (docs/130): post_shot = 첫 발사 전 limiter kinetic 차단")
+    r.add_argument("--limiter-inert", action="store_true",
+                   help="E7-c: physics.kill_radius = 0 (판정 폐쇄·kinetic 동시 0)")
     r.add_argument("--coop-window", action="store_true",
                    help="P-②c (docs/129 §7, e7b v1.1): 창 tick 마다 limiter 有/無 판정 재계산")
     r.add_argument("--def-stack", type=int, default=1,
