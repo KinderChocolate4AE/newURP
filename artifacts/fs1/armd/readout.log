@@ -1,0 +1,71 @@
+{
+  "manifest_hash": "c21ab916d68e3e30",
+  "cells": {
+    "m0.35_n1": {
+      "thr": 29,
+      "seeds": {
+        "0": {
+          "ceil_sto": 3,
+          "ceil_det": 0,
+          "audit_final": 0.9918,
+          "v_fire_med": 0.0,
+          "pass_ii": false,
+          "pass_i": false
+        },
+        "1": {
+          "ceil_sto": 2,
+          "ceil_det": 3,
+          "audit_final": 0.9856,
+          "v_fire_med": 0.0,
+          "pass_ii": false,
+          "pass_i": false
+        },
+        "2": {
+          "ceil_sto": 15,
+          "ceil_det": 11,
+          "audit_final": 0.9328,
+          "v_fire_med": 0.018,
+          "pass_ii": false,
+          "pass_i": false
+        }
+      },
+      "audit_softened": false,
+      "opens": false
+    },
+    "m1.4_n1": {
+      "thr": 29,
+      "seeds": {
+        "0": {
+          "ceil_sto": 3,
+          "ceil_det": 7,
+          "audit_final": 0.9875,
+          "v_fire_med": 0.395,
+          "pass_ii": false,
+          "pass_i": false
+        },
+        "1": {
+          "ceil_sto": 4,
+          "ceil_det": 11,
+          "audit_final": 0.9875,
+          "v_fire_med": 0.002,
+          "pass_ii": false,
+          "pass_i": false
+        },
+        "2": {
+          "ceil_sto": 4,
+          "ceil_det": 15,
+          "audit_final": 0.9852,
+          "v_fire_med": null,
+          "pass_ii": false,
+          "pass_i": false
+        }
+      },
+      "audit_softened": false,
+      "opens": false
+    }
+  },
+  "invalid": [],
+  "decision": "ARMD_NULL",
+  "opened": [],
+  "audit_softened": []
+}
