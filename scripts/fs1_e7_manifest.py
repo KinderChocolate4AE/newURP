@@ -94,10 +94,17 @@ B_SEED0, B_STRIDE = 276000, 1000
 
 def build_e7b() -> dict:
     body = {
-        "schema": "fs1-e7b-manifest-v1",
+        "schema": "fs1-e7b-manifest-v1.1",
         "status": ("sealed after the E7-a readout (P_RHO1_SUPPORTED, harvest b5f8695) and the "
                    "P-rho2 registration (note 2026-10-08c), BEFORE any E7-b training. Scope = "
-                   "user approval 2026-10-08 (5 variants: cv rho-ladder 4 + ma contrast 1)"),
+                   "user approval 2026-10-08 (5 variants: cv rho-ladder 4 + ma contrast 1). "
+                   "v1.1 AMENDMENT (user-approved 2026-10-08, before any E7-b production or "
+                   "result): P-2c measurement source moved from JAX C-2 training logs to the "
+                   "canonical eval (frozen defense vs dedicated exploiter = the judgment "
+                   "condition; no dependence on log format), with a minimum-signal floor "
+                   "(E7-a2 lesson: its criteria had none and the verdict rested on 1-3 tick "
+                   "counts). Production: server4 single GPU (server rule); 4090 != parity-seal "
+                   "GPU -> full parity green required before production"),
         "lineage": {"contract": "docs/129 section 6", "e7a": build_e7a()["manifest_hash"],
                     "p_rho2": "note 2026-10-08c: rho* = 2.813 (4dt, V=23.01) / 2.427 (3.5dt); "
                               "registered pre-E7-b, no flag",
@@ -130,7 +137,10 @@ def build_e7b() -> dict:
                                      "fin12_fb + kfirst50 (scripted TRANSFER reference vs the "
                                      "same judge exploiter — exploiter was trained vs the "
                                      "learned defense, so reference-only, never a gate)"],
-                       "environment": "server4; seed band 276000+ never used in training"},
+                       "environment": "server4; seed band 276000+ never used in training",
+                       "cli": ("shepherd.fs1.eval run --tau-scale/--theta-scale/--aim per "
+                               "variant + --coop-window (window = LOADED and d <= 16 m; judge "
+                               "recomputed with limiters removed, same seed and heading)")},
         "gates": {
             "E7_OPENS": (f"per variant: ceil_learned_det >= {B_CEIL_REF} + {B_MARGIN} = "
                          f"29/{B_N} on >= 2 of 3 seeds. HONESTY FLAG: new-world ceil_ref not "
@@ -141,6 +151,15 @@ def build_e7b() -> dict:
             "P-rho3": "cv-ladder (4 points): seed-median ceil_det monotone in rho, "
                       "Spearman >= 0.7 -> P_RHO3_SUPPORTED (money-curve claim); ma point "
                       "reported as a pair contrast at equal rho",
+            "P-2c (v1.1, supersedes the docs/129 sec 7 log-based wording)": (
+                "learned_det vs ex_judge, canonical eval: window-tick cooperation share C = "
+                "n(robust with limiters and not without) / n(window ticks). Prediction: "
+                "C(t0.7_h1.0_cv, rho 3.93) > C(t0.5_h1.5_cv, rho 11.77) on >= 2 of 3 seeds -> "
+                "P_2C_SUPPORTED, else P_2C_NOT_SUPPORTED. MIN-SIGNAL FLOOR: if the 3-seed pooled "
+                "C is < 0.01 in BOTH compared variants -> UNDECIDABLE_LOW_SIGNAL (the "
+                "cooperation channel is not measurable, not falsified). C and H (boxed harm) "
+                "reported for all 5 variants and all defenders (rho-profile of learned vs "
+                "scripted limiters). JAX C-2 logs = secondary, report only"),
         },
         "readout_extras": ["P-rho2 overlay: recompute the E7-a window median CONDITIONAL on "
                            "shell-passing encounters (registered population) from "

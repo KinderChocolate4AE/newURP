@@ -120,3 +120,15 @@
   1~2 개 × {limiter 무장 / 무장 해제} 대응 run — "협력이 경계를 미는가" (연구 정체성 기여
   ③) 의 학습 수준 검정. Prop 2 (사용자/K1 레인) = 부분 witness 폐쇄 하 ρ*_eff 와 boxed_in
   상한의 해석 유도.
+
+### 7.1 정정 (2026-10-08, 사용자 승인 — E7-b 생산·결과 전): P-②c 측정 출처 이관 + 최소 신호 하한
+
+- P-②c 의 측정 출처를 JAX C-② 학습 로그 → **server4 정본 평가** 로 이관 (manifest
+  `build_e7b` v1.1). 이유: 정본 평가가 판정 조건 그대로 (동결 방어 vs 전용 착취자) 이고, 학습
+  로그 형식 (무작위 tick 희석, arm C-① 전례) 에 의존하지 않음. 구현 = `shepherd.fs1.eval
+  --coop-window` (창 = LOADED ∧ d ≤ 16 m, 같은 seed·조준축에서 limiter 만 제거한 판정 재계산).
+- 판정: learned_det 의 창 tick 협력 몫 C(t0.7_h1.0_cv) > C(t0.5_h1.5_cv), seed 2/3 →
+  `P_2C_SUPPORTED`. **최소 신호 하한**: 두 변형 모두 3-seed 합산 C < 1% 면
+  `UNDECIDABLE_LOW_SIGNAL` (E7-a′ 의 기준 결함 — 하한 부재로 1~3 tick 이 판정을 정함 — 교정).
+  5 변형 × 전 defender 의 C·H 는 보고 (학습 vs scripted limiter 의 ρ 프로파일).
+- JAX C-② 로그는 보조 자료 (형식 그대로, 보강 요청 철회). 생산 = server4 GPU 1장 (서버 룰).

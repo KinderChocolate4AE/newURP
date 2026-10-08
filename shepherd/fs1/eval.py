@@ -33,6 +33,7 @@ NET = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT")
 CHUNK = 8                                   # 워커 작업 단위 (episode 수)
 C5_R_D, C5_DPHI = 9.0, np.deg2rad(30.0)     # B2 RULE_COOP kw (P1c c5) — E3 D3 진단용
 FWD_RHO = 0.5                               # P1d fwd (전진 호: r = max(r_d, rho·R_h))
+COOP_WINDOW_D = 16.0                        # P-②c 창 정의 = 1.5a/E7-a′ 와 동일 (LOADED ∧ d ≤ 16 m)
 
 
 def _arc_act(env, fwd):
@@ -78,6 +79,11 @@ def _def_act(env, o, name, team, kf_r=None):
     return acts
 
 
+def _eval_init(spec_kw, coop_window=False):
+    _init_worker(spec_kw)
+    _W["coop_window"] = bool(coop_window)
+
+
 def episodes(job):
     """job = (방어 이름, 방어 snap|None, 상대, 시드들, 궤적 기록 수) → episode 기록 리스트."""
     import torch
@@ -98,6 +104,8 @@ def episodes(job):
         tgt = np.asarray(inn.layout.target, float)
         rec = {"seed": s, "opp": opp["name"], "arm_d": None, "fire_d": None, "n_fire": 0,
                "v_fire": None, "p_feas": None}       # R1/R2 공통 진단 (docs/124 D4): 첫 발사 tick
+        if _W.get("coop_window"):                    # docs/129 §7 P-②c (e7b v1.1): 창 tick 협력
+            rec.update(n_win=0, n_rob=0, n_C=0, n_H=0)
         tr = [] if j < n_traj else None
         prev = None                     # arm D 프레임 스택 (docs/128): k=4 최신-우선 타일-초기화
         while not done:
@@ -114,6 +122,15 @@ def episodes(job):
             lims, fin, att = inn._states()
             p_att = inn._p(att)
             armed = [float(acts[l][3] > 0.5) for l in env.limiter_ids]
+            if (_W.get("coop_window") and inn.fsm.state.value == "LOADED"
+                    and np.linalg.norm(p_att - inn._p(fin)) <= COOP_WINDOW_D):
+                sd = inn._seed * 100003 + inn._step_i     # 같은 seed·조준축, limiter 만 제거
+                w = inn._vshot(p_att, inn._v(att), [inn._p(x) for x in lims], fin, seed=sd)
+                f = inn._vshot(p_att, inn._v(att), [], fin, seed=sd)
+                rw = w.v_shot_worst >= 1.0 and not w.boxed_in
+                rf = f.v_shot_worst >= 1.0 and not f.boxed_in
+                rec["n_win"] += 1; rec["n_rob"] += int(rw)
+                rec["n_C"] += int(rw and not rf); rec["n_H"] += int(rf and not rw)
             if rec["arm_d"] is None and any(armed):
                 rec["arm_d"] = round(float(np.linalg.norm(p_att - tgt)), 2)
             obs, _, done, info = env.step(acts)
@@ -172,6 +189,11 @@ def summarize(recs):
                      "arm_d_median": round(float(np.median(arm)), 1) if arm else None,
                      "fire_d_median": (round(float(np.median([r["fire_d"] for r in rs if r["fire_d"] is not None])), 1)
                                        if any(r["fire_d"] is not None for r in rs) else None)})
+        if "n_win" in rs[0]:                       # P-②c 창 tick 협력 (e7b v1.1)
+            nw = sum(r["n_win"] for r in rs)
+            rows[-1]["coop"] = {"n_win": nw, "n_rob": sum(r["n_rob"] for r in rs),
+                                "n_C": sum(r["n_C"] for r in rs), "n_H": sum(r["n_H"] for r in rs),
+                                "C": round(sum(r["n_C"] for r in rs) / nw, 5) if nw else None}
     return rows
 
 
@@ -228,9 +250,10 @@ def run(a):
                     jobs.append((d, dsnap, opp, seeds[c:c + CHUNK], nt if c == 0 else 0,
                                  a.def_stack))
     from shepherd.fs1.world import FS1Spec
-    with mp.get_context("spawn").Pool(a.workers, initializer=_init_worker,
-                                      initargs=(FS1Spec(obs_time=a.stack == "r4p",
-                                                        mu=a.mu, nu=a.nu).__dict__,)) as P:
+    spec = FS1Spec(obs_time=a.stack == "r4p", mu=a.mu, nu=a.nu, tau_scale=a.tau_scale,
+                   theta_scale=a.theta_scale, aim=a.aim)
+    with mp.get_context("spawn").Pool(a.workers, initializer=_eval_init,
+                                      initargs=(spec.__dict__, a.coop_window)) as P:
         recs = [x for part in P.map(episodes, jobs) for x in part]
     with open(out / "episodes.jsonl", "w", encoding="utf-8") as f:
         for d, g, r in recs:
@@ -241,7 +264,8 @@ def run(a):
             "episodes": a.episodes, "seed": a.seed, "defenders": a.defenders,
             "groups": {g: [o["name"] for o in v] for g, v in groups.items()},
             "exploiter": a.exploiter, "manifest": a.manifest, "ladder": a.ladder, "stack": a.stack,
-            "mu": a.mu, "nu": a.nu, "def_stack": a.def_stack,
+            "mu": a.mu, "nu": a.nu, "def_stack": a.def_stack, "tau_scale": a.tau_scale,
+            "theta_scale": a.theta_scale, "aim": a.aim, "coop_window": a.coop_window,
             "git": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
             "seeds_by_group": {g: [r["seed"] for d, gg, r in recs if gg == g and d == a.defenders[0]]
                                for g in groups}}
@@ -303,6 +327,11 @@ def main(argv=None):
                    help="ckpt 의 학습 stack 과 일치시킬 것 (r4p = 관측 66-D)")
     r.add_argument("--mu", type=float, default=0.35, help="E3 cell: 방어 가속비 (FS1Spec.mu)")
     r.add_argument("--nu", type=float, default=1.0, help="E3 cell: 방어 속도비 (FS1Spec.nu)")
+    r.add_argument("--tau-scale", type=float, default=1.0, help="E7-b 세계 변형 (FS1Spec)")
+    r.add_argument("--theta-scale", type=float, default=1.0, help="E7-b 세계 변형 (FS1Spec)")
+    r.add_argument("--aim", choices=["cv", "ma"], default="cv", help="E7-b FCS 조준 (FS1Spec)")
+    r.add_argument("--coop-window", action="store_true",
+                   help="P-②c (docs/129 §7, e7b v1.1): 창 tick 마다 limiter 有/無 판정 재계산")
     r.add_argument("--def-stack", type=int, default=1,
                    help="방어 obs 프레임 스택 k (arm D, docs/128: 최신-우선, 타일-초기화; "
                         "학습 ckpt 와 일치시킬 것)")

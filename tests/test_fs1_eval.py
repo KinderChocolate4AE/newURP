@@ -164,3 +164,21 @@ def test_ladder_nominal_restores_p1a_spec():
 ])
 def test_readout_gate(tmp_path, cells, want):
     assert _fake_eval(tmp_path, cells) == want
+
+
+def test_coop_window_counts_consistent():
+    """P-②c (e7b v1.1): 창 tick 협력 카운터 — 끄면 키 없음, 켜면 C+H ≤ 창, robust ≤ 창."""
+    from shepherd.fs1.world import FS1Spec
+    _W["env"] = FS1Env(FS1Spec(tau_scale=0.5), seed=0)
+    opp = dict(ladder_pool()[0], group="ladder")
+    _W["coop_window"] = False
+    off = [r for _, _, r in ev.episodes(("fin12_fb", None, opp, [3], 0))]
+    assert "n_win" not in off[0]
+    _W["coop_window"] = True
+    try:
+        on = [r for _, _, r in ev.episodes(("fin12_fb", None, opp, [3, 4], 0))]
+    finally:
+        _W["coop_window"] = False
+    for r in on:
+        assert r["n_C"] + r["n_H"] <= r["n_win"] and r["n_rob"] <= r["n_win"]
+    assert [r["label"] for r in on][:1] == [off[0]["label"]]   # 측정은 rollout 을 바꾸지 않음
