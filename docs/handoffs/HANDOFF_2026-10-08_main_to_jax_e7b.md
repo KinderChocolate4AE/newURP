@@ -28,17 +28,13 @@
    main 이 strip (pools 마지막 1개 truncate)·전송·정본 평가 (seed0 276000대 — 학습 사용
    금지).
 
-## GPU 배정 (2026-10-08 오전 재확인, 사용자 launch 지시)
+## GPU 배정 (2026-10-08, **서버 룰 반영 확정판** — 사용자 지시)
 
-- **server6 GPU0** (RTX 4500 Ada = parity seal 기종 → 추가 검증 불필요, 즉시 시작):
-  `CUDA_VISIBLE_DEVICES=0` + `XLA_PYTHON_CLIENT_PREALLOCATE=false` (또는 MEM_FRACTION ≤ 0.5)
-  — GPU1 은 타 사용자 gcbf+ 학습 중, GPU0 엔 rustdesk 만 상주 (데스크톱 사용자 공존 대비).
-- **server4 4090 ×2** (계산 작업 0): `.venv-jax` 설치 → **parity 테스트 전부 green 확인
-  후에만** 생산 (Ada 동일 아키텍처지만 기종이 다름 — 확인 결과를 보고에 포함). 판정
-  평가 서버이므로 CPU 점유는 최소로 (평가 workers 6 와 공존).
-- **server5 사용 금지** (양 GPU 타 사용자 soft_cbf 학습 중).
-- 분배 (권고): server6 GPU0 에서 BC 5종 + 첫 변형부터 시작 → server4 parity 통과 시 남은
-  run 을 나눠 받음. 변형×seed 배정은 JAX 재량, 산출 경로/manifest 는 변형 단위로 통일.
+- **생산은 server4 의 GPU 1장만** (서버 룰). `CUDA_VISIBLE_DEVICES` 로 4090 한 장에 고정.
+  server5·server6 은 E7-b 에 사용하지 않음 (초판의 server6 GPU0 배정 철회).
+- server4 는 parity seal 기종 (RTX 4500 Ada) 과 다른 4090 → `.venv-jax` 설치 후
+  **parity 테스트 전부 green 확인 후에만** 생산, 결과를 보고에 포함.
+- 판정 평가 서버이므로 CPU 점유 최소 (평가 workers 6 와 공존). 15 run 직렬 ~15h 예상.
 
 ## 함정 (불변)
 
