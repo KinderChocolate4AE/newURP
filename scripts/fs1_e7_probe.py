@@ -65,7 +65,7 @@ def coop_readout(npz, rho):
         rb = np.concatenate([npz[f"{s}.{vn}.rb"] for s in ATTACKERS]).astype(bool)
         rf = np.concatenate([npz[f"{s}.{vn}.rbf"] for s in ATTACKERS]).astype(bool)
         n = max(len(rb), 1)
-        out[vn] = {"rho": rho[vn], "C": round(float((rb & ~rf).sum() / n), 5),
+        out[vn] = {"rho": float(rho[vn]), "C": round(float((rb & ~rf).sum() / n), 5),
                    "H": round(float((rf & ~rb).sum() / n), 5), "n_ticks": int(len(rb))}
     res = {"per_variant": out}
     for key, crit, fn in (
@@ -78,12 +78,12 @@ def coop_readout(npz, rho):
             cmax = max(out[v]["C"] for v in vs)
             if key == "p2a":
                 arg = fn(vs)
-                verdict[aim] = {"argmax": arg, "rho": out[arg]["rho"],
-                                "pass": cmax > 0 and out[arg]["rho"] <= PEAK_RHO_MAX}
+                verdict[aim] = {"argmax": arg, "rho": float(out[arg]["rho"]),
+                                "pass": bool(cmax > 0 and out[arg]["rho"] <= PEAK_RHO_MAX)}
             else:
                 hi = max((out[v]["C"] for v in vs if out[v]["rho"] >= HIGH_RHO), default=0.0)
-                verdict[aim] = {"max_C_high": hi, "max_C": cmax,
-                                "pass": cmax > 0 and hi <= cmax / 3}
+                verdict[aim] = {"max_C_high": float(hi), "max_C": float(cmax),
+                                "pass": bool(cmax > 0 and hi <= cmax / 3)}
         degenerate = any(v["pass"] is False and
                          max(out[x]["C"] for x, *_r, am in VARIANTS if am == aim) == 0
                          for aim, v in verdict.items())
@@ -202,26 +202,60 @@ def run_slot(name, root, sub, dfd, eps, coop=False):
     return consts, summ, {k: np.asarray(v) for k, v in rows.items()}
 
 
+def slots_from_rows(npz, eps, coop):
+    """저장된 rows.npz → run_slot 요약 재구성 (재추첨 없이 판독만 다시 할 때)."""
+    from shepherd.fs1.world import FIN, FS1Env, FS1Spec
+    inn = FS1Env(FS1Spec(mu=MU, nu=NU), seed=0).inner
+    consts = {"tau0": float(inn.tau_deploy), "theta0": float(inn.cone_half_angle),
+              "range_max": float(inn.cone_range_max), "a_att": float(inn.a_att_max),
+              "dt": float(inn.dt), "omega_fin": float(inn.backend.by_name(FIN).limits.omega_max)}
+    slots = {}
+    for name in ATTACKERS:
+        ep = npz[f"{name}.ep"]
+        summ = {}
+        for vn, *_ in VARIANTS:
+            rb = npz[f"{name}.{vn}.rb"].astype(bool)
+            per = [rb[ep == i] for i in range(eps)]
+            summ[vn] = {"steps_med": float(np.median([int(x.sum()) for x in per])),
+                        "max_run_med": float(np.median([_max_run(x) for x in per])),
+                        "eps_with_window": int(sum(x.sum() > 0 for x in per))}
+            if coop:
+                rf = npz[f"{name}.{vn}.rbf"].astype(bool)
+                summ[vn]["free_steps_med"] = float(np.median(
+                    [int(rf[ep == i].sum()) for i in range(eps)]))
+        ag = npz[f"{name}.agree_cv11"]
+        summ["_anchor"] = {"window_ticks": int(len(ep)),
+                           "aim_approx_agree": round(float(np.mean(ag)), 4) if len(ag) else None}
+        slots[name] = summ
+    return consts, slots
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--stage1", required=True)
-    ap.add_argument("--e3b", required=True)
+    ap.add_argument("--stage1", default=None)
+    ap.add_argument("--e3b", default=None)
+    ap.add_argument("--readout-only", action="store_true",
+                    help="out-dir/rows.npz 에서 판독만 재구성 (rollout 재실행·재추첨 없음)")
     ap.add_argument("--out-dir", default="artifacts/fs1/e7a")
     ap.add_argument("--eps", type=int, default=EPS)
     ap.add_argument("--coop", action="store_true",
                     help="E7-a′ (docs/129 §7): limiter 제거 counterfactual + P-② 판정")
     a = ap.parse_args()
-    roots = {"stage1": pathlib.Path(a.stage1), "e3b": pathlib.Path(a.e3b)}
     out_dir = pathlib.Path(a.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    slots, npz, consts = {}, {}, None
-    for name, (rk, sub, dfd) in ATTACKERS.items():
-        consts, summ, rows = run_slot(name, roots[rk], sub, dfd, a.eps, coop=a.coop)
-        slots[name] = summ
-        for k, v in rows.items():
-            npz[f"{name}.{k}"] = v
-    np.savez_compressed(out_dir / "rows.npz", **npz)
+    if a.readout_only:
+        npz = dict(np.load(out_dir / "rows.npz"))
+        consts, slots = slots_from_rows(npz, a.eps, a.coop)
+    else:
+        roots = {"stage1": pathlib.Path(a.stage1), "e3b": pathlib.Path(a.e3b)}
+        slots, npz, consts = {}, {}, None
+        for name, (rk, sub, dfd) in ATTACKERS.items():
+            consts, summ, rows = run_slot(name, roots[rk], sub, dfd, a.eps, coop=a.coop)
+            slots[name] = summ
+            for k, v in rows.items():
+                npz[f"{name}.{k}"] = v
+        np.savez_compressed(out_dir / "rows.npz", **npz)
 
     rho, variant_med = {}, {}
     for vn, ts, hs, aim in VARIANTS:
