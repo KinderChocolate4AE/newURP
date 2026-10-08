@@ -53,7 +53,44 @@ def _max_run(flags):
     return best
 
 
-def run_slot(name, root, sub, dfd, eps):
+HIGH_RHO = 6.0           # P-②b: ρ ≥ 6 (= ρ* 2.81 의 2배 이상) 은 "콘 단독 충분" 영역
+PEAK_RHO_MAX = 4.0       # P-②a: 협력 몫 C(ρ) 의 argmax 가 ρ ≤ 4 (전이 구간) 에 있어야 함
+
+
+def coop_readout(npz, rho):
+    """P-② (docs/129 §7): tick 단위, 4 slot 합산. C = limiter 가 있어야만 robust 인 tick 비율
+    (협력 몫), H = limiter 가 있으면 robust 가 깨지는 tick 비율 (boxed_in 손해)."""
+    out = {}
+    for vn, *_ in VARIANTS:
+        rb = np.concatenate([npz[f"{s}.{vn}.rb"] for s in ATTACKERS]).astype(bool)
+        rf = np.concatenate([npz[f"{s}.{vn}.rbf"] for s in ATTACKERS]).astype(bool)
+        n = max(len(rb), 1)
+        out[vn] = {"rho": rho[vn], "C": round(float((rb & ~rf).sum() / n), 5),
+                   "H": round(float((rf & ~rb).sum() / n), 5), "n_ticks": int(len(rb))}
+    res = {"per_variant": out}
+    for key, crit, fn in (
+            ("p2a", f"per aim: argmax_rho C(rho) <= {PEAK_RHO_MAX}",
+             lambda vs: max(vs, key=lambda v: out[v]["C"])),
+            ("p2b", f"per aim: max C over rho >= {HIGH_RHO} <= (1/3)·max C", None)):
+        verdict = {}
+        for aim in AIMS:
+            vs = [vn for vn, *_r, am in VARIANTS if am == aim]
+            cmax = max(out[v]["C"] for v in vs)
+            if key == "p2a":
+                arg = fn(vs)
+                verdict[aim] = {"argmax": arg, "rho": out[arg]["rho"],
+                                "pass": cmax > 0 and out[arg]["rho"] <= PEAK_RHO_MAX}
+            else:
+                hi = max((out[v]["C"] for v in vs if out[v]["rho"] >= HIGH_RHO), default=0.0)
+                verdict[aim] = {"max_C_high": hi, "max_C": cmax,
+                                "pass": cmax > 0 and hi <= cmax / 3}
+        res[key] = {"criterion": crit, "by_aim": verdict,
+                    "verdict": "SUPPORTED" if all(v["pass"] for v in verdict.values())
+                    else "NOT_SUPPORTED"}
+    return res
+
+
+def run_slot(name, root, sub, dfd, eps, coop=False):
     import torch as T
     from shepherd.fs1.eval import _ep_kf_r
     from shepherd.fs1.train import _team, ATT_ROLES, DISC_IN, att_action, scripted_def_actions
@@ -73,6 +110,9 @@ def run_slot(name, root, sub, dfd, eps):
 
     per_ep = {vn: {"steps": [], "run": []} for vn, *_ in VARIANTS}
     rows = {f"{vn}.rb": [] for vn, *_ in VARIANTS}
+    if coop:                                   # E7-a′ (docs/129 §7): limiter 제거 counterfactual
+        rows.update({f"{vn}.rbf": [] for vn, *_ in VARIANTS})
+        per_ep_f = {vn: [] for vn, *_ in VARIANTS}
     rows.update({"ep": [], "step": [], "anchor_rb": [], "agree_cv11": []})
     checked = 0
     for i in range(eps):
@@ -82,6 +122,7 @@ def run_slot(name, root, sub, dfd, eps):
         obs, _ = env.reset(seed=s)
         done, v_prev = False, None
         flags = {vn: [] for vn, *_ in VARIANTS}
+        flags_f = {vn: [] for vn, *_ in VARIANTS}
         axis = {vn: inn._e(inn._states()[1]).copy() for vn, *_ in VARIANTS}
         while not done:
             o = obs["finisher_0"]
@@ -127,12 +168,19 @@ def run_slot(name, root, sub, dfd, eps):
                     rb = _robust(r)
                     rows[f"{vn}.rb"].append(rb)
                     flags[vn].append(rb)
+                    if coop:                       # 같은 tick·seed·축, limiter 만 제거
+                        rf = V.v_shot(p_att, v_att, tau=tau0 * ts, theta_net=th0 * hs,
+                                      n_F=ax_v[vn], **{**com, "limiters": None})
+                        rows[f"{vn}.rbf"].append(_robust(rf))
+                        flags_f[vn].append(_robust(rf))
                 rows["agree_cv11"].append(rows["t1.0_h1.0_cv.rb"][-1] == rows["anchor_rb"][-1])
             obs, _, done, info = env.step(acts)
             v_prev = v_att
         for vn in flags:
             per_ep[vn]["steps"].append(int(sum(flags[vn])))
             per_ep[vn]["run"].append(_max_run(flags[vn]))
+            if coop:
+                per_ep_f[vn].append(int(sum(flags_f[vn])))
 
     consts = {"tau0": tau0, "theta0": th0, "range_max": rmax, "a_att": a_att, "dt": dt,
               "omega_fin": om_fin}
@@ -140,6 +188,9 @@ def run_slot(name, root, sub, dfd, eps):
                  "max_run_med": float(np.median(p["run"])),
                  "eps_with_window": int(sum(x > 0 for x in p["steps"]))}
             for vn, p in per_ep.items()}
+    if coop:
+        for vn in per_ep_f:
+            summ[vn]["free_steps_med"] = float(np.median(per_ep_f[vn]))
     summ["_anchor"] = {"window_ticks": len(rows["ep"]),
                        "aim_approx_agree": (round(float(np.mean(rows["agree_cv11"])), 4)
                                             if rows["agree_cv11"] else None)}
@@ -153,6 +204,8 @@ def main() -> None:
     ap.add_argument("--e3b", required=True)
     ap.add_argument("--out-dir", default="artifacts/fs1/e7a")
     ap.add_argument("--eps", type=int, default=EPS)
+    ap.add_argument("--coop", action="store_true",
+                    help="E7-a′ (docs/129 §7): limiter 제거 counterfactual + P-② 판정")
     a = ap.parse_args()
     roots = {"stage1": pathlib.Path(a.stage1), "e3b": pathlib.Path(a.e3b)}
     out_dir = pathlib.Path(a.out_dir)
@@ -160,7 +213,7 @@ def main() -> None:
 
     slots, npz, consts = {}, {}, None
     for name, (rk, sub, dfd) in ATTACKERS.items():
-        consts, summ, rows = run_slot(name, roots[rk], sub, dfd, a.eps)
+        consts, summ, rows = run_slot(name, roots[rk], sub, dfd, a.eps, coop=a.coop)
         slots[name] = summ
         for k, v in rows.items():
             npz[f"{name}.{k}"] = v
@@ -182,7 +235,7 @@ def main() -> None:
     report = {
         "schema": "fs1-e7a-probe-v1", "seed0": SEED0, "cell": CELL, "consts": consts,
         "caveats": ["구세계 적응 공격자 (비공진화) — 낙관 편향, 선별용만",
-                    "즉시 조준 근사 (포탑 slew 무시) — anchor agree 로 오차 정량",
+                    "조준축 = 변형별 포탑 slew 시뮬레이션 (v1.1) — anchor agree 로 충실도 정량",
                     "양성 판정은 E7-b (신세계 전용 착취자) 만"],
         "rho": rho, "variant_window_med": variant_med,
         "p_rho1": {"criterion": "Spearman(rho, window_med) >= 0.7", "spearman": spear,
@@ -193,6 +246,10 @@ def main() -> None:
         "anchor": {s: slots[s]["_anchor"] for s in ATTACKERS},
         "slots": slots,
     }
+    if a.coop:
+        report["schema"] = "fs1-e7a2-coop-probe-v1"
+        report["coop"] = coop_readout(npz, rho)
+        print("P-②:", json.dumps({k: report["coop"][k] for k in ("p2a", "p2b")}))
     (out_dir / "probe.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print("promoted:", promoted, "| spearman:", spear)
     print("->", out_dir / "probe.json")

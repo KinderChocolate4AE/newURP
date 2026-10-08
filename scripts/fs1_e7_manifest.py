@@ -166,9 +166,61 @@ def load_e7b() -> dict:
     return data
 
 
+# ---------------------------------------------------------------- E7-a′ -----
+MANIFEST_A2 = ROOT / "artifacts" / "fs1" / "e7a2_manifest.json"
+
+
+def build_e7a2() -> dict:
+    body = {
+        "schema": "fs1-e7a2-manifest-v1",
+        "status": ("sealed BEFORE any E7-b result (E7-b not yet launched) and before the "
+                   "E7-a′ run (contract: docs/129 section 7; user agreement 2026-10-08)"),
+        "lineage": {"contract": "docs/129 section 7", "e7a": build_e7a()["manifest_hash"],
+                    "e7b": build_e7b()["manifest_hash"],
+                    "p_rho2": "rho* = 2.813 is the axis-2 = 0 boundary (K1 assumption A5)"},
+        "question": ("axis 2 (cooperation, docs/126): how much of the robust window exists ONLY "
+                     "because limiters close escape witnesses, as a function of rho"),
+        "protocol": ("E7-a protocol unchanged (m0.35_n1, 4 adapted attackers x 24 eps, SEED0 "
+                     "268000, no-fire, 12 variants, slew-simulated aim) + --coop: same tick/"
+                     "seed/aim-axis judge recompute with limiters removed"),
+        "metrics": {"C": "share of window ticks robust WITH limiters and not robust WITHOUT "
+                         "(cooperation share), pooled over 4 slots",
+                    "H": "share robust WITHOUT and not WITH (boxed_in harm) — report only"},
+        "predictions": {
+            "P-2a": "per aim: argmax_rho C(rho) has rho <= 4.0 -> SUPPORTED if both aims",
+            "P-2b": "per aim: max C over rho >= 6.0 <= (1/3) max C -> SUPPORTED if both aims",
+            "P-2c": ("E7-b readout: window-conditioned C-2 escape-shrinkage share of "
+                     "t0.7_h1.0_cv (rho 3.93) > t0.5_h1.5_cv (rho 11.77) on >= 2 of 3 seeds; "
+                     "undecidable if the log format does not allow window conditioning "
+                     "(reported as such)"),
+        },
+        "limitations": ["limiters in the rollout are scripted -> C is a LOWER BOUND on what "
+                        "learned limiters could contribute",
+                        "old-world adapted attackers (non-co-evolved) — optimistic bias",
+                        "no bit-reproduction claim vs E7-a (stochastic RL attacker); paired "
+                        "within E7-a′ only"],
+        "follow_ups_form_only": ["E7-c: transition-band (rho 2-3.5) learned points x {limiters "
+                                 "armed / disarmed}, numbers sealed after the E7-a′ readout",
+                                 "Prop 2 (user/K1 lane): rho*_eff under partial witness "
+                                 "closure + boxed_in upper bound"],
+        "not_evidence_for": ["cooperation vocabulary (limiter-control opportunity)",
+                             "learned-limiter contribution (lower bound only)", "world ceiling"],
+    }
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    return {**body, "manifest_hash": hashlib.sha256(raw.encode()).hexdigest()[:16]}
+
+
+def load_e7a2() -> dict:
+    data = json.loads(MANIFEST_A2.read_text(encoding="utf-8"))
+    if data != build_e7a2():
+        raise ValueError(f"E7-a′ manifest drift: {MANIFEST_A2}")
+    return data
+
+
 def main() -> None:
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)
-    for path, body in ((MANIFEST, build_e7a()), (MANIFEST_B, build_e7b())):
+    for path, body in ((MANIFEST, build_e7a()), (MANIFEST_B, build_e7b()),
+                       (MANIFEST_A2, build_e7a2())):
         path.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"{path} {body['manifest_hash']}")
 
