@@ -245,10 +245,88 @@ def load_e7a2() -> dict:
     return data
 
 
+# ---------------------------------------------------------------- E7-c ------
+MANIFEST_C = ROOT / "artifacts" / "fs1" / "e7c_manifest.json"
+C_CONDS = [{"name": "P1_armed", "tau_scale": 0.85, "theta_scale": 1.0, "limiters": "post_shot", "rho": 2.662},
+           {"name": "P1_inert", "tau_scale": 0.85, "theta_scale": 1.0, "limiters": "inert", "rho": 2.662},
+           {"name": "P2_armed", "tau_scale": 1.0, "theta_scale": 1.5, "limiters": "post_shot", "rho": 2.941},
+           {"name": "P2_inert", "tau_scale": 1.0, "theta_scale": 1.5, "limiters": "inert", "rho": 2.941}]
+C_SEED0, C_STRIDE = 278000, 1000
+
+
+def build_e7c() -> dict:
+    body = {
+        "schema": "fs1-e7c-manifest-v1",
+        "status": ("sealed 2026-10-08 on user approval ('fixed'), BEFORE any E7-b result and "
+                   "before any E7-c production (contract: docs/130)"),
+        "lineage": {"contract": "docs/130", "e7b": "543cd9e4b3582687 (v1.1, seal-time literal)",
+                    "e7a2": "57b4faafba5d27bf", "p_rho2": "rho* = 2.813 (note 2026-10-08c)"},
+        "question": ("does limiter-control opportunity (stage 1 of the original design: "
+                     "cooperation -> net attempt -> kinetic fallback) push the net-capture "
+                     "boundary near rho*; and does rho* hold at learning level in the "
+                     "limiter-free (assumption A5) world"),
+        "cell": {"cell": "m0.35_n1", "mu": 0.35, "nu": 1.0, "aim": "cv"},
+        "conditions": C_CONDS, "seeds": [0, 1, 2],
+        "rules": {
+            "post_shot": ("limiter kinetic engagement (arm/commit path AND contact resolver) "
+                          "allowed only after the finisher has fired (fsm leaves LOADED); "
+                          "matches the judge's witness-closure semantics"),
+            "inert": "physics.kill_radius = 0 (single config source: judge closure and kinetic "
+                     "contact both off); limiters still move, observation structure unchanged",
+            "no_cross_comparison": "E7-b uses ROE A; E7-c comparisons are internal only",
+        },
+        "production": ("per-condition new BC; arm C-1 recipe trained under each condition's "
+                       "rule, 1.1e8; per-condition dedicated judge exploiter 1e7 (jseed "
+                       "279000-band); server4 single GPU after E7-b"),
+        "metric": ("D_shot = NET (NET_CAPTURE + CAPTURE_WITH_CONTACT) + kinetic kills inside "
+                   "the shot window (after the shot, before net resolution); fallback kills "
+                   "(after net miss) excluded and reported; pre-shot kinetic must be 0 under "
+                   "post_shot (else run invalid); inert: D_shot = NET"),
+        "evaluation": {"n": 240, "seed0": C_SEED0, "cond_seed_stride": C_STRIDE,
+                       "cond_idx": "index in THIS manifest's conditions list",
+                       "paired": True, "defenders": ["learned_det (judgment)",
+                                                     "learned_sto (report)"],
+                       "cli": "--tau-scale/--theta-scale/--aim + --limiter-roe post_shot | "
+                              "--limiter-inert + --coop-window; episode kill_phase tag",
+                       "environment": "server4; seed band 278000+ never used in training"},
+        "gates": {
+            "P-rho2L": ("D_shot(inert, P2) >= 29 AND D_shot(inert, P1) < 29 (each 2/3 seeds) "
+                        "-> P_RHO2L_SUPPORTED, else NOT_SUPPORTED with direction"),
+            "P-2d": ("at P1: D_shot(armed) >= 29 AND D_shot(armed) - D_shot(inert) >= +24 "
+                     "(same-seed pairs, 2/3) -> COOP_PUSHES_BOUNDARY; P1 armed closed -> "
+                     "COOP_NULL_BELOW; P2 armed - inert reported"),
+            "mechanism_report": ("armed --coop-window C and H with min-signal floor 0.01 "
+                                 "(LOW_SIGNAL below); D_shot gap not explained by C = "
+                                 "trajectory-shaping candidate, reported as a range only"),
+            "invalid": "budget/completion/paired/manifest/BC-lineage or post_shot violation",
+        },
+        "implementation_preconditions": ["FS1Spec.limiter_roe in {a (default, bit-exact), "
+                                         "post_shot}", "FS1Spec.limiter_inert",
+                                         "tests: default no-op; post_shot pre-shot kinetic 0 "
+                                         "and post-shot contact possible; inert judge == "
+                                         "limiters-removed judge and kinetic 0; eval kill_phase",
+                                         "JAX parity: baseline golden + post_shot and inert "
+                                         "one f64 spot-check each"],
+        "not_evidence_for": ["world ceiling", "real-net representativeness",
+                             "global rho cooperation profile (local test only)",
+                             "cooperation vocabulary (limiter-control opportunity)",
+                             "pooling with E7-a/b, arm C-1/D"],
+    }
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    return {**body, "manifest_hash": hashlib.sha256(raw.encode()).hexdigest()[:16]}
+
+
+def load_e7c() -> dict:
+    data = json.loads(MANIFEST_C.read_text(encoding="utf-8"))
+    if data != build_e7c():
+        raise ValueError(f"E7-c manifest drift: {MANIFEST_C}")
+    return data
+
+
 def main() -> None:
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)
     for path, body in ((MANIFEST, build_e7a()), (MANIFEST_B, build_e7b()),
-                       (MANIFEST_A2, build_e7a2())):
+                       (MANIFEST_A2, build_e7a2()), (MANIFEST_C, build_e7c())):
         path.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"{path} {body['manifest_hash']}")
 
