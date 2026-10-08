@@ -1,0 +1,47 @@
+{
+  "schema": "fs1-e7a-manifest-v1",
+  "status": "sealed before any E7-a probe result (contract: docs/129; behavior-side prescriptions exhausted: E3B2_NULL / ARMC1_NULL / ARMD_NULL)",
+  "lineage": {
+    "contract": "docs/129",
+    "armd": "c21ab916d68e3e30 (ARMD_NULL)",
+    "occupancy_15a": "artifacts/fs1/e3b/occupancy.json (9275722) — protocol reused (SEED0 268000, no-fire, LOADED & d<=16)",
+    "jax_design": "newURP-jax 103165d E7_PLUMBING_DESIGN.md (E7-a needs zero world change: all three knobs are judge-call arguments in a no-fire probe)"
+  },
+  "grid": {
+    "cell": "m0.35_n1 (mu-nu plane flat per E3 — axis-1 isolation)",
+    "tau_scale": [
+      1.0,
+      0.7,
+      0.5
+    ],
+    "theta_scale": [
+      1.0,
+      1.5
+    ],
+    "aim": [
+      "cv (nc = p+v*tau, current)",
+      "ma (nc += 0.5*ahat*tau^2; ahat = (v_t - v_{t-1})/dt, |ahat| <= a_att_max clip, first tick 0)"
+    ],
+    "variants": 12,
+    "excluded": "range, axis-3 turn-limit (P0a AXIS3_NULL), FRPN terminal guidance"
+  },
+  "rho": "rho(variant) = d_star * tan(theta_v) / (0.5 * a_att * tau_v^2), d_star = cone_range_max (runtime-recorded). Absolute level depends on the d_star convention — monotonicity/ratios only; no absolute comparison to the A.1 anchor 1.6",
+  "aggregation": "per variant: median over the 4 slot medians of per-episode robust-step counts (same family as P0a), 24 eps x 4 adapted attackers",
+  "predictions": {
+    "P-rho1": "window med is monotone in rho: Spearman(rho, window_med) >= 0.7 -> P_RHO1_SUPPORTED; an inversion-rich map rejects rho-sole-dominance",
+    "P-rho2": "the K1 hand-proof rho boundary (user lane, <= 2026-10-31) overlays the E7-a window map contour — boundary value must be registered BEFORE E7-b training starts, else E7-b proceeds flagged as boundary-unregistered"
+  },
+  "e7b_entry": "variant window med >= 4 steps (same threshold family as P0a) -> promotion to E7-b training candidates; zero promotions -> grid extension resubmitted to the user (no training)",
+  "probe_approximations": [
+    "attackers = old-world adapted exploiters (non-co-evolved) — optimistic bias; selection only, positive claims E7-b only (fresh new-world exploiter + audit)",
+    "instant-aim axis n_F = unit(nc - p_fin) ignoring turret slew — optimistic; quantified via the baseline-variant vs rollout-axis anchor agreement rate",
+    "wiring self-check: (tau0, theta0, n_F = rollout e_fin) bit-exact vs inn._vshot"
+  ],
+  "jax_parity_note": "risk-1 answer (JAX memo section 3): E7-a touches no world code. For E7-b the canonical landing must scale inn.tau_deploy AND the FSM dep-timer table from ONE FS1Spec source — recorded as an E7-b addendum precondition",
+  "not_evidence_for": [
+    "world ceiling",
+    "capture probability (guaranteed-capture lower bound only)",
+    "pooling with old-world numbers (reference anchor comparison only)"
+  ],
+  "manifest_hash": "0604471a06163da3"
+}
