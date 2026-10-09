@@ -1,0 +1,528 @@
+{
+  "manifest_hash": "1edae95d5dfa8747",
+  "invalid": [],
+  "lines": {
+    "det": {
+      "P_rho2L": "NOT_SUPPORTED",
+      "P_rho2L_detail": {
+        "P2_inert": [
+          10,
+          11,
+          4
+        ],
+        "P1_inert": [
+          7,
+          16,
+          7
+        ]
+      },
+      "P_2d": "COOP_NULL_BELOW",
+      "interpretation": {
+        "delta": [
+          -5,
+          10,
+          7
+        ],
+        "C_pooled": 0.0,
+        "K_sw": [
+          0,
+          1,
+          0
+        ],
+        "rows_per_seed": [
+          "C",
+          "C",
+          "C"
+        ],
+        "row": "C"
+      },
+      "P2_armed_minus_inert": [
+        6,
+        -1,
+        16
+      ]
+    },
+    "sto": {
+      "P_rho2L": "NOT_SUPPORTED",
+      "P_rho2L_detail": {
+        "P2_inert": [
+          31,
+          16,
+          0
+        ],
+        "P1_inert": [
+          7,
+          28,
+          10
+        ]
+      },
+      "P_2d": "COOP_NULL_BELOW",
+      "interpretation": {
+        "delta": [
+          14,
+          -15,
+          14
+        ],
+        "C_pooled": 0.0,
+        "K_sw": [
+          0,
+          0,
+          0
+        ],
+        "rows_per_seed": [
+          "C",
+          "C",
+          "C"
+        ],
+        "row": "C"
+      },
+      "P2_armed_minus_inert": [
+        4,
+        -4,
+        22
+      ]
+    }
+  },
+  "slots": {
+    "P1_armed": {
+      "0": {
+        "det": {
+          "d_shot": 2,
+          "net": 2,
+          "defended": 2,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 4542,
+            "n_rob": 411,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 21,
+          "net": 21,
+          "defended": 21,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 4428,
+            "n_rob": 334,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 2,
+          "learned_det_vs_ex_judge_sto": 23,
+          "learned_sto_vs_ex_judge": 22,
+          "learned_sto_vs_ex_judge_sto": 21
+        }
+      },
+      "1": {
+        "det": {
+          "d_shot": 26,
+          "net": 25,
+          "defended": 26,
+          "k_sw": 1,
+          "fallback": 0,
+          "coop": {
+            "n_win": 4569,
+            "n_rob": 287,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 13,
+          "net": 13,
+          "defended": 13,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 5233,
+            "n_rob": 108,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 26,
+          "learned_det_vs_ex_judge_sto": 14,
+          "learned_sto_vs_ex_judge": 53,
+          "learned_sto_vs_ex_judge_sto": 13
+        }
+      },
+      "2": {
+        "det": {
+          "d_shot": 14,
+          "net": 14,
+          "defended": 14,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 8633,
+            "n_rob": 507,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 24,
+          "net": 24,
+          "defended": 24,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 6621,
+            "n_rob": 256,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 14,
+          "learned_det_vs_ex_judge_sto": 34,
+          "learned_sto_vs_ex_judge": 53,
+          "learned_sto_vs_ex_judge_sto": 24
+        }
+      }
+    },
+    "P1_inert": {
+      "0": {
+        "det": {
+          "d_shot": 7,
+          "net": 7,
+          "defended": 7,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 2002,
+            "n_rob": 109,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 7,
+          "net": 7,
+          "defended": 7,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 3278,
+            "n_rob": 143,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 7,
+          "learned_det_vs_ex_judge_sto": 18,
+          "learned_sto_vs_ex_judge": 46,
+          "learned_sto_vs_ex_judge_sto": 7
+        }
+      },
+      "1": {
+        "det": {
+          "d_shot": 16,
+          "net": 16,
+          "defended": 16,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 4182,
+            "n_rob": 507,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 28,
+          "net": 28,
+          "defended": 28,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 3724,
+            "n_rob": 297,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 16,
+          "learned_det_vs_ex_judge_sto": 28,
+          "learned_sto_vs_ex_judge": 48,
+          "learned_sto_vs_ex_judge_sto": 28
+        }
+      },
+      "2": {
+        "det": {
+          "d_shot": 7,
+          "net": 7,
+          "defended": 7,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 5505,
+            "n_rob": 524,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 10,
+          "net": 10,
+          "defended": 10,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 6568,
+            "n_rob": 189,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 7,
+          "learned_det_vs_ex_judge_sto": 10,
+          "learned_sto_vs_ex_judge": 55,
+          "learned_sto_vs_ex_judge_sto": 10
+        }
+      }
+    },
+    "P2_armed": {
+      "0": {
+        "det": {
+          "d_shot": 16,
+          "net": 16,
+          "defended": 16,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 5681,
+            "n_rob": 650,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 35,
+          "net": 34,
+          "defended": 35,
+          "k_sw": 1,
+          "fallback": 0,
+          "coop": {
+            "n_win": 2749,
+            "n_rob": 224,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 16,
+          "learned_det_vs_ex_judge_sto": 44,
+          "learned_sto_vs_ex_judge": 75,
+          "learned_sto_vs_ex_judge_sto": 35
+        }
+      },
+      "1": {
+        "det": {
+          "d_shot": 10,
+          "net": 10,
+          "defended": 10,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 4158,
+            "n_rob": 222,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 12,
+          "net": 12,
+          "defended": 12,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 4396,
+            "n_rob": 198,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 10,
+          "learned_det_vs_ex_judge_sto": 38,
+          "learned_sto_vs_ex_judge": 61,
+          "learned_sto_vs_ex_judge_sto": 12
+        }
+      },
+      "2": {
+        "det": {
+          "d_shot": 20,
+          "net": 20,
+          "defended": 20,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 2205,
+            "n_rob": 208,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 22,
+          "net": 22,
+          "defended": 23,
+          "k_sw": 0,
+          "fallback": 1,
+          "coop": {
+            "n_win": 4764,
+            "n_rob": 148,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 20,
+          "learned_det_vs_ex_judge_sto": 28,
+          "learned_sto_vs_ex_judge": 108,
+          "learned_sto_vs_ex_judge_sto": 22
+        }
+      }
+    },
+    "P2_inert": {
+      "0": {
+        "det": {
+          "d_shot": 10,
+          "net": 10,
+          "defended": 10,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 4876,
+            "n_rob": 282,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 31,
+          "net": 31,
+          "defended": 31,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 5794,
+            "n_rob": 267,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 10,
+          "learned_det_vs_ex_judge_sto": 47,
+          "learned_sto_vs_ex_judge": 74,
+          "learned_sto_vs_ex_judge_sto": 31
+        }
+      },
+      "1": {
+        "det": {
+          "d_shot": 11,
+          "net": 11,
+          "defended": 11,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 6170,
+            "n_rob": 423,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 16,
+          "net": 16,
+          "defended": 16,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 5785,
+            "n_rob": 236,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 11,
+          "learned_det_vs_ex_judge_sto": 31,
+          "learned_sto_vs_ex_judge": 75,
+          "learned_sto_vs_ex_judge_sto": 16
+        }
+      },
+      "2": {
+        "det": {
+          "d_shot": 4,
+          "net": 4,
+          "defended": 4,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 992,
+            "n_rob": 8,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "sto": {
+          "d_shot": 0,
+          "net": 0,
+          "defended": 0,
+          "k_sw": 0,
+          "fallback": 0,
+          "coop": {
+            "n_win": 2188,
+            "n_rob": 11,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          }
+        },
+        "cross": {
+          "learned_det_vs_ex_judge": 4,
+          "learned_det_vs_ex_judge_sto": 5,
+          "learned_sto_vs_ex_judge": 44,
+          "learned_sto_vs_ex_judge_sto": 0
+        }
+      }
+    }
+  }
+}

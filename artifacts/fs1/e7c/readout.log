@@ -1,0 +1,85 @@
+{
+  "lines": {
+    "det": {
+      "P_rho2L": "NOT_SUPPORTED",
+      "P_rho2L_detail": {
+        "P2_inert": [
+          10,
+          11,
+          4
+        ],
+        "P1_inert": [
+          7,
+          16,
+          7
+        ]
+      },
+      "P_2d": "COOP_NULL_BELOW",
+      "interpretation": {
+        "delta": [
+          -5,
+          10,
+          7
+        ],
+        "C_pooled": 0.0,
+        "K_sw": [
+          0,
+          1,
+          0
+        ],
+        "rows_per_seed": [
+          "C",
+          "C",
+          "C"
+        ],
+        "row": "C"
+      },
+      "P2_armed_minus_inert": [
+        6,
+        -1,
+        16
+      ]
+    },
+    "sto": {
+      "P_rho2L": "NOT_SUPPORTED",
+      "P_rho2L_detail": {
+        "P2_inert": [
+          31,
+          16,
+          0
+        ],
+        "P1_inert": [
+          7,
+          28,
+          10
+        ]
+      },
+      "P_2d": "COOP_NULL_BELOW",
+      "interpretation": {
+        "delta": [
+          14,
+          -15,
+          14
+        ],
+        "C_pooled": 0.0,
+        "K_sw": [
+          0,
+          0,
+          0
+        ],
+        "rows_per_seed": [
+          "C",
+          "C",
+          "C"
+        ],
+        "row": "C"
+      },
+      "P2_armed_minus_inert": [
+        4,
+        -4,
+        22
+      ]
+    }
+  },
+  "invalid": []
+}
