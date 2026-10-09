@@ -1,0 +1,292 @@
+{
+  "manifest_hash": "d25bf6e6dedf31ea",
+  "thr": 29,
+  "variants": {
+    "t0.7_h1.0_cv": {
+      "rho": 3.925,
+      "seeds": {
+        "0": {
+          "ceil_sto": 17,
+          "net_sto": 17,
+          "det_vs_sto_exploiter": 50,
+          "e7b_ceil_det": 41,
+          "penetration": 0.9172,
+          "coop_sto": {
+            "n_win": 4559,
+            "n_rob": 97,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": false
+        },
+        "1": {
+          "ceil_sto": 29,
+          "net_sto": 28,
+          "det_vs_sto_exploiter": 116,
+          "e7b_ceil_det": 7,
+          "penetration": 0.8453,
+          "coop_sto": {
+            "n_win": 4047,
+            "n_rob": 184,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": true
+        },
+        "2": {
+          "ceil_sto": 19,
+          "net_sto": 17,
+          "det_vs_sto_exploiter": 22,
+          "e7b_ceil_det": 19,
+          "penetration": 0.8961,
+          "coop_sto": {
+            "n_win": 2463,
+            "n_rob": 90,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": false
+        }
+      },
+      "n_pass": 1,
+      "opens": false,
+      "ceil_sto_med": 19.0
+    },
+    "t0.7_h1.5_cv": {
+      "rho": 6.002,
+      "seeds": {
+        "0": {
+          "ceil_sto": 32,
+          "net_sto": 30,
+          "det_vs_sto_exploiter": 54,
+          "e7b_ceil_det": 17,
+          "penetration": 0.8649,
+          "coop_sto": {
+            "n_win": 4091,
+            "n_rob": 215,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": true
+        },
+        "1": {
+          "ceil_sto": 21,
+          "net_sto": 21,
+          "det_vs_sto_exploiter": 48,
+          "e7b_ceil_det": 14,
+          "penetration": 0.9156,
+          "coop_sto": {
+            "n_win": 4095,
+            "n_rob": 70,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": false
+        },
+        "2": {
+          "ceil_sto": 20,
+          "net_sto": 19,
+          "det_vs_sto_exploiter": 65,
+          "e7b_ceil_det": 8,
+          "penetration": 0.9051,
+          "coop_sto": {
+            "n_win": 6462,
+            "n_rob": 253,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": false
+        }
+      },
+      "n_pass": 1,
+      "opens": false,
+      "ceil_sto_med": 21.0
+    },
+    "t0.5_h1.0_cv": {
+      "rho": 7.692,
+      "seeds": {
+        "0": {
+          "ceil_sto": 36,
+          "net_sto": 32,
+          "det_vs_sto_exploiter": 60,
+          "e7b_ceil_det": 21,
+          "penetration": 0.8582,
+          "coop_sto": {
+            "n_win": 3730,
+            "n_rob": 319,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": true
+        },
+        "1": {
+          "ceil_sto": 11,
+          "net_sto": 9,
+          "det_vs_sto_exploiter": 51,
+          "e7b_ceil_det": 15,
+          "penetration": 0.9414,
+          "coop_sto": {
+            "n_win": 5614,
+            "n_rob": 272,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": false
+        },
+        "2": {
+          "ceil_sto": 33,
+          "net_sto": 30,
+          "det_vs_sto_exploiter": 72,
+          "e7b_ceil_det": 25,
+          "penetration": 0.8594,
+          "coop_sto": {
+            "n_win": 4420,
+            "n_rob": 238,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": true
+        }
+      },
+      "n_pass": 2,
+      "opens": true,
+      "ceil_sto_med": 33.0
+    },
+    "t0.5_h1.5_cv": {
+      "rho": 11.765,
+      "seeds": {
+        "0": {
+          "ceil_sto": 10,
+          "net_sto": 10,
+          "det_vs_sto_exploiter": 23,
+          "e7b_ceil_det": 22,
+          "penetration": 0.9109,
+          "coop_sto": {
+            "n_win": 4701,
+            "n_rob": 139,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": false
+        },
+        "1": {
+          "ceil_sto": 16,
+          "net_sto": 16,
+          "det_vs_sto_exploiter": 35,
+          "e7b_ceil_det": 21,
+          "penetration": 0.9016,
+          "coop_sto": {
+            "n_win": 4615,
+            "n_rob": 176,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": false
+        },
+        "2": {
+          "ceil_sto": 25,
+          "net_sto": 22,
+          "det_vs_sto_exploiter": 54,
+          "e7b_ceil_det": 22,
+          "penetration": 0.9144,
+          "coop_sto": {
+            "n_win": 4055,
+            "n_rob": 104,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": false
+        }
+      },
+      "n_pass": 0,
+      "opens": false,
+      "ceil_sto_med": 16.0
+    },
+    "t0.5_h1.0_ma": {
+      "rho": 7.692,
+      "seeds": {
+        "0": {
+          "ceil_sto": 22,
+          "net_sto": 20,
+          "det_vs_sto_exploiter": 68,
+          "e7b_ceil_det": 19,
+          "penetration": 0.9109,
+          "coop_sto": {
+            "n_win": 4785,
+            "n_rob": 133,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": false
+        },
+        "1": {
+          "ceil_sto": 37,
+          "net_sto": 37,
+          "det_vs_sto_exploiter": 58,
+          "e7b_ceil_det": 41,
+          "penetration": 0.8289,
+          "coop_sto": {
+            "n_win": 1952,
+            "n_rob": 84,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": true
+        },
+        "2": {
+          "ceil_sto": 24,
+          "net_sto": 24,
+          "det_vs_sto_exploiter": 48,
+          "e7b_ceil_det": 21,
+          "penetration": 0.9,
+          "coop_sto": {
+            "n_win": 5006,
+            "n_rob": 334,
+            "n_C": 0,
+            "n_H": 0,
+            "C": 0.0
+          },
+          "pass": false
+        }
+      },
+      "n_pass": 1,
+      "opens": false,
+      "ceil_sto_med": 24.0
+    }
+  },
+  "invalid": [],
+  "E7B2": "E7B2_OPENS",
+  "opened": [
+    "t0.5_h1.0_cv"
+  ],
+  "P_rho3s": {
+    "ladder": [
+      "t0.7_h1.0_cv",
+      "t0.7_h1.5_cv",
+      "t0.5_h1.0_cv",
+      "t0.5_h1.5_cv"
+    ],
+    "seed_median_ceil_sto": [
+      19.0,
+      21.0,
+      33.0,
+      16.0
+    ],
+    "spearman": -0.19999999999999998,
+    "verdict": "P_RHO3S_NOT_SUPPORTED"
+  }
+}

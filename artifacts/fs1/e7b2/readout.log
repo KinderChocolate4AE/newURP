@@ -1,0 +1,23 @@
+{
+  "E7B2": "E7B2_OPENS",
+  "opened": [
+    "t0.5_h1.0_cv"
+  ],
+  "P_rho3s": {
+    "ladder": [
+      "t0.7_h1.0_cv",
+      "t0.7_h1.5_cv",
+      "t0.5_h1.0_cv",
+      "t0.5_h1.5_cv"
+    ],
+    "seed_median_ceil_sto": [
+      19.0,
+      21.0,
+      33.0,
+      16.0
+    ],
+    "spearman": -0.19999999999999998,
+    "verdict": "P_RHO3S_NOT_SUPPORTED"
+  },
+  "invalid": []
+}
