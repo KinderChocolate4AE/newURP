@@ -256,7 +256,17 @@ C_SEED0, C_STRIDE = 278000, 1000
 
 def build_e7c() -> dict:
     body = {
-        "schema": "fs1-e7c-manifest-v1.2",
+        "schema": "fs1-e7c-manifest-v1.3",
+        "jseed_amendment_v1_3": ("2026-10-09, before any E7-c production (JAX-detected): the v1/v1.2 "
+                                 "exploiter jseed bands overlapped numerically with E7-b "
+                                 "(277000-281002) and E7-b2 (281000-285002) because bands 2000 "
+                                 "apart each span ~4000 with stride 1000. No contamination "
+                                 "(different worlds/defenses), but the disjoint-band rule was "
+                                 "violated -> E7-c det exploiter jseed = 290000 + cond_idx*1000 + "
+                                 "seed, sto exploiter jseed = 295000 + cond_idx*1000 + seed. These "
+                                 "supersede the 279000 / 283000 bands written below. The E7-b vs "
+                                 "E7-b2 overlap (already produced) is recorded as known and "
+                                 "harmless"),
         "status": ("sealed 2026-10-08 on user approval ('fixed'), BEFORE any E7-b result and "
                    "before any E7-c production (contract: docs/130). v1.1 (user-approved, "
                    "still before any production/result): interpretation table fixed "

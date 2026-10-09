@@ -1,5 +1,6 @@
 {
-  "schema": "fs1-e7c-manifest-v1.2",
+  "schema": "fs1-e7c-manifest-v1.3",
+  "jseed_amendment_v1_3": "2026-10-09, before any E7-c production (JAX-detected): the v1/v1.2 exploiter jseed bands overlapped numerically with E7-b (277000-281002) and E7-b2 (281000-285002) because bands 2000 apart each span ~4000 with stride 1000. No contamination (different worlds/defenses), but the disjoint-band rule was violated -> E7-c det exploiter jseed = 290000 + cond_idx*1000 + seed, sto exploiter jseed = 295000 + cond_idx*1000 + seed. These supersede the 279000 / 283000 bands written below. The E7-b vs E7-b2 overlap (already produced) is recorded as known and harmless",
   "status": "sealed 2026-10-08 on user approval ('fixed'), BEFORE any E7-b result and before any E7-c production (contract: docs/130). v1.1 (user-approved, still before any production/result): interpretation table fixed (docs/130 section 7); gates unchanged. v1.2 (user-approved 2026-10-09, after the E7-b readout, before any E7-c production/result): stochastic-policy audit arm added (docs/130 section 9)",
   "sto_audit_arm_v1_2": {
     "exploiters": "per condition x seed: fresh dedicated exploiter vs the frozen STOCHASTIC defense (--exploit-sto), 1e7, jseed 283000 + cond_idx*1000 + seed (separate from the det exploiters, jseed 279000-band)",
@@ -104,5 +105,5 @@
     "cooperation vocabulary (limiter-control opportunity)",
     "pooling with E7-a/b, arm C-1/D"
   ],
-  "manifest_hash": "46cea2edfd601f10"
+  "manifest_hash": "1edae95d5dfa8747"
 }

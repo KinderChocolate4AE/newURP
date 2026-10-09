@@ -28,3 +28,8 @@
 
 양성 주장 금지 · server4 GPU 1장만 · git 은 newURP-jax 만 · jseed 대역 혼동 금지 (279000 det /
 281000 E7-b′ sto / 283000 E7-c sto) · 첫 slot 정상 확인 후 sweep.
+
+## 정정 (2026-10-09, E7-c 생산 전 — JAX 발견, manifest E7-c v1.3)
+
+E7-c 착취자 jseed: det = **290000 + cond_idx·1000 + seed**, sto = **295000 + cond_idx·1000 + seed**
+(위의 279000 / 283000 대체 — 기존 식은 E7-b·E7-b′ 대역과 숫자상 겹쳤음). E7-b′ 는 그대로.
