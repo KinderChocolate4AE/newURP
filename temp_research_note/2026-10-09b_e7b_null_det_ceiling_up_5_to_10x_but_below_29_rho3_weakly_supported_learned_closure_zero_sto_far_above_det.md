@@ -74,3 +74,8 @@ harvest `576e55e` (manifest v1.1 `543cd9e4b3582687`, pin `eef7c27`). 판정 = le
   시 server4 CPU 평가 (`run_fs1_e7b2_eval.sh`) 자동 발사.
 - E7-c: 조건 디렉토리 P1_armed / P1_inert / P2_armed / P2_inert (cond_idx 순), BC 래퍼 별도 파일
   `bc_variant_e7c.py` (E7-b 원본 보존, 32 eps 단독 테스트 통과). ETA 12 × ~43분 → 10-10 00시 전후.
+- **15:01 드라이버 교체 (E7-c v1.3 jseed 반영)**: `e7b2_e7c_v13.sh` (PID 1840104, tmux e7b2c).
+  실행 중 bash 제자리 수정이 위험해 교체 방식. 교체 순간 막 시작한 E7-b′ slot 1개
+  (t0.5_h1.0_cv/s2, jseed 283002, 수 초 진행) 는 부분 산출물 삭제 후 **같은 seed 로 처음부터
+  재시작** — 진행 로그에 "DRIVER SWAP" 기록. 결과를 본 적 없는 수 초 분량이라 재추첨 문제 없음
+  (같은 seed 재실행). E7-c 는 시작 전이라 영향 없음.
