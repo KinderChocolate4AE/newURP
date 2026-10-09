@@ -61,3 +61,16 @@ harvest `576e55e` (manifest v1.1 `543cd9e4b3582687`, pin `eef7c27`). 판정 = le
 - golden 재생성 (world.py 해시 + Params/State repr 변경, 라벨 불변). BC 는 E7-b 래퍼에
   limiter_roe/limiter_inert 추가, jseed 279000대 예약. `--exploit-sto` 는 arm D 때 구현 (`b3031ed`).
 - **발사 보류** — sto 감사 팔 결정 (E7-b′, E7-c sto) 대기.
+
+## 5. E7-b′ → E7-c 직렬 발사 (JAX 보고 14:38)
+
+- server4 GPU0 1장, tmux `e7b2c`, 드라이버 `/data/hjhong/fs1jax/runs/e7b2_e7c.sh`, 진행 로그
+  `/data/hjhong/fs1jax/e7b2_e7c_progress.log`. **E7-c pin 확정 = `80afb2a`** (정본 드리프트 0).
+- 코드 동기화 범위 기록: server4 code 디렉토리를 80afb2a 의 **shepherd + tests 만** 동기화
+  (전체 아카이브 282 MB 업로드 제한) — REVISION = "80afb2a (shepherd+tests)". E7-b′ 착취자도
+  80afb2a 코드로 학습되지만 E7-b 변형에서 신규 필드는 기본 off 라 eef7c27 과 bit-동일.
+- 첫 slot 확인: t0.7_h1.0_cv/s0 `judge_exploiter_sto` config = exploit_sto true · τ0.7 · θ1.0 · cv ·
+  seed 281000 · r4p. E7-b′ 15 × ~3.5분 → ~15:30 완료 예상 → main 감시 스크립트가 15개 완료 확인
+  시 server4 CPU 평가 (`run_fs1_e7b2_eval.sh`) 자동 발사.
+- E7-c: 조건 디렉토리 P1_armed / P1_inert / P2_armed / P2_inert (cond_idx 순), BC 래퍼 별도 파일
+  `bc_variant_e7c.py` (E7-b 원본 보존, 32 eps 단독 테스트 통과). ETA 12 × ~43분 → 10-10 00시 전후.
