@@ -1,0 +1,34 @@
+{
+  "E7": "E7B_NULL",
+  "opened": [],
+  "P_rho3": {
+    "ladder": [
+      "t0.7_h1.0_cv",
+      "t0.7_h1.5_cv",
+      "t0.5_h1.0_cv",
+      "t0.5_h1.5_cv"
+    ],
+    "seed_median_ceil_det": [
+      19.0,
+      14.0,
+      21.0,
+      22.0
+    ],
+    "spearman": 0.7999999999999999,
+    "verdict": "P_RHO3_SUPPORTED"
+  },
+  "P_2c": {
+    "pair": [
+      "t0.7_h1.0_cv",
+      "t0.5_h1.5_cv"
+    ],
+    "pooled_C": [
+      0.0,
+      0.0
+    ],
+    "seed_wins": 0,
+    "n_seeds": 3,
+    "verdict": "UNDECIDABLE_LOW_SIGNAL"
+  },
+  "invalid": []
+}
