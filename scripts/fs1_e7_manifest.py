@@ -256,11 +256,26 @@ C_SEED0, C_STRIDE = 278000, 1000
 
 def build_e7c() -> dict:
     body = {
-        "schema": "fs1-e7c-manifest-v1.1",
+        "schema": "fs1-e7c-manifest-v1.2",
         "status": ("sealed 2026-10-08 on user approval ('fixed'), BEFORE any E7-b result and "
                    "before any E7-c production (contract: docs/130). v1.1 (user-approved, "
                    "still before any production/result): interpretation table fixed "
-                   "(docs/130 section 7); gates unchanged"),
+                   "(docs/130 section 7); gates unchanged. v1.2 (user-approved 2026-10-09, "
+                   "after the E7-b readout, before any E7-c production/result): stochastic-"
+                   "policy audit arm added (docs/130 section 9)"),
+        "sto_audit_arm_v1_2": {
+            "exploiters": "per condition x seed: fresh dedicated exploiter vs the frozen "
+                          "STOCHASTIC defense (--exploit-sto), 1e7, jseed 283000 + cond_idx*1000 "
+                          "+ seed (separate from the det exploiters, jseed 279000-band)",
+            "judgment": ("two parallel lines, no preference (pre-declared): det line = section 3 "
+                         "gates as sealed (learned_det vs det exploiter); sto line = the same "
+                         "gate wording applied to learned_sto vs sto exploiter (P_RHO2L_S, "
+                         "COOP_PUSHES_BOUNDARY_S) + the section 7 interpretation table; if the "
+                         "lines disagree, report both and record the gap as an "
+                         "unpredictability effect (never as emergence)"),
+            "eval": "same seeds (278000 + cond_idx*1000), exploiter groups ex_judge and "
+                    "ex_judge_sto",
+        },
         "lineage": {"contract": "docs/130", "e7b": "543cd9e4b3582687 (v1.1, seal-time literal)",
                     "e7a2": "57b4faafba5d27bf", "p_rho2": "rho* = 2.813 (note 2026-10-08c)"},
         "question": ("does limiter-control opportunity (stage 1 of the original design: "
@@ -347,10 +362,61 @@ def load_e7c() -> dict:
     return data
 
 
+# ---------------------------------------------------------------- E7-b′ -----
+MANIFEST_B2 = ROOT / "artifacts" / "fs1" / "e7b2_manifest.json"
+B2_JSEED0 = 281000
+
+
+def build_e7b2() -> dict:
+    body = {
+        "schema": "fs1-e7b2-manifest-v1",
+        "status": ("sealed 2026-10-09 on user approval, after the E7-b readout (E7B_NULL) and "
+                   "BEFORE any E7-b2 exploiter training or result (contract: docs/129 section 8). "
+                   "HONESTY FLAG: the hypothesis was motivated by already-seen UNAUDITED sto "
+                   "ceilings (59-117/240 vs det-trained exploiters); the test itself (exploiters "
+                   "trained vs sto) is unseen"),
+        "lineage": {"contract": "docs/129 section 8", "e7b": "543cd9e4b3582687 (seal-time literal)",
+                    "e7b_harvest": "576e55e", "defense_pin": "eef7c27 (E7-b checkpoints, not retrained)"},
+        "question": ("in the opened net-physics worlds, does the frozen STOCHASTIC defense survive "
+                     "a dedicated exploiter trained against it — i.e., has the remaining bottleneck "
+                     "moved from window generation to predictability"),
+        "variants": B_VARIANTS, "seeds": B_SEEDS,
+        "exploiters": (f"per E7-b slot: fresh dedicated exploiter vs the frozen stochastic defense "
+                       f"(--exploit-sto), {B_EX_STEPS:.0e}, same variant world flags, jseed "
+                       f"{B2_JSEED0} + vi*1000 + seed"),
+        "judgment_defender": ("learned_sto — PRE-DECLARED judgment-model change, this contract only "
+                              "(arm D precedent); learned_det reported vs the same sto exploiter"),
+        "evaluation": {"n": B_N, "seed0": B_SEED0, "variant_seed_stride": B_STRIDE,
+                       "note": "same seed band as E7-b -> paired comparison with the det verdict",
+                       "defenders": ["learned_sto (judgment)", "learned_det (report)"],
+                       "group": "ex_judge_sto", "cli": "variant flags + --coop-window"},
+        "gates": {
+            "E7B2_OPENS": (f"per variant: ceil_learned_sto >= {B_CEIL_REF} + {B_MARGIN} = 29/{B_N} "
+                           "on >= 2 of 3 seeds; none -> E7B2_NULL"),
+            "P-rho3s": "cv ladder (4 points): seed-median ceil_sto monotone in rho, Spearman >= 0.7",
+            "report": ["exploiter penetration (mean of last 10 win_rate)",
+                       "paired det-vs-sto gap vs E7-b", "coop-window C and H"],
+            "invalid": "budget (exploiter >= 1e7) / completion / paired / manifest / variant flags",
+        },
+        "not_evidence_for": ["emergence", "world ceiling", "pooling with E7-b det verdict "
+                             "(paired comparison only)", "positive claims unconditional on 1e7"],
+    }
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    return {**body, "manifest_hash": hashlib.sha256(raw.encode()).hexdigest()[:16]}
+
+
+def load_e7b2() -> dict:
+    data = json.loads(MANIFEST_B2.read_text(encoding="utf-8"))
+    if data != build_e7b2():
+        raise ValueError(f"E7-b2 manifest drift: {MANIFEST_B2}")
+    return data
+
+
 def main() -> None:
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)
     for path, body in ((MANIFEST, build_e7a()), (MANIFEST_B, build_e7b()),
-                       (MANIFEST_A2, build_e7a2()), (MANIFEST_C, build_e7c())):
+                       (MANIFEST_A2, build_e7a2()), (MANIFEST_C, build_e7c()),
+                       (MANIFEST_B2, build_e7b2())):
         path.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"{path} {body['manifest_hash']}")
 

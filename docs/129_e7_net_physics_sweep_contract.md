@@ -132,3 +132,20 @@
   `UNDECIDABLE_LOW_SIGNAL` (E7-a′ 의 기준 결함 — 하한 부재로 1~3 tick 이 판정을 정함 — 교정).
   5 변형 × 전 defender 의 C·H 는 보고 (학습 vs scripted limiter 의 ρ 프로파일).
 - JAX C-② 로그는 보조 자료 (형식 그대로, 보강 요청 철회). 생산 = server4 GPU 1장 (서버 룰).
+
+## 8. E7-b′ — 확률 정책 감사 (봉인 2026-10-09, 사용자 승인 — E7-b′ 착취자 학습·결과 전)
+
+- **근거**: E7-b = `E7B_NULL` (노트 10-09b). 판정 착취자는 결정 정책 (det) 만 상대로 학습
+  (`exploit_sto=False`) — ceil_sto 59~117/240 은 sto 를 본 적 없는 착취자 상대라 미감사.
+  가설: 창이 열린 세계에서는 남은 병목이 예측 가능성으로 이동. **정직 플래그**: 이 가설은
+  이미 본 (미감사) sto 수치에서 나왔다 — 검정 (sto 상대로 학습한 착취자) 은 미관측.
+- **설계**: E7-b 의 동결 방어 15 slot (pin `eef7c27` 산출 ckpt) 각각에 대해 **확률 정책 동결
+  방어 상대 신규 전용 착취자** (`--exploit-sto`, 1e7, 변형 세계 플래그 동일, jseed **281000 +
+  vi·1000 + seed**). 방어는 재학습하지 않는다.
+- **판정 defender = learned_sto (사전 선언, 본 계약 한정 — arm D 선례)**. learned_det 은 같은
+  sto-착취자 상대 보고. 정본 평가 240판, seed0 = **276000 + vi·1000 (E7-b 와 같은 대역 — det
+  판정과 paired 비교 가능)**, `--coop-window`.
+- **게이트**: 변형별 ceil_sto ≥ 29/240, seed 2/3 → `E7B2_OPENS(variant)`; 전무 → `E7B2_NULL`.
+  **P-ρ3s** (등록): cv 사다리 4점의 seed 중앙 ceil_sto 가 ρ 단조, Spearman ≥ 0.7. 보고: 착취자
+  학습 곡선 (마지막 10 iter win_rate 평균 = 관통), E7-b det 판정과의 paired 차이, C·H.
+- 무효: budget (착취자 ≥ 1e7) / completion / paired / manifest / 변형 플래그 불일치.

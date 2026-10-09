@@ -1,0 +1,84 @@
+{
+  "schema": "fs1-e7b2-manifest-v1",
+  "status": "sealed 2026-10-09 on user approval, after the E7-b readout (E7B_NULL) and BEFORE any E7-b2 exploiter training or result (contract: docs/129 section 8). HONESTY FLAG: the hypothesis was motivated by already-seen UNAUDITED sto ceilings (59-117/240 vs det-trained exploiters); the test itself (exploiters trained vs sto) is unseen",
+  "lineage": {
+    "contract": "docs/129 section 8",
+    "e7b": "543cd9e4b3582687 (seal-time literal)",
+    "e7b_harvest": "576e55e",
+    "defense_pin": "eef7c27 (E7-b checkpoints, not retrained)"
+  },
+  "question": "in the opened net-physics worlds, does the frozen STOCHASTIC defense survive a dedicated exploiter trained against it — i.e., has the remaining bottleneck moved from window generation to predictability",
+  "variants": [
+    {
+      "name": "t0.7_h1.0_cv",
+      "tau_scale": 0.7,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "rho": 3.925
+    },
+    {
+      "name": "t0.7_h1.5_cv",
+      "tau_scale": 0.7,
+      "theta_scale": 1.5,
+      "aim": "cv",
+      "rho": 6.002
+    },
+    {
+      "name": "t0.5_h1.0_cv",
+      "tau_scale": 0.5,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "rho": 7.692
+    },
+    {
+      "name": "t0.5_h1.5_cv",
+      "tau_scale": 0.5,
+      "theta_scale": 1.5,
+      "aim": "cv",
+      "rho": 11.765
+    },
+    {
+      "name": "t0.5_h1.0_ma",
+      "tau_scale": 0.5,
+      "theta_scale": 1.0,
+      "aim": "ma",
+      "rho": 7.692
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "exploiters": "per E7-b slot: fresh dedicated exploiter vs the frozen stochastic defense (--exploit-sto), 1e+07, same variant world flags, jseed 281000 + vi*1000 + seed",
+  "judgment_defender": "learned_sto — PRE-DECLARED judgment-model change, this contract only (arm D precedent); learned_det reported vs the same sto exploiter",
+  "evaluation": {
+    "n": 240,
+    "seed0": 276000,
+    "variant_seed_stride": 1000,
+    "note": "same seed band as E7-b -> paired comparison with the det verdict",
+    "defenders": [
+      "learned_sto (judgment)",
+      "learned_det (report)"
+    ],
+    "group": "ex_judge_sto",
+    "cli": "variant flags + --coop-window"
+  },
+  "gates": {
+    "E7B2_OPENS": "per variant: ceil_learned_sto >= 5 + 24 = 29/240 on >= 2 of 3 seeds; none -> E7B2_NULL",
+    "P-rho3s": "cv ladder (4 points): seed-median ceil_sto monotone in rho, Spearman >= 0.7",
+    "report": [
+      "exploiter penetration (mean of last 10 win_rate)",
+      "paired det-vs-sto gap vs E7-b",
+      "coop-window C and H"
+    ],
+    "invalid": "budget (exploiter >= 1e7) / completion / paired / manifest / variant flags"
+  },
+  "not_evidence_for": [
+    "emergence",
+    "world ceiling",
+    "pooling with E7-b det verdict (paired comparison only)",
+    "positive claims unconditional on 1e7"
+  ],
+  "manifest_hash": "d25bf6e6dedf31ea"
+}
