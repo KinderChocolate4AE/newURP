@@ -47,3 +47,17 @@ harvest `576e55e` (manifest v1.1 `543cd9e4b3582687`, pin `eef7c27`). 판정 = le
 - 다음 결정 (사용자): ① **E7-b′ sto 감사** — 15 slot 각각 sto 동결 방어 상대 신규 착취자 (1e7)
   → ceil_sto 판정 (판정 defender = sto 사전 선언, arm D 선례). 착취자만 학습하므로 GPU ~2~3h.
   ② E7-c 에 같은 sto 감사 팔을 추가할지 (E7-c 미착수 — 결과 전 정정 가능).
+
+## 4. E7-c 미러 준비 완료 (JAX 보고, 같은 날) — 발사 보류 유지
+
+- pin 후보 **`80afb2a`** (newURP-jax, 존재 확인, 36/36 green). 미러 = 정본 `64e969b` 의미론:
+  `State.fired` 첫 발사 latch (발사 tick 자체는 latch 전 = 정본의 env.step 뒤 `_fired` 세팅과
+  동일), harmless = inert ∨ (post_shot ∧ ¬fired) → limiter 무장 채널 0 (위치 목표 유지) + 그
+  step 접촉 resolver off. inert 의 kill_radius = 0 은 resolve 가 kill_r·r_contact·commit margin
+  으로 흡수 (P2-inert commit margin −0.150 → 커밋 불가). 기본값 bit-exact.
+- f64 spot-check: P1-armed (τ0.85, post_shot) 15 ep + P2-inert (τ1.0 θ1.5) 15 ep 전부 step-exact
+  (상태·관측·보상·done·라벨·retired/pending·fired latch). 교전 규칙 의미 확인: post_shot 발사 전
+  kinetic 소모 0, 발사 후 5회 (원거리 miss 뒤 HARD_KILL) / inert kinetic 0, kinetic 라벨 없음.
+- golden 재생성 (world.py 해시 + Params/State repr 변경, 라벨 불변). BC 는 E7-b 래퍼에
+  limiter_roe/limiter_inert 추가, jseed 279000대 예약. `--exploit-sto` 는 arm D 때 구현 (`b3031ed`).
+- **발사 보류** — sto 감사 팔 결정 (E7-b′, E7-c sto) 대기.
