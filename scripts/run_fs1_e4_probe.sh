@@ -10,7 +10,7 @@ main() {
   OUT=artifacts/fs1/e4
   notify() { python -c "from shepherd.notify import ntfy; ntfy('$1', title='e4')" || true; }
   trap 'notify "E4 probe FAILED - check logs"' ERR
-  while [ ! -f artifacts/fs1/ami/readout.json ]; do sleep 120; done      # AMI 판독 = AMI 종료
+  while [ ! -f artifacts/fs1/ami/readout.log ]; do sleep 120; done       # AMI 종료 (판독 성공 여부 무관)
   flock /tmp/fs1_git.lock git pull -q --rebase origin feat/scale-up-v2 || true
   python -c "import sys; sys.path.insert(0, 'scripts'); from fs1_e4_manifest import load; print(load()['manifest_hash'])"
   mkdir -p "$OUT"
