@@ -9,6 +9,27 @@
   에서는 "펼침 시간" 이 아니라 **표적 도달까지 시간 (비행 + 펼침)** 이 맞다. 제조사의 "0.2 s 에 펼쳐짐"
   은 비행 시간을 빼먹었을 수 있으므로 그 ρ 는 **상한 (낙관)** 으로만 읽는다.
 
+## 0. ★ 원문 대조 정정 (같은 날, 사용자가 PDF 4편 제공 — main 이 직접 읽음)
+
+- **Huh 2026 (machines-14-00413-v3-1.pdf, p.4 §3.1)**: main 직접 확인 — "the capturable region was specified as the effective
+  engagement envelope of the net-gun device. The radial constraint was set to 3–10 m, based on the effective range [31] and net
+  deployment distance. The angular constraint was set to a central angle of 10°…", d_min 3 m, d_max 10 m, θ_c = 10°, "Capture was
+  considered successful if at least one pursuer maintained the evader within C_i for 0.5 s." — **0.5 s 문장에 인용 없음 확인**.
+  [31] = DroneCatcher 웹사이트. 서브에이전트 인용과 일치.
+- **Han 2026 (drones-10-00478-v2.pdf) — 정정**: t = 0.228 s 는 **실측이 아니라 FEM 시뮬레이션** 값이고, 그 시뮬에서 표적 UAV 는
+  −z 로 50 m/s 로 움직이며 접근한다 (시간 = 닫힘 기하 하의 첫 접촉, 순수 전개 시간 아님). 저자: "The actual experimental
+  duration … is considerably longer than the simulated timeframe" (§5.4, 실험 시간 수치는 없음). → 아래 표의 "1차 학술 τ" 표기는
+  **틀렸다**: "FEM 시뮬 (닫힘 50 m/s), 실험은 더 느림 — 하한 쪽 τ, 즉 ρ 2.82 는 상한".
+- **Yu et al. 2022 (AIAA)**: 0.61 m × 0.61 m 소형 공압 net, 본문에 **시간 수치 없음** (그림만). 최대 개방은 0.75 m 지점, 유효
+  개방은 2.4 m 지점, 개방률 40–80% 로 시행마다 일관성 없음, COG 영교차 1.3–3.2 m. → τ anchor 로는 쓸 수 없음. 대신 **"이상
+  콘 가정 (A2) 이 낙관적"** 이라는 한계 서술 (D2) 의 실측 근거.
+- **UAV Hunter (Zhang et al. 2024, drones-08-00573.pdf, §2)**: 3 m × 3 m net, 무게추 8 개, 공압, 45° 고정 장착, "the rope net
+  unfolds around the third meter and exhibits a significant trajectory deviation around the eighth meter. As a result, its
+  effective capture range is about 3 to 8 m." 시간 수치 없음. → **사거리 anchor**: FS1 R_max 8.22 m · robust 껍질 [4.37, 7.30] m
+  가 실측 유효 포획 거리 3–8 m 와 맞는다 (Huh 의 3–10 m 와도 같은 급).
+- **결론 갱신**: 공개 자료 중 **독립 실측 τ 는 0 개**. τ 값은 제조사 주장 (Chipa P, MITLA S, DefendAir P) 또는 FEM 시뮬 (Han) 뿐.
+  ρ 2.8–4.4 는 "공개 주장·시뮬 기준 상한" 으로만 쓴다. R_max 는 실측 anchor 1 개 (UAV Hunter) 확보.
+
 ## 1. 실물 net → ρ (a = 20.45 기준)
 
 | 시스템 | 근거 | τ | r_net | ρ | 등급 |
