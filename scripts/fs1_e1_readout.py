@@ -70,8 +70,8 @@ def main() -> None:
     out = {"manifest_hash": h}
     cells = {}
     for p in M.LADDER + M.PAIR:
-        for s in M.SEEDS:
-            d = root / p["name"] / f"s{s}" / "eval"
+        for s, sub in ((s, sub) for s in M.SEEDS for sub in ("eval_judge", "eval_judge_sto")):
+            d = root / p["name"] / f"s{s}" / sub
             if not (d / "summary.json").exists():
                 continue
             sm = json.loads((d / "summary.json").read_text(encoding="utf-8"))
