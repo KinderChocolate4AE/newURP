@@ -350,55 +350,46 @@ def figF2():
     plt.close(fig)
 
 
-# ---------------------------------------------------------------- 그림 4 (spine v3) ρ별 분해 — 사후 기술 통계
-def decomposition():
-    """E7-b (결정적) / E7-b′ (확률적) 평가 기록: slot 별 (창이 생긴 판, 창 뒤 발사한 판, net 포획 판).
-    창 = LOADED ∧ d ≤ 16 m 에서 robust tick ≥ 1 (n_rob, 발사 전까지만 셈) → 창 뒤 발사 = 창이 먼저 생긴 판에서의 발사."""
-    import glob
-    import pathlib
-    net = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT")
-    out = {}
+# ---------------------------------------------------------------- 그림 4 ρ별 결과 분해 (6분류) — 사후 기술 통계
+def fig4dec():
+    """E7-b (결정적) / E7-b′ (확률적) 평가 기록의 판 단위 6분류. 분류 규칙 = viz/paper1_logic._cat (단일 정의).
+    창은 장전·16 m 이내·첫 발사 전에만 기록되므로 '창 기록 전에 이미 쏨' 은 이후 창 여부를 알 수 없다."""
+    import sys as _s
+    _s.path.insert(0, str(ROOT / "viz"))
+    import paper1_logic as L
+    rows = {}
     for line, exp, dn, g in (("det", "e7b", "learned_det", "ex_judge"), ("sto", "e7b2", "learned_sto", "ex_judge_sto")):
         rho = {v: x["rho"] for v, x in load(f"{exp}/readout.json")["variants"].items()}
-        for f in sorted(glob.glob(str(A / exp / "*" / "s*" / "eval" / "episodes.jsonl"))):
-            p = pathlib.Path(f)
-            var = p.parents[2].name
-            E = [json.loads(x) for x in p.read_text(encoding="utf-8").splitlines()]
-            d = [e for e in E if e["defender"] == dn and e["group"] == g]
-            w = [e for e in d if e["n_rob"] > 0]
-            out.setdefault((line, var, rho[var]), []).append(
-                (len(w), sum(e["n_fire"] > 0 for e in w), sum(e["label"] in net for e in d),
-                 sum(e["label"] in net for e in d if e["n_rob"] == 0)))   # 마지막 = 창 기록 밖 포획 (경계 사례)
-    return out
-
-
-def fig4dec():
-    dec = decomposition()
-    n_out = {ln: sum(v[3] for k, vs in dec.items() if k[0] == ln for v in vs) for ln in ("det", "sto")}
-    fig, axs = plt.subplots(1, 2, figsize=(160 * MM, 68 * MM), sharey=True)
-    styles = [("window occurred", "0.85", None), ("fired after a window", "0.55", None), ("net capture", "0.15", None)]
+        for f in sorted((A / exp).glob("*/s*/eval/episodes.jsonl")):
+            var = f.parents[2].name
+            for x in f.read_text(encoding="utf-8").splitlines():
+                e = json.loads(x)
+                if e["defender"] == dn and e["group"] == g:
+                    c = rows.setdefault((line, var, rho[var]), dict.fromkeys(L.CATS, 0))
+                    c[L._cat(e)] += 1
+    styles = [("0.10", None), ("0.35", None), ("0.55", "////"), ("0.75", "...."), ("white", "xxxx"), ("0.92", None)]
+    fig, axs = plt.subplots(1, 2, figsize=(160 * MM, 78 * MM), sharey=True)
     for ax, line, ttl in ((axs[0], "det", "(a) deterministic defense vs its exploiter"),
                           (axs[1], "sto", "(b) stochastic defense vs its exploiter")):
-        keys = sorted((k for k in dec if k[0] == line), key=lambda k: (k[2], k[1]))
-        xs = np.arange(len(keys) + 1)
-        ax.bar(0, 0, color="white")
-        ax.text(0, 8, "ρ 1.92\npending\n(transition\nladder)", ha="center", va="bottom", fontsize=6, color="0.35")
-        for i, k in enumerate(keys, start=1):
-            vals = np.array(dec[k])                              # seed × 3
-            for j, (lab, fc, _) in enumerate(styles):
-                x = i + (j - 1) * 0.27
-                ax.bar(x, np.median(vals[:, j]), width=0.25, fc=fc, ec="k", lw=0.5, label=lab if i == 1 else None)
-                ax.plot([x] * len(vals), vals[:, j], "k.", ms=2.5)
-        ax.set_xticks(xs, ["1.92"] + [f"{k[2]:.2f}" + ("\nma" if k[1].endswith("ma") else "") for k in keys], fontsize=6.5)
+        keys = sorted((k for k in rows if k[0] == line), key=lambda k: (k[2], k[1]))
+        for i, k in enumerate(keys):
+            tot, bottom = sum(rows[k].values()), 0.0
+            for (cat, n), (fc, hat) in zip(rows[k].items(), styles):
+                h = 100 * n / tot
+                ax.bar(i, h, bottom=bottom, width=0.7, fc=fc, ec="k", lw=0.5, hatch=hat, label=cat if i == 0 else None)
+                bottom += h
+        ax.set_xticks(range(len(keys)), [f"{k[2]:.2f}" + ("\nma" if k[1].endswith("ma") else "") for k in keys], fontsize=6.5)
         ax.set_xlabel(r"$\rho$ (variant)")
         ax.set_title(ttl, fontsize=7, loc="left")
         ax.tick_params(labelsize=7)
-    axs[0].set_ylabel("episodes /240 (median, dots = seeds)")
-    axs[1].legend(fontsize=6.3, loc="upper right", frameon=False)
-    fig.text(0.5, 0.005, "post-hoc descriptive counts from the matched-audit evaluation logs (1e7 exploiter); "
-             f"not a pre-registered verdict.\nCaptures with no recorded window: det {n_out['det']}, sto {n_out['sto']} "
-             "(window counted only while loaded and within 16 m)", ha="center", fontsize=5.8, color="0.3")
-    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    axs[0].set_ylabel("share of episodes [%] (3 seeds x 240)")
+    labels_en = ["net capture", "direct kill", "fired after a window, missed", "window, never fired",
+                 "fired before any recorded window", "no window, never fired"]
+    hs = [plt.Rectangle((0, 0), 1, 1, fc=fc, ec="k", lw=0.5, hatch=h) for fc, h in styles]
+    fig.legend(hs, labels_en, loc="lower center", ncol=3, fontsize=6.3, frameon=False, bbox_to_anchor=(0.5, 0.0))
+    fig.text(0.5, 0.135, "post-hoc descriptive counts (1e7 exploiter); windows are recorded only while loaded, within 16 m, "
+             "before the first shot", ha="center", fontsize=5.8, color="0.3")
+    fig.tight_layout(rect=(0, 0.16, 1, 1))
     fig.savefig(OUT / "fig_decomposition.png")
     plt.close(fig)
 
