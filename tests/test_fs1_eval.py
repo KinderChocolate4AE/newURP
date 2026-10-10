@@ -217,3 +217,16 @@ def test_coop_window_counts_consistent():
     for r in on:
         assert r["n_C"] + r["n_H"] <= r["n_win"] and r["n_rob"] <= r["n_win"]
     assert [r["label"] for r in on][:1] == [off[0]["label"]]   # 측정은 rollout 을 바꾸지 않음
+
+
+def test_e6_a_scale_single_source():
+    """E6 (docs/134 §4): a_scale 은 판정·동역학·residual 범위에 함께 전파되고, mu 보정으로 방어 가속은 고정."""
+    from shepherd.fs1.world import ADV, FS1Spec
+    base = FS1Env(FS1Spec(), seed=0)
+    e6 = FS1Env(FS1Spec(a_scale=0.49, mu=0.35 / 0.49), seed=0)
+    a0 = base.att_a_max
+    for env, a in ((base, a0), (e6, 0.49 * a0)):
+        inn = env.inner
+        assert abs(env.att_a_max - a) < 1e-9 and abs(inn.a_att_max - a) < 1e-9 and abs(inn.adv_a_max - a) < 1e-9
+        assert abs(float(env.action_space(ADV).high[0]) - 2 * a) < 1e-4
+        assert abs(inn.backend.by_name(env.limiter_ids[0]).limits.a_max - 0.35 * a0) < 1e-6

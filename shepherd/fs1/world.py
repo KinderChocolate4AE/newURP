@@ -74,6 +74,9 @@ class FS1Spec:
     limiter_roe: str = "a"              # E7-c (docs/130): "a" = 현행 (net 전 kinetic 허용) /
                                         # "post_shot" = 첫 발사 전 limiter 무장·접촉 kinetic 차단
     limiter_inert: bool = False         # E7-c: physics.kill_radius = 0 (판정 폐쇄·kinetic 동시 0)
+    a_scale: float = 1.0                # E6 (docs/134 §4): physics.a_att_max 단일 config 소스 배율 —
+                                        # 판정 surrogate·공격자 동역학·residual 범위 동시 전파. 방어 가속은
+                                        # mu × (새 a) 이므로 a_def 고정은 mu 를 함께 바꿔서 (E6: mu 0.7143)
 
 
 def _physics_kwargs(spec: FS1Spec) -> dict:
@@ -82,6 +85,9 @@ def _physics_kwargs(spec: FS1Spec) -> dict:
     kw = resolve(_slices()[spec.lam_slice], spec.chi, spec.eta)
     extra = dict(kw["extra_cfg"])
     a, v = extra["physics.a_att_max"], extra["physics.att_speed"]
+    if spec.a_scale != 1.0:              # E6: config 단일 소스 (기본 1.0 = 기존과 비트 동일)
+        a = a * spec.a_scale
+        extra["physics.a_att_max"] = a
     extra["train.episode_len"] = int(spec.episode_len)
     # E3 capability conditioning (기본 mu/nu = resolve 의 MU/NU 와 동일 → bit-exact)
     extra["physics.a_lim_max"] = spec.mu * a
