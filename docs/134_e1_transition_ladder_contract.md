@@ -69,3 +69,6 @@ blind 아님 (단 천장 층에 대한 첫 등록 예측) · 세계 천장 아�
   가리키는지 봉인 전에 확인 — `tests/test_fs1_eval.py::test_e6_label_semantics`.
 - 생산: E6 두 arm × seed 5 = 10 slot (idx 9, 10), 사다리 ①·계단 쌍 ② 다음, sto 착취자 ④ 앞. 사다리·쌍·다른 규칙은 변경 없음.
   수정 시점에 E1 평가 데이터 없음.
+- **E6 생산 pin (JAX 보고 2026-10-11)**: `0d36d2b` (JAX 쪽 변경 = train.py `--a-scale` 전달만, 36/36 테스트 통과, golden 은 정본 world.py 해시만 갱신).
+  E6 두 arm 은 server4 `/data/hjhong/fs1jax/code_e6` (= 0d36d2b) 에서, 사다리·계단 쌍은 `code/` (= 80afb2a) 그대로 — 계보 분리.
+  JAX parity (f64): a_scale 0.49 × μ {0.7143, 0.35} 에서 판정 surrogate a = 동역학 a = 10.0221, 방어 가속 7.1588 / 3.5077, 8 에피소드 step 단위 일치.
