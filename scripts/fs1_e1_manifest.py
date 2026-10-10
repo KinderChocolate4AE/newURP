@@ -42,11 +42,39 @@ FIT_BOUNDS = {"lower": [0.0, 0.0, 0.5, math.log(1.5)], "upper": [1.0, 1.0, 50.0,
 N_BOOT, MIN_STEP = 2000, 4 / 240
 E6 = {"name": "e6_a10", "tau_scale": 1.0, "theta_scale": 1.0, "a_scale": 0.49, "mu": round(0.35 / 0.49, 4),
       "rho": round(RHO_B / 0.49, 4), "compare_to": "r3.92"}
+# v1.1 amendment (2026-10-11, before any E6 production/data): second a-arm with the relative accel ratio fixed
+E6B = {"name": "e6_a10_mu", "tau_scale": 1.0, "theta_scale": 1.0, "a_scale": 0.49, "mu": 0.35,
+       "rho": round(RHO_B / 0.49, 4)}
+E6_ARMS = [E6, E6B]                                # idx 9, 10
+E6_MARGIN, E6_POS, E6_FLOOR = 8, 4, 4              # 중앙값 ±8/240, 5 seed 중 4, 바닥 = A2 net 중앙값 <= 4/240
+
+
+def e6_label(d_seed, floor=False):
+    """seed 짝 차이 d → 갈래. 의미 단위 테스트는 tests/test_fs1_eval.py (라벨 이름이 결론을 가리키는지)."""
+    if floor:
+        return "UNIDENTIFIABLE_FLOOR"
+    d = sorted(d_seed); med = d[len(d) // 2]
+    if med >= E6_MARGIN and sum(x > 0 for x in d) >= E6_POS:
+        return "POSITIVE"
+    if med <= -E6_MARGIN and sum(x < 0 for x in d) >= E6_POS:
+        return "NEGATIVE"
+    if abs(med) < E6_MARGIN:
+        return "NULL"
+    return "MIXED"
 
 
 def build() -> dict:
     body = {
-        "schema": "fs1-e1-manifest-v1",
+        "schema": "fs1-e1-manifest-v1.1",
+        "amendment_v1_1": ("2026-10-11, after the AMI readout (E6 trigger ON) and BEFORE any E6 production or data, "
+                           "user question + advisor Q1 = (B): the sealed a-arm (a x 0.49 with a_def fixed, mu 0.7143) "
+                           "doubles the defender/attacker accel ratio (0.35 -> 0.71), confounding Lambda with "
+                           "relative agility. Added second a-arm e6_a10_mu (a x 0.49, mu 0.35 -> a_def 3.51). Three "
+                           "points at rho 3.92: T = r3.92, A1 = e6_a10, A2 = e6_a10_mu. Contrasts: A1 - A2 = "
+                           "defender agility at fixed attacker; A2 - T = attacker+defender accel both halved "
+                           "(ratio fixed, Lambda moves). Floor rule: if A2 net median <= 4/240 the A2 - T contrast "
+                           "is UNIDENTIFIABLE_FLOOR. Original A1 - T rule kept and reported as sealed. Ladder, "
+                           "pair and all other rules unchanged; no E1 evaluation data existed at amendment"),
         "status": ("sealed 2026-10-11 BEFORE any E1 production (contract: docs/134; user 'start now, maximize "
                    "evidence' 2026-10-11 — overrides the advisor's 'after 10/26' timing; design = advisor "
                    "2026-10-11 rounds 2-3). No E1 data exists at seal"),
@@ -61,9 +89,9 @@ def build() -> dict:
         "production": {
             "per point": "NEW BC (canonical bc.py, 3000 eps) -> arm C-1 recipe 1.1e8 -> det exploiter 1e7 "
                          "(jseed 300000 + idx*100 + seed) -> sto exploiter 1e7 (jseed 305000 + idx*100 + seed)",
-            "idx": "index in ladder + tick_pair (ladder 0-6, pair 7-8), E6 = 9",
+            "idx": "index in ladder + tick_pair (ladder 0-6, pair 7-8), E6 A1 = 9, E6 A2 = 10",
             "priority": ["ladder det path (train + det exploiter), all 35 slots",
-                         "tick pair det path (10 slots)", "E6 a-arm if triggered (5 slots)",
+                         "tick pair det path (10 slots)", "E6 a-arms A1 + A2 (10 slots, triggered)",
                          "sto exploiters (report line)"],
             "hardware": "server4 single GPU (server rule); JAX learner (E7-b parity regime)",
         },
@@ -106,6 +134,14 @@ def build() -> dict:
             "prediction": ("Lambda = V^2/(a R_max) doubles. Seed-paired d = net(e6) - net(r3.92): median d >= "
                            "+8/240 and >= 4 of 5 seeds positive -> LAMBDA_RAISES_CEILING; |median d| < 8 -> "
                            "CEILING_COLLAPSES_IN_RHO; median d <= -8 -> LAMBDA_LOWERS_CEILING; else MIXED"),
+            "second_arm_v1_1": {**E6B, "contrasts": {
+                "A1 - A2 (defender agility, attacker fixed)": "seed-paired d = net(e6_a10) - net(e6_a10_mu) -> e6_label",
+                "A2 - T (Lambda at fixed accel ratio)": "seed-paired d = net(e6_a10_mu) - net(r3.92) -> e6_label, "
+                                                      "UNIDENTIFIABLE_FLOOR if A2 net median <= 4",
+                "labels": f"POSITIVE: median >= +{E6_MARGIN} and >= {E6_POS}/5 positive; NEGATIVE: median <= -{E6_MARGIN} "
+                          f"and >= {E6_POS}/5 negative; NULL: |median| < {E6_MARGIN}; else MIXED",
+                "label_semantics_test": "tests/test_fs1_eval.py::test_e6_label_semantics (synthetic ideal data per "
+                                        "label, checked before seal — advisor 10-11 template rule)"}},
             "confounds_named": ["homing gain K_HOME not normalized by a (clip binds more often)",
                                 "exploiter difficulty at equal 1e7 budget -> exploiter final penetration "
                                 "reported as covariate", "ROE A kinetic route -> net metric only"],

@@ -1,5 +1,6 @@
 {
-  "schema": "fs1-e1-manifest-v1",
+  "schema": "fs1-e1-manifest-v1.1",
+  "amendment_v1_1": "2026-10-11, after the AMI readout (E6 trigger ON) and BEFORE any E6 production or data, user question + advisor Q1 = (B): the sealed a-arm (a x 0.49 with a_def fixed, mu 0.7143) doubles the defender/attacker accel ratio (0.35 -> 0.71), confounding Lambda with relative agility. Added second a-arm e6_a10_mu (a x 0.49, mu 0.35 -> a_def 3.51). Three points at rho 3.92: T = r3.92, A1 = e6_a10, A2 = e6_a10_mu. Contrasts: A1 - A2 = defender agility at fixed attacker; A2 - T = attacker+defender accel both halved (ratio fixed, Lambda moves). Floor rule: if A2 net median <= 4/240 the A2 - T contrast is UNIDENTIFIABLE_FLOOR. Original A1 - T rule kept and reported as sealed. Ladder, pair and all other rules unchanged; no E1 evaluation data existed at amendment",
   "status": "sealed 2026-10-11 BEFORE any E1 production (contract: docs/134; user 'start now, maximize evidence' 2026-10-11 — overrides the advisor's 'after 10/26' timing; design = advisor 2026-10-11 rounds 2-3). No E1 data exists at seal",
   "lineage": {
     "contract": "docs/134",
@@ -92,11 +93,11 @@
   "knob": "tau only (theta 1.0, cv aim) so that the ladder is a single-knob family; E7-b points are previous lineage, reported for reproduction only, never fitted",
   "production": {
     "per point": "NEW BC (canonical bc.py, 3000 eps) -> arm C-1 recipe 1.1e8 -> det exploiter 1e7 (jseed 300000 + idx*100 + seed) -> sto exploiter 1e7 (jseed 305000 + idx*100 + seed)",
-    "idx": "index in ladder + tick_pair (ladder 0-6, pair 7-8), E6 = 9",
+    "idx": "index in ladder + tick_pair (ladder 0-6, pair 7-8), E6 A1 = 9, E6 A2 = 10",
     "priority": [
       "ladder det path (train + det exploiter), all 35 slots",
       "tick pair det path (10 slots)",
-      "E6 a-arm if triggered (5 slots)",
+      "E6 a-arms A1 + A2 (10 slots, triggered)",
       "sto exploiters (report line)"
     ],
     "hardware": "server4 single GPU (server rule); JAX learner (E7-b parity regime)"
@@ -147,6 +148,20 @@
     "trigger": "AMI (docs/132) det-line branch AMI_ADAPTIVE or AMI_ATTACKER_NONADAPTIVE; else not run",
     "world": "requires a NEW FS1Spec a_scale knob (attacker a_att_max x 0.49 = 10.02) with mu' = 0.7143 so that a_def stays 7.16 m/s^2 (advisor round 2: a_def-absolute primary). Default a_scale 1.0 must be bit-exact (test) + JAX parity spot-check before production",
     "prediction": "Lambda = V^2/(a R_max) doubles. Seed-paired d = net(e6) - net(r3.92): median d >= +8/240 and >= 4 of 5 seeds positive -> LAMBDA_RAISES_CEILING; |median d| < 8 -> CEILING_COLLAPSES_IN_RHO; median d <= -8 -> LAMBDA_LOWERS_CEILING; else MIXED",
+    "second_arm_v1_1": {
+      "name": "e6_a10_mu",
+      "tau_scale": 1.0,
+      "theta_scale": 1.0,
+      "a_scale": 0.49,
+      "mu": 0.35,
+      "rho": 3.9247,
+      "contrasts": {
+        "A1 - A2 (defender agility, attacker fixed)": "seed-paired d = net(e6_a10) - net(e6_a10_mu) -> e6_label",
+        "A2 - T (Lambda at fixed accel ratio)": "seed-paired d = net(e6_a10_mu) - net(r3.92) -> e6_label, UNIDENTIFIABLE_FLOOR if A2 net median <= 4",
+        "labels": "POSITIVE: median >= +8 and >= 4/5 positive; NEGATIVE: median <= -8 and >= 4/5 negative; NULL: |median| < 8; else MIXED",
+        "label_semantics_test": "tests/test_fs1_eval.py::test_e6_label_semantics (synthetic ideal data per label, checked before seal — advisor 10-11 template rule)"
+      }
+    },
     "confounds_named": [
       "homing gain K_HOME not normalized by a (clip binds more often)",
       "exploiter difficulty at equal 1e7 budget -> exploiter final penetration reported as covariate",
@@ -160,5 +175,5 @@
     "positive claims unconditional on the 1e7 exploiter",
     "pooling with E7-b/b2/c"
   ],
-  "manifest_hash": "54bc40f652e1e0d1"
+  "manifest_hash": "4215cdb837a0307b"
 }

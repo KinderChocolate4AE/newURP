@@ -14,12 +14,12 @@ main() {
   if [ -n "${WAIT_FILE:-}" ]; then for _ in $(seq 120); do [ -f "$WAIT_FILE" ] && break; sleep 120; done; fi   # 앞 작업 종료 대기 (최대 4h)
   flock /tmp/fs1_git.lock git pull -q --rebase origin feat/scale-up-v2 || true
   H=$(python -c "import sys; sys.path.insert(0, 'scripts'); from fs1_e1_manifest import load; print(load()['manifest_hash'])")
-  ROWS=$(python -c "import sys; sys.path.insert(0, 'scripts'); from fs1_e1_manifest import LADDER, PAIR, SEEDS, SEED0, STRIDE, N
-for i, p in enumerate(LADDER + PAIR):
-    for s in SEEDS: print(p['name'], p['tau_scale'], s, SEED0 + i*STRIDE, N)")
+  ROWS=$(python -c "import sys; sys.path.insert(0, 'scripts'); from fs1_e1_manifest import LADDER, PAIR, E6_ARMS, SEEDS, SEED0, STRIDE, N
+for i, p in enumerate(LADDER + PAIR + E6_ARMS):
+    for s in SEEDS: print(p['name'], p['tau_scale'], p.get('a_scale', 1.0), p.get('mu', 0.35), s, SEED0 + i*STRIDE, N)")
   while true; do
     left=0
-    while read -r PT TAU S SEED NEP; do
+    while read -r PT TAU AS MU S SEED NEP; do
       D="$OUT/$PT/s$S"; SRC="$IN/$PT/s$S"
       for EX in judge_exploiter judge_exploiter_sto; do      # det 착취자 (판정) 가 먼저 나오면 먼저 평가
         G=$([ "$EX" = judge_exploiter ] && echo judge || echo judge_sto)
@@ -30,8 +30,8 @@ for i, p in enumerate(LADDER + PAIR):
         mkdir -p "$D/$EX" "$E"
         cp "$SRC/log.jsonl" "$D/"; cp "$SRC/$EX/log.jsonl" "$D/$EX/"
         if ! python -u -m shepherd.fs1.eval run --ckpt "$SRC/ckpt.pt" --out "$E" \
-            --workers "$WORKERS" --episodes "$NEP" --seed "$SEED" --mu 0.35 --nu 1.0 --stack r4p \
-            --tau-scale "$TAU" --theta-scale 1.0 --aim cv --coop-window --env-seed 0 \
+            --workers "$WORKERS" --episodes "$NEP" --seed "$SEED" --mu "$MU" --nu 1.0 --stack r4p \
+            --tau-scale "$TAU" --a-scale "$AS" --theta-scale 1.0 --aim cv --coop-window --env-seed 0 \
             --manifest "$H" --ladder nominal --defenders learned_det learned_sto --groups none --traj 2 \
             --exploiter "$G=$SRC/$EX/ckpt.pt" > "$E/eval.log" 2>&1; then
           notify "E1 eval slot $PT s$S $G failed - skipped, loop continues"   # 한 slot 실패가 전체를 멈추지 않게

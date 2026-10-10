@@ -230,3 +230,15 @@ def test_e6_a_scale_single_source():
         assert abs(env.att_a_max - a) < 1e-9 and abs(inn.a_att_max - a) < 1e-9 and abs(inn.adv_a_max - a) < 1e-9
         assert abs(float(env.action_space(ADV).high[0]) - 2 * a) < 1e-4
         assert abs(inn.backend.by_name(env.limiter_ids[0]).limits.a_max - 0.35 * a0) < 1e-6
+
+
+def test_e6_label_semantics():
+    """라벨 의미 단위 테스트 (지도교수 10-11 템플릿 규칙): 각 라벨이 나와야 하는 이상적 합성 데이터 → 라벨 이름이 결론과 맞는가."""
+    import sys
+    sys.path.insert(0, "scripts")
+    import fs1_e1_manifest as M
+    assert M.e6_label([20, 15, 12, 30, -1]) == "POSITIVE"      # A 쪽이 뚜렷이 더 잡음 → '올린다'
+    assert M.e6_label([-20, -15, -12, -30, 1]) == "NEGATIVE"   # 뚜렷이 덜 잡음 → '내린다'
+    assert M.e6_label([2, -3, 1, 0, 4]) == "NULL"             # 차이 없음 → 'ρ 로 모인다'
+    assert M.e6_label([9, -12, 10, -9, 11]) == "MIXED"         # 중앙값은 크지만 seed 방향이 갈림
+    assert M.e6_label([30, 30, 30, 30, 30], floor=True) == "UNIDENTIFIABLE_FLOOR"

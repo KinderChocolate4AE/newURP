@@ -69,7 +69,7 @@ def main() -> None:
     root, h = pathlib.Path(a.root), M.load()["manifest_hash"]
     out = {"manifest_hash": h}
     cells = {}
-    for p in M.LADDER + M.PAIR:
+    for p in M.LADDER + M.PAIR + M.E6_ARMS:
         for s, sub in ((s, sub) for s in M.SEEDS for sub in ("eval_judge", "eval_judge_sto")):
             d = root / p["name"] / f"s{s}" / sub
             if not (d / "summary.json").exists():
@@ -104,9 +104,19 @@ def main() -> None:
     pr = [cells.get((p["name"], s, J["defender"], J["group"]), {}).get("net") for p in M.PAIR for s in M.SEEDS]
     out["pair"] = {p["name"]: [cells.get((p["name"], s, J["defender"], J["group"]), {}).get("net") for s in M.SEEDS]
                    for p in M.PAIR} if any(x is not None for x in pr) else None
+    net = lambda name: [cells.get((name, s, J["defender"], J["group"]), {}).get("net") for s in M.SEEDS]
+    a1, a2, tt = net("e6_a10"), net("e6_a10_mu"), net("r3.92")
+    if all(x is not None for x in a1 + a2 + tt):
+        floor = sorted(a2)[len(a2) // 2] <= M.E6_FLOOR
+        out["e6"] = {"A1": a1, "A2": a2, "T": tt,
+                     "A1-T (sealed v1)": M.e6_label([x - y for x, y in zip(a1, tt)]),
+                     "A1-A2 (defender agility)": M.e6_label([x - y for x, y in zip(a1, a2)]),
+                     "A2-T (Lambda, ratio fixed)": M.e6_label([x - y for x, y in zip(a2, tt)], floor=floor)}
+    else:
+        out["e6"] = {"status": "INCOMPLETE"}
     out["cells"] = {"/".join(map(str, k)): v for k, v in cells.items()}
     (root / "readout.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
-    print(json.dumps({k: out[k] for k in ("primary_net", "secondary_rob_fire", "verdict", "pair")}, indent=1))
+    print(json.dumps({k: out[k] for k in ("primary_net", "secondary_rob_fire", "verdict", "pair", "e6")}, indent=1))
 
 
 if __name__ == "__main__":
