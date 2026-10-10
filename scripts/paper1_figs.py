@@ -292,8 +292,8 @@ def fig4():
 
 
 # ---------------------------------------------------------------- F2 (τ, a) regime map — 해석판
-# 실물 τ·a 값 = 노트 10-11b (E3, PDF 원문 대조). 실물 net 은 R·θ 가 FS1 과 달라 평면 위 점이 아니라 축 눈금으로만.
-NET_TAU = [("Chipa / MITLA-1 (claimed)", 0.20), ("Han 2026 (FEM)", 0.228), ("DefendAir (spec)", 1.0)]
+# 위협 a = 노트 10-11b (사양 틸트각·추력비에서 도출). 실물 net 은 반각·사거리가 FS1 과 달라 경계 자체가 다르므로
+# 이 그림에 올리지 않는다 (spine v3 §7-2).
 THREAT_A = [("Mavic 3", 6.87), ("Phantom 4", 8.83), ("std quad", 17.4), ("racing FPV", 38.8), ("extreme racer", 117.0)]
 
 
@@ -317,7 +317,7 @@ def figF2():
     for V, ls, t in ((15.0, (0, (1, 1.5)), 0.5), (V_BAR, "--", 0.105), (35.0, "-.", 0.07)):
         rs = rho0(TH) / (1 - 4 * DT * V / RMAX)
         ax.plot(taus, a_at(rs, taus), ls=ls, color="k", lw=0.9, zorder=3)
-        label(rs, t, rf"$\rho^*$ = {rs:.2f} (V {V:g} m/s)")
+        label(rs, t, rf"$\rho^*$ = {rs:.2f} (0.2 s window, V {V:g} m/s)")
     ax.text(1.4, 150, r"$\rho<\rho_0$: no guaranteed-capture instant (model)", ha="right", fontsize=7)
     # FS1 τ 사다리의 측정 점 (a = 20.45 한 줄) — 천장 숫자는 실측 점 옆에만
     e7b = load("e7b/readout.json")["variants"]
@@ -334,10 +334,6 @@ def figF2():
                 arrowprops=dict(arrowstyle="-|>", lw=0.8, color="0.3"))
     ax.text(0.21, AATT * 0.74, r"evader reaction delay $\tau_r$ 0.15 s", fontsize=6.3, ha="center", va="top", bbox=dict(fc="white", ec="none", pad=0.5),
             color="0.3")
-    for lab, t in (("Chipa/MITLA\n(claimed)", 0.20), ("Han 2026\n(FEM)", 0.228), ("DefendAir\n(spec)", 1.0)):
-        ax.plot([t, t], [170, 200], "k-", lw=1.4, clip_on=False)
-        ax.text(t * (0.93 if t == 0.20 else 1.07 if t == 0.228 else 1.0), 215, lab, fontsize=6,
-                ha="right" if t == 0.20 else "left" if t == 0.228 else "center", va="bottom")
     for lab, a in THREAT_A:                                  # 위협 등급 a (오른쪽 눈금)
         ax.plot([1.35, 1.5], [a, a], "k-", lw=1.4)
         ax.text(1.6, a, f"{lab} ({a:g})", fontsize=6.3, va="center")
@@ -353,10 +349,64 @@ def figF2():
     fig.savefig(OUT / "figF2_regime_map.png")
     plt.close(fig)
 
+
+# ---------------------------------------------------------------- 그림 4 (spine v3) ρ별 분해 — 사후 기술 통계
+def decomposition():
+    """E7-b (결정적) / E7-b′ (확률적) 평가 기록: slot 별 (창이 생긴 판, 창 뒤 발사한 판, net 포획 판).
+    창 = LOADED ∧ d ≤ 16 m 에서 robust tick ≥ 1 (n_rob, 발사 전까지만 셈) → 창 뒤 발사 = 창이 먼저 생긴 판에서의 발사."""
+    import glob
+    import pathlib
+    net = ("NET_CAPTURE", "CAPTURE_WITH_CONTACT")
+    out = {}
+    for line, exp, dn, g in (("det", "e7b", "learned_det", "ex_judge"), ("sto", "e7b2", "learned_sto", "ex_judge_sto")):
+        rho = {v: x["rho"] for v, x in load(f"{exp}/readout.json")["variants"].items()}
+        for f in sorted(glob.glob(str(A / exp / "*" / "s*" / "eval" / "episodes.jsonl"))):
+            p = pathlib.Path(f)
+            var = p.parents[2].name
+            E = [json.loads(x) for x in p.read_text(encoding="utf-8").splitlines()]
+            d = [e for e in E if e["defender"] == dn and e["group"] == g]
+            w = [e for e in d if e["n_rob"] > 0]
+            out.setdefault((line, var, rho[var]), []).append(
+                (len(w), sum(e["n_fire"] > 0 for e in w), sum(e["label"] in net for e in d),
+                 sum(e["label"] in net for e in d if e["n_rob"] == 0)))   # 마지막 = 창 기록 밖 포획 (경계 사례)
+    return out
+
+
+def fig4dec():
+    dec = decomposition()
+    n_out = {ln: sum(v[3] for k, vs in dec.items() if k[0] == ln for v in vs) for ln in ("det", "sto")}
+    fig, axs = plt.subplots(1, 2, figsize=(160 * MM, 68 * MM), sharey=True)
+    styles = [("window occurred", "0.85", None), ("fired after a window", "0.55", None), ("net capture", "0.15", None)]
+    for ax, line, ttl in ((axs[0], "det", "(a) deterministic defense vs its exploiter"),
+                          (axs[1], "sto", "(b) stochastic defense vs its exploiter")):
+        keys = sorted((k for k in dec if k[0] == line), key=lambda k: (k[2], k[1]))
+        xs = np.arange(len(keys) + 1)
+        ax.bar(0, 0, color="white")
+        ax.text(0, 8, "ρ 1.92\npending\n(transition\nladder)", ha="center", va="bottom", fontsize=6, color="0.35")
+        for i, k in enumerate(keys, start=1):
+            vals = np.array(dec[k])                              # seed × 3
+            for j, (lab, fc, _) in enumerate(styles):
+                x = i + (j - 1) * 0.27
+                ax.bar(x, np.median(vals[:, j]), width=0.25, fc=fc, ec="k", lw=0.5, label=lab if i == 1 else None)
+                ax.plot([x] * len(vals), vals[:, j], "k.", ms=2.5)
+        ax.set_xticks(xs, ["1.92"] + [f"{k[2]:.2f}" + ("\nma" if k[1].endswith("ma") else "") for k in keys], fontsize=6.5)
+        ax.set_xlabel(r"$\rho$ (variant)")
+        ax.set_title(ttl, fontsize=7, loc="left")
+        ax.tick_params(labelsize=7)
+    axs[0].set_ylabel("episodes /240 (median, dots = seeds)")
+    axs[1].legend(fontsize=6.3, loc="upper right", frameon=False)
+    fig.text(0.5, 0.005, "post-hoc descriptive counts from the matched-audit evaluation logs (1e7 exploiter); "
+             f"not a pre-registered verdict.\nCaptures with no recorded window: det {n_out['det']}, sto {n_out['sto']} "
+             "(window counted only while loaded and within 16 m)", ha="center", fontsize=5.8, color="0.3")
+    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    fig.savefig(OUT / "fig_decomposition.png")
+    plt.close(fig)
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     fig1()
     fig2()
     fig4()
     figF2()
+    fig4dec()
     print("wrote", *sorted(p.name for p in OUT.glob("*.png")))
