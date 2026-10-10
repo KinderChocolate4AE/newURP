@@ -11,7 +11,7 @@ main() {
   OUT=artifacts/fs1/e1
   notify() { python -c "from shepherd.notify import ntfy; ntfy('$1', title='e1')" || true; }
   trap 'notify "E1 eval FAILED - check logs"' ERR
-  [ -n "${WAIT_FILE:-}" ] && while [ ! -f "$WAIT_FILE" ]; do sleep 120; done   # CPU 상한: 앞 작업 종료 대기
+  if [ -n "${WAIT_FILE:-}" ]; then for _ in $(seq 120); do [ -f "$WAIT_FILE" ] && break; sleep 120; done; fi   # 앞 작업 종료 대기 (최대 4h)
   flock /tmp/fs1_git.lock git pull -q --rebase origin feat/scale-up-v2 || true
   H=$(python -c "import sys; sys.path.insert(0, 'scripts'); from fs1_e1_manifest import load; print(load()['manifest_hash'])")
   ROWS=$(python -c "import sys; sys.path.insert(0, 'scripts'); from fs1_e1_manifest import LADDER, PAIR, SEEDS, SEED0, STRIDE, N
