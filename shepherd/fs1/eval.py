@@ -90,9 +90,45 @@ def _kill_phase(label, n_fire):
     return None
 
 
-def _eval_init(spec_kw, coop_window=False):
+ATT_IV = ("none", "out0", "in0", "zfix", "lat0", "shuf_out", "shuf_in", "in_half")
+
+
+def _att_iv(res, iv, env, k, donor):
+    """E2 공격자 개입 (docs/132): 학습 residual 만 바꾼다 (autopilot 불변). 구간 in = 공격자–
+    finisher 거리 ≤ COOP_WINDOW_D (창 정의와 같은 16 m), out = 그 밖. k = 현재 구간 안 step 번호
+    (shuffle 용), donor = 다른 episode 의 같은 구간 residual 열 (기록 순서, 길이 넘으면 순환)."""
+    if iv in ("none", "zfix"):
+        return res
+    inn = env.inner
+    _, fin, att = inn._states()
+    p = inn._p(att)
+    seg_in = np.linalg.norm(p - inn._p(fin)) <= COOP_WINDOW_D
+    if iv == "lat0":                                   # 자산 방향 성분만 남김 (횡방향 제거)
+        u = np.asarray(inn.layout.target, float) - p
+        u = u / max(np.linalg.norm(u), 1e-9)
+        return (res @ u) * u
+    if iv == "in_half":
+        return 0.5 * res if seg_in else res
+    if seg_in != (iv in ("in0", "shuf_in")):           # 개입 구간 밖이면 그대로
+        return res
+    if iv.startswith("shuf"):
+        return np.asarray(donor[k % len(donor)], float) if donor else np.zeros(3)
+    return np.zeros(3)                                 # out0 / in0
+
+
+def _eval_init(spec_kw, coop_window=False, att_iv="none", donor=None, record_res=False, env_seed=None):
     _init_worker(spec_kw)
+    if env_seed is not None:     # E2: env 생성 seed (기본 = worker pid) 가 m4 스택 RNG 로 새어 판정
+        from shepherd.fs1.world import FS1Env, FS1Spec       # 값이 실행마다 달라짐 → 고정해 재현
+        _W["env"] = FS1Env(FS1Spec(**spec_kw), seed=int(env_seed))
     _W["coop_window"] = bool(coop_window)
+    _W["att_iv"] = att_iv
+    _W["record_res"] = bool(record_res)
+    _W["donor"] = None
+    if donor:                                          # seed → {in, out}; 공여자 = 다음 seed (순환)
+        d = json.loads(pathlib.Path(donor).read_text(encoding="utf-8"))
+        ks = sorted(d, key=int)
+        _W["donor"] = {int(s): d[ks[(i + 1) % len(ks)]] for i, s in enumerate(ks)}
 
 
 def episodes(job):
@@ -118,6 +154,9 @@ def episodes(job):
         if _W.get("coop_window"):                    # docs/129 §7 P-②c (e7b v1.1): 창 tick 협력
             rec.update(n_win=0, n_rob=0, n_C=0, n_H=0)
         tr = [] if j < n_traj else None
+        iv = _W.get("att_iv", "none")
+        z0, res_log, kseg = env.z.copy(), {"in": [], "out": []}, {"in": 0, "out": 0}
+        dn = (_W.get("donor") or {}).get(s)
         prev = None                     # arm D 프레임 스택 (docs/128): k=4 최신-우선 타일-초기화
         while not done:
             o = obs["finisher_0"]
@@ -128,10 +167,16 @@ def episodes(job):
             else:
                 o_def = o
             acts = _def_act(env, o_def, dname, dteam, kf_r)
-            if ateam:
-                acts["adversary_0"] = att_action(ateam.act(env.att_obs(o))[0], env)
             lims, fin, att = inn._states()
             p_att = inn._p(att)
+            if ateam:
+                if iv == "zfix":                         # rng 소비는 그대로, 관측 z 만 첫 추첨 고정
+                    env.z = z0
+                res = att_action(ateam.act(env.att_obs(o))[0], env)
+                seg = "in" if np.linalg.norm(p_att - inn._p(fin)) <= COOP_WINDOW_D else "out"
+                res_log[seg].append(np.round(res, 3).tolist())
+                acts["adversary_0"] = _att_iv(res, iv, env, kseg[seg], (dn or {}).get(seg))
+                kseg[seg] += 1
             armed = [float(acts[l][3] > 0.5) for l in env.limiter_ids]
             if (_W.get("coop_window") and inn.fsm.state.value == "LOADED"
                     and np.linalg.norm(p_att - inn._p(fin)) <= COOP_WINDOW_D):
@@ -160,6 +205,8 @@ def episodes(job):
             t += 1
         rec.update(label=str(fi["fs1_label"]), len=t)
         rec["kill_phase"] = _kill_phase(rec["label"], rec["n_fire"])
+        if _W.get("record_res"):
+            rec["res"] = res_log
         if tr is not None:
             rec["traj"] = np.array(tr, np.float32).tolist()
         out.append(rec)
@@ -269,11 +316,17 @@ def run(a):
                    theta_scale=a.theta_scale, aim=a.aim, limiter_roe=a.limiter_roe,
                    limiter_inert=a.limiter_inert)
     with mp.get_context("spawn").Pool(a.workers, initializer=_eval_init,
-                                      initargs=(spec.__dict__, a.coop_window)) as P:
+                                      initargs=(spec.__dict__, a.coop_window, a.att_iv, a.att_donor,
+                                                bool(a.record_res), a.env_seed)) as P:
         recs = [x for part in P.map(episodes, jobs) for x in part]
+    if a.record_res:                                   # E2 shuffle 공여 파일 (첫 방어 기준, seed → in/out)
+        res = {str(r["seed"]): r["res"] for d, g, r in recs if d == a.defenders[0]}
+        pathlib.Path(a.record_res).parent.mkdir(parents=True, exist_ok=True)
+        pathlib.Path(a.record_res).write_text(json.dumps(res), "utf-8")
     with open(out / "episodes.jsonl", "w", encoding="utf-8") as f:
         for d, g, r in recs:
-            f.write(json.dumps({"defender": d, "group": g, **{k: v for k, v in r.items() if k != "traj"}}) + "\n")
+            f.write(json.dumps({"defender": d, "group": g,
+                                **{k: v for k, v in r.items() if k not in ("traj", "res")}}) + "\n")
     rows = summarize(recs)
     import subprocess
     meta = {"ckpt": str(a.ckpt), "ckpt_it": ck.get("it"), "ckpt_total_steps": ck.get("total_steps"),
@@ -283,6 +336,7 @@ def run(a):
             "mu": a.mu, "nu": a.nu, "def_stack": a.def_stack, "tau_scale": a.tau_scale,
             "theta_scale": a.theta_scale, "aim": a.aim, "coop_window": a.coop_window,
             "limiter_roe": a.limiter_roe, "limiter_inert": a.limiter_inert,
+            "att_iv": a.att_iv, "att_donor": a.att_donor, "env_seed": a.env_seed,
             "git": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
             "seeds_by_group": {g: [r["seed"] for d, gg, r in recs if gg == g and d == a.defenders[0]]
                                for g in groups}}
@@ -353,6 +407,13 @@ def main(argv=None):
                    help="E7-c: physics.kill_radius = 0 (판정 폐쇄·kinetic 동시 0)")
     r.add_argument("--coop-window", action="store_true",
                    help="P-②c (docs/129 §7, e7b v1.1): 창 tick 마다 limiter 有/無 판정 재계산")
+    r.add_argument("--att-iv", choices=ATT_IV, default="none",
+                   help="E2 (docs/132) 공격자 residual 개입. none = 기존과 비트 동일")
+    r.add_argument("--att-donor", default=None, help="shuf_* 공여 residual 파일 (--record-res 산출물)")
+    r.add_argument("--record-res", default=None, metavar="PATH",
+                   help="RL 공격자 residual 을 구간 (in/out) 별로 PATH 에 기록 (shuffle 공여용)")
+    r.add_argument("--env-seed", type=int, default=None,
+                   help="워커 env 생성 seed 고정 (기본 None = pid, 기존 동작). 실행 간 비트 재현용")
     r.add_argument("--def-stack", type=int, default=1,
                    help="방어 obs 프레임 스택 k (arm D, docs/128: 최신-우선, 타일-초기화; "
                         "학습 ckpt 와 일치시킬 것)")

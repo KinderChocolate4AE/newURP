@@ -1,0 +1,116 @@
+{
+  "schema": "fs1-ami-manifest-v1",
+  "status": "sealed 2026-10-11 BEFORE any AMI production result (contract: docs/132; user approval 2026-10-10 'A', scope amendments by advisor 2026-10-11: shuffle control + alpha 0.5 dose + E6 trigger). Only a 6-episode smoke on the local smoke ckpt (wiring) was run",
+  "lineage": {
+    "contract": "docs/132",
+    "e7b": "543cd9e4b3582687",
+    "e7b2": "d25bf6e6dedf31ea",
+    "gap": "docs/131 G1 (plateau cause), hypothesis D3 (window-denial approach geometry)"
+  },
+  "question": "why does the matched-audit net ceiling stay ~8-9% for rho 3.9-11.8: which part of the dedicated exploiter's learned residual carries it, and is it state-contingent (adaptive) or just maneuver energy",
+  "slots": {
+    "variants": [
+      {
+        "name": "t0.7_h1.0_cv",
+        "tau_scale": 0.7,
+        "theta_scale": 1.0,
+        "aim": "cv",
+        "rho": 3.925
+      },
+      {
+        "name": "t0.7_h1.5_cv",
+        "tau_scale": 0.7,
+        "theta_scale": 1.5,
+        "aim": "cv",
+        "rho": 6.002
+      },
+      {
+        "name": "t0.5_h1.0_cv",
+        "tau_scale": 0.5,
+        "theta_scale": 1.0,
+        "aim": "cv",
+        "rho": 7.692
+      },
+      {
+        "name": "t0.5_h1.5_cv",
+        "tau_scale": 0.5,
+        "theta_scale": 1.5,
+        "aim": "cv",
+        "rho": 11.765
+      },
+      {
+        "name": "t0.5_h1.0_ma",
+        "tau_scale": 0.5,
+        "theta_scale": 1.0,
+        "aim": "ma",
+        "rho": 7.692
+      }
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "checkpoints": "E7-b frozen defense + its dedicated exploiters (no new training)"
+  },
+  "lines": {
+    "det": {
+      "defender": "learned_det",
+      "exploiter": "judge_exploiter",
+      "role": "judgment"
+    },
+    "sto": {
+      "defender": "learned_sto",
+      "exploiter": "judge_exploiter_sto",
+      "role": "replication"
+    }
+  },
+  "arms": {
+    "base": "no intervention (+ records residuals per segment = shuffle donor)",
+    "out0": "learned residual = 0 while |p_att - p_fin| > 16 m (pure homing approach)",
+    "in0": "learned residual = 0 while |p_att - p_fin| <= 16 m (16 m = existing window def.)",
+    "zfix": "skill z frozen at its episode-start draw (rng consumption unchanged)",
+    "lat0": "residual projected on the attacker->asset axis (lateral component removed)",
+    "shuf_out": "out-segment residual replaced by the base-arm residual sequence of another episode (donor = next seed in the slot, cyclic; k-th step uses donor[k mod len])",
+    "shuf_in": "same, in-segment",
+    "in_half": "in-segment residual x 0.5 (dose)"
+  },
+  "evaluation": {
+    "n": 240,
+    "seed0": 276000,
+    "variant_seed_stride": 1000,
+    "paired": "same 240 seeds in every arm (= E7-b seeds)",
+    "env_seed": "0 for every worker (--env-seed). FINDING 2026-10-11: the default worker env is built with seed=os.getpid(), which leaks into the m4-stack RNG (v_fire-level differences, same labels in the smoke) -> prior canonical evals are distribution-equivalent but not bit-reproducible; AMI fixes it for cross-arm pairing",
+    "cli": "E7-b flags (--stack r4p --mu 0.35 --nu 1.0 + variant flags --coop-window --groups none) + --att-iv ARM [--att-donor] --env-seed 0"
+  },
+  "metric": {
+    "primary": "net = NET_CAPTURE + CAPTURE_WITH_CONTACT of the line defender vs its exploiter (ROE A: weaker attackers are also easier kinetic targets -> defended total is reported, never judged)",
+    "delta": "Δ_X(slot) = net_X - net_base (paired)",
+    "report": [
+      "defended, K_FIRST, fallback, penetrated",
+      "occupancy: episodes with >= 1 robust window tick, total robust ticks (coop-window n_rob)",
+      "fires, net per fire"
+    ]
+  },
+  "gates": {
+    "repro_check": "base median net over 15 slots within ±6 of the E7-b net_det median (det line) / E7-b2 net_sto median (sto line); else INVALID_REPRO (pipeline fault, stop)",
+    "LIFT(X)": "median_15 Δ_X >= +8 AND Δ_X > 0 in >= 10 of 15 slots (X in out0, in0, zfix, lat0)",
+    "ADAPTIVE_S / ENERGY_S": "for S in (out, in) with LIFT(S0): ADAPTIVE_S if median_15(Δ_S0 - Δ_shufS) >= 0.5 x median_15 Δ_S0 (shuffled residual of equal energy recovers less than half of the lift), else ENERGY_S",
+    "branch (det line = judgment)": {
+      "AMI_ADAPTIVE": "any ADAPTIVE_S -> plateau carried by state-contingent residual in S",
+      "AMI_ATTACKER_NONADAPTIVE": "some LIFT but no ADAPTIVE_S",
+      "AMI_NOT_ATTACKER": "no LIFT in (out0, in0, zfix, lat0) -> plateau not removable by these attacker-side ablations (defense-side candidate)"
+    },
+    "sto line": "same rules, replication only; disagreement -> report both as line-dependent",
+    "dose": "in_half: Δ reported with its position relative to Δ_in0 (report only)"
+  },
+  "e6_trigger (pre-registered both ways)": "AMI_ADAPTIVE or AMI_ATTACKER_NONADAPTIVE -> E6 (world a-change point at rho 3.92, a ~ 10.0, a_def fixed by mu' ~ 0.72, Lambda = V^2/(a R_max) named) becomes a conditional arm of the E1 contract; AMI_NOT_ATTACKER -> E6 deferred to the journal version. E6 hypotheses and gates are sealed in that contract before any E6 run; E6 results reported regardless",
+  "not_evidence_for": [
+    "world ceiling",
+    "attacker optimality (1e7 exploiter conditional)",
+    "real-threat behavior",
+    "pooling with E7-b/b2 verdicts (paired re-eval only)",
+    "cooperation vocabulary"
+  ],
+  "manifest_hash": "7889a46bec000590"
+}

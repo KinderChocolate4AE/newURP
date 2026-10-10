@@ -166,6 +166,26 @@ def test_readout_gate(tmp_path, cells, want):
     assert _fake_eval(tmp_path, cells) == want
 
 
+def test_att_iv_segments():
+    """E2 (docs/132): 구간 개입은 해당 구간 residual 만 바꾸고, lat0 는 자산 방향 성분만 남긴다."""
+    import numpy as np
+    env = FS1Env(seed=0)
+    env.reset(seed=3)
+    inn = env.inner
+    _, fin, att = inn._states()
+    seg_in = np.linalg.norm(inn._p(att) - inn._p(fin)) <= ev.COOP_WINDOW_D
+    assert not seg_in                                    # 시작 배치 = 교전 거리 밖
+    r = np.array([3.0, -2.0, 1.0])
+    assert np.array_equal(ev._att_iv(r, "none", env, 0, None), r)
+    assert np.array_equal(ev._att_iv(r, "in0", env, 0, None), r)          # 구간 밖 → 불변
+    assert np.array_equal(ev._att_iv(r, "out0", env, 0, None), np.zeros(3))
+    assert np.array_equal(ev._att_iv(r, "shuf_out", env, 3, [[1, 1, 1], [2, 2, 2]]), [2, 2, 2])
+    assert np.array_equal(ev._att_iv(r, "in_half", env, 0, None), r)
+    u = np.asarray(inn.layout.target, float) - inn._p(att)
+    lat = ev._att_iv(r, "lat0", env, 0, None)
+    assert np.linalg.norm(np.cross(lat, u)) < 1e-9 and abs(lat @ u - r @ u) < 1e-9
+
+
 def test_coop_window_counts_consistent():
     """P-②c (e7b v1.1): 창 tick 협력 카운터 — 끄면 키 없음, 켜면 C+H ≤ 창, robust ≤ 창."""
     from shepherd.fs1.world import FS1Spec
