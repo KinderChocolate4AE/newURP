@@ -29,11 +29,14 @@ for i, p in enumerate(LADDER + PAIR):
         [ -f "$SRC/$EX/done" ] || continue
         mkdir -p "$D/$EX" "$E"
         cp "$SRC/log.jsonl" "$D/"; cp "$SRC/$EX/log.jsonl" "$D/$EX/"
-        python -u -m shepherd.fs1.eval run --ckpt "$SRC/ckpt.pt" --out "$E" \
+        if ! python -u -m shepherd.fs1.eval run --ckpt "$SRC/ckpt.pt" --out "$E" \
             --workers "$WORKERS" --episodes "$NEP" --seed "$SEED" --mu 0.35 --nu 1.0 --stack r4p \
             --tau-scale "$TAU" --theta-scale 1.0 --aim cv --coop-window --env-seed 0 \
             --manifest "$H" --ladder nominal --defenders learned_det learned_sto --groups none --traj 2 \
-            --exploiter "$G=$SRC/$EX/ckpt.pt" > "$E/eval.log" 2>&1
+            --exploiter "$G=$SRC/$EX/ckpt.pt" > "$E/eval.log" 2>&1; then
+          notify "E1 eval slot $PT s$S $G failed - skipped, loop continues"   # 한 slot 실패가 전체를 멈추지 않게
+          continue                                                             # (다음 순회에서 재시도)
+        fi
         touch "$E/done"
       done
     done <<< "$ROWS"
