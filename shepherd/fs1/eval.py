@@ -314,7 +314,7 @@ def run(a):
                     jobs.append((d, dsnap, opp, seeds[c:c + CHUNK], nt if c == 0 else 0,
                                  a.def_stack))
     from shepherd.fs1.world import FS1Spec
-    spec = FS1Spec(obs_time=a.stack == "r4p", mu=a.mu, nu=a.nu, tau_scale=a.tau_scale,
+    spec = FS1Spec(obs_time=a.stack == "r4p", mu=a.mu, nu=a.nu, tau_scale=a.tau_scale, a_scale=a.a_scale,
                    theta_scale=a.theta_scale, aim=a.aim, limiter_roe=a.limiter_roe,
                    limiter_inert=a.limiter_inert)
     with mp.get_context("spawn").Pool(a.workers, initializer=_eval_init,
@@ -335,7 +335,7 @@ def run(a):
             "episodes": a.episodes, "seed": a.seed, "defenders": a.defenders,
             "groups": {g: [o["name"] for o in v] for g, v in groups.items()},
             "exploiter": a.exploiter, "manifest": a.manifest, "ladder": a.ladder, "stack": a.stack,
-            "mu": a.mu, "nu": a.nu, "def_stack": a.def_stack, "tau_scale": a.tau_scale,
+            "mu": a.mu, "nu": a.nu, "def_stack": a.def_stack, "tau_scale": a.tau_scale, "a_scale": a.a_scale,
             "theta_scale": a.theta_scale, "aim": a.aim, "coop_window": a.coop_window,
             "limiter_roe": a.limiter_roe, "limiter_inert": a.limiter_inert,
             "att_iv": a.att_iv, "att_donor": a.att_donor, "env_seed": a.env_seed,
@@ -401,6 +401,7 @@ def main(argv=None):
     r.add_argument("--mu", type=float, default=0.35, help="E3 cell: 방어 가속비 (FS1Spec.mu)")
     r.add_argument("--nu", type=float, default=1.0, help="E3 cell: 방어 속도비 (FS1Spec.nu)")
     r.add_argument("--tau-scale", type=float, default=1.0, help="E7-b 세계 변형 (FS1Spec)")
+    r.add_argument("--a-scale", type=float, default=1.0, help="E6 세계 변형: 공격자 가속 배율 (FS1Spec)")
     r.add_argument("--theta-scale", type=float, default=1.0, help="E7-b 세계 변형 (FS1Spec)")
     r.add_argument("--aim", choices=["cv", "ma"], default="cv", help="E7-b FCS 조준 (FS1Spec)")
     r.add_argument("--limiter-roe", choices=["a", "post_shot"], default="a",
