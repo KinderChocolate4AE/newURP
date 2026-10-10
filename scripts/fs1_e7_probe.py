@@ -94,7 +94,7 @@ def coop_readout(npz, rho):
     return res
 
 
-def run_slot(name, root, sub, dfd, eps, coop=False):
+def run_slot(name, root, sub, dfd, eps, coop=False, geom=False):
     import torch as T
     from shepherd.fs1.eval import _ep_kf_r
     from shepherd.fs1.train import _team, ATT_ROLES, DISC_IN, att_action, scripted_def_actions
@@ -118,6 +118,8 @@ def run_slot(name, root, sub, dfd, eps, coop=False):
         rows.update({f"{vn}.rbf": [] for vn, *_ in VARIANTS})
         per_ep_f = {vn: [] for vn, *_ in VARIANTS}
     rows.update({"ep": [], "step": [], "anchor_rb": [], "agree_cv11": []})
+    if geom:                                   # P-ρ2 overlay (docs/129 §9): 조준점 거리 재계산용
+        rows.update({"pa": [], "va": [], "pf": []})
     checked = 0
     for i in range(eps):
         s = SEED0 + i
@@ -166,6 +168,9 @@ def run_slot(name, root, sub, dfd, eps, coop=False):
                     checked += 1
                 rows["ep"].append(i); rows["step"].append(inn._step_i)
                 rows["anchor_rb"].append(_robust(base))
+                if geom:
+                    rows["pa"].append(p_att.copy()); rows["va"].append(v_att.copy())
+                    rows["pf"].append(p_fin.copy())
                 for vn, ts, hs, aim in VARIANTS:
                     r = V.v_shot(p_att, v_att, tau=tau0 * ts, theta_net=th0 * hs,
                                  n_F=ax_v[vn], **com)
@@ -240,6 +245,8 @@ def main() -> None:
     ap.add_argument("--eps", type=int, default=EPS)
     ap.add_argument("--coop", action="store_true",
                     help="E7-a′ (docs/129 §7): limiter 제거 counterfactual + P-② 판정")
+    ap.add_argument("--geom", action="store_true",
+                    help="P-ρ2 overlay (docs/129 §9): window tick 의 p_att·v_att·p_fin 기록")
     a = ap.parse_args()
     out_dir = pathlib.Path(a.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -251,7 +258,8 @@ def main() -> None:
         roots = {"stage1": pathlib.Path(a.stage1), "e3b": pathlib.Path(a.e3b)}
         slots, npz, consts = {}, {}, None
         for name, (rk, sub, dfd) in ATTACKERS.items():
-            consts, summ, rows = run_slot(name, roots[rk], sub, dfd, a.eps, coop=a.coop)
+            consts, summ, rows = run_slot(name, roots[rk], sub, dfd, a.eps, coop=a.coop,
+                                          geom=a.geom)
             slots[name] = summ
             for k, v in rows.items():
                 npz[f"{name}.{k}"] = v

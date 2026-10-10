@@ -149,3 +149,14 @@
   **P-ρ3s** (등록): cv 사다리 4점의 seed 중앙 ceil_sto 가 ρ 단조, Spearman ≥ 0.7. 보고: 착취자
   학습 곡선 (마지막 10 iter win_rate 평균 = 관통), E7-b det 판정과의 paired 차이, C·H.
 - 무효: budget (착취자 ≥ 1e7) / completion / paired / manifest / 변형 플래그 불일치.
+
+## 9. E7-a3 — P-ρ2 overlay 재계산 (봉인 2026-10-10, report-only — 프로브 재실행 전)
+
+- 이유: E7-a 의 창 지표 (전 ep 총 robust step) 는 P-ρ2 등록 모집단 (shell 통과 encounter 조건부)
+  과 다르다. 등록값 (ρ* 2.813, V̄ 23.01) 은 불변이고, 비교 방법만 정합시킨다.
+- 실행: E7-a 프로토콜 그대로 + `--geom` (window tick 의 p_att·v_att·p_fin 기록). manifest
+  `build_e7a3`. 분석 = `scripts/fs1_rho2_overlay.py` (정의는 manifest·스크립트 docstring 에 고정:
+  shell [r/sinθ, R_max − r], 조준점 c = p + vτ, shell 통과 episode 의 robust tick 수 pooled 중앙값,
+  예측 N∞(1 − ρ₀(θ)/ρ)₊).
+- 보고: 12 변형의 열림 분류 일치 (중앙값 ≥ 4 vs ρ ≥ ρ*(θ)) · Spearman(예측, 관측) · 잔차.
+  게이트 없음. Paper 1 v0 머니 커브 (a) 에 사용.

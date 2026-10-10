@@ -422,11 +422,54 @@ def load_e7b2() -> dict:
     return data
 
 
+# ---------------------------------------------------------------- E7-a3 (P-ρ2 overlay) --
+MANIFEST_A3 = ROOT / "artifacts" / "fs1" / "e7a3_manifest.json"
+
+
+def build_e7a3() -> dict:
+    body = {
+        "schema": "fs1-e7a3-overlay-manifest-v1",
+        "status": ("sealed 2026-10-10 BEFORE the geometry-logging probe run (contract: docs/129 "
+                   "section 9). Report-only overlay of the registered P-rho2 boundary; registered "
+                   "values (rho* = 2.813, V = 23.01, note 2026-10-08c) are immutable"),
+        "lineage": {"e7a": "3a8c066156b6972e", "e7a2": "57b4faafba5d27bf",
+                    "p_rho2": "note 2026-10-08c (8a35410)"},
+        "why": ("the E7-a window metric (all episodes, total robust steps) differs from the "
+                "registered population (shell-passing encounters) -> recompute on a fresh run "
+                "of the identical E7-a protocol that also logs p_att, v_att, p_fin per window tick"),
+        "protocol": "E7-a protocol unchanged (m0.35_n1, 4 adapted attackers x 24 eps, SEED0 268000, "
+                    "no-fire, 12 variants, slew-simulated aim) + --geom",
+        "definitions": {
+            "shell": "D_min = r_v / sin(theta_v), D_max = R_max - r_v, r_v = 0.5 a_att tau_v^2 (delta = 0)",
+            "aim_point": "c = p_att + v_att tau_v (witness-sphere center; independent of cv/ma aim)",
+            "shell_pass": "an episode with at least one window tick whose |c - p_fin| is in [D_min, D_max]",
+            "window": "robust ticks of that episode under variant v; pooled median over shell-passing "
+                      "episodes of all 4 slots",
+            "prediction": "N_pred = N_inf (1 - rho0(theta_v)/rho_v)+, N_inf = R_max/(V dt), "
+                          "rho0 = sec + tan, rho*(theta) = rho0/(1 - 4 dt V/R_max)",
+        },
+        "report": ["classification agreement (median >= 4 vs rho_v >= rho*(theta_v)) over 12 variants",
+                   "Spearman(N_pred, conditional median)", "per-variant residuals",
+                   "money-curve panel (a) overlay"],
+        "not_evidence_for": ["a new gate (report-only)", "changing registered values",
+                             "learned-defense ceilings (probe population only)"],
+    }
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    return {**body, "manifest_hash": hashlib.sha256(raw.encode()).hexdigest()[:16]}
+
+
+def load_e7a3() -> dict:
+    data = json.loads(MANIFEST_A3.read_text(encoding="utf-8"))
+    if data != build_e7a3():
+        raise ValueError(f"E7-a3 manifest drift: {MANIFEST_A3}")
+    return data
+
+
 def main() -> None:
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)
     for path, body in ((MANIFEST, build_e7a()), (MANIFEST_B, build_e7b()),
                        (MANIFEST_A2, build_e7a2()), (MANIFEST_C, build_e7c()),
-                       (MANIFEST_B2, build_e7b2())):
+                       (MANIFEST_B2, build_e7b2()), (MANIFEST_A3, build_e7a3())):
         path.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"{path} {body['manifest_hash']}")
 
