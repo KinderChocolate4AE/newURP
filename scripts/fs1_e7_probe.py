@@ -39,6 +39,16 @@ SEED0 = 268000
 TS, HS, AIMS = (1.0, 0.7, 0.5), (1.0, 1.5), ("cv", "ma")
 VARIANTS = [(f"t{t}_h{h}_{a}", t, h, a) for t, h, a in itertools.product(TS, HS, AIMS)]
 CRIT_STEPS = 4            # E7-b 진입: 변형 창 중앙값 (4 slot 중앙값들의 중앙값) >= 4 step
+KN: dict = {}             # E4 (docs/133): 변형 → (a 배율, R_max 배율). 없으면 (1, 1) = 기존 격자
+
+
+def use_e4_grid():
+    """E4 collapse 격자 (cv 만): 같은 ρ 를 τ / a / θ / R 계열로, 그리고 ρ < ρ₀ 점. 판정 측 인자만 바뀜."""
+    global VARIANTS
+    import fs1_e4_manifest as E4
+    VARIANTS = [(g["name"], g["ts"], g["hs"], "cv") for g in E4.GRID]
+    KN.clear()
+    KN.update({g["name"]: (g["as"], g["rs"]) for g in E4.GRID})
 
 
 def _robust(v):
@@ -172,14 +182,16 @@ def run_slot(name, root, sub, dfd, eps, coop=False, geom=False):
                     rows["pa"].append(p_att.copy()); rows["va"].append(v_att.copy())
                     rows["pf"].append(p_fin.copy())
                 for vn, ts, hs, aim in VARIANTS:
+                    ks, kr = KN.get(vn, (1.0, 1.0))
+                    cv_ = {**com, "a_att_max": a_att * ks, "range_max": rmax * kr}
                     r = V.v_shot(p_att, v_att, tau=tau0 * ts, theta_net=th0 * hs,
-                                 n_F=ax_v[vn], **com)
+                                 n_F=ax_v[vn], **cv_)
                     rb = _robust(r)
                     rows[f"{vn}.rb"].append(rb)
                     flags[vn].append(rb)
                     if coop:                       # 같은 tick·seed·축, limiter 만 제거
                         rf = V.v_shot(p_att, v_att, tau=tau0 * ts, theta_net=th0 * hs,
-                                      n_F=ax_v[vn], **{**com, "limiters": None})
+                                      n_F=ax_v[vn], **{**cv_, "limiters": None})
                         rows[f"{vn}.rbf"].append(_robust(rf))
                         flags_f[vn].append(_robust(rf))
                 rows["agree_cv11"].append(rows["t1.0_h1.0_cv.rb"][-1] == rows["anchor_rb"][-1])
@@ -247,7 +259,11 @@ def main() -> None:
                     help="E7-a′ (docs/129 §7): limiter 제거 counterfactual + P-② 판정")
     ap.add_argument("--geom", action="store_true",
                     help="P-ρ2 overlay (docs/129 §9): window tick 의 p_att·v_att·p_fin 기록")
+    ap.add_argument("--grid", choices=["e7a", "e4"], default="e7a",
+                    help="e4 = collapse 격자 (docs/133, fs1_e4_manifest.GRID)")
     a = ap.parse_args()
+    if a.grid == "e4":
+        use_e4_grid()
     out_dir = pathlib.Path(a.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -268,7 +284,8 @@ def main() -> None:
     rho, variant_med = {}, {}
     for vn, ts, hs, aim in VARIANTS:
         tv, thv = consts["tau0"] * ts, consts["theta0"] * hs
-        rho[vn] = round(consts["range_max"] * np.tan(thv) / (0.5 * consts["a_att"] * tv * tv), 3)
+        ks, kr = KN.get(vn, (1.0, 1.0))
+        rho[vn] = round(consts["range_max"] * kr * np.tan(thv) / (0.5 * consts["a_att"] * ks * tv * tv), 3)
         variant_med[vn] = float(np.median([slots[s][vn]["steps_med"] for s in ATTACKERS]))
     rs = np.array([rho[vn] for vn, *_ in VARIANTS])
     ws = np.array([variant_med[vn] for vn, *_ in VARIANTS])
@@ -292,7 +309,10 @@ def main() -> None:
         "anchor": {s: slots[s]["_anchor"] for s in ATTACKERS},
         "slots": slots,
     }
-    if a.coop:
+    if a.grid == "e4":
+        report["schema"] = "fs1-e4-collapse-probe-v1"
+        report["kn"] = {vn: KN[vn] for vn, *_ in VARIANTS}
+    elif a.coop:
         report["schema"] = "fs1-e7a2-coop-probe-v1"
         report["coop"] = coop_readout(npz, rho)
         print("P-②:", json.dumps({k: report["coop"][k] for k in ("p2a", "p2b")}))
