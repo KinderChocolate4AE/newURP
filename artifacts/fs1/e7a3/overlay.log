@@ -1,0 +1,17 @@
+{
+  "classification_agree": "11/12",
+  "spearman_pred_vs_obs": 0.9360021077335748,
+  "note": "report-only overlay \u2014 registered values (rho* 2.813) immutable"
+}
+t1.0_h1.0_cv   rho   1.92 rho*  2.81 shell_eps  96 med 2.0 pred  2.54 pred_open False obs_open False
+t1.0_h1.0_ma   rho   1.92 rho*  2.81 shell_eps  96 med 1.0 pred  2.54 pred_open False obs_open False
+t1.0_h1.5_cv   rho   2.94 rho*  3.14 shell_eps  96 med 3.0 pred  3.79 pred_open False obs_open False
+t1.0_h1.5_ma   rho   2.94 rho*  3.14 shell_eps  96 med 2.0 pred  3.79 pred_open False obs_open False
+t0.7_h1.0_cv   rho   3.92 rho*  2.81 shell_eps  96 med 4.0 pred  4.89 pred_open True obs_open True
+t0.7_h1.0_ma   rho   3.92 rho*  2.81 shell_eps  96 med 3.0 pred  4.89 pred_open True obs_open False
+t0.7_h1.5_cv   rho   6.00 rho*  3.14 shell_eps  96 med 5.0 pred  5.50 pred_open True obs_open True
+t0.7_h1.5_ma   rho   6.00 rho*  3.14 shell_eps  96 med 4.0 pred  5.50 pred_open True obs_open True
+t0.5_h1.0_cv   rho   7.69 rho*  2.81 shell_eps  96 med 5.0 pred  6.00 pred_open True obs_open True
+t0.5_h1.0_ma   rho   7.69 rho*  2.81 shell_eps  96 med 5.0 pred  6.00 pred_open True obs_open True
+t0.5_h1.5_cv   rho  11.77 rho*  3.14 shell_eps  96 med 5.0 pred  6.30 pred_open True obs_open True
+t0.5_h1.5_ma   rho  11.77 rho*  3.14 shell_eps  96 med 5.0 pred  6.30 pred_open True obs_open True
