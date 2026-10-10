@@ -1,0 +1,19 @@
+[det] repro base 20.0 vs ref 19.0 -> AMI_ATTACKER_NONADAPTIVE
+  out0      dmed  +51.0  pos 15/15  lift True
+  in0       dmed   +1.0  pos  8/15  lift False
+  zfix      dmed   +0.0  pos  4/15  lift False
+  lat0      dmed  +60.0  pos 15/15  lift True
+  shuf_out  dmed  +56.0  pos 15/15  lift -
+  shuf_in   dmed  +10.0  pos 13/15  lift -
+  in_half   dmed   -3.0  pos  4/15  lift -
+  segments {'out': {'recovered_gap_med': -3.0, 'label': 'ENERGY'}}
+[sto] repro base 18.0 vs ref 21.0 -> AMI_ADAPTIVE
+  out0      dmed +124.0  pos 15/15  lift True
+  in0       dmed   +6.0  pos 11/15  lift False
+  zfix      dmed   +1.0  pos 10/15  lift False
+  lat0      dmed +109.0  pos 15/15  lift True
+  shuf_out  dmed  +52.0  pos 15/15  lift -
+  shuf_in   dmed  +12.0  pos 14/15  lift -
+  in_half   dmed   +2.0  pos 10/15  lift -
+  segments {'out': {'recovered_gap_med': 78.0, 'label': 'ADAPTIVE'}}
+verdict {'judgment_det': 'AMI_ATTACKER_NONADAPTIVE', 'replication_sto': 'AMI_ADAPTIVE', 'agree': False, 'e6_trigger': True}

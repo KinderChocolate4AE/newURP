@@ -1,0 +1,2723 @@
+{
+  "manifest_hash": "7889a46bec000590",
+  "lines": {
+    "det": {
+      "repro": {
+        "base_net_med": 20.0,
+        "ref_net_med": 19.0,
+        "ok": true
+      },
+      "delta_med": {
+        "out0": 51.0,
+        "in0": 1.0,
+        "zfix": 0.0,
+        "lat0": 60.0,
+        "shuf_out": 56.0,
+        "shuf_in": 10.0,
+        "in_half": -3.0
+      },
+      "delta_pos": {
+        "out0": 15,
+        "in0": 8,
+        "zfix": 4,
+        "lat0": 15,
+        "shuf_out": 15,
+        "shuf_in": 13,
+        "in_half": 4
+      },
+      "lift": {
+        "out0": true,
+        "in0": false,
+        "zfix": false,
+        "lat0": true
+      },
+      "segments": {
+        "out": {
+          "recovered_gap_med": -3.0,
+          "label": "ENERGY"
+        }
+      },
+      "branch": "AMI_ATTACKER_NONADAPTIVE",
+      "dose": {
+        "in_half_med": -3.0,
+        "in0_med": 1.0
+      },
+      "per_arm_totals": {
+        "base": {
+          "net": 317,
+          "defended": 332,
+          "k_first": 15,
+          "fallback": 0,
+          "pen": 3250,
+          "occ_eps": 1323,
+          "rob_ticks": 4731,
+          "fire_eps": 2326
+        },
+        "out0": {
+          "net": 1117,
+          "defended": 2302,
+          "k_first": 1185,
+          "fallback": 0,
+          "pen": 1298,
+          "occ_eps": 1524,
+          "rob_ticks": 4378,
+          "fire_eps": 2177
+        },
+        "in0": {
+          "net": 402,
+          "defended": 414,
+          "k_first": 12,
+          "fallback": 0,
+          "pen": 3186,
+          "occ_eps": 1445,
+          "rob_ticks": 4831,
+          "fire_eps": 2085
+        },
+        "zfix": {
+          "net": 303,
+          "defended": 316,
+          "k_first": 13,
+          "fallback": 0,
+          "pen": 3262,
+          "occ_eps": 1304,
+          "rob_ticks": 4650,
+          "fire_eps": 2348
+        },
+        "lat0": {
+          "net": 1206,
+          "defended": 2168,
+          "k_first": 962,
+          "fallback": 0,
+          "pen": 1432,
+          "occ_eps": 1668,
+          "rob_ticks": 4311,
+          "fire_eps": 2285
+        },
+        "shuf_out": {
+          "net": 1186,
+          "defended": 1256,
+          "k_first": 65,
+          "fallback": 5,
+          "pen": 1435,
+          "occ_eps": 1894,
+          "rob_ticks": 9533,
+          "fire_eps": 2563
+        },
+        "shuf_in": {
+          "net": 494,
+          "defended": 509,
+          "k_first": 12,
+          "fallback": 3,
+          "pen": 3066,
+          "occ_eps": 1447,
+          "rob_ticks": 6138,
+          "fire_eps": 2459
+        },
+        "in_half": {
+          "net": 284,
+          "defended": 296,
+          "k_first": 12,
+          "fallback": 0,
+          "pen": 3303,
+          "occ_eps": 1334,
+          "rob_ticks": 4335,
+          "fire_eps": 2170
+        }
+      },
+      "slots": {
+        "t0.7_h1.0_cv/s0": {
+          "base": {
+            "net": 27,
+            "defended": 28,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 212,
+            "occ_eps": 114,
+            "rob_ticks": 313,
+            "fire_eps": 170
+          },
+          "out0": {
+            "net": 113,
+            "defended": 178,
+            "k_first": 65,
+            "fallback": 0,
+            "pen": 62,
+            "occ_eps": 140,
+            "rob_ticks": 271,
+            "fire_eps": 164
+          },
+          "in0": {
+            "net": 59,
+            "defended": 59,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 181,
+            "occ_eps": 145,
+            "rob_ticks": 295,
+            "fire_eps": 143
+          },
+          "zfix": {
+            "net": 31,
+            "defended": 31,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 209,
+            "occ_eps": 121,
+            "rob_ticks": 402,
+            "fire_eps": 170
+          },
+          "lat0": {
+            "net": 104,
+            "defended": 171,
+            "k_first": 67,
+            "fallback": 0,
+            "pen": 69,
+            "occ_eps": 130,
+            "rob_ticks": 221,
+            "fire_eps": 168
+          },
+          "shuf_out": {
+            "net": 78,
+            "defended": 86,
+            "k_first": 8,
+            "fallback": 0,
+            "pen": 78,
+            "occ_eps": 121,
+            "rob_ticks": 498,
+            "fire_eps": 158
+          },
+          "shuf_in": {
+            "net": 63,
+            "defended": 63,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 176,
+            "occ_eps": 145,
+            "rob_ticks": 466,
+            "fire_eps": 177
+          },
+          "in_half": {
+            "net": 30,
+            "defended": 30,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 210,
+            "occ_eps": 126,
+            "rob_ticks": 278,
+            "fire_eps": 156
+          }
+        },
+        "t0.7_h1.0_cv/s1": {
+          "base": {
+            "net": 15,
+            "defended": 15,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 224,
+            "occ_eps": 168,
+            "rob_ticks": 414,
+            "fire_eps": 83
+          },
+          "out0": {
+            "net": 78,
+            "defended": 160,
+            "k_first": 82,
+            "fallback": 0,
+            "pen": 80,
+            "occ_eps": 122,
+            "rob_ticks": 296,
+            "fire_eps": 148
+          },
+          "in0": {
+            "net": 6,
+            "defended": 6,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 234,
+            "occ_eps": 183,
+            "rob_ticks": 459,
+            "fire_eps": 41
+          },
+          "zfix": {
+            "net": 14,
+            "defended": 14,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 224,
+            "occ_eps": 170,
+            "rob_ticks": 407,
+            "fire_eps": 90
+          },
+          "lat0": {
+            "net": 117,
+            "defended": 171,
+            "k_first": 54,
+            "fallback": 0,
+            "pen": 69,
+            "occ_eps": 141,
+            "rob_ticks": 344,
+            "fire_eps": 183
+          },
+          "shuf_out": {
+            "net": 59,
+            "defended": 60,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 118,
+            "occ_eps": 159,
+            "rob_ticks": 549,
+            "fire_eps": 154
+          },
+          "shuf_in": {
+            "net": 15,
+            "defended": 15,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 223,
+            "occ_eps": 174,
+            "rob_ticks": 492,
+            "fire_eps": 101
+          },
+          "in_half": {
+            "net": 7,
+            "defended": 7,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 233,
+            "occ_eps": 171,
+            "rob_ticks": 419,
+            "fire_eps": 64
+          }
+        },
+        "t0.7_h1.0_cv/s2": {
+          "base": {
+            "net": 19,
+            "defended": 19,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 221,
+            "occ_eps": 112,
+            "rob_ticks": 233,
+            "fire_eps": 228
+          },
+          "out0": {
+            "net": 34,
+            "defended": 177,
+            "k_first": 143,
+            "fallback": 0,
+            "pen": 63,
+            "occ_eps": 76,
+            "rob_ticks": 178,
+            "fire_eps": 93
+          },
+          "in0": {
+            "net": 51,
+            "defended": 51,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 189,
+            "occ_eps": 125,
+            "rob_ticks": 318,
+            "fire_eps": 227
+          },
+          "zfix": {
+            "net": 19,
+            "defended": 19,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 221,
+            "occ_eps": 114,
+            "rob_ticks": 242,
+            "fire_eps": 227
+          },
+          "lat0": {
+            "net": 41,
+            "defended": 141,
+            "k_first": 100,
+            "fallback": 0,
+            "pen": 99,
+            "occ_eps": 86,
+            "rob_ticks": 186,
+            "fire_eps": 124
+          },
+          "shuf_out": {
+            "net": 46,
+            "defended": 51,
+            "k_first": 4,
+            "fallback": 1,
+            "pen": 92,
+            "occ_eps": 95,
+            "rob_ticks": 254,
+            "fire_eps": 152
+          },
+          "shuf_in": {
+            "net": 35,
+            "defended": 36,
+            "k_first": 0,
+            "fallback": 1,
+            "pen": 203,
+            "occ_eps": 117,
+            "rob_ticks": 305,
+            "fire_eps": 226
+          },
+          "in_half": {
+            "net": 25,
+            "defended": 25,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 215,
+            "occ_eps": 119,
+            "rob_ticks": 260,
+            "fire_eps": 223
+          }
+        },
+        "t0.7_h1.5_cv/s0": {
+          "base": {
+            "net": 20,
+            "defended": 20,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 219,
+            "occ_eps": 85,
+            "rob_ticks": 381,
+            "fire_eps": 138
+          },
+          "out0": {
+            "net": 61,
+            "defended": 155,
+            "k_first": 94,
+            "fallback": 0,
+            "pen": 85,
+            "occ_eps": 78,
+            "rob_ticks": 174,
+            "fire_eps": 142
+          },
+          "in0": {
+            "net": 9,
+            "defended": 9,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 231,
+            "occ_eps": 85,
+            "rob_ticks": 364,
+            "fire_eps": 109
+          },
+          "zfix": {
+            "net": 18,
+            "defended": 19,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 221,
+            "occ_eps": 76,
+            "rob_ticks": 303,
+            "fire_eps": 140
+          },
+          "lat0": {
+            "net": 29,
+            "defended": 116,
+            "k_first": 87,
+            "fallback": 0,
+            "pen": 124,
+            "occ_eps": 96,
+            "rob_ticks": 283,
+            "fire_eps": 122
+          },
+          "shuf_out": {
+            "net": 85,
+            "defended": 90,
+            "k_first": 5,
+            "fallback": 0,
+            "pen": 70,
+            "occ_eps": 115,
+            "rob_ticks": 561,
+            "fire_eps": 161
+          },
+          "shuf_in": {
+            "net": 36,
+            "defended": 36,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 201,
+            "occ_eps": 94,
+            "rob_ticks": 449,
+            "fire_eps": 161
+          },
+          "in_half": {
+            "net": 11,
+            "defended": 11,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 229,
+            "occ_eps": 76,
+            "rob_ticks": 289,
+            "fire_eps": 119
+          }
+        },
+        "t0.7_h1.5_cv/s1": {
+          "base": {
+            "net": 11,
+            "defended": 12,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 228,
+            "occ_eps": 63,
+            "rob_ticks": 183,
+            "fire_eps": 182
+          },
+          "out0": {
+            "net": 99,
+            "defended": 183,
+            "k_first": 84,
+            "fallback": 0,
+            "pen": 57,
+            "occ_eps": 119,
+            "rob_ticks": 274,
+            "fire_eps": 142
+          },
+          "in0": {
+            "net": 10,
+            "defended": 11,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 229,
+            "occ_eps": 57,
+            "rob_ticks": 135,
+            "fire_eps": 166
+          },
+          "zfix": {
+            "net": 11,
+            "defended": 12,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 227,
+            "occ_eps": 58,
+            "rob_ticks": 264,
+            "fire_eps": 187
+          },
+          "lat0": {
+            "net": 106,
+            "defended": 169,
+            "k_first": 63,
+            "fallback": 0,
+            "pen": 71,
+            "occ_eps": 132,
+            "rob_ticks": 332,
+            "fire_eps": 165
+          },
+          "shuf_out": {
+            "net": 94,
+            "defended": 100,
+            "k_first": 5,
+            "fallback": 1,
+            "pen": 74,
+            "occ_eps": 124,
+            "rob_ticks": 485,
+            "fire_eps": 181
+          },
+          "shuf_in": {
+            "net": 16,
+            "defended": 17,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 223,
+            "occ_eps": 62,
+            "rob_ticks": 260,
+            "fire_eps": 184
+          },
+          "in_half": {
+            "net": 8,
+            "defended": 9,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 231,
+            "occ_eps": 59,
+            "rob_ticks": 128,
+            "fire_eps": 174
+          }
+        },
+        "t0.7_h1.5_cv/s2": {
+          "base": {
+            "net": 16,
+            "defended": 16,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 224,
+            "occ_eps": 58,
+            "rob_ticks": 187,
+            "fire_eps": 103
+          },
+          "out0": {
+            "net": 89,
+            "defended": 92,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 148,
+            "occ_eps": 136,
+            "rob_ticks": 360,
+            "fire_eps": 173
+          },
+          "in0": {
+            "net": 8,
+            "defended": 8,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 232,
+            "occ_eps": 58,
+            "rob_ticks": 200,
+            "fire_eps": 79
+          },
+          "zfix": {
+            "net": 14,
+            "defended": 14,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 226,
+            "occ_eps": 61,
+            "rob_ticks": 245,
+            "fire_eps": 94
+          },
+          "lat0": {
+            "net": 67,
+            "defended": 70,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 170,
+            "occ_eps": 133,
+            "rob_ticks": 366,
+            "fire_eps": 166
+          },
+          "shuf_out": {
+            "net": 55,
+            "defended": 62,
+            "k_first": 7,
+            "fallback": 0,
+            "pen": 112,
+            "occ_eps": 101,
+            "rob_ticks": 420,
+            "fire_eps": 142
+          },
+          "shuf_in": {
+            "net": 15,
+            "defended": 15,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 225,
+            "occ_eps": 59,
+            "rob_ticks": 221,
+            "fire_eps": 112
+          },
+          "in_half": {
+            "net": 6,
+            "defended": 6,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 234,
+            "occ_eps": 57,
+            "rob_ticks": 159,
+            "fire_eps": 80
+          }
+        },
+        "t0.5_h1.0_cv/s0": {
+          "base": {
+            "net": 26,
+            "defended": 27,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 212,
+            "occ_eps": 187,
+            "rob_ticks": 661,
+            "fire_eps": 94
+          },
+          "out0": {
+            "net": 86,
+            "defended": 148,
+            "k_first": 62,
+            "fallback": 0,
+            "pen": 92,
+            "occ_eps": 138,
+            "rob_ticks": 427,
+            "fire_eps": 162
+          },
+          "in0": {
+            "net": 23,
+            "defended": 23,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 217,
+            "occ_eps": 189,
+            "rob_ticks": 674,
+            "fire_eps": 80
+          },
+          "zfix": {
+            "net": 16,
+            "defended": 18,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 220,
+            "occ_eps": 179,
+            "rob_ticks": 618,
+            "fire_eps": 97
+          },
+          "lat0": {
+            "net": 74,
+            "defended": 145,
+            "k_first": 71,
+            "fallback": 0,
+            "pen": 95,
+            "occ_eps": 145,
+            "rob_ticks": 423,
+            "fire_eps": 135
+          },
+          "shuf_out": {
+            "net": 81,
+            "defended": 85,
+            "k_first": 4,
+            "fallback": 0,
+            "pen": 107,
+            "occ_eps": 158,
+            "rob_ticks": 759,
+            "fire_eps": 173
+          },
+          "shuf_in": {
+            "net": 37,
+            "defended": 37,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 202,
+            "occ_eps": 191,
+            "rob_ticks": 889,
+            "fire_eps": 109
+          },
+          "in_half": {
+            "net": 17,
+            "defended": 17,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 223,
+            "occ_eps": 184,
+            "rob_ticks": 628,
+            "fire_eps": 80
+          }
+        },
+        "t0.5_h1.0_cv/s1": {
+          "base": {
+            "net": 17,
+            "defended": 19,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 221,
+            "occ_eps": 24,
+            "rob_ticks": 72,
+            "fire_eps": 237
+          },
+          "out0": {
+            "net": 81,
+            "defended": 121,
+            "k_first": 40,
+            "fallback": 0,
+            "pen": 119,
+            "occ_eps": 103,
+            "rob_ticks": 314,
+            "fire_eps": 195
+          },
+          "in0": {
+            "net": 46,
+            "defended": 48,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 192,
+            "occ_eps": 59,
+            "rob_ticks": 182,
+            "fire_eps": 235
+          },
+          "zfix": {
+            "net": 11,
+            "defended": 13,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 227,
+            "occ_eps": 21,
+            "rob_ticks": 59,
+            "fire_eps": 237
+          },
+          "lat0": {
+            "net": 86,
+            "defended": 133,
+            "k_first": 47,
+            "fallback": 0,
+            "pen": 107,
+            "occ_eps": 92,
+            "rob_ticks": 189,
+            "fire_eps": 192
+          },
+          "shuf_out": {
+            "net": 80,
+            "defended": 83,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 66,
+            "occ_eps": 104,
+            "rob_ticks": 599,
+            "fire_eps": 178
+          },
+          "shuf_in": {
+            "net": 28,
+            "defended": 30,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 210,
+            "occ_eps": 38,
+            "rob_ticks": 117,
+            "fire_eps": 238
+          },
+          "in_half": {
+            "net": 23,
+            "defended": 25,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 215,
+            "occ_eps": 31,
+            "rob_ticks": 114,
+            "fire_eps": 237
+          }
+        },
+        "t0.5_h1.0_cv/s2": {
+          "base": {
+            "net": 24,
+            "defended": 25,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 215,
+            "occ_eps": 74,
+            "rob_ticks": 293,
+            "fire_eps": 210
+          },
+          "out0": {
+            "net": 72,
+            "defended": 164,
+            "k_first": 92,
+            "fallback": 0,
+            "pen": 76,
+            "occ_eps": 114,
+            "rob_ticks": 365,
+            "fire_eps": 141
+          },
+          "in0": {
+            "net": 25,
+            "defended": 26,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 214,
+            "occ_eps": 83,
+            "rob_ticks": 340,
+            "fire_eps": 196
+          },
+          "zfix": {
+            "net": 27,
+            "defended": 27,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 213,
+            "occ_eps": 75,
+            "rob_ticks": 339,
+            "fire_eps": 217
+          },
+          "lat0": {
+            "net": 65,
+            "defended": 149,
+            "k_first": 84,
+            "fallback": 0,
+            "pen": 91,
+            "occ_eps": 76,
+            "rob_ticks": 203,
+            "fire_eps": 156
+          },
+          "shuf_out": {
+            "net": 80,
+            "defended": 86,
+            "k_first": 5,
+            "fallback": 1,
+            "pen": 97,
+            "occ_eps": 133,
+            "rob_ticks": 1139,
+            "fire_eps": 189
+          },
+          "shuf_in": {
+            "net": 29,
+            "defended": 31,
+            "k_first": 1,
+            "fallback": 1,
+            "pen": 206,
+            "occ_eps": 79,
+            "rob_ticks": 498,
+            "fire_eps": 213
+          },
+          "in_half": {
+            "net": 21,
+            "defended": 22,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 218,
+            "occ_eps": 75,
+            "rob_ticks": 300,
+            "fire_eps": 203
+          }
+        },
+        "t0.5_h1.5_cv/s0": {
+          "base": {
+            "net": 21,
+            "defended": 23,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 217,
+            "occ_eps": 58,
+            "rob_ticks": 223,
+            "fire_eps": 190
+          },
+          "out0": {
+            "net": 70,
+            "defended": 172,
+            "k_first": 102,
+            "fallback": 0,
+            "pen": 68,
+            "occ_eps": 76,
+            "rob_ticks": 161,
+            "fire_eps": 135
+          },
+          "in0": {
+            "net": 14,
+            "defended": 16,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 224,
+            "occ_eps": 51,
+            "rob_ticks": 201,
+            "fire_eps": 176
+          },
+          "zfix": {
+            "net": 16,
+            "defended": 17,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 222,
+            "occ_eps": 56,
+            "rob_ticks": 233,
+            "fire_eps": 193
+          },
+          "lat0": {
+            "net": 103,
+            "defended": 199,
+            "k_first": 96,
+            "fallback": 0,
+            "pen": 41,
+            "occ_eps": 108,
+            "rob_ticks": 233,
+            "fire_eps": 142
+          },
+          "shuf_out": {
+            "net": 84,
+            "defended": 86,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 116,
+            "occ_eps": 111,
+            "rob_ticks": 616,
+            "fire_eps": 189
+          },
+          "shuf_in": {
+            "net": 28,
+            "defended": 30,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 209,
+            "occ_eps": 62,
+            "rob_ticks": 292,
+            "fire_eps": 200
+          },
+          "in_half": {
+            "net": 16,
+            "defended": 18,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 222,
+            "occ_eps": 55,
+            "rob_ticks": 170,
+            "fire_eps": 180
+          }
+        },
+        "t0.5_h1.5_cv/s1": {
+          "base": {
+            "net": 21,
+            "defended": 23,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 217,
+            "occ_eps": 74,
+            "rob_ticks": 330,
+            "fire_eps": 144
+          },
+          "out0": {
+            "net": 54,
+            "defended": 153,
+            "k_first": 99,
+            "fallback": 0,
+            "pen": 87,
+            "occ_eps": 70,
+            "rob_ticks": 268,
+            "fire_eps": 109
+          },
+          "in0": {
+            "net": 24,
+            "defended": 25,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 215,
+            "occ_eps": 88,
+            "rob_ticks": 415,
+            "fire_eps": 129
+          },
+          "zfix": {
+            "net": 25,
+            "defended": 27,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 213,
+            "occ_eps": 86,
+            "rob_ticks": 382,
+            "fire_eps": 139
+          },
+          "lat0": {
+            "net": 73,
+            "defended": 159,
+            "k_first": 86,
+            "fallback": 0,
+            "pen": 81,
+            "occ_eps": 86,
+            "rob_ticks": 265,
+            "fire_eps": 128
+          },
+          "shuf_out": {
+            "net": 111,
+            "defended": 117,
+            "k_first": 6,
+            "fallback": 0,
+            "pen": 106,
+            "occ_eps": 141,
+            "rob_ticks": 587,
+            "fire_eps": 199
+          },
+          "shuf_in": {
+            "net": 31,
+            "defended": 32,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 206,
+            "occ_eps": 79,
+            "rob_ticks": 397,
+            "fire_eps": 152
+          },
+          "in_half": {
+            "net": 20,
+            "defended": 21,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 219,
+            "occ_eps": 81,
+            "rob_ticks": 376,
+            "fire_eps": 130
+          }
+        },
+        "t0.5_h1.5_cv/s2": {
+          "base": {
+            "net": 19,
+            "defended": 20,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 209,
+            "occ_eps": 80,
+            "rob_ticks": 562,
+            "fire_eps": 75
+          },
+          "out0": {
+            "net": 44,
+            "defended": 173,
+            "k_first": 129,
+            "fallback": 0,
+            "pen": 67,
+            "occ_eps": 60,
+            "rob_ticks": 436,
+            "fire_eps": 74
+          },
+          "in0": {
+            "net": 32,
+            "defended": 33,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 207,
+            "occ_eps": 81,
+            "rob_ticks": 455,
+            "fire_eps": 70
+          },
+          "zfix": {
+            "net": 19,
+            "defended": 20,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 211,
+            "occ_eps": 79,
+            "rob_ticks": 450,
+            "fire_eps": 81
+          },
+          "lat0": {
+            "net": 36,
+            "defended": 93,
+            "k_first": 57,
+            "fallback": 0,
+            "pen": 147,
+            "occ_eps": 67,
+            "rob_ticks": 334,
+            "fire_eps": 77
+          },
+          "shuf_out": {
+            "net": 101,
+            "defended": 107,
+            "k_first": 6,
+            "fallback": 0,
+            "pen": 97,
+            "occ_eps": 153,
+            "rob_ticks": 971,
+            "fire_eps": 166
+          },
+          "shuf_in": {
+            "net": 43,
+            "defended": 44,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 190,
+            "occ_eps": 99,
+            "rob_ticks": 673,
+            "fire_eps": 99
+          },
+          "in_half": {
+            "net": 18,
+            "defended": 19,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 220,
+            "occ_eps": 78,
+            "rob_ticks": 408,
+            "fire_eps": 66
+          }
+        },
+        "t0.5_h1.0_ma/s0": {
+          "base": {
+            "net": 17,
+            "defended": 18,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 219,
+            "occ_eps": 55,
+            "rob_ticks": 411,
+            "fire_eps": 165
+          },
+          "out0": {
+            "net": 68,
+            "defended": 93,
+            "k_first": 25,
+            "fallback": 0,
+            "pen": 147,
+            "occ_eps": 88,
+            "rob_ticks": 286,
+            "fire_eps": 199
+          },
+          "in0": {
+            "net": 20,
+            "defended": 21,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 219,
+            "occ_eps": 60,
+            "rob_ticks": 224,
+            "fire_eps": 153
+          },
+          "zfix": {
+            "net": 16,
+            "defended": 17,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 217,
+            "occ_eps": 50,
+            "rob_ticks": 296,
+            "fire_eps": 174
+          },
+          "lat0": {
+            "net": 77,
+            "defended": 107,
+            "k_first": 30,
+            "fallback": 0,
+            "pen": 133,
+            "occ_eps": 103,
+            "rob_ticks": 337,
+            "fire_eps": 194
+          },
+          "shuf_out": {
+            "net": 49,
+            "defended": 54,
+            "k_first": 4,
+            "fallback": 1,
+            "pen": 74,
+            "occ_eps": 80,
+            "rob_ticks": 624,
+            "fire_eps": 131
+          },
+          "shuf_in": {
+            "net": 25,
+            "defended": 26,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 214,
+            "occ_eps": 67,
+            "rob_ticks": 412,
+            "fire_eps": 171
+          },
+          "in_half": {
+            "net": 14,
+            "defended": 15,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 225,
+            "occ_eps": 54,
+            "rob_ticks": 215,
+            "fire_eps": 159
+          }
+        },
+        "t0.5_h1.0_ma/s1": {
+          "base": {
+            "net": 44,
+            "defended": 45,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 195,
+            "occ_eps": 108,
+            "rob_ticks": 249,
+            "fire_eps": 179
+          },
+          "out0": {
+            "net": 97,
+            "defended": 160,
+            "k_first": 63,
+            "fallback": 0,
+            "pen": 80,
+            "occ_eps": 113,
+            "rob_ticks": 293,
+            "fire_eps": 175
+          },
+          "in0": {
+            "net": 62,
+            "defended": 63,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 177,
+            "occ_eps": 121,
+            "rob_ticks": 399,
+            "fire_eps": 167
+          },
+          "zfix": {
+            "net": 44,
+            "defended": 44,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 195,
+            "occ_eps": 98,
+            "rob_ticks": 217,
+            "fire_eps": 178
+          },
+          "lat0": {
+            "net": 129,
+            "defended": 163,
+            "k_first": 34,
+            "fallback": 0,
+            "pen": 77,
+            "occ_eps": 151,
+            "rob_ticks": 329,
+            "fire_eps": 196
+          },
+          "shuf_out": {
+            "net": 100,
+            "defended": 105,
+            "k_first": 4,
+            "fallback": 1,
+            "pen": 113,
+            "occ_eps": 149,
+            "rob_ticks": 533,
+            "fire_eps": 221
+          },
+          "shuf_in": {
+            "net": 70,
+            "defended": 72,
+            "k_first": 1,
+            "fallback": 1,
+            "pen": 164,
+            "occ_eps": 117,
+            "rob_ticks": 462,
+            "fire_eps": 182
+          },
+          "in_half": {
+            "net": 52,
+            "defended": 53,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 187,
+            "occ_eps": 110,
+            "rob_ticks": 393,
+            "fire_eps": 178
+          }
+        },
+        "t0.5_h1.0_ma/s2": {
+          "base": {
+            "net": 20,
+            "defended": 22,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 217,
+            "occ_eps": 63,
+            "rob_ticks": 219,
+            "fire_eps": 128
+          },
+          "out0": {
+            "net": 71,
+            "defended": 173,
+            "k_first": 102,
+            "fallback": 0,
+            "pen": 67,
+            "occ_eps": 91,
+            "rob_ticks": 275,
+            "fire_eps": 125
+          },
+          "in0": {
+            "net": 13,
+            "defended": 15,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 225,
+            "occ_eps": 60,
+            "rob_ticks": 170,
+            "fire_eps": 114
+          },
+          "zfix": {
+            "net": 22,
+            "defended": 24,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 216,
+            "occ_eps": 60,
+            "rob_ticks": 193,
+            "fire_eps": 124
+          },
+          "lat0": {
+            "net": 99,
+            "defended": 182,
+            "k_first": 83,
+            "fallback": 0,
+            "pen": 58,
+            "occ_eps": 122,
+            "rob_ticks": 266,
+            "fire_eps": 137
+          },
+          "shuf_out": {
+            "net": 83,
+            "defended": 84,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 115,
+            "occ_eps": 150,
+            "rob_ticks": 938,
+            "fire_eps": 169
+          },
+          "shuf_in": {
+            "net": 23,
+            "defended": 25,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 214,
+            "occ_eps": 64,
+            "rob_ticks": 205,
+            "fire_eps": 134
+          },
+          "in_half": {
+            "net": 16,
+            "defended": 18,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 222,
+            "occ_eps": 58,
+            "rob_ticks": 198,
+            "fire_eps": 121
+          }
+        }
+      }
+    },
+    "sto": {
+      "repro": {
+        "base_net_med": 18.0,
+        "ref_net_med": 21.0,
+        "ok": true
+      },
+      "delta_med": {
+        "out0": 124.0,
+        "in0": 6.0,
+        "zfix": 1.0,
+        "lat0": 109.0,
+        "shuf_out": 52.0,
+        "shuf_in": 12.0,
+        "in_half": 2.0
+      },
+      "delta_pos": {
+        "out0": 15,
+        "in0": 11,
+        "zfix": 10,
+        "lat0": 15,
+        "shuf_out": 15,
+        "shuf_in": 14,
+        "in_half": 10
+      },
+      "lift": {
+        "out0": true,
+        "in0": false,
+        "zfix": false,
+        "lat0": true
+      },
+      "segments": {
+        "out": {
+          "recovered_gap_med": 78.0,
+          "label": "ADAPTIVE"
+        }
+      },
+      "branch": "AMI_ADAPTIVE",
+      "dose": {
+        "in_half_med": 2.0,
+        "in0_med": 6.0
+      },
+      "per_arm_totals": {
+        "base": {
+          "net": 332,
+          "defended": 350,
+          "k_first": 18,
+          "fallback": 0,
+          "pen": 3222,
+          "occ_eps": 884,
+          "rob_ticks": 2660,
+          "fire_eps": 2189
+        },
+        "out0": {
+          "net": 2189,
+          "defended": 2293,
+          "k_first": 104,
+          "fallback": 0,
+          "pen": 1307,
+          "occ_eps": 2657,
+          "rob_ticks": 6294,
+          "fire_eps": 3422
+        },
+        "in0": {
+          "net": 440,
+          "defended": 458,
+          "k_first": 18,
+          "fallback": 0,
+          "pen": 3141,
+          "occ_eps": 1098,
+          "rob_ticks": 3103,
+          "fire_eps": 1954
+        },
+        "zfix": {
+          "net": 348,
+          "defended": 369,
+          "k_first": 20,
+          "fallback": 1,
+          "pen": 3206,
+          "occ_eps": 879,
+          "rob_ticks": 2885,
+          "fire_eps": 2172
+        },
+        "lat0": {
+          "net": 1993,
+          "defended": 2089,
+          "k_first": 96,
+          "fallback": 0,
+          "pen": 1511,
+          "occ_eps": 2626,
+          "rob_ticks": 6333,
+          "fire_eps": 3301
+        },
+        "shuf_out": {
+          "net": 1089,
+          "defended": 1130,
+          "k_first": 38,
+          "fallback": 3,
+          "pen": 1531,
+          "occ_eps": 1587,
+          "rob_ticks": 5729,
+          "fire_eps": 2632
+        },
+        "shuf_in": {
+          "net": 515,
+          "defended": 536,
+          "k_first": 20,
+          "fallback": 1,
+          "pen": 3024,
+          "occ_eps": 1072,
+          "rob_ticks": 3716,
+          "fire_eps": 2322
+        },
+        "in_half": {
+          "net": 355,
+          "defended": 372,
+          "k_first": 17,
+          "fallback": 0,
+          "pen": 3227,
+          "occ_eps": 958,
+          "rob_ticks": 2686,
+          "fire_eps": 1968
+        }
+      },
+      "slots": {
+        "t0.7_h1.0_cv/s0": {
+          "base": {
+            "net": 17,
+            "defended": 17,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 218,
+            "occ_eps": 50,
+            "rob_ticks": 79,
+            "fire_eps": 102
+          },
+          "out0": {
+            "net": 157,
+            "defended": 163,
+            "k_first": 6,
+            "fallback": 0,
+            "pen": 77,
+            "occ_eps": 208,
+            "rob_ticks": 335,
+            "fire_eps": 235
+          },
+          "in0": {
+            "net": 26,
+            "defended": 26,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 214,
+            "occ_eps": 60,
+            "rob_ticks": 116,
+            "fire_eps": 88
+          },
+          "zfix": {
+            "net": 11,
+            "defended": 11,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 227,
+            "occ_eps": 37,
+            "rob_ticks": 58,
+            "fire_eps": 95
+          },
+          "lat0": {
+            "net": 138,
+            "defended": 153,
+            "k_first": 15,
+            "fallback": 0,
+            "pen": 87,
+            "occ_eps": 182,
+            "rob_ticks": 316,
+            "fire_eps": 225
+          },
+          "shuf_out": {
+            "net": 58,
+            "defended": 60,
+            "k_first": 1,
+            "fallback": 1,
+            "pen": 131,
+            "occ_eps": 105,
+            "rob_ticks": 321,
+            "fire_eps": 178
+          },
+          "shuf_in": {
+            "net": 25,
+            "defended": 25,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 213,
+            "occ_eps": 56,
+            "rob_ticks": 145,
+            "fire_eps": 119
+          },
+          "in_half": {
+            "net": 15,
+            "defended": 15,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 225,
+            "occ_eps": 53,
+            "rob_ticks": 96,
+            "fire_eps": 84
+          }
+        },
+        "t0.7_h1.0_cv/s1": {
+          "base": {
+            "net": 29,
+            "defended": 29,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 211,
+            "occ_eps": 90,
+            "rob_ticks": 183,
+            "fire_eps": 167
+          },
+          "out0": {
+            "net": 161,
+            "defended": 163,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 77,
+            "occ_eps": 185,
+            "rob_ticks": 379,
+            "fire_eps": 238
+          },
+          "in0": {
+            "net": 35,
+            "defended": 35,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 205,
+            "occ_eps": 103,
+            "rob_ticks": 228,
+            "fire_eps": 141
+          },
+          "zfix": {
+            "net": 28,
+            "defended": 28,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 211,
+            "occ_eps": 90,
+            "rob_ticks": 193,
+            "fire_eps": 166
+          },
+          "lat0": {
+            "net": 130,
+            "defended": 134,
+            "k_first": 4,
+            "fallback": 0,
+            "pen": 106,
+            "occ_eps": 179,
+            "rob_ticks": 374,
+            "fire_eps": 230
+          },
+          "shuf_out": {
+            "net": 83,
+            "defended": 83,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 86,
+            "occ_eps": 137,
+            "rob_ticks": 359,
+            "fire_eps": 173
+          },
+          "shuf_in": {
+            "net": 53,
+            "defended": 53,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 184,
+            "occ_eps": 105,
+            "rob_ticks": 284,
+            "fire_eps": 167
+          },
+          "in_half": {
+            "net": 34,
+            "defended": 34,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 206,
+            "occ_eps": 96,
+            "rob_ticks": 183,
+            "fire_eps": 146
+          }
+        },
+        "t0.7_h1.0_cv/s2": {
+          "base": {
+            "net": 18,
+            "defended": 21,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 218,
+            "occ_eps": 59,
+            "rob_ticks": 97,
+            "fire_eps": 202
+          },
+          "out0": {
+            "net": 109,
+            "defended": 117,
+            "k_first": 8,
+            "fallback": 0,
+            "pen": 123,
+            "occ_eps": 175,
+            "rob_ticks": 325,
+            "fire_eps": 230
+          },
+          "in0": {
+            "net": 48,
+            "defended": 51,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 189,
+            "occ_eps": 100,
+            "rob_ticks": 213,
+            "fire_eps": 201
+          },
+          "zfix": {
+            "net": 19,
+            "defended": 21,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 218,
+            "occ_eps": 54,
+            "rob_ticks": 86,
+            "fire_eps": 199
+          },
+          "lat0": {
+            "net": 104,
+            "defended": 113,
+            "k_first": 9,
+            "fallback": 0,
+            "pen": 127,
+            "occ_eps": 176,
+            "rob_ticks": 340,
+            "fire_eps": 221
+          },
+          "shuf_out": {
+            "net": 71,
+            "defended": 74,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 103,
+            "occ_eps": 108,
+            "rob_ticks": 245,
+            "fire_eps": 182
+          },
+          "shuf_in": {
+            "net": 34,
+            "defended": 37,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 202,
+            "occ_eps": 78,
+            "rob_ticks": 151,
+            "fire_eps": 205
+          },
+          "in_half": {
+            "net": 25,
+            "defended": 28,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 212,
+            "occ_eps": 75,
+            "rob_ticks": 133,
+            "fire_eps": 199
+          }
+        },
+        "t0.7_h1.5_cv/s0": {
+          "base": {
+            "net": 30,
+            "defended": 31,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 205,
+            "occ_eps": 59,
+            "rob_ticks": 193,
+            "fire_eps": 137
+          },
+          "out0": {
+            "net": 150,
+            "defended": 163,
+            "k_first": 13,
+            "fallback": 0,
+            "pen": 77,
+            "occ_eps": 169,
+            "rob_ticks": 374,
+            "fire_eps": 226
+          },
+          "in0": {
+            "net": 33,
+            "defended": 35,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 204,
+            "occ_eps": 64,
+            "rob_ticks": 180,
+            "fire_eps": 121
+          },
+          "zfix": {
+            "net": 31,
+            "defended": 33,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 202,
+            "occ_eps": 67,
+            "rob_ticks": 264,
+            "fire_eps": 136
+          },
+          "lat0": {
+            "net": 105,
+            "defended": 120,
+            "k_first": 15,
+            "fallback": 0,
+            "pen": 120,
+            "occ_eps": 149,
+            "rob_ticks": 353,
+            "fire_eps": 194
+          },
+          "shuf_out": {
+            "net": 80,
+            "defended": 84,
+            "k_first": 4,
+            "fallback": 0,
+            "pen": 85,
+            "occ_eps": 112,
+            "rob_ticks": 446,
+            "fire_eps": 160
+          },
+          "shuf_in": {
+            "net": 42,
+            "defended": 44,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 188,
+            "occ_eps": 73,
+            "rob_ticks": 257,
+            "fire_eps": 145
+          },
+          "in_half": {
+            "net": 30,
+            "defended": 31,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 208,
+            "occ_eps": 60,
+            "rob_ticks": 177,
+            "fire_eps": 126
+          }
+        },
+        "t0.7_h1.5_cv/s1": {
+          "base": {
+            "net": 21,
+            "defended": 21,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 219,
+            "occ_eps": 31,
+            "rob_ticks": 62,
+            "fire_eps": 145
+          },
+          "out0": {
+            "net": 175,
+            "defended": 185,
+            "k_first": 10,
+            "fallback": 0,
+            "pen": 55,
+            "occ_eps": 188,
+            "rob_ticks": 382,
+            "fire_eps": 225
+          },
+          "in0": {
+            "net": 18,
+            "defended": 18,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 222,
+            "occ_eps": 27,
+            "rob_ticks": 63,
+            "fire_eps": 129
+          },
+          "zfix": {
+            "net": 15,
+            "defended": 15,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 225,
+            "occ_eps": 24,
+            "rob_ticks": 70,
+            "fire_eps": 145
+          },
+          "lat0": {
+            "net": 163,
+            "defended": 167,
+            "k_first": 4,
+            "fallback": 0,
+            "pen": 73,
+            "occ_eps": 180,
+            "rob_ticks": 427,
+            "fire_eps": 229
+          },
+          "shuf_out": {
+            "net": 75,
+            "defended": 76,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 117,
+            "occ_eps": 93,
+            "rob_ticks": 272,
+            "fire_eps": 195
+          },
+          "shuf_in": {
+            "net": 31,
+            "defended": 31,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 208,
+            "occ_eps": 40,
+            "rob_ticks": 113,
+            "fire_eps": 152
+          },
+          "in_half": {
+            "net": 23,
+            "defended": 23,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 217,
+            "occ_eps": 31,
+            "rob_ticks": 75,
+            "fire_eps": 131
+          }
+        },
+        "t0.7_h1.5_cv/s2": {
+          "base": {
+            "net": 18,
+            "defended": 19,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 217,
+            "occ_eps": 75,
+            "rob_ticks": 242,
+            "fire_eps": 140
+          },
+          "out0": {
+            "net": 111,
+            "defended": 115,
+            "k_first": 4,
+            "fallback": 0,
+            "pen": 125,
+            "occ_eps": 149,
+            "rob_ticks": 329,
+            "fire_eps": 229
+          },
+          "in0": {
+            "net": 29,
+            "defended": 30,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 210,
+            "occ_eps": 89,
+            "rob_ticks": 315,
+            "fire_eps": 103
+          },
+          "zfix": {
+            "net": 24,
+            "defended": 29,
+            "k_first": 4,
+            "fallback": 1,
+            "pen": 211,
+            "occ_eps": 77,
+            "rob_ticks": 248,
+            "fire_eps": 138
+          },
+          "lat0": {
+            "net": 98,
+            "defended": 100,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 140,
+            "occ_eps": 170,
+            "rob_ticks": 357,
+            "fire_eps": 222
+          },
+          "shuf_out": {
+            "net": 55,
+            "defended": 57,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 102,
+            "occ_eps": 95,
+            "rob_ticks": 289,
+            "fire_eps": 156
+          },
+          "shuf_in": {
+            "net": 33,
+            "defended": 34,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 205,
+            "occ_eps": 94,
+            "rob_ticks": 371,
+            "fire_eps": 163
+          },
+          "in_half": {
+            "net": 21,
+            "defended": 22,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 218,
+            "occ_eps": 81,
+            "rob_ticks": 268,
+            "fire_eps": 106
+          }
+        },
+        "t0.5_h1.0_cv/s0": {
+          "base": {
+            "net": 33,
+            "defended": 37,
+            "k_first": 4,
+            "fallback": 0,
+            "pen": 203,
+            "occ_eps": 97,
+            "rob_ticks": 331,
+            "fire_eps": 159
+          },
+          "out0": {
+            "net": 157,
+            "defended": 157,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 83,
+            "occ_eps": 194,
+            "rob_ticks": 581,
+            "fire_eps": 238
+          },
+          "in0": {
+            "net": 33,
+            "defended": 36,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 204,
+            "occ_eps": 124,
+            "rob_ticks": 365,
+            "fire_eps": 148
+          },
+          "zfix": {
+            "net": 38,
+            "defended": 40,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 200,
+            "occ_eps": 110,
+            "rob_ticks": 385,
+            "fire_eps": 161
+          },
+          "lat0": {
+            "net": 122,
+            "defended": 125,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 115,
+            "occ_eps": 188,
+            "rob_ticks": 531,
+            "fire_eps": 228
+          },
+          "shuf_out": {
+            "net": 67,
+            "defended": 70,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 91,
+            "occ_eps": 94,
+            "rob_ticks": 431,
+            "fire_eps": 164
+          },
+          "shuf_in": {
+            "net": 50,
+            "defended": 53,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 187,
+            "occ_eps": 119,
+            "rob_ticks": 443,
+            "fire_eps": 172
+          },
+          "in_half": {
+            "net": 34,
+            "defended": 37,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 203,
+            "occ_eps": 109,
+            "rob_ticks": 322,
+            "fire_eps": 145
+          }
+        },
+        "t0.5_h1.0_cv/s1": {
+          "base": {
+            "net": 11,
+            "defended": 12,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 228,
+            "occ_eps": 85,
+            "rob_ticks": 285,
+            "fire_eps": 36
+          },
+          "out0": {
+            "net": 144,
+            "defended": 148,
+            "k_first": 4,
+            "fallback": 0,
+            "pen": 92,
+            "occ_eps": 185,
+            "rob_ticks": 455,
+            "fire_eps": 235
+          },
+          "in0": {
+            "net": 10,
+            "defended": 11,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 229,
+            "occ_eps": 88,
+            "rob_ticks": 321,
+            "fire_eps": 33
+          },
+          "zfix": {
+            "net": 15,
+            "defended": 17,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 223,
+            "occ_eps": 83,
+            "rob_ticks": 292,
+            "fire_eps": 45
+          },
+          "lat0": {
+            "net": 120,
+            "defended": 128,
+            "k_first": 8,
+            "fallback": 0,
+            "pen": 112,
+            "occ_eps": 146,
+            "rob_ticks": 354,
+            "fire_eps": 229
+          },
+          "shuf_out": {
+            "net": 53,
+            "defended": 54,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 63,
+            "occ_eps": 94,
+            "rob_ticks": 337,
+            "fire_eps": 112
+          },
+          "shuf_in": {
+            "net": 11,
+            "defended": 12,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 225,
+            "occ_eps": 89,
+            "rob_ticks": 331,
+            "fire_eps": 57
+          },
+          "in_half": {
+            "net": 7,
+            "defended": 8,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 232,
+            "occ_eps": 81,
+            "rob_ticks": 278,
+            "fire_eps": 28
+          }
+        },
+        "t0.5_h1.0_cv/s2": {
+          "base": {
+            "net": 31,
+            "defended": 32,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 207,
+            "occ_eps": 50,
+            "rob_ticks": 288,
+            "fire_eps": 221
+          },
+          "out0": {
+            "net": 167,
+            "defended": 170,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 70,
+            "occ_eps": 191,
+            "rob_ticks": 467,
+            "fire_eps": 236
+          },
+          "in0": {
+            "net": 27,
+            "defended": 28,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 212,
+            "occ_eps": 60,
+            "rob_ticks": 194,
+            "fire_eps": 207
+          },
+          "zfix": {
+            "net": 29,
+            "defended": 30,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 210,
+            "occ_eps": 45,
+            "rob_ticks": 167,
+            "fire_eps": 218
+          },
+          "lat0": {
+            "net": 159,
+            "defended": 161,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 79,
+            "occ_eps": 185,
+            "rob_ticks": 423,
+            "fire_eps": 235
+          },
+          "shuf_out": {
+            "net": 74,
+            "defended": 78,
+            "k_first": 3,
+            "fallback": 1,
+            "pen": 100,
+            "occ_eps": 112,
+            "rob_ticks": 456,
+            "fire_eps": 194
+          },
+          "shuf_in": {
+            "net": 46,
+            "defended": 47,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 186,
+            "occ_eps": 61,
+            "rob_ticks": 249,
+            "fire_eps": 222
+          },
+          "in_half": {
+            "net": 26,
+            "defended": 27,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 213,
+            "occ_eps": 51,
+            "rob_ticks": 171,
+            "fire_eps": 205
+          }
+        },
+        "t0.5_h1.5_cv/s0": {
+          "base": {
+            "net": 13,
+            "defended": 14,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 221,
+            "occ_eps": 41,
+            "rob_ticks": 134,
+            "fire_eps": 109
+          },
+          "out0": {
+            "net": 164,
+            "defended": 173,
+            "k_first": 9,
+            "fallback": 0,
+            "pen": 67,
+            "occ_eps": 173,
+            "rob_ticks": 436,
+            "fire_eps": 231
+          },
+          "in0": {
+            "net": 17,
+            "defended": 18,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 222,
+            "occ_eps": 50,
+            "rob_ticks": 194,
+            "fire_eps": 80
+          },
+          "zfix": {
+            "net": 16,
+            "defended": 16,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 218,
+            "occ_eps": 44,
+            "rob_ticks": 137,
+            "fire_eps": 104
+          },
+          "lat0": {
+            "net": 165,
+            "defended": 170,
+            "k_first": 5,
+            "fallback": 0,
+            "pen": 70,
+            "occ_eps": 180,
+            "rob_ticks": 478,
+            "fire_eps": 231
+          },
+          "shuf_out": {
+            "net": 76,
+            "defended": 77,
+            "k_first": 0,
+            "fallback": 1,
+            "pen": 121,
+            "occ_eps": 99,
+            "rob_ticks": 417,
+            "fire_eps": 184
+          },
+          "shuf_in": {
+            "net": 31,
+            "defended": 32,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 204,
+            "occ_eps": 62,
+            "rob_ticks": 257,
+            "fire_eps": 126
+          },
+          "in_half": {
+            "net": 16,
+            "defended": 17,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 223,
+            "occ_eps": 47,
+            "rob_ticks": 159,
+            "fire_eps": 86
+          }
+        },
+        "t0.5_h1.5_cv/s1": {
+          "base": {
+            "net": 15,
+            "defended": 16,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 220,
+            "occ_eps": 35,
+            "rob_ticks": 132,
+            "fire_eps": 131
+          },
+          "out0": {
+            "net": 180,
+            "defended": 189,
+            "k_first": 9,
+            "fallback": 0,
+            "pen": 51,
+            "occ_eps": 201,
+            "rob_ticks": 512,
+            "fire_eps": 226
+          },
+          "in0": {
+            "net": 21,
+            "defended": 22,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 218,
+            "occ_eps": 49,
+            "rob_ticks": 175,
+            "fire_eps": 117
+          },
+          "zfix": {
+            "net": 19,
+            "defended": 19,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 213,
+            "occ_eps": 36,
+            "rob_ticks": 182,
+            "fire_eps": 127
+          },
+          "lat0": {
+            "net": 164,
+            "defended": 167,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 73,
+            "occ_eps": 180,
+            "rob_ticks": 534,
+            "fire_eps": 229
+          },
+          "shuf_out": {
+            "net": 75,
+            "defended": 75,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 132,
+            "occ_eps": 103,
+            "rob_ticks": 463,
+            "fire_eps": 181
+          },
+          "shuf_in": {
+            "net": 30,
+            "defended": 31,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 202,
+            "occ_eps": 52,
+            "rob_ticks": 238,
+            "fire_eps": 146
+          },
+          "in_half": {
+            "net": 19,
+            "defended": 20,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 220,
+            "occ_eps": 47,
+            "rob_ticks": 182,
+            "fire_eps": 121
+          }
+        },
+        "t0.5_h1.5_cv/s2": {
+          "base": {
+            "net": 17,
+            "defended": 20,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 218,
+            "occ_eps": 24,
+            "rob_ticks": 100,
+            "fire_eps": 146
+          },
+          "out0": {
+            "net": 127,
+            "defended": 149,
+            "k_first": 22,
+            "fallback": 0,
+            "pen": 91,
+            "occ_eps": 155,
+            "rob_ticks": 557,
+            "fire_eps": 187
+          },
+          "in0": {
+            "net": 26,
+            "defended": 29,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 211,
+            "occ_eps": 33,
+            "rob_ticks": 114,
+            "fire_eps": 136
+          },
+          "zfix": {
+            "net": 21,
+            "defended": 24,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 215,
+            "occ_eps": 28,
+            "rob_ticks": 200,
+            "fire_eps": 152
+          },
+          "lat0": {
+            "net": 141,
+            "defended": 149,
+            "k_first": 8,
+            "fallback": 0,
+            "pen": 91,
+            "occ_eps": 190,
+            "rob_ticks": 695,
+            "fire_eps": 198
+          },
+          "shuf_out": {
+            "net": 75,
+            "defended": 79,
+            "k_first": 4,
+            "fallback": 0,
+            "pen": 105,
+            "occ_eps": 111,
+            "rob_ticks": 486,
+            "fire_eps": 188
+          },
+          "shuf_in": {
+            "net": 27,
+            "defended": 30,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 210,
+            "occ_eps": 37,
+            "rob_ticks": 178,
+            "fire_eps": 155
+          },
+          "in_half": {
+            "net": 19,
+            "defended": 22,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 218,
+            "occ_eps": 28,
+            "rob_ticks": 111,
+            "fire_eps": 136
+          }
+        },
+        "t0.5_h1.0_ma/s0": {
+          "base": {
+            "net": 17,
+            "defended": 19,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 221,
+            "occ_eps": 53,
+            "rob_ticks": 139,
+            "fire_eps": 167
+          },
+          "out0": {
+            "net": 107,
+            "defended": 114,
+            "k_first": 7,
+            "fallback": 0,
+            "pen": 126,
+            "occ_eps": 142,
+            "rob_ticks": 370,
+            "fire_eps": 225
+          },
+          "in0": {
+            "net": 25,
+            "defended": 27,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 213,
+            "occ_eps": 69,
+            "rob_ticks": 168,
+            "fire_eps": 141
+          },
+          "zfix": {
+            "net": 21,
+            "defended": 24,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 216,
+            "occ_eps": 53,
+            "rob_ticks": 166,
+            "fire_eps": 157
+          },
+          "lat0": {
+            "net": 133,
+            "defended": 142,
+            "k_first": 9,
+            "fallback": 0,
+            "pen": 98,
+            "occ_eps": 178,
+            "rob_ticks": 361,
+            "fire_eps": 207
+          },
+          "shuf_out": {
+            "net": 67,
+            "defended": 77,
+            "k_first": 10,
+            "fallback": 0,
+            "pen": 83,
+            "occ_eps": 90,
+            "rob_ticks": 296,
+            "fire_eps": 165
+          },
+          "shuf_in": {
+            "net": 21,
+            "defended": 24,
+            "k_first": 3,
+            "fallback": 0,
+            "pen": 216,
+            "occ_eps": 53,
+            "rob_ticks": 162,
+            "fire_eps": 158
+          },
+          "in_half": {
+            "net": 18,
+            "defended": 20,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 220,
+            "occ_eps": 57,
+            "rob_ticks": 135,
+            "fire_eps": 149
+          }
+        },
+        "t0.5_h1.0_ma/s1": {
+          "base": {
+            "net": 39,
+            "defended": 39,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 200,
+            "occ_eps": 50,
+            "rob_ticks": 85,
+            "fire_eps": 231
+          },
+          "out0": {
+            "net": 148,
+            "defended": 150,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 90,
+            "occ_eps": 167,
+            "rob_ticks": 382,
+            "fire_eps": 233
+          },
+          "in0": {
+            "net": 62,
+            "defended": 62,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 178,
+            "occ_eps": 79,
+            "rob_ticks": 137,
+            "fire_eps": 229
+          },
+          "zfix": {
+            "net": 37,
+            "defended": 37,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 202,
+            "occ_eps": 48,
+            "rob_ticks": 101,
+            "fire_eps": 231
+          },
+          "lat0": {
+            "net": 143,
+            "defended": 147,
+            "k_first": 4,
+            "fallback": 0,
+            "pen": 93,
+            "occ_eps": 168,
+            "rob_ticks": 333,
+            "fire_eps": 230
+          },
+          "shuf_out": {
+            "net": 105,
+            "defended": 107,
+            "k_first": 2,
+            "fallback": 0,
+            "pen": 95,
+            "occ_eps": 123,
+            "rob_ticks": 546,
+            "fire_eps": 227
+          },
+          "shuf_in": {
+            "net": 51,
+            "defended": 52,
+            "k_first": 0,
+            "fallback": 1,
+            "pen": 188,
+            "occ_eps": 62,
+            "rob_ticks": 175,
+            "fire_eps": 233
+          },
+          "in_half": {
+            "net": 45,
+            "defended": 45,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 195,
+            "occ_eps": 53,
+            "rob_ticks": 105,
+            "fire_eps": 230
+          }
+        },
+        "t0.5_h1.0_ma/s2": {
+          "base": {
+            "net": 23,
+            "defended": 23,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 216,
+            "occ_eps": 85,
+            "rob_ticks": 310,
+            "fire_eps": 96
+          },
+          "out0": {
+            "net": 132,
+            "defended": 137,
+            "k_first": 5,
+            "fallback": 0,
+            "pen": 103,
+            "occ_eps": 175,
+            "rob_ticks": 410,
+            "fire_eps": 228
+          },
+          "in0": {
+            "net": 30,
+            "defended": 30,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 210,
+            "occ_eps": 103,
+            "rob_ticks": 320,
+            "fire_eps": 80
+          },
+          "zfix": {
+            "net": 24,
+            "defended": 25,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 215,
+            "occ_eps": 83,
+            "rob_ticks": 336,
+            "fire_eps": 98
+          },
+          "lat0": {
+            "net": 108,
+            "defended": 113,
+            "k_first": 5,
+            "fallback": 0,
+            "pen": 127,
+            "occ_eps": 175,
+            "rob_ticks": 457,
+            "fire_eps": 193
+          },
+          "shuf_out": {
+            "net": 75,
+            "defended": 79,
+            "k_first": 4,
+            "fallback": 0,
+            "pen": 117,
+            "occ_eps": 111,
+            "rob_ticks": 365,
+            "fire_eps": 173
+          },
+          "shuf_in": {
+            "net": 30,
+            "defended": 31,
+            "k_first": 1,
+            "fallback": 0,
+            "pen": 206,
+            "occ_eps": 91,
+            "rob_ticks": 362,
+            "fire_eps": 102
+          },
+          "in_half": {
+            "net": 23,
+            "defended": 23,
+            "k_first": 0,
+            "fallback": 0,
+            "pen": 217,
+            "occ_eps": 89,
+            "rob_ticks": 291,
+            "fire_eps": 76
+          }
+        }
+      }
+    }
+  },
+  "verdict": {
+    "judgment_det": "AMI_ATTACKER_NONADAPTIVE",
+    "replication_sto": "AMI_ADAPTIVE",
+    "agree": false,
+    "e6_trigger": true
+  }
+}
