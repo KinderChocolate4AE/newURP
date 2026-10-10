@@ -1,0 +1,6 @@
+m0.35_n1 ex_kfirst50 {"window_ticks": 311, "aim_approx_agree": 0.8939}
+m0.35_n1 ex_fin12_fb {"window_ticks": 404, "aim_approx_agree": 0.9332}
+m0.35_n1 ex_mix5050 {"window_ticks": 1298, "aim_approx_agree": 0.9353}
+m0.35_n1 ex_kfirst_rand {"window_ticks": 699, "aim_approx_agree": 0.9428}
+promoted: ['tau_m2.94', 'a_m2.94', 't0.7_h1.0_cv', 'a_m3.92', 'th_x2.04', 't0.5_h1.0_cv', 'a_m7.69', 'th_x4'] | spearman: 0.9192982456140351
+-> artifacts/fs1/e4/probe.json

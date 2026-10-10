@@ -1,0 +1,22 @@
+t1.0_h1.0_cv  base  rho  1.923 win  2.0 N_pred  2.54 resid -0.076
+tau_1.2       tau   rho  1.335 win  0.0 N_pred  0.52 resid -0.073
+th_x0.694     theta rho  1.335 win  1.0 N_pred  0.94 resid +0.009
+R_x0.694      R     rho  1.335 win  0.0 N_pred  0.36 resid -0.073
+tau_m2.94     tau   rho  2.941 win  4.0 N_pred  4.14 resid -0.019
+a_m2.94       a     rho  2.941 win  4.0 N_pred  4.14 resid -0.019
+t1.0_h1.5_cv  theta rho  2.941 win  3.0 N_pred  3.79 resid -0.110
+R_m2.94       R     rho  2.941 win  3.5 N_pred  6.33 resid -0.259
+t0.7_h1.0_cv  tau   rho  3.925 win  4.0 N_pred  4.89 resid -0.125
+a_m3.92       a     rho  3.925 win  4.0 N_pred  4.89 resid -0.125
+th_x2.04      theta rho  3.925 win  4.0 N_pred  4.36 resid -0.050
+t0.5_h1.0_cv  tau   rho  7.692 win  5.0 N_pred  6.00 resid -0.139
+a_m7.69       a     rho  7.692 win  4.0 N_pred  6.00 resid -0.279
+th_x4         theta rho  7.692 win  4.0 N_pred  5.12 resid -0.157
+a_25          a     rho  1.573 win  1.0 N_pred  1.52 resid -0.073
+a_30          a     rho  1.311 win  0.0 N_pred  0.40 resid -0.056
+tau_1.3       tau   rho  1.138 win  0.0 N_pred  0.00 resid +0.000
+a_m1.14       a     rho  1.138 win  0.0 N_pred  0.00 resid +0.000
+R_m1.14       R     rho  1.138 win  0.0 N_pred  0.00 resid +0.000
+P-E4a {"groups": {"1.335": {"spread_ticks": 0.585, "collapses": true, "lowest": "tau_1.2", "highest": "th_x0.694"}, "2.94": {"spread_ticks": 1.712, "collapses": false, "lowest": "R_m2.94", "highest": "tau_m2.94"}, "3.92": {"spread_ticks": 0.534, "collapses": true, "lowest": "t0.7_h1.0_cv", "highest": "th_x2.04"}, "7.69": {"spread_ticks": 1.0, "collapses": true, "lowest": "a_m7.69", "highest": "t0.5_h1.0_cv"}, "1.14": {"spread_ticks": 0.0, "collapses": true, "lowest": "tau_1.3", "highest": "tau_1.3"}}, "n_collapse": 4, "verdict": "COLLAPSE_PARTIAL"}
+P-E4b {"by_rho": {"2.94": true, "3.92": true, "7.69": false}, "verdict": "SUPPORTED"}
+P-E4c {"limiter_free_robust_ticks": {"tau_1.3": 0, "a_m1.14": 0, "R_m1.14": 0}, "share_of_window_ticks": {"tau_1.3": 0.0, "a_m1.14": 0.0, "R_m1.14": 0.0}, "limiter_present_robust_ticks": {"tau_1.3": 0, "a_m1.14": 0, "R_m1.14": 0}, "verdict": "JUDGE_CONSERVATIVE_AT_BOUNDARY"}
