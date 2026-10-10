@@ -291,9 +291,72 @@ def fig4():
     plt.close(fig)
 
 
+# ---------------------------------------------------------------- F2 (τ, a) regime map — 해석판
+# 실물 τ·a 값 = 노트 10-11b (E3, PDF 원문 대조). 실물 net 은 R·θ 가 FS1 과 달라 평면 위 점이 아니라 축 눈금으로만.
+NET_TAU = [("Chipa / MITLA-1 (claimed)", 0.20), ("Han 2026 (FEM)", 0.228), ("DefendAir (spec)", 1.0)]
+THREAT_A = [("Mavic 3", 6.87), ("Phantom 4", 8.83), ("std quad", 17.4), ("racing FPV", 38.8), ("extreme racer", 117.0)]
+
+
+def figF2():
+    fig, ax = plt.subplots(figsize=(160 * MM, 100 * MM))
+    fig.subplots_adjust(left=0.09, right=0.83, top=0.86, bottom=0.11)
+    ax.set_xscale("log"); ax.set_yscale("log")
+    ax.set_xlim(0.05, 1.5); ax.set_ylim(3, 200)
+    taus = np.geomspace(0.05, 1.5, 300)
+    rt = RMAX * np.tan(TH)                                   # FS1 net 반폭 (R_max tanθ)
+    a_at = lambda rho, t: 2 * rt / (rho * t ** 2)            # iso-ρ: a = 2 R tanθ / (ρ τ²)
+
+    def label(rho, t, txt, **kw):                            # 선 위 라벨 (화면 기울기에 맞춘 각도)
+        p1, p2 = ax.transData.transform([(t, a_at(rho, t)), (t * 1.2, a_at(rho, t * 1.2))])
+        ang = np.degrees(np.arctan2(p2[1] - p1[1], p2[0] - p1[0]))
+        ax.text(t, a_at(rho, t) * 1.07, txt, rotation=ang, rotation_mode="anchor", fontsize=6.5, **kw)
+
+    ax.fill_between(taus, a_at(rho0(TH), taus), 1e4, fc="0.82", ec="none", zorder=0)
+    ax.plot(taus, a_at(rho0(TH), taus), "k-", lw=1.8, zorder=3)
+    label(rho0(TH), 0.34, rf"$\rho_0$ = {rho0(TH):.2f} (window opens)")
+    for V, ls, t in ((15.0, (0, (1, 1.5)), 0.5), (V_BAR, "--", 0.105), (35.0, "-.", 0.07)):
+        rs = rho0(TH) / (1 - 4 * DT * V / RMAX)
+        ax.plot(taus, a_at(rs, taus), ls=ls, color="k", lw=0.9, zorder=3)
+        label(rs, t, rf"$\rho^*$ = {rs:.2f} (V {V:g} m/s)")
+    ax.text(1.4, 150, r"$\rho<\rho_0$: no guaranteed-capture instant (model)", ha="right", fontsize=7)
+    # FS1 τ 사다리의 측정 점 (a = 20.45 한 줄) — 천장 숫자는 실측 점 옆에만
+    e7b = load("e7b/readout.json")["variants"]
+    armc = [s["ceil_det"] for s in load("armc1/readout.json")["cells"]["m0.35_n1"]["seeds"].values()]
+    pts = [(TAU, f"{min(armc)}–{max(armc)}"), (0.7 * TAU, f"{e7b['t0.7_h1.0_cv']['ceil_det_med']:g}"),
+           (0.5 * TAU, f"{e7b['t0.5_h1.0_cv']['ceil_det_med']:g}")]
+    for t, c in pts:
+        ax.plot(t, AATT, "o", ms=5.5, mfc="k", mec="k", zorder=5)
+        ax.text(t, AATT * 1.18, c, fontsize=7, ha="center", zorder=6,
+                bbox=dict(fc="white", ec="none", pad=0.5))
+    ax.text(0.155, 32, "matched-audit det ceiling /240\n(1e7 exploiter; measured at a = 20.45 only)",
+            fontsize=6.3, ha="left", color="0.2", bbox=dict(fc="white", ec="none", pad=0.8))
+    ax.annotate("", xy=(TAU - 0.15, AATT * 0.80), xytext=(TAU, AATT * 0.80),
+                arrowprops=dict(arrowstyle="-|>", lw=0.8, color="0.3"))
+    ax.text(0.21, AATT * 0.74, r"evader reaction delay $\tau_r$ 0.15 s", fontsize=6.3, ha="center", va="top", bbox=dict(fc="white", ec="none", pad=0.5),
+            color="0.3")
+    for lab, t in (("Chipa/MITLA\n(claimed)", 0.20), ("Han 2026\n(FEM)", 0.228), ("DefendAir\n(spec)", 1.0)):
+        ax.plot([t, t], [170, 200], "k-", lw=1.4, clip_on=False)
+        ax.text(t * (0.93 if t == 0.20 else 1.07 if t == 0.228 else 1.0), 215, lab, fontsize=6,
+                ha="right" if t == 0.20 else "left" if t == 0.228 else "center", va="bottom")
+    for lab, a in THREAT_A:                                  # 위협 등급 a (오른쪽 눈금)
+        ax.plot([1.35, 1.5], [a, a], "k-", lw=1.4)
+        ax.text(1.6, a, f"{lab} ({a:g})", fontsize=6.3, va="center")
+    ax.set_xlabel(r"net deployment time $\tau$ [s]")
+    ax.set_ylabel(r"threat acceleration $a$ [m/s$^2$]")
+    ax.set_xticks([0.05, 0.1, 0.15, 0.2, 0.3, 0.5, 1.0], ["0.05", "0.1", "0.15", "0.2", "0.3", "0.5", "1"])
+    ax.set_yticks([3, 5, 10, 20, 50, 100, 200], ["3", "5", "10", "20", "50", "100", "200"])
+    ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
+    ax.yaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
+    ax.text(0.052, 3.25, rf"net geometry fixed at FS1 ($R_{{\max}}$ {RMAX} m, $\theta$ {np.degrees(TH):.1f}°); "
+            r"lines = analytic window boundaries", fontsize=6.2, color="0.25")
+    ax.tick_params(labelsize=7)
+    fig.savefig(OUT / "figF2_regime_map.png")
+    plt.close(fig)
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     fig1()
     fig2()
     fig4()
-    print("wrote", OUT / "fig1_concept.png", OUT / "fig2_money.png", OUT / "fig4_cross_audit.png")
+    figF2()
+    print("wrote", *sorted(p.name for p in OUT.glob("*.png")))
