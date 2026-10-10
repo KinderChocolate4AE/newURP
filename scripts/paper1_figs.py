@@ -245,8 +245,55 @@ def fig2():
     plt.close(fig)
 
 
+# ---------------------------------------------------------------- 그림 4
+def cross_audit():
+    """계보별 교차 감사 행렬 (방어 정책 × 착취자 학습 상대), 값 = defended /240 의 seed·slot 목록.
+    E7-c 는 교전 규칙·지표가 달라 별도 패널 (pooling 금지). E7-c 대각 = D_shot (assert)."""
+    b, b2 = load("e7b/readout.json")["variants"], load("e7b2/readout.json")["variants"]
+    c = load("e7c/readout.json")["slots"]
+    S = lambda src, f: [f(s) for v in src.values() for s in v["seeds"].values()]
+    C = lambda key: [s["cross"][key] for v in c.values() for s in v.values()]
+    ab = {("det", "det"): S(b, lambda s: s["ceil_det"]), ("sto", "det"): S(b, lambda s: s["ceil_sto"]),
+          ("sto", "sto"): S(b2, lambda s: s["ceil_sto"]), ("det", "sto"): S(b2, lambda s: s["det_vs_sto_exploiter"])}
+    cc = {(d, e): C(f"learned_{d}_vs_ex_judge" + ("_sto" if e == "sto" else "")) for d in ("det", "sto")
+          for e in ("det", "sto")}
+    assert cc[("det", "det")] == [s["det"]["d_shot"] for v in c.values() for s in v.values()]
+    return ab, cc
+
+
+def fig4():
+    ab, cc = cross_audit()
+    fig, axs = plt.subplots(1, 2, figsize=(160 * MM, 64 * MM))
+    for ax, m, lab in ((axs[0], ab, "(a) E7-b / E7-b$'$, ROE A (15 slots)"),
+                       (axs[1], cc, "(b) E7-c, post-shot / inert (12 slots)")):
+        med = np.array([[np.median(m[(d, e)]) for e in ("det", "sto")] for d in ("det", "sto")])
+        ax.imshow(med, cmap="Greys", vmin=0, vmax=120)
+        for i, d in enumerate(("det", "sto")):
+            for j, e in enumerate(("det", "sto")):
+                v = m[(d, e)]
+                ax.text(j, i, f"{np.median(v):g}\n({min(v)}–{max(v)})", ha="center", va="center", fontsize=8,
+                        color="white" if med[i, j] > 60 else "black", fontweight="bold" if i == j else "normal")
+                if i == j:
+                    ax.add_patch(plt.Rectangle((j - .5, i - .5), 1, 1, fill=False, ec="k", lw=1.6))
+        ax.set_xticks([0, 1], ["det", "sto"])
+        ax.set_yticks([0, 1], ["det", "sto"])
+        ax.set_xlabel("exploiter trained against")
+        ax.set_ylabel("defense policy evaluated")
+        ax.set_title(lab, fontsize=7.5, loc="left")
+        r = (np.median(m[("sto", "det")]) / np.median(m[("sto", "sto")]),
+             np.median(m[("det", "sto")]) / np.median(m[("det", "det")]))
+        ax.text(0.5, -0.42, f"mismatched / matched median: sto {r[0]:.2f}x, det {r[1]:.2f}x",
+                transform=ax.transAxes, ha="center", fontsize=7)
+        ax.tick_params(labelsize=7.5)
+    fig.text(0.5, 0.005, "cells: defended /240, median (min–max); bold box = matched audit", ha="center", fontsize=7)
+    fig.tight_layout(rect=(0, 0.05, 1, 1), w_pad=0.5)
+    fig.savefig(OUT / "fig4_cross_audit.png")
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     fig1()
     fig2()
-    print("wrote", OUT / "fig1_concept.png", OUT / "fig2_money.png")
+    fig4()
+    print("wrote", OUT / "fig1_concept.png", OUT / "fig2_money.png", OUT / "fig4_cross_audit.png")
