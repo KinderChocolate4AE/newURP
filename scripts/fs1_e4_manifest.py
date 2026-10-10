@@ -73,7 +73,10 @@ def build() -> dict:
         "schema": "fs1-e4-manifest-v1",
         "status": ("sealed 2026-10-11 BEFORE any E4 run (contract: docs/133; user 'start now' 2026-10-11; "
                    "design = advisor 2026-10-11 Q4: matched-rho points + rho0-neighbourhood points, "
-                   "normalized collapse coordinates, separate direction prediction, judge-leniency read)"),
+                   "normalized collapse coordinates, separate direction prediction, judge-leniency read). "
+                   "DISCLOSURE: a 1-episode-per-slot server wiring smoke (4 eps) was seen before this seal; "
+                   "the only criterion change (collapse spread 1.0 -> 1.5 ticks, integer-median rounding) "
+                   "was made BEFORE that smoke, from a synthetic perfect-collapse check"),
         "lineage": {"protocol": "E7-a (fs1_e7_manifest e7a 3a8c066156b6972e): m0.35_n1, 4 old-world adapted "
                                 "attackers x 24 eps, SEED0 268000, no-fire, slew-simulated aim, window = "
                                 "LOADED and d <= 16 m; + --coop (limiter-free judge recompute)",
