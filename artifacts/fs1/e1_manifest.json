@@ -1,0 +1,164 @@
+{
+  "schema": "fs1-e1-manifest-v1",
+  "status": "sealed 2026-10-11 BEFORE any E1 production (contract: docs/134; user 'start now, maximize evidence' 2026-10-11 — overrides the advisor's 'after 10/26' timing; design = advisor 2026-10-11 rounds 2-3). No E1 data exists at seal",
+  "lineage": {
+    "contract": "docs/134",
+    "recipe": "E7-b (fs1_e7_manifest e7b 543cd9e4b3582687): arm C-1 distilled fire head, ROE A, m0.35_n1",
+    "p_rho2": "rho* 2.813 / 2.427 (note 2026-10-08c)",
+    "ami": "docs/132 (E6 trigger)",
+    "e4": "docs/133"
+  },
+  "question": "does the registered window boundary rho* predict WHERE the learned net-capture ceiling (matched dedicated-exploiter audit) turns on",
+  "ladder": [
+    {
+      "name": "r1.92",
+      "tau_scale": 1.0,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "ladder",
+      "rho": 1.9231,
+      "tau": 0.3,
+      "deploy_ticks": 6
+    },
+    {
+      "name": "r2.30",
+      "tau_scale": 0.915,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "ladder",
+      "rho": 2.297,
+      "tau": 0.2745,
+      "deploy_ticks": 6
+    },
+    {
+      "name": "r2.66",
+      "tau_scale": 0.85,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "ladder",
+      "rho": 2.6617,
+      "tau": 0.255,
+      "deploy_ticks": 6
+    },
+    {
+      "name": "r2.93",
+      "tau_scale": 0.81,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "ladder",
+      "rho": 2.9311,
+      "tau": 0.243,
+      "deploy_ticks": 5
+    },
+    {
+      "name": "r3.42",
+      "tau_scale": 0.75,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "ladder",
+      "rho": 3.4188,
+      "tau": 0.225,
+      "deploy_ticks": 5
+    },
+    {
+      "name": "r3.92",
+      "tau_scale": 0.7,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "ladder",
+      "rho": 3.9247,
+      "tau": 0.21,
+      "deploy_ticks": 5
+    },
+    {
+      "name": "r7.69",
+      "tau_scale": 0.5,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "ladder",
+      "rho": 7.6924,
+      "tau": 0.15,
+      "deploy_ticks": 3
+    }
+  ],
+  "tick_pair": "report: seed-median net(p2.75, 6 ticks) - net(p2.78, 5 ticks) = deploy-tick step effect",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "knob": "tau only (theta 1.0, cv aim) so that the ladder is a single-knob family; E7-b points are previous lineage, reported for reproduction only, never fitted",
+  "production": {
+    "per point": "NEW BC (canonical bc.py, 3000 eps) -> arm C-1 recipe 1.1e8 -> det exploiter 1e7 (jseed 300000 + idx*100 + seed) -> sto exploiter 1e7 (jseed 305000 + idx*100 + seed)",
+    "idx": "index in ladder + tick_pair (ladder 0-6, pair 7-8), E6 = 9",
+    "priority": [
+      "ladder det path (train + det exploiter), all 35 slots",
+      "tick pair det path (10 slots)",
+      "E6 a-arm if triggered (5 slots)",
+      "sto exploiters (report line)"
+    ],
+    "hardware": "server4 single GPU (server rule); JAX learner (E7-b parity regime)"
+  },
+  "evaluation": {
+    "n": 240,
+    "seed0": 330000,
+    "stride": 1000,
+    "env_seed": 0,
+    "defenders": [
+      "learned_det (judgment, vs ex_judge = det exploiter)",
+      "learned_sto (report, vs ex_judge_sto)"
+    ],
+    "cli": "--tau-scale per point, --stack r4p --mu 0.35 --nu 1.0 --coop-window --env-seed 0 --groups none; records rob_fire (first-fire robust judgment)"
+  },
+  "metric": {
+    "primary": "net = NET_CAPTURE + CAPTURE_WITH_CONTACT, learned_det vs det exploiter",
+    "secondary": "rob_fire = episodes whose first fire was robust at the fire instant (capture-scheduled; removes the deploy-tick resolution path)",
+    "report": [
+      "defended total",
+      "rob_fire but penetrated before resolution",
+      "sto line",
+      "realized deploy ticks per point (6 6 6 5 5 5 3; step at tau 0.25 s = rho 2.769)"
+    ]
+  },
+  "rho_half": {
+    "model": "y = L + (U - L) / (1 + exp(-k (log rho - log rho_half))), y = net/240 per slot",
+    "fit": "least squares (scipy curve_fit), bounds {'lower': [0.0, 0.0, 0.5, 0.4054651081081644], 'upper': [1.0, 1.0, 50.0, 2.0794415416798357]}, all 35 ladder slots",
+    "ci": "stratified percentile bootstrap (resample seeds within each rho point), 2000 reps, rng seed 0",
+    "no_transition": "U - L < 0.0167 (4/240) or fit failure -> NO_TRANSITION",
+    "plateau": "nuisance parameter fitted jointly (advisor Q1); sensitivity: external plateau = E7-b net_det median (report only)"
+  },
+  "branches (pre-registered three-way, CI rule)": {
+    "EARLY": "CI95 entirely < 2.427 -> learned capture starts once a window merely exists (rho0 side); the 4-step threshold is not needed",
+    "AT_BOUNDARY": "CI95 inside [2.427, 2.813] -> rho* predicts the learned onset (strongest result)",
+    "LATE": "CI95 entirely > 2.813 -> the boundary is necessary only; onset set by the adversary",
+    "UNDETERMINED": "CI crosses a branch edge",
+    "discretization": "primary and secondary branches differ -> DISCRETIZATION_SENSITIVE, no branch claim"
+  },
+  "e6_conditional_arm": {
+    "name": "e6_a10",
+    "tau_scale": 1.0,
+    "theta_scale": 1.0,
+    "a_scale": 0.49,
+    "mu": 0.7143,
+    "rho": 3.9247,
+    "compare_to": "r3.92",
+    "trigger": "AMI (docs/132) det-line branch AMI_ADAPTIVE or AMI_ATTACKER_NONADAPTIVE; else not run",
+    "world": "requires a NEW FS1Spec a_scale knob (attacker a_att_max x 0.49 = 10.02) with mu' = 0.7143 so that a_def stays 7.16 m/s^2 (advisor round 2: a_def-absolute primary). Default a_scale 1.0 must be bit-exact (test) + JAX parity spot-check before production",
+    "prediction": "Lambda = V^2/(a R_max) doubles. Seed-paired d = net(e6) - net(r3.92): median d >= +8/240 and >= 4 of 5 seeds positive -> LAMBDA_RAISES_CEILING; |median d| < 8 -> CEILING_COLLAPSES_IN_RHO; median d <= -8 -> LAMBDA_LOWERS_CEILING; else MIXED",
+    "confounds_named": [
+      "homing gain K_HOME not normalized by a (clip binds more often)",
+      "exploiter difficulty at equal 1e7 budget -> exploiter final penetration reported as covariate",
+      "ROE A kinetic route -> net metric only"
+    ]
+  },
+  "not_evidence_for": [
+    "world ceiling",
+    "real-net representativeness",
+    "blind prediction (rho* registered after the E7-a probe; first registered prediction for the CEILING layer)",
+    "positive claims unconditional on the 1e7 exploiter",
+    "pooling with E7-b/b2/c"
+  ],
+  "manifest_hash": "54bc40f652e1e0d1"
+}

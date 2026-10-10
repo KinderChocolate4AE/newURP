@@ -150,7 +150,8 @@ def episodes(job):
         inn, done, t = env.inner, False, 0
         tgt = np.asarray(inn.layout.target, float)
         rec = {"seed": s, "opp": opp["name"], "arm_d": None, "fire_d": None, "n_fire": 0,
-               "v_fire": None, "p_feas": None}       # R1/R2 공통 진단 (docs/124 D4): 첫 발사 tick
+               "v_fire": None, "p_feas": None,       # R1/R2 공통 진단 (docs/124 D4): 첫 발사 tick
+               "rob_fire": None}                     # E1 2차 지표: 첫 발사 순간 robust 판정 (포획 예정)
         if _W.get("coop_window"):                    # docs/129 §7 P-②c (e7b v1.1): 창 tick 협력
             rec.update(n_win=0, n_rob=0, n_C=0, n_H=0)
         tr = [] if j < n_traj else None
@@ -199,6 +200,7 @@ def episodes(job):
                     rec["fire_d"] = round(float(np.linalg.norm(p_att - inn._p(fin))), 2)
                     rec["v_fire"] = round(float(fi.get("v_shot_soft") or 0.0), 4)
                     rec["p_feas"] = round(float(fi.get("p_feasible") or 0.0), 4)
+                    rec["rob_fire"] = bool(inn._pending_capture)   # env.py:341 (읽기만)
             if tr is not None:
                 tr.append(np.r_[p_att, inn._p(fin), np.concatenate([inn._p(x) for x in lims]),
                                 armed, float(bool(fi.get("fire_event")))])

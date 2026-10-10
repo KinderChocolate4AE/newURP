@@ -186,6 +186,21 @@ def test_att_iv_segments():
     assert np.linalg.norm(np.cross(lat, u)) < 1e-9 and abs(lat @ u - r @ u) < 1e-9
 
 
+def test_rob_fire_implies_net_label():
+    """E1 2차 지표: net 포획 라벨이면 첫 발사가 robust 였어야 한다 (포획 = 발사 순간 판정, env.py:341)."""
+    from shepherd.fs1.world import FS1Spec
+    _W["env"] = FS1Env(FS1Spec(tau_scale=0.5), seed=0)
+    _W["coop_window"] = False
+    opp = dict(ladder_pool()[0], group="ladder")
+    recs = [r for _, _, r in ev.episodes(("fin12_fb", None, opp, list(range(3, 11)), 0))]
+    assert any(r["rob_fire"] is not None for r in recs)
+    for r in recs:
+        if r["label"] in ev.NET:
+            assert r["rob_fire"] is True
+        if r["n_fire"] == 0:
+            assert r["rob_fire"] is None
+
+
 def test_coop_window_counts_consistent():
     """P-②c (e7b v1.1): 창 tick 협력 카운터 — 끄면 키 없음, 켜면 C+H ≤ 창, robust ≤ 창."""
     from shepherd.fs1.world import FS1Spec
