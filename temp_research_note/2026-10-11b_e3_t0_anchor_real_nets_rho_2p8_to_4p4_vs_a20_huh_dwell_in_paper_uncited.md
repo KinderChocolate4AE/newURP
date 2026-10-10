@@ -44,6 +44,11 @@
   → F2 (τ, a) 평면의 실무 의미가 크다. 단 a 방향은 E4/E6 전까지 해석선만 (노트 10-11a).
 - **V ≥ 41.1 m/s (창이 어떤 ρ 에서도 4 step 에 못 닿는 영역)** 에 고정익 배회탄 (Shahed, SB dash/sprint,
   Lancet 급강하) 이 들어간다. 회전익은 극한 레이싱도 30 m/s 라 밖. → F2 캡션·논의 1문장 근거.
+  **정정 (같은 날)**: 이 한계는 V = R_max/(4·dt) 라서 **R_max 8.22 m 에서만** 성립한다. 사거리 25 m net 이면 한계는
+  약 125 m/s → 51 m/s 급 고정익도 창이 열린다. 서술은 반드시 "사거리가 짧은 net 에서는" 조건을 붙인다.
+- 추가 확보 대상 DOI (Crossref 확인): Yu, Judasz, Zheng, Botta 2022 *Design and Testing of a Net-Launch Device for Drone
+  Capture* (AIAA SciTech, 10.2514/6.2022-0273) · Zhang et al. 2024 *UAV Hunter* (Drones 8(10):573, 10.3390/drones8100573).
+  사용자가 PDF 를 받아 넣어 주기로 함 (Huh 2026, Yu 2022, Han 2026 우선).
 
 ## 3. 서지 검증 (G6) — Crossref 로 main 재확인
 
