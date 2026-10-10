@@ -150,6 +150,21 @@ E3 T0 anchor = 노트 10-11b (완료) · E4 ρ-collapse = docs/133 (봉인 d41bf
 원칙. 선 밖 = 협력·mode 전환·τ_r 실험·E7-b′ OPENS·ma 조준. E1 = 10/26 이후, 세 갈래 사전 등록, 새 사다리
 {1.92…3.92}×5 seed / E4 를 E1 보다 먼저 / F2 = (τ, a_att) log–log, 천장 숫자는 실측 점 옆에만.
 
+## 3b. 서론·논의 배경 출처 (웹 문헌, 2026-10-11 확인)
+
+서브에이전트 조사 + main 원문 대조 (✓ = main 이 직접 원문에서 문구 확인). 모두 언론·정부·제조사 발표 — 독립 검증 아님 → 본문은
+"보도에 따르면 / 발표에 따르면" 수준. 형식은 hwp 양식의 웹 문헌 형식.
+
+| # | 사실 | 출처 (참고문헌 줄) | 주의 |
+|---|---|---|---|
+| W1 | 광섬유 유선 FPV 는 RF 재밍에 영향을 받지 않음 | [ ] H. Altman, T. Rogoway, Russian Fiber-Optic Drones Are Now Reaching Into Ukrainian Cities Deep Behind The Lines, The War Zone, 2025. 10. 6., https://www.twz.com/news-features/russian-fiber-optic-drones-are-now-reaching-into-ukrainian-cities-far-behind-the-lines (검색일 : 2026. 10. 11.) · [ ] E. Gosselin-Malo, Ukraine, NATO eye tech trials for intercepting Russia's cabled drones, Defense News, 2025. 6. 12., https://www.defensenews.com/global/europe/2025/06/12/ukraine-nato-eye-tech-trials-for-intercepting-russias-cabled-drones/ (검색일 : 2026. 10. 11.) | "완전 면역" 대신 "RF 재밍에 강함" (Defense News 는 "largely immune") |
+| W2 ✓ | 우크라이나 상공 격추 표적 3분의 1 이 요격 드론 (공군 발표) / 2026년 2월 Shahed 격추의 70% 이상이 드론 (총사령관 발표) | [ ] K. Livingstone, Novel interceptor drones bend air-defense economics in Ukraine's favor, Defense News, 2026. 3. 5., https://www.defensenews.com/global/europe/2026/03/05/novel-interceptor-drones-bend-air-defense-economics-in-ukraines-favor/ (검색일 : 2026. 10. 11.) | 우크라이나 군 발표, 한 달 수치. 70% 의 지역 범위 불명확 → "전국 70%" 금지. 3분의 1 은 전체 공중표적 기준 |
+| W3 ✓ | 미 국방부 합동기관 TF 401 의 Replicator 2 첫 구매 = net 포획 요격기 DroneHunter F700 2대 (2026년 1월) | [ ] A. Scher, Joint Interagency Task Force announces first Replicator 2 purchase to counter homeland drone threats, U.S. Army, 2026. 1. 14., https://www.army.mil/article/289979/joint_interagency_task_force_announces_first_replicator_2_purchase_to_counter_homeland_drone_threats (검색일 : 2026. 10. 11.) + 제조사 확인용 [ ] Z. B. Fletcher, Pentagon task force to deploy AI-powered UAS systems to capture drones, Defense News, 2026. 1. 13., https://www.defensenews.com/unmanned/2026/01/13/pentagon-task-force-to-deploy-ai-powered-uas-systems-to-capture-drones/ (검색일 : 2026. 10. 11.) | army.mil 원문에는 Fortem 이름 없음 → Defense News 와 함께. 규모 2대, 금액 비공개. 육군 18M 달러 계약은 제조사 발표만 (쓰면 "제조사 발표에 따르면") |
+| W4 | 우크라이나 AirNet 드론 탑재 net 발사기: net 발사 거리 5–10 m, 780 g | [ ] Т. Сафронов, Українська AirNet розробила сіткомет з радаром для перехоплення дронів, Militarnyi, 2025. 12. 4., https://militarnyi.com/uk/news/ukrayinska-airnet-rozrobyla-sitkomet-z-radarom-dlya-perehoplennya-droniv/ (검색일 : 2026. 10. 11.) | 업체 대표의 전시회 진술 (제조사 주장). 0.1–6 m 는 탐지·발사 트리거 구간, 5–10 m 가 net 발사 거리 |
+| W5 ✓ | 2026년 9월 말 우크라이나 대통령: 드론 전체 격추율 70%, 제트형 Shahed 는 57% | [ ] A. Mazurenko, Zelenskyy: Drone interception rate is 70% overall, 57% for jet-powered drones, Ukrainska Pravda, 2026. 9. 28., https://www.pravda.com.ua/eng/news/2026/09/28/8055500/ (검색일 : 2026. 10. 11.) | 정부 공식 주장, 전자전 무력화 포함. "기존형 90% 초과" 는 Militarnyi 보도 (main 미대조) |
+
+- 쓰지 않을 것: Reuters "요격 드론이 Shahed 격추의 40%", FT "Geran-5 60% vs 95%" (원문 접근 불가 — 확인 못 함).
+
 ## 4. A (공격자 기전 개입) — v0 이전 실행 가능성
 
 - 설계 (main): 학습된 착취자의 행동 성분을 개입으로 고정·제거 — 후보: (i) 교전 거리 밖에서 학습
