@@ -57,6 +57,11 @@ assert abs(N_INF - RMAX / (V_BAR * DT)) < 1e-3
 assert abs(rho_star(TH, 3.5) - 2.427) < 1e-3  # 등록 불확실 대역 하단 (노트 10-08c)
 RS_BAND = (rho_star(TH, 3.5), rho_star(TH))   # ρ* 대역 (θ₀): [3.5dt, 4dt]
 
+# 그림 표기 = KSAS 2026 추계 기호 (spine v6): ρ_KSAS = 반폭 R·tanθ, w = ½aτ², χ = w/ρ_KSAS = 1/ρ (내부 계산은 ρ 그대로)
+CHI = 1 / RHO
+CHI_BAND = (1 / RS_BAND[1], 1 / RS_BAND[0])     # χ*_0.2 대역 (θ₀): 0.355–0.412
+assert abs(1 / rho0(TH) - 0.8076) < 1e-3       # KSAS χ*_geom = 0.808
+
 
 # ---------------------------------------------------------------- 그림 1
 def fig1():
@@ -89,7 +94,7 @@ def fig1():
     # 탈출 반경 r
     ax.plot([c[0], c[0] + R_ESC * np.cos(np.radians(50))], [c[1], c[1] + R_ESC * np.sin(np.radians(50))],
             "k-", lw=0.7, zorder=5)
-    ax.text(c[0] + 0.55, c[1] + 0.95, r"$r=\frac{1}{2}a\tau^2$", fontsize=8, zorder=6)
+    ax.text(c[0] + 0.55, c[1] + 0.95, r"$w=\frac{1}{2}a\tau^2$", fontsize=8, zorder=6)
     # 발사기, 반각, 사거리
     ax.plot(0, 0, "ks", ms=6)
     ax.text(-0.15, -0.55, "net launcher", ha="center", fontsize=7.5)
@@ -101,19 +106,19 @@ def fig1():
     ax.text(3.6, 1.15, r"$R_{\max}$", fontsize=8.5, rotation=th_deg)
     # 축 위 껍질 [D_min, D_max]
     yb = -2.35
-    for x, lab in ((D_MIN, r"$D_{\min}=r/\sin\theta$"), (D_MAX, r"$D_{\max}=R_{\max}-r$")):
+    for x, lab in ((D_MIN, r"$D_{\min}=w/\sin\theta$"), (D_MAX, r"$D_{\max}=R_{\max}-w$")):
         ax.plot([x, x], [yb, -0.05], "-", lw=0.4, color="0.4")
         ax.text(x, yb - 0.32, lab, ha="center", fontsize=7.5)
     ax.annotate("", xy=(D_MAX, yb + 0.15), xytext=(D_MIN, yb + 0.15),
                 arrowprops=dict(arrowstyle="<->", lw=0.7, shrinkA=0, shrinkB=0))
     ax.text((D_MIN + D_MAX) / 2, yb + 0.3, "robust aim set (hatched)", ha="center", fontsize=7.5)
     ax.text(10.2, -1.75,
-            r"$\rho=\dfrac{R_{\max}\tan\theta}{r}$" + "\n"
-            + rf"$\rho_0=\sec\theta+\tan\theta$" + "\n"
-            + rf"here: $\rho={RHO:.2f}$, $\rho_0={rho0(TH):.2f}$",
+            r"$\chi=\dfrac{w}{\rho},\ \rho=R_{\max}\tan\theta$" + "\n"
+            + r"$\chi^*_{geom}=\dfrac{\cos\theta}{1+\sin\theta}$" + "\n"
+            + rf"here: $\chi={CHI:.2f}$, $\chi^*_{{geom}}={1 / rho0(TH):.3f}$",
             fontsize=8, va="center", bbox=dict(fc="white", ec="k", lw=0.5, pad=3))
-    ax.text(-0.8, -2.2, rf"$\tau={TAU}$ s, $\theta={np.degrees(TH):.1f}$°, $R_{{\max}}={RMAX}$ m" + "\n"
-            rf"$a={AATT:.1f}$ m/s$^2$, $r={R_ESC:.2f}$ m", ha="left", va="center", fontsize=7, color="0.25")
+    ax.text(-0.8, -2.2, rf"$\tau={TAU}$ s, $\theta={np.degrees(TH):.2f}$°, $R_{{\max}}={RMAX}$ m" + "\n"
+            rf"$a={AATT:.2f}$ m/s$^2$, $w={R_ESC:.2f}$ m", ha="left", va="center", fontsize=7, color="0.25")
     ax.set_aspect("equal")
     ax.set_xlim(-0.9, 13.5)
     ax.set_ylim(-3.0, 2.15)
@@ -128,17 +133,17 @@ def fig1():
 
 
 # ---------------------------------------------------------------- 그림 2
-def jit(x, k):
-    return x * (1 + 0.022 * k)  # 로그 x 에서 같은 ρ 점을 좌우로 벌림 (값 변경 없음, 표시만)
+def jit(rho, k):
+    return 1 / rho + 0.0045 * k  # χ = 1/ρ 로 바꾸고 같은 점을 좌우로 벌림 (값 변경 없음, 표시만)
 
 
 def fig2():
     fig, (aa, ab) = plt.subplots(2, 1, figsize=(160 * MM, 150 * MM), sharex=True,
                                  gridspec_kw=dict(height_ratios=[1, 1], hspace=0.08))
-    xs = np.geomspace(1.0, 14, 400)
-    for ax in (aa, ab):  # 두 패널을 관통하는 ρ* 대역 (θ₀)
-        ax.axvspan(*RS_BAND, fc="0.86", ec="none", zorder=0)
-    ab.text(np.sqrt(RS_BAND[0] * RS_BAND[1]), 46, r"$\rho^*$ band" + "\n" + r"($\theta_0$)", ha="center",
+    xs = np.linspace(0, 0.9, 400)
+    for ax in (aa, ab):  # 두 패널을 관통하는 χ*_0.2 대역 (θ₀)
+        ax.axvspan(*CHI_BAND, fc="0.86", ec="none", zorder=0)
+    ab.text(np.mean(CHI_BAND), 46, r"$\chi^*_{0.2}$ band" + "\n" + r"($\theta_0$)", ha="center",
             va="top", fontsize=6.5, color="0.2", bbox=dict(fc="white", ec="none", pad=0.6))
     ths ={"h1.0": (TH, "-", r"$\theta_0$", "o"), "h1.5": (1.5 * TH, "--", r"$1.5\,\theta_0$", "s")}
 
@@ -149,10 +154,10 @@ def fig2():
             aa.plot(jit(d["rho"][vn], -2.6 if vn.endswith("cv") else 2.6), w, mk, color="0.65", ms=4, mew=0.7,
                     zorder=2)
     for h, (th, ls, lab, mk) in ths.items():
-        n = np.clip(N_INF * (1 - rho0(th) / xs), 0, None)
+        n = np.clip(N_INF * (1 - xs * rho0(th)), 0, None)   # N = N∞ (1 − χ/χ*_geom), χ 에 대해 직선
         aa.plot(xs, n, ls, color="k", lw=1.0, zorder=3)
-        aa.axvline(rho0(th), color="0.35", ls=":", lw=0.8)
-        aa.axvline(rho_star(th), color="0.35", ls="-." if h == "h1.0" else (0, (5, 2, 1, 2, 1, 2)), lw=0.8)
+        aa.axvline(1 / rho0(th), color="0.35", ls=":", lw=0.8)
+        aa.axvline(1 / rho_star(th), color="0.35", ls="-." if h == "h1.0" else (0, (5, 2, 1, 2, 1, 2)), lw=0.8)
         for vn, v in OV["variants"].items():
             if h not in vn:
                 continue
@@ -160,13 +165,14 @@ def fig2():
             aa.plot(jit(v["rho"], -1 if cv else 1), v["cond_window_med"], mk, ms=6, mew=1.0, mec="k",
                     mfc="k" if cv else "white", zorder=5)
     aa.axhline(4, color="k", lw=0.6, ls=(0, (1, 1.5)))
-    aa.text(13.6, 4.12, "4 steps", ha="right", va="bottom", fontsize=7)
-    aa.text(13.6, N_INF * (1 - rho0(TH) / 13.6) + 0.15, r"$N(\rho;\theta_0)$", ha="right", va="bottom", fontsize=7.5)
-    aa.text(13.6, N_INF * (1 - rho0(1.5 * TH) / 13.6) - 0.2, r"$N(\rho;1.5\theta_0)$", ha="right", va="top",
+    aa.text(0.005, 4.12, "4 steps", ha="left", va="bottom", fontsize=7)
+    aa.text(0.2, N_INF * (1 - 0.2 * rho0(TH)) + 0.2, r"$N(\chi;\theta_0)$", ha="left", va="bottom", fontsize=7.5)
+    aa.text(0.48, N_INF * (1 - 0.48 * rho0(1.5 * TH)) - 0.3, r"$N(\chi;1.5\theta_0)$", ha="right", va="top",
             fontsize=7.5)
     for th, nm in ((TH, r"\theta_0"), (1.5 * TH, r"1.5\theta_0")):
-        aa.text(rho0(th) * 1.012, 6.85 if th == TH else 6.35, rf"$\rho_0({nm})$", fontsize=6.8, va="top")
-        aa.text(rho_star(th) * 1.012, 6.85 if th == TH else 6.35, rf"$\rho^*({nm})$", fontsize=6.8, va="top")
+        aa.text(1 / rho0(th) + 0.004, 6.85 if th == TH else 6.35, rf"$\chi^*_{{geom}}({nm})$", fontsize=6.8, va="top")
+        aa.text(1 / rho_star(th) + 0.004, 6.85 if th == TH else 6.35, rf"$\chi^*_{{0.2}}({nm})$", fontsize=6.8,
+                va="top")
     aa.set_ylim(0, 7.2)
     aa.set_ylabel("robust window (median, steps)")
     h_ = [plt.Line2D([], [], ls="", marker="o", mfc="k", mec="k", label=r"cv, $\theta_0$"),
@@ -175,9 +181,9 @@ def fig2():
           plt.Line2D([], [], ls="", marker="s", mfc="white", mec="k", label=r"ma, $1.5\theta_0$"),
           plt.Line2D([], [], ls="", marker="x", color="0.65", label="E7-a (repeat)"),
           plt.Line2D([], [], ls="", marker="+", color="0.65", label="E7-a$'$ (repeat)"),
-          plt.Line2D([], [], ls="-", color="k", label=r"$N(\rho;\theta_0)$, upper bound ($\delta=0$)"),
-          plt.Line2D([], [], ls="--", color="k", label=r"$N(\rho;1.5\theta_0)$, upper bound")]
-    aa.legend(handles=h_, loc="lower right", fontsize=6.5, frameon=True,
+          plt.Line2D([], [], ls="-", color="k", label=r"$N(\chi;\theta_0)$, upper bound ($\delta=0$)"),
+          plt.Line2D([], [], ls="--", color="k", label=r"$N(\chi;1.5\theta_0)$, upper bound")]
+    aa.legend(handles=h_, loc="center right", fontsize=6.5, frameon=True,
               framealpha=1, edgecolor="0.7", ncol=1)
     aa.text(0.01, 0.97, "(a)", transform=aa.transAxes, fontsize=9, fontweight="bold", va="top")
 
@@ -198,29 +204,29 @@ def fig2():
         for rho, vals in pts:
             x = jit(rho, off)
             for i, s in enumerate(vals):
-                ab.plot(x * (1 + 0.004 * (i - 1)), s, mk, ms=3.6, mew=0.7, mec="k", mfc=fill, zorder=4)
+                ab.plot(x + 0.0012 * (i - 1), s, mk, ms=3.6, mew=0.7, mec="k", mfc=fill, zorder=4)
             med = float(np.median(vals))
-            ab.plot([x / 1.012, x * 1.012], [med, med], "k-", lw=1.6, zorder=5)
-    # 평탄부 띠: 계약별 (pooling 금지) — 같은 계약 안 ρ ≥ 3.92 seed 값 전부의 중앙값·IQR, 기술 통계만
-    x_pl, pl_handles = (3.6, 13.5), []
+            ab.plot([x - 0.004, x + 0.004], [med, med], "k-", lw=1.6, zorder=5)
+    # 평탄부 띠: 계약별 (pooling 금지) — 같은 계약 안 ρ ≥ 3.92 (χ ≤ 0.255) seed 값 전부의 중앙값·IQR, 기술 통계만
+    x_pl, pl_handles = (0.06, 0.275), []
     for src, key, kw, lab in ((e7b, "ceil_det", dict(fc="0.75", ec="none", alpha=0.45), "E7-b det"),
                               (e7b2, "ceil_sto", dict(fc="none", ec="0.45", hatch="\\\\\\\\", lw=0), "E7-b$'$ sto")):
         vals = [s[key] for v in src.values() for s in v["seeds"].values()]
         q1, med, q3 = np.percentile(vals, [25, 50, 75])
         ab.fill_between(x_pl, q1, q3, zorder=1, **kw)
         ab.plot(x_pl, [med, med], color="0.3", lw=0.8, ls=(0, (4, 2)), zorder=2)
-        pl_handles.append(matplotlib.patches.Patch(**kw, label=f"{lab}, ρ≥3.92: median {med:g}, IQR {q1:g}–{q3:g}"))
+        pl_handles.append(matplotlib.patches.Patch(**kw, label=f"{lab}, χ≤0.255: median {med:g}, IQR {q1:g}–{q3:g}"))
     ab.axhline(29, color="k", lw=0.7, ls="--")
-    ab.text(1.03, 29.6, "gate 29/240", fontsize=7)
-    ab.axvspan(RHO * 1.07, 3.925 / 1.07, fc="none", ec="0.6", hatch="..", lw=0)
-    ab.text(np.sqrt(RHO * 3.925), 38, "no trained\npoints\n(this lineage)", ha="center", va="top",
+    ab.text(0.895, 29.6, "gate 29/240", fontsize=7, ha="right")
+    ab.axvspan(1 / 3.925 + 0.02, CHI - 0.02, fc="none", ec="0.6", hatch="..", lw=0)
+    ab.text((1 / 3.925 + CHI) / 2, 38, "no trained\npoints\n(this lineage)", ha="center", va="top",
             fontsize=6.8, color="0.3", bbox=dict(fc="white", ec="none", pad=0.6))
     ab.set_ylim(0, 60)
     ab.set_ylabel("matched-audit ceiling [/240]")
     sec = ab.secondary_yaxis("right", functions=(lambda y: y / 2.4, lambda p: p * 2.4))
     sec.set_ylabel("[%]")
     sec.tick_params(labelsize=7)
-    hb = [plt.Line2D([], [], ls="", marker="D", mfc="k", mec="k", ms=4, label=r"arm C-1, det ($\rho$ 1.92)"),
+    hb = [plt.Line2D([], [], ls="", marker="D", mfc="k", mec="k", ms=4, label=r"arm C-1, det ($\chi$ 0.52)"),
           plt.Line2D([], [], ls="", marker="o", mfc="k", mec="k", ms=4, label="E7-b, det"),
           plt.Line2D([], [], ls="", marker="^", mfc="k", mec="k", ms=4, label="E7-b, det, ma"),
           plt.Line2D([], [], ls="", marker="o", mfc="white", mec="k", ms=4, label=r"E7-b$'$, sto"),
@@ -229,13 +235,8 @@ def fig2():
     ab.legend(handles=hb, loc="upper right", fontsize=6.5, ncol=3, frameon=True, framealpha=1, edgecolor="0.7")
     ab.text(0.01, 0.97, "(b)", transform=ab.transAxes, fontsize=9, fontweight="bold", va="top")
 
-    ab.set_xscale("log")
-    ticks = [1.24, 1.92, 2.94, 3.92, 6.0, 7.69, 11.8]
-    ab.set_xticks(ticks)
-    ab.set_xticklabels([f"{t:g}" for t in ticks])
-    ab.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
-    ab.set_xlim(1.0, 14)
-    ab.set_xlabel(r"$\rho = R_{\max}\tan\theta\,/\,(\frac{1}{2}a\tau^2)$  (log scale)")
+    ab.set_xlim(0, 0.9)
+    ab.set_xlabel(r"$\chi = w/\rho = a\tau^2 / (2R_{\max}\tan\theta)$")
     for ax in (aa, ab):
         ax.tick_params(labelsize=7)
         ax.spines["top"].set_visible(False)
@@ -313,12 +314,12 @@ def figF2():
 
     ax.fill_between(taus, a_at(rho0(TH), taus), 1e4, fc="0.82", ec="none", zorder=0)
     ax.plot(taus, a_at(rho0(TH), taus), "k-", lw=1.8, zorder=3)
-    label(rho0(TH), 0.34, rf"$\rho_0$ = {rho0(TH):.2f} (window opens)")
+    label(rho0(TH), 0.34, rf"$\chi^*_{{geom}}$ = {1 / rho0(TH):.3f} (window opens)")
     for V, ls, t in ((15.0, (0, (1, 1.5)), 0.5), (V_BAR, "--", 0.105), (35.0, "-.", 0.07)):
         rs = rho0(TH) / (1 - 4 * DT * V / RMAX)
         ax.plot(taus, a_at(rs, taus), ls=ls, color="k", lw=0.9, zorder=3)
-        label(rs, t, rf"$\rho^*$ = {rs:.2f} (0.2 s window, V {V:g} m/s)")
-    ax.text(1.4, 150, r"$\rho<\rho_0$: no guaranteed-capture instant (model)", ha="right", fontsize=7)
+        label(rs, t, rf"$\chi^*_{{0.2}}$ = {1 / rs:.3f} (0.2 s window, V {V:g} m/s)")
+    ax.text(1.4, 150, r"$\chi>\chi^*_{geom}$: no guaranteed-capture instant (model)", ha="right", fontsize=7)
     # FS1 τ 사다리의 측정 점 (a = 20.45 한 줄) — 천장 숫자는 실측 점 옆에만
     e7b = load("e7b/readout.json")["variants"]
     armc = [s["ceil_det"] for s in load("armc1/readout.json")["cells"]["m0.35_n1"]["seeds"].values()]
@@ -343,7 +344,7 @@ def figF2():
     ax.set_yticks([3, 5, 10, 20, 50, 100, 200], ["3", "5", "10", "20", "50", "100", "200"])
     ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
     ax.yaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
-    ax.text(0.052, 3.25, rf"net geometry fixed at FS1 ($R_{{\max}}$ {RMAX} m, $\theta$ {np.degrees(TH):.1f}°); "
+    ax.text(0.052, 3.25, rf"net geometry fixed at FS1 ($R_{{\max}}$ {RMAX} m, $\theta$ {np.degrees(TH):.2f}°); "
             r"lines = analytic window boundaries", fontsize=6.2, color="0.25")
     ax.tick_params(labelsize=7)
     fig.savefig(OUT / "figF2_regime_map.png")
@@ -371,15 +372,16 @@ def fig4dec():
     fig, axs = plt.subplots(1, 2, figsize=(160 * MM, 78 * MM), sharey=True)
     for ax, line, ttl in ((axs[0], "det", "(a) deterministic defense vs its exploiter"),
                           (axs[1], "sto", "(b) stochastic defense vs its exploiter")):
-        keys = sorted((k for k in rows if k[0] == line), key=lambda k: (k[2], k[1]))
+        keys = sorted((k for k in rows if k[0] == line), key=lambda k: (-k[2], k[1]))  # χ = 1/ρ 오름차순
         for i, k in enumerate(keys):
             tot, bottom = sum(rows[k].values()), 0.0
             for (cat, n), (fc, hat) in zip(rows[k].items(), styles):
                 h = 100 * n / tot
                 ax.bar(i, h, bottom=bottom, width=0.7, fc=fc, ec="k", lw=0.5, hatch=hat, label=cat if i == 0 else None)
                 bottom += h
-        ax.set_xticks(range(len(keys)), [f"{k[2]:.2f}" + ("\nma" if k[1].endswith("ma") else "") for k in keys], fontsize=6.5)
-        ax.set_xlabel(r"$\rho$ (variant)")
+        ax.set_xticks(range(len(keys)), [f"{1 / k[2]:.3f}" + ("\nma" if k[1].endswith("ma") else "") for k in keys],
+                      fontsize=6.5)
+        ax.set_xlabel(r"$\chi$ (variant)")
         ax.set_title(ttl, fontsize=7, loc="left")
         ax.tick_params(labelsize=7)
     axs[0].set_ylabel("share of episodes [%] (3 seeds x 240)")
