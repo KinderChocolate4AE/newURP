@@ -181,8 +181,8 @@ def fig2():
           plt.Line2D([], [], ls="", marker="s", mfc="white", mec="k", label=r"ma, $1.5\theta_0$"),
           plt.Line2D([], [], ls="", marker="x", color="0.65", label="E7-a (repeat)"),
           plt.Line2D([], [], ls="", marker="+", color="0.65", label="E7-a$'$ (repeat)"),
-          plt.Line2D([], [], ls="-", color="k", label=r"$N(\chi;\theta_0)$, upper bound ($\delta=0$)"),
-          plt.Line2D([], [], ls="--", color="k", label=r"$N(\chi;1.5\theta_0)$, upper bound")]
+          plt.Line2D([], [], ls="-", color="k", label=r"$N(\chi;\theta_0)$, head-on value ($\delta=0$)"),
+          plt.Line2D([], [], ls="--", color="k", label=r"$N(\chi;1.5\theta_0)$, head-on value")]
     aa.legend(handles=h_, loc="center right", fontsize=6.5, frameon=True,
               framealpha=1, edgecolor="0.7", ncol=1)
     aa.text(0.01, 0.97, "(a)", transform=aa.transAxes, fontsize=9, fontweight="bold", va="top")
