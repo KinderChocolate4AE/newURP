@@ -1,0 +1,1 @@
+v1.0 hash 54bc40f6 eval (10-11 04:00, 1 min before v1.1 amendment commit) superseded by v1.1 re-run 10-12; episodes.jsonl byte-identical (cmp), summary identical except meta.manifest/git. Kept for audit; readout reads eval_judge only.

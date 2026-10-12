@@ -1,0 +1,4 @@
+| defender | group | defended/n | net | K_FIRST | fallback | pen | arm_d med | fire_d med |
+|---|---|---|---|---|---|---|---|---|
+| learned_det | ex_judge_sto | 67/240 | 57 | 10 | 0 | 165 | 208.4 | 10.5 |
+| learned_sto | ex_judge_sto | 46/240 | 42 | 4 | 0 | 190 | 211.7 | 9.3 |

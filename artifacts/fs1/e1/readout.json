@@ -1,0 +1,1400 @@
+{
+  "manifest_hash": "4215cdb837a0307b",
+  "primary_net": {
+    "fit": {
+      "rho_half": 2.0938512596464376,
+      "L": 9.351417105088332e-34,
+      "U": 0.08498546721447676,
+      "k": 14.286433187728067
+    },
+    "ci95": [
+      1.9625919911887757,
+      3.3236769943939115
+    ],
+    "n_boot_ok": 2000,
+    "branch": "UNDETERMINED"
+  },
+  "secondary_rob_fire": {
+    "fit": {
+      "rho_half": 2.0448503420798363,
+      "L": 4.3693929886317066e-18,
+      "U": 0.09570251672835996,
+      "k": 20.575128989907345
+    },
+    "ci95": [
+      1.9523031572973213,
+      2.248634158822406
+    ],
+    "n_boot_ok": 2000,
+    "branch": "EARLY"
+  },
+  "verdict": {
+    "branch": "UNDETERMINED",
+    "secondary": "EARLY",
+    "discretization_sensitive": true
+  },
+  "pair": {
+    "p2.75": [
+      28,
+      13,
+      23,
+      13,
+      37
+    ],
+    "p2.78": [
+      17,
+      29,
+      46,
+      23,
+      12
+    ]
+  },
+  "e6": {
+    "A1": [
+      36,
+      28,
+      21,
+      7,
+      37
+    ],
+    "A2": [
+      23,
+      38,
+      33,
+      16,
+      12
+    ],
+    "T": [
+      15,
+      29,
+      10,
+      10,
+      27
+    ],
+    "A1-T (sealed v1)": "MIXED",
+    "A1-A2 (defender agility)": "MIXED",
+    "A2-T (Lambda, ratio fixed)": "POSITIVE"
+  },
+  "cells": {
+    "r1.92/0/learned_det/ex_judge": {
+      "net": 0,
+      "rob_fire": 3,
+      "rob_fire_pen": 3,
+      "n": 240
+    },
+    "r1.92/0/learned_sto/ex_judge": {
+      "net": 1,
+      "rob_fire": 2,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r1.92/0/learned_det/ex_judge_sto": {
+      "net": 1,
+      "rob_fire": 2,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r1.92/0/learned_sto/ex_judge_sto": {
+      "net": 5,
+      "rob_fire": 12,
+      "rob_fire_pen": 7,
+      "n": 240
+    },
+    "r1.92/1/learned_det/ex_judge": {
+      "net": 2,
+      "rob_fire": 2,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r1.92/1/learned_sto/ex_judge": {
+      "net": 11,
+      "rob_fire": 13,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r1.92/1/learned_det/ex_judge_sto": {
+      "net": 5,
+      "rob_fire": 5,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r1.92/1/learned_sto/ex_judge_sto": {
+      "net": 10,
+      "rob_fire": 10,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r1.92/2/learned_det/ex_judge": {
+      "net": 10,
+      "rob_fire": 12,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r1.92/2/learned_sto/ex_judge": {
+      "net": 20,
+      "rob_fire": 23,
+      "rob_fire_pen": 3,
+      "n": 240
+    },
+    "r1.92/2/learned_det/ex_judge_sto": {
+      "net": 14,
+      "rob_fire": 14,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r1.92/2/learned_sto/ex_judge_sto": {
+      "net": 9,
+      "rob_fire": 11,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r1.92/3/learned_det/ex_judge": {
+      "net": 3,
+      "rob_fire": 3,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r1.92/3/learned_sto/ex_judge": {
+      "net": 5,
+      "rob_fire": 5,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r1.92/3/learned_det/ex_judge_sto": {
+      "net": 3,
+      "rob_fire": 5,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r1.92/3/learned_sto/ex_judge_sto": {
+      "net": 5,
+      "rob_fire": 7,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r1.92/4/learned_det/ex_judge": {
+      "net": 5,
+      "rob_fire": 5,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r1.92/4/learned_sto/ex_judge": {
+      "net": 27,
+      "rob_fire": 28,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r1.92/4/learned_det/ex_judge_sto": {
+      "net": 10,
+      "rob_fire": 11,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r1.92/4/learned_sto/ex_judge_sto": {
+      "net": 10,
+      "rob_fire": 10,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r2.30/0/learned_det/ex_judge": {
+      "net": 14,
+      "rob_fire": 15,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.30/0/learned_sto/ex_judge": {
+      "net": 61,
+      "rob_fire": 65,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "r2.30/0/learned_det/ex_judge_sto": {
+      "net": 30,
+      "rob_fire": 41,
+      "rob_fire_pen": 11,
+      "n": 240
+    },
+    "r2.30/0/learned_sto/ex_judge_sto": {
+      "net": 37,
+      "rob_fire": 51,
+      "rob_fire_pen": 14,
+      "n": 240
+    },
+    "r2.30/1/learned_det/ex_judge": {
+      "net": 18,
+      "rob_fire": 19,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.30/1/learned_sto/ex_judge": {
+      "net": 49,
+      "rob_fire": 59,
+      "rob_fire_pen": 10,
+      "n": 240
+    },
+    "r2.30/1/learned_det/ex_judge_sto": {
+      "net": 27,
+      "rob_fire": 29,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r2.30/1/learned_sto/ex_judge_sto": {
+      "net": 28,
+      "rob_fire": 32,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "r2.30/2/learned_det/ex_judge": {
+      "net": 21,
+      "rob_fire": 22,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.30/2/learned_sto/ex_judge": {
+      "net": 52,
+      "rob_fire": 54,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r2.30/2/learned_det/ex_judge_sto": {
+      "net": 28,
+      "rob_fire": 31,
+      "rob_fire_pen": 3,
+      "n": 240
+    },
+    "r2.30/2/learned_sto/ex_judge_sto": {
+      "net": 15,
+      "rob_fire": 22,
+      "rob_fire_pen": 7,
+      "n": 240
+    },
+    "r2.30/3/learned_det/ex_judge": {
+      "net": 18,
+      "rob_fire": 27,
+      "rob_fire_pen": 9,
+      "n": 240
+    },
+    "r2.30/3/learned_sto/ex_judge": {
+      "net": 59,
+      "rob_fire": 66,
+      "rob_fire_pen": 7,
+      "n": 240
+    },
+    "r2.30/3/learned_det/ex_judge_sto": {
+      "net": 32,
+      "rob_fire": 35,
+      "rob_fire_pen": 3,
+      "n": 240
+    },
+    "r2.30/3/learned_sto/ex_judge_sto": {
+      "net": 16,
+      "rob_fire": 28,
+      "rob_fire_pen": 12,
+      "n": 240
+    },
+    "r2.30/4/learned_det/ex_judge": {
+      "net": 18,
+      "rob_fire": 24,
+      "rob_fire_pen": 6,
+      "n": 240
+    },
+    "r2.30/4/learned_sto/ex_judge": {
+      "net": 26,
+      "rob_fire": 40,
+      "rob_fire_pen": 14,
+      "n": 240
+    },
+    "r2.30/4/learned_det/ex_judge_sto": {
+      "net": 36,
+      "rob_fire": 42,
+      "rob_fire_pen": 6,
+      "n": 240
+    },
+    "r2.30/4/learned_sto/ex_judge_sto": {
+      "net": 25,
+      "rob_fire": 35,
+      "rob_fire_pen": 10,
+      "n": 240
+    },
+    "r2.66/0/learned_det/ex_judge": {
+      "net": 13,
+      "rob_fire": 17,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "r2.66/0/learned_sto/ex_judge": {
+      "net": 66,
+      "rob_fire": 73,
+      "rob_fire_pen": 7,
+      "n": 240
+    },
+    "r2.66/0/learned_det/ex_judge_sto": {
+      "net": 22,
+      "rob_fire": 23,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.66/0/learned_sto/ex_judge_sto": {
+      "net": 22,
+      "rob_fire": 23,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.66/1/learned_det/ex_judge": {
+      "net": 13,
+      "rob_fire": 14,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.66/1/learned_sto/ex_judge": {
+      "net": 71,
+      "rob_fire": 72,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.66/1/learned_det/ex_judge_sto": {
+      "net": 46,
+      "rob_fire": 46,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r2.66/1/learned_sto/ex_judge_sto": {
+      "net": 17,
+      "rob_fire": 17,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r2.66/2/learned_det/ex_judge": {
+      "net": 11,
+      "rob_fire": 12,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.66/2/learned_sto/ex_judge": {
+      "net": 33,
+      "rob_fire": 35,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r2.66/2/learned_det/ex_judge_sto": {
+      "net": 20,
+      "rob_fire": 22,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r2.66/2/learned_sto/ex_judge_sto": {
+      "net": 12,
+      "rob_fire": 16,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "r2.66/3/learned_det/ex_judge": {
+      "net": 16,
+      "rob_fire": 30,
+      "rob_fire_pen": 14,
+      "n": 240
+    },
+    "r2.66/3/learned_sto/ex_judge": {
+      "net": 55,
+      "rob_fire": 67,
+      "rob_fire_pen": 12,
+      "n": 240
+    },
+    "r2.66/3/learned_det/ex_judge_sto": {
+      "net": 35,
+      "rob_fire": 42,
+      "rob_fire_pen": 6,
+      "n": 240
+    },
+    "r2.66/3/learned_sto/ex_judge_sto": {
+      "net": 27,
+      "rob_fire": 34,
+      "rob_fire_pen": 7,
+      "n": 240
+    },
+    "r2.66/4/learned_det/ex_judge": {
+      "net": 13,
+      "rob_fire": 17,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "r2.66/4/learned_sto/ex_judge": {
+      "net": 30,
+      "rob_fire": 31,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.66/4/learned_det/ex_judge_sto": {
+      "net": 30,
+      "rob_fire": 30,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r2.66/4/learned_sto/ex_judge_sto": {
+      "net": 13,
+      "rob_fire": 13,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r2.93/0/learned_det/ex_judge": {
+      "net": 25,
+      "rob_fire": 25,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r2.93/0/learned_sto/ex_judge": {
+      "net": 70,
+      "rob_fire": 71,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.93/0/learned_det/ex_judge_sto": {
+      "net": 37,
+      "rob_fire": 44,
+      "rob_fire_pen": 7,
+      "n": 240
+    },
+    "r2.93/0/learned_sto/ex_judge_sto": {
+      "net": 17,
+      "rob_fire": 40,
+      "rob_fire_pen": 23,
+      "n": 240
+    },
+    "r2.93/1/learned_det/ex_judge": {
+      "net": 39,
+      "rob_fire": 40,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.93/1/learned_sto/ex_judge": {
+      "net": 86,
+      "rob_fire": 88,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.93/1/learned_det/ex_judge_sto": {
+      "net": 59,
+      "rob_fire": 59,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r2.93/1/learned_sto/ex_judge_sto": {
+      "net": 24,
+      "rob_fire": 24,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r2.93/2/learned_det/ex_judge": {
+      "net": 26,
+      "rob_fire": 26,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r2.93/2/learned_sto/ex_judge": {
+      "net": 67,
+      "rob_fire": 67,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r2.93/2/learned_det/ex_judge_sto": {
+      "net": 34,
+      "rob_fire": 34,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r2.93/2/learned_sto/ex_judge_sto": {
+      "net": 27,
+      "rob_fire": 31,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "r2.93/3/learned_det/ex_judge": {
+      "net": 18,
+      "rob_fire": 48,
+      "rob_fire_pen": 30,
+      "n": 240
+    },
+    "r2.93/3/learned_sto/ex_judge": {
+      "net": 50,
+      "rob_fire": 67,
+      "rob_fire_pen": 17,
+      "n": 240
+    },
+    "r2.93/3/learned_det/ex_judge_sto": {
+      "net": 53,
+      "rob_fire": 61,
+      "rob_fire_pen": 8,
+      "n": 240
+    },
+    "r2.93/3/learned_sto/ex_judge_sto": {
+      "net": 13,
+      "rob_fire": 23,
+      "rob_fire_pen": 10,
+      "n": 240
+    },
+    "r2.93/4/learned_det/ex_judge": {
+      "net": 16,
+      "rob_fire": 17,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r2.93/4/learned_sto/ex_judge": {
+      "net": 49,
+      "rob_fire": 54,
+      "rob_fire_pen": 5,
+      "n": 240
+    },
+    "r2.93/4/learned_det/ex_judge_sto": {
+      "net": 30,
+      "rob_fire": 33,
+      "rob_fire_pen": 3,
+      "n": 240
+    },
+    "r2.93/4/learned_sto/ex_judge_sto": {
+      "net": 16,
+      "rob_fire": 23,
+      "rob_fire_pen": 7,
+      "n": 240
+    },
+    "r3.42/0/learned_det/ex_judge": {
+      "net": 8,
+      "rob_fire": 9,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r3.42/0/learned_sto/ex_judge": {
+      "net": 35,
+      "rob_fire": 36,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r3.42/0/learned_det/ex_judge_sto": {
+      "net": 39,
+      "rob_fire": 41,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r3.42/0/learned_sto/ex_judge_sto": {
+      "net": 16,
+      "rob_fire": 17,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r3.42/1/learned_det/ex_judge": {
+      "net": 22,
+      "rob_fire": 22,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r3.42/1/learned_sto/ex_judge": {
+      "net": 79,
+      "rob_fire": 81,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r3.42/1/learned_det/ex_judge_sto": {
+      "net": 33,
+      "rob_fire": 35,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r3.42/1/learned_sto/ex_judge_sto": {
+      "net": 9,
+      "rob_fire": 9,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r3.42/2/learned_det/ex_judge": {
+      "net": 25,
+      "rob_fire": 28,
+      "rob_fire_pen": 3,
+      "n": 240
+    },
+    "r3.42/2/learned_sto/ex_judge": {
+      "net": 95,
+      "rob_fire": 95,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r3.42/2/learned_det/ex_judge_sto": {
+      "net": 45,
+      "rob_fire": 48,
+      "rob_fire_pen": 3,
+      "n": 240
+    },
+    "r3.42/2/learned_sto/ex_judge_sto": {
+      "net": 19,
+      "rob_fire": 21,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r3.42/3/learned_det/ex_judge": {
+      "net": 21,
+      "rob_fire": 22,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r3.42/3/learned_sto/ex_judge": {
+      "net": 57,
+      "rob_fire": 57,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r3.42/3/learned_det/ex_judge_sto": {
+      "net": 42,
+      "rob_fire": 42,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r3.42/3/learned_sto/ex_judge_sto": {
+      "net": 21,
+      "rob_fire": 21,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r3.42/4/learned_det/ex_judge": {
+      "net": 22,
+      "rob_fire": 24,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r3.42/4/learned_sto/ex_judge": {
+      "net": 78,
+      "rob_fire": 79,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r3.42/4/learned_det/ex_judge_sto": {
+      "net": 61,
+      "rob_fire": 62,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r3.42/4/learned_sto/ex_judge_sto": {
+      "net": 20,
+      "rob_fire": 21,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r3.92/0/learned_det/ex_judge": {
+      "net": 15,
+      "rob_fire": 19,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "r3.92/0/learned_sto/ex_judge": {
+      "net": 36,
+      "rob_fire": 42,
+      "rob_fire_pen": 6,
+      "n": 240
+    },
+    "r3.92/0/learned_det/ex_judge_sto": {
+      "net": 46,
+      "rob_fire": 57,
+      "rob_fire_pen": 11,
+      "n": 240
+    },
+    "r3.92/0/learned_sto/ex_judge_sto": {
+      "net": 31,
+      "rob_fire": 39,
+      "rob_fire_pen": 8,
+      "n": 240
+    },
+    "r3.92/1/learned_det/ex_judge": {
+      "net": 29,
+      "rob_fire": 29,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r3.92/1/learned_sto/ex_judge": {
+      "net": 109,
+      "rob_fire": 110,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r3.92/1/learned_det/ex_judge_sto": {
+      "net": 57,
+      "rob_fire": 58,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r3.92/1/learned_sto/ex_judge_sto": {
+      "net": 42,
+      "rob_fire": 43,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r3.92/2/learned_det/ex_judge": {
+      "net": 10,
+      "rob_fire": 11,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r3.92/2/learned_sto/ex_judge": {
+      "net": 55,
+      "rob_fire": 55,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r3.92/2/learned_det/ex_judge_sto": {
+      "net": 36,
+      "rob_fire": 36,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r3.92/2/learned_sto/ex_judge_sto": {
+      "net": 31,
+      "rob_fire": 33,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r3.92/3/learned_det/ex_judge": {
+      "net": 10,
+      "rob_fire": 12,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r3.92/3/learned_sto/ex_judge": {
+      "net": 47,
+      "rob_fire": 47,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r3.92/3/learned_det/ex_judge_sto": {
+      "net": 38,
+      "rob_fire": 40,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r3.92/3/learned_sto/ex_judge_sto": {
+      "net": 23,
+      "rob_fire": 25,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r3.92/4/learned_det/ex_judge": {
+      "net": 27,
+      "rob_fire": 29,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "r3.92/4/learned_sto/ex_judge": {
+      "net": 71,
+      "rob_fire": 74,
+      "rob_fire_pen": 3,
+      "n": 240
+    },
+    "r3.92/4/learned_det/ex_judge_sto": {
+      "net": 70,
+      "rob_fire": 76,
+      "rob_fire_pen": 6,
+      "n": 240
+    },
+    "r3.92/4/learned_sto/ex_judge_sto": {
+      "net": 35,
+      "rob_fire": 56,
+      "rob_fire_pen": 21,
+      "n": 240
+    },
+    "r7.69/0/learned_det/ex_judge": {
+      "net": 36,
+      "rob_fire": 36,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/0/learned_sto/ex_judge": {
+      "net": 70,
+      "rob_fire": 70,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/0/learned_det/ex_judge_sto": {
+      "net": 86,
+      "rob_fire": 87,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r7.69/0/learned_sto/ex_judge_sto": {
+      "net": 14,
+      "rob_fire": 14,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/1/learned_det/ex_judge": {
+      "net": 18,
+      "rob_fire": 18,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/1/learned_sto/ex_judge": {
+      "net": 79,
+      "rob_fire": 80,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r7.69/1/learned_det/ex_judge_sto": {
+      "net": 30,
+      "rob_fire": 30,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/1/learned_sto/ex_judge_sto": {
+      "net": 20,
+      "rob_fire": 21,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r7.69/2/learned_det/ex_judge": {
+      "net": 29,
+      "rob_fire": 30,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r7.69/2/learned_sto/ex_judge": {
+      "net": 100,
+      "rob_fire": 100,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/2/learned_det/ex_judge_sto": {
+      "net": 54,
+      "rob_fire": 55,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/2/learned_sto/ex_judge_sto": {
+      "net": 11,
+      "rob_fire": 12,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "r7.69/3/learned_det/ex_judge": {
+      "net": 20,
+      "rob_fire": 20,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/3/learned_sto/ex_judge": {
+      "net": 92,
+      "rob_fire": 92,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/3/learned_det/ex_judge_sto": {
+      "net": 104,
+      "rob_fire": 104,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/3/learned_sto/ex_judge_sto": {
+      "net": 60,
+      "rob_fire": 60,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/4/learned_det/ex_judge": {
+      "net": 17,
+      "rob_fire": 17,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "r7.69/4/learned_sto/ex_judge": {
+      "net": 46,
+      "rob_fire": 55,
+      "rob_fire_pen": 9,
+      "n": 240
+    },
+    "r7.69/4/learned_det/ex_judge_sto": {
+      "net": 51,
+      "rob_fire": 77,
+      "rob_fire_pen": 26,
+      "n": 240
+    },
+    "r7.69/4/learned_sto/ex_judge_sto": {
+      "net": 17,
+      "rob_fire": 54,
+      "rob_fire_pen": 37,
+      "n": 240
+    },
+    "p2.75/0/learned_det/ex_judge": {
+      "net": 28,
+      "rob_fire": 39,
+      "rob_fire_pen": 11,
+      "n": 240
+    },
+    "p2.75/0/learned_sto/ex_judge": {
+      "net": 37,
+      "rob_fire": 50,
+      "rob_fire_pen": 13,
+      "n": 240
+    },
+    "p2.75/0/learned_det/ex_judge_sto": {
+      "net": 40,
+      "rob_fire": 42,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "p2.75/0/learned_sto/ex_judge_sto": {
+      "net": 25,
+      "rob_fire": 27,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "p2.75/1/learned_det/ex_judge": {
+      "net": 13,
+      "rob_fire": 18,
+      "rob_fire_pen": 5,
+      "n": 240
+    },
+    "p2.75/1/learned_sto/ex_judge": {
+      "net": 45,
+      "rob_fire": 53,
+      "rob_fire_pen": 8,
+      "n": 240
+    },
+    "p2.75/1/learned_det/ex_judge_sto": {
+      "net": 41,
+      "rob_fire": 44,
+      "rob_fire_pen": 3,
+      "n": 240
+    },
+    "p2.75/1/learned_sto/ex_judge_sto": {
+      "net": 19,
+      "rob_fire": 25,
+      "rob_fire_pen": 6,
+      "n": 240
+    },
+    "p2.75/2/learned_det/ex_judge": {
+      "net": 23,
+      "rob_fire": 30,
+      "rob_fire_pen": 7,
+      "n": 240
+    },
+    "p2.75/2/learned_sto/ex_judge": {
+      "net": 65,
+      "rob_fire": 69,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "p2.75/2/learned_det/ex_judge_sto": {
+      "net": 12,
+      "rob_fire": 14,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "p2.75/2/learned_sto/ex_judge_sto": {
+      "net": 8,
+      "rob_fire": 8,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "p2.75/3/learned_det/ex_judge": {
+      "net": 13,
+      "rob_fire": 19,
+      "rob_fire_pen": 6,
+      "n": 240
+    },
+    "p2.75/3/learned_sto/ex_judge": {
+      "net": 47,
+      "rob_fire": 54,
+      "rob_fire_pen": 7,
+      "n": 240
+    },
+    "p2.75/3/learned_det/ex_judge_sto": {
+      "net": 32,
+      "rob_fire": 43,
+      "rob_fire_pen": 11,
+      "n": 240
+    },
+    "p2.75/3/learned_sto/ex_judge_sto": {
+      "net": 12,
+      "rob_fire": 29,
+      "rob_fire_pen": 17,
+      "n": 240
+    },
+    "p2.75/4/learned_det/ex_judge": {
+      "net": 37,
+      "rob_fire": 39,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "p2.75/4/learned_sto/ex_judge": {
+      "net": 66,
+      "rob_fire": 68,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "p2.75/4/learned_det/ex_judge_sto": {
+      "net": 36,
+      "rob_fire": 40,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "p2.75/4/learned_sto/ex_judge_sto": {
+      "net": 19,
+      "rob_fire": 19,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "p2.78/0/learned_det/ex_judge": {
+      "net": 17,
+      "rob_fire": 21,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "p2.78/0/learned_sto/ex_judge": {
+      "net": 63,
+      "rob_fire": 65,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "p2.78/0/learned_det/ex_judge_sto": {
+      "net": 20,
+      "rob_fire": 20,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "p2.78/0/learned_sto/ex_judge_sto": {
+      "net": 9,
+      "rob_fire": 9,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "p2.78/1/learned_det/ex_judge": {
+      "net": 29,
+      "rob_fire": 30,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "p2.78/1/learned_sto/ex_judge": {
+      "net": 69,
+      "rob_fire": 70,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "p2.78/1/learned_det/ex_judge_sto": {
+      "net": 18,
+      "rob_fire": 19,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "p2.78/1/learned_sto/ex_judge_sto": {
+      "net": 16,
+      "rob_fire": 16,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "p2.78/2/learned_det/ex_judge": {
+      "net": 46,
+      "rob_fire": 55,
+      "rob_fire_pen": 9,
+      "n": 240
+    },
+    "p2.78/2/learned_sto/ex_judge": {
+      "net": 89,
+      "rob_fire": 93,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "p2.78/2/learned_det/ex_judge_sto": {
+      "net": 27,
+      "rob_fire": 28,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "p2.78/2/learned_sto/ex_judge_sto": {
+      "net": 25,
+      "rob_fire": 27,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "p2.78/3/learned_det/ex_judge": {
+      "net": 23,
+      "rob_fire": 56,
+      "rob_fire_pen": 33,
+      "n": 240
+    },
+    "p2.78/3/learned_sto/ex_judge": {
+      "net": 42,
+      "rob_fire": 91,
+      "rob_fire_pen": 49,
+      "n": 240
+    },
+    "p2.78/3/learned_det/ex_judge_sto": {
+      "net": 53,
+      "rob_fire": 100,
+      "rob_fire_pen": 47,
+      "n": 240
+    },
+    "p2.78/3/learned_sto/ex_judge_sto": {
+      "net": 39,
+      "rob_fire": 109,
+      "rob_fire_pen": 70,
+      "n": 240
+    },
+    "p2.78/4/learned_det/ex_judge": {
+      "net": 12,
+      "rob_fire": 13,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "p2.78/4/learned_sto/ex_judge": {
+      "net": 68,
+      "rob_fire": 71,
+      "rob_fire_pen": 3,
+      "n": 240
+    },
+    "p2.78/4/learned_det/ex_judge_sto": {
+      "net": 25,
+      "rob_fire": 26,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "p2.78/4/learned_sto/ex_judge_sto": {
+      "net": 23,
+      "rob_fire": 23,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/0/learned_det/ex_judge": {
+      "net": 36,
+      "rob_fire": 38,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "e6_a10/0/learned_sto/ex_judge": {
+      "net": 110,
+      "rob_fire": 115,
+      "rob_fire_pen": 5,
+      "n": 240
+    },
+    "e6_a10/0/learned_det/ex_judge_sto": {
+      "net": 62,
+      "rob_fire": 68,
+      "rob_fire_pen": 5,
+      "n": 240
+    },
+    "e6_a10/0/learned_sto/ex_judge_sto": {
+      "net": 50,
+      "rob_fire": 63,
+      "rob_fire_pen": 13,
+      "n": 240
+    },
+    "e6_a10/1/learned_det/ex_judge": {
+      "net": 28,
+      "rob_fire": 28,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/1/learned_sto/ex_judge": {
+      "net": 72,
+      "rob_fire": 72,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/1/learned_det/ex_judge_sto": {
+      "net": 24,
+      "rob_fire": 26,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "e6_a10/1/learned_sto/ex_judge_sto": {
+      "net": 10,
+      "rob_fire": 10,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/2/learned_det/ex_judge": {
+      "net": 21,
+      "rob_fire": 21,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/2/learned_sto/ex_judge": {
+      "net": 72,
+      "rob_fire": 73,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "e6_a10/2/learned_det/ex_judge_sto": {
+      "net": 29,
+      "rob_fire": 29,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/2/learned_sto/ex_judge_sto": {
+      "net": 43,
+      "rob_fire": 43,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/3/learned_det/ex_judge": {
+      "net": 7,
+      "rob_fire": 8,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "e6_a10/3/learned_sto/ex_judge": {
+      "net": 78,
+      "rob_fire": 78,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/3/learned_det/ex_judge_sto": {
+      "net": 40,
+      "rob_fire": 40,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/3/learned_sto/ex_judge_sto": {
+      "net": 9,
+      "rob_fire": 9,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/4/learned_det/ex_judge": {
+      "net": 37,
+      "rob_fire": 37,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/4/learned_sto/ex_judge": {
+      "net": 98,
+      "rob_fire": 98,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/4/learned_det/ex_judge_sto": {
+      "net": 47,
+      "rob_fire": 47,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10/4/learned_sto/ex_judge_sto": {
+      "net": 50,
+      "rob_fire": 51,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "e6_a10_mu/0/learned_det/ex_judge": {
+      "net": 23,
+      "rob_fire": 25,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "e6_a10_mu/0/learned_sto/ex_judge": {
+      "net": 79,
+      "rob_fire": 80,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10_mu/0/learned_det/ex_judge_sto": {
+      "net": 72,
+      "rob_fire": 76,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "e6_a10_mu/0/learned_sto/ex_judge_sto": {
+      "net": 72,
+      "rob_fire": 74,
+      "rob_fire_pen": 2,
+      "n": 240
+    },
+    "e6_a10_mu/1/learned_det/ex_judge": {
+      "net": 38,
+      "rob_fire": 43,
+      "rob_fire_pen": 5,
+      "n": 240
+    },
+    "e6_a10_mu/1/learned_sto/ex_judge": {
+      "net": 67,
+      "rob_fire": 68,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "e6_a10_mu/1/learned_det/ex_judge_sto": {
+      "net": 34,
+      "rob_fire": 35,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "e6_a10_mu/1/learned_sto/ex_judge_sto": {
+      "net": 21,
+      "rob_fire": 22,
+      "rob_fire_pen": 1,
+      "n": 240
+    },
+    "e6_a10_mu/2/learned_det/ex_judge": {
+      "net": 33,
+      "rob_fire": 37,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "e6_a10_mu/2/learned_sto/ex_judge": {
+      "net": 47,
+      "rob_fire": 52,
+      "rob_fire_pen": 5,
+      "n": 240
+    },
+    "e6_a10_mu/2/learned_det/ex_judge_sto": {
+      "net": 38,
+      "rob_fire": 42,
+      "rob_fire_pen": 4,
+      "n": 240
+    },
+    "e6_a10_mu/2/learned_sto/ex_judge_sto": {
+      "net": 12,
+      "rob_fire": 19,
+      "rob_fire_pen": 7,
+      "n": 240
+    },
+    "e6_a10_mu/3/learned_det/ex_judge": {
+      "net": 16,
+      "rob_fire": 16,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10_mu/3/learned_sto/ex_judge": {
+      "net": 55,
+      "rob_fire": 55,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10_mu/3/learned_det/ex_judge_sto": {
+      "net": 51,
+      "rob_fire": 51,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10_mu/3/learned_sto/ex_judge_sto": {
+      "net": 40,
+      "rob_fire": 40,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10_mu/4/learned_det/ex_judge": {
+      "net": 12,
+      "rob_fire": 12,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10_mu/4/learned_sto/ex_judge": {
+      "net": 47,
+      "rob_fire": 47,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10_mu/4/learned_det/ex_judge_sto": {
+      "net": 81,
+      "rob_fire": 81,
+      "rob_fire_pen": 0,
+      "n": 240
+    },
+    "e6_a10_mu/4/learned_sto/ex_judge_sto": {
+      "net": 46,
+      "rob_fire": 46,
+      "rob_fire_pen": 0,
+      "n": 240
+    }
+  }
+}
