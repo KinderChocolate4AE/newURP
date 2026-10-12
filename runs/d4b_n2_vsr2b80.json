@@ -1,0 +1,43 @@
+{
+ "args": {
+  "cmd": "train_def",
+  "name": "d4b_n2_vsr2b80",
+  "n": 2,
+  "iters": 800,
+  "seed": 16,
+  "envs": 2048,
+  "red": "runs/r2b_n2_vs_script.pkl",
+  "red_frac": 0.8,
+  "init": null,
+  "def_": null,
+  "att": null,
+  "nores": false,
+  "lr": 0.0001,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000
+ },
+ "train_sec": 143.05708622932434,
+ "vs_script": {
+  "n": 8000,
+  "intercept": 0.939875066280365,
+  "net": 0.000375000003259629,
+  "lim": 0.9395000338554382,
+  "leak": 0.0598750039935112,
+  "timeout": 0.0002500000118743628,
+  "seed_std": 0.007270443679202513,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ },
+ "vs_red_trained_against": {
+  "n": 8000,
+  "intercept": 1.0,
+  "net": 0.0,
+  "lim": 1.0,
+  "leak": 0.0,
+  "timeout": 0.0,
+  "seed_std": 0.0,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

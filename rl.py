@@ -103,11 +103,14 @@ def policy_fn(side, params):
 def make_opponent(own, opp_side=None, opp_params=None):
     """Frozen opponent policy for env stepping. For defender training the attacker is
     script (kinds 0-2) or a red-team net (kind 3); for attacker training the defender is script or a net."""
-    if own == "def":
-        net = policy_fn(opp_side, opp_params) if opp_params is not None else None
+    if own == "def":  # opp_params: list of red-team params (pool); kind 3+j -> pool member j
+        if not opp_params:
+            return att_script
+        stacked = jax.tree.map(lambda *x: jnp.stack(x), *opp_params)
         def att(s):
-            a = att_script(s)
-            return a if net is None else jnp.where(s.akind == 3, net(s), a)
+            outs = jax.vmap(lambda p: policy_fn(opp_side, p)(s))(stacked)
+            j = jnp.clip(s.akind - 3, 0, len(opp_params) - 1)
+            return jnp.where(s.akind >= 3, outs[j], att_script(s))
         return att
     return policy_fn(opp_side, opp_params) if opp_params is not None else def_script
 
@@ -115,7 +118,7 @@ def make_opponent(own, opp_side=None, opp_params=None):
 # ---------------- PPO ----------------
 
 def train(side, n, opp, seed, iters, num_envs=2048, T=64, lr=3e-4, epochs=4, nmb=8, gamma=0.99, lam=0.95,
-          clip=0.2, ent=1e-3, red_frac=0.0, init=None, log=None, use_net=True, use_lim=True, save=None):
+          clip=0.2, ent=1e-3, red_frac=0.0, n_red=1, init=None, log=None, use_net=True, use_lim=True, save=None):
     key = jax.random.PRNGKey(seed)
     key, kp = jax.random.split(key)
     params = init if init is not None else init_params(kp, side, n)
@@ -125,7 +128,7 @@ def train(side, n, opp, seed, iters, num_envs=2048, T=64, lr=3e-4, epochs=4, nmb
         k1, k2, k3 = jax.random.split(k, 3)
         s = reset(k1, n, use_net, use_lim)
         red = jax.random.uniform(k2) < red_frac
-        return s._replace(akind=jnp.where(red, 3, s.akind))
+        return s._replace(akind=jnp.where(red, 3 + jax.random.randint(k3, (), 0, n_red), s.akind))
 
     def env_step(s, action):
         if side.name == "def":

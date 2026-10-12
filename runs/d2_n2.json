@@ -1,0 +1,32 @@
+{
+ "args": {
+  "cmd": "train_def",
+  "name": "d2_n2",
+  "n": 2,
+  "iters": 500,
+  "seed": 12,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": null,
+  "att": null,
+  "nores": false,
+  "lr": 0.0001,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000
+ },
+ "train_sec": 76.7416923046112,
+ "vs_script": {
+  "n": 8000,
+  "intercept": 0.9573750495910645,
+  "net": 0.0032500000670552254,
+  "lim": 0.9541250467300415,
+  "leak": 0.042375002056360245,
+  "timeout": 0.0002500000118743628,
+  "seed_std": 0.008572299431376192,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

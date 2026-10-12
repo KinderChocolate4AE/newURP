@@ -30,12 +30,21 @@ def plot(tr, ax_xy, ax_xz, title=""):
 
 
 if __name__ == "__main__":
+    # python viz.py out.png n [def.pkl|script] [att.pkl|script]
+    from rl import policy_fn, def_side, red_pol, load
     out = sys.argv[1]
     n = int(sys.argv[2]) if len(sys.argv) > 2 else 2
-    fig, axs = plt.subplots(2, 6, figsize=(24, 8))
+    dp = sys.argv[3] if len(sys.argv) > 3 else "script"
+    at = sys.argv[4] if len(sys.argv) > 4 else "script"
+    dpol = def_script if dp == "script" else policy_fn(def_side(n), load(dp))
+    apol = att_script if at == "script" else red_pol(load(at))
+    fig, axs = plt.subplots(3, 6, figsize=(24, 12))
     for c in range(6):
-        kind, seed = c % 3, c
-        tr = trace(jax.random.PRNGKey(seed), n, def_script, att_script, kind=kind)
+        kind, seed = c % 3, 900 + c
+        tr = trace(jax.random.PRNGKey(seed), n, dpol, apol, kind=kind)
         plot(tr, axs[0, c], axs[1, c], f"kind={kind} seed={seed}")
-        # zoom on last 3 s
-    fig.tight_layout(); fig.savefig(out, dpi=80)
+        end = int(np.argmax(tr.status != 0)) + 1 if (tr.status != 0).any() else len(tr.status)
+        z = jax.tree.map(lambda x: x[max(0, end - 30):end], tr)  # last 3 s, x-z plane
+        plot(z, axs[2, c], axs[2, c], "")
+    fig.suptitle(f"def={dp} att={at}")
+    fig.tight_layout(); fig.savefig(out, dpi=70)

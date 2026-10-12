@@ -1,0 +1,32 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "r1b_n2_vs_script",
+  "n": 2,
+  "iters": 500,
+  "seed": 32,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "script",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000
+ },
+ "train_sec": 68.10212206840515,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.9931250214576721,
+  "net": 0.06599999964237213,
+  "lim": 0.9271250367164612,
+  "leak": 0.004000000189989805,
+  "timeout": 0.002875000238418579,
+  "seed_std": 0.004284787429067608,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

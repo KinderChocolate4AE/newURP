@@ -1,0 +1,32 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "RP_script_s1",
+  "n": 2,
+  "iters": 800,
+  "seed": 1001,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "script",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000
+ },
+ "train_sec": 157.2849862575531,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.39400002360343933,
+  "net": 0.021375000476837158,
+  "lim": 0.3726250231266022,
+  "leak": 0.5720000267028809,
+  "timeout": 0.03400000184774399,
+  "seed_std": 0.0213072745246113,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

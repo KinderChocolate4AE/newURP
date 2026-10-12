@@ -49,15 +49,16 @@ if a.cmd == "baseline":
 
 elif a.cmd == "train_def":
     side = def_side(a.n, not a.nores)
-    opp = make_opponent("def", att_side(), load(a.red)) if a.red else make_opponent("def")
+    reds = [load(x) for x in a.red.split(",")] if a.red else []
+    opp = make_opponent("def", att_side(), reds)
     init = load(a.init) if a.init else None
-    p, h = train(side, a.n, opp, a.seed, a.iters, num_envs=a.envs, red_frac=a.red_frac if a.red else 0.0,
+    p, h = train(side, a.n, opp, a.seed, a.iters, num_envs=a.envs, red_frac=a.red_frac if a.red else 0.0, n_red=max(len(reds), 1),
                  init=init, log=f"runs/{a.name}.log", save=f"runs/{a.name}.pkl", lr=a.lr, use_net=un, use_lim=ul)
     pol = policy_fn(side, p)
     res = dict(args=vars(a), train_sec=time.time() - t0,
                vs_script=evaluate(a.n, pol, att_script, eps=a.eps, use_net=un, use_lim=ul))
-    if a.red:
-        res["vs_red_trained_against"] = evaluate(a.n, pol, red_pol(load(a.red)), eps=a.eps, use_net=un, use_lim=ul)
+    for x, rp in zip(a.red.split(",") if a.red else [], reds):
+        res["vs_" + os.path.basename(x)] = evaluate(a.n, pol, red_pol(rp), eps=a.eps, use_net=un, use_lim=ul)["intercept"]
     dump(a.name, res)
 
 elif a.cmd == "train_att":
