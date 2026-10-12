@@ -14,7 +14,19 @@ class P:  # WORLD.md §1 nominal values. Changing any of these = new scoreboard.
     lim_v = 45.; lim_a = 30.; lim_tau = 0.10
     net_r = 1.5; net_speed = 25.; net_open = 0.25; net_tmax = 1.0; net_shots = 2; net_reload = 1.0
     kill_r = 2.5; asset_r = 3.0
-    trk_sp = 1.0; trk_sv = 1.0  # defense track noise (m, m/s), latency = 1 control step (0.1 s)
+    trk_sp = 1.0; trk_sv = 1.0  # defense track noise (m, m/s)
+    trk_lag = 1  # defense track latency in control steps (x0.1 s)
+
+
+def set_world(spec):
+    """'lim_a=25,att_v=40' -> mutate P (call before any jit). Returns dict of overrides."""
+    out = {}
+    for kv in filter(None, (spec or "").split(",")):
+        k, v = kv.split("=")
+        assert hasattr(P, k), k
+        setattr(P, k, type(getattr(P, k))(float(v)) if not isinstance(getattr(P, k), int) else int(v))
+        out[k] = getattr(P, k)
+    return out
 
 
 CTRL_DT = P.dt * P.repeat
@@ -30,6 +42,7 @@ class S(NamedTuple):
     lp: jax.Array; lv: jax.Array; la: jax.Array; lalive: jax.Array  # limiters (n,3)/(n,)
     t: jax.Array; status: jax.Array
     trk_p: jax.Array; trk_v: jax.Array; key: jax.Array  # defense's delayed noisy attacker track
+    hist_p: jax.Array; hist_v: jax.Array  # (trk_lag,3) past true attacker states
 
 
 class DefAct(NamedTuple):
@@ -105,7 +118,8 @@ def reset(key, n, use_net=True, use_lim=True, kind=None):
              net_on=jnp.bool_(False), net_p=z3, net_v=z3, net_age=jnp.float32(0.),
              lp=lp, lv=jnp.zeros((n, 3)), la=jnp.zeros((n, 3)), lalive=jnp.full((n,), use_lim),
              t=jnp.float32(0.), status=jnp.int32(0),
-             trk_p=ap + P.trk_sp * jax.random.normal(k[6], (3,)), trk_v=25. * unit(-ap), key=jax.random.fold_in(k[6], 1))
+             trk_p=ap + P.trk_sp * jax.random.normal(k[6], (3,)), trk_v=25. * unit(-ap), key=jax.random.fold_in(k[6], 1),
+             hist_p=jnp.tile(ap, (P.trk_lag, 1)), hist_v=jnp.tile(25. * unit(-ap), (P.trk_lag, 1)))
 
 
 def _substep(s, dact, aacc):
@@ -148,8 +162,10 @@ def step(s, dact, aacc):
     key, kp, kv = jax.random.split(s.key, 3)
     ap0, av0 = s.ap, s.av
     s = jax.lax.fori_loop(0, P.repeat, lambda i, x: _substep(x, dact, aacc), s)
-    return s._replace(key=key, trk_p=ap0 + P.trk_sp * jax.random.normal(kp, (3,)),
-                      trk_v=av0 + P.trk_sv * jax.random.normal(kv, (3,)))
+    hp = jnp.concatenate([s.hist_p[1:], ap0[None]])
+    hv = jnp.concatenate([s.hist_v[1:], av0[None]])
+    return s._replace(key=key, hist_p=hp, hist_v=hv, trk_p=hp[0] + P.trk_sp * jax.random.normal(kp, (3,)),
+                      trk_v=hv[0] + P.trk_sv * jax.random.normal(kv, (3,)))
 
 
 # ---------------- scripted policies ----------------

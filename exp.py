@@ -32,7 +32,9 @@ ap.add_argument("--init"); ap.add_argument("--def_", "--def", dest="def_"); ap.a
 ap.add_argument("--nores", action="store_true"); ap.add_argument("--lr", type=float, default=3e-4)
 ap.add_argument("--no_net", action="store_true"); ap.add_argument("--no_lim", action="store_true")
 ap.add_argument("--eps", type=int, default=1000)
+ap.add_argument("--world", default="")
 a = ap.parse_args()
+WORLD_OVR = set_world(a.world)
 t0 = time.time()
 un, ul = not a.no_net, not a.no_lim
 

@@ -76,6 +76,18 @@ def test_summarize_names():
     assert r["intercept"] == 3 / 8 and r["net"] == 2 / 8 and r["lim"] == 1 / 8 and r["leak"] == 1 / 8 and r["timeout"] == 1 / 8
 
 
+def test_track_lag():
+    old = (P.trk_lag, P.trk_sp, P.trk_sv)
+    P.trk_lag, P.trk_sp, P.trk_sv = 3, 0.0, 0.0
+    s = reset(jax.random.PRNGKey(3), 1)
+    ps = []
+    for _ in range(6):
+        ps.append(s.ap)
+        s = step(s, NOACT(1), att_script(s))
+    assert np.allclose(s.trk_p, ps[3], atol=1e-4)  # 6 steps done, track = state at start of step 4 (3 steps old)
+    P.trk_lag, P.trk_sp, P.trk_sv = old
+
+
 if __name__ == "__main__":
     for k, f in list(globals().items()):
         if k.startswith("test_"):

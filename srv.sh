@@ -19,5 +19,7 @@ case "$1" in
   wait) shift; for n in "$@"; do until $SSH "grep -q '^EXIT' $D/runs/$n.out" 2>/dev/null; do sleep 30; done; done
         for n in "$@"; do $SSH "tail -2 $D/runs/$n.out"; done ;;
   pull) $SSH "cd $D && tar czf - runs" | tar xzf - ;;
+  runpy) name=$2; cores=$3; shift 3
+       $SSH "cd $D && tmux new-session -d -s night_$name \"CUDA_VISIBLE_DEVICES=1 XLA_PYTHON_CLIENT_MEM_FRACTION=$MEM PYTHONUNBUFFERED=1 taskset -c $cores $PY $* > runs/$name.out 2>&1; echo EXIT \\$? >> runs/$name.out\"" ;;
   sh) shift; $SSH "cd $D && $*" ;;
 esac
