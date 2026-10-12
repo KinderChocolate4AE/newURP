@@ -92,7 +92,7 @@ def main():
            "max_abs_err_s": max(abs(r["err_s"]) for r in rows),
            "sign": {"measured<analytic": sum(r["err_s"] < 0 for r in rows), "measured>analytic": sum(r["err_s"] > 0 for r in rows)},
            "rows": rows}
-    (ROOT / "artifacts" / "paper1" / "window_check.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
+    (ROOT / "artifacts" / "paper1" / "window_check.json").write_text(json.dumps(out, indent=1, default=lambda o: o.item()), encoding="utf-8")
     print(out["verdict"], out["max_abs_err_s"], out["sign"])
 
 
