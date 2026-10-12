@@ -1,0 +1,170 @@
+{
+ "manifest_hash": "0dfec67442ca6951",
+ "slots": {
+  "t0.5_h1.0_cv/s0": {
+   "cells": {
+    "det|det": {
+     "type": "matched",
+     "per_env_seed": [
+      27,
+      23,
+      26,
+      18,
+      26,
+      23,
+      19,
+      22
+     ],
+     "mean": 23.0,
+     "sd": 3.295017884191656,
+     "binomial_sd": 4.560244876465883,
+     "label": "R0_BINOMIAL"
+    },
+    "sto|det": {
+     "type": "mismatched",
+     "per_env_seed": [
+      56,
+      56,
+      48,
+      55,
+      51,
+      49,
+      56,
+      61
+     ],
+     "mean": 54.0,
+     "sd": 4.342481186734475,
+     "binomial_sd": 6.469157595854347,
+     "label": "R0_BINOMIAL"
+    },
+    "det|sto": {
+     "type": "mismatched",
+     "per_env_seed": [
+      65,
+      62,
+      65,
+      62,
+      68,
+      65,
+      68,
+      66
+     ],
+     "mean": 65.125,
+     "sd": 2.295181287579947,
+     "binomial_sd": 6.888618141240907,
+     "label": "R0_BINOMIAL"
+    },
+    "sto|sto": {
+     "type": "matched",
+     "per_env_seed": [
+      37,
+      31,
+      37,
+      34,
+      42,
+      33,
+      32,
+      29
+     ],
+     "mean": 34.375,
+     "sd": 4.138236339311712,
+     "binomial_sd": 5.426923382159853,
+     "label": "R0_BINOMIAL"
+    }
+   },
+   "ratios": {
+    "det": {
+     "ratio": 2.8315217391304346,
+     "lower95": 2.5879396984924625
+    },
+    "sto": {
+     "ratio": 1.5709090909090908,
+     "lower95": 1.4334415403942147
+    }
+   }
+  },
+  "t0.7_h1.0_cv/s1": {
+   "cells": {
+    "det|det": {
+     "type": "matched",
+     "per_env_seed": [
+      15,
+      10,
+      14,
+      13,
+      9,
+      11,
+      12,
+      14
+     ],
+     "mean": 12.25,
+     "sd": 2.1213203435596424,
+     "binomial_sd": 3.4095072346797175,
+     "label": "R0_BINOMIAL"
+    },
+    "sto|det": {
+     "type": "mismatched",
+     "per_env_seed": [
+      75,
+      69,
+      72,
+      69,
+      71,
+      76,
+      69,
+      74
+     ],
+     "mean": 71.875,
+     "sd": 2.850438562747845,
+     "binomial_sd": 7.095768802309819,
+     "label": "R0_BINOMIAL"
+    },
+    "det|sto": {
+     "type": "mismatched",
+     "per_env_seed": [
+      114,
+      111,
+      97,
+      114,
+      106,
+      104,
+      112,
+      117
+     ],
+     "mean": 109.375,
+     "sd": 6.588680769753099,
+     "binomial_sd": 7.715544206070842,
+     "label": "R0_BINOMIAL"
+    },
+    "sto|sto": {
+     "type": "matched",
+     "per_env_seed": [
+      29,
+      35,
+      33,
+      37,
+      27,
+      34,
+      37,
+      33
+     ],
+     "mean": 33.125,
+     "sd": 3.563204817496262,
+     "binomial_sd": 5.343506329727076,
+     "label": "R0_BINOMIAL"
+    }
+   },
+   "ratios": {
+    "det": {
+     "ratio": 8.928571428571429,
+     "lower95": 7.96393893893894
+    },
+    "sto": {
+     "ratio": 2.169811320754717,
+     "lower95": 2.0319148936170213
+    }
+   }
+  }
+ },
+ "inflation": "INFLATION_PARTIAL"
+}
