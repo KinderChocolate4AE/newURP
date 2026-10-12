@@ -1,0 +1,5 @@
+R2_lim_v40 {'netonly': 0.297, 'both_n1': 0.872, 'limonly_n1': 0.842, 'both_n2': 0.923, 'limonly_n2': 0.904, 'both_n3': 0.942, 'limonly_n3': 0.919, 'both_n4': 0.948, 'limonly_n4': 0.927}
+R6_att_a30 {'netonly': 0.253, 'both_n1': 0.923, 'limonly_n1': 0.922, 'both_n2': 0.907, 'limonly_n2': 0.909, 'both_n3': 0.913, 'limonly_n3': 0.917, 'both_n4': 0.921, 'limonly_n4': 0.923}
+C1_limweak {'netonly': 0.297, 'both_n1': 0.638, 'limonly_n1': 0.587, 'both_n2': 0.756, 'limonly_n2': 0.748, 'both_n3': 0.774, 'limonly_n3': 0.765, 'both_n4': 0.778, 'limonly_n4': 0.766}
+C5_all {'netonly': 0.096, 'both_n1': 0.377, 'limonly_n1': 0.318, 'both_n2': 0.46, 'limonly_n2': 0.419, 'both_n3': 0.487, 'limonly_n3': 0.448, 'both_n4': 0.497, 'limonly_n4': 0.458}
+EXIT 0

@@ -1,0 +1,32 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "RP_d4_s2",
+  "n": 2,
+  "iters": 800,
+  "seed": 1002,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "runs/d4_n2_vsr2b50.pkl",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000
+ },
+ "train_sec": 120.31125164031982,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.9895000457763672,
+  "net": 0.0002500000118743628,
+  "lim": 0.9892500638961792,
+  "leak": 0.0008750000270083547,
+  "timeout": 0.00962500087916851,
+  "seed_std": 0.0015000055234542114,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

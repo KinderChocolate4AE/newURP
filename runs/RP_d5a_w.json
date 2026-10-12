@@ -1,0 +1,32 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "RP_d5a_w",
+  "n": 2,
+  "iters": 800,
+  "seed": 1003,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": "runs/RP_d4_w.pkl",
+  "def_": "runs/d5a_n2_pool7_init4.pkl",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000
+ },
+ "train_sec": 44.93011498451233,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.9485000371932983,
+  "net": 0.0,
+  "lim": 0.9485000371932983,
+  "leak": 0.017625000327825546,
+  "timeout": 0.0338750034570694,
+  "seed_std": 0.007314373546625462,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

@@ -18,9 +18,13 @@ class P:  # WORLD.md §1 nominal values. Changing any of these = new scoreboard.
     trk_lag = 1  # defense track latency in control steps (x0.1 s)
 
 
+WORLDS = {"S1": "", "S2": "trk_lag=3"}  # scoreboards: S2 = WORLD-v1.1 + 0.3 s defense track latency (LAB_LOG 03:21)
+
+
 def set_world(spec):
     """'lim_a=25,att_v=40' -> mutate P (call before any jit). Returns dict of overrides."""
     out = {}
+    spec = WORLDS.get(spec, spec)
     for kv in filter(None, (spec or "").split(",")):
         k, v = kv.split("=")
         assert hasattr(P, k), k

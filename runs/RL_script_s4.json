@@ -1,0 +1,32 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "RL_script_s4",
+  "n": 2,
+  "iters": 2400,
+  "seed": 1004,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "script",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000
+ },
+ "train_sec": 253.7483355998993,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.9933750629425049,
+  "net": 0.061625003814697266,
+  "lim": 0.9317500591278076,
+  "leak": 0.003375000087544322,
+  "timeout": 0.0032500000670552254,
+  "seed_std": 0.0014947876471409663,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

@@ -1,0 +1,39 @@
+{
+ "args": {
+  "cmd": "train_def",
+  "name": "d5b_n2_pool7",
+  "n": 2,
+  "iters": 800,
+  "seed": 18,
+  "envs": 2048,
+  "red": "runs/r2b_n2_vs_script.pkl,runs/RP_script_s1.pkl,runs/RP_script_s2.pkl,runs/RP_script_w.pkl,runs/RP_d4_s1.pkl,runs/RP_d4_s2.pkl,runs/RP_d4_w.pkl",
+  "red_frac": 0.7,
+  "init": null,
+  "def_": null,
+  "att": null,
+  "nores": false,
+  "lr": 0.0001,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000
+ },
+ "train_sec": 198.86455297470093,
+ "vs_script": {
+  "n": 8000,
+  "intercept": 0.9568750262260437,
+  "net": 0.008750000037252903,
+  "lim": 0.9481250643730164,
+  "leak": 0.042750000953674316,
+  "timeout": 0.000375000003259629,
+  "seed_std": 0.00637254293862188,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ },
+ "vs_r2b_n2_vs_script.pkl": 0.9965000748634338,
+ "vs_RP_script_s1.pkl": 0.9938750267028809,
+ "vs_RP_script_s2.pkl": 0.9936250448226929,
+ "vs_RP_script_w.pkl": 0.9957500696182251,
+ "vs_RP_d4_s1.pkl": 0.9673750400543213,
+ "vs_RP_d4_s2.pkl": 0.999625027179718,
+ "vs_RP_d4_w.pkl": 0.9817500710487366
+}

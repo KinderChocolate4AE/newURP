@@ -1,0 +1,39 @@
+{
+ "args": {
+  "cmd": "train_def",
+  "name": "d5a_n2_pool7_init4",
+  "n": 2,
+  "iters": 800,
+  "seed": 17,
+  "envs": 2048,
+  "red": "runs/r2b_n2_vs_script.pkl,runs/RP_script_s1.pkl,runs/RP_script_s2.pkl,runs/RP_script_w.pkl,runs/RP_d4_s1.pkl,runs/RP_d4_s2.pkl,runs/RP_d4_w.pkl",
+  "red_frac": 0.7,
+  "init": "runs/d4_n2_vsr2b50.pkl",
+  "def_": null,
+  "att": null,
+  "nores": false,
+  "lr": 0.0001,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000
+ },
+ "train_sec": 118.18521690368652,
+ "vs_script": {
+  "n": 8000,
+  "intercept": 0.9628750681877136,
+  "net": 0.0001250000059371814,
+  "lim": 0.9627500176429749,
+  "leak": 0.03700000047683716,
+  "timeout": 0.0001250000059371814,
+  "seed_std": 0.004313859290017032,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ },
+ "vs_r2b_n2_vs_script.pkl": 0.999500036239624,
+ "vs_RP_script_s1.pkl": 0.999250054359436,
+ "vs_RP_script_s2.pkl": 0.999000072479248,
+ "vs_RP_script_w.pkl": 0.9976250529289246,
+ "vs_RP_d4_s1.pkl": 0.9865000247955322,
+ "vs_RP_d4_s2.pkl": 0.999750018119812,
+ "vs_RP_d4_w.pkl": 0.9952500462532043
+}
