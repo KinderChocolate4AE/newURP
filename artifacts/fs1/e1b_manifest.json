@@ -1,0 +1,131 @@
+{
+  "schema": "fs1-e1b-manifest-v1",
+  "status": "sealed 2026-10-12 BEFORE any E1b production (contract docs/137). User approval 2026-10-12 'run now while the server is idle' — overrides the advisor's 'after 10/27' timing (advisor rule: before 10/26 only R0; user decision). Design = advisor 10-12 sketch with two power-driven changes (see 'deviations'). E1 data (docs/134 §8) seen before this design — disclosed",
+  "lineage": {
+    "contract": "docs/137",
+    "parent": "E1 docs/134 (manifest 4215cdb837a0307b)",
+    "recipe": "identical to E1 ladder (arm C-1 distilled fire head, ROE A, m0.35_n1, NEW BC -> 1.1e8 -> det exploiter 1e7), production code pin = E1 ladder pin 80afb2a"
+  },
+  "question": "where (and whether) the learned net-capture ceiling turns on inside rho 1.92-2.30 (E1's one-step rise)",
+  "why_this_interval": "all five points realize 6 deploy ticks (tau 0.300 -> 0.2745 s), so a split between metrics cannot come from the tick step (E1's step is at rho 2.769, outside)",
+  "points": [
+    {
+      "name": "d0",
+      "tau_scale": 1.0,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "densify",
+      "rho": 1.9231,
+      "tau": 0.3,
+      "deploy_ticks": 6
+    },
+    {
+      "name": "d1",
+      "tau_scale": 0.97804,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "densify",
+      "rho": 2.0104,
+      "tau": 0.29341,
+      "deploy_ticks": 6
+    },
+    {
+      "name": "d2",
+      "tau_scale": 0.95656,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "densify",
+      "rho": 2.1017,
+      "tau": 0.28697,
+      "deploy_ticks": 6
+    },
+    {
+      "name": "d3",
+      "tau_scale": 0.93555,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "densify",
+      "rho": 2.1972,
+      "tau": 0.28066,
+      "deploy_ticks": 6
+    },
+    {
+      "name": "d4",
+      "tau_scale": 0.915,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "role": "densify",
+      "rho": 2.297,
+      "tau": 0.2745,
+      "deploy_ticks": 6
+    }
+  ],
+  "seeds": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "no_pooling": "endpoints d0 (rho 1.92) and d4 (rho 2.30) are NEW training with seeds 10-17; E1 slots (seeds 0-4) are never combined with E1b",
+  "production": {
+    "per slot": "NEW BC -> 1.1e8 -> det exploiter 1e7 (jseed 310000 + idx*100 + seed); no sto exploiter",
+    "slots": 40,
+    "hardware": "server4 single GPU, JAX learner (E1 regime)"
+  },
+  "evaluation": {
+    "n": 240,
+    "seed0": 350000,
+    "stride": 1000,
+    "env_seed": 0,
+    "defenders": [
+      "learned_det (judgment, vs ex_judge)",
+      "learned_sto (report, vs ex_judge)"
+    ],
+    "cli": "same as E1 (--tau-scale per point, --stack r4p --mu 0.35 --nu 1.0 --coop-window --env-seed 0 --groups none); records rob_fire"
+  },
+  "metric": {
+    "primary (judgment)": "net = NET_CAPTURE + CAPTURE_WITH_CONTACT, learned_det vs det exploiter",
+    "diagnostic only": "rob_fire and conversion = net / rob_fire (E1 A2 count: rob_fire = net + robust-fire-then-penetrated exactly; conversion 0.80 at 1.92, 0.83 at 2.30)",
+    "report": [
+      "seed-median net per point normalized (net - F)/(P - F) = shape (descriptive, no label)",
+      "defended total",
+      "learned_sto line"
+    ]
+  },
+  "rule": {
+    "endpoints": "F = seed-median net at d0, P = seed-median net at d4 (both inside this contract)",
+    "no_step": "P - F < 4/240 -> NO_STEP (point estimate, no bootstrap): E1's rise did not reproduce",
+    "onset": "first interior point (d1, d2, d3) whose seed-median net >= M = (F + P)/2",
+    "labels": {
+      "ONSET_LOW": "onset at d1 (rho 2.01)",
+      "ONSET_MID": "onset at d2 (rho 2.10)",
+      "ONSET_HIGH": "onset at d3 (rho 2.20) or no interior point reaches M"
+    },
+    "uncertainty": "stratified bootstrap (resample seeds within each point incl. endpoints, recompute F, P, M), 2000 reps, rng seed 0; final = point label if its bootstrap share >= 0.9, else UNRESOLVED",
+    "diagnostic_flag": "if the same rule on rob_fire gives a different final label -> CONVERSION_SENSITIVE flag with the conversion table attached; the judgment stays the primary label (E1's 'no branch claim on disagreement' rule is NOT reused — advisor 10-12)"
+  },
+  "prediction (registered, hypothesis formed after seeing E1)": "head-on window N = 3 steps at rho ~ 2.17 -> ONSET_HIGH or ONSET_MID boundary; registered as: onset label in {ONSET_MID, ONSET_HIGH}. Not blind: E1 data motivated it",
+  "deviations_from_advisor_sketch": [
+    "seeds 5 -> 8 (power memo: 5 seeds gave 46-91% correct under seed SD 4-7, 8 seeds 80-100%)",
+    "ONSET_GRADUAL label dropped: synthetic power 0-10% (true gradual values sit on the 25%/75% band edges); a gradual truth yields UNRESOLVED in 86-97% of synthetic runs, which is the honest outcome. Shape is reported descriptively",
+    "bootstrap rule = point-label share >= 0.90 (95% gave 22-62% power at 5 seeds)"
+  ],
+  "power_memo": "synthetic (F 3, P 18, endpoint SD 4, plateau SD 4/7, 80 reps): 8 seeds -> step at d1/d2/d3 correct 0.80-1.00, wrong label <= 0.02; script = scratch e1b_power2.py (logic copied into tests/test_fs1_eval.py semantics test)",
+  "pre_seal_checks": [
+    "label semantics unit test (ideal synthetic data per label -> that label)",
+    "deploy ticks = 6 at all five points (manifest assert)",
+    "measurement window: net/rob_fire are episode outcomes, no 16 m window involved"
+  ],
+  "not_evidence_for": [
+    "world ceiling",
+    "real-net representativeness",
+    "blind prediction",
+    "pooling with E1 or E7-b",
+    "claims unconditional on the 1e7 exploiter"
+  ],
+  "manifest_hash": "ecc6974151e28502"
+}

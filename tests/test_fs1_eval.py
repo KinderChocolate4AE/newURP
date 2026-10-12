@@ -242,3 +242,22 @@ def test_e6_label_semantics():
     assert M.e6_label([2, -3, 1, 0, 4]) == "NULL"             # 차이 없음 → 'ρ 로 모인다'
     assert M.e6_label([9, -12, 10, -9, 11]) == "MIXED"         # 중앙값은 크지만 seed 방향이 갈림
     assert M.e6_label([30, 30, 30, 30, 30], floor=True) == "UNIDENTIFIABLE_FLOOR"
+
+
+def test_e1b_onset_label_semantics():
+    """E1b 라벨 의미 단위 테스트 (docs/137): 이상적 합성 데이터 → 라벨 이름이 결론 (시작 위치) 을 가리키는가."""
+    import sys
+    sys.path.insert(0, "scripts")
+    import numpy as np
+    import fs1_e1b_manifest as M
+    import fs1_e1b_readout as R
+    assert all(p["deploy_ticks"] == 6 for p in M.POINTS) and len(M.SEEDS) == 8
+    assert M.onset_label([3, 18, 18, 18, 18]) == "ONSET_LOW"    # 첫 내부점에서 이미 위 → '낮은 ρ 에서 시작'
+    assert M.onset_label([3, 3, 18, 18, 18]) == "ONSET_MID"
+    assert M.onset_label([3, 3, 3, 18, 18]) == "ONSET_HIGH"
+    assert M.onset_label([3, 3, 3, 3, 18]) == "ONSET_HIGH"      # 내부점이 M 에 못 미침 → 마지막 구간
+    assert M.onset_label([3, 4, 5, 4, 6]) == "NO_STEP"          # 끝점 차 < 4 → E1 의 오름이 재현 안 됨
+    seeds = lambda m, sd=0: np.full(8, float(m)) + sd * np.array([-2, -1, -1, 0, 0, 1, 1, 2])
+    assert R.judge([seeds(m, 1) for m in (3, 3, 18, 18, 18)])["final"] == "ONSET_MID"   # 깨끗한 계단 → 판정
+    noisy = [seeds(3, 1), seeds(10.5, 12), seeds(10.5, 12), seeds(10.5, 12), seeds(18, 1)]
+    assert R.judge(noisy)["final"] == "UNRESOLVED"               # 내부점이 M 근처에서 크게 흩어짐 → 판정 보류
