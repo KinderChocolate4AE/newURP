@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "S2_RP_G1_s2",
+  "n": 1,
+  "iters": 800,
+  "seed": 1002,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "runs/S2_G1_bigpool_fromA1.pkl",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK,obs_hist=3",
+  "fire_prior": 1.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.0
+ },
+ "train_sec": 212.1428952217102,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.39775002002716064,
+  "net": 0.273375004529953,
+  "lim": 0.12437500804662704,
+  "leak": 0.5660000443458557,
+  "timeout": 0.036250002682209015,
+  "seed_std": 0.014006687573902832,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}
