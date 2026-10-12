@@ -1,0 +1,17 @@
+2026-10-13 05:42:18.757517: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-10-13 05:42:18.758107: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-10-13 05:42:18.763406: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-10-13 05:42:18.763448: W external/xla/xla/service/gpu/autotuning/gemm_fusion_autotuner.cc:1157] Compiling 188 configs for 18 fusions on a single thread.
+E1013 05:42:43.321478 3063919 cuda_blas.cc:196] failed to create cublas handle: the resource allocation failed
+E1013 05:42:43.321521 3063919 cuda_blas.cc:199] Failure to initialize cublas may be due to OOM (cublas needs some free memory when you initialize it, and your deep-learning framework may have preallocated more than its fair share), or may be because this binary was not built with support for the GPU in your machine.
+jax.errors.SimplifiedTraceback: For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/hjhong/night/code/exp.py", line 85, in <module>
+    p, h = train(att_side(), a.n, opp, a.seed, a.iters, num_envs=a.envs, init=load(a.init) if a.init else None,
+  File "/data/hjhong/night/code/rl.py", line 244, in train
+    params, opt, s, key, stats = update(params, opt, s, key)
+jaxlib._jax.XlaRuntimeError: INTERNAL: Failed to initialize BLAS support
+EXIT 1

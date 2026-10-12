@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "SENS_RP_lag1learn_s3plus",
+  "n": 1,
+  "iters": 1600,
+  "seed": 1303,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": "runs/SENS_RP_lag1learn_s3.pkl",
+  "def_": "runs/SENS_lag1_learn.pkl",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S1,GK,H300,obs_hist=3",
+  "fire_prior": 1.0,
+  "lim_scale": 0.5,
+  "nd_scale": 0.5,
+  "c_lim": 0.0
+ },
+ "train_sec": 227.16067814826965,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.9425000548362732,
+  "net": 0.0005000000237487257,
+  "lim": 0.9420000314712524,
+  "leak": 0.0,
+  "timeout": 0.057500001043081284,
+  "seed_std": 0.006422622344818406,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

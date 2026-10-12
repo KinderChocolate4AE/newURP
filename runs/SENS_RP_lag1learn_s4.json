@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "SENS_RP_lag1learn_s4",
+  "n": 1,
+  "iters": 800,
+  "seed": 1004,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "runs/SENS_lag1_learn.pkl",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S1,GK,H300,obs_hist=3",
+  "fire_prior": 1.0,
+  "lim_scale": 0.5,
+  "nd_scale": 0.5,
+  "c_lim": 0.0
+ },
+ "train_sec": 206.6111719608307,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.7231250405311584,
+  "net": 0.08137500286102295,
+  "lim": 0.6417500376701355,
+  "leak": 0.042750000953674316,
+  "timeout": 0.234125018119812,
+  "seed_std": 0.00816144311401624,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}
