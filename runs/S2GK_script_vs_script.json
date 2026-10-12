@@ -1,0 +1,36 @@
+{
+ "args": {
+  "cmd": "eval",
+  "name": "S2GK_script_vs_script",
+  "n": 1,
+  "iters": 200,
+  "seed": 1,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "script",
+  "att": "script",
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK",
+  "fire_prior": 3.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.0
+ },
+ "res": {
+  "n": 8000,
+  "intercept": 0.8860000371932983,
+  "net": 0.30650001764297485,
+  "lim": 0.5795000195503235,
+  "leak": 0.11375000327825546,
+  "timeout": 0.0002500000118743628,
+  "seed_std": 0.009949878810030807,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

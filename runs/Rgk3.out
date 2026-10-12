@@ -1,0 +1,16 @@
+E1013 03:40:33.138260 2785091 pjrt_stream_executor_client.cc:2916] Execution of replica 0 failed: RESOURCE_EXHAUSTED: Failed to load in-memory CUBIN (compiled for a different GPU?).: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+jax.errors.SimplifiedTraceback: For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/hjhong/night/code/exp.py", line 72, in <module>
+    p, h = train(att_side(), a.n, opp, a.seed, a.iters, num_envs=a.envs, init=load(a.init) if a.init else None,
+  File "/data/hjhong/night/code/rl.py", line 128, in train
+    params = init if init is not None else init_params(kp, side, n)
+  File "/data/hjhong/night/code/rl.py", line 89, in init_params
+    s = reset(jax.random.PRNGKey(0), n)
+  File "/data/hjhong/night/code/sim.py", line 116, in reset
+    ap = jnp.array([R * jnp.cos(b), R * jnp.sin(b), alt])
+jaxlib._jax.XlaRuntimeError: RESOURCE_EXHAUSTED: Failed to load in-memory CUBIN (compiled for a different GPU?).: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+EXIT 1

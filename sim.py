@@ -245,7 +245,7 @@ def def_obs(s, script=None):
     return jnp.concatenate([
         s.trk_p / 100., s.trk_v / 30.,
         s.dp / 100., s.dv / 30., (s.trk_p - s.dp) / 100.,
-        jnp.array([s.shots / 2., jnp.maximum(s.reload, 0.), s.net_on, s.net_age, s.t / P.T]),
+        jnp.array([s.shots / 2., jnp.maximum(s.reload, 0.), s.net_on, s.net_age, s.t / 30.]),
         lrel.ravel(), (s.lv / 45.).ravel(), s.lalive.astype(jnp.float32),
         (script.lim_acc / P.lim_a).ravel(), script.nd_acc / P.nd_a, script.fire[None].astype(jnp.float32),
     ] + ([((jnp.concatenate([s.trk_p, s.trk_v])[None] - s.trk_prev[-P.obs_hist:]) / 10.).ravel()] if P.obs_hist else []))
@@ -256,7 +256,7 @@ def att_obs(s):
     return jnp.concatenate([
         s.ap / 100., s.av / 30., s.aa / 20.,
         rel(s.dp), s.dv / 30.,
-        rel(s.net_p) * s.net_on, s.net_v / 30. * s.net_on, jnp.array([s.net_on, s.net_age, s.shots / 2., s.t / P.T]),
+        rel(s.net_p) * s.net_on, s.net_v / 30. * s.net_on, jnp.array([s.net_on, s.net_age, s.shots / 2., s.t / 30.]),
         jax.vmap(rel)(s.lp).ravel() , (s.lv / 45.).ravel(), s.lalive.astype(jnp.float32),
     ])
 
@@ -271,7 +271,7 @@ def run_episodes(key, n_eps, n, def_pol, att_pol, use_net=True, use_lim=True, ki
         s = jax.vmap(lambda x: step(x, def_pol(x), att_pol(x)))(s)
         return s, None
 
-    s, _ = jax.lax.scan(body, s0, None, length=N_CTRL)
+    s, _ = jax.lax.scan(body, s0, None, length=int(round(P.T / CTRL_DT)))  # obs time is normalized by a fixed 30 s
     return s
 
 
