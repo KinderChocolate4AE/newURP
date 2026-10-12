@@ -24,6 +24,7 @@ fixed = [("원 스크립트 (기준선)", "runs/S2_baseline.json", "n1_mix", ["S
          ("GK+H300+RND 스크립트 (판마다 무작위)", None, None, ["S2GKHR_RP_script_s1", "S2GKHR_RP_script_s2", "S2GKHR_RP_script_s3"], None),
          ("MIX1 혼합 {GKH 스크립트, H_D1, H_D2, H0_D1}", None, None, ["S2MIX1_RP_s1", "S2MIX1_RP_s2", "S2MIX1_RP_s3"], None),
          ("**G1 (학습, GK prior, 큰 풀 56, c=0.2)**", "runs/S2_G1_bigpool_fromA1.json", "vs_script", ["S2_RP_G1_s1", "S2_RP_G1_s2", "S2_RP_G1_s3"], "runs/S2_G1_bigpool_fromA1.json"),
+         ("G1r2 (G1 + 큰 풀 68 1500 it 추가)", "runs/S2_G1r2_vs_script.json", "vs_script", ["S2_RP_G1r2_s1", "S2_RP_G1r2_s2", "S2_RP_G1r2_s3"], None),
          ("G2 (학습, GK+H300 prior, 큰 풀 56, c=0.2)", "runs/S2_G2_bigpool_H300.json", "vs_script", ["S2_RP_G2_s1", "S2_RP_G2_s2", "S2_RP_G2_s3"], "runs/S2_G2_bigpool_H300.json"),
          ("e4 (학습, 원 prior, c=0.2)", "runs/S2_e4_c02_fp1.json", "vs_script", ["S2_RP_e4_s1", "S2_RP_e4_s2", "S2_RP_e4_w"], "runs/S2_e4_c02_fp1.json")]
 for name, f, key, reds, poolf in fixed:

@@ -1,0 +1,10 @@
+{
+ "vs_script": {
+  "intercept": 0.866,
+  "net": 0.267,
+  "lim": 0.599,
+  "leak": 0.134,
+  "timeout": 0.0
+ },
+ "note": "local 8x1000 eval at 06:46 (server post-train eval was stopped)"
+}

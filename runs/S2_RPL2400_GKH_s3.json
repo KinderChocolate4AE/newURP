@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "S2_RPL2400_GKH_s3",
+  "n": 1,
+  "iters": 2400,
+  "seed": 2003,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "script",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK,H300",
+  "fire_prior": 3.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.0
+ },
+ "train_sec": 571.479546546936,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.35462501645088196,
+  "net": 0.34425002336502075,
+  "lim": 0.010375000536441803,
+  "leak": 0.6106250286102295,
+  "timeout": 0.03475000336766243,
+  "seed_std": 0.009013013857862436,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}
