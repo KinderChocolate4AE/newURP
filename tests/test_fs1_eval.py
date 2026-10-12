@@ -261,3 +261,22 @@ def test_e1b_onset_label_semantics():
     assert R.judge([seeds(m, 1) for m in (3, 3, 18, 18, 18)])["final"] == "ONSET_MID"   # 깨끗한 계단 → 판정
     noisy = [seeds(3, 1), seeds(10.5, 12), seeds(10.5, 12), seeds(10.5, 12), seeds(18, 1)]
     assert R.judge(noisy)["final"] == "UNRESOLVED"               # 내부점이 M 근처에서 크게 흩어짐 → 판정 보류
+
+
+def test_r0_label_semantics():
+    """R0 라벨 의미 단위 테스트 (docs/135): 이항 → BINOMIAL, 과분산 → OVERDISPERSED, 3:1 비율 → EXCEEDS."""
+    import sys
+    sys.path.insert(0, "scripts")
+    import numpy as np
+    import fs1_r0_manifest as M
+    import fs1_r0_readout as R
+    rng = np.random.default_rng(0)
+    b = rng.binomial(240, 0.1, 8)
+    assert M.dispersion_label(np.std(b, ddof=1), b.mean()) == "R0_BINOMIAL"
+    od = rng.binomial(240, rng.beta(2, 18, 8))                            # beta-binomial (p 가 env seed 마다 흔들림)
+    assert M.dispersion_label(np.std(od, ddof=1), od.mean()) == "R0_OVERDISPERSED"
+    lb = [R.ratio_lower(rng.binomial(240, 0.3, 8), rng.binomial(240, 0.1, 8), rng)[1] for _ in range(4)]
+    assert M.inflation_label(lb) == "INFLATION_EXCEEDS_NOISE"            # 3:1 → 잡음을 넘는 과대평가
+    same = [R.ratio_lower(rng.binomial(240, 0.1, 8), rng.binomial(240, 0.1, 8), rng)[1] for _ in range(4)]
+    assert M.inflation_label(same) == "INFLATION_WITHIN_NOISE"           # 1:1 → 잡음 안
+    assert M.inflation_label([2.0, 2.0, 1.2, 1.1]) == "INFLATION_PARTIAL"

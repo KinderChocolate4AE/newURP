@@ -1,0 +1,60 @@
+{
+  "schema": "fs1-r0-manifest-v1",
+  "status": "sealed 2026-10-12 BEFORE any R0 evaluation (contract docs/135; user approval 10-12; design = advisor 10-12 sketch). The only new contract allowed before 10/26 by the advisor rule",
+  "question": "with frozen defense and frozen exploiter, how much does the canonical 240-episode ceiling move when only the environment seed changes, and does the cross-audit inflation (mismatched / matched, 2.6-3.8x) exceed that noise",
+  "finding_behind": "10-12: with --env-seed fixed a re-run is byte-identical, so repeatability must be measured by varying the env seed (worker env RNG leaks into the m4 stack); initial states (--seed band) stay fixed",
+  "slots": [
+    {
+      "variant": "t0.5_h1.0_cv",
+      "seed": 0,
+      "why": "plateau: ceil_det 21 = median of 15 (first in manifest order among ties)",
+      "tau_scale": 0.5,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "eval_seed": 278000
+    },
+    {
+      "variant": "t0.7_h1.0_cv",
+      "seed": 1,
+      "why": "low ceiling: min ceil_det 7",
+      "tau_scale": 0.7,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "eval_seed": 276000
+    }
+  ],
+  "exploiters": {
+    "det": "judge_exploiter",
+    "sto": "judge_exploiter_sto"
+  },
+  "env_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "n": 240,
+  "source": "server4 /data/hjhong/fs1jax/e7b/<variant>/s<seed> (E7-b / E7-b' checkpoints, no retraining)",
+  "evaluation": "python -m shepherd.fs1.eval run, defenders learned_det learned_sto, one run per (slot, exploiter, env seed) = 32 runs, flags as the E7-b runner (incl. --coop-window) plus --env-seed k",
+  "cells": {
+    "det|det": "matched",
+    "sto|sto": "matched",
+    "det|sto": "mismatched",
+    "sto|det": "mismatched"
+  },
+  "labels": {
+    "dispersion (per slot x cell)": "SD over env seeds <= 1.5 x binomial SD -> R0_BINOMIAL else R0_OVERDISPERSED",
+    "inflation": "ratio = mean(mismatched)/mean(matched) per (slot, defense line); stratified bootstrap over env seeds (numerator and denominator resampled independently), 2000 reps, rng 0; 95% lower bound > 1.5 in all 4 -> INFLATION_EXCEEDS_NOISE, in 1-3 -> INFLATION_PARTIAL, in 0 -> INFLATION_WITHIN_NOISE"
+  },
+  "power_memo": "advisor: matched p ~ .08 -> binomial SD ~4.2/240, mismatched p ~ .25 -> ~6.7; a ~40 difference is ~5 sigma; the risk is overdispersion",
+  "use": "one sentence in the evaluation-method section next to 2.6-3.8x and next to borderline verdicts; NO re-judgment of any sealed verdict",
+  "pre_seal_checks": [
+    "label semantics unit test tests/test_fs1_eval.py::test_r0_label_semantics",
+    "measurement window: episode outcomes only (defended count; coop-window kept on only to match E7-b)"
+  ],
+  "manifest_hash": "0dfec67442ca6951"
+}
