@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "S2_RPL2400_A_D1_s2",
+  "n": 1,
+  "iters": 2400,
+  "seed": 2002,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "runs/A_D1.pkl",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK,obs_hist=3",
+  "fire_prior": 1.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.0
+ },
+ "train_sec": 345.4885835647583,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.1392500102519989,
+  "net": 0.09962500631809235,
+  "lim": 0.03962500020861626,
+  "leak": 0.8368750214576721,
+  "timeout": 0.023875001817941666,
+  "seed_std": 0.006759256694807965,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}
