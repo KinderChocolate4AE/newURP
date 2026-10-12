@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "SENS_lag1_GKH_s2",
+  "n": 1,
+  "iters": 800,
+  "seed": 1002,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "script",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S1,GK,H300",
+  "fire_prior": 3.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.0
+ },
+ "train_sec": 136.39823007583618,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.8193750381469727,
+  "net": 0.32862502336502075,
+  "lim": 0.4907500147819519,
+  "leak": 0.1391250044107437,
+  "timeout": 0.04150000214576721,
+  "seed_std": 0.009603867287579176,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}
