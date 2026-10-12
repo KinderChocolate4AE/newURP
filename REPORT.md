@@ -142,12 +142,13 @@ S1 의 net 추가 기여 ≈ 0 (both 98.9 = limiter 단독 98.9). S1 레드팀 �
 
 효과가 없었던 것:
 1. **스크립트 공격자 상대 잔차 PPO** (S1 d1–d3, S2 d1/진단 A–D) — 기준선 근처에서 PN 을 망치며 표류 (S2 진단: lr≈0 만 66.1% 유지, 학습하면 55–60%).
-2. **PSRO 반복 (최신 방어만 배치)** — fresh 최악이 오르지 않음: A 14.9→14.8→12.8, H 7.6→0.4→7.9 (E26–E44). 학습한 풀은 막지만 새 레드팀에 일반화 안 됨.
+2. **PSRO 반복 / 이어 학습 (최신 방어만 배치)** — fresh 최악이 오르지 않음: A 14.9→14.8→12.8, H 7.6→0.4→7.9 (E26–E44), G1 을 큰 풀 68 로 1500 it 더 학습한 G1r2 도 19.2→8.4% (E57). 학습한 풀은 막지만 새 레드팀에 일반화 안 됨.
 3. **무작위화 (RND), 모집단 혼합 (MIX1), limiter n=2 (SPR)** — 적응 상대 fresh 최악 14.1 / 5.9 / 1.7% (GK+H300 스크립트 19.7%), 모두 레드팀 seed 잡음 범위 안이거나 더 나쁨 (E37, E42, E46). clean 압력 c=0.5 (C_D1) 도 1순위 위반 (6.2 vs 14.9%).
 
 ## 5. 확신하지 못하는 부분
 1. **간판 지표의 잡음이 설계 차이보다 크다.** 같은 GK+H300 스크립트에 레드팀 6개: 33.3/19.7/49.6/31.4/8.8/48.4% → 3팀 최악이 seed 선택만으로 8.8–19.7%. A_D1 도 6팀 14.9–54.3%. ±10%p 이내 비교 (예: "최선 대비 −2%p") 는 판정 불가.
-2. **800 it 레드팀은 수렴 전.** 최악 팀을 +1600 it 이어 학습하면 GKH 스크립트 8.8→3.5%, A_D1 14.9→3.2% (E48). 표의 fresh 숫자는 견고성의 상한 (낙관치)이다. 충분히 학습한 공격자 상대로는 S2 n=1 의 모든 방어가 ~3% 로 보인다.
+2. **800 it 레드팀은 수렴 전.** 최악 팀을 +1600 it 이어 학습하면 GKH 스크립트 8.8→3.5%, A_D1 14.9→3.2%, G1 39.8→8.2% (E48, E56). scratch 2400 it 레드팀 3개는 G1 18.8 / GKH 스크립트 2.5% (E59). 표의 fresh 숫자는 견고성의 상한 (낙관치)이다.
+7. **G1 은 학습 seed 1 개짜리 결과다.** 같은 방식의 G2 (다른 prior) 는 1.8%, G1 을 이어 학습한 G1r2 는 8.4% 였다. G1 의 레시피 (A_D1 에서 시작, 풀 56, 3000 it, rf 0.8) 가 재현되는지는 확인하지 못했다.
 3. **30 s 창.** 시간초과 판이 많은 레드팀 상대 평균 요격률은 창에 민감 (g1: 63.6→97.5% @60 s). 최악 팀은 시간초과가 적어 간판은 거의 불변 (E25, E41). 레드팀 학습도 30 s 규칙 기준.
 4. **적응 상대 기여 분리**는 구성별 레드팀 재학습으로만 의미가 있다. 같은 레드팀으로 net/limiter 를 끄면 오히려 요격이 오르는 경우가 있다 (E43 주석).
 5. 모형 단순화: 점질량·중력 무시, 기체 간 충돌·아군 피해 없음, 그물은 구형 1.5 m (방향 무관 — 실제보다 관대), 근접신관은 반경 안이면 확정 격추. 센서 잡음은 백색 (필터 없음) — 실제 추적 필터가 있으면 지연 효과가 달라질 수 있다.
@@ -170,10 +171,17 @@ PYTHONIOENCODING=utf-8 ./.venv/Scripts/python report_tables.py
 ./srv.sh run NAME 16 train_att S2_RP_x_s1 --world S2,GK,obs_hist=3 --n 1 --iters 800 --seed 1001 \
     --def runs/<def>.pkl --fire_prior 1 --lim_scale 1.0
 tmux new -d -s night_psroA 'CUDA_VISIBLE_DEVICES=1 $PY psro.py A 30 runs/S2GK_g1.pkl S2,GK,obs_hist=3 "--c_lim 0.2 --fire_prior 1 --lim_scale 1.0" 12 16,17,18 0805 0820'
+# 간판 방어 G1 (풀 목록 = runs/bigpool.txt 의 56 개, 05:09 시점 완료 레드팀)
+./srv.sh run G1 12 train_def S2_G1_bigpool_fromA1 --world S2,GK,obs_hist=3 --n 1 --iters 3000 --lr 1e-4 --envs 4096     --red $(cat runs/bigpool.txt) --red_frac 0.8 --c_lim 0.2 --fire_prior 1 --lim_scale 1.0 --init runs/A_D1.pkl --seed 401 --eps 500
+# 그 방어 전용 레드팀 (간판) / 강한 레드팀
+./srv.sh run R 14 train_att S2_RP_G1_s1 --world S2,GK,obs_hist=3 --n 1 --iters 800 --seed 1001 --def runs/S2_G1_bigpool_fromA1.pkl --fire_prior 1 --lim_scale 1.0
+./srv.sh run R 14 train_att S2_RPL2400_G1_s1 --world S2,GK,obs_hist=3 --n 1 --iters 2400 --seed 2001 --def runs/S2_G1_bigpool_fromA1.pkl --fire_prior 1 --lim_scale 1.0
 ```
+seed: 평가 = PRNGKey(100001..100008) × 1000 판 (rl.EVAL_SEEDS), 학습 = 각 명령의 --seed (≤ 9999). 학습된 파라미터는 runs/*.pkl (git 포함).
 <!--TMUX-->
 
 ## 7. 다음에 할 일
+0. **G1 레시피 재현**: 같은 설정을 학습 seed 3개로 다시 돌려 fresh 최악 (2400 it × 3) 의 분포를 본다. 지금의 학습 효과 주장은 이것에 달려 있다.
 1. **센서 지연이 결정 변수인지 확정**: 지연 0.1/0.2/0.3 s 에서 같은 GK+H300 + 학습 방어를 수렴 레드팀 (≥2400 it, 6 seed) 으로 재고, 적응 상대 요격률이 의미 있게 갈리는 지연 경계를 찾는다 (E49 는 그 첫 점).
 2. **평가 프로토콜 강화**: 레드팀 6 seed × 2400 it + 최악·중앙값 동시 보고. 지금 표의 800 it 3팀 최악은 낙관치이고 잡음이 ±10%p.
 3. **방어 측 정보·탄 수 설계 비교** (세계 범위 안): net 2발→3발/재장전 단축, 추적 필터 (지연 보상 예측) 를 fire-control 에 넣기, limiter 재교전 로직. 적응 공격자가 노리는 것은 0.3 s 지연 + 단발 limiter overshoot 이므로, 학습보다 이 두 구조를 먼저 바꾸는 것이 효과가 클 것으로 본다.
