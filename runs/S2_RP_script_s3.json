@@ -1,0 +1,33 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "S2_RP_script_s3",
+  "n": 1,
+  "iters": 800,
+  "seed": 1003,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "script",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2"
+ },
+ "train_sec": 159.38373041152954,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.1525000035762787,
+  "net": 0.00937500037252903,
+  "lim": 0.1431250125169754,
+  "leak": 0.546125054359436,
+  "timeout": 0.30137500166893005,
+  "seed_std": 0.01151086332639864,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

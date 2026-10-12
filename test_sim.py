@@ -49,7 +49,7 @@ def test_net_capture_in_range_and_not_beyond():
         for i in range(15):
             s = step(s, act if i == 0 else NOACT(1), jnp.zeros(3))
         assert int(s.status) == want, (dist, int(s.status))
-        assert int(s.shots) == 1
+        assert int(s.shots) == (1 if dist < 25 else 2)  # 40 m: no solution within net flight time -> interlock holds fire
 
 
 def test_net_not_before_open():

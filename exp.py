@@ -16,7 +16,8 @@ def dump(name, obj):
 
 
 def defpol(path, n, residual=True):
-    return def_script if path in (None, "script") else policy_fn(def_side(n, residual), load(path))
+    return def_script if path in (None, "script") else policy_fn(def_side(n, residual, fire_prior=a.fire_prior,
+                                                                          lim_scale=a.lim_scale, nd_scale=a.nd_scale), load(path))
 
 
 def attpol(path):
@@ -33,6 +34,8 @@ ap.add_argument("--nores", action="store_true"); ap.add_argument("--lr", type=fl
 ap.add_argument("--no_net", action="store_true"); ap.add_argument("--no_lim", action="store_true")
 ap.add_argument("--eps", type=int, default=1000)
 ap.add_argument("--world", default="")
+ap.add_argument("--fire_prior", type=float, default=3.0); ap.add_argument("--lim_scale", type=float, default=1.0)
+ap.add_argument("--nd_scale", type=float, default=1.0); ap.add_argument("--c_lim", type=float, default=0.0)
 a = ap.parse_args()
 WORLD_OVR = set_world(a.world)
 t0 = time.time()
@@ -50,7 +53,7 @@ if a.cmd == "baseline":
     dump(a.name, out)
 
 elif a.cmd == "train_def":
-    side = def_side(a.n, not a.nores)
+    side = def_side(a.n, not a.nores, fire_prior=a.fire_prior, lim_scale=a.lim_scale, nd_scale=a.nd_scale, c_lim=a.c_lim)
     reds = [load(x) for x in a.red.split(",")] if a.red else []
     opp = make_opponent("def", att_side(), reds)
     init = load(a.init) if a.init else None
@@ -64,7 +67,7 @@ elif a.cmd == "train_def":
     dump(a.name, res)
 
 elif a.cmd == "train_att":
-    dside = def_side(a.n, not a.nores)
+    dside = def_side(a.n, not a.nores, fire_prior=a.fire_prior, lim_scale=a.lim_scale, nd_scale=a.nd_scale)
     opp = make_opponent("att", dside, load(a.def_)) if a.def_ not in (None, "script") else make_opponent("att")
     p, h = train(att_side(), a.n, opp, a.seed, a.iters, num_envs=a.envs, init=load(a.init) if a.init else None,
                  log=f"runs/{a.name}.log", save=f"runs/{a.name}.pkl", lr=a.lr, use_net=un, use_lim=ul)

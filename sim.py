@@ -150,8 +150,9 @@ def _substep(s, dact, aacc):
 
 
 def fire_net(s, fire):
-    can = fire & (s.shots > 0) & (s.reload <= 0) & ~s.net_on & (s.status == 0)
-    u, _, _ = lead_aim(s.trk_p - s.dp, s.trk_v - s.dv, P.net_speed)
+    u, th, ok = lead_aim(s.trk_p - s.dp, s.trk_v - s.dv, P.net_speed)
+    # fire-control interlock: no shot without an intercept solution inside the net's flight time
+    can = fire & (s.shots > 0) & (s.reload <= 0) & ~s.net_on & (s.status == 0) & ok & (th <= P.net_tmax)
     return s._replace(net_on=s.net_on | can,
                       net_p=jnp.where(can, s.dp, s.net_p),
                       net_v=jnp.where(can, s.dv + P.net_speed * u, s.net_v),

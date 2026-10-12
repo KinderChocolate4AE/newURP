@@ -58,14 +58,18 @@ class Side(NamedTuple):
     log_std0: float
 
 
-def def_side(n, residual=True, log_std0=-2.3):
+def def_side(n, residual=True, log_std0=-2.3, fire_prior=3.0, lim_scale=1.0, nd_scale=1.0, c_lim=0.0):
+    """fire = Bernoulli(sigmoid(learned_logit + fire_prior*(+1 if script fires else -1))): the learned logit is
+    unbounded, so the policy decides timing; the prior only sets the starting point.
+    Reward: net capture +1, limiter kill +1-c_lim (limiter expended), leak -1, timeout 0."""
     def act(s, cont, fire):
         sc = def_script(s)
         base_l = sc.lim_acc if residual else 0.0
         base_n = sc.nd_acc if residual else 0.0
-        return DefAct(base_l + P.lim_a * cont[:3 * n].reshape(n, 3), base_n + P.nd_a * cont[3 * n:], fire)
-    bias = (lambda s: 3.0 * (2.0 * def_script(s).fire - 1.0)) if residual else (lambda s: -2.0)
-    rew = lambda st: jnp.select([(st == 1) | (st == 2), st == 3], [1.0, -1.0], 0.0)
+        return DefAct(base_l + lim_scale * P.lim_a * cont[:3 * n].reshape(n, 3),
+                      base_n + nd_scale * P.nd_a * cont[3 * n:], fire)
+    bias = (lambda s: fire_prior * (2.0 * def_script(s).fire - 1.0)) if residual else (lambda s: -2.0)
+    rew = lambda st: jnp.select([st == 1, st == 2, st == 3], [1.0, 1.0 - c_lim, -1.0], 0.0)
     return Side("def", def_obs, 3 * n + 3, True, act, bias, rew, lambda s, s2: 0.0, log_std0)
 
 
@@ -227,6 +231,7 @@ def train(side, n, opp, seed, iters, num_envs=2048, T=64, lr=3e-4, epochs=4, nmb
         (params, opt), aux = jax.lax.scan(epoch, (params, opt), jax.random.split(ke, epochs))
         ndone = d.sum()
         stats = dict(done=ndone, icpt=((st == 1) | (st == 2)).sum() / jnp.maximum(ndone, 1),
+                     net=(st == 1).sum() / jnp.maximum(ndone, 1),
                      leak=(st == 3).sum() / jnp.maximum(ndone, 1), pl=aux[0].mean(), vl=aux[1].mean(),
                      std=jnp.exp(params["log_std"]).mean())
         return params, opt, s, key, stats
