@@ -1,0 +1,43 @@
+{
+ "args": {
+  "cmd": "train_def",
+  "name": "S2GKH_h1",
+  "n": 1,
+  "iters": 1500,
+  "seed": 301,
+  "envs": 4096,
+  "red": "runs/S2GKH_RP_script_s1.pkl,runs/S2_RP_C_D1_s2.pkl,runs/S2_RP_C_D1_s1.pkl,runs/S2_RP_A_D2_s1.pkl,runs/S2_RP_A_D2_s2.pkl,runs/S2_RP_C_D1_w.pkl",
+  "red_frac": 0.85,
+  "init": null,
+  "def_": null,
+  "att": null,
+  "nores": false,
+  "lr": 0.0001,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK,H300,obs_hist=3",
+  "fire_prior": 1.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.2
+ },
+ "train_sec": 423.84404730796814,
+ "vs_script": {
+  "n": 8000,
+  "intercept": 0.752875030040741,
+  "net": 0.11075000464916229,
+  "lim": 0.6421250104904175,
+  "leak": 0.24712501466274261,
+  "timeout": 0.0,
+  "seed_std": 0.012404007764316724,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ },
+ "vs_S2GKH_RP_script_s1.pkl": 0.6486250162124634,
+ "vs_S2_RP_C_D1_s2.pkl": 0.7892500162124634,
+ "vs_S2_RP_C_D1_s1.pkl": 0.7930000424385071,
+ "vs_S2_RP_A_D2_s1.pkl": 0.7403750419616699,
+ "vs_S2_RP_A_D2_s2.pkl": 0.6882500052452087,
+ "vs_S2_RP_C_D1_w.pkl": 0.9511250257492065
+}

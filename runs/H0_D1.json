@@ -1,0 +1,43 @@
+{
+ "args": {
+  "cmd": "train_def",
+  "name": "H0_D1",
+  "n": 1,
+  "iters": 1500,
+  "seed": 107,
+  "envs": 4096,
+  "red": "runs/S2GKH_RP_script_s1.pkl,runs/S2GKH_RP_script_s2.pkl,runs/S2GKH_RP_script_s3.pkl,runs/S2_RP_A2_D1_w.pkl,runs/S2_RP_A2_D1_s2.pkl,runs/S2_RP_A2_D1_s1.pkl",
+  "red_frac": 0.6,
+  "init": null,
+  "def_": null,
+  "att": null,
+  "nores": false,
+  "lr": 0.0001,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK,H300,obs_hist=3",
+  "fire_prior": 1.0,
+  "lim_scale": 0.5,
+  "nd_scale": 0.5,
+  "c_lim": 0.0
+ },
+ "train_sec": 368.6761417388916,
+ "vs_script": {
+  "n": 8000,
+  "intercept": 0.9225000143051147,
+  "net": 0.30637502670288086,
+  "lim": 0.6161250472068787,
+  "leak": 0.07750000059604645,
+  "timeout": 0.0,
+  "seed_std": 0.004636820251355596,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ },
+ "vs_S2GKH_RP_script_s1.pkl": 0.5591250061988831,
+ "vs_S2GKH_RP_script_s2.pkl": 0.3722500205039978,
+ "vs_S2GKH_RP_script_s3.pkl": 0.6537500023841858,
+ "vs_S2_RP_A2_D1_w.pkl": 0.8301250338554382,
+ "vs_S2_RP_A2_D1_s2.pkl": 0.7127500176429749,
+ "vs_S2_RP_A2_D1_s1.pkl": 0.7308750152587891
+}

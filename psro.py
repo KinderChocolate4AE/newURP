@@ -11,11 +11,14 @@ stop = sys.argv[8] if len(sys.argv) > 8 else "0805"  # no new round after this
 HARD = sys.argv[9] if len(sys.argv) > 9 else "0820"   # running jobs are killed at this time (partial params already saved)
 PY = sys.executable
 SMOKE = os.environ.get("PSRO_SMOKE")  # tiny iters for a pipeline check
-IT_D, IT_R, ENVS = ("2", "2", "64") if SMOKE else ("1000", "800", "4096")
+IT_D, IT_R, ENVS = ("2", "2", "64") if SMOKE else (os.environ.get("PSRO_IT", "1000"), "800", "4096")
+POOL_N = int(os.environ.get("PSRO_POOL", "15"))  # newest red teams in the defender's training pool
+RF = os.environ.get("PSRO_RF", "0.7")             # fraction of training episodes vs red teams (rest: scripted attackers)
 
 
-def pool_now():  # all S2 (n=1) red teams on disk, shared across lineages, newest 15
-    return sorted(glob.glob("runs/S2*RP_*.pkl"), key=os.path.getmtime)[-15:]
+def pool_now():  # all S2 (n=1) red teams on disk, shared across lineages, newest POOL_N
+    done = [p for p in glob.glob("runs/S2*RP_*.pkl") if os.path.exists(p[:-4] + ".json")]  # finished teams only
+    return sorted(done, key=os.path.getmtime)[-POOL_N:]
 
 
 def run(name, cores, mem, args):
@@ -47,8 +50,8 @@ for r in range(1, rounds + 1):
     if SMOKE:
         dname = "smoke_" + dname
     ok(run(dname, tcore, 0.13, ["train_def", dname, "--world", world, "--n", "1", "--iters", IT_D, "--lr", "1e-4",
-                                "--envs", ENVS, "--red", ",".join(pool_now()), "--red_frac", "0.7", "--seed", str(100 * r + 7),
-                                "--init", d_prev] + dflags.split()), dname)
+                                "--envs", ENVS, "--red", ",".join(pool_now()), "--red_frac", RF, "--seed", str(100 * r + 7)]
+                               + (["--init", d_prev] if d_prev != "none" else []) + dflags.split()), dname)
     dres = json.load(open(f"runs/{dname}.json"))
     vs = {k[3:]: v for k, v in dres.items() if k.startswith("vs_S2")}
     warm = "runs/" + min(vs, key=vs.get) if vs else None

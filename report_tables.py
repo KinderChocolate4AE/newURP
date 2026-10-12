@@ -31,7 +31,7 @@ for name, f, key, reds, poolf in fixed:
     row(name, f"{pct(v['intercept'])} ({pct(v['net'])} / {pct(v['lim'])} / {pct(v['leak'])})",
         f"**{pct(fw['intercept'])}** ({pct(fw['net'])} / {pct(fw['lim'])} / {pct(fw['leak'])} / {pct(fw['timeout'])})",
         " / ".join(pct(rs[k]["intercept"]) for k in rs), f"{v['lim']:.3f} / {fw['lim']:.3f}", pct(pm))
-for lin in ("A", "B", "C"):
+for lin in ("A", "A2", "B", "C", "H", "H0"):
     p = f"runs/psro_{lin}.jsonl"
     if not os.path.exists(p):
         continue

@@ -18,10 +18,15 @@ class P:  # WORLD.md §1 nominal values. Changing any of these = new scoreboard.
     trk_lag = 1  # defense track latency in control steps (x0.1 s)
     obs_hist = 0  # defender design (not world): # of past measured tracks in def_obs
     def_standoff = 40.0; def_fire_lo = 0.3; def_fire_hi = 0.7  # scripted-defense design (GK preset changes these)
+    def_rand = 0  # 1: scripted-defense params drawn per episode (mixed strategy, hidden from attacker)
+    def_lim_hold = 0.0  # limiter waits at a 15 m station until attacker is within this range of the asset (0 = always engage)
 
 
 WORLDS = {"S1": "", "S2": "trk_lag=3",
-          "GK": "def_standoff=8,def_fire_lo=0.25,def_fire_hi=0.5"}  # GK = goalkeeper net-drone prior (defender design, not world)  # scoreboards: S2 = WORLD-v1.1 + 0.3 s defense track latency (LAB_LOG 03:21)
+          "GK": "def_standoff=8,def_fire_lo=0.25,def_fire_hi=0.5",
+          "H300": "def_lim_hold=300", "RND": "def_rand=1"}
+# scoreboards: S2 = WORLD-v1.1 + 0.3 s defense track latency (LAB_LOG 03:21).
+# GK (goalkeeper net drone) and H300 (limiter holds near asset until attacker < 300 m) are defender design, not world.
 
 
 def set_world(spec):
@@ -51,6 +56,7 @@ class S(NamedTuple):
     trk_p: jax.Array; trk_v: jax.Array; key: jax.Array  # defense's delayed noisy attacker track
     hist_p: jax.Array; hist_v: jax.Array  # (trk_lag,3) past true attacker states
     trk_prev: jax.Array  # (max(obs_hist,1),6) past *measured* tracks (p,v), oldest first
+    dpar: jax.Array  # (3,) U[0,1) per-episode defender randomization (used if P.def_rand)
 
 
 class DefAct(NamedTuple):
@@ -128,6 +134,7 @@ def reset(key, n, use_net=True, use_lim=True, kind=None):
              t=jnp.float32(0.), status=jnp.int32(0),
              trk_p=ap + P.trk_sp * jax.random.normal(k[6], (3,)), trk_v=25. * unit(-ap), key=jax.random.fold_in(k[6], 1),
              hist_p=jnp.tile(ap, (P.trk_lag, 1)), hist_v=jnp.tile(25. * unit(-ap), (P.trk_lag, 1)),
+             dpar=jax.random.uniform(jax.random.fold_in(k[6], 2), (3,)),
              trk_prev=jnp.tile(jnp.concatenate([ap, 25. * unit(-ap)]), (max(P.obs_hist, 1), 1)))
 
 
@@ -230,6 +237,14 @@ def def_script(s, fire_lo=None, fire_hi=None, standoff=None):
     fire_hi = P.def_fire_hi if fire_hi is None else fire_hi
     standoff = P.def_standoff if standoff is None else standoff
     lim = jax.vmap(lim_pn, (0, 0, None, None))(s.lp, s.lv, s.trk_p, s.trk_v)
+    if P.def_rand:  # x0.5..x1.5 of the nominal design values
+        standoff = standoff * (0.5 + s.dpar[1])
+        fire_hi = fire_lo + (fire_hi - fire_lo) * (0.5 + s.dpar[2])
+    if P.def_lim_hold > 0:
+        station = s.trk_p * (15.0 / norm(s.trk_p))
+        hold = 2.0 * (station[None] - s.lp) - 2.5 * s.lv
+        R = P.def_lim_hold * ((0.5 + s.dpar[0]) if P.def_rand else 1.0)
+        lim = jnp.where(norm(s.trk_p) > R, hold, lim)
     goal = s.trk_p * (standoff / norm(s.trk_p))
     nd = 1.5 * (goal - s.dp) - 2.0 * s.dv
     _, th, ok = lead_aim(s.trk_p - s.dp, s.trk_v - s.dv, P.net_speed)
