@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "S2MIX1_RP_s2",
+  "n": 1,
+  "iters": 800,
+  "seed": 1002,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "mix:script,runs/H_D1.pkl,runs/H_D2.pkl,runs/H0_D1.pkl",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK,H300,obs_hist=3",
+  "fire_prior": 1.0,
+  "lim_scale": 0.5,
+  "nd_scale": 0.5,
+  "c_lim": 0.0
+ },
+ "train_sec": 172.4101951122284,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.2605000138282776,
+  "net": 0.21187500655651093,
+  "lim": 0.048625003546476364,
+  "leak": 0.6422500014305115,
+  "timeout": 0.09725000709295273,
+  "seed_std": 0.006020798353627387,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

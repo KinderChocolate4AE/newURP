@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "S2_RPx_A_D1_s5",
+  "n": 1,
+  "iters": 800,
+  "seed": 1005,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "runs/A_D1.pkl",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK,obs_hist=3",
+  "fire_prior": 1.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.0
+ },
+ "train_sec": 229.987806558609,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.2460000067949295,
+  "net": 0.14925000071525574,
+  "lim": 0.09675000607967377,
+  "leak": 0.7382500171661377,
+  "timeout": 0.01575000025331974,
+  "seed_std": 0.013856410479316896,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

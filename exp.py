@@ -15,7 +15,20 @@ def dump(name, obj):
     print(name, json.dumps(obj, default=lambda o: o.item()), flush=True)
 
 
+def _dside(n, residual=True):
+    return def_side(n, residual, fire_prior=a.fire_prior, lim_scale=a.lim_scale, nd_scale=a.nd_scale)
+
+
+def mix_members(spec, n):  # "mix:script,runs/A.pkl,..."; "script" member = zero residual
+    ps = [load(x) for x in spec[4:].split(",") if x != "script"]
+    if "script" in spec[4:].split(","):
+        ps = [jax.tree.map(jnp.zeros_like, ps[0])] + ps
+    return ps
+
+
 def defpol(path, n, residual=True):
+    if path and path.startswith("mix:"):
+        return mix_policy(_dside(n, residual), mix_members(path, n))
     return def_script if path in (None, "script") else policy_fn(def_side(n, residual, fire_prior=a.fire_prior,
                                                                           lim_scale=a.lim_scale, nd_scale=a.nd_scale), load(path))
 
@@ -68,7 +81,7 @@ elif a.cmd == "train_def":
 
 elif a.cmd == "train_att":
     dside = def_side(a.n, not a.nores, fire_prior=a.fire_prior, lim_scale=a.lim_scale, nd_scale=a.nd_scale)
-    opp = make_opponent("att", dside, load(a.def_)) if a.def_ not in (None, "script") else make_opponent("att")
+    opp = defpol(a.def_, a.n, not a.nores)
     p, h = train(att_side(), a.n, opp, a.seed, a.iters, num_envs=a.envs, init=load(a.init) if a.init else None,
                  log=f"runs/{a.name}.log", save=f"runs/{a.name}.pkl", lr=a.lr, use_net=un, use_lim=ul)
     res = dict(args=vars(a), train_sec=time.time() - t0,

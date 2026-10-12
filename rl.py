@@ -268,6 +268,18 @@ def evaluate(n, def_pol, att_pol, eps=1000, seeds=EVAL_SEEDS, kind=None, use_net
     return tot
 
 
+def mix_policy(side, params_list):
+    """Population mixture (PSRO meta-strategy, uniform): one member per episode, chosen by the episode's hidden
+    defender randomness s.dpar[0]. A zero-params member == the scripted prior (residual 0)."""
+    stacked = jax.tree.map(lambda *x: jnp.stack(x), *params_list)
+    K = len(params_list)
+    def pol(s):
+        acts = jax.vmap(lambda p: policy_fn(side, p)(s))(stacked)
+        j = jnp.minimum((s.dpar[0] * K).astype(jnp.int32), K - 1)
+        return jax.tree.map(lambda x: x[j], acts)
+    return pol
+
+
 def red_pol(params):
     """Attacker policy from red-team params, usable as att_pol in evaluate()."""
     return policy_fn(att_side(), params)

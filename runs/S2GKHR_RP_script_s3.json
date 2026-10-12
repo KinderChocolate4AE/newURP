@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "S2GKHR_RP_script_s3",
+  "n": 1,
+  "iters": 800,
+  "seed": 1003,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "script",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK,H300,RND",
+  "fire_prior": 3.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.0
+ },
+ "train_sec": 137.9465901851654,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.5220000147819519,
+  "net": 0.33275002241134644,
+  "lim": 0.18925000727176666,
+  "leak": 0.2122500091791153,
+  "timeout": 0.2657500207424164,
+  "seed_std": 0.010988642247618955,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

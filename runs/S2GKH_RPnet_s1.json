@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "S2GKH_RPnet_s1",
+  "n": 1,
+  "iters": 800,
+  "seed": 1001,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "script",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": true,
+  "eps": 1000,
+  "world": "S2,GK,H300",
+  "fire_prior": 3.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.0
+ },
+ "train_sec": 167.8307604789734,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.061500001698732376,
+  "net": 0.061500001698732376,
+  "lim": 0.0,
+  "leak": 0.7865000367164612,
+  "timeout": 0.15200001001358032,
+  "seed_std": 0.004092676601661914,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

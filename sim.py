@@ -18,13 +18,14 @@ class P:  # WORLD.md §1 nominal values. Changing any of these = new scoreboard.
     trk_lag = 1  # defense track latency in control steps (x0.1 s)
     obs_hist = 0  # defender design (not world): # of past measured tracks in def_obs
     def_standoff = 40.0; def_fire_lo = 0.3; def_fire_hi = 0.7  # scripted-defense design (GK preset changes these)
+    def_spread = 0  # 1: per-limiter stations + staggered launch for n>1 (SPR preset)
     def_rand = 0  # 1: scripted-defense params drawn per episode (mixed strategy, hidden from attacker)
     def_lim_hold = 0.0  # limiter waits at a 15 m station until attacker is within this range of the asset (0 = always engage)
 
 
 WORLDS = {"S1": "", "S2": "trk_lag=3",
           "GK": "def_standoff=8,def_fire_lo=0.25,def_fire_hi=0.5",
-          "H300": "def_lim_hold=300", "RND": "def_rand=1"}
+          "H300": "def_lim_hold=300", "RND": "def_rand=1", "SPR": "def_spread=1"}
 # scoreboards: S2 = WORLD-v1.1 + 0.3 s defense track latency (LAB_LOG 03:21).
 # GK (goalkeeper net drone) and H300 (limiter holds near asset until attacker < 300 m) are defender design, not world.
 
@@ -241,10 +242,16 @@ def def_script(s, fire_lo=None, fire_hi=None, standoff=None):
         standoff = standoff * (0.5 + s.dpar[1])
         fire_hi = fire_lo + (fire_hi - fire_lo) * (0.5 + s.dpar[2])
     if P.def_lim_hold > 0:
-        station = s.trk_p * (15.0 / norm(s.trk_p))
-        hold = 2.0 * (station[None] - s.lp) - 2.5 * s.lv
+        n = s.lp.shape[0]
+        u = unit(s.trk_p)
+        lat = unit(jnp.array([-u[1], u[0], 0.0]) + 1e-6)
+        k = jnp.arange(n) - (n - 1) / 2.0
+        # SPREAD: own station per limiter (20 m lateral spacing) and staggered launch (300 m, then closer)
+        station = 15.0 * u[None] + (P.def_spread * 20.0 * k)[:, None] * lat[None]
+        hold = 2.0 * (station - s.lp) - 2.5 * s.lv
         R = P.def_lim_hold * ((0.5 + s.dpar[0]) if P.def_rand else 1.0)
-        lim = jnp.where(norm(s.trk_p) > R, hold, lim)
+        R = R * (1.0 - P.def_spread * 0.6 * jnp.arange(n) / max(n - 1, 1))
+        lim = jnp.where((norm(s.trk_p) > R)[:, None], hold, lim)
     goal = s.trk_p * (standoff / norm(s.trk_p))
     nd = 1.5 * (goal - s.dp) - 2.0 * s.dv
     _, th, ok = lead_aim(s.trk_p - s.dp, s.trk_v - s.dv, P.net_speed)

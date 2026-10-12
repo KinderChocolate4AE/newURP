@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "S2GKHS_n2_RP_s1",
+  "n": 2,
+  "iters": 800,
+  "seed": 1001,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "script",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK,H300,SPR",
+  "fire_prior": 3.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.0
+ },
+ "train_sec": 220.64200377464294,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.017000000923871994,
+  "net": 0.009000000543892384,
+  "lim": 0.00800000037997961,
+  "leak": 0.971500039100647,
+  "timeout": 0.011500000953674316,
+  "seed_std": 0.003041381534007622,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

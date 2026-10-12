@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "S2_RP_H_D2_s2",
+  "n": 1,
+  "iters": 800,
+  "seed": 5022,
+  "envs": 4096,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "runs/H_D2.pkl",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK,H300,obs_hist=3",
+  "fire_prior": 1.0,
+  "lim_scale": 0.5,
+  "nd_scale": 0.5,
+  "c_lim": 0.0
+ },
+ "train_sec": 216.30520701408386,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.22162501513957977,
+  "net": 0.1771250069141388,
+  "lim": 0.04450000077486038,
+  "leak": 0.7463750243186951,
+  "timeout": 0.03200000151991844,
+  "seed_std": 0.008702550052583809,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

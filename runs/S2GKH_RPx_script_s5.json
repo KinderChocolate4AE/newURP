@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_att",
+  "name": "S2GKH_RPx_script_s5",
+  "n": 1,
+  "iters": 800,
+  "seed": 1005,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": "script",
+  "att": null,
+  "nores": false,
+  "lr": 0.0003,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2,GK,H300",
+  "fire_prior": 3.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.0
+ },
+ "train_sec": 173.88727736473083,
+ "def_vs_this_red": {
+  "n": 8000,
+  "intercept": 0.08762500435113907,
+  "net": 0.04100000113248825,
+  "lim": 0.04662500321865082,
+  "leak": 0.7861250638961792,
+  "timeout": 0.1262499988079071,
+  "seed_std": 0.01041558285781092,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}
