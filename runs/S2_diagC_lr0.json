@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_def",
+  "name": "S2_diagC_lr0",
+  "n": 1,
+  "iters": 400,
+  "seed": 63,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": null,
+  "att": null,
+  "nores": false,
+  "lr": 1e-09,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2",
+  "fire_prior": 3.0,
+  "lim_scale": 1.0,
+  "nd_scale": 1.0,
+  "c_lim": 0.0
+ },
+ "train_sec": 113.37744927406311,
+ "vs_script": {
+  "n": 8000,
+  "intercept": 0.6607500314712524,
+  "net": 0.07349999994039536,
+  "lim": 0.5872500538825989,
+  "leak": 0.3348750174045563,
+  "timeout": 0.0043750000186264515,
+  "seed_std": 0.010377260704382961,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

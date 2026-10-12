@@ -1,0 +1,37 @@
+{
+ "args": {
+  "cmd": "train_def",
+  "name": "S2_diagB_fireonly",
+  "n": 1,
+  "iters": 400,
+  "seed": 62,
+  "envs": 2048,
+  "red": null,
+  "red_frac": 0.0,
+  "init": null,
+  "def_": null,
+  "att": null,
+  "nores": false,
+  "lr": 0.0001,
+  "no_net": false,
+  "no_lim": false,
+  "eps": 1000,
+  "world": "S2",
+  "fire_prior": 3.0,
+  "lim_scale": 0.0,
+  "nd_scale": 0.0,
+  "c_lim": 0.0
+ },
+ "train_sec": 112.75104594230652,
+ "vs_script": {
+  "n": 8000,
+  "intercept": 0.5996250510215759,
+  "net": 0.018125001341104507,
+  "lim": 0.5815000534057617,
+  "leak": 0.39787501096725464,
+  "timeout": 0.002500000176951289,
+  "seed_std": 0.014334733103753071,
+  "seeds": 8,
+  "eps_per_seed": 1000
+ }
+}

@@ -16,15 +16,18 @@ class P:  # WORLD.md §1 nominal values. Changing any of these = new scoreboard.
     kill_r = 2.5; asset_r = 3.0
     trk_sp = 1.0; trk_sv = 1.0  # defense track noise (m, m/s)
     trk_lag = 1  # defense track latency in control steps (x0.1 s)
+    obs_hist = 0  # defender design (not world): # of past measured tracks in def_obs
+    def_standoff = 40.0; def_fire_lo = 0.3; def_fire_hi = 0.7  # scripted-defense design (GK preset changes these)
 
 
-WORLDS = {"S1": "", "S2": "trk_lag=3"}  # scoreboards: S2 = WORLD-v1.1 + 0.3 s defense track latency (LAB_LOG 03:21)
+WORLDS = {"S1": "", "S2": "trk_lag=3",
+          "GK": "def_standoff=8,def_fire_lo=0.25,def_fire_hi=0.5"}  # GK = goalkeeper net-drone prior (defender design, not world)  # scoreboards: S2 = WORLD-v1.1 + 0.3 s defense track latency (LAB_LOG 03:21)
 
 
 def set_world(spec):
     """'lim_a=25,att_v=40' -> mutate P (call before any jit). Returns dict of overrides."""
     out = {}
-    spec = WORLDS.get(spec, spec)
+    spec = ",".join(WORLDS.get(t, t) for t in (spec or "").split(","))
     for kv in filter(None, (spec or "").split(",")):
         k, v = kv.split("=")
         assert hasattr(P, k), k
@@ -47,6 +50,7 @@ class S(NamedTuple):
     t: jax.Array; status: jax.Array
     trk_p: jax.Array; trk_v: jax.Array; key: jax.Array  # defense's delayed noisy attacker track
     hist_p: jax.Array; hist_v: jax.Array  # (trk_lag,3) past true attacker states
+    trk_prev: jax.Array  # (max(obs_hist,1),6) past *measured* tracks (p,v), oldest first
 
 
 class DefAct(NamedTuple):
@@ -123,7 +127,8 @@ def reset(key, n, use_net=True, use_lim=True, kind=None):
              lp=lp, lv=jnp.zeros((n, 3)), la=jnp.zeros((n, 3)), lalive=jnp.full((n,), use_lim),
              t=jnp.float32(0.), status=jnp.int32(0),
              trk_p=ap + P.trk_sp * jax.random.normal(k[6], (3,)), trk_v=25. * unit(-ap), key=jax.random.fold_in(k[6], 1),
-             hist_p=jnp.tile(ap, (P.trk_lag, 1)), hist_v=jnp.tile(25. * unit(-ap), (P.trk_lag, 1)))
+             hist_p=jnp.tile(ap, (P.trk_lag, 1)), hist_v=jnp.tile(25. * unit(-ap), (P.trk_lag, 1)),
+             trk_prev=jnp.tile(jnp.concatenate([ap, 25. * unit(-ap)]), (max(P.obs_hist, 1), 1)))
 
 
 def _substep(s, dact, aacc):
@@ -169,7 +174,8 @@ def step(s, dact, aacc):
     s = jax.lax.fori_loop(0, P.repeat, lambda i, x: _substep(x, dact, aacc), s)
     hp = jnp.concatenate([s.hist_p[1:], ap0[None]])
     hv = jnp.concatenate([s.hist_v[1:], av0[None]])
-    return s._replace(key=key, hist_p=hp, hist_v=hv, trk_p=hp[0] + P.trk_sp * jax.random.normal(kp, (3,)),
+    tp = jnp.concatenate([s.trk_prev[1:], jnp.concatenate([s.trk_p, s.trk_v])[None]])
+    return s._replace(key=key, hist_p=hp, hist_v=hv, trk_prev=tp, trk_p=hp[0] + P.trk_sp * jax.random.normal(kp, (3,)),
                       trk_v=hv[0] + P.trk_sv * jax.random.normal(kv, (3,)))
 
 
@@ -219,7 +225,10 @@ def lim_pn(lp, lv, ap, av, N=4.0):
     return alat + rem * ru
 
 
-def def_script(s, fire_lo=0.3, fire_hi=0.7, standoff=40.0):
+def def_script(s, fire_lo=None, fire_hi=None, standoff=None):
+    fire_lo = P.def_fire_lo if fire_lo is None else fire_lo
+    fire_hi = P.def_fire_hi if fire_hi is None else fire_hi
+    standoff = P.def_standoff if standoff is None else standoff
     lim = jax.vmap(lim_pn, (0, 0, None, None))(s.lp, s.lv, s.trk_p, s.trk_v)
     goal = s.trk_p * (standoff / norm(s.trk_p))
     nd = 1.5 * (goal - s.dp) - 2.0 * s.dv
@@ -239,7 +248,7 @@ def def_obs(s, script=None):
         jnp.array([s.shots / 2., jnp.maximum(s.reload, 0.), s.net_on, s.net_age, s.t / P.T]),
         lrel.ravel(), (s.lv / 45.).ravel(), s.lalive.astype(jnp.float32),
         (script.lim_acc / P.lim_a).ravel(), script.nd_acc / P.nd_a, script.fire[None].astype(jnp.float32),
-    ])
+    ] + ([((jnp.concatenate([s.trk_p, s.trk_v])[None] - s.trk_prev[-P.obs_hist:]) / 10.).ravel()] if P.obs_hist else []))
 
 
 def att_obs(s):
