@@ -352,7 +352,7 @@ def figSens():
     fig, axs = plt.subplots(1, 3, figsize=(160 * MM, 58 * MM), sharey=True)
     tr = np.linspace(0, 0.15, 50)
     axs[0].plot(tr, a0 * (TAU / (TAU - tr)) ** 2, "k-")
-    axs[0].set_xlabel(r"evader reaction $	au_r$ [s]", fontsize=7.5)
+    axs[0].set_xlabel(r"evader reaction $\tau_r$ [s]", fontsize=7.5)
     L = np.linspace(0, 0.15, 50)
     axs[1].plot(L, a0 * (TAU / (TAU + L)) ** 2, "k--")
     axs[1].set_xlabel("tracking delay $L$ [s] *", fontsize=7.5)
