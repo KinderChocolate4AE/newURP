@@ -16,6 +16,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "artifacts" / "fs1" / "r1_manifest.json"
 
 BUDGETS = {"b1": 1e7, "b3": 3e7}              # 새 착취자 (scratch, 새 seed) — b1 은 원래 예산의 재학습, b3 는 3 배
+B3_SNAPS = {"b3_at1e7": 1e7, "b3_at2e7": 2e7}  # v1.1: b3 run 안의 중간 체크포인트 (보고 전용)
 JSEED = {"b1": 320000, "b3": 325000}          # + variant_idx*100 + seed (E7 277000·E1 300000/305000·E1b 310000 대역과 분리)
 N = 240
 MARGIN = 4                                    # 판 수 (/240)
@@ -34,7 +35,13 @@ def budget_label(d) -> str:
 
 def build() -> dict:
     body = {
-        "schema": "fs1-r1-manifest-v1",
+        "schema": "fs1-r1-manifest-v1.1",
+        "amendment_v1_1": ("2026-10-13, advisor review, BEFORE any R1 production: b3 run saves snapshots at the first "
+                           "checkpoint after 1e7 and 2e7 env steps (b3_at1e7, b3_at2e7) and they are evaluated as REPORT "
+                           "lines (b3@1e7 vs b3@3e7 = within-seed budget effect; b1 vs b3@1e7 = exploiter-seed scatter at "
+                           "equal budget; b3@2e7 -> 3e7 still falling = reported as 'not converged by 3e7' even under "
+                           "CONVERGED). Judgment rule (b1 vs b3) unchanged. Meaning of CONVERGED and interpretation "
+                           "pre-written (see rule.meaning)"),
         "status": ("sealed 2026-10-13 BEFORE any R1 production (contract docs/138; user 2026-10-13 'evidence collection "
                    "tonight'). Motivation: the night sandbox (exploratory, outside contracts) found 800 -> 2400 it red "
                    "teams cut the headline a lot; our ceilings rest on a fixed 1e7 exploiter"),
@@ -49,13 +56,18 @@ def build() -> dict:
                                  "world flags of the variant)", "slots": 15, "runs": 30},
         "evaluation": {"n": N, "seed0": "E7-b eval band (276000 + idx*1000)", "env_seed": 0,
                        "defenders": ["learned_det (judgment)", "learned_sto (report)"],
-                       "exploiters": "b1, b3 (new) + original E7-b 1e7 exploiter re-evaluated with --env-seed 0 (report)",
+                       "exploiters": "b1, b3 (new) + b3_at1e7, b3_at2e7 snapshots (report) + original E7-b 1e7 exploiter re-evaluated with --env-seed 0 (report)",
                        "metric": "defended (eval.summarize; same ceiling definition as E7-b) + net (report)"},
         "rule": {"d": "per slot d = ceil(b1) - ceil(b3), learned_det",
                  "labels": f"BUDGET_UNDERTRAINED: median d >= {MARGIN} and >= {POS}/15 slots d > 0; BUDGET_CONVERGED: "
                            f"|median d| < {MARGIN}; else BUDGET_MIXED",
                  "report": ["plateau median ceiling at b1 / b3 / original", "seed reproducibility |ceil(b1) - ceil(orig)|",
-                            "exploiter final penetration (train log) per budget"]},
+                            "exploiter final penetration (train log) per budget",
+                            "b3_at1e7 / b3_at2e7 snapshots: within-seed budget curve (report only)"],
+                 "meaning": ("CONVERGED = budget effect below ~4/240 (1.7 pp) given median SE ~2 — not a proof of "
+                             "convergence. UNDERTRAINED = all ceilings so far are upper estimates of performance against "
+                             "stronger red teams; the H1 plateau '~8%' becomes '<= ~8%' (direction of the story kept: the "
+                             "adaptive evader sets the ceiling; only the number goes down)")},
         "power_memo": ("R0: per-slot env-seed SD <= binomial (~4/240 at p ~ .09); a paired b1-b3 difference has SD ~ 6 "
                        "incl. exploiter-seed scatter -> median of 15 has SE ~ 2; threshold 4 ~ 2 SE"),
         "pre_seal_checks": ["label semantics unit test tests/test_fs1_eval.py::test_r1_label_semantics",

@@ -24,7 +24,7 @@ def slope_ci(per_point, la, rng_seed=0):
         return float(np.polyfit(x, y, 1)[0])
     rng = np.random.default_rng(rng_seed)
     bs = [beta([rng.choice(v, len(v)) for v in per_point]) for _ in range(M.N_BOOT)]
-    return beta(per_point), float(np.percentile(bs, 2.5)), float(np.percentile(bs, 97.5))
+    return beta(per_point), float(np.percentile(bs, M.CI_Q[0])), float(np.percentile(bs, M.CI_Q[1]))
 
 
 def main():
@@ -32,9 +32,12 @@ def main():
     ap.add_argument("--root", default="artifacts/fs1/e8")
     root = pathlib.Path(ap.parse_args().root)
     h = M.load()["manifest_hash"]
+    stage2 = all((root / p["name"] / f"s{s}" / "eval_judge" / "summary.json").exists()
+                 for p in M.POINTS for s in M.SEEDS_STAGE2)
+    seeds = M.SEEDS + (M.SEEDS_STAGE2 if stage2 else [])
     cells = {}
     for p in M.POINTS:
-        for s in M.SEEDS:
+        for s in seeds:
             d = root / p["name"] / f"s{s}" / "eval_judge"
             sm = json.loads((d / "summary.json").read_text(encoding="utf-8"))
             if sm["meta"]["manifest"] != h:
@@ -43,10 +46,12 @@ def main():
                 e = json.loads(x)
                 c = cells.setdefault(f"{p['name']}/{s}/{e['defender']}/{e['group']}", {"net": 0, "rob_fire": 0, "n": 0})
                 c["n"] += 1; c["net"] += e["label"] in NET; c["rob_fire"] += bool(e.get("rob_fire"))
-    per = [np.array([cells[f"{p['name']}/{s}/learned_det/ex_judge"]["net"] for s in M.SEEDS], float) for p in M.POINTS]
+    per = [np.array([cells[f"{p['name']}/{s}/learned_det/ex_judge"]["net"] for s in seeds], float) for p in M.POINTS]
     la = [float(np.log(p["a_scale"])) for p in M.POINTS]
     b, lo, hi = slope_ci(per, la)
-    out = {"manifest_hash": h, "beta": b, "ci95": [lo, hi], "label": M.slope_label(lo, hi),
+    lab = M.slope_label(lo, hi)
+    out = {"manifest_hash": h, "stage": 2 if stage2 else 1, "seeds": seeds, "beta": b, "ci975": [lo, hi], "label": lab,
+           "stage2_needed": (not stage2) and M.stage2_needed(lab, b),
            "median_net": {p["name"]: float(np.median(v)) for p, v in zip(M.POINTS, per)}, "cells": cells}
     (root / "readout.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
     print(json.dumps({k: v for k, v in out.items() if k != "cells"}, indent=1))

@@ -1,5 +1,6 @@
 {
-  "schema": "fs1-r1-manifest-v1",
+  "schema": "fs1-r1-manifest-v1.1",
+  "amendment_v1_1": "2026-10-13, advisor review, BEFORE any R1 production: b3 run saves snapshots at the first checkpoint after 1e7 and 2e7 env steps (b3_at1e7, b3_at2e7) and they are evaluated as REPORT lines (b3@1e7 vs b3@3e7 = within-seed budget effect; b1 vs b3@1e7 = exploiter-seed scatter at equal budget; b3@2e7 -> 3e7 still falling = reported as 'not converged by 3e7' even under CONVERGED). Judgment rule (b1 vs b3) unchanged. Meaning of CONVERGED and interpretation pre-written (see rule.meaning)",
   "status": "sealed 2026-10-13 BEFORE any R1 production (contract docs/138; user 2026-10-13 'evidence collection tonight'). Motivation: the night sandbox (exploratory, outside contracts) found 800 -> 2400 it red teams cut the headline a lot; our ceilings rest on a fixed 1e7 exploiter",
   "question": "does a 3x longer dedicated exploiter pull the E7-b matched-audit ceiling down, i.e. is 1e7 converged",
   "slots": [
@@ -157,7 +158,7 @@
       "learned_det (judgment)",
       "learned_sto (report)"
     ],
-    "exploiters": "b1, b3 (new) + original E7-b 1e7 exploiter re-evaluated with --env-seed 0 (report)",
+    "exploiters": "b1, b3 (new) + b3_at1e7, b3_at2e7 snapshots (report) + original E7-b 1e7 exploiter re-evaluated with --env-seed 0 (report)",
     "metric": "defended (eval.summarize; same ceiling definition as E7-b) + net (report)"
   },
   "rule": {
@@ -166,8 +167,10 @@
     "report": [
       "plateau median ceiling at b1 / b3 / original",
       "seed reproducibility |ceil(b1) - ceil(orig)|",
-      "exploiter final penetration (train log) per budget"
-    ]
+      "exploiter final penetration (train log) per budget",
+      "b3_at1e7 / b3_at2e7 snapshots: within-seed budget curve (report only)"
+    ],
+    "meaning": "CONVERGED = budget effect below ~4/240 (1.7 pp) given median SE ~2 — not a proof of convergence. UNDERTRAINED = all ceilings so far are upper estimates of performance against stronger red teams; the H1 plateau '~8%' becomes '<= ~8%' (direction of the story kept: the adaptive evader sets the ceiling; only the number goes down)"
   },
   "power_memo": "R0: per-slot env-seed SD <= binomial (~4/240 at p ~ .09); a paired b1-b3 difference has SD ~ 6 incl. exploiter-seed scatter -> median of 15 has SE ~ 2; threshold 4 ~ 2 SE",
   "pre_seal_checks": [
@@ -179,5 +182,5 @@
     "other lineages",
     "re-judging any sealed verdict"
   ],
-  "manifest_hash": "7b8762005d274eb0"
+  "manifest_hash": "1cdb7153a9391665"
 }

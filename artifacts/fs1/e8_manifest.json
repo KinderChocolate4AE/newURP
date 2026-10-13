@@ -1,5 +1,6 @@
 {
-  "schema": "fs1-e8-manifest-v1",
+  "schema": "fs1-e8-manifest-v1.1",
+  "amendment_v1_1": "2026-10-13, advisor review, BEFORE any E8 production: (1) run order R1 -> E8 and the E8 exploiter budget is conditional on the R1 label (3e7 if BUDGET_UNDERTRAINED else 1e7), registered before any result; defense training may start before R1 ends, only the exploiter stage waits; (2) the label names an AGILITY BUNDLE, not pure Lambda: along iso-chi, Lambda = V^2/(aR), q_dec = dt/tau (1/6 -> 1/3) and dt*a/V all change together; (3) strength: w = a tau^2/2 = 0.45 m is constant, so kappa = kill radius / w is fixed (limiter geometry held); (4) two-stage sequential design: stage 1 seeds 20-24; if UNRESOLVED and |beta_hat| < 5.77, add seeds 25-27 and re-apply to 8 seeds; both looks use 97.5% CIs; (5) stage 1 detects >= 12/240 trends over the x4 range but cannot prove collapse — UNRESOLVED must not be read as collapse",
   "status": "sealed 2026-10-13 BEFORE any E8 production (contract docs/139; user 2026-10-13 'evidence collection tonight'). Extends E6 (docs/134 §8: a x 0.49 with ratio fixed raised the ceiling, borderline POSITIVE) — E6 data seen before this design",
   "question": "at a fixed chi (0.255, plateau), does the learned matched-audit ceiling depend on the attacker acceleration itself (with tau adjusted to keep chi), i.e. does the ceiling layer collapse in chi",
   "points": [
@@ -59,7 +60,7 @@
     23,
     24
   ],
-  "held_fixed": "chi (rho 3.925), mu 0.35 (a_def = 0.35 a_att scales with a), V, theta, R_max, recipe",
+  "held_fixed": "chi (rho 3.925), mu 0.35 (a_def = 0.35 a_att scales with a), V, theta, R_max, recipe; w = 0.45 m constant so kappa = kill radius / w is fixed",
   "what_changes": "a_att x4 range (10.0 -> 40.1 m/s^2) with tau 0.30 -> 0.15 s exact tick multiples; head-on window in seconds is the same at all points (chi fixed); Lambda = V^2/(a R) changes x4",
   "production": {
     "per slot": "NEW BC -> arm C-1 recipe 1.1e8 -> det exploiter 1e7 (jseed 315000 + idx*100 + seed); no sto exploiter",
@@ -80,7 +81,10 @@
   },
   "rule": {
     "metric": "net = NET_CAPTURE + CAPTURE_WITH_CONTACT (learned_det vs det exploiter), slot level",
-    "fit": "OLS slope beta of net on ln(a_scale) over 20 slots; stratified bootstrap (seeds within point) 2000, rng 0, percentile 95% CI",
+    "fit": "OLS slope beta of net on ln(a_scale) over the stage's slots; stratified bootstrap (seeds within point) 2000, rng 0, percentile CI at (1.25, 98.75) (97.5%, two looks)",
+    "stage2": "if stage-1 label is UNRESOLVED and |beta_hat| < 5.77: add seeds [25, 26, 27], same rule on 8 seeds",
+    "exploiter_budget": "3e7 if R1 label == BUDGET_UNDERTRAINED else 1e7 (fs1_e8_manifest.exploiter_budget)",
+    "reading": "FALLS/RISES = the ceiling at fixed chi depends on the agility bundle (Lambda, q_dec, dt*a/V); do not attribute to Lambda alone",
     "labels": "CI > 0 -> CEILING_RISES_WITH_a; CI < 0 -> CEILING_FALLS_WITH_a; CI inside (-5.77, 5.77) (= less than 8/240 change over the x4 range) -> COLLAPSES_IN_CHI; else UNRESOLVED",
     "prediction": "CEILING_FALLS_WITH_a (from E6: halving a raised the ceiling); not blind",
     "report": [
@@ -106,5 +110,5 @@
     "world ceiling",
     "blind prediction"
   ],
-  "manifest_hash": "7f7f442f8784fa56"
+  "manifest_hash": "afba5be9e9c2714c"
 }

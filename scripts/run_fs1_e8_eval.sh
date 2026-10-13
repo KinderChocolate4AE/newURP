@@ -11,9 +11,10 @@ main() {
   notify() { python -c "from shepherd.notify import ntfy; ntfy('$1', title='e8')" || true; }
   flock /tmp/fs1_git.lock git pull -q --rebase origin feat/scale-up-v2 || true
   H=$(python -c "import sys; sys.path.insert(0, 'scripts'); from fs1_e8_manifest import load; print(load()['manifest_hash'])")
-  ROWS=$(python -c "import sys; sys.path.insert(0, 'scripts'); from fs1_e8_manifest import POINTS, SEEDS, SEED0, STRIDE, N
+  STAGE=${STAGE:-1}   # v1.1: 2 = seed 20–27 (2단계 조건부)
+  ROWS=$(python -c "import sys; sys.path.insert(0, 'scripts'); from fs1_e8_manifest import POINTS, SEEDS, SEEDS_STAGE2, SEED0, STRIDE, N
 for i, p in enumerate(POINTS):
-    for s in SEEDS: print(p['name'], p['tau_scale'], p['a_scale'], s, SEED0 + i*STRIDE, N)")
+    for s in SEEDS + (SEEDS_STAGE2 if '$STAGE' == '2' else []): print(p['name'], p['tau_scale'], p['a_scale'], s, SEED0 + i*STRIDE, N)")
   while true; do
     left=0
     while read -r PT TAU AS S SEED NEP; do

@@ -23,12 +23,24 @@ POINTS = [{"name": f"a{i}", "tau_scale": ts, "a_scale": round(RHO_B / (RHO_T * t
 for p in POINTS:
     p["a_att"] = round(20.453333333333333 * p["a_scale"], 3)
     p["rho"] = round(RHO_B / (p["a_scale"] * p["tau_scale"] ** 2), 4)
-SEEDS = [20, 21, 22, 23, 24]
+SEEDS = [20, 21, 22, 23, 24]                         # 1단계
+SEEDS_STAGE2 = [25, 26, 27]                          # v1.1: 2단계 (조건부) — 전체 8 seed
+CI_Q = (1.25, 98.75)                                 # v1.1: 두 번 보므로 단계마다 97.5% CI
 N = 240
 SEED0, STRIDE = 360000, 1000
 JSEED_DET = 315000                                  # + idx*100 + seed
 EQUIV = 8.0 / 1.386294361                           # |β| < 8/240 의 변화 / ln 4 (a 범위 4 배) → 판 수 / ln a
 N_BOOT = 2000
+
+
+def stage2_needed(label, beta) -> bool:
+    """v1.1 순차 규칙: 1단계 UNRESOLVED 이고 점추정 |β| < EQUIV 이면 seed 25–27 을 추가해 같은 규칙 (97.5% CI) 을 8 seed 로 다시 적용."""
+    return label == "UNRESOLVED" and abs(beta) < EQUIV
+
+
+def exploiter_budget(r1_label) -> float:
+    """v1.1 조건부 예산: R1 (docs/138) = BUDGET_UNDERTRAINED 이면 3e7, 그 밖 1e7. R1 판독 후 착취자 단계에서 적용."""
+    return 3e7 if r1_label == "BUDGET_UNDERTRAINED" else 1e7
 
 
 def slope_label(lo, hi) -> str:
@@ -48,14 +60,24 @@ assert all(abs(p["rho"] - RHO_T) < 1e-3 for p in POINTS)
 
 def build() -> dict:
     body = {
-        "schema": "fs1-e8-manifest-v1",
+        "schema": "fs1-e8-manifest-v1.1",
+        "amendment_v1_1": ("2026-10-13, advisor review, BEFORE any E8 production: (1) run order R1 -> E8 and the E8 exploiter "
+                           "budget is conditional on the R1 label (3e7 if BUDGET_UNDERTRAINED else 1e7), registered before "
+                           "any result; defense training may start before R1 ends, only the exploiter stage waits; (2) the "
+                           "label names an AGILITY BUNDLE, not pure Lambda: along iso-chi, Lambda = V^2/(aR), q_dec = dt/tau "
+                           "(1/6 -> 1/3) and dt*a/V all change together; (3) strength: w = a tau^2/2 = 0.45 m is constant, so "
+                           "kappa = kill radius / w is fixed (limiter geometry held); (4) two-stage sequential design: stage 1 "
+                           "seeds 20-24; if UNRESOLVED and |beta_hat| < 5.77, add seeds 25-27 and re-apply to 8 seeds; both "
+                           "looks use 97.5% CIs; (5) stage 1 detects >= 12/240 trends over the x4 range but cannot prove "
+                           "collapse — UNRESOLVED must not be read as collapse"),
         "status": ("sealed 2026-10-13 BEFORE any E8 production (contract docs/139; user 2026-10-13 'evidence "
                    "collection tonight'). Extends E6 (docs/134 §8: a x 0.49 with ratio fixed raised the ceiling, "
                    "borderline POSITIVE) — E6 data seen before this design"),
         "question": ("at a fixed chi (0.255, plateau), does the learned matched-audit ceiling depend on the attacker "
                      "acceleration itself (with tau adjusted to keep chi), i.e. does the ceiling layer collapse in chi"),
         "points": POINTS, "seeds": SEEDS,
-        "held_fixed": "chi (rho 3.925), mu 0.35 (a_def = 0.35 a_att scales with a), V, theta, R_max, recipe",
+        "held_fixed": ("chi (rho 3.925), mu 0.35 (a_def = 0.35 a_att scales with a), V, theta, R_max, recipe; w = 0.45 m "
+                       "constant so kappa = kill radius / w is fixed"),
         "what_changes": ("a_att x4 range (10.0 -> 40.1 m/s^2) with tau 0.30 -> 0.15 s exact tick multiples; head-on "
                          "window in seconds is the same at all points (chi fixed); Lambda = V^2/(a R) changes x4"),
         "production": {"per slot": f"NEW BC -> arm C-1 recipe 1.1e8 -> det exploiter 1e7 (jseed {JSEED_DET} + idx*100 + "
@@ -66,8 +88,12 @@ def build() -> dict:
                        "defenders": ["learned_det (judgment, vs det exploiter)", "learned_sto (report)"],
                        "cli": "--tau-scale --a-scale per point, --mu 0.35 --nu 1.0 --stack r4p --coop-window --env-seed 0"},
         "rule": {"metric": "net = NET_CAPTURE + CAPTURE_WITH_CONTACT (learned_det vs det exploiter), slot level",
-                 "fit": "OLS slope beta of net on ln(a_scale) over 20 slots; stratified bootstrap (seeds within point) "
-                        f"{N_BOOT}, rng 0, percentile 95% CI",
+                 "fit": "OLS slope beta of net on ln(a_scale) over the stage's slots; stratified bootstrap (seeds within "
+                        f"point) {N_BOOT}, rng 0, percentile CI at {CI_Q} (97.5%, two looks)",
+                 "stage2": f"if stage-1 label is UNRESOLVED and |beta_hat| < {EQUIV:.2f}: add seeds {SEEDS_STAGE2}, same rule on 8 seeds",
+                 "exploiter_budget": "3e7 if R1 label == BUDGET_UNDERTRAINED else 1e7 (fs1_e8_manifest.exploiter_budget)",
+                 "reading": ("FALLS/RISES = the ceiling at fixed chi depends on the agility bundle (Lambda, q_dec, dt*a/V); "
+                             "do not attribute to Lambda alone"),
                  "labels": f"CI > 0 -> CEILING_RISES_WITH_a; CI < 0 -> CEILING_FALLS_WITH_a; CI inside (-{EQUIV:.2f}, "
                            f"{EQUIV:.2f}) (= less than 8/240 change over the x4 range) -> COLLAPSES_IN_CHI; else UNRESOLVED",
                  "prediction": "CEILING_FALLS_WITH_a (from E6: halving a raised the ceiling); not blind",

@@ -311,3 +311,15 @@ def test_e8_label_semantics():
     noisy = [20 + 12 * np.array([-1.0, -0.5, 0.0, 0.5, 1.0]) * (1 if i % 2 else -1) for i in range(4)]
     assert M.slope_label(*R.slope_ci(noisy, la)[1:]) == "UNRESOLVED"
     assert [p["deploy_ticks"] for p in M.POINTS] == [6, 5, 4, 3]
+
+
+def test_e8_v11_rules():
+    """E8 v1.1: 조건부 착취자 예산 (R1 UNDERTRAINED → 3e7) 과 2단계 순차 규칙의 의미."""
+    import sys
+    sys.path.insert(0, "scripts")
+    import fs1_e8_manifest as M
+    assert M.exploiter_budget("BUDGET_UNDERTRAINED") == 3e7
+    assert M.exploiter_budget("BUDGET_CONVERGED") == 1e7 and M.exploiter_budget("BUDGET_MIXED") == 1e7
+    assert M.stage2_needed("UNRESOLVED", 2.0) and not M.stage2_needed("UNRESOLVED", 9.0)
+    assert not M.stage2_needed("CEILING_FALLS_WITH_a", -9.0)
+    assert M.CI_Q == (1.25, 98.75)

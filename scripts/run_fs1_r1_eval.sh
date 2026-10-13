@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # R1 착취자 예산 민감도 평가 (server4 CPU, manifest fs1_r1_manifest, docs/138): slot 마다 원래 1e7 착취자 (env-seed 0 재평가) + 새 b1/b3 착취자.
-# 착취자 생산 경로: $IN/<variant>/s<seed>/{b1,b3}/ (ckpt.pt, done). 원래 착취자·방어: $E7B/<variant>/s<seed>/.
+# 착취자 생산 경로: $IN/<variant>/s<seed>/{b1,b3,b3_at1e7,b3_at2e7}/ (ckpt.pt, done). 원래 착취자·방어: $E7B/<variant>/s<seed>/.
 #   tmux new -d -s r1_eval 'cd <repo> && source .venv-l2/bin/activate && IN=/data/hjhong/fs1jax/r1 E7B=/data/hjhong/fs1jax/e7b bash scripts/run_fs1_r1_eval.sh'
 main() {
   set -euo pipefail
@@ -17,7 +17,7 @@ for s in build()['slots']: print(s['variant'], s['seed'], s['tau_scale'], s['the
   while true; do
     left=0
     while read -r VAR S TAU THETA AIM SEED; do
-      for EX in orig b1 b3; do
+      for EX in orig b1 b3 b3_at1e7 b3_at2e7; do
         E="$OUT/$VAR/s$S/eval_$EX"; [ -f "$E/done" ] && continue
         left=$((left + 1))
         if [ "$EX" = orig ]; then CK="$E7B/$VAR/s$S/judge_exploiter"; else CK="$IN/$VAR/s$S/$EX"; fi
