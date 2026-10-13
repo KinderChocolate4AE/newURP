@@ -1,0 +1,878 @@
+{
+  "manifest_hash": "1cdb7153a9391665",
+  "d_b1_minus_b3": [
+    16,
+    13,
+    10,
+    2,
+    11,
+    17,
+    2,
+    16,
+    16,
+    14,
+    12,
+    19,
+    10,
+    31,
+    19
+  ],
+  "label": "BUDGET_UNDERTRAINED",
+  "median": {
+    "b1": 22.0,
+    "b3": 8.0,
+    "orig": 20.0,
+    "b3_at1e7": 21.0,
+    "b3_at2e7": 13.0
+  },
+  "report_within_seed_budget_b3at1e7_minus_b3": [
+    12,
+    8,
+    19,
+    0,
+    5,
+    11,
+    8,
+    19,
+    8,
+    13,
+    14,
+    19,
+    13,
+    19,
+    9
+  ],
+  "report_still_falling_b3at2e7_minus_b3": [
+    12,
+    -3,
+    3,
+    3,
+    -2,
+    0,
+    4,
+    11,
+    -1,
+    2,
+    9,
+    6,
+    0,
+    9,
+    2
+  ],
+  "report_exploiter_seed_scatter_b1_minus_b3at1e7": [
+    4,
+    5,
+    -9,
+    2,
+    6,
+    6,
+    -6,
+    -3,
+    8,
+    1,
+    -2,
+    0,
+    -3,
+    12,
+    10
+  ],
+  "seed_repro_abs_b1_vs_orig": [
+    5,
+    14,
+    0,
+    2,
+    7,
+    8,
+    6,
+    3,
+    2,
+    1,
+    4,
+    3,
+    2,
+    4,
+    14
+  ],
+  "slots": {
+    "t0.7_h1.0_cv/s0": {
+      "b1": {
+        "learned_det": {
+          "defended": 23,
+          "net": 20
+        },
+        "learned_sto": {
+          "defended": 76,
+          "net": 76
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 7,
+          "net": 6
+        },
+        "learned_sto": {
+          "defended": 29,
+          "net": 29
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 28,
+          "net": 27
+        },
+        "learned_sto": {
+          "defended": 89,
+          "net": 87
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 19,
+          "net": 17
+        },
+        "learned_sto": {
+          "defended": 44,
+          "net": 44
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 19,
+          "net": 19
+        },
+        "learned_sto": {
+          "defended": 41,
+          "net": 39
+        }
+      }
+    },
+    "t0.7_h1.0_cv/s1": {
+      "b1": {
+        "learned_det": {
+          "defended": 29,
+          "net": 29
+        },
+        "learned_sto": {
+          "defended": 50,
+          "net": 50
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 16,
+          "net": 14
+        },
+        "learned_sto": {
+          "defended": 57,
+          "net": 57
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 15,
+          "net": 15
+        },
+        "learned_sto": {
+          "defended": 75,
+          "net": 75
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 24,
+          "net": 24
+        },
+        "learned_sto": {
+          "defended": 66,
+          "net": 65
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 13,
+          "net": 13
+        },
+        "learned_sto": {
+          "defended": 70,
+          "net": 69
+        }
+      }
+    },
+    "t0.7_h1.0_cv/s2": {
+      "b1": {
+        "learned_det": {
+          "defended": 19,
+          "net": 19
+        },
+        "learned_sto": {
+          "defended": 95,
+          "net": 94
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 9,
+          "net": 8
+        },
+        "learned_sto": {
+          "defended": 96,
+          "net": 93
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 19,
+          "net": 19
+        },
+        "learned_sto": {
+          "defended": 83,
+          "net": 82
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 28,
+          "net": 27
+        },
+        "learned_sto": {
+          "defended": 106,
+          "net": 103
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 12,
+          "net": 11
+        },
+        "learned_sto": {
+          "defended": 122,
+          "net": 120
+        }
+      }
+    },
+    "t0.7_h1.5_cv/s0": {
+      "b1": {
+        "learned_det": {
+          "defended": 18,
+          "net": 18
+        },
+        "learned_sto": {
+          "defended": 84,
+          "net": 79
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 16,
+          "net": 15
+        },
+        "learned_sto": {
+          "defended": 86,
+          "net": 85
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 20,
+          "net": 20
+        },
+        "learned_sto": {
+          "defended": 87,
+          "net": 82
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 16,
+          "net": 15
+        },
+        "learned_sto": {
+          "defended": 87,
+          "net": 78
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 19,
+          "net": 17
+        },
+        "learned_sto": {
+          "defended": 97,
+          "net": 91
+        }
+      }
+    },
+    "t0.7_h1.5_cv/s1": {
+      "b1": {
+        "learned_det": {
+          "defended": 19,
+          "net": 19
+        },
+        "learned_sto": {
+          "defended": 86,
+          "net": 81
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 8,
+          "net": 8
+        },
+        "learned_sto": {
+          "defended": 76,
+          "net": 76
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 12,
+          "net": 11
+        },
+        "learned_sto": {
+          "defended": 72,
+          "net": 70
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 13,
+          "net": 12
+        },
+        "learned_sto": {
+          "defended": 75,
+          "net": 73
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 6,
+          "net": 6
+        },
+        "learned_sto": {
+          "defended": 59,
+          "net": 58
+        }
+      }
+    },
+    "t0.7_h1.5_cv/s2": {
+      "b1": {
+        "learned_det": {
+          "defended": 24,
+          "net": 23
+        },
+        "learned_sto": {
+          "defended": 74,
+          "net": 70
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 7,
+          "net": 7
+        },
+        "learned_sto": {
+          "defended": 81,
+          "net": 78
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 16,
+          "net": 16
+        },
+        "learned_sto": {
+          "defended": 72,
+          "net": 70
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 18,
+          "net": 18
+        },
+        "learned_sto": {
+          "defended": 81,
+          "net": 81
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 7,
+          "net": 7
+        },
+        "learned_sto": {
+          "defended": 82,
+          "net": 81
+        }
+      }
+    },
+    "t0.5_h1.0_cv/s0": {
+      "b1": {
+        "learned_det": {
+          "defended": 21,
+          "net": 19
+        },
+        "learned_sto": {
+          "defended": 51,
+          "net": 49
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 19,
+          "net": 19
+        },
+        "learned_sto": {
+          "defended": 87,
+          "net": 86
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 27,
+          "net": 26
+        },
+        "learned_sto": {
+          "defended": 56,
+          "net": 53
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 27,
+          "net": 25
+        },
+        "learned_sto": {
+          "defended": 73,
+          "net": 72
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 23,
+          "net": 22
+        },
+        "learned_sto": {
+          "defended": 81,
+          "net": 81
+        }
+      }
+    },
+    "t0.5_h1.0_cv/s1": {
+      "b1": {
+        "learned_det": {
+          "defended": 22,
+          "net": 20
+        },
+        "learned_sto": {
+          "defended": 104,
+          "net": 92
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 6,
+          "net": 6
+        },
+        "learned_sto": {
+          "defended": 100,
+          "net": 96
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 19,
+          "net": 17
+        },
+        "learned_sto": {
+          "defended": 76,
+          "net": 74
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 25,
+          "net": 25
+        },
+        "learned_sto": {
+          "defended": 87,
+          "net": 83
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 17,
+          "net": 17
+        },
+        "learned_sto": {
+          "defended": 80,
+          "net": 78
+        }
+      }
+    },
+    "t0.5_h1.0_cv/s2": {
+      "b1": {
+        "learned_det": {
+          "defended": 27,
+          "net": 25
+        },
+        "learned_sto": {
+          "defended": 103,
+          "net": 100
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 11,
+          "net": 11
+        },
+        "learned_sto": {
+          "defended": 81,
+          "net": 76
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 25,
+          "net": 24
+        },
+        "learned_sto": {
+          "defended": 81,
+          "net": 78
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 19,
+          "net": 18
+        },
+        "learned_sto": {
+          "defended": 73,
+          "net": 72
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 10,
+          "net": 10
+        },
+        "learned_sto": {
+          "defended": 85,
+          "net": 83
+        }
+      }
+    },
+    "t0.5_h1.5_cv/s0": {
+      "b1": {
+        "learned_det": {
+          "defended": 22,
+          "net": 21
+        },
+        "learned_sto": {
+          "defended": 65,
+          "net": 65
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 8,
+          "net": 8
+        },
+        "learned_sto": {
+          "defended": 52,
+          "net": 52
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 23,
+          "net": 21
+        },
+        "learned_sto": {
+          "defended": 99,
+          "net": 99
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 21,
+          "net": 20
+        },
+        "learned_sto": {
+          "defended": 68,
+          "net": 68
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 10,
+          "net": 10
+        },
+        "learned_sto": {
+          "defended": 42,
+          "net": 40
+        }
+      }
+    },
+    "t0.5_h1.5_cv/s1": {
+      "b1": {
+        "learned_det": {
+          "defended": 19,
+          "net": 18
+        },
+        "learned_sto": {
+          "defended": 132,
+          "net": 131
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 7,
+          "net": 7
+        },
+        "learned_sto": {
+          "defended": 67,
+          "net": 67
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 23,
+          "net": 21
+        },
+        "learned_sto": {
+          "defended": 123,
+          "net": 123
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 21,
+          "net": 21
+        },
+        "learned_sto": {
+          "defended": 96,
+          "net": 95
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 16,
+          "net": 15
+        },
+        "learned_sto": {
+          "defended": 96,
+          "net": 95
+        }
+      }
+    },
+    "t0.5_h1.5_cv/s2": {
+      "b1": {
+        "learned_det": {
+          "defended": 23,
+          "net": 23
+        },
+        "learned_sto": {
+          "defended": 71,
+          "net": 68
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 4,
+          "net": 4
+        },
+        "learned_sto": {
+          "defended": 54,
+          "net": 54
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 20,
+          "net": 19
+        },
+        "learned_sto": {
+          "defended": 89,
+          "net": 87
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 23,
+          "net": 23
+        },
+        "learned_sto": {
+          "defended": 75,
+          "net": 74
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 10,
+          "net": 10
+        },
+        "learned_sto": {
+          "defended": 36,
+          "net": 34
+        }
+      }
+    },
+    "t0.5_h1.0_ma/s0": {
+      "b1": {
+        "learned_det": {
+          "defended": 16,
+          "net": 16
+        },
+        "learned_sto": {
+          "defended": 78,
+          "net": 76
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 6,
+          "net": 6
+        },
+        "learned_sto": {
+          "defended": 85,
+          "net": 85
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 18,
+          "net": 17
+        },
+        "learned_sto": {
+          "defended": 77,
+          "net": 76
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 19,
+          "net": 19
+        },
+        "learned_sto": {
+          "defended": 86,
+          "net": 83
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 6,
+          "net": 6
+        },
+        "learned_sto": {
+          "defended": 73,
+          "net": 72
+        }
+      }
+    },
+    "t0.5_h1.0_ma/s1": {
+      "b1": {
+        "learned_det": {
+          "defended": 41,
+          "net": 38
+        },
+        "learned_sto": {
+          "defended": 80,
+          "net": 79
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 10,
+          "net": 10
+        },
+        "learned_sto": {
+          "defended": 63,
+          "net": 62
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 45,
+          "net": 44
+        },
+        "learned_sto": {
+          "defended": 95,
+          "net": 95
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 29,
+          "net": 25
+        },
+        "learned_sto": {
+          "defended": 95,
+          "net": 94
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 19,
+          "net": 18
+        },
+        "learned_sto": {
+          "defended": 82,
+          "net": 81
+        }
+      }
+    },
+    "t0.5_h1.0_ma/s2": {
+      "b1": {
+        "learned_det": {
+          "defended": 36,
+          "net": 36
+        },
+        "learned_sto": {
+          "defended": 77,
+          "net": 76
+        }
+      },
+      "b3": {
+        "learned_det": {
+          "defended": 17,
+          "net": 14
+        },
+        "learned_sto": {
+          "defended": 78,
+          "net": 77
+        }
+      },
+      "orig": {
+        "learned_det": {
+          "defended": 22,
+          "net": 20
+        },
+        "learned_sto": {
+          "defended": 58,
+          "net": 58
+        }
+      },
+      "b3_at1e7": {
+        "learned_det": {
+          "defended": 26,
+          "net": 26
+        },
+        "learned_sto": {
+          "defended": 64,
+          "net": 64
+        }
+      },
+      "b3_at2e7": {
+        "learned_det": {
+          "defended": 19,
+          "net": 19
+        },
+        "learned_sto": {
+          "defended": 84,
+          "net": 83
+        }
+      }
+    }
+  }
+}
