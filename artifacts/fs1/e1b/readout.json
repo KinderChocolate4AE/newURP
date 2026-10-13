@@ -1,0 +1,447 @@
+{
+  "manifest_hash": "ecc6974151e28502",
+  "net": {
+    "medians": [
+      1.0,
+      4.0,
+      9.0,
+      7.0,
+      11.0
+    ],
+    "point": "ONSET_MID",
+    "share": 0.6615,
+    "final": "UNRESOLVED"
+  },
+  "rob_fire": {
+    "medians": [
+      1.0,
+      8.0,
+      10.5,
+      11.5,
+      15.0
+    ],
+    "point": "ONSET_LOW",
+    "share": 0.496,
+    "final": "UNRESOLVED"
+  },
+  "verdict": {
+    "label": "UNRESOLVED",
+    "conversion_sensitive": false
+  },
+  "shape_normalized": [
+    0.0,
+    0.3,
+    0.8,
+    0.6,
+    1.0
+  ],
+  "conversion": {
+    "d0": 0.8,
+    "d1": 0.6060606060606061,
+    "d2": 0.7129629629629629,
+    "d3": 0.5901639344262295,
+    "d4": 0.8378378378378378
+  },
+  "cells": {
+    "d0/10/learned_det/ex_judge": {
+      "net": 0,
+      "rob_fire": 0,
+      "n": 240
+    },
+    "d0/10/learned_sto/ex_judge": {
+      "net": 5,
+      "rob_fire": 6,
+      "n": 240
+    },
+    "d0/11/learned_det/ex_judge": {
+      "net": 1,
+      "rob_fire": 2,
+      "n": 240
+    },
+    "d0/11/learned_sto/ex_judge": {
+      "net": 8,
+      "rob_fire": 9,
+      "n": 240
+    },
+    "d0/12/learned_det/ex_judge": {
+      "net": 3,
+      "rob_fire": 3,
+      "n": 240
+    },
+    "d0/12/learned_sto/ex_judge": {
+      "net": 4,
+      "rob_fire": 6,
+      "n": 240
+    },
+    "d0/13/learned_det/ex_judge": {
+      "net": 0,
+      "rob_fire": 0,
+      "n": 240
+    },
+    "d0/13/learned_sto/ex_judge": {
+      "net": 0,
+      "rob_fire": 0,
+      "n": 240
+    },
+    "d0/14/learned_det/ex_judge": {
+      "net": 1,
+      "rob_fire": 1,
+      "n": 240
+    },
+    "d0/14/learned_sto/ex_judge": {
+      "net": 8,
+      "rob_fire": 12,
+      "n": 240
+    },
+    "d0/15/learned_det/ex_judge": {
+      "net": 1,
+      "rob_fire": 1,
+      "n": 240
+    },
+    "d0/15/learned_sto/ex_judge": {
+      "net": 3,
+      "rob_fire": 4,
+      "n": 240
+    },
+    "d0/16/learned_det/ex_judge": {
+      "net": 0,
+      "rob_fire": 0,
+      "n": 240
+    },
+    "d0/16/learned_sto/ex_judge": {
+      "net": 7,
+      "rob_fire": 7,
+      "n": 240
+    },
+    "d0/17/learned_det/ex_judge": {
+      "net": 2,
+      "rob_fire": 3,
+      "n": 240
+    },
+    "d0/17/learned_sto/ex_judge": {
+      "net": 32,
+      "rob_fire": 33,
+      "n": 240
+    },
+    "d1/10/learned_det/ex_judge": {
+      "net": 8,
+      "rob_fire": 9,
+      "n": 240
+    },
+    "d1/10/learned_sto/ex_judge": {
+      "net": 29,
+      "rob_fire": 39,
+      "n": 240
+    },
+    "d1/11/learned_det/ex_judge": {
+      "net": 9,
+      "rob_fire": 9,
+      "n": 240
+    },
+    "d1/11/learned_sto/ex_judge": {
+      "net": 29,
+      "rob_fire": 33,
+      "n": 240
+    },
+    "d1/12/learned_det/ex_judge": {
+      "net": 3,
+      "rob_fire": 14,
+      "n": 240
+    },
+    "d1/12/learned_sto/ex_judge": {
+      "net": 32,
+      "rob_fire": 52,
+      "n": 240
+    },
+    "d1/13/learned_det/ex_judge": {
+      "net": 4,
+      "rob_fire": 7,
+      "n": 240
+    },
+    "d1/13/learned_sto/ex_judge": {
+      "net": 25,
+      "rob_fire": 27,
+      "n": 240
+    },
+    "d1/14/learned_det/ex_judge": {
+      "net": 0,
+      "rob_fire": 0,
+      "n": 240
+    },
+    "d1/14/learned_sto/ex_judge": {
+      "net": 7,
+      "rob_fire": 10,
+      "n": 240
+    },
+    "d1/15/learned_det/ex_judge": {
+      "net": 2,
+      "rob_fire": 2,
+      "n": 240
+    },
+    "d1/15/learned_sto/ex_judge": {
+      "net": 20,
+      "rob_fire": 26,
+      "n": 240
+    },
+    "d1/16/learned_det/ex_judge": {
+      "net": 10,
+      "rob_fire": 21,
+      "n": 240
+    },
+    "d1/16/learned_sto/ex_judge": {
+      "net": 24,
+      "rob_fire": 30,
+      "n": 240
+    },
+    "d1/17/learned_det/ex_judge": {
+      "net": 4,
+      "rob_fire": 4,
+      "n": 240
+    },
+    "d1/17/learned_sto/ex_judge": {
+      "net": 14,
+      "rob_fire": 21,
+      "n": 240
+    },
+    "d2/10/learned_det/ex_judge": {
+      "net": 4,
+      "rob_fire": 6,
+      "n": 240
+    },
+    "d2/10/learned_sto/ex_judge": {
+      "net": 47,
+      "rob_fire": 47,
+      "n": 240
+    },
+    "d2/11/learned_det/ex_judge": {
+      "net": 13,
+      "rob_fire": 15,
+      "n": 240
+    },
+    "d2/11/learned_sto/ex_judge": {
+      "net": 37,
+      "rob_fire": 42,
+      "n": 240
+    },
+    "d2/12/learned_det/ex_judge": {
+      "net": 10,
+      "rob_fire": 12,
+      "n": 240
+    },
+    "d2/12/learned_sto/ex_judge": {
+      "net": 34,
+      "rob_fire": 36,
+      "n": 240
+    },
+    "d2/13/learned_det/ex_judge": {
+      "net": 9,
+      "rob_fire": 9,
+      "n": 240
+    },
+    "d2/13/learned_sto/ex_judge": {
+      "net": 17,
+      "rob_fire": 21,
+      "n": 240
+    },
+    "d2/14/learned_det/ex_judge": {
+      "net": 19,
+      "rob_fire": 39,
+      "n": 240
+    },
+    "d2/14/learned_sto/ex_judge": {
+      "net": 31,
+      "rob_fire": 62,
+      "n": 240
+    },
+    "d2/15/learned_det/ex_judge": {
+      "net": 7,
+      "rob_fire": 9,
+      "n": 240
+    },
+    "d2/15/learned_sto/ex_judge": {
+      "net": 41,
+      "rob_fire": 48,
+      "n": 240
+    },
+    "d2/16/learned_det/ex_judge": {
+      "net": 6,
+      "rob_fire": 6,
+      "n": 240
+    },
+    "d2/16/learned_sto/ex_judge": {
+      "net": 40,
+      "rob_fire": 40,
+      "n": 240
+    },
+    "d2/17/learned_det/ex_judge": {
+      "net": 9,
+      "rob_fire": 12,
+      "n": 240
+    },
+    "d2/17/learned_sto/ex_judge": {
+      "net": 23,
+      "rob_fire": 27,
+      "n": 240
+    },
+    "d3/10/learned_det/ex_judge": {
+      "net": 6,
+      "rob_fire": 7,
+      "n": 240
+    },
+    "d3/10/learned_sto/ex_judge": {
+      "net": 35,
+      "rob_fire": 38,
+      "n": 240
+    },
+    "d3/11/learned_det/ex_judge": {
+      "net": 6,
+      "rob_fire": 9,
+      "n": 240
+    },
+    "d3/11/learned_sto/ex_judge": {
+      "net": 34,
+      "rob_fire": 35,
+      "n": 240
+    },
+    "d3/12/learned_det/ex_judge": {
+      "net": 8,
+      "rob_fire": 9,
+      "n": 240
+    },
+    "d3/12/learned_sto/ex_judge": {
+      "net": 30,
+      "rob_fire": 31,
+      "n": 240
+    },
+    "d3/13/learned_det/ex_judge": {
+      "net": 12,
+      "rob_fire": 14,
+      "n": 240
+    },
+    "d3/13/learned_sto/ex_judge": {
+      "net": 30,
+      "rob_fire": 37,
+      "n": 240
+    },
+    "d3/14/learned_det/ex_judge": {
+      "net": 22,
+      "rob_fire": 39,
+      "n": 240
+    },
+    "d3/14/learned_sto/ex_judge": {
+      "net": 55,
+      "rob_fire": 63,
+      "n": 240
+    },
+    "d3/15/learned_det/ex_judge": {
+      "net": 4,
+      "rob_fire": 15,
+      "n": 240
+    },
+    "d3/15/learned_sto/ex_judge": {
+      "net": 39,
+      "rob_fire": 47,
+      "n": 240
+    },
+    "d3/16/learned_det/ex_judge": {
+      "net": 9,
+      "rob_fire": 20,
+      "n": 240
+    },
+    "d3/16/learned_sto/ex_judge": {
+      "net": 29,
+      "rob_fire": 44,
+      "n": 240
+    },
+    "d3/17/learned_det/ex_judge": {
+      "net": 5,
+      "rob_fire": 9,
+      "n": 240
+    },
+    "d3/17/learned_sto/ex_judge": {
+      "net": 24,
+      "rob_fire": 31,
+      "n": 240
+    },
+    "d4/10/learned_det/ex_judge": {
+      "net": 21,
+      "rob_fire": 22,
+      "n": 240
+    },
+    "d4/10/learned_sto/ex_judge": {
+      "net": 48,
+      "rob_fire": 49,
+      "n": 240
+    },
+    "d4/11/learned_det/ex_judge": {
+      "net": 17,
+      "rob_fire": 17,
+      "n": 240
+    },
+    "d4/11/learned_sto/ex_judge": {
+      "net": 51,
+      "rob_fire": 53,
+      "n": 240
+    },
+    "d4/12/learned_det/ex_judge": {
+      "net": 11,
+      "rob_fire": 15,
+      "n": 240
+    },
+    "d4/12/learned_sto/ex_judge": {
+      "net": 39,
+      "rob_fire": 51,
+      "n": 240
+    },
+    "d4/13/learned_det/ex_judge": {
+      "net": 3,
+      "rob_fire": 5,
+      "n": 240
+    },
+    "d4/13/learned_sto/ex_judge": {
+      "net": 19,
+      "rob_fire": 21,
+      "n": 240
+    },
+    "d4/14/learned_det/ex_judge": {
+      "net": 6,
+      "rob_fire": 7,
+      "n": 240
+    },
+    "d4/14/learned_sto/ex_judge": {
+      "net": 31,
+      "rob_fire": 35,
+      "n": 240
+    },
+    "d4/15/learned_det/ex_judge": {
+      "net": 9,
+      "rob_fire": 15,
+      "n": 240
+    },
+    "d4/15/learned_sto/ex_judge": {
+      "net": 30,
+      "rob_fire": 39,
+      "n": 240
+    },
+    "d4/16/learned_det/ex_judge": {
+      "net": 15,
+      "rob_fire": 18,
+      "n": 240
+    },
+    "d4/16/learned_sto/ex_judge": {
+      "net": 33,
+      "rob_fire": 41,
+      "n": 240
+    },
+    "d4/17/learned_det/ex_judge": {
+      "net": 11,
+      "rob_fire": 12,
+      "n": 240
+    },
+    "d4/17/learned_sto/ex_judge": {
+      "net": 39,
+      "rob_fire": 40,
+      "n": 240
+    }
+  }
+}

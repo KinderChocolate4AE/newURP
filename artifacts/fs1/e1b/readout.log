@@ -1,0 +1,45 @@
+{
+ "manifest_hash": "ecc6974151e28502",
+ "net": {
+  "medians": [
+   1.0,
+   4.0,
+   9.0,
+   7.0,
+   11.0
+  ],
+  "point": "ONSET_MID",
+  "share": 0.6615,
+  "final": "UNRESOLVED"
+ },
+ "rob_fire": {
+  "medians": [
+   1.0,
+   8.0,
+   10.5,
+   11.5,
+   15.0
+  ],
+  "point": "ONSET_LOW",
+  "share": 0.496,
+  "final": "UNRESOLVED"
+ },
+ "verdict": {
+  "label": "UNRESOLVED",
+  "conversion_sensitive": false
+ },
+ "shape_normalized": [
+  0.0,
+  0.3,
+  0.8,
+  0.6,
+  1.0
+ ],
+ "conversion": {
+  "d0": 0.8,
+  "d1": 0.6060606060606061,
+  "d2": 0.7129629629629629,
+  "d3": 0.5901639344262295,
+  "d4": 0.8378378378378378
+ }
+}
