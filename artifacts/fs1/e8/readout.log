@@ -1,0 +1,24 @@
+{
+ "manifest_hash": "afba5be9e9c2714c",
+ "stage": 1,
+ "seeds": [
+  20,
+  21,
+  22,
+  23,
+  24
+ ],
+ "beta": -7.527017383628829,
+ "ci975": [
+  -12.388077996519623,
+  -3.106349979064546
+ ],
+ "label": "CEILING_FALLS_WITH_a",
+ "stage2_needed": false,
+ "median_net": {
+  "a0": 11.0,
+  "a1": 20.0,
+  "a2": 6.0,
+  "a3": 6.0
+ }
+}
