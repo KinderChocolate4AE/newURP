@@ -1,0 +1,127 @@
+{
+ "tolerance": "|rel err| <= 0.02, registered before run",
+ "verdict": "PASS",
+ "max_abs_rel_err": 0.0102,
+ "rows": [
+  {
+   "kind": "base",
+   "tau_r": 0.0,
+   "L": 0.0,
+   "delta_deg": 0.0,
+   "analytic": 31.765,
+   "numeric": 31.665,
+   "rel_err": -0.00315,
+   "pass": true
+  },
+  {
+   "kind": "reaction",
+   "tau_r": 0.05,
+   "L": 0.0,
+   "delta_deg": 0.0,
+   "analytic": 45.742,
+   "numeric": 45.598,
+   "rel_err": -0.00315,
+   "pass": true
+  },
+  {
+   "kind": "reaction",
+   "tau_r": 0.1,
+   "L": 0.0,
+   "delta_deg": 0.0,
+   "analytic": 71.472,
+   "numeric": 71.247,
+   "rel_err": -0.00315,
+   "pass": true
+  },
+  {
+   "kind": "reaction",
+   "tau_r": 0.15,
+   "L": 0.0,
+   "delta_deg": 0.0,
+   "analytic": 127.061,
+   "numeric": 126.661,
+   "rel_err": -0.00315,
+   "pass": true
+  },
+  {
+   "kind": "tracking",
+   "tau_r": 0.0,
+   "L": 0.05,
+   "delta_deg": 0.0,
+   "analytic": 23.338,
+   "numeric": 23.264,
+   "rel_err": -0.00315,
+   "pass": true
+  },
+  {
+   "kind": "tracking",
+   "tau_r": 0.0,
+   "L": 0.1,
+   "delta_deg": 0.0,
+   "analytic": 17.868,
+   "numeric": 17.812,
+   "rel_err": -0.00315,
+   "pass": true
+  },
+  {
+   "kind": "tracking",
+   "tau_r": 0.0,
+   "L": 0.15,
+   "delta_deg": 0.0,
+   "analytic": 14.118,
+   "numeric": 14.073,
+   "rel_err": -0.00315,
+   "pass": true
+  },
+  {
+   "kind": "aim",
+   "tau_r": 0.0,
+   "L": 0.0,
+   "delta_deg": 1,
+   "analytic": 29.604,
+   "numeric": 29.642,
+   "rel_err": 0.0013,
+   "pass": true
+  },
+  {
+   "kind": "aim",
+   "tau_r": 0.0,
+   "L": 0.0,
+   "delta_deg": 2,
+   "analytic": 27.372,
+   "numeric": 27.553,
+   "rel_err": 0.00661,
+   "pass": true
+  },
+  {
+   "kind": "aim",
+   "tau_r": 0.0,
+   "L": 0.0,
+   "delta_deg": 3,
+   "analytic": 25.067,
+   "numeric": 25.288,
+   "rel_err": 0.00885,
+   "pass": true
+  },
+  {
+   "kind": "aim",
+   "tau_r": 0.0,
+   "L": 0.0,
+   "delta_deg": 5,
+   "analytic": 20.224,
+   "numeric": 20.425,
+   "rel_err": 0.00996,
+   "pass": true
+  },
+  {
+   "kind": "aim",
+   "tau_r": 0.0,
+   "L": 0.0,
+   "delta_deg": 8,
+   "analytic": 12.332,
+   "numeric": 12.458,
+   "rel_err": 0.0102,
+   "pass": true
+  }
+ ]
+}

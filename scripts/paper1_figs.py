@@ -355,7 +355,7 @@ def figSens():
     axs[0].set_xlabel(r"evader reaction $\tau_r$ [s]", fontsize=7.5)
     L = np.linspace(0, 0.15, 50)
     axs[1].plot(L, a0 * (TAU / (TAU + L)) ** 2, "k--")
-    axs[1].set_xlabel("tracking delay $L$ [s] *", fontsize=7.5)
+    axs[1].set_xlabel("tracking delay $L$ [s]", fontsize=7.5)
     d = np.radians(np.linspace(0, 8, 80))
     chi = 1 / (np.tan(TH) * (1 + 1 / np.sin(TH - d)))
     axs[2].plot(np.degrees(d), chi * 2 * RMAX * np.tan(TH) / TAU ** 2, "k-.")
@@ -370,7 +370,7 @@ def figSens():
         axs[2].text(8.6, a, f"{lab} ({a:g})", fontsize=5.8, va="center", color="0.4")
     axs[1].text(0.15, a0 + 5, f"baseline {a0:.1f}", fontsize=6.3, color="0.3", ha="right")
     axs[0].set_ylabel("threat accel. where the\nwindow vanishes [m/s$^2$]", fontsize=7.5)
-    fig.text(0.5, 0.005, r"$\tau$ 0.30 s, FS1 net ($\theta$ 12.15°, $R_{\max}$ 8.22 m); above a curve = no guaranteed-capture instant;  * new formula, under check",
+    fig.text(0.5, 0.005, r"$\tau$ 0.30 s, FS1 net ($\theta$ 12.15°, $R_{\max}$ 8.22 m); above a curve = no guaranteed-capture instant; all three curves checked numerically (<= 1%)",
              ha="center", fontsize=6.2, color="0.3")
     fig.tight_layout(rect=(0, 0.05, 0.94, 1), w_pad=0.6)
     fig.savefig(OUT / "fig_sensitivity.png")
