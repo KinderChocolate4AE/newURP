@@ -1,0 +1,183 @@
+{
+  "schema": "fs1-r1-manifest-v1",
+  "status": "sealed 2026-10-13 BEFORE any R1 production (contract docs/138; user 2026-10-13 'evidence collection tonight'). Motivation: the night sandbox (exploratory, outside contracts) found 800 -> 2400 it red teams cut the headline a lot; our ceilings rest on a fixed 1e7 exploiter",
+  "question": "does a 3x longer dedicated exploiter pull the E7-b matched-audit ceiling down, i.e. is 1e7 converged",
+  "slots": [
+    {
+      "variant": "t0.7_h1.0_cv",
+      "seed": 0,
+      "tau_scale": 0.7,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "eval_seed": 276000,
+      "idx": 0
+    },
+    {
+      "variant": "t0.7_h1.0_cv",
+      "seed": 1,
+      "tau_scale": 0.7,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "eval_seed": 276000,
+      "idx": 0
+    },
+    {
+      "variant": "t0.7_h1.0_cv",
+      "seed": 2,
+      "tau_scale": 0.7,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "eval_seed": 276000,
+      "idx": 0
+    },
+    {
+      "variant": "t0.7_h1.5_cv",
+      "seed": 0,
+      "tau_scale": 0.7,
+      "theta_scale": 1.5,
+      "aim": "cv",
+      "eval_seed": 277000,
+      "idx": 1
+    },
+    {
+      "variant": "t0.7_h1.5_cv",
+      "seed": 1,
+      "tau_scale": 0.7,
+      "theta_scale": 1.5,
+      "aim": "cv",
+      "eval_seed": 277000,
+      "idx": 1
+    },
+    {
+      "variant": "t0.7_h1.5_cv",
+      "seed": 2,
+      "tau_scale": 0.7,
+      "theta_scale": 1.5,
+      "aim": "cv",
+      "eval_seed": 277000,
+      "idx": 1
+    },
+    {
+      "variant": "t0.5_h1.0_cv",
+      "seed": 0,
+      "tau_scale": 0.5,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "eval_seed": 278000,
+      "idx": 2
+    },
+    {
+      "variant": "t0.5_h1.0_cv",
+      "seed": 1,
+      "tau_scale": 0.5,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "eval_seed": 278000,
+      "idx": 2
+    },
+    {
+      "variant": "t0.5_h1.0_cv",
+      "seed": 2,
+      "tau_scale": 0.5,
+      "theta_scale": 1.0,
+      "aim": "cv",
+      "eval_seed": 278000,
+      "idx": 2
+    },
+    {
+      "variant": "t0.5_h1.5_cv",
+      "seed": 0,
+      "tau_scale": 0.5,
+      "theta_scale": 1.5,
+      "aim": "cv",
+      "eval_seed": 279000,
+      "idx": 3
+    },
+    {
+      "variant": "t0.5_h1.5_cv",
+      "seed": 1,
+      "tau_scale": 0.5,
+      "theta_scale": 1.5,
+      "aim": "cv",
+      "eval_seed": 279000,
+      "idx": 3
+    },
+    {
+      "variant": "t0.5_h1.5_cv",
+      "seed": 2,
+      "tau_scale": 0.5,
+      "theta_scale": 1.5,
+      "aim": "cv",
+      "eval_seed": 279000,
+      "idx": 3
+    },
+    {
+      "variant": "t0.5_h1.0_ma",
+      "seed": 0,
+      "tau_scale": 0.5,
+      "theta_scale": 1.0,
+      "aim": "ma",
+      "eval_seed": 280000,
+      "idx": 4
+    },
+    {
+      "variant": "t0.5_h1.0_ma",
+      "seed": 1,
+      "tau_scale": 0.5,
+      "theta_scale": 1.0,
+      "aim": "ma",
+      "eval_seed": 280000,
+      "idx": 4
+    },
+    {
+      "variant": "t0.5_h1.0_ma",
+      "seed": 2,
+      "tau_scale": 0.5,
+      "theta_scale": 1.0,
+      "aim": "ma",
+      "eval_seed": 280000,
+      "idx": 4
+    }
+  ],
+  "source": "server4 /data/hjhong/fs1jax/e7b/<variant>/s<seed>/ckpt.pt (E7-b frozen defense, no retraining)",
+  "production": {
+    "exploiters": {
+      "b1": "det exploiter vs frozen learned_det, scratch, total-steps 1e+07, jseed 320000 + idx*100 + seed",
+      "b3": "det exploiter vs frozen learned_det, scratch, total-steps 3e+07, jseed 325000 + idx*100 + seed"
+    },
+    "recipe": "identical to the E7-b det exploiter except budget and jseed (--exploit ckpt --stack r4p + world flags of the variant)",
+    "slots": 15,
+    "runs": 30
+  },
+  "evaluation": {
+    "n": 240,
+    "seed0": "E7-b eval band (276000 + idx*1000)",
+    "env_seed": 0,
+    "defenders": [
+      "learned_det (judgment)",
+      "learned_sto (report)"
+    ],
+    "exploiters": "b1, b3 (new) + original E7-b 1e7 exploiter re-evaluated with --env-seed 0 (report)",
+    "metric": "defended (eval.summarize; same ceiling definition as E7-b) + net (report)"
+  },
+  "rule": {
+    "d": "per slot d = ceil(b1) - ceil(b3), learned_det",
+    "labels": "BUDGET_UNDERTRAINED: median d >= 4 and >= 10/15 slots d > 0; BUDGET_CONVERGED: |median d| < 4; else BUDGET_MIXED",
+    "report": [
+      "plateau median ceiling at b1 / b3 / original",
+      "seed reproducibility |ceil(b1) - ceil(orig)|",
+      "exploiter final penetration (train log) per budget"
+    ]
+  },
+  "power_memo": "R0: per-slot env-seed SD <= binomial (~4/240 at p ~ .09); a paired b1-b3 difference has SD ~ 6 incl. exploiter-seed scatter -> median of 15 has SE ~ 2; threshold 4 ~ 2 SE",
+  "pre_seal_checks": [
+    "label semantics unit test tests/test_fs1_eval.py::test_r1_label_semantics",
+    "measurement window: episode outcomes only"
+  ],
+  "not_evidence_for": [
+    "convergence beyond 3e7",
+    "other lineages",
+    "re-judging any sealed verdict"
+  ],
+  "manifest_hash": "7b8762005d274eb0"
+}

@@ -280,3 +280,34 @@ def test_r0_label_semantics():
     same = [R.ratio_lower(rng.binomial(240, 0.1, 8), rng.binomial(240, 0.1, 8), rng)[1] for _ in range(4)]
     assert M.inflation_label(same) == "INFLATION_WITHIN_NOISE"           # 1:1 → 잡음 안
     assert M.inflation_label([2.0, 2.0, 1.2, 1.1]) == "INFLATION_PARTIAL"
+
+
+def test_r1_label_semantics():
+    """R1 (docs/138): 더 학습한 착취자가 천장을 뚜렷이 끌어내림 → UNDERTRAINED, 변화 없음 → CONVERGED."""
+    import sys
+    sys.path.insert(0, "scripts")
+    import fs1_r1_manifest as M
+    assert M.budget_label([6, 8, 5, 7, 9, 4, 6, 5, 8, 7, 3, 6, -1, 5, 7]) == "BUDGET_UNDERTRAINED"
+    assert M.budget_label([1, -2, 0, 2, -1, 3, 0, -3, 1, 2, -1, 0, 1, -2, 2]) == "BUDGET_CONVERGED"
+    assert M.budget_label([6, -8, 5, -7, 9, -4, 6, -5, 8, -7, 3, 6, -1, 5, 7]) == "BUDGET_MIXED"
+    assert len(M.build()["slots"]) == 15
+
+
+def test_e8_label_semantics():
+    """E8 (docs/139): 가속이 클수록 천장 하락 → FALLS, 상승 → RISES, 평평 + 좁은 CI → COLLAPSES, 넓은 CI → UNRESOLVED."""
+    import sys
+    sys.path.insert(0, "scripts")
+    import numpy as np
+    import fs1_e8_manifest as M
+    import fs1_e8_readout as R
+    la = [float(np.log(p["a_scale"])) for p in M.POINTS]
+    jitter = np.array([-1.0, -0.5, 0.0, 0.5, 1.0])
+    falls = [30 - 10 * l + jitter for l in la]
+    assert M.slope_label(*R.slope_ci(falls, la)[1:]) == "CEILING_FALLS_WITH_a"
+    rises = [10 + 10 * l + jitter for l in la]
+    assert M.slope_label(*R.slope_ci(rises, la)[1:]) == "CEILING_RISES_WITH_a"
+    flat = [20 + jitter for _ in la]
+    assert M.slope_label(*R.slope_ci(flat, la)[1:]) == "COLLAPSES_IN_CHI"
+    noisy = [20 + 12 * np.array([-1.0, -0.5, 0.0, 0.5, 1.0]) * (1 if i % 2 else -1) for i in range(4)]
+    assert M.slope_label(*R.slope_ci(noisy, la)[1:]) == "UNRESOLVED"
+    assert [p["deploy_ticks"] for p in M.POINTS] == [6, 5, 4, 3]
