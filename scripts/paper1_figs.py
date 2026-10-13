@@ -300,41 +300,33 @@ THREAT_A = [("Mavic 3", 6.87), ("Phantom 4", 8.83), ("std quad", 17.4), ("racing
 
 def figF2():
     fig, ax = plt.subplots(figsize=(160 * MM, 100 * MM))
-    fig.subplots_adjust(left=0.09, right=0.83, top=0.86, bottom=0.11)
+    fig.subplots_adjust(left=0.09, right=0.83, top=0.93, bottom=0.15)
     ax.set_xscale("log"); ax.set_yscale("log")
     ax.set_xlim(0.05, 1.5); ax.set_ylim(3, 200)
     taus = np.geomspace(0.05, 1.5, 300)
     rt = RMAX * np.tan(TH)                                   # FS1 net 반폭 (R_max tanθ)
     a_at = lambda rho, t: 2 * rt / (rho * t ** 2)            # iso-ρ: a = 2 R tanθ / (ρ τ²)
 
-    def label(rho, t, txt, **kw):                            # 선 위 라벨 (화면 기울기에 맞춘 각도)
-        p1, p2 = ax.transData.transform([(t, a_at(rho, t)), (t * 1.2, a_at(rho, t * 1.2))])
-        ang = np.degrees(np.arctan2(p2[1] - p1[1], p2[0] - p1[0]))
-        ax.text(t, a_at(rho, t) * 1.07, txt, rotation=ang, rotation_mode="anchor", fontsize=6.5, **kw)
-
-    ax.fill_between(taus, a_at(rho0(TH), taus), 1e4, fc="0.82", ec="none", zorder=0)
-    ax.plot(taus, a_at(rho0(TH), taus), "k-", lw=1.8, zorder=3)
-    label(rho0(TH), 0.34, rf"$\chi^*_{{geom}}$ = {1 / rho0(TH):.3f} (window opens)")
-    for V, ls, t in ((15.0, (0, (1, 1.5)), 0.5), (V_BAR, "--", 0.105), (35.0, "-.", 0.07)):
+    hs = []                                                  # 선 라벨은 범례로 (선 위 회전 라벨은 겹침)
+    ax.fill_between(taus, a_at(rho0(TH), taus), 1e4, fc="0.85", ec="none", zorder=0)
+    hs += ax.plot(taus, a_at(rho0(TH), taus), "k-", lw=1.8, zorder=3,
+                  label=rf"$\chi^*_{{geom}}$ = {1 / rho0(TH):.3f}: window exists below this line")
+    for V, ls in ((15.0, (0, (1, 1.5))), (V_BAR, "--"), (35.0, "-.")):
         rs = rho0(TH) / (1 - 4 * DT * V / RMAX)
-        ax.plot(taus, a_at(rs, taus), ls=ls, color="k", lw=0.9, zorder=3)
-        label(rs, t, rf"$\chi^*_{{0.2}}$ = {1 / rs:.3f} (0.2 s window, V {V:g} m/s)")
-    ax.text(1.4, 150, r"$\chi>\chi^*_{geom}$: no guaranteed-capture instant (model)", ha="right", fontsize=7)
+        hs += ax.plot(taus, a_at(rs, taus), ls=ls, color="k", lw=0.9, zorder=3,
+                      label=rf"$\chi^*_{{0.2}}$ = {1 / rs:.3f}: head-on window $\geq$ 0.2 s at V = {V:g} m/s")
+    ax.text(1.25, 140, "no guaranteed-capture\ninstant (model)", ha="right", fontsize=7, color="0.25")
     # FS1 τ 사다리의 측정 점 (a = 20.45 한 줄) — 천장 숫자는 실측 점 옆에만
     e7b = load("e7b/readout.json")["variants"]
     armc = [s["ceil_det"] for s in load("armc1/readout.json")["cells"]["m0.35_n1"]["seeds"].values()]
     pts = [(TAU, f"{min(armc)}–{max(armc)}"), (0.7 * TAU, f"{e7b['t0.7_h1.0_cv']['ceil_det_med']:g}"),
            (0.5 * TAU, f"{e7b['t0.5_h1.0_cv']['ceil_det_med']:g}")]
     for t, c in pts:
-        ax.plot(t, AATT, "o", ms=5.5, mfc="k", mec="k", zorder=5)
-        ax.text(t, AATT * 1.18, c, fontsize=7, ha="center", zorder=6,
-                bbox=dict(fc="white", ec="none", pad=0.5))
-    ax.text(0.155, 32, "matched-audit det ceiling /240\n(1e7 exploiter; measured at a = 20.45 only)",
-            fontsize=6.3, ha="left", color="0.2", bbox=dict(fc="white", ec="none", pad=0.8))
-    ax.annotate("", xy=(TAU - 0.15, AATT * 0.80), xytext=(TAU, AATT * 0.80),
-                arrowprops=dict(arrowstyle="-|>", lw=0.8, color="0.3"))
-    ax.text(0.21, AATT * 0.74, r"evader reaction delay $\tau_r$ 0.15 s", fontsize=6.3, ha="center", va="top", bbox=dict(fc="white", ec="none", pad=0.5),
-            color="0.3")
+        ax.plot(t, AATT, "o", ms=5.5, mfc="white", mec="k", mew=1.2, zorder=5)
+        ax.text(t, AATT * 0.80, c, fontsize=7, ha="center", va="top", zorder=6)
+    hs.append(plt.Line2D([], [], ls="", marker="o", mfc="white", mec="k", mew=1.2,
+                         label="measured learned ceiling /240 at a = 20.45 (dedicated 1e7 exploiter)"))
+    ax.legend(handles=hs, loc="lower left", fontsize=6.2, frameon=True, framealpha=1, edgecolor="0.7")
     for lab, a in THREAT_A:                                  # 위협 등급 a (오른쪽 눈금)
         ax.plot([1.35, 1.5], [a, a], "k-", lw=1.4)
         ax.text(1.6, a, f"{lab} ({a:g})", fontsize=6.3, va="center")
@@ -344,10 +336,44 @@ def figF2():
     ax.set_yticks([3, 5, 10, 20, 50, 100, 200], ["3", "5", "10", "20", "50", "100", "200"])
     ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
     ax.yaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
-    ax.text(0.052, 3.25, rf"net geometry fixed at FS1 ($R_{{\max}}$ {RMAX} m, $\theta$ {np.degrees(TH):.2f}°); "
-            r"lines = analytic window boundaries", fontsize=6.2, color="0.25")
+    fig.text(0.09, 0.012, rf"net geometry fixed at FS1 ($R_{{\max}}$ {RMAX} m, $\theta$ {np.degrees(TH):.2f}°); lines = analytic "
+             r"boundaries for an ideal evader (instant reaction)", fontsize=6.2, color="0.25")
     ax.tick_params(labelsize=7)
     fig.savefig(OUT / "figF2_regime_map.png")
+    plt.close(fig)
+
+
+# ---------------------------------------------------------------- 가정 민감도 (해석) — 창 존재 경계가 각 가정을 풀 때 얼마나 움직이나
+def figSens():
+    """τ 0.3 s 기준 '창이 사라지는 위협 가속' a* 의 이동. 회피자 반응 지연 τ_r: a*·[τ/(τ−τ_r)]² / 방어 추적 지연 L: a*·[τ/(τ+L)]²
+    (새로 세운 식, 사용자 유도 확인 전) / 조준 오차 δ: χ*_geom(δ) = 1/[tanθ(1 + 1/sin(θ−δ))]."""
+    a0 = 2 * RMAX * np.tan(TH) / (rho0(TH) * TAU ** 2)
+    assert abs(a0 - 31.8) < 0.1
+    fig, axs = plt.subplots(1, 3, figsize=(160 * MM, 58 * MM), sharey=True)
+    tr = np.linspace(0, 0.15, 50)
+    axs[0].plot(tr, a0 * (TAU / (TAU - tr)) ** 2, "k-")
+    axs[0].set_xlabel(r"evader reaction $	au_r$ [s]", fontsize=7.5)
+    L = np.linspace(0, 0.15, 50)
+    axs[1].plot(L, a0 * (TAU / (TAU + L)) ** 2, "k--")
+    axs[1].set_xlabel("tracking delay $L$ [s] *", fontsize=7.5)
+    d = np.radians(np.linspace(0, 8, 80))
+    chi = 1 / (np.tan(TH) * (1 + 1 / np.sin(TH - d)))
+    axs[2].plot(np.degrees(d), chi * 2 * RMAX * np.tan(TH) / TAU ** 2, "k-.")
+    axs[2].set_xlabel(r"aim error $\delta$ [deg]", fontsize=7.5)
+    for ax in axs:
+        ax.axhline(a0, color="0.6", lw=0.7)
+        for lab, a in (THREAT_A[2], THREAT_A[3]):
+            ax.axhline(a, color="0.85", lw=0.6, zorder=0)
+        ax.tick_params(labelsize=7)
+        ax.set_ylim(0, 130)
+    for lab, a in (THREAT_A[2], THREAT_A[3]):
+        axs[2].text(8.6, a, f"{lab} ({a:g})", fontsize=5.8, va="center", color="0.4")
+    axs[1].text(0.15, a0 + 5, f"baseline {a0:.1f}", fontsize=6.3, color="0.3", ha="right")
+    axs[0].set_ylabel("threat accel. where the\nwindow vanishes [m/s$^2$]", fontsize=7.5)
+    fig.text(0.5, 0.005, r"$\tau$ 0.30 s, FS1 net ($\theta$ 12.15°, $R_{\max}$ 8.22 m); above a curve = no guaranteed-capture instant;  * new formula, under check",
+             ha="center", fontsize=6.2, color="0.3")
+    fig.tight_layout(rect=(0, 0.05, 0.94, 1), w_pad=0.6)
+    fig.savefig(OUT / "fig_sensitivity.png")
     plt.close(fig)
 
 
@@ -401,5 +427,6 @@ if __name__ == "__main__":
     fig2()
     fig4()
     figF2()
+    figSens()
     fig4dec()
     print("wrote", *sorted(p.name for p in OUT.glob("*.png")))
