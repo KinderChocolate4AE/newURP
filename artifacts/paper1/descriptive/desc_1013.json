@@ -1,0 +1,492 @@
+{
+ "status": "descriptive, not a judgment; numbers partly seen earlier (E1 readout tabulation 10-12)",
+ "1-2 cross_audit_E1": {
+  "all_55": {
+   "n_slots": 55,
+   "medians": {
+    "det|det": 20.0,
+    "sto|det": 62.0,
+    "det|sto": 40.0,
+    "sto|sto": 21.0
+   },
+   "ratio_det_line (median det|sto / median det|det)": 2.0,
+   "ratio_sto_line (median sto|det / median sto|sto)": 2.9523809523809526,
+   "per_slot_ratio_range": [
+    0.3333333333333333,
+    9.818181818181818
+   ],
+   "per_slot_ratio_below_1": 6,
+   "per_slot_ratio_n": 109
+  },
+  "excluding_rho1.92 (floor)": {
+   "n_slots": 50,
+   "medians": {
+    "det|det": 21.5,
+    "sto|det": 66.0,
+    "det|sto": 40.5,
+    "sto|sto": 22.0
+   },
+   "ratio_det_line (median det|sto / median det|det)": 1.8837209302325582,
+   "ratio_sto_line (median sto|det / median sto|sto)": 3.0,
+   "per_slot_ratio_range": [
+    0.5,
+    9.818181818181818
+   ],
+   "per_slot_ratio_below_1": 5,
+   "per_slot_ratio_n": 100
+  },
+  "slots": {
+   "r1.92/s0": {
+    "det|det": 0,
+    "sto|det": 2,
+    "det|sto": 4,
+    "sto|sto": 6
+   },
+   "r1.92/s1": {
+    "det|det": 5,
+    "sto|det": 13,
+    "det|sto": 7,
+    "sto|sto": 10
+   },
+   "r1.92/s2": {
+    "det|det": 12,
+    "sto|det": 23,
+    "det|sto": 15,
+    "sto|sto": 10
+   },
+   "r1.92/s3": {
+    "det|det": 5,
+    "sto|det": 12,
+    "det|sto": 5,
+    "sto|sto": 6
+   },
+   "r1.92/s4": {
+    "det|det": 5,
+    "sto|det": 28,
+    "det|sto": 13,
+    "sto|sto": 10
+   },
+   "r2.30/s0": {
+    "det|det": 15,
+    "sto|det": 62,
+    "det|sto": 47,
+    "sto|sto": 38
+   },
+   "r2.30/s1": {
+    "det|det": 19,
+    "sto|det": 50,
+    "det|sto": 29,
+    "sto|sto": 29
+   },
+   "r2.30/s2": {
+    "det|det": 24,
+    "sto|det": 56,
+    "det|sto": 30,
+    "sto|sto": 17
+   },
+   "r2.30/s3": {
+    "det|det": 22,
+    "sto|det": 61,
+    "det|sto": 35,
+    "sto|sto": 18
+   },
+   "r2.30/s4": {
+    "det|det": 21,
+    "sto|det": 27,
+    "det|sto": 39,
+    "sto|sto": 26
+   },
+   "r2.66/s0": {
+    "det|det": 16,
+    "sto|det": 67,
+    "det|sto": 24,
+    "sto|sto": 24
+   },
+   "r2.66/s1": {
+    "det|det": 14,
+    "sto|det": 73,
+    "det|sto": 47,
+    "sto|sto": 18
+   },
+   "r2.66/s2": {
+    "det|det": 11,
+    "sto|det": 34,
+    "det|sto": 23,
+    "sto|sto": 14
+   },
+   "r2.66/s3": {
+    "det|det": 17,
+    "sto|det": 57,
+    "det|sto": 41,
+    "sto|sto": 29
+   },
+   "r2.66/s4": {
+    "det|det": 15,
+    "sto|det": 32,
+    "det|sto": 31,
+    "sto|sto": 13
+   },
+   "r2.93/s0": {
+    "det|det": 26,
+    "sto|det": 73,
+    "det|sto": 40,
+    "sto|sto": 19
+   },
+   "r2.93/s1": {
+    "det|det": 39,
+    "sto|det": 92,
+    "det|sto": 59,
+    "sto|sto": 25
+   },
+   "r2.93/s2": {
+    "det|det": 26,
+    "sto|det": 67,
+    "det|sto": 37,
+    "sto|sto": 27
+   },
+   "r2.93/s3": {
+    "det|det": 19,
+    "sto|det": 56,
+    "det|sto": 57,
+    "sto|sto": 13
+   },
+   "r2.93/s4": {
+    "det|det": 16,
+    "sto|det": 50,
+    "det|sto": 31,
+    "sto|sto": 17
+   },
+   "r3.42/s0": {
+    "det|det": 14,
+    "sto|det": 36,
+    "det|sto": 45,
+    "sto|sto": 17
+   },
+   "r3.42/s1": {
+    "det|det": 23,
+    "sto|det": 79,
+    "det|sto": 34,
+    "sto|sto": 10
+   },
+   "r3.42/s2": {
+    "det|det": 25,
+    "sto|det": 101,
+    "det|sto": 51,
+    "sto|sto": 20
+   },
+   "r3.42/s3": {
+    "det|det": 22,
+    "sto|det": 59,
+    "det|sto": 47,
+    "sto|sto": 23
+   },
+   "r3.42/s4": {
+    "det|det": 22,
+    "sto|det": 82,
+    "det|sto": 66,
+    "sto|sto": 21
+   },
+   "r3.92/s0": {
+    "det|det": 16,
+    "sto|det": 40,
+    "det|sto": 47,
+    "sto|sto": 31
+   },
+   "r3.92/s1": {
+    "det|det": 31,
+    "sto|det": 114,
+    "det|sto": 67,
+    "sto|sto": 46
+   },
+   "r3.92/s2": {
+    "det|det": 10,
+    "sto|det": 58,
+    "det|sto": 40,
+    "sto|sto": 32
+   },
+   "r3.92/s3": {
+    "det|det": 11,
+    "sto|det": 50,
+    "det|sto": 39,
+    "sto|sto": 23
+   },
+   "r3.92/s4": {
+    "det|det": 27,
+    "sto|det": 74,
+    "det|sto": 74,
+    "sto|sto": 36
+   },
+   "r7.69/s0": {
+    "det|det": 36,
+    "sto|det": 71,
+    "det|sto": 86,
+    "sto|sto": 15
+   },
+   "r7.69/s1": {
+    "det|det": 19,
+    "sto|det": 80,
+    "det|sto": 34,
+    "sto|sto": 21
+   },
+   "r7.69/s2": {
+    "det|det": 32,
+    "sto|det": 108,
+    "det|sto": 55,
+    "sto|sto": 11
+   },
+   "r7.69/s3": {
+    "det|det": 20,
+    "sto|det": 97,
+    "det|sto": 105,
+    "sto|sto": 66
+   },
+   "r7.69/s4": {
+    "det|det": 19,
+    "sto|det": 50,
+    "det|sto": 52,
+    "sto|sto": 17
+   },
+   "p2.75/s0": {
+    "det|det": 28,
+    "sto|det": 39,
+    "det|sto": 44,
+    "sto|sto": 28
+   },
+   "p2.75/s1": {
+    "det|det": 13,
+    "sto|det": 53,
+    "det|sto": 47,
+    "sto|sto": 23
+   },
+   "p2.75/s2": {
+    "det|det": 24,
+    "sto|det": 66,
+    "det|sto": 12,
+    "sto|sto": 8
+   },
+   "p2.75/s3": {
+    "det|det": 13,
+    "sto|det": 47,
+    "det|sto": 33,
+    "sto|sto": 14
+   },
+   "p2.75/s4": {
+    "det|det": 37,
+    "sto|det": 66,
+    "det|sto": 37,
+    "sto|sto": 19
+   },
+   "p2.78/s0": {
+    "det|det": 19,
+    "sto|det": 65,
+    "det|sto": 23,
+    "sto|sto": 12
+   },
+   "p2.78/s1": {
+    "det|det": 30,
+    "sto|det": 74,
+    "det|sto": 19,
+    "sto|sto": 16
+   },
+   "p2.78/s2": {
+    "det|det": 49,
+    "sto|det": 97,
+    "det|sto": 29,
+    "sto|sto": 28
+   },
+   "p2.78/s3": {
+    "det|det": 24,
+    "sto|det": 43,
+    "det|sto": 59,
+    "sto|sto": 39
+   },
+   "p2.78/s4": {
+    "det|det": 14,
+    "sto|det": 68,
+    "det|sto": 25,
+    "sto|sto": 24
+   },
+   "e6_a10/s0": {
+    "det|det": 43,
+    "sto|det": 122,
+    "det|sto": 80,
+    "sto|sto": 51
+   },
+   "e6_a10/s1": {
+    "det|det": 30,
+    "sto|det": 76,
+    "det|sto": 28,
+    "sto|sto": 15
+   },
+   "e6_a10/s2": {
+    "det|det": 21,
+    "sto|det": 82,
+    "det|sto": 40,
+    "sto|sto": 52
+   },
+   "e6_a10/s3": {
+    "det|det": 13,
+    "sto|det": 79,
+    "det|sto": 50,
+    "sto|sto": 10
+   },
+   "e6_a10/s4": {
+    "det|det": 39,
+    "sto|det": 99,
+    "det|sto": 52,
+    "sto|sto": 55
+   },
+   "e6_a10_mu/s0": {
+    "det|det": 25,
+    "sto|det": 80,
+    "det|sto": 74,
+    "sto|sto": 72
+   },
+   "e6_a10_mu/s1": {
+    "det|det": 47,
+    "sto|det": 69,
+    "det|sto": 34,
+    "sto|sto": 21
+   },
+   "e6_a10_mu/s2": {
+    "det|det": 36,
+    "sto|det": 52,
+    "det|sto": 39,
+    "sto|sto": 13
+   },
+   "e6_a10_mu/s3": {
+    "det|det": 18,
+    "sto|det": 57,
+    "det|sto": 80,
+    "sto|sto": 44
+   },
+   "e6_a10_mu/s4": {
+    "det|det": 12,
+    "sto|det": 49,
+    "det|sto": 88,
+    "sto|sto": 47
+   }
+  }
+ },
+ "1-3 six_way_r1.92": {
+  "net 포획": 20,
+  "직접 요격": 7,
+  "창 뒤에 쏘고 놓침": 83,
+  "창이 있었는데 안 쏨": 549,
+  "창 기록 전에 이미 쏨 (이후 미상)": 37,
+  "창이 끝내 없음 (안 쏨)": 504,
+  "n": 1200
+ },
+ "1-4 window_vs_capture_E1b [episodes, net captures]": {
+  "d0 (chi 0.520)": {
+   "n_rob=0": [
+    1368,
+    0
+   ],
+   "n_rob=1": [
+    317,
+    2
+   ],
+   "n_rob=2": [
+    135,
+    0
+   ],
+   "n_rob=3": [
+    27,
+    1
+   ],
+   "n_rob=>=4": [
+    73,
+    5
+   ]
+  },
+  "d1 (chi 0.497)": {
+   "n_rob=0": [
+    537,
+    0
+   ],
+   "n_rob=1": [
+    623,
+    11
+   ],
+   "n_rob=2": [
+    498,
+    14
+   ],
+   "n_rob=3": [
+    122,
+    3
+   ],
+   "n_rob=>=4": [
+    140,
+    12
+   ]
+  },
+  "d2 (chi 0.476)": {
+   "n_rob=0": [
+    398,
+    0
+   ],
+   "n_rob=1": [
+    699,
+    25
+   ],
+   "n_rob=2": [
+    530,
+    20
+   ],
+   "n_rob=3": [
+    128,
+    9
+   ],
+   "n_rob=>=4": [
+    165,
+    23
+   ]
+  },
+  "d3 (chi 0.455)": {
+   "n_rob=0": [
+    487,
+    0
+   ],
+   "n_rob=1": [
+    558,
+    27
+   ],
+   "n_rob=2": [
+    491,
+    12
+   ],
+   "n_rob=3": [
+    170,
+    6
+   ],
+   "n_rob=>=4": [
+    214,
+    27
+   ]
+  },
+  "d4 (chi 0.435)": {
+   "n_rob=0": [
+    501,
+    1
+   ],
+   "n_rob=1": [
+    550,
+    16
+   ],
+   "n_rob=2": [
+    513,
+    28
+   ],
+   "n_rob=3": [
+    153,
+    15
+   ],
+   "n_rob=>=4": [
+    203,
+    33
+   ]
+  }
+ }
+}
