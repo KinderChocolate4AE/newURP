@@ -1,0 +1,769 @@
+{
+ "rows": [
+  {
+   "id": "F01",
+   "para": "3-1·3-2 표 1",
+   "what": "기준 상수",
+   "frozen": "dt 0.05 s · τ 0.30 s · θ 12.15° · R_max 8.22 m · ρ 1.77 m · a 20.45 m/s² · V_c 23.01 m/s · 방어 가속 7.16 m/s² (0.35배)",
+   "value": "dt 0.05 s · τ 0.30 s · θ 12.15° · R_max 8.22 m · ρ 1.77 m · a 20.45 m/s² · V_c 23.01 m/s · 방어 가속 7.16 m/s² (0.35배)",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7a/probe.json (consts)",
+    "artifacts/fs1/e7a3/overlay.json (V_bar)",
+    "artifacts/fs1/armc1/readout.json (셀 m0.35)"
+   ],
+   "label": "정의",
+   "cond": "KSAS 기준 조건",
+   "note": ""
+  },
+  {
+   "id": "F02",
+   "para": "3-3",
+   "what": "도망 거리·χ",
+   "frozen": "w 0.92 m · χ 0.52",
+   "value": "w 0.92 m · χ 0.52",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7a/probe.json (consts)",
+    "artifacts/fs1/e7a3/overlay.json (V_bar)"
+   ],
+   "label": "정의",
+   "cond": "w = ½aτ², χ = w/ρ",
+   "note": ""
+  },
+  {
+   "id": "F03",
+   "para": "4-1 (2-2)",
+   "what": "존재 경계 (KSAS 인용)",
+   "frozen": "χ*_geom 0.808 · D_min 4.37 m · D_max 7.30 m · a 31.8 m/s² (τ 0.30 s)",
+   "value": "χ*_geom 0.808 · D_min 4.37 m · D_max 7.30 m · a 31.8 m/s² (τ 0.30 s)",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7a/probe.json (consts)",
+    "artifacts/fs1/e7a3/overlay.json (V_bar)"
+   ],
+   "label": "해석 (층 1)",
+   "cond": "최대 기동으로 즉시 회피하는 위협, 점질량·등방 가속",
+   "note": ""
+  },
+  {
+   "id": "F04",
+   "para": "4-2·요-3·6-1",
+   "what": "실용 창 경계 χ*_T",
+   "frozen": "0.355 (T_req 0.2 s) · 0.412 (0.175 s)",
+   "value": "0.355 (T_req 0.2 s) · 0.412 (0.175 s)",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7a/probe.json (consts)",
+    "artifacts/fs1/e7a3/overlay.json (V_bar)",
+    "artifacts/paper1/window_check.json"
+   ],
+   "label": "해석 (층 2)",
+   "cond": "정면 접근 기준 · T_req 는 예시값 (운용 요구 주체가 정함)",
+   "note": ""
+  },
+  {
+   "id": "F05",
+   "para": "4-2·표 1 하단·6-1",
+   "what": "T_req 표",
+   "frozen": "0.1/0.2/0.3 s → χ*_T 0.582/0.355/0.129 → a ≤ 22.9/14.0/5.1 m/s²",
+   "value": "0.1/0.2/0.3 s → χ*_T 0.582/0.355/0.129 → a ≤ 22.9/14.0/5.1 m/s²",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7a/probe.json (consts)",
+    "artifacts/fs1/e7a3/overlay.json (V_bar)"
+   ],
+   "label": "해석 (층 2)",
+   "cond": "τ 0.30 s, 이 net 기하 (반각 12.15°·사거리 8.22 m) 전용",
+   "note": ""
+  },
+  {
+   "id": "F06",
+   "para": "4-2·6-3",
+   "what": "창 길이 극한·속도 한계",
+   "frozen": "χ→0 극한 0.36 s · V_c 한계 41 m/s (R 8.22 m) · 125 m/s (R 25 m)",
+   "value": "χ→0 극한 0.36 s · V_c 한계 41 m/s (R 8.22 m) · 125 m/s (R 25 m)",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7a/probe.json (consts)",
+    "artifacts/fs1/e7a3/overlay.json (V_bar)"
+   ],
+   "label": "해석 (층 2)",
+   "cond": "T_req 0.2 s",
+   "note": ""
+  },
+  {
+   "id": "F07",
+   "para": "4-4 → 5-2 조건",
+   "what": "현행 모델 net 의 정면 창 (χ 0.52)",
+   "frozen": "약 0.13 s",
+   "value": "약 0.13 s",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7a/probe.json (consts)",
+    "artifacts/fs1/e7a3/overlay.json (V_bar)"
+   ],
+   "label": "해석 (층 2)",
+   "cond": "정면 기준값 — 측정값 아님",
+   "note": "반올림 전 0.1272 s (소수 둘째 자리 반올림)"
+  },
+  {
+   "id": "F08",
+   "para": "4-4·그림 2",
+   "what": "위협 등급별 χ (τ 0.30 s)",
+   "frozen": "계수 0.0254 · Mavic급 6.9→0.175 · Phantom급 8.8→0.224 · 표준 쿼드 17.4→0.442 · 레이싱 ≈39→0.99",
+   "value": "계수 0.0254 · Mavic급 6.9→0.175 · Phantom급 8.8→0.224 · 표준 쿼드 17.4→0.442 · 레이싱 ≈39→0.99",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7a/probe.json (consts)",
+    "artifacts/fs1/e7a3/overlay.json (V_bar)",
+    "temp_research_note/2026-10-11b_e3_t0_anchor_real_nets_rho_2p8_to_4p4_vs_a20_huh_dwell_in_paper_uncited.md"
+   ],
+   "label": "조건부 (위협 가속은 사양에서 도출)",
+   "cond": "이상적 반응 회피자 · 이 net 기하 전용",
+   "note": "가속 도출 출처 (제조사 사양) 가 장부 docs/131 에 W 행으로 없음 → 행 추가 필요"
+  },
+  {
+   "id": "F09",
+   "para": "4-2 각주",
+   "what": "사거리 끝 평면 효과",
+   "frozen": "D_max 7.30 → 7.33 m (창 길이 +0.9%)",
+   "value": "D_max 7.30 → 7.33 m (창 길이 +0.9%)",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7a/probe.json (consts)",
+    "artifacts/fs1/e7a3/overlay.json (V_bar)"
+   ],
+   "label": "해석 (층 2)",
+   "cond": "축 기울기 최적화, 가까운 끝 D_min 불변",
+   "note": ""
+  },
+  {
+   "id": "F10",
+   "para": "4-3·6-3",
+   "what": "조준 오차 δ 0.05 rad",
+   "frozen": "χ*_geom 0.808 → 0.645 (−20%)",
+   "value": "χ*_geom 0.808 → 0.645 (−20%)",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7a/probe.json (consts)",
+    "artifacts/fs1/e7a3/overlay.json (V_bar)"
+   ],
+   "label": "해석 (층 1)",
+   "cond": "정확식 χ*_geom(δ) = 1/[tanθ(1+1/sin(θ−δ))] — 선형 근사와 섞지 않음",
+   "note": ""
+  },
+  {
+   "id": "F11",
+   "para": "4-3·6-3",
+   "what": "경계의 조준 오차 민감도 |dχ*/dδ|",
+   "frozen": "3.1 /rad (12.15°) · 15 /rad (3.4°) · 약 5배",
+   "value": "3.1 /rad (12.15°) · 15 /rad (3.4°) · 약 5배",
+   "status": "PASS",
+   "src": [],
+   "label": "해석 (층 1)",
+   "cond": "χ*_geom²/sinθ",
+   "note": ""
+  },
+  {
+   "id": "F12",
+   "para": "4-3·4-4",
+   "what": "회피 반응 지연 τ_r 0.15 s",
+   "frozen": "χ × 1/4 (수치 경계 4.0배)",
+   "value": "χ × 1/4 (수치 경계 4.0배)",
+   "status": "PASS",
+   "src": [
+    "artifacts/paper1/assumption_check.json"
+   ],
+   "label": "해석 + 수치 확인",
+   "cond": "χ_eff = χ[(τ−τ_r)/τ]²",
+   "note": ""
+  },
+  {
+   "id": "F13",
+   "para": "4-2·4-3 (검증 문장)",
+   "what": "수치 검증",
+   "frozen": "창 길이 식 75/75 PASS (최대 차 0.003 s) · 가정 민감도 12/12 PASS (최대 상대 오차 ≤ 1%)",
+   "value": "창 길이 식 75/75 PASS (최대 차 0.003 s) · 가정 민감도 12/12 PASS (최대 상대 오차 1.02%)",
+   "status": "CHECK",
+   "src": [
+    "artifacts/paper1/window_check.json",
+    "artifacts/paper1/assumption_check.json"
+   ],
+   "label": "수치 검증 (사전 허용치)",
+   "cond": "허용치: 창 max(2%, 0.05 s) / 가정 2%",
+   "note": "가정 민감도 최대 상대 오차 1.02% — '≤ 1%' 표기는 틀림 → '약 1%' 또는 '2% 허용치 안' 으로"
+  },
+  {
+   "id": "F14",
+   "para": "4-5·그림 3 캡션",
+   "what": "시뮬레이션 검증 (프로브)",
+   "frozen": "순위상관 0.93 (반복 0.94) · 경계 일치 11/12 · 사양 변형 12",
+   "value": "순위상관 0.93 (반복 0.94) · 경계 일치 11/12 · 사양 변형 12",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7a/probe.json",
+    "artifacts/fs1/e7a2/probe.json",
+    "artifacts/fs1/e7a3/overlay.json"
+   ],
+   "label": "확정 (층 3, 검증용)",
+   "cond": "비공진화 공격자 · 쏘지 않는 기록 (낙관)",
+   "note": "동점 보정 순위상관 (저장값 0.951 은 쓰지 않음). 재실행 = 같은 seed (독립 재현 아님)"
+  },
+  {
+   "id": "F15",
+   "para": "5-2·표 2",
+   "what": "학습 방어 다섯 가지 (판정 계열)",
+   "frozen": "고정 규칙 0–2% · 혼합 1–5 · 동시학습 결정적 1–11 · 판정 흉내 2–4 (net 만 1–3) · 기억+확률 ≤ 15 → 15판 이하 (약 6% 이하)",
+   "value": "고정 규칙 0–2% · 혼합 1–5 · 동시학습 결정적 1–11 · 판정 흉내 2–4 (net 만 1–3) · 기억+확률 ≤ 15 → 15판 이하 (약 6% 이하)",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e3/stage1/stage1_readout.json",
+    "artifacts/fs1/e3b/phase1/readout.json",
+    "artifacts/fs1/e3b/phase2/readout.json",
+    "artifacts/fs1/armc1/readout.json",
+    "artifacts/fs1/armd/readout.json"
+   ],
+   "label": "E3_BAND_EMPTY · E3B1_FLOOR_EVERYWHERE · E3B2_NULL · ARMC1_NULL · ARMD_NULL",
+   "cond": "χ 0.52 한 점 · 레드팀 1천만 step · 240판",
+   "note": "판정 계열이 처방마다 다름 (고정 = ceiling_s 전 격자, 혼합 = M1/M2, 동시학습·판정 흉내 = 결정적, 기억 = 확률적). 동시학습 확률 9–31 은 다른 모드용 레드팀 상대 (표 2 각주)"
+  },
+  {
+   "id": "F15b",
+   "para": "5-2",
+   "what": "같은 셀 (판정 흉내 발사, 방어 가속 0.35배)",
+   "frozen": "2–4 (0.8–1.7%)",
+   "value": "2–4 (0.8–1.7%)",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/armc1/readout.json"
+   ],
+   "label": "ARMC1_NULL",
+   "cond": "χ 0.52 · 1천만 step",
+   "note": ""
+  },
+  {
+   "id": "F16",
+   "para": "5-3·6-2·그림 4",
+   "what": "평가 방법 배율 (판정 2세트, 비교 4)",
+   "frozen": "중앙값 2.6–3.8배 (2.57 · 2.67 · 2.92 · 3.77) · 개별 0.5–17배",
+   "value": "중앙값 2.6–3.8배 (2.57 · 2.67 · 2.92 · 3.77) · 개별 0.5–17배",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7b/readout.json",
+    "artifacts/fs1/e7b2/readout.json",
+    "artifacts/fs1/e7c/readout.json"
+   ],
+   "label": "확정 (비율 주장)",
+   "cond": "본 시뮬레이션, 레드팀 예산 1천만 step",
+   "note": "slot 비교 53 (정합 천장 0 인 1 제외)"
+  },
+  {
+   "id": "F17",
+   "para": "5-3",
+   "what": "세 번째 독립 방어 세트 포함 (기술)",
+   "frozen": "세 독립 방어 세트, 중앙값 1.9–3.8배",
+   "value": "세 독립 방어 세트, 중앙값 2.0–3.8배",
+   "status": "CHECK",
+   "src": [
+    "artifacts/paper1/descriptive/desc_1013.json"
+   ],
+   "label": "기술통계 (판정 아님)",
+   "cond": "본 시뮬레이션, 1천만 step",
+   "note": "세 번째 세트 전체 55 slot = 2.00 / 2.95 → 하한 2.0. 1.9 는 바닥 점 (χ 0.52) 을 뺀 50 slot 의 1.88 — 어느 쪽을 쓸지 결정 필요"
+  },
+  {
+   "id": "F18",
+   "para": "5-3",
+   "what": "평가 반복성",
+   "frozen": "SD 2–7판 · BINOMIAL 8/8 · 과대평가 4칸 중 3칸 하한 2.0–8.0배 · 나머지 1.6배 (하한 1.4) · INFLATION_PARTIAL",
+   "value": "SD 2–7판 · BINOMIAL 8/8 · 과대평가 4칸 중 3칸 하한 2.0–8.0배 · 나머지 1.6배 (하한 1.4) · INFLATION_PARTIAL",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/r0/readout.json",
+    "docs/135 §4"
+   ],
+   "label": "INFLATION_PARTIAL",
+   "cond": "같은 방어·같은 레드팀, 환경 난수만 변경",
+   "note": "칸 기준 = 하한 > 1.5 (docs/135 §2)"
+  },
+  {
+   "id": "F19",
+   "para": "3-4 표 1b·5-1·6-2·7-1",
+   "what": "학습 예산",
+   "frozen": "레드팀 1e+07 step · 방어 학습 1.1e8 step · 강화 레드팀 3e+07 step",
+   "value": "레드팀 1e+07 step · 방어 학습 1.1e8 step · 강화 레드팀 3e+07 step",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7b_manifest.json",
+    "artifacts/fs1/armc1_manifest.json",
+    "artifacts/fs1/r1_manifest.json"
+   ],
+   "label": "설정",
+   "cond": "6-2 비용 문장: 3천만 vs 1.1억 (레드팀이 방어 학습보다 짧음)",
+   "note": ""
+  },
+  {
+   "id": "F20",
+   "para": "5-3·6-1 (★결재 10-14)",
+   "what": "레드팀 예산 3배 (같은 방어)",
+   "frozen": "중앙값 20 → 8/240 (8.3% → 3.3%), −12 · d 양수 15/15, 중앙값 14 · BUDGET_UNDERTRAINED",
+   "value": "중앙값 20 → 8/240 (8.3% → 3.3%), −12 · d 양수 15/15, 중앙값 14 · BUDGET_UNDERTRAINED",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/r1/readout.json",
+    "docs/138 판독"
+   ],
+   "label": "BUDGET_UNDERTRAINED",
+   "cond": "본 시뮬레이션, 1천만 vs 3천만 step, 미수렴",
+   "note": "공사 본문은 비율·방향만 (15 slot·중앙 14 는 쓰지 않음). 20 = 원래 1e7 착취자 재평가 (env-seed 0)"
+  },
+  {
+   "id": "F21",
+   "para": "6-1 (★결재 10-14)",
+   "what": "기준 이상 사양 천장 (중앙값 기준 10% 미만)",
+   "frozen": "중앙값 21/240 (8.8%) < 10% · seed 범위 7–41",
+   "value": "중앙값 21/240 (8.8%) < 10% · seed 범위 7–41",
+   "status": "PASS",
+   "src": [
+    "artifacts/fs1/e7b/readout.json"
+   ],
+   "label": "확정 (E7-b, 1천만 step)",
+   "cond": "본 시뮬레이션, 레드팀 1천만 step, 중앙값 기준",
+   "note": "천장 = net 포획 + 직접 요격 (net 만 중앙값 19). 원고 'net 포획 10% 미만' 이면 'net 포획만 중앙값 19/240' 또는 '방어 성공' 으로 표현 맞출 것. 최대 41/240 = 17% → 중앙값 한정 필수"
+  },
+  {
+   "id": "F22",
+   "para": "4-2 끝 (◇결재 A4, 대기)",
+   "what": "창 발생·미발사·창 길이별 포획",
+   "frozen": "창 발생 53% (29–53%) · 그중 미발사 87% · 포획 2.9% → 16.3% · 0.2 s 이상 창 7–16%",
+   "value": "창 발생 53% (29–53%) · 그중 미발사 87% · 포획 2.9% → 16.3% · 0.2 s 이상 창 7–16%",
+   "status": "PASS",
+   "src": [
+    "artifacts/paper1/descriptive/desc_1013.json"
+   ],
+   "label": "기술통계 (판정 아님) · 결재 대기",
+   "cond": "전이 구간 학습 사다리 자료 (χ 0.52 점 + 촘촘한 사다리)",
+   "note": "주의 3: (1) 전부 전이 구간 실험 자료 — spine 의 '전이 구간 숫자 공사판 미사용' 과 충돌. (2) 29–53% 는 seed 산포가 아니라 두 실험 (χ 0.52 의 두 seed 세트) 차이. (3) 2.9% → 16.3% 는 χ 0.435 점 (현행 0.52 아님)"
+  },
+  {
+   "id": "W1",
+   "para": "§1·§2·6-3",
+   "what": "광섬유 유선 FPV 는 RF 재밍에 영향을 받지 않음",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 미대조",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W2",
+   "para": "§1·§2·6-3",
+   "what": "우크라이나 상공 격추 표적 3분의 1 이 요격 드론 (공군 발표) / 2026년 2월 Shahed 격추의 70% 이상이 드론 (총사령관 발표)",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 원문 대조 완료",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W3",
+   "para": "§1·§2·6-3",
+   "what": "미 국방부 합동기관 TF 401 의 Replicator 2 첫 구매 = net 포획 요격기 DroneHunter F700 2대 (2026년 1월)",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 원문 대조 완료",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W4",
+   "para": "§1·§2·6-3",
+   "what": "우크라이나 AirNet 드론 탑재 net 발사기: net 발사 거리 5–10 m, 780 g",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 미대조",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W6",
+   "para": "§1·§2·6-3",
+   "what": "엄동환 2019: 작전운용성능 정량화 노력 미흡 / 개발시험평가는 개발주관기관 주관, 소요군·방사청은 \"참관하는 수준\" → 개발시험평가 결과 신뢰 낮음 / 개발·",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 원문 대조 완료",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W7",
+   "para": "§1·§2·6-3",
+   "what": "방위사업법: 제15조① 합참의장이 합동참모회의 심의로 소요 결정 / 제21조③ 연구개발 시험평가 = 개발시험평가 (요구성능·개발목표 충족 검증) + 운용시험평가 ",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "미러만 대조 — law.go.kr 원문 대조 필요",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W8",
+   "para": "§1·§2·6-3",
+   "what": "미 국방부 자율 무기 지침: \"against adaptive adversaries taking realistic and practicable countermeas",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 미대조",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W9",
+   "para": "§1·§2·6-3",
+   "what": "미 DOT&E AI·자율 체계 운용시험 지침: 적대적 공격 하 불안정성 평가 (§3.2), 독립 운용시험용 시험 데이터 분리 보관 (§3.8.b), 위협 환경 변",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 미대조",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W10",
+   "para": "§1·§2·6-3",
+   "what": "DARPA SABER: 운용 AI 레드팀 체계 개발 공고, \"no well-developed capability\"",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 미대조",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W11",
+   "para": "§1·§2·6-3",
+   "what": "미 JCO 시연: Group 1 UAS 상대 효과 평가, 시나리오 최대 16개, \"inform future requirements\" / 2023 시연은 무게 구간",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 미대조",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W12",
+   "para": "§1·§2·6-3",
+   "what": "국내 맥락: 2022. 12. 26. 북한 무인기 침범 (비행금지구역 북단 통과, 2023. 1. 5. 군 인정), 격추 0 → 2023. 9. 1. 드론작전사령",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 미대조",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W13",
+   "para": "§1·§2·6-3",
+   "what": "국내 요격드론 획득: 방사청 '대드론 하드킬 근접방호체계' 신속시범사업 (2025. 9.), 직충돌 방식, 2년 170억 원, 2028년부터 군 배치 후 성능입증",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 미대조",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  },
+  {
+   "id": "W5",
+   "para": "§1·§2·6-3",
+   "what": "2026년 9월 말 우크라이나 대통령: 드론 전체 격추율 70%, 제트형 Shahed 는 57%",
+   "frozen": "—",
+   "value": "—",
+   "status": "EXT",
+   "src": [
+    "docs/131 §3b"
+   ],
+   "label": "main 원문 대조 완료",
+   "cond": "보도·발표에 따르면",
+   "note": ""
+  }
+ ],
+ "chain": [
+  [
+   "서론",
+   [
+    [
+     "요-3",
+     "χ 에 접근 속도를 더한 설계 기준 · 다섯 가지 모두 낮음 · 평가 방법 배율",
+     [
+      "F04",
+      "F15",
+      "F16"
+     ]
+    ],
+    [
+     "1-1",
+     "요격 드론이 실전 수단 · net 포획 요격기 조달 · 국내는 net 아님",
+     [
+      "W1",
+      "W2",
+      "W3",
+      "W12",
+      "W13"
+     ]
+    ],
+    [
+     "1-2",
+     "전개 중 회피가 요구 성능에서 빠짐 · 무엇을 상대로 재느냐가 숫자를 바꿈 → 정량 기준 부재",
+     []
+    ],
+    [
+     "1-3·1-4",
+     "두 질문 (무엇을 요구 / 어떻게 재나) · KSAS 경계 계승 + 속력 확장",
+     []
+    ]
+   ]
+  ],
+  [
+   "배경",
+   [
+    [
+     "2-1",
+     "전개 시간의 독립 실측 공개 자료 없음 → ③ 세움",
+     [
+      "W4"
+     ]
+    ],
+    [
+     "2-2",
+     "선행 포획 기준 (거리·각도·유지) · KSAS χ 와 남긴 속력 문제 → ① 세움",
+     [
+      "F03"
+     ]
+    ],
+    [
+     "2-3",
+     "작전운용성능이 운용시험 대상을 정함 · 국외 '적응하는 적대자' · 국내 공개 지침 미발견 → ② 세움",
+     [
+      "W6",
+      "W7",
+      "W8",
+      "W9",
+      "W11"
+     ]
+    ]
+   ]
+  ],
+  [
+   "분석 틀",
+   [
+    [
+     "3-1·3-2",
+     "교전 모델 · net 기준 조건 = KSAS",
+     [
+      "F01"
+     ]
+    ],
+    [
+     "3-3",
+     "보장 포획 순간 · 창의 세 층 (존재 경계 / 실용 창 / 측정 창)",
+     [
+      "F02"
+     ]
+    ],
+    [
+     "3-4",
+     "시험 조건표 (표 1b) — 숫자는 이 조건 한정",
+     [
+      "F19"
+     ]
+    ]
+   ]
+  ],
+  [
+   "분석 1 — 요구 성능",
+   [
+    [
+     "4-1",
+     "존재 경계 (층 1, 인용) — 위치·조준·시점 무관",
+     [
+      "F03"
+     ]
+    ],
+    [
+     "4-2",
+     "정면 창 = χ 의 직선 → χ ≤ χ*_T, T_req·V_c < R_max (층 2, 설계 기준)",
+     [
+      "F04",
+      "F05",
+      "F06",
+      "F09",
+      "F13"
+     ]
+    ],
+    [
+     "4-3",
+     "반응 지연·추적 지연·조준 오차 → 실측해야 할 상수 (③)",
+     [
+      "F10",
+      "F11",
+      "F12",
+      "F13"
+     ]
+    ],
+    [
+     "4-4",
+     "위협 등급별: 넉넉 / T_req 미달 / 창 없음 · 현행 모델 net 은 미달",
+     [
+      "F08",
+      "F07"
+     ]
+    ],
+    [
+     "4-5",
+     "구현에서도 순서가 같다 (층 3, 검증용)",
+     [
+      "F14"
+     ]
+    ]
+   ]
+  ],
+  [
+   "분석 2 — 시험평가",
+   [
+    [
+     "5-1",
+     "그 방어·그 모드 전용 레드팀 · 예산은 시험 조건",
+     [
+      "F19"
+     ]
+    ],
+    [
+     "5-2",
+     "χ 0.52 에서 다섯 가지 모두 사전 기준 미달 (절대 주장, 한정)",
+     [
+      "F07",
+      "F15",
+      "F15b"
+     ]
+    ],
+    [
+     "5-3",
+     "같은 방어를 다르게 재면 부풀려짐 · 레드팀 강도도 숫자를 정함 (비율 주장)",
+     [
+      "F16",
+      "F17",
+      "F18",
+      "F20"
+     ]
+    ]
+   ]
+  ],
+  [
+   "결론",
+   [
+    [
+     "6-1",
+     "① 요구 성능 명시 항목 + 필요조건 (충족해도 보장 안 함)",
+     [
+      "F05",
+      "F20",
+      "F21"
+     ]
+    ],
+    [
+     "6-2",
+     "② 적응형 레드팀 + 시험 조건 보고 · 비용",
+     [
+      "F16",
+      "F19",
+      "W8"
+     ]
+    ],
+    [
+     "6-3",
+     "③ 전개 시간 τ(D)·조준 정확도 실측 → τ·δ → χ → 창 → 시험 한 사슬",
+     [
+      "F10",
+      "F11",
+      "F06",
+      "W5",
+      "W7",
+      "W13"
+     ]
+    ],
+    [
+     "7",
+     "한계 · 후속 (AIAA) 한 줄 · 결론",
+     [
+      "F19",
+      "F20"
+     ]
+    ]
+   ]
+  ],
+  [
+   "◇결재 대기",
+   [
+    [
+     "A2(3)",
+     "기동력 열세가 큰 사양에서는 하드웨어 요구 성능이 먼저",
+     []
+    ],
+    [
+     "A4",
+     "창이 있어도 대부분 쏘지 않았다 — T_req 충족 ≠ 포획",
+     [
+      "F22"
+     ]
+    ]
+   ]
+  ]
+ ],
+ "count": {
+  "PASS": 21,
+  "CHECK": 2,
+  "EXT": 13
+ }
+}

@@ -464,6 +464,7 @@ def build(root: pathlib.Path, *, now: str) -> tuple[str, dict, list[str]]:
         "open_questions": open_questions(root, cards),
         "warnings": warnings,
         "paper1": _paper1_model(root),
+        "gongsa": _gongsa_model(root),
     }
     return _render(model), model, warnings
 
@@ -473,6 +474,13 @@ def _paper1_model(root: pathlib.Path) -> dict:
     sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
     import paper1_logic
     return paper1_logic.chain(root)
+
+
+def _gongsa_model(root: pathlib.Path) -> dict:
+    """공사 원고 (docs/140) 단락 사슬 + 10/18 수치 동결 표 (viz/gongsa_freeze.py) — 원자료 재계산."""
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    import gongsa_freeze
+    return gongsa_freeze.model(root)
 
 
 # ------------------------------------------------------------------ HTML -----
@@ -516,6 +524,41 @@ def _paper1_section(p1: dict) -> str:
         f'<div class="muted">{_E(g["state"])}</div></div>' for g in p1["gaps"]))
     out.append('</section>')
     return "".join(out)
+
+_FZ_CLS = {"PASS": "g-ok", "CHECK": "s-conf", "EXT": "g-none"}
+
+
+def _gongsa_section(g: dict) -> str:
+    rows = {r["id"]: r for r in g["rows"]}
+    c = g["count"]
+    out = ['<section id="gongsa"><h2>공사 원고 논리 (정책/전략 분과, 10/26) — 10/18 수치 동결 '
+           '<span class="muted">(spine = docs/140, 생성 = viz/gongsa_freeze.py, 표 = artifacts/paper1/freeze_1018.md)</span></h2>',
+           '<div class="card"><b>원고 표기 대 원자료 재계산</b> — ' +
+           " ".join(_badge(f"{k} {c[k]}", _FZ_CLS[k]) for k in ("PASS", "CHECK", "EXT")) +
+           '<div class="muted">CHECK = 원고 표기와 재계산이 다름 (원고나 원자료 중 하나를 고친다) · '
+           'EXT = 외부 문헌 (코드 검증 대상 아님, 원문 대조 상태만)</div></div>']
+    for part, paras in g["chain"]:
+        out.append(f'<h3 class="muted">{_E(part)}</h3>')
+        for pid, claim, refs in paras:
+            body = "".join(
+                f'<div class="mono">{_badge(rows[i]["status"], _FZ_CLS[rows[i]["status"]])} <b>{_E(i)}</b> '
+                f'{_E(rows[i]["what"])}: {_E(rows[i]["value"] if rows[i]["status"] != "EXT" else rows[i]["label"])}</div>'
+                + (f'<div class="conf">⚠ 원고 표기 {_E(rows[i]["frozen"])}</div>' if rows[i]["status"] == "CHECK" else "")
+                for i in refs) or '<div class="muted">숫자 없음 (논리·제도 단락)</div>'
+            out.append(f'<div class="card" data-search="{_E((pid + " " + claim).lower())}" data-status="" data-grade="">'
+                       f'<div class="hd"><span class="cid">{_E(pid)}</span></div>'
+                       f'<div class="wording">{_E(claim)}</div>{body}</div>')
+    tbl = "".join(
+        f'<tr><td class="mono">{_E(r["id"])}</td><td>{_E(r["para"])}</td><td>{_E(r["what"])}</td>'
+        f'<td>{_E(r["frozen"])}</td><td>{_E(r["value"])}</td><td>{_badge(r["status"], _FZ_CLS[r["status"]])}</td>'
+        f'<td>{_E(r["label"])}<div class="muted">{_E(r["cond"])}</div></td>'
+        f'<td>{_E(r["note"])}</td><td class="mono">{"<br>".join(_E(s) for s in r["src"])}</td></tr>'
+        for r in g["rows"])
+    out.append(_details("수치 동결 표 전체", '<table><tr><th>ID</th><th>원고 위치</th><th>무엇</th><th>원고 표기</th>'
+                        '<th>재계산</th><th>상태</th><th>라벨·조건</th><th>비고</th><th>출처</th></tr>' + tbl + '</table>'))
+    out.append('</section>')
+    return "".join(out)
+
 
 _STATUS_CLS = {"ACTIVE": "s-act", "DOWNGRADED": "s-down", "RETRACTED": "s-ret",
                "PENDING": "s-pend", "CONFLICT": "s-conf", "RESOLVED": "s-res"}
@@ -700,6 +743,7 @@ authority: claim = <b>{_E(s['claim_registry'])}</b> · canonical =
               "SUPERSEDED-FOR-MEASUREMENT", "NO-OP"):
         p.append(f'<span class="chip gr" data-v="{k}">{k.replace("_", " ")}</span>')
     p.append('<span class="chip" id="selshow">선택 패널</span></div></div>')
+    p.append(_gongsa_section(m["gongsa"]))
     p.append(_paper1_section(m["paper1"]))
 
     # --- warnings / conflicts / open questions -------------------------------
