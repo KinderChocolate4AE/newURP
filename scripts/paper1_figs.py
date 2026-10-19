@@ -137,17 +137,13 @@ def jit(rho, k):
     return 1 / rho + 0.0045 * k  # χ = 1/ρ 로 바꾸고 같은 점을 좌우로 벌림 (값 변경 없음, 표시만)
 
 
-def fig2():
-    fig, (aa, ab) = plt.subplots(2, 1, figsize=(160 * MM, 150 * MM), sharex=True,
-                                 gridspec_kw=dict(height_ratios=[1, 1], hspace=0.08))
+def _probe_panel(aa, panel="(a)"):
+    """프로브 창 대 χ 패널 — fig2 의 (a) 와 fig3a 단독판이 공유."""
     xs = np.linspace(0, 0.9, 400)
-    for ax in (aa, ab):  # 두 패널을 관통하는 χ*_0.2 대역 (θ₀)
-        ax.axvspan(*CHI_BAND, fc="0.86", ec="none", zorder=0)
-    ab.text(np.mean(CHI_BAND), 46, r"$\chi^*_{0.2}$ band" + "\n" + r"($\theta_0$)", ha="center",
-            va="top", fontsize=6.5, color="0.2", bbox=dict(fc="white", ec="none", pad=0.6))
+    aa.axvspan(*CHI_BAND, fc="0.86", ec="none", zorder=0)   # χ*_T 대역 (θ₀, T_req 0.2 s)
     ths ={"h1.0": (TH, "-", r"$\theta_0$", "o"), "h1.5": (1.5 * TH, "--", r"$1.5\,\theta_0$", "s")}
 
-    # (a) 회색: E7-a, E7-a′ (같은 프로토콜 반복 측정)
+    # 회색: E7-a, E7-a′ (같은 프로토콜 반복 측정)
     for src, mk in (("e7a/probe.json", "x"), ("e7a2/probe.json", "+")):
         d = load(src)
         for vn, w in d["variant_window_med"].items():
@@ -171,10 +167,8 @@ def fig2():
             fontsize=7.5)
     for th, nm in ((TH, r"\theta_0"), (1.5 * TH, r"1.5\theta_0")):
         aa.text(1 / rho0(th) + 0.004, 6.85 if th == TH else 6.35, rf"$\chi^*_{{geom}}({nm})$", fontsize=6.8, va="top")
-        aa.text(1 / rho_star(th) + 0.004, 6.85 if th == TH else 6.35, rf"$\chi^*_{{0.2}}({nm})$", fontsize=6.8,
+        aa.text(1 / rho_star(th) + 0.004, 6.85 if th == TH else 6.35, rf"$\chi^*_{{T}}({nm})$", fontsize=6.8,
                 va="top")
-    aa.set_ylim(0, 7.2)
-    aa.set_ylabel("robust window (median, steps)")
     h_ = [plt.Line2D([], [], ls="", marker="o", mfc="k", mec="k", label=r"cv, $\theta_0$"),
           plt.Line2D([], [], ls="", marker="o", mfc="white", mec="k", label=r"ma, $\theta_0$"),
           plt.Line2D([], [], ls="", marker="s", mfc="k", mec="k", label=r"cv, $1.5\theta_0$"),
@@ -185,7 +179,37 @@ def fig2():
           plt.Line2D([], [], ls="--", color="k", label=r"$N(\chi;1.5\theta_0)$, head-on value")]
     aa.legend(handles=h_, loc="center right", fontsize=6.5, frameon=True,
               framealpha=1, edgecolor="0.7", ncol=1)
-    aa.text(0.01, 0.97, "(a)", transform=aa.transAxes, fontsize=9, fontweight="bold", va="top")
+    if panel:
+        aa.text(0.01, 0.97, panel, transform=aa.transAxes, fontsize=9, fontweight="bold", va="top")
+    aa.set_ylim(0, 7.2)
+    aa.set_ylabel("robust window (median, steps)")
+    aa.tick_params(labelsize=7)
+    aa.spines["top"].set_visible(False)
+    aa.spines["right"].set_visible(False)
+
+
+def fig3a():
+    """공사 그림 3 = 프로브 창 패널 단독판 ((b) 천장은 AIAA — docs/140 단계 3)."""
+    fig, ax = plt.subplots(figsize=(160 * MM, 95 * MM))
+    _probe_panel(ax, panel=None)
+    ax.text(np.mean(CHI_BAND), 0.25, r"$\chi^*_{T}$ band ($\theta_0$, $T_{req}$ 0.2 s)", ha="center",
+            va="bottom", fontsize=6.5, color="0.2", bbox=dict(fc="white", ec="none", pad=0.6))
+    ax.set_xlim(0, 0.9)
+    ax.set_xlabel(r"$\chi = w/\rho = a\tau^2 / (2R_{\max}\tan\theta)$")
+    fig.text(0.095, 0.012, "probe runs on non-firing engagements (non-coevolved attacker; Table 1b conditions); "
+             "lines = analytic head-on reference values", fontsize=6.2, color="0.25")
+    fig.subplots_adjust(left=0.085, right=0.975, top=0.975, bottom=0.17)
+    fig.savefig(OUT / "fig3_window.png")
+    plt.close(fig)
+
+
+def fig2():
+    fig, (aa, ab) = plt.subplots(2, 1, figsize=(160 * MM, 150 * MM), sharex=True,
+                                 gridspec_kw=dict(height_ratios=[1, 1], hspace=0.08))
+    _probe_panel(aa)
+    ab.axvspan(*CHI_BAND, fc="0.86", ec="none", zorder=0)   # (a) 와 같은 χ*_T 대역
+    ab.text(np.mean(CHI_BAND), 46, r"$\chi^*_{T}$ band" + "\n" + r"($\theta_0$)", ha="center",
+            va="top", fontsize=6.5, color="0.2", bbox=dict(fc="white", ec="none", pad=0.6))
 
     # (b) 정합 감사 천장 (A안 계보) — seed 점 + 중앙값 막대, 보간선 없음
     armc = load("armc1/readout.json")["cells"]["m0.35_n1"]["seeds"]
@@ -314,7 +338,7 @@ def figF2():
     for V, ls in ((15.0, (0, (1, 1.5))), (V_BAR, "--"), (35.0, "-.")):
         rs = rho0(TH) / (1 - 4 * DT * V / RMAX)
         hs += ax.plot(taus, a_at(rs, taus), ls=ls, color="k", lw=0.9, zorder=3,
-                      label=rf"$\chi^*_{{0.2}}$ = {1 / rs:.3f}: head-on window $\geq$ 0.2 s at V = {V:g} m/s")
+                      label=rf"$\chi^*_{{T}}$ = {1 / rs:.3f}: head-on window $\geq T_{{req}}$ 0.2 s at V = {V:g} m/s")
     ax.text(1.25, 140, "no guaranteed-capture\ninstant (model)", ha="right", fontsize=7, color="0.25")
     # FS1 τ 사다리의 측정 점 (a = 20.45 한 줄) — 천장 숫자는 실측 점 옆에만
     e7b = load("e7b/readout.json")["variants"]
@@ -425,6 +449,7 @@ if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     fig1()
     fig2()
+    fig3a()
     fig4()
     figF2()
     figSens()
