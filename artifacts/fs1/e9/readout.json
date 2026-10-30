@@ -1,0 +1,10 @@
+{
+  "manifest_hash": "23ffb71e3415d925",
+  "wiring_e4_bit_exact": {
+    "t1.0_h1.0_cv": false,
+    "tau_m2.94": false,
+    "t0.7_h1.0_cv": false,
+    "t0.5_h1.0_cv": false
+  },
+  "void": true
+}
