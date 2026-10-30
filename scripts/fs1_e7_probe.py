@@ -40,6 +40,29 @@ TS, HS, AIMS = (1.0, 0.7, 0.5), (1.0, 1.5), ("cv", "ma")
 VARIANTS = [(f"t{t}_h{h}_{a}", t, h, a) for t, h, a in itertools.product(TS, HS, AIMS)]
 CRIT_STEPS = 4            # E7-b 진입: 변형 창 중앙값 (4 slot 중앙값들의 중앙값) >= 4 step
 KN: dict = {}             # E4 (docs/133): 변형 → (a 배율, R_max 배율). 없으면 (1, 1) = 기존 격자
+LAG: dict = {}            # E9 (docs/144): 변형 → 추적 지연 tick (조준점 = t−L 상태, lead τ+L)
+DELTA: dict = {}          # E9: 변형 → 판정 콘 축 오프셋 (rad, episode 별 무작위 방향)
+E9_SEED = 290000
+
+
+def use_e9_grid():
+    """E9 비이상성 접힘 격자 (docs/144): E4 τ 기준점 + L·δ 셀 + 같은 χ_eff 의 이상 참조 셀."""
+    global VARIANTS
+    import fs1_e9_manifest as E9
+    VARIANTS = [(g["name"], g["ts"], g["hs"], "cv") for g in E9.GRID]
+    KN.clear(); LAG.clear(); DELTA.clear()
+    KN.update({g["name"]: (g["as"], g["rs"]) for g in E9.GRID})
+    LAG.update({g["name"]: g["lag"] for g in E9.GRID if g["lag"]})
+    DELTA.update({g["name"]: g["delta"] for g in E9.GRID if g["delta"]})
+
+
+def _offset(axis, delta, phi):
+    """단위 축을 delta 만큼, 축에 수직인 방향 φ 쪽으로 기울인다 (보어사이트 오차)."""
+    ref = np.array([0.0, 0.0, 1.0]) if abs(axis[2]) < 0.9 else np.array([1.0, 0.0, 0.0])
+    u1 = np.cross(axis, ref)
+    u1 /= np.linalg.norm(u1)
+    u2 = np.cross(axis, u1)
+    return np.cos(delta) * axis + np.sin(delta) * (np.cos(phi) * u1 + np.sin(phi) * u2)
 
 
 def use_e4_grid():
@@ -137,6 +160,8 @@ def run_slot(name, root, sub, dfd, eps, coop=False, geom=False):
         kf_r = _ep_kf_r(dfd, s)
         obs, _ = env.reset(seed=s)
         done, v_prev = False, None
+        hist = []                                          # E9: (p_att, v_att) tick 이력
+        phi = (np.random.default_rng([E9_SEED, i]).uniform(0, 2 * np.pi) if DELTA else 0.0)
         flags = {vn: [] for vn, *_ in VARIANTS}
         flags_f = {vn: [] for vn, *_ in VARIANTS}
         axis = {vn: inn._e(inn._states()[1]).copy() for vn, *_ in VARIANTS}
@@ -152,16 +177,22 @@ def run_slot(name, root, sub, dfd, eps, coop=False, geom=False):
             ahat = np.zeros(3) if v_prev is None else (v_att - v_prev) / dt
             if (n := np.linalg.norm(ahat)) > a_att:
                 ahat = ahat * (a_att / n)
+            hist.append((p_att.copy(), v_att.copy()))
             nc_v, ax_v = {}, {}
             for vn, ts, hs, aim in VARIANTS:          # 포탑 slew 시뮬레이션 (매 tick 추적)
                 tv = tau0 * ts
-                nc = p_att + v_att * tv + (0.5 * ahat * tv * tv if aim == "ma" else 0.0)
+                if (k := LAG.get(vn, 0)):              # E9: 낡은 상태 + 지연 보상 lead
+                    pk, vk = hist[max(0, len(hist) - 1 - k)]
+                    nc = pk + vk * (tv + k * dt)
+                else:
+                    nc = p_att + v_att * tv + (0.5 * ahat * tv * tv if aim == "ma" else 0.0)
                 des = nc - p_fin
                 nrm = np.linalg.norm(des)
                 if nrm > 1e-9:
                     axis[vn] = _slew(axis[vn], des / nrm, om_fin * dt)
                 nc_v[vn], ax_v[vn] = nc, axis[vn]
             if inn.fsm.state.value == "LOADED" and d <= WINDOW_D:
+                assert len(hist) > max(LAG.values(), default=0), f"E9 history short at {name} ep{i}"
                 lim_ps = [inn._p(l) for l in lims]
                 sd = inn._seed * 100003 + inn._step_i
                 base = inn._vshot(p_att, v_att, lim_ps, fin, seed=sd)
@@ -184,8 +215,9 @@ def run_slot(name, root, sub, dfd, eps, coop=False, geom=False):
                 for vn, ts, hs, aim in VARIANTS:
                     ks, kr = KN.get(vn, (1.0, 1.0))
                     cv_ = {**com, "a_att_max": a_att * ks, "range_max": rmax * kr}
+                    n_j = _offset(ax_v[vn], DELTA[vn], phi) if vn in DELTA else ax_v[vn]
                     r = V.v_shot(p_att, v_att, tau=tau0 * ts, theta_net=th0 * hs,
-                                 n_F=ax_v[vn], **cv_)
+                                 n_F=n_j, **cv_)
                     rb = _robust(r)
                     rows[f"{vn}.rb"].append(rb)
                     flags[vn].append(rb)
@@ -259,11 +291,13 @@ def main() -> None:
                     help="E7-a′ (docs/129 §7): limiter 제거 counterfactual + P-② 판정")
     ap.add_argument("--geom", action="store_true",
                     help="P-ρ2 overlay (docs/129 §9): window tick 의 p_att·v_att·p_fin 기록")
-    ap.add_argument("--grid", choices=["e7a", "e4"], default="e7a",
-                    help="e4 = collapse 격자 (docs/133, fs1_e4_manifest.GRID)")
+    ap.add_argument("--grid", choices=["e7a", "e4", "e9"], default="e7a",
+                    help="e4 = collapse 격자 (docs/133), e9 = 비이상성 접힘 격자 (docs/144)")
     a = ap.parse_args()
     if a.grid == "e4":
         use_e4_grid()
+    elif a.grid == "e9":
+        use_e9_grid()
     out_dir = pathlib.Path(a.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -309,9 +343,11 @@ def main() -> None:
         "anchor": {s: slots[s]["_anchor"] for s in ATTACKERS},
         "slots": slots,
     }
-    if a.grid == "e4":
-        report["schema"] = "fs1-e4-collapse-probe-v1"
+    if a.grid in ("e4", "e9"):
+        report["schema"] = {"e4": "fs1-e4-collapse-probe-v1", "e9": "fs1-e9-fold-probe-v1"}[a.grid]
         report["kn"] = {vn: KN[vn] for vn, *_ in VARIANTS}
+        if a.grid == "e9":
+            report["lag"], report["delta"] = dict(LAG), dict(DELTA)
     elif a.coop:
         report["schema"] = "fs1-e7a2-coop-probe-v1"
         report["coop"] = coop_readout(npz, rho)
