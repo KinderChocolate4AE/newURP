@@ -45,6 +45,7 @@ _PHASES = [FinisherState.LOADED, FinisherState.DEPLOYING,
 #   lean                    viability 를 FIRE 시도 tick 에만 계산 (gate·포획 판정용).
 #                           관측의 v_shot 3채널 = 0, dense 보상항 = 0, COMA = 0.
 #   fire_gate_on=False      R2 gate 제거 — LOADED 에서 FIRE 는 항상 유효 (포획 판정 불변).
+#   fire_gate_robust=True   E10 (docs/146): FIRE 는 포획 술어 (worst ≥ 1 ∧ ¬boxed_in) 가 참일 때만 유효.
 #   finisher_learned_accel  finisher 행동 [axis3, slew, fire, accel3] — 병진을 정책이 낸다.
 _LEAN_V = V.VShotResult(0.0, 0.0, 0, 0, False, 0.0, 0.0, "lean", 0)
 
@@ -327,6 +328,11 @@ class ShapingParallelEnv(ParallelEnv):
         # No executable code or runtime semantics changed (docs/09 freeze exception).
         gate_v = (vfull.v_shot_soft if getattr(self, "fire_gate_on", True)
                   else float("inf"))          # FS1: gate 제거 시 항상 통과
+        if getattr(self, "fire_gate_robust", False):
+            # E10 (docs/146): 아래 fire_event 의 포획 술어 자체로 게이트 — 통과한 발사는 정의상 포획,
+            # 막힌 요청은 FSM 의 gate-blocked 경로 (탄·낭비 무변화). lean 은 LOADED ∧ FIRE tick 에 vfull 을 계산한다.
+            gate_v = (float("inf") if ((not vfull.boxed_in) and vfull.v_shot_worst >= 1.0)
+                      else float("-inf"))
         self.fsm = step_fsm(self.fsm, fire_cmd, gate_v,
                             finisher_spec=self.sc.finisher, fire_gate=self.sc.fire_gate,
                             dt=self.dt, commit_meta=commit_meta,

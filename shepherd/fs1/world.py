@@ -77,6 +77,8 @@ class FS1Spec:
     a_scale: float = 1.0                # E6 (docs/134 §4): physics.a_att_max 단일 config 소스 배율 —
                                         # 판정 surrogate·공격자 동역학·residual 범위 동시 전파. 방어 가속은
                                         # mu × (새 a) 이므로 a_def 고정은 mu 를 함께 바꿔서 (E6: mu 0.7143)
+    fire_gate: str = "off"              # E10 (docs/146): "off" = 현행 / "robust" = 포획 술어가 참인 tick 에만
+                                        # 발사 허용 (막힌 요청은 탄·발사 비용 무소모). 발사 = 포획 (정의상)
 
 
 def _physics_kwargs(spec: FS1Spec) -> dict:
@@ -118,6 +120,9 @@ class FS1Env:
         self.inner = self.sys.inner                     # ShapingParallelEnv
         inn = self.inner
         inn.lean, inn.fire_gate_on, inn.finisher_learned_accel = True, False, True
+        assert spec.fire_gate in ("off", "robust"), spec.fire_gate
+        if spec.fire_gate == "robust":   # E10 (docs/146): 속성이 없으면 (기본) 기존 경로와 비트 동일
+            inn.fire_gate_robust = True
         if spec.theta_scale != 1.0:      # E7-b: judge 콘 반각 배율 (판정 의미론 불변)
             inn.cone_half_angle = float(inn.cone_half_angle) * spec.theta_scale
         self._fcs_v_prev = None          # E7-b ma 조준용 공격자 속도 이력 (cv 는 미사용)
@@ -262,8 +267,11 @@ class FS1Env:
             nc = nc + 0.5 * ah * inn.tau_deploy ** 2
             self._fcs_v_prev = v_att.copy()
         axis = (nc - p_fin) / max(np.linalg.norm(nc - p_fin), 1e-9)
+        # E10 (docs/146): 게이트 아래에서는 막힌 요청이 무비용이라 발사 거리 선택에 득실이 없다 →
+        # r_fire 행동을 무시하고 범위 상한 (16 m = 계측 창) 안에서 항상 요청. BC 교사의 12 m 가 편향을 만들지 않게.
+        r_req = self.spec.r_fire_range[1] if self.spec.fire_gate == "robust" else f[3]
         fire = float(f[4] > 0.5 and inn.fsm.state.value == "LOADED"
-                     and np.linalg.norm(p_att - p_fin) <= f[3])
+                     and np.linalg.norm(p_att - p_fin) <= r_req)
         acts[FIN] = np.r_[axis, 1.0, fire, self.station_accel(FIN, f[:3])]
         return acts
 

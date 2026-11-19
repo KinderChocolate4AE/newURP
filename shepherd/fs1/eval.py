@@ -316,7 +316,7 @@ def run(a):
     from shepherd.fs1.world import FS1Spec
     spec = FS1Spec(obs_time=a.stack == "r4p", mu=a.mu, nu=a.nu, tau_scale=a.tau_scale, a_scale=a.a_scale,
                    theta_scale=a.theta_scale, aim=a.aim, limiter_roe=a.limiter_roe,
-                   limiter_inert=a.limiter_inert)
+                   limiter_inert=a.limiter_inert, fire_gate=a.fire_gate)
     with mp.get_context("spawn").Pool(a.workers, initializer=_eval_init,
                                       initargs=(spec.__dict__, a.coop_window, a.att_iv, a.att_donor,
                                                 bool(a.record_res), a.env_seed)) as P:
@@ -408,6 +408,8 @@ def main(argv=None):
                    help="E7-c (docs/130): post_shot = 첫 발사 전 limiter kinetic 차단")
     r.add_argument("--limiter-inert", action="store_true",
                    help="E7-c: physics.kill_radius = 0 (판정 폐쇄·kinetic 동시 0)")
+    r.add_argument("--fire-gate", choices=["off", "robust"], default="off",
+                   help="E10 (docs/146): robust = 포획 술어가 참인 tick 에만 발사 허용 (FS1Spec)")
     r.add_argument("--coop-window", action="store_true",
                    help="P-②c (docs/129 §7, e7b v1.1): 창 tick 마다 limiter 有/無 판정 재계산")
     r.add_argument("--att-iv", choices=ATT_IV, default="none",
