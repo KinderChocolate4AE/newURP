@@ -51,6 +51,9 @@ def grid() -> list:
         for d in DELTAS:
             g += _cell(f"{b}_d{d}", "d", b, ts, delta=d)
         g += _cell(f"{b}_L{COMBO[0]}d{COMBO[1]}", "Ld", b, ts, lag=COMBO[0], delta=COMBO[1])
+    # v1.1 wiring 셀: 기준점과 손잡이가 전부 같은 복제 — 같은 실행 안에서 rb 가 비트 일치해야 함
+    g.append({"name": "wiring_dup_base", "family": "wiring", "base": "t1.0_h1.0_cv", "ts": 1.0,
+              "hs": 1.0, "as": 1.0, "rs": 1.0, "lag": 0, "delta": 0.0, "ref": None})
     return g
 
 
@@ -96,12 +99,25 @@ def build() -> dict:
                    "probe 2026-10-20, 'start' 2026-10-31). Design origin: advisor draft docs/141 §5 (2a); "
                    "changed before seal: tau_r axis removed (judge-level tau_r == a-scale (1-tau_r/tau)^2, "
                    "already covered by E4 a family), judgment = fold-conservativeness vs matched ideal "
-                   "reference cells instead of Spearman ordering"),
+                   "reference cells instead of Spearman ordering. "
+                   "AMENDED v1.1 2026-11-19 with NO E9 window value read (run 1 harvest c1fd81f went VOID at "
+                   "the wiring gate; readout stopped before P-E9; artifacts quarantined at "
+                   "artifacts/fs1/e9_quarantine_2026-11-19): root cause = attacker act() samples from the "
+                   "GLOBAL torch RNG which the probe never seeded, so rollouts are not reproducible across "
+                   "processes and the sealed cross-run bit-exact wiring vs the Oct-11 E4 rows was impossible "
+                   "by construction (same bug class as the pid-seeded eval workers, 2026-10-11). Fix: "
+                   "per-episode torch.manual_seed(SEED0+i) in the probe; wiring redefined WITHIN-run "
+                   "(duplicate base cell wiring_dup_base must match t1.0_h1.0_cv rb bit-exact per slot). "
+                   "Verdict rules, families, grid cells, tolerances, metric: unchanged"),
         "lineage": {"protocol": "E4 (docs/133, manifest d41bfc2693d8f8c7) rollout unchanged: m0.35_n1, 4 old-world "
                                 "adapted attackers x 24 eps, SEED0 268000, no-fire, slew-simulated cv aim, window = "
                                 "LOADED and d <= 16 m",
-                    "wiring": "base variants keep E4 names; their rb rows must equal artifacts/fs1/e4/rows.npz "
-                              "bit-exact, else the run is void (not a result)"},
+                    "wiring": "v1.1: duplicate cell wiring_dup_base (identical knobs to t1.0_h1.0_cv) must have "
+                              "bit-exact rb per slot within the same run, else the run is void (not a result). "
+                              "Cross-run equality with the Oct-11 E4 rows is NOT required (rollout entangled "
+                              "with torch global RNG in run 1; now seeded per episode, but E4 ran unseeded so "
+                              "its exact rollout is unrecoverable). Paired cell-vs-reference comparison is "
+                              "within-run and unaffected"},
         "question": ("can tracking latency L and boresight aim error delta be folded conservatively into chi: "
                      "chi_eff = a (tau+L)^2 / (2 R tan(theta-delta)), chi*_geom(theta-delta)"),
         "knob_semantics": {

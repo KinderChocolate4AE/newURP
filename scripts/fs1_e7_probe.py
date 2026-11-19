@@ -157,6 +157,7 @@ def run_slot(name, root, sub, dfd, eps, coop=False, geom=False):
     for i in range(eps):
         s = SEED0 + i
         np.random.seed(s)
+        T.manual_seed(s)       # E9 v1.1: 공격자 act() 는 torch 전역 RNG 샘플링 — 미시드면 실행 간 rollout 재현 불가
         kf_r = _ep_kf_r(dfd, s)
         obs, _ = env.reset(seed=s)
         done, v_prev = False, None

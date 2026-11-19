@@ -1,6 +1,6 @@
-"""E9 = 비이상성 접힘 판독 (docs/144, manifest fs1_e9_manifest). 판정 규칙은 manifest 의 verdict 만 쓴다.
+"""E9 = 비이상성 접힘 판독 (docs/144 v1.1, manifest fs1_e9_manifest). 판정 규칙은 manifest 의 verdict 만 쓴다.
 
-    python scripts/fs1_e9_readout.py --dir artifacts/fs1/e9 --e4-dir artifacts/fs1/e4
+    python scripts/fs1_e9_readout.py --dir artifacts/fs1/e9
 """
 from __future__ import annotations
 
@@ -18,13 +18,11 @@ import fs1_e9_manifest as M  # noqa: E402
 SLOTS = ("ex_kfirst50", "ex_fin12_fb", "ex_mix5050", "ex_kfirst_rand")
 
 
-def wiring(npz: dict, e4: dict) -> dict:
-    """기준점 rb 배열 == E4 rows.npz (같은 rollout). 하나라도 다르면 실행 무효 (결과 아님)."""
-    res = {}
-    for b in M.BASES:
-        res[b] = all(np.array_equal(npz[f"{s}.{b}.rb"], e4[f"{s}.{b}.rb"]) and
-                     np.array_equal(npz[f"{s}.ep"], e4[f"{s}.ep"]) for s in SLOTS)
-    return res
+def wiring(npz: dict) -> dict:
+    """v1.1: 같은 실행 안에서 복제 셀 wiring_dup_base 의 rb == 기준점 t1.0_h1.0_cv 의 rb (slot 별
+    비트 일치). 하나라도 다르면 실행 무효 (결과 아님)."""
+    return {s: bool(np.array_equal(npz[f"{s}.wiring_dup_base.rb"], npz[f"{s}.t1.0_h1.0_cv.rb"]))
+            for s in SLOTS}
 
 
 def monotone(win: dict) -> dict:
@@ -41,7 +39,6 @@ def monotone(win: dict) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dir", default="artifacts/fs1/e9")
-    ap.add_argument("--e4-dir", default="artifacts/fs1/e4")
     a = ap.parse_args()
     d = pathlib.Path(a.dir)
     h = M.load()["manifest_hash"]
@@ -50,9 +47,9 @@ def main() -> None:
     assert abs(k["tau0"] - E4.TAU0) < 1e-12 and abs(k["theta0"] - E4.TH0) < 1e-12
     assert abs(k["range_max"] - E4.RMAX) < 1e-9 and abs(k["a_att"] - E4.A0) < 1e-6 and abs(k["dt"] - E4.DT) < 1e-12
     npz = dict(np.load(d / "rows.npz"))
-    wire = wiring(npz, dict(np.load(pathlib.Path(a.e4_dir) / "rows.npz")))
+    wire = wiring(npz)
     win = probe["variant_window_med"]
-    out = {"manifest_hash": h, "wiring_e4_bit_exact": wire, "void": not all(wire.values())}
+    out = {"manifest_hash": h, "wiring_dup_bit_exact": wire, "void": not all(wire.values())}
     if not out["void"]:
         out["P-E9"] = M.verdict(win)
         out["report_monotone"] = monotone(win)

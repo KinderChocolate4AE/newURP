@@ -48,6 +48,14 @@ def test_reference_cell_sits_at_cell_chi_eff():
             assert M.chi_eff(c) == pytest.approx(1.0 / E4.rho(c), rel=1e-12)
 
 
+def test_wiring_dup_cell_knobs_identical_to_base():
+    """v1.1 wiring 셀의 전제: 복제 셀과 기준점의 판정 손잡이가 전부 같다."""
+    by = {c["name"]: c for c in M.GRID}
+    dup, base = by["wiring_dup_base"], by["t1.0_h1.0_cv"]
+    assert all(dup[k] == base[k] for k in ("ts", "hs", "as", "rs", "lag", "delta"))
+    assert dup["family"] == "wiring" and dup["ref"] is None
+
+
 @pytest.mark.parametrize("axis", [[1, 0, 0], [0.3, -0.2, 0.93], [0, 0, 1]])
 @pytest.mark.parametrize("phi", [0.0, 1.0, 4.0])
 def test_offset_angle_is_delta(axis, phi):

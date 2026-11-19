@@ -14,7 +14,7 @@ main() {
   mkdir -p "$OUT"
   python -u scripts/fs1_e7_probe.py --stage1 "$IN/e3_in/stage1" --e3b "$IN/e3b_in/phase1" \
       --out-dir "$OUT" --grid e9 > "$OUT/probe.log" 2>&1
-  python scripts/fs1_e9_readout.py --dir "$OUT" --e4-dir artifacts/fs1/e4 > "$OUT/readout.log" 2>&1
+  python scripts/fs1_e9_readout.py --dir "$OUT" > "$OUT/readout.log" 2>&1
   flock /tmp/fs1_git.lock bash -c "git add '$OUT' \
       && git commit -m 'science(fs1): harvest E9 non-ideality fold probe (docs/144)' \
                     -m 'Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>' \

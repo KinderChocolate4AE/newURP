@@ -40,10 +40,19 @@ m0.35_n1, 구세계 적응 공격자 4 × 24 ep, SEED0 268000, 발사 금지, �
   뜻이 아니다 (gap 크기는 보고). `FOLD_BREAKS` ≠ χ 이론 반증 — 접힘 규칙의 실패.
 - **보고 전용**: gap 분포 (보수성 크기), 기준점별 L·δ 단조성, χ_eff 에서의 E4 공식 N_pred.
 
-## 4. wiring (무효 조건, 결과 아님)
+## 4. wiring (무효 조건, 결과 아님) — v1.1 개정 2026-11-19
 
-기준점 4 개의 rb 배열·ep 배열이 `artifacts/fs1/e4/rows.npz` 와 bit-동일해야 한다 (같은 rollout). 하나라도 다르면 `void` —
-판독하지 않고 원인 수정 후 재실행. 창 tick 에서 이력 길이 > 최대 지연 (assert). 라벨·참조 χ_eff·오프셋 각도 =
+**v1.0 (봉인 10-31)**: 기준점 4 개의 rb·ep 배열이 `artifacts/fs1/e4/rows.npz` 와 bit-동일. → **실행 1 (수확 c1fd81f) 이 이
+관문에서 VOID**. 근본 원인: 공격자 `act()` 가 **torch 전역 RNG** 로 샘플링하는데 프로브는 `np.random.seed` 만 심었다
+(`shepherd/fs1/nets.py` L47–54) — torch 전역 RNG 는 프로세스마다 OS 엔트로피로 초기화되므로 rollout 이 실행 간 재현 불가.
+즉 v1.0 wiring 은 **구조상 충족 불가능한 조건**이었다 (10-11 의 "eval 워커 env seed = pid" 와 같은 부류). E4 자체는 한 실행
+안의 짝 비교라 무사하다. 실행 1 산출물은 `artifacts/fs1/e9_quarantine_2026-11-19/` (읽기 전용) 로 격리, **창 값은 읽지 않았다**
+(main 판독기가 wiring 단계에서 중단, P-E9 미계산; 개정은 결과 비노출 상태에서 수행).
+
+**v1.1**: ① 프로브에 episode 별 `torch.manual_seed(SEED0+i)` 추가 (이후 실행은 재현 가능). ② wiring = **같은 실행 안** 복제 셀
+`wiring_dup_base` (기준점과 손잡이 전부 동일) 의 rb 가 slot 별로 `t1.0_h1.0_cv` 와 bit-동일. 하나라도 다르면 `void` — 판독하지
+않고 원인 수정 후 재실행. E4 교차 실행 일치는 요구하지 않는다 (셀 대 참조 셀 비교는 어차피 같은 실행 안의 짝). **판정 규칙·
+가족·격자 셀·허용치·지표는 무변경.** 창 tick 에서 이력 길이 > 최대 지연 (assert). 라벨·참조 χ_eff·오프셋 각도·복제 셀 전제 =
 `tests/test_fs1_e9_labels.py`.
 
 ## 5. τ_r (회피 반응 지연) — 해석으로 답함, 실행 없음
