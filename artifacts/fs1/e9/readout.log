@@ -1,0 +1,24 @@
+wiring: {'ex_kfirst50': True, 'ex_fin12_fb': True, 'ex_mix5050': True, 'ex_kfirst_rand': True} 
+L FOLD_CONSERVATIVE informative 8 failing []
+  t1.0_h1.0_cv_L1        chi_eff 0.708 win  1.0 ref  1.0 gap +0.0 base  2.2
+  t1.0_h1.0_cv_L2        chi_eff 0.924 win  1.0 ref  0.0 gap +1.0 base  2.2
+  tau_m2.94_L1           chi_eff 0.495 win  3.0 ref  2.8 gap +0.2 base  4.0
+  tau_m2.94_L2           chi_eff 0.678 win  3.0 ref  1.0 gap +2.0 base  4.0
+  t0.7_h1.0_cv_L1        chi_eff 0.391 win  3.5 ref  3.0 gap +0.5 base  4.0
+  t0.7_h1.0_cv_L2        chi_eff 0.555 win  3.0 ref  2.0 gap +1.0 base  4.0
+  t0.5_h1.0_cv_L1        chi_eff 0.231 win  5.0 ref  4.8 gap +0.2 base  5.0
+  t0.5_h1.0_cv_L2        chi_eff 0.361 win  4.5 ref  3.8 gap +0.8 base  5.0
+d FOLD_CONSERVATIVE informative 8 failing []
+  t1.0_h1.0_cv_d0.02     chi_eff 0.576 win  2.0 ref  2.0 gap +0.0 base  2.2
+  t1.0_h1.0_cv_d0.05     chi_eff 0.685 win  1.0 ref  1.0 gap +0.0 base  2.2
+  tau_m2.94_d0.02        chi_eff 0.376 win  3.5 ref  3.5 gap +0.0 base  4.0
+  tau_m2.94_d0.05        chi_eff 0.448 win  3.0 ref  3.0 gap +0.0 base  4.0
+  t0.7_h1.0_cv_d0.02     chi_eff 0.282 win  4.0 ref  4.0 gap +0.0 base  4.0
+  t0.7_h1.0_cv_d0.05     chi_eff 0.336 win  4.0 ref  4.0 gap +0.0 base  4.0
+  t0.5_h1.0_cv_d0.02     chi_eff 0.144 win  5.0 ref  5.0 gap +0.0 base  5.0
+  t0.5_h1.0_cv_d0.05     chi_eff 0.171 win  5.0 ref  5.0 gap +0.0 base  5.0
+Ld FOLD_CONSERVATIVE informative 4 failing []
+  t1.0_h1.0_cv_L1d0.02   chi_eff 0.784 win  1.0 ref  0.0 gap +1.0 base  2.2
+  tau_m2.94_L1d0.02      chi_eff 0.548 win  3.0 ref  2.0 gap +1.0 base  4.0
+  t0.7_h1.0_cv_L1d0.02   chi_eff 0.432 win  3.8 ref  3.0 gap +0.8 base  4.0
+  t0.5_h1.0_cv_L1d0.02   chi_eff 0.256 win  5.0 ref  4.0 gap +1.0 base  5.0
